@@ -114,11 +114,13 @@ namespace TA3D
             }
             target_unit->unlock();
         }
+        pMutex.lock();
         MISSION* old = mission;
         mission = mission->next;
         if (old->path)				// Détruit le chemin si nécessaire
             destroy_path(old->path);
         delete old;
+        pMutex.unlock();
     }
 
 
@@ -208,7 +210,7 @@ namespace TA3D
             "QueryTransport","BeginTransport","EndTransport",
             "SetSpeed","SetDirection","SetMaxReloadTime",
             "QueryBuildInfo","SweetSpot","RockUnit",
-            "QueryLandingPad"
+            "QueryLandingPad","setSFXoccupy"
         };
         script_idx[id] = get_script_index(script_name[id]);
         return script_idx[id];
@@ -539,6 +541,7 @@ namespace TA3D
 
     void UNIT::clear_def_mission()
     {
+        pMutex.lock();
         while (def_mission)
         {
             MISSION* old = def_mission;
@@ -547,6 +550,7 @@ namespace TA3D
                 destroy_path(old->path);
             delete old;
         }
+        pMutex.unlock();
     }
 
 
@@ -2670,7 +2674,7 @@ namespace TA3D
         if (type_id < 0 || type_id >= unit_manager.nb_unit || flags == 0 ) // A unit which cannot exist
         {
             pMutex.unlock();
-            LOG_ERROR("UNIT::move : A unit which ");
+            LOG_ERROR("UNIT::move : A unit which doesn't exist was found");
             return	-1;		// Should NEVER happen
         }
 
@@ -4252,13 +4256,17 @@ namespace TA3D
                     {
                         UNIT *target_unit = (mission->flags & MISSION_FLAG_TARGET_WEAPON) == MISSION_FLAG_TARGET_WEAPON ? NULL : (UNIT*) mission->p;
                         WEAPON *target_weapon = (mission->flags & MISSION_FLAG_TARGET_WEAPON) == MISSION_FLAG_TARGET_WEAPON ? (WEAPON*) mission->p : NULL;
-                        if ((target_unit!=NULL && (target_unit->flags&1) && target_unit->ID == mission->target_ID) || (target_weapon!=NULL && target_weapon->weapon_id!=-1) || (target_weapon==NULL && target_unit==NULL) ) {
-
-                            if (target_unit ) {				// Check if we can target the unit
+                        if ((target_unit!=NULL && (target_unit->flags&1) && target_unit->ID == mission->target_ID)
+                         || (target_weapon!=NULL && target_weapon->weapon_id!=-1)
+                         || (target_weapon==NULL && target_unit==NULL))
+                        {
+                            if (target_unit)				// Check if we can target the unit
+                            {
                                 byte mask = 1 << owner_id;
-                                if (target_unit->cloaked && !target_unit->is_on_radar( mask ) ) {
+                                if (target_unit->cloaked && !target_unit->is_on_radar( mask ))
+                                {
                                     for( int i = 0 ; i < weapon.size() ; i++ )
-                                        if (weapon[ i ].target == mission->p )		// Stop shooting
+                                        if (weapon[ i ].target == mission->p)		// Stop shooting
                                             weapon[ i ].state = WEAPON_FLAG_IDLE;
                                     next_mission();
                                     break;
@@ -4269,78 +4277,97 @@ namespace TA3D
                                 && unit_manager.unit_type[type_id]->attackrunlength == 0 )	break;					// Just do basic checks every tick, and advanced ones when needed
 
                             if (weapon.size() == 0
-                                && !unit_manager.unit_type[type_id]->kamikaze ) {		// Check if this units has weapons
-                                next_mission();		break;	}
+                                && !unit_manager.unit_type[type_id]->kamikaze)		// Check if this units has weapons
+                            {
+                                next_mission();
+                                break;
+                            }
 
                             Vector3D Dir = target_unit==NULL ? (target_weapon == NULL ? mission->target-Pos : target_weapon->Pos-Pos) : target_unit->Pos-Pos;
                             Dir.y = 0.0f;
-                            if (target_weapon || target_unit )
+                            if (target_weapon || target_unit)
                                 mission->target = target_unit==NULL ? target_weapon->Pos : target_unit->Pos;
                             float dist = Dir.sq();
                             int maxdist = 0;
                             int mindist = 0xFFFFF;
 
-                            if (target_unit != NULL && unit_manager.unit_type[target_unit->type_id]->checkCategory( unit_manager.unit_type[type_id]->BadTargetCategory ) ) {
+//                            if (target_unit != NULL && unit_manager.unit_type[target_unit->type_id]->checkCategory( unit_manager.unit_type[type_id]->BadTargetCategory ))
+                            if (target_unit != NULL && unit_manager.unit_type[target_unit->type_id]->checkCategory( unit_manager.unit_type[type_id]->NoChaseCategory ))
+                            {
                                 next_mission();
                                 break;
                             }
 
-                            for( int i = 0 ; i < weapon.size() ; i++ ) {
+                            for (int i = 0 ; i < weapon.size() ; i++)
+                            {
                                 if (unit_manager.unit_type[type_id]->weapon[ i ]==NULL || unit_manager.unit_type[type_id]->weapon[ i ]->interceptor)	continue;
                                 int cur_mindist;
                                 int cur_maxdist;
                                 bool allowed_to_fire = true;
-                                if (unit_manager.unit_type[type_id]->attackrunlength>0) {
+                                if (unit_manager.unit_type[type_id]->attackrunlength>0)
+                                {
                                     if (Dir % V < 0.0f )	allowed_to_fire = false;
                                     float t = 2.0f/map->ota_data.gravity*fabs(Pos.y-mission->target.y);
                                     cur_mindist = (int)sqrt(t*V.sq())-((unit_manager.unit_type[type_id]->attackrunlength+1)>>1);
                                     cur_maxdist = cur_mindist+(unit_manager.unit_type[type_id]->attackrunlength);
                                 }
-                                else {
+                                else
+                                {
                                     cur_maxdist = unit_manager.unit_type[type_id]->weapon[ i ]->range>>1;
                                     cur_mindist = 0;
                                 }
-                                if (maxdist < cur_maxdist )	maxdist = cur_maxdist;
-                                if (mindist > cur_mindist )	mindist = cur_mindist;
-                                if (allowed_to_fire && dist >= cur_mindist * cur_mindist && dist <= cur_maxdist * cur_maxdist && !unit_manager.unit_type[type_id]->weapon[ i ]->interceptor )
+                                if (maxdist < cur_maxdist)	maxdist = cur_maxdist;
+                                if (mindist > cur_mindist)	mindist = cur_mindist;
+                                if (allowed_to_fire && dist >= cur_mindist * cur_mindist && dist <= cur_maxdist * cur_maxdist && !unit_manager.unit_type[type_id]->weapon[ i ]->interceptor)
                                 {
+//                                    if (( (weapon[i].state & 3) == WEAPON_FLAG_IDLE || ( (weapon[i].state & 3) != WEAPON_FLAG_IDLE && weapon[i].target != mission->p ) )
+//                                        && ( target_unit == NULL || ( (!unit_manager.unit_type[type_id]->weapon[ i ]->toairweapon
+//                                                                       || ( unit_manager.unit_type[type_id]->weapon[ i ]->toairweapon && target_unit->flying ) )
+//                                                                      && !unit_manager.unit_type[target_unit->type_id]->checkCategory( unit_manager.unit_type[type_id]->w_badTargetCategory[i] ) ) )
+//                                        && ( ((mission->flags & MISSION_FLAG_COMMAND_FIRE) && (unit_manager.unit_type[type_id]->weapon[ i ]->commandfire || !unit_manager.unit_type[type_id]->candgun) )
+//                                             || (!(mission->flags & MISSION_FLAG_COMMAND_FIRE) && !unit_manager.unit_type[type_id]->weapon[ i ]->commandfire)
+//                                             || unit_manager.unit_type[type_id]->weapon[ i ]->dropped ) )
                                     if (( (weapon[i].state & 3) == WEAPON_FLAG_IDLE || ( (weapon[i].state & 3) != WEAPON_FLAG_IDLE && weapon[i].target != mission->p ) )
                                         && ( target_unit == NULL || ( (!unit_manager.unit_type[type_id]->weapon[ i ]->toairweapon
                                                                        || ( unit_manager.unit_type[type_id]->weapon[ i ]->toairweapon && target_unit->flying ) )
-                                                                      && !unit_manager.unit_type[target_unit->type_id]->checkCategory( unit_manager.unit_type[type_id]->w_badTargetCategory[i] ) ) )
+                                                                      && !unit_manager.unit_type[target_unit->type_id]->checkCategory( unit_manager.unit_type[type_id]->NoChaseCategory ) ) )
                                         && ( ((mission->flags & MISSION_FLAG_COMMAND_FIRE) && (unit_manager.unit_type[type_id]->weapon[ i ]->commandfire || !unit_manager.unit_type[type_id]->candgun) )
                                              || (!(mission->flags & MISSION_FLAG_COMMAND_FIRE) && !unit_manager.unit_type[type_id]->weapon[ i ]->commandfire)
-                                             || unit_manager.unit_type[type_id]->weapon[ i ]->dropped ) ) {
+                                             || unit_manager.unit_type[type_id]->weapon[ i ]->dropped ) )
+                                    {
                                         weapon[i].state = WEAPON_FLAG_AIM;
                                         weapon[i].target = mission->p;
                                         weapon[i].target_pos = mission->target;
                                         weapon[i].data = -1;
-                                        if (mission->flags & MISSION_FLAG_TARGET_WEAPON )
+                                        if (mission->flags & MISSION_FLAG_TARGET_WEAPON)
                                             weapon[i].state |= WEAPON_FLAG_WEAPON;
-                                        if (unit_manager.unit_type[type_id]->weapon[ i ]->commandfire )
+                                        if (unit_manager.unit_type[type_id]->weapon[ i ]->commandfire)
                                             weapon[i].state |= WEAPON_FLAG_COMMAND_FIRE;
                                     }
                                 }
                             }
 
-                            if (unit_manager.unit_type[type_id]->kamikaze && unit_manager.unit_type[type_id]->kamikazedistance > maxdist )
+                            if (unit_manager.unit_type[type_id]->kamikaze && unit_manager.unit_type[type_id]->kamikazedistance > maxdist)
                                 maxdist = unit_manager.unit_type[type_id]->kamikazedistance;
 
-                            if (mindist > maxdist )	mindist = maxdist;
+                            if (mindist > maxdist)	mindist = maxdist;
 
                             mission->flags |= MISSION_FLAG_CAN_ATTACK;
 
                             if (unit_manager.unit_type[type_id]->kamikaze				// Kamikaze attack !!
                                 && dist <= unit_manager.unit_type[type_id]->kamikazedistance * unit_manager.unit_type[type_id]->kamikazedistance
-                                && self_destruct < 0.0f )
+                                && self_destruct < 0.0f)
                                 self_destruct = 0.01f;
 
-                            if (dist>maxdist*maxdist || dist<mindist*mindist) {	// Si l'unité est trop loin de sa cible / if unit isn't where it should be
-                                if (!unit_manager.unit_type[type_id]->canmove) {		// Bah là si on peut pas bouger faut changer de cible!! / need to change target
+                            if (dist>maxdist*maxdist || dist<mindist*mindist)	// Si l'unité est trop loin de sa cible / if unit isn't where it should be
+                            {
+                                if (!unit_manager.unit_type[type_id]->canmove)		// Bah là si on peut pas bouger faut changer de cible!! / need to change target
+                                {
                                     next_mission();
                                     break;
                                 }
-                                else if (!unit_manager.unit_type[type_id]->canfly || unit_manager.unit_type[type_id]->hoverattack ) {
+                                else if (!unit_manager.unit_type[type_id]->canfly || unit_manager.unit_type[type_id]->hoverattack)
+                                {
                                     c_time=0.0f;
                                     mission->flags |= MISSION_FLAG_MOVE;
                                     mission->move_data = maxdist*7/80;
@@ -4351,7 +4378,7 @@ namespace TA3D
                                 mission->data = 2;
                                 int param[] = { 0 };
                                 for( int i = 0 ; i < weapon.size() ; i++ )
-                                    if (unit_manager.unit_type[type_id]->weapon[ i ] )
+                                    if (unit_manager.unit_type[type_id]->weapon[ i ])
                                         param[ 0 ] = Math::Max(param[0], (int)( unit_manager.unit_type[type_id]->weapon[i]->reloadtime * 1000.0f) * Math::Max(1, (int)unit_manager.unit_type[type_id]->weapon[i]->burst));
                                 launch_script(get_script_index(SCRIPT_SetMaxReloadTime),1,param);
                             }
@@ -4872,7 +4899,8 @@ namespace TA3D
                                              && ( units.unit[cur_idx].is_on_radar( mask ) ||
                                                   ( (units.map->sight_map->line[y>>1][x>>1] & mask)
                                                     && !units.unit[cur_idx].cloaked ) )
-                                             && !unit_manager.unit_type[ units.unit[cur_idx].type_id ]->checkCategory( unit_manager.unit_type[type_id]->BadTargetCategory ) )
+                                             && !unit_manager.unit_type[ units.unit[cur_idx].type_id ]->checkCategory( unit_manager.unit_type[type_id]->NoChaseCategory ) )
+//                                             && !unit_manager.unit_type[ units.unit[cur_idx].type_id ]->checkCategory( unit_manager.unit_type[type_id]->BadTargetCategory ) )
                                         {
                                             if (returning_fire)
                                             {
@@ -4910,7 +4938,8 @@ namespace TA3D
                                     && !unit_manager.unit_type[type_id]->weapon[ i ]->interceptor
                                     && (!unit_manager.unit_type[type_id]->weapon[ i ]->toairweapon
                                         || ( unit_manager.unit_type[type_id]->weapon[ i ]->toairweapon && units.unit[enemy_idx].flying )
-                                        && !unit_manager.unit_type[ units.unit[enemy_idx].type_id ]->checkCategory( unit_manager.unit_type[type_id]->w_badTargetCategory[i] ) ) )
+                                        && !unit_manager.unit_type[ units.unit[enemy_idx].type_id ]->checkCategory( unit_manager.unit_type[type_id]->NoChaseCategory ) ) )
+//                                        && !unit_manager.unit_type[ units.unit[enemy_idx].type_id ]->checkCategory( unit_manager.unit_type[type_id]->w_badTargetCategory[i] ) ) )
                                 {
                                     weapon[i].state = WEAPON_FLAG_AIM;
                                     weapon[i].target = &(units.unit[enemy_idx]);
@@ -5069,12 +5098,14 @@ namespace TA3D
 script_exec:
         if (map && !attached && ( (!jump_commands && unit_manager.unit_type[type_id]->canmove) || first_move ))
         {
+            bool hover_on_water = false;
             float min_h = map->get_unit_h(Pos.x,Pos.z);
             h = Pos.y - min_h;
             if (!unit_manager.unit_type[type_id]->Floater && !unit_manager.unit_type[type_id]->canfly && !unit_manager.unit_type[type_id]->canhover && h > 0.0f && unit_manager.unit_type[type_id]->WaterLine == 0.0f )
                 Pos.y = min_h;
-            else if (unit_manager.unit_type[type_id]->canhover && Pos.y < map->sealvl)
+            else if (unit_manager.unit_type[type_id]->canhover && Pos.y <= map->sealvl)
             {
+                hover_on_water = true;
                 Pos.y = map->sealvl;
                 if (V.y<0.0f)
                     V.y=0.0f;
@@ -5094,6 +5125,11 @@ script_exec:
                 Pos.y = Math::Max(min_h, map->sealvl);
                 if (V.y<0.0f)
                     V.y=0.0f;
+            }
+            if (unit_manager.unit_type[type_id]->canhover)
+            {
+                int param[1] = { hover_on_water ? ( map->sealvl - min_h >= 8.0f ? 2 : 1) : 4 };
+                run_script_function(units.map,get_script_index(SCRIPT_setSFXoccupy),1,param);
             }
             if (min_h>Pos.y)
             {
@@ -5245,6 +5281,12 @@ script_exec:
             show_orders( only_build_commands, true );
 
         pMutex.lock();
+
+        if (!(flags&1))
+        {
+            pMutex.unlock();
+            return;
+        }
 
         bool low_def = (Camera::inGame->rpos.y > gfx->low_def_limit);
 
@@ -6187,20 +6229,24 @@ script_exec:
         if (hidden || build_percent_left != 0.0f )
             return;
 
-        bool system_activated = (port[ACTIVATION] && unit_manager.unit_type[type_id]->onoffable) || !unit_manager.unit_type[type_id]->onoffable;
+        int unit_type = type_id;
+
+        if (flags == 0 || unit_type == -1)  return;
+
+        bool system_activated = (port[ACTIVATION] && unit_manager.unit_type[unit_type]->onoffable) || !unit_manager.unit_type[unit_type]->onoffable;
 
         if (jamming )
         {
-            radar_jam_range = system_activated ? (unit_manager.unit_type[type_id]->RadarDistanceJam >> 3) : 0;
-            sonar_jam_range = system_activated ? (unit_manager.unit_type[type_id]->SonarDistanceJam >> 3) : 0;
+            radar_jam_range = system_activated ? (unit_manager.unit_type[unit_type]->RadarDistanceJam >> 3) : 0;
+            sonar_jam_range = system_activated ? (unit_manager.unit_type[unit_type]->SonarDistanceJam >> 3) : 0;
 
             units.map->update_player_visibility( owner_id, cur_px, cur_py, 0, 0, 0, radar_jam_range, sonar_jam_range, true );
         }
         else
         {
-            sint16 cur_sight = ((int)h + unit_manager.unit_type[type_id]->SightDistance) >> 3;
-            radar_range = system_activated ? (unit_manager.unit_type[type_id]->RadarDistance >> 3) : 0;
-            sonar_range = system_activated ? (unit_manager.unit_type[type_id]->SonarDistance >> 3) : 0;
+            sint16 cur_sight = ((int)h + unit_manager.unit_type[unit_type]->SightDistance) >> 3;
+            radar_range = system_activated ? (unit_manager.unit_type[unit_type]->RadarDistance >> 3) : 0;
+            sonar_range = system_activated ? (unit_manager.unit_type[unit_type]->SonarDistance >> 3) : 0;
 
             units.map->update_player_visibility( owner_id, cur_px, cur_py, cur_sight, radar_range, sonar_range, 0, 0, false, old_px != cur_px || old_py != cur_py || cur_sight != sight );
 
@@ -6681,6 +6727,13 @@ script_exec:
             pMutex.unlock();
 
             unit[i].lock();
+
+            if (unit[i].flags == 0 || unit[i].type_id == -1)        // It has nothing to do there
+            {
+                unit[i].unlock();
+                pMutex.lock();
+                continue;
+            }
 
             if (unit[i].just_created && unit_manager.unit_type[unit[i].type_id]->ExtractsMetal ) // Compute amount of metal extracted by sec
             {
@@ -7524,6 +7577,13 @@ script_exec:
                 {
                     while( current_tick > min_tick && !thread_ask_to_stop )
                     {
+                        while( lp_CONFIG->pause && !thread_ask_to_stop )            // We need this to prevent client dead lock when saving game
+                        {
+                            lp_CONFIG->paused = true;
+                            rest(10); // in pause mode wait for pause to be false again
+                        }
+                        lp_CONFIG->paused = false;
+
                         players_thread_sync = 0;
                         rest(1);
 

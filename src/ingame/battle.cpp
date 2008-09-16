@@ -340,7 +340,8 @@ namespace TA3D
         if (pNetworkEnabled)
         {
             players.set_network( &ta3d_network);
-            pArea.msg("esc_menu.b_save.disable");
+            if (!network_manager.isServer())                // Only server is able to save a game
+                pArea.msg("esc_menu.b_save.disable");
         }
         g_ta3d_network = &ta3d_network;
 
@@ -352,11 +353,16 @@ namespace TA3D
 
         LUA_PROGRAM	game_script;					// Script that will rule the game
         if (!pNetworkEnabled || pNetworkIsServer)
+        {
+            if (!pGameData->saved_file.empty()) 		// We have something to load
+                LUA_PROGRAM::passive = true;            // So deactivate unit creation (at least neutralize network creation events)
             game_script.load(pGameData->game_script, map.get());	// Load the script
+            LUA_PROGRAM::passive = false;
+        }
 
         if (!pGameData->saved_file.empty()) 			// We have something to load
         {
-            load_game( pGameData);
+            load_game(pGameData);
             done = !pGameData->saved_file.empty();		// If loading the game fails, then exit
         }
 
@@ -2235,12 +2241,16 @@ namespace TA3D
                         glDisable(GL_LIGHTING);
                         glEnable(GL_BLEND);
                         glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
-                        glScalef(10.0f,1.0f,10.0f);         // Draw it larger than the unit itself so we can view it at an angle without seeing the border
+                        float points[12] = { -DX,0.0f,-DZ,  DX,0.0f,-DZ,    DX,0.0f,DZ,     -DX,0.0f,DZ };
                         glBegin(GL_QUADS);
-                            glVertex3f( -DX, 0.0f, -DZ );
-                            glVertex3f( DX, 0.0f, -DZ );
-                            glVertex3f( DX, 0.0f, DZ );
-                            glVertex3f( -DX, 0.0f, DZ );
+                        for (int i = 0 ; i < 4 ; i++)         // Draw it larger than the unit itself so we can view it at an angle without seeing the border
+                        {
+                            points[i*3] *= 10.0f;
+                            points[i*3+2] *= 10.0f;
+                            points[i*3] = Math::Max( Math::Min( points[i*3], map->map_w * 0.5f - target.x ), -map->map_w * 0.5f - target.x );
+                            points[i*3+2] = Math::Max( Math::Min( points[i*3+2], map->map_h * 0.5f - target.z ), -map->map_h * 0.5f - target.z );
+                            glVertex3f( points[i*3], points[i*3+1], points[i*3+2] );
+                        }
                         glEnd();
                         glColor4ub(0xFF,0xFF,0xFF,0xFF);
                     }
@@ -2416,7 +2426,10 @@ namespace TA3D
                 if (obj_file_list)
                 {
                     String::List file_list;
-                    Paths::Glob(file_list, TA3D::Paths::Savegames + "*.sav");
+                    if (network_manager.isConnected())
+                        Paths::Glob(file_list, TA3D::Paths::Savegames + "multiplayer" + Paths::Separator + "*.sav");
+                    else
+                        Paths::Glob(file_list, TA3D::Paths::Savegames + "*.sav");
                     file_list.sort();
                     obj_file_list->Text.clear();
                     obj_file_list->Text.reserve(file_list.size());
@@ -2438,7 +2451,15 @@ namespace TA3D
                 String filename = pArea.get_caption("save_menu.t_name");
                 if (!filename.empty())
                 {
-                    filename = Paths::Savegames + Paths::Files::ReplaceExtension(filename, ".sav");
+                    if (network_manager.isServer())          // Ask all clients to save the game too, otherwise they won't be able to load it
+                    {
+                        network_manager.sendSpecial("SAVE " + ReplaceChar( filename, ' ', 1) );
+                        
+                                // Save multiplayer games in their own folder
+                        filename = Paths::Savegames + "multiplayer" + Paths::Separator + Paths::Files::ReplaceExtension(filename, ".sav");
+                    }
+                    else
+                        filename = Paths::Savegames + Paths::Files::ReplaceExtension(filename, ".sav");
                     save_game(filename, pGameData); // Save the game
                 }
                 lp_CONFIG->pause = false;

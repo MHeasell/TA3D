@@ -58,6 +58,17 @@ void save_game( const String filename, GameData *game_data )
     // without having the engine accessing its data
     fputs( "TA3D SAV", file );
 
+    if (network_manager.isConnected())     // Multiplayer game ?
+    {
+        fputc( 'M', file );                 // Save connection data
+        if (network_manager.isServer())    // Are we the server ? (only server can resume the game)
+            fputc( 1, file );
+        else
+            fputc( 0, file );
+    }
+    else
+        fputc( 'S', file );
+
     //----- Save game information --------------------------------------------------------------
 
     fputs( game_data->map_filename.c_str(), file );	fputc( 0, file );
@@ -439,16 +450,33 @@ void save_game( const String filename, GameData *game_data )
         fwrite( units.unit[i].data.axe[2], sizeof( AXE ), units.unit[i].data.nb_piece, file );
     }
 
+    SAVE( units.current_tick );     // We'll need this for multiplayer games
+
+    if (game_data->fog_of_war)      // Save fog of war state
+    {
+        for (int y = 0 ; y < the_map->view_map->h ; y++)
+            fwrite( the_map->view_map->line[y], bitmap_color_depth(the_map->view_map) >> 3, the_map->view_map->w, file );
+
+        for (int y = 0 ; y < the_map->sight_map->h ; y++)
+            fwrite( the_map->sight_map->line[y], bitmap_color_depth(the_map->sight_map) >> 3, the_map->sight_map->w, file );
+
+        for (int y = 0 ; y < the_map->radar_map->h ; y++)
+            fwrite( the_map->radar_map->line[y], bitmap_color_depth(the_map->radar_map) >> 3, the_map->radar_map->w, file );
+
+        for (int y = 0 ; y < the_map->sonar_map->h ; y++)
+            fwrite( the_map->sonar_map->line[y], bitmap_color_depth(the_map->sonar_map) >> 3, the_map->sonar_map->w, file );
+    }
+
     fclose( file );
 
     lp_CONFIG->pause = previous_pause_state;
 }
 
-void load_game_data( const String filename, GameData *game_data )
+bool load_game_data( const String filename, GameData *game_data, bool loading )
 {
     FILE *file = TA3D_OpenFile( filename, "rb" );
 
-    if( file == NULL )	return;
+    if( file == NULL )	return false;
 
     char tmp[1024];
     tmp[8] = 0;
@@ -457,7 +485,25 @@ void load_game_data( const String filename, GameData *game_data )
     if (strcmp(tmp, "TA3D SAV"))// Check format identifier
     {
         fclose( file );
-        return;
+        return false;
+    }
+
+    bool network = false;
+
+    if (fgetc(file) == 'M')         // Multiplayer saved game
+    {
+        network = true;
+        if (fgetc(file))            // We are server
+        {
+        }
+        else                        // We are client
+        {
+            if (!loading)
+            {
+                fclose( file );
+                return true;
+            }
+        }
     }
 
     //----- Load game information --------------------------------------------------------------
@@ -508,6 +554,7 @@ void load_game_data( const String filename, GameData *game_data )
     game_data->saved_file = filename;
 
     fclose(file);
+    return network;
 }
 
 void load_game( GameData *game_data )
@@ -524,6 +571,16 @@ void load_game( GameData *game_data )
     {
         fclose( file );
         return;
+    }
+
+    if (fgetc(file) == 'M')         // Multiplayer saved game
+    {
+        if (fgetc(file))            // We are server
+        {
+        }
+        else                        // We are client
+        {
+        }
     }
 
     //----- Load game information --------------------------------------------------------------
@@ -1019,7 +1076,24 @@ void load_game( GameData *game_data )
             units.free_idx[ player_id * MAX_UNIT_PER_PLAYER + (units.free_index_size[player_id]++) ] = i;
     }
 
+    LOAD( units.current_tick );     // We'll need this for multiplayer games
+
     units.unlock();
+
+    if (game_data->fog_of_war)      // Load fog of war state
+    {
+        for (int y = 0 ; y < the_map->view_map->h ; y++)
+            fread( the_map->view_map->line[y], bitmap_color_depth(the_map->view_map) >> 3, the_map->view_map->w, file );
+
+        for (int y = 0 ; y < the_map->sight_map->h ; y++)
+            fread( the_map->sight_map->line[y], bitmap_color_depth(the_map->sight_map) >> 3, the_map->sight_map->w, file );
+
+        for (int y = 0 ; y < the_map->radar_map->h ; y++)
+            fread( the_map->radar_map->line[y], bitmap_color_depth(the_map->radar_map) >> 3, the_map->radar_map->w, file );
+
+        for (int y = 0 ; y < the_map->sonar_map->h ; y++)
+            fread( the_map->sonar_map->line[y], bitmap_color_depth(the_map->sonar_map) >> 3, the_map->sonar_map->w, file );
+    }
 
     game_data->saved_file.clear();
 
