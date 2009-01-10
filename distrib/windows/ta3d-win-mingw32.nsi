@@ -2,7 +2,7 @@
 ;--------------------------------
 
 !ifndef VERSION
-  !define VERSION '0.5.1'
+  !define VERSION '0.5.2'
 !endif
 
 !define PRODUCT_NAME "TA3D" 
