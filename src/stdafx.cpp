@@ -25,6 +25,7 @@
 */
 
 #include "stdafx.h"
+#include <sys/stat.h>
 
 namespace TA3D
 {
@@ -179,6 +180,122 @@ GetClientPath(void)
 		bName = true;
 	}
 	return szName;
+}
+
+uint32 file_size(const String &filename)
+{
+    fstream file(filename.c_str(), fstream::in);
+
+    if (file.is_open())
+    {
+        file.seekg(0, fstream::end);
+        uint32 _size = file.tellg();
+        file.close();
+
+        return _size;
+    }
+
+    return 0;
+}
+
+int ASCIItoUTF8(const byte c, byte *out)
+{
+    if (c < 0x80)
+    {
+        *out = c;
+        return 1;
+    }
+    else if(c < 0xC0)
+    {
+        out[0] = 0xC2;
+        out[1] = c;
+        return 2;
+    }
+    out[0] = 0xC3;
+    out[1] = c - 0x40;
+    return 2;
+}
+
+bool exists(const String &filename)
+{
+    struct stat FileInfo;
+    return stat(filename.c_str(),&FileInfo) == 0;
+}
+
+void blit(SDL_Surface *in, SDL_Surface *out, int x0, int y0, int x1, int y1, int w, int h)
+{
+    SDL_Surface *tmp = in;
+    if (in->format->BitsPerPixel != out->format->BitsPerPixel)
+        tmp = SDL_ConvertSurface(in, out->format, SDL_SWSURFACE);
+
+    SDL_Rect rect_in, rect_out;
+
+    rect_in.x = x0;
+    rect_in.y = y0;
+    rect_in.w = w;
+    rect_in.h = h;
+    rect_out.x = x1;
+    rect_out.y = y1;
+
+    SDL_BlitSurface(tmp, &(rect_in), out, &(rect_out));
+
+    if (in->format->BitsPerPixel != out->format->BitsPerPixel)
+        SDL_FreeSurface(tmp);
+}
+
+void stretch_blit( SDL_Surface *in, SDL_Surface *out, int x0, int y0, int w0, int h0, int x1, int y1, int w1, int h1 )
+{
+    switch(in->format->BitsPerPixel)
+    {
+    case 8:
+        for(int y = 0 ; y < h0 ; y++)
+        {
+            int dy = (y1 + y * h1 / h0) * out->pitch;
+            int sy = (y + y0) * in->pitch;
+            for(int x = 0 ; x < w0 ; x++)
+            {
+                int sx = x + x0;
+                int dx = x1 + x * w1 / w0;
+                ((byte*)out->pixels)[dy + dx] = ((byte*)in->pixels)[sy + sx];
+            }
+        }
+        break;
+    case 16:
+        for(int y = 0 ; y < h0 ; y++)
+        {
+            int dy = (y1 + y * h1 / h0) * out->pitch;
+            int sy = (y + y0) * in->pitch;
+            for(int x = 0 ; x < w0 ; x++)
+            {
+                int sx = x + x0;
+                int dx = x1 + x * w1 / w0;
+                ((uint16*)out->pixels)[dy + dx] = ((uint16*)in->pixels)[sy + sx];
+            }
+        }
+        break;
+    case 32:
+        for(int y = 0 ; y < h0 ; y++)
+        {
+            int dy = (y1 + y * h1 / h0) * out->pitch;
+            int sy = (y + y0) * in->pitch;
+            for(int x = 0 ; x < w0 ; x++)
+            {
+                int sx = x + x0;
+                int dx = x1 + x * w1 / w0;
+                ((uint32*)out->pixels)[dy + dx] = ((uint32*)in->pixels)[sy + sx];
+            }
+        }
+        break;
+    };
+}
+
+void rest(uint32 msec)
+{
+#ifdef TA3D_PLATFORM_WINDOWS
+    sleep(msec);
+#else
+    usleep(msec * 1000);
+#endif
 }
 
 }

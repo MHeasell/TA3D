@@ -37,14 +37,16 @@ int
 _jpeg_getc(void)
 {
 	bytes_read++;
-	if (_jpeg_io.current_bit < 8) {
+	if (_jpeg_io.current_bit < 8)
+	{
 		if (*_jpeg_io.buffer == 0xff)
 			_jpeg_io.buffer++;
 		_jpeg_io.buffer++;
 	}
 	_jpeg_io.current_bit = 8;
 
-	if (_jpeg_io.buffer >= _jpeg_io.buffer_end) {
+	if (_jpeg_io.buffer >= _jpeg_io.buffer_end)
+	{
 		TRACE("Tried to read memory past buffer size");
 		jpgalleg_error = JPG_ERROR_INPUT_BUFFER_TOO_SMALL;
 		return -1;
@@ -59,7 +61,8 @@ _jpeg_getc(void)
 int
 _jpeg_putc(int c)
 {
-	if (_jpeg_io.buffer >= _jpeg_io.buffer_end) {
+	if (_jpeg_io.buffer >= _jpeg_io.buffer_end)
+	{
 		TRACE("Tried to write memory past buffer size");
 		jpgalleg_error = JPG_ERROR_OUTPUT_BUFFER_TOO_SMALL;
 		return -1;
@@ -76,7 +79,7 @@ int
 _jpeg_getw(void)
 {
 	int result;
-	
+
 	result = _jpeg_getc() << 8;
 	result |= _jpeg_getc();
 	return result;
@@ -90,7 +93,7 @@ int
 _jpeg_putw(int w)
 {
 	int result;
-	
+
 	result = _jpeg_putc((w >> 8) & 0xff);
 	result |= _jpeg_putc(w & 0xff);
 	return result;
@@ -103,8 +106,10 @@ _jpeg_putw(int w)
 int
 _jpeg_get_bit(void)
 {
-	if (_jpeg_io.current_bit <= 0) {
-		if (_jpeg_io.buffer >= _jpeg_io.buffer_end) {
+	if (_jpeg_io.current_bit <= 0)
+	{
+		if (_jpeg_io.buffer >= _jpeg_io.buffer_end)
+		{
 			TRACE("Tried to read memory past buffer size");
 			jpgalleg_error = JPG_ERROR_INPUT_BUFFER_TOO_SMALL;
 			return -1;
@@ -130,7 +135,8 @@ _jpeg_put_bit(int bit)
 {
 	current_byte |= (bit << _jpeg_io.current_bit);
 	_jpeg_io.current_bit--;
-	if (_jpeg_io.current_bit < 0) {
+	if (_jpeg_io.current_bit < 0)
+	{
 		if (_jpeg_putc(current_byte))
 			return -1;
 		if (current_byte == 0xff)
@@ -182,7 +188,7 @@ _jpeg_close_chunk(void)
 int
 _jpeg_eoc(void)
 {
-	return (bytes_read < chunk_len) ? FALSE : TRUE;
+	return (bytes_read < chunk_len) ? false : true;
 }
 
 
@@ -193,7 +199,7 @@ void
 _jpeg_new_chunk(int type)
 {
 	char *c = (char *)malloc(65536);
-	
+
 	c[0] = 0xff;
 	c[1] = type;
 	chunk_len = 2;
@@ -208,7 +214,7 @@ void
 _jpeg_write_chunk(void)
 {
 	unsigned char *c;
-	
+
 	if (!chunk)
 		return;
 	c = (unsigned char *)chunk;
@@ -230,7 +236,7 @@ void
 _jpeg_chunk_putc(int c)
 {
 	char *p = (char *)chunk + chunk_len + 2;
-	
+
 	*p = c;
 	chunk_len++;
 }

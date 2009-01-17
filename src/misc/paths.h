@@ -192,8 +192,8 @@ namespace Paths
     ** }
     ** \endcode
     */
-    bool Glob(String::Vector& out, const String& pattern, const bool emptyListBefore = true);
-    bool Glob(String::List& out, const String& pattern, const bool emptyListBefore = true);
+    bool Glob(String::Vector& out, const String& pattern, const bool emptyListBefore = true, const bool relative = false);
+    bool Glob(String::List& out, const String& pattern, const bool emptyListBefore = true, const bool relative = false);
 
     /*!
     ** \brief Find files matching a pattern
@@ -217,8 +217,8 @@ namespace Paths
     ** }
     ** \endcode
     */
-    bool GlobFiles(String::Vector& out, const String& pattern, const bool emptyListBefore = true);
-    bool GlobFiles(String::List& out, const String& pattern, const bool emptyListBefore = true);
+    bool GlobFiles(String::Vector& out, const String& pattern, const bool emptyListBefore = true, const bool relative = false);
+    bool GlobFiles(String::List& out, const String& pattern, const bool emptyListBefore = true, const bool relative = false);
 
     /*!
     ** \brief Find directories matching a pattern
@@ -242,8 +242,8 @@ namespace Paths
     ** }
     ** \endcode
     */
-    bool GlobDirs(String::Vector& out, const String& pattern, const bool emptyListBefore = true);
-    bool GlobDirs(String::List& out, const String& pattern, const bool emptyListBefore = true);
+    bool GlobDirs(String::Vector& out, const String& pattern, const bool emptyListBefore = true, const bool relative = false);
+    bool GlobDirs(String::List& out, const String& pattern, const bool emptyListBefore = true, const bool relative = false);
 
     //@} // Globbing
 

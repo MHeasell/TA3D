@@ -52,6 +52,8 @@ namespace TA3D
         friend class GfxFont;
 
         bool		alpha_blending_set;
+        GLuint      texture_format;
+        bool        build_mipmaps;
 
     public:
         //! \name 2D/3D Mode
@@ -62,6 +64,11 @@ namespace TA3D
         static void unset_2D_mode();
         //@}
 
+        //! Set current texture format
+        void set_texture_format(GLuint gl_format);
+
+        //! Set current texture format
+        void use_mipmapping(bool use);
 
         /*!
         ** \brief Draw a texture inside a quad surface
@@ -79,9 +86,9 @@ namespace TA3D
         **
         ** \param file The texture file
         ** \param filealpha The mask
-        ** \return A valid BITMAP
+        ** \return A valid SDL_Surface
         */
-        static BITMAP* LoadMaskedTextureToBmp(const String& file, const String& filealpha);
+        static SDL_Surface* LoadMaskedTextureToBmp(const String& file, const String& filealpha);
 
     public:
         int			width;				// Size of this window on the screen
@@ -122,7 +129,7 @@ namespace TA3D
         uint32 InterfaceMsg( const lpcImsg msg );
 
         void preCalculations();
-        void initAllegroGL();
+        void initSDL();
         bool checkVideoCardWorkaround() const;
         void displayInfosAboutOpenGL() const;
 
@@ -243,9 +250,9 @@ namespace TA3D
         //@} // Text manipilation
 
 
-        GLuint	make_texture( BITMAP *bmp, byte filter_type = FILTER_TRILINEAR, bool clamp = true );
+        GLuint	make_texture( SDL_Surface *bmp, byte filter_type = FILTER_TRILINEAR, bool clamp = true );
         GLuint	create_texture( int w, int h, byte filter_type = FILTER_TRILINEAR, bool clamp = true );
-        void	blit_texture( BITMAP *src, GLuint dst );
+        void	blit_texture( SDL_Surface *src, GLuint dst );
         GLuint	load_texture( String file, byte filter_type = FILTER_TRILINEAR, uint32 *width = NULL, uint32 *height = NULL, bool clamp = true, GLuint texFormat = 0 );
         GLuint	load_texture_mask( String file, int level, byte filter_type = FILTER_TRILINEAR, uint32 *width = NULL, uint32 *height = NULL, bool clamp = true );
         GLuint	load_texture_from_cache( String file, byte filter_type = FILTER_TRILINEAR, uint32 *width = NULL, uint32 *height = NULL, bool clamp = true );
@@ -273,7 +280,7 @@ namespace TA3D
 
         GLuint make_texture_from_screen(byte filter_type = FILTER_NONE);
 
-        BITMAP *load_image(const String filename);
+        SDL_Surface *load_image(const String filename);
 
         void set_alpha_blending();
         void unset_alpha_blending();
@@ -293,7 +300,7 @@ namespace TA3D
         /*!
         ** \brief Flip the backbuffer to the Allegro screen and clear it
         */
-        void flip() const { allegro_gl_flip(); }
+        void flip() const { SDL_GL_SwapBuffers(); }
 
         /*!
         ** \brief set a texture as render target, goes back to normal when passing 0 (do not forget to detach the texture when you're done!)
@@ -304,6 +311,9 @@ namespace TA3D
         ** \brief runs several tests on GFX hardware capabilities, should be used only when calling ta3d with --test
         */
         static void runTests();
+
+        SDL_Surface *create_surface_ex(int bpp, int w, int h);
+        SDL_Surface *create_surface(int w, int h);
 
     }; // class GFX
 

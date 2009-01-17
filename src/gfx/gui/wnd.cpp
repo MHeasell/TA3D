@@ -83,8 +83,8 @@ namespace TA3D
             return;
 
         // Format
-        int old_u_format = get_uformat();
-        set_uformat(u_format);
+//        int old_u_format = get_uformat();
+//        set_uformat(u_format);
 
         // Background
         doDrawWindowBackground(skin);
@@ -106,7 +106,7 @@ namespace TA3D
             }
         }
         // Restore the previous format
-        set_uformat(old_u_format);
+//        set_uformat(old_u_format);
     }
 
 
@@ -114,7 +114,7 @@ namespace TA3D
     void WND::doDrawWindowBackground(SKIN* skin)
     {
         glEnable(GL_BLEND);
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);		
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         if (background == 0)
         {
             if (skin && skin->wnd_background)
@@ -344,7 +344,7 @@ namespace TA3D
         }
 
         // Make it darker when disabled
-        if (Objets[i].Type != OBJ_TA_BUTTON && (Objets[i].Flag & FLAG_DISABLED)) 
+        if (Objets[i].Type != OBJ_TA_BUTTON && (Objets[i].Flag & FLAG_DISABLED))
         {
             glEnable(GL_BLEND);
             glDisable(GL_TEXTURE_2D);
@@ -356,7 +356,7 @@ namespace TA3D
         }
 
         // Highlight the object
-        if ((Objets[i].Flag & FLAG_HIGHLIGHT) && Objets[i].MouseOn) 
+        if ((Objets[i].Flag & FLAG_HIGHLIGHT) && Objets[i].MouseOn)
         {
             glEnable(GL_BLEND);
             glDisable(GL_TEXTURE_2D);
@@ -378,7 +378,7 @@ namespace TA3D
                 FloatMenu(x + Objets[i].x1, y + Objets[i].y1, Objets[i].Text,
                           Objets[i].Data, 0, skin, Objets[i].s);
                 break;
-            case OBJ_MENU: // Menu déroulant 
+            case OBJ_MENU: // Menu déroulant
                 if (Objets[i].Etat)
                 {
                     button(x + Objets[i].x1, y + Objets[i].y1,
@@ -1172,9 +1172,9 @@ namespace TA3D
     void WND::load_gui(const String& filename, TA3D::UTILS::cHashTable< std::vector< TA3D::Interfaces::GfxTexture >* > &gui_hashtable)
     {
         if (g_useTextureCompression && lp_CONFIG->use_texture_compression)
-            allegro_gl_set_texture_format(GL_COMPRESSED_RGB_ARB);
+            gfx->set_texture_format(GL_COMPRESSED_RGB_ARB);
         else
-            allegro_gl_set_texture_format(GL_RGB8);
+            gfx->set_texture_format(GL_RGB8);
 
         TDFParser wndFile(filename, false, false, true);
 
@@ -1384,8 +1384,6 @@ namespace TA3D
 
             String wnd_uformat = wndFile.pullAsString("window.uformat");
             if (wnd_uformat == "ASCII")    u_format = U_ASCII;
-            if (wnd_uformat == "ASCII_CP") u_format = U_ASCII_CP;
-            if (wnd_uformat == "UNICODE")  u_format = U_UNICODE;
             if (wnd_uformat == "UTF8")     u_format = U_UTF8;
             Title = I18N::Translate(wndFile.pullAsString("window.title"));
             x = wndFile.pullAsInt("window.x");
@@ -1528,7 +1526,7 @@ namespace TA3D
                             t_h.push_back(th);
                         }
                     }
-                    
+
                     Objets[i].create_ta_button(X1, Y1, Entry, gl_imgs, gl_imgs.size());
                     for (unsigned int e = 0; e < Objets[i].gltex_states.size(); ++e)
                     {

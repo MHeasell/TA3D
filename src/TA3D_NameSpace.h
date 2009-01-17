@@ -193,11 +193,12 @@ namespace TA3D
 
 	namespace VARS
 	{
+	    TA3D_API_E SDL_Surface                      *screen;
 		TA3D_API_E TA3D::IInterfaceManager			*InterfaceManager;
 		TA3D_API_E TA3D::UTILS::HPI::cHPIHandler	*HPIManager;
 		TA3D_API_E TA3D::GFX* gfx;
 
-		TA3D_API_E RGB								*pal;
+		TA3D_API_E SDL_Color						*pal;
 		TA3D_API_E TA3D::TA3DCONFIG					*lp_CONFIG;
 
 		TA3D_API_E uint8							unit_engine_thread_sync;
@@ -208,6 +209,10 @@ namespace TA3D
 		TA3D_API_E ObjectSync						*ThreadSynchroniser;
 		TA3D_API_E String							TA3D_CURRENT_MOD;
 		TA3D_API_E int								ascii_to_scancode[ 256 ];
+
+		TA3D_API_E int                              mouse_x, mouse_y, mouse_z, mouse_b;
+		TA3D_API_E int                              key[0x1000];
+		TA3D_API_E std::list<int>                   keybuf;
 
 		// Some constant data needed by the engine ( like number of ticks/sec. to simulate )
 #define TICKS_PER_SEC				30
@@ -222,10 +227,49 @@ namespace TA3D
     */
 	void TA3D_clear_cache(bool force=false);
 
+	/*!
+	** \brief return true is there are key codes waiting in the buffer, false otherwise
+	*/
+	inline bool keypressed()    {   return !VARS::keybuf.empty(); }
+
+	/*!
+	** \brief return the next key code in the key buffer
+	*/
+	int readkey();
+
+	/*!
+	** \brief clears the key code buffer
+	*/
+	void clear_keybuf();
+
+	/*!
+	** \brief poll keyboard events
+	*/
+	void poll_keyboard();
+
+	/*!
+	** \brief poll mouse events
+	*/
+	void poll_mouse();
 } // namespace TA3D
 
+#define SCREEN_W    (screen->w)
+#define SCREEN_H    (screen->h)
 
-
+#define KEY_ENTER       SDLK_RETURN
+#define KEY_SPACE       SDLK_SPACE
+#define KEY_LEFT        SDLK_LEFT
+#define KEY_RIGHT       SDLK_RIGHT
+#define KEY_UP          SDLK_UP
+#define KEY_DOWN        SDLK_DOWN
+#define KEY_TAB         SDLK_TAB
+#define KEY_LSHIFT      SDLK_LSHIFT
+#define KEY_RSHIFT      SDLK_RSHIFT
+#define KEY_LCONTROL    SDLK_LCTRL
+#define KEY_RCONTROL    SDLK_RCTRL
+#define KEY_ESC         SDLK_ESCAPE
+#define KEY_BACKSPACE   SDLK_BACKSPACE
+#define KEY_DEL         SDLK_DELETE
 
 #ifndef TA3D_MSEC_TIMER
 #define TA3D_MSEC_TIMER

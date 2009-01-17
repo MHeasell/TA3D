@@ -22,7 +22,6 @@
 
 #include "internal.h"
 
-
 static HUFFMAN_TABLE *ac_luminance_table, *dc_luminance_table;
 static HUFFMAN_TABLE *ac_chrominance_table, *dc_chrominance_table;
 static DATA_BUFFER *data_buffer[3];
@@ -54,12 +53,14 @@ _jpeg_c_idct(short *data, short *output, short *dequant, short *workspace)
 	short *inptr, *dqptr, *outptr;
 	int *wsptr;
 	int i, temp;
-	
+
 	inptr = data;
 	dqptr = dequant;
 	wsptr = (int *)workspace;
-	for (i = 8; i; i--) {
-		if ((inptr[8] | inptr[16] | inptr[24] | inptr[32] | inptr[40] | inptr[48] | inptr[56]) == 0) {
+	for (i = 8; i; i--)
+	{
+		if ((inptr[8] | inptr[16] | inptr[24] | inptr[32] | inptr[40] | inptr[48] | inptr[56]) == 0)
+		{
 			temp = inptr[0] * dqptr[0];
 			wsptr[0] = temp;
 			wsptr[8] = temp;
@@ -114,10 +115,11 @@ _jpeg_c_idct(short *data, short *output, short *dequant, short *workspace)
 		dqptr++;
 		wsptr++;
 	}
-	
+
 	wsptr = (int *)workspace;
 	outptr = output;
-	for (i = 8; i; i--) {
+	for (i = 8; i; i--)
+	{
 		tmp10 = wsptr[0] + wsptr[4];
 		tmp11 = wsptr[0] - wsptr[4];
 		tmp13 = wsptr[2] + wsptr[6];
@@ -155,11 +157,11 @@ _jpeg_c_idct(short *data, short *output, short *dequant, short *workspace)
 /* zigzag_reorder:
  *  Reorders a vector of 64 coefficients by the zigzag scan.
  */
-static INLINE void
+static inline void
 zigzag_reorder(short *input, short *output)
 {
 	int i;
-	
+
 	for (i = 0; i < 64; i++)
 		output[i] = input[_jpeg_zigzag_scan[i]];
 }
@@ -172,8 +174,9 @@ static void
 free_huffman_table(HUFFMAN_TABLE *table)
 {
 	int i;
-	
-	for (i = 0; i < 16; i++) {
+
+	for (i = 0; i < 16; i++)
+	{
 		if (table->entry_of_length[i])
 			free(table->entry_of_length[i]);
 		table->entry_of_length[i] = NULL;
@@ -192,17 +195,20 @@ read_dht_chunk(void)
 	unsigned char data;
 	HUFFMAN_TABLE *table;
 	HUFFMAN_ENTRY *entry;
-	
+
 	_jpeg_open_chunk();
-	do {
+	do
+	{
 		data = _jpeg_getc();
-		if (data & 0xe0) {
+		if (data & 0xe0)
+		{
 			TRACE("Invalid DHT information byte");
 			jpgalleg_error = JPG_ERROR_BAD_IMAGE;
 			return -1;
 		}
 		table_id = data & 0xf;
-		if (table_id > 3) {
+		if (table_id > 3)
+		{
 			TRACE("Invalid huffman table number");
 			jpgalleg_error = JPG_ERROR_BAD_IMAGE;
 			return -1;
@@ -214,16 +220,19 @@ read_dht_chunk(void)
 		for (i = 0; i < 16; i++)
 			num_codes[i] = _jpeg_getc();
 		code = 0;
-		for (i = 0; i < 16; i++) {
+		for (i = 0; i < 16; i++)
+		{
 			if (table->entry_of_length[i])
 				free(table->entry_of_length[i]);
 			table->entry_of_length[i] = (HUFFMAN_ENTRY *)calloc(1 << (i + 1), sizeof(HUFFMAN_ENTRY));
-			if (!table->entry_of_length[i]) {
+			if (!table->entry_of_length[i])
+			{
 				TRACE("Out of memory");
 				jpgalleg_error = JPG_ERROR_OUT_OF_MEMORY;
 				return -1;
 			}
-			for (j = 0; j < num_codes[i]; j++) {
+			for (j = 0; j < num_codes[i]; j++)
+			{
 				value = _jpeg_getc();
 				entry = &table->entry_of_length[i][code];
 				entry->value = value;
@@ -235,7 +244,7 @@ read_dht_chunk(void)
 		}
 	} while (!_jpeg_eoc());
 	_jpeg_close_chunk();
-	
+
 	return 0;
 }
 
@@ -247,9 +256,10 @@ static int
 read_sof0_chunk(void)
 {
 	int i, data;
-	
+
 	_jpeg_open_chunk();
-	if ((data = _jpeg_getc()) != 8) {
+	if ((data = _jpeg_getc()) != 8)
+	{
 		TRACE("Unsupported data precision (%d)", data);
 		jpgalleg_error = JPG_ERROR_UNSUPPORTED_DATA_PRECISION;
 		return -1;
@@ -257,25 +267,29 @@ read_sof0_chunk(void)
 	jpeg_h = _jpeg_getw();
 	jpeg_w = _jpeg_getw();
 	jpeg_components = _jpeg_getc();
-	if ((jpeg_components != 1) && (jpeg_components != 3)) {
+	if ((jpeg_components != 1) && (jpeg_components != 3))
+	{
 		TRACE("Unsupported number of components (%d)", jpeg_components);
 		jpgalleg_error = JPG_ERROR_UNSUPPORTED_COLOR_SPACE;
 		return -1;
 	}
-	for (i = 0; i < jpeg_components; i++) {
+	for (i = 0; i < jpeg_components; i++)
+	{
 		switch (_jpeg_getc()) {
 			case 1:
 				data = _jpeg_getc();
 				h_sampling = data >> 4;
 				v_sampling = data & 0xf;
 				sampling = h_sampling * v_sampling;
-				if ((sampling != 1) && (sampling != 2) && (sampling != 4)) {
+				if ((sampling != 1) && (sampling != 2) && (sampling != 4))
+				{
 					TRACE("Bad sampling byte (%d)", sampling);
 					jpgalleg_error = JPG_ERROR_BAD_IMAGE;
 					return -1;
 				}
 				data = _jpeg_getc();
-				if (data > 3) {
+				if (data > 3)
+				{
 					TRACE("Bad quantization table number (%d)", data);
 					jpgalleg_error = JPG_ERROR_BAD_IMAGE;
 					return -1;
@@ -286,7 +300,8 @@ read_sof0_chunk(void)
 			case 3:
 				_jpeg_getc();
 				data = _jpeg_getc();
-				if (data > 3) {
+				if (data > 3)
+				{
 					TRACE("Bad quantization table number (%d)", data);
 					jpgalleg_error = JPG_ERROR_BAD_IMAGE;
 					return -1;
@@ -296,7 +311,7 @@ read_sof0_chunk(void)
 		}
 	}
 	_jpeg_close_chunk();
-	
+
 	return 0;
 }
 
@@ -310,16 +325,19 @@ read_dqt_chunk(void)
 	int i, data;
 	short *table, temp[64];
 	float value;
-	
+
 	_jpeg_open_chunk();
-	do {
+	do
+	{
   		data = _jpeg_getc();
-		if ((data & 0xf) > 3) {
+		if ((data & 0xf) > 3)
+		{
 			TRACE("Bad quantization table number (%d)", data);
 			jpgalleg_error = JPG_ERROR_BAD_IMAGE;
 			return -1;
 		}
-		if (data & 0xf0) {
+		if (data & 0xf0)
+		{
 			TRACE("Unsupported quantization table data precision");
 			jpgalleg_error = JPG_ERROR_UNSUPPORTED_DATA_PRECISION;
 			return -1;
@@ -328,13 +346,14 @@ read_dqt_chunk(void)
 		for (i = 0; i < 64; i++)
 			temp[i] = _jpeg_getc();
 		zigzag_reorder(temp, table);
-		for (i = 0; i < 64; i++) {
+		for (i = 0; i < 64; i++)
+		{
 			value = (float)table[i] * AAN_FACTOR(i) * 16384.0;
 			table[i] = ((int)value + (1 << 11)) >> 12;
 		}
 	} while (!_jpeg_eoc());
 	_jpeg_close_chunk();
-	
+
 	return 0;
 }
 
@@ -346,20 +365,24 @@ static int
 read_sos_chunk(void)
 {
 	int i, data;
-	
+
 	_jpeg_open_chunk();
 	scan_components = _jpeg_getc();
-	if (scan_components > 3) {
+	if (scan_components > 3)
+	{
 		TRACE("Unsupported number of scan components (%d)", scan_components);
 		jpgalleg_error = JPG_ERROR_UNSUPPORTED_COLOR_SPACE;
 		return -1;
 	}
-	for (i = 0; i < scan_components; i++) {
+	for (i = 0; i < scan_components; i++)
+	{
 		component[i] = _jpeg_getc();
-		switch (component[i]) {
+		switch (component[i])
+		{
 			case 1:
 				data = _jpeg_getc();
-				if (((data & 0xf) > 3) || ((data >> 4) > 3)) {
+				if (((data & 0xf) > 3) || ((data >> 4) > 3))
+				{
 					TRACE("Bad huffman table specified for %s component", _jpeg_component_name[component[i] - 1]);
 					jpgalleg_error = JPG_ERROR_BAD_IMAGE;
 					return -1;
@@ -370,7 +393,8 @@ read_sos_chunk(void)
 			case 2:
 			case 3:
 				data = _jpeg_getc();
-				if (((data & 0xf) > 3) || ((data >> 4) > 3)) {
+				if (((data & 0xf) > 3) || ((data >> 4) > 3))
+				{
 					TRACE("Bad huffman table specified for %s component", _jpeg_component_name[component[i] - 1]);
 					jpgalleg_error = JPG_ERROR_BAD_IMAGE;
 					return -1;
@@ -403,24 +427,28 @@ read_appn_chunk(int n)
 {
 	const char *header_id;
 	int i;
-	
+
 	if (n == CHUNK_APP0)
 		header_id = "JFIF";
 	else
 		header_id = "Exif";
-	
+
 	_jpeg_open_chunk();
-	for (i = 0; i < 5; i++) {
-		if (_jpeg_getc() != header_id[i]) {
+	for (i = 0; i < 5; i++)
+	{
+		if (_jpeg_getc() != header_id[i])
+		{
 			TRACE("Bad %s header", (n == CHUNK_APP0) ? "JFIF" : "EXIF" );
 			_jpeg_close_chunk();
 			jpgalleg_error = JPG_ERROR_NOT_JPEG;
 			return -1;
 		}
 	}
-	if (n == CHUNK_APP0) {
+	if (n == CHUNK_APP0)
+	{
 		/* Only JFIF version 1.x is supported */
-		if (_jpeg_getc() != 1) {
+		if (_jpeg_getc() != 1)
+		{
 			TRACE("Not a JFIF version 1.x file");
 			_jpeg_close_chunk();
 			return -1;
@@ -451,14 +479,16 @@ static int
 get_bits(int num_bits)
 {
 	int result = 0;
-	
-	while (_jpeg_io.current_bit < num_bits) {
+
+	while (_jpeg_io.current_bit < num_bits)
+	{
 		result = (result << _jpeg_io.current_bit) | (*_jpeg_io.buffer & ((1 << _jpeg_io.current_bit) - 1));
 		num_bits -= _jpeg_io.current_bit;
 		_jpeg_io.current_bit = 8;
 		if (*_jpeg_io.buffer == 0xff)
 			_jpeg_io.buffer++;
-		if (_jpeg_io.buffer >= _jpeg_io.buffer_end) {
+		if (_jpeg_io.buffer >= _jpeg_io.buffer_end)
+		{
 			TRACE("Tried to read memory past buffer size");
 			jpgalleg_error = JPG_ERROR_INPUT_BUFFER_TOO_SMALL;
 			return 0x80000000;
@@ -467,7 +497,7 @@ get_bits(int num_bits)
 	}
 	result = (result << num_bits) | ((*_jpeg_io.buffer >> (_jpeg_io.current_bit - num_bits)) & ((1 << num_bits) - 1));
 	_jpeg_io.current_bit -= num_bits;
-	
+
 	return result;
 }
 
@@ -476,7 +506,7 @@ get_bits(int num_bits)
  *  Reads a string of bits from the input stream and returns a properly signed
  *  number given the category.
  */
-INLINE int
+inline int
 get_value(int category)
 {
 	int result = get_bits(category);
@@ -497,19 +527,22 @@ huffman_decode(HUFFMAN_TABLE *table)
 	HUFFMAN_ENTRY *entry, **entry_lut;
 	int i, value;
 	unsigned char *p = _jpeg_io.buffer;
-	
+
 	value = (*p & ((1 << _jpeg_io.current_bit) - 1)) << (16 - _jpeg_io.current_bit);
 	if (*p++ == 0xff) p++;
 	value |= *p << (8 - _jpeg_io.current_bit);
 	if (*p++ == 0xff) p++;
 	value |= *p >> _jpeg_io.current_bit;
-	
+
 	entry_lut = table->entry_of_length;
-	for (i = 15; i >= 0; i--) {
+	for (i = 15; i >= 0; i--)
+	{
 		entry = &((*entry_lut)[value >> i]);
-		if (entry->bits_length == 16 - i) {
+		if (entry->bits_length == 16 - i)
+		{
 			_jpeg_io.current_bit -= 16 - i;
-			while (_jpeg_io.current_bit <= 0) {
+			while (_jpeg_io.current_bit <= 0)
+			{
 				_jpeg_io.current_bit += 8;
 				if (*_jpeg_io.buffer == 0xff)
 					_jpeg_io.buffer++;
@@ -537,20 +570,23 @@ decode_baseline_block(short *block, int type, int *old_dc)
 	short workspace[130];
 	short pre_idct_block[80];
 	short ordered_pre_idct_block[64];
-	
-	if (type == LUMINANCE) {
+
+	if (type == LUMINANCE)
+	{
 		dc_table = dc_luminance_table;
 		ac_table = ac_luminance_table;
 		quant_table = luminance_quantization_table;
 	}
-	else {
+	else
+	{
 		dc_table = dc_chrominance_table;
 		ac_table = ac_chrominance_table;
 		quant_table = chrominance_quantization_table;
 	}
-	
+
 	data = huffman_decode(dc_table);
-	if (data < 0) {
+	if (data < 0)
+	{
 		TRACE("Bad dc data");
 		jpgalleg_error = JPG_ERROR_BAD_IMAGE;
 		return -1;
@@ -559,11 +595,13 @@ decode_baseline_block(short *block, int type, int *old_dc)
 		return -1;
 	*old_dc += data;
 	pre_idct_block[0] = *old_dc;
-	
+
 	index = 1;
-	do {
+	do
+	{
 		data = huffman_decode(ac_table);
-		if (data < 0) {
+		if (data < 0)
+		{
 			/* Bad block */
 			TRACE("Bad ac data");
 			jpgalleg_error = JPG_ERROR_BAD_IMAGE;
@@ -571,7 +609,8 @@ decode_baseline_block(short *block, int type, int *old_dc)
 		}
 		num_zeroes = data >> 4;
 		category = data & 0xf;
-		if (category != 0) {
+		if (category != 0)
+		{
 			/* Normal zero run length coding */
 			for (; num_zeroes; num_zeroes--)
 				pre_idct_block[index++] = 0;
@@ -579,30 +618,34 @@ decode_baseline_block(short *block, int type, int *old_dc)
 				return -1;
 			pre_idct_block[index++] = data;
 		}
-		else {
-			if (num_zeroes == 0) {
+		else
+		{
+			if (num_zeroes == 0)
+			{
 				/* End of block */
 				while (index < 64)
 					pre_idct_block[index++] = 0;
 				break;
 			}
-			else if (num_zeroes == 15) {
+			else if (num_zeroes == 15)
+			{
 				/* 16 zeroes special case */
 				for (i = 16; i; i--)
 					pre_idct_block[index++] = 0;
 			}
-			else {
+			else
+			{
 				TRACE("Bad ac data");
 				jpgalleg_error = JPG_ERROR_BAD_IMAGE;
 				return -1;
 			}
 		}
 	} while (index < 64);
-	
+
 	zigzag_reorder(pre_idct_block, ordered_pre_idct_block);
-	
+
 	idct(ordered_pre_idct_block, block, quant_table, workspace);
-	
+
 	return 0;
 }
 
@@ -619,22 +662,27 @@ decode_progressive_block(char *addr, int type, int *old_dc)
 	int data, index, value;
 	int num_zeroes, category;
 	int p_bit, n_bit;
-	
-	if (type == LUMINANCE) {
+
+	if (type == LUMINANCE)
+	{
 		dc_table = dc_luminance_table;
 		ac_table = ac_luminance_table;
 	}
-	else {
+	else
+	{
 		dc_table = dc_chrominance_table;
 		ac_table = ac_chrominance_table;
 	}
-	
-	if (spectrum_start == 0) {
+
+	if (spectrum_start == 0)
+	{
 		/* DC scan */
-		if (successive_high == 0) {
+		if (successive_high == 0)
+		{
 			/* First DC scan */
 			data = huffman_decode(dc_table);
-			if (data < 0) {
+			if (data < 0)
+			{
 				TRACE("Bad dc data");
 				jpgalleg_error = JPG_ERROR_BAD_IMAGE;
 				return -1;
@@ -644,9 +692,11 @@ decode_progressive_block(char *addr, int type, int *old_dc)
 			*old_dc += data;
 			block[0] = *old_dc << successive_low;
 		}
-		else {
+		else
+		{
 			/* DC successive approximation */
-			if ((data = _jpeg_get_bit()) < 0) {
+			if ((data = _jpeg_get_bit()) < 0)
+			{
 				TRACE("Failed to get bit from input stream");
 				jpgalleg_error = JPG_ERROR_BAD_IMAGE;
 				return -1;
@@ -655,33 +705,42 @@ decode_progressive_block(char *addr, int type, int *old_dc)
 				block[0] |= (1 << successive_low);
 		}
 	}
-	else {
+	else
+	{
 		/* AC scan */
-		if (successive_high == 0) {
+		if (successive_high == 0)
+		{
 			/* First AC scan */
-			if (skip_count) {
+			if (skip_count)
+			{
 				skip_count--;
 				return 0;
 			}
 			index = spectrum_start;
-			do {
+			do
+			{
 				data = huffman_decode(ac_table);
-				if (data < 0) {
+				if (data < 0)
+				{
 					TRACE("Bad ac data (first scan)");
 					jpgalleg_error = JPG_ERROR_BAD_IMAGE;
 					return -1;
 				}
 				num_zeroes = data >> 4;
 				category = data & 0xf;
-				if (category == 0) {
+				if (category == 0)
+				{
 					if (num_zeroes == 15)
 						index += 16;
-					else {
+					else
+					{
 						index++;
 						skip_count = 0;
-						if (num_zeroes) {
+						if (num_zeroes)
+						{
 							value = get_bits(num_zeroes);
-							if (value < 0) {
+							if (value < 0)
+							{
 								TRACE("Failed to get bit from input stream");
 								jpgalleg_error = JPG_ERROR_BAD_IMAGE;
 								return -1;
@@ -691,7 +750,8 @@ decode_progressive_block(char *addr, int type, int *old_dc)
 						break;
 					}
 				}
-				else {
+				else
+				{
 					index += num_zeroes;
 					if ((data = get_value(category)) == (int)0x80000000)
 						return -1;
@@ -699,27 +759,35 @@ decode_progressive_block(char *addr, int type, int *old_dc)
 				}
 			} while (index <= spectrum_end);
 		}
-		else {
+		else
+		{
 			/* AC successive approximation */
 			index = spectrum_start;
 			p_bit = 1 << successive_low;
 			n_bit = (-1) << successive_low;
-			if (skip_count == 0) {
-				do {
+			if (skip_count == 0)
+			{
+				do
+				{
 					data = huffman_decode(ac_table);
-					if (data < 0) {
+					if (data < 0)
+					{
 						TRACE("Bad ac data");
 						jpgalleg_error = JPG_ERROR_BAD_IMAGE;
 						return -1;
 					}
 					num_zeroes = data >> 4;
 					category = data & 0xf;
-					if (category == 0) {
-						if (num_zeroes < 15) {
+					if (category == 0)
+					{
+						if (num_zeroes < 15)
+						{
 							skip_count = 1 << num_zeroes;
-							if (num_zeroes) {
+							if (num_zeroes)
+							{
 								value = get_bits(num_zeroes);
-								if (value < 0) {
+								if (value < 0)
+								{
 									TRACE("Failed to get bit from input stream");
 									jpgalleg_error = JPG_ERROR_BAD_IMAGE;
 									return -1;
@@ -729,8 +797,10 @@ decode_progressive_block(char *addr, int type, int *old_dc)
 							break;
 						}
 					}
-					else if (category == 1) {
-						if ((data = _jpeg_get_bit()) < 0) {
+					else if (category == 1)
+					{
+						if ((data = _jpeg_get_bit()) < 0)
+						{
 							TRACE("Failed to get bit from input stream");
 							jpgalleg_error = JPG_ERROR_BAD_IMAGE;
 							return -1;
@@ -740,26 +810,32 @@ decode_progressive_block(char *addr, int type, int *old_dc)
 						else
 							category = n_bit;
 					}
-					else {
+					else
+					{
 						TRACE("Unexpected ac value category");
 						jpgalleg_error = JPG_ERROR_BAD_IMAGE;
 						return -1;
 					}
-					do {
-						if (block[index]) {
-							if ((data = _jpeg_get_bit()) < 0) {
+					do
+					{
+						if (block[index])
+						{
+							if ((data = _jpeg_get_bit()) < 0)
+							{
 								TRACE("Failed to get bit from input stream");
 								jpgalleg_error = JPG_ERROR_BAD_IMAGE;
 								return -1;
 							}
-							if ((data) && (!(block[index] & p_bit))) {
+							if ((data) && (!(block[index] & p_bit)))
+							{
 								if (block[index] >= 0)
 									block[index] += p_bit;
 								else
 									block[index] += n_bit;
 							}
 						}
-						else {
+						else
+						{
 							num_zeroes--;
 							if (num_zeroes < 0)
 								break;
@@ -771,15 +847,20 @@ decode_progressive_block(char *addr, int type, int *old_dc)
 					index++;
 				} while (index <= spectrum_end);
 			}
-			if (skip_count > 0) {
-				while (index <= spectrum_end) {
-					if (block[index]) {
-						if ((data = _jpeg_get_bit()) < 0) {
+			if (skip_count > 0)
+			{
+				while (index <= spectrum_end)
+				{
+					if (block[index])
+					{
+						if ((data = _jpeg_get_bit()) < 0)
+						{
 							TRACE("Failed to get bit from input stream");
 							jpgalleg_error = JPG_ERROR_BAD_IMAGE;
 							return -1;
 						}
-						if ((data) && (!(block[index] & p_bit))) {
+						if ((data) && (!(block[index] & p_bit)))
+						{
 							if (block[index] >= 0)
 								block[index] += p_bit;
 							else
@@ -792,7 +873,7 @@ decode_progressive_block(char *addr, int type, int *old_dc)
 			}
 		}
 	}
-	
+
 	return 0;
 }
 
@@ -864,14 +945,17 @@ plot_444(char *addr, int pitch, short *y1, short *y2, short *y3, short *y4, shor
 {
 	int x, y;
 	short *y1_ptr = y1, *cb_ptr = cb, *cr_ptr = cr, v;
-	
+
 	(void)y2;
 	(void)y3;
 	(void)y4;
-	
-	if (jpeg_components == 1) {
-		for (y = 0; y < 8; y++) {
-			for (x = 0; x < 8; x++) {
+
+	if (jpeg_components == 1)
+	{
+		for (y = 0; y < 8; y++)
+		{
+			for (x = 0; x < 8; x++)
+			{
 				v = *y1_ptr++;
 				*(unsigned char *)addr = MID(0, v, 255);
 				addr++;
@@ -879,9 +963,12 @@ plot_444(char *addr, int pitch, short *y1, short *y2, short *y3, short *y4, shor
 			addr += (pitch - 8);
 		}
 	}
-	else {
-		for (y = 0; y < 8; y++) {
-			for (x = 0; x < 8; x += 4) {
+	else
+	{
+		for (y = 0; y < 8; y++)
+		{
+			for (x = 0; x < 8; x += 4)
+			{
 				ycbcr2rgb(addr, *y1_ptr, *cb_ptr, *cr_ptr, *(y1_ptr + 1), *(cb_ptr + 1), *(cr_ptr + 1), *(y1_ptr + 2), *(cb_ptr + 2), *(cr_ptr + 2), *(y1_ptr + 3), *(cb_ptr + 3), *(cr_ptr + 3));
 				y1_ptr += 4;
 				cb_ptr += 4;
@@ -902,12 +989,14 @@ plot_422_h(char *addr, int pitch, short *y1, short *y2, short *y3, short *y4, sh
 {
 	int x, y;
 	short *y1_ptr = y1, *y2_ptr = y2, *cb_ptr = cb, *cr_ptr = cr;
-	
+
 	(void)y3;
 	(void)y4;
-	
-	for (y = 0; y < 8; y++) {
-		for (x = 0; x < 8; x += 4) {
+
+	for (y = 0; y < 8; y++)
+	{
+		for (x = 0; x < 8; x += 4)
+		{
 			ycbcr2rgb(addr, *y1_ptr, *cb_ptr, *cr_ptr, *(y1_ptr + 1), *cb_ptr, *cr_ptr, *(y1_ptr + 2), *(cb_ptr + 1), *(cr_ptr + 1), *(y1_ptr + 3), *(cb_ptr + 1), *(cr_ptr + 1));
 			ycbcr2rgb(addr + 24, *y2_ptr, *(cb_ptr + 4), *(cr_ptr + 4), *(y2_ptr + 1), *(cb_ptr + 4), *(cr_ptr + 4), *(y2_ptr + 2), *(cb_ptr + 5), *(cr_ptr + 5), *(y2_ptr + 3), *(cb_ptr + 5), *(cr_ptr + 5));
 			y1_ptr += 4;
@@ -931,12 +1020,14 @@ plot_422_v(char *addr, int pitch, short *y1, short *y2, short *y3, short *y4, sh
 {
 	int x, y, d;
 	short *y1_ptr = y1, *y2_ptr = y2, *cb_ptr = cb, *cr_ptr = cr;
-	
+
 	(void)y3;
 	(void)y4;
-	
-	for (y = 0; y < 8; y++) {
-		for (x = 0; x < 8; x += 4) {
+
+	for (y = 0; y < 8; y++)
+	{
+		for (x = 0; x < 8; x += 4)
+		{
 			ycbcr2rgb(addr, *y1_ptr, *cb_ptr, *cr_ptr, *(y1_ptr + 1), *(cb_ptr + 1), *(cr_ptr + 1), *(y1_ptr + 2), *(cb_ptr + 2), *(cr_ptr + 2), *(y1_ptr + 3), *(cb_ptr + 3), *(cr_ptr + 3));
 			ycbcr2rgb(addr + (pitch * 8), *y2_ptr, *(cb_ptr + 32), *(cr_ptr + 32), *(y2_ptr + 1), *(cb_ptr + 33), *(cr_ptr + 33), *(y2_ptr + 2), *(cb_ptr + 34), *(cr_ptr + 34), *(y2_ptr + 3), *(cb_ptr + 35), *(cr_ptr + 35));
 			y1_ptr += 4;
@@ -961,9 +1052,11 @@ plot_411(char *addr, int pitch, short *y1, short *y2, short *y3, short *y4, shor
 {
 	int x, y, d;
 	short *y1_ptr = y1, *y2_ptr = y2, *y3_ptr = y3, *y4_ptr = y4, *cb_ptr = cb, *cr_ptr = cr;
-	
-	for (y = 0; y < 8; y++) {
-		for (x = 0; x < 8; x += 4) {
+
+	for (y = 0; y < 8; y++)
+	{
+		for (x = 0; x < 8; x += 4)
+		{
 			ycbcr2rgb(addr, *y1_ptr, *cb_ptr, *cr_ptr, *(y1_ptr + 1), *cb_ptr, *cr_ptr, *(y1_ptr + 2), *(cb_ptr + 1), *(cr_ptr + 1), *(y1_ptr + 3), *(cb_ptr + 1), *(cr_ptr + 1));
 			ycbcr2rgb(addr + 24, *y2_ptr, *(cb_ptr + 4), *(cr_ptr + 4), *(y2_ptr + 1), *(cb_ptr + 4), *(cr_ptr + 4), *(y2_ptr + 2), *(cb_ptr + 5), *(cr_ptr + 5), *(y2_ptr + 3), *(cb_ptr + 5), *(cr_ptr + 5));
 			ycbcr2rgb(addr + (pitch * 8), *y3_ptr, *(cb_ptr + 32), *(cr_ptr + 32), *(y3_ptr + 1), *(cb_ptr + 32), *(cr_ptr + 32), *(y3_ptr + 2), *(cb_ptr + 33), *(cr_ptr + 33), *(y3_ptr + 3), *(cb_ptr + 33), *(cr_ptr + 33));
@@ -990,11 +1083,11 @@ dump_chunk(char *msg, int length)
 {
 	char buffer[65536];
 	int i;
-	
+
 	for (i = 0; (i < length) && (!_jpeg_eoc()); i++)
 		buffer[i] = _jpeg_getc();
 	buffer[i] = '\0';
-	
+
 	TRACE("%s%s", msg, buffer);
 }
 #endif
@@ -1003,8 +1096,8 @@ dump_chunk(char *msg, int length)
 /* _jpeg_decode:
  *  Main decoding function.
  */
-BITMAP *
-_jpeg_decode(RGB *pal, void (*callback)(int))
+SDL_Surface *
+_jpeg_decode(SDL_Color *pal, void (*callback)(int))
 {
 	const int x_ofs[4] = { 0, 1, 0, 1 }, y_ofs[4] = { 0, 0, 1, 1 };
 	short coefs_buffer[384], coefs[64], *coefs_ptr, *temp_ptr;
@@ -1019,17 +1112,18 @@ _jpeg_decode(RGB *pal, void (*callback)(int))
 	int block_x_ofs[6], block_y_ofs[6];
 	int mcu_w, mcu_h, component_w[3], component_h[3], c;
 	int old_dc[3] = { 0, 0, 0 };
-	BITMAP *bmp;
+	SDL_Surface *bmp;
 	int data, flags = 0;
 	int restart_count;
 	int depth;
-	
+
 	jpgalleg_error = JPG_ERROR_NONE;
-	
+
 	TRACE("############### Decode start ###############");
-	
+
 #ifdef JPGALLEG_MMX
-	if (cpu_capabilities & CPU_MMX) {
+	if (cpu_capabilities & CPU_MMX)
+	{
 		idct = _jpeg_mmx_idct;
 		if (_rgb_r_shift_24 == 0)
 			ycbcr2rgb = _jpeg_mmx_ycbcr2rgb;
@@ -1039,7 +1133,8 @@ _jpeg_decode(RGB *pal, void (*callback)(int))
 			ycbcr2rgb = _jpeg_c_ycbcr2rgb;
 		TRACE("Using MMX...");
 	}
-	else {
+	else
+	{
 #endif
 		idct = _jpeg_c_idct;
 		ycbcr2rgb = _jpeg_c_ycbcr2rgb;
@@ -1055,21 +1150,24 @@ _jpeg_decode(RGB *pal, void (*callback)(int))
 	y4 = coefs_buffer + 192;
 	cb = coefs_buffer + 256;
 	cr = coefs_buffer + 320;
-	
+
 	_jpeg_io.current_bit = 8;
-	
-	if (_jpeg_getw() != CHUNK_SOI) {
+
+	if (_jpeg_getw() != CHUNK_SOI)
+	{
 		TRACE("SOI chunk not found");
 		jpgalleg_error = JPG_ERROR_NOT_JPEG;
 		return NULL;
 	}
-	
+
 	/* Examine header */
-	do {
+	do
+	{
 		data = _jpeg_getc();
 		if (data < 0)
 			return NULL;
-		else if (data == 0xff) {
+		else if (data == 0xff)
+		{
 			while ((data = _jpeg_getc()) == 0xff)
 				;
 			switch (data) {
@@ -1158,7 +1256,7 @@ _jpeg_decode(RGB *pal, void (*callback)(int))
 					_jpeg_close_chunk();
 					flags |= APP0_DEFINED;
 					break;
-					
+
 				case CHUNK_DRI:
 					TRACE("DRI chunk found");
 					if (read_dri_chunk())
@@ -1196,37 +1294,42 @@ _jpeg_decode(RGB *pal, void (*callback)(int))
 			}
 		}
 	} while (((flags & JFIF_OK) != JFIF_OK) && ((flags & EXIF_OK) != EXIF_OK));
-	
+
 	/* Deal with bogus restart interval */
 	if (restart_interval <= 0)
 		flags &= ~DRI_DEFINED;
-	
-	bmp = create_bitmap_ex((jpeg_components == 1) ? 8 : 24, (jpeg_w + 15) & ~0xf, (jpeg_h + 15) & ~0xf);
-	if (!bmp) {
+
+    bmp = SDL_CreateRGBSurface(SDL_SWSURFACE, (jpeg_w + 15) & ~0xf, (jpeg_h + 15) & ~0xf, (jpeg_components == 1) ? 8 : 32,
+                                0xFF000000, 0x00FF0000, 0x0000FF00, 0x000000FF);
+	if (!bmp)
+	{
 		TRACE("Out of memory");
 		return NULL;
 	}
-	pitch = (int)(bmp->line[1] - bmp->line[0]);
-	
+	pitch = (int)bmp->pitch;
+
 	block_x = block_y = 0;
 	restart_count = 0;
 	memset(data_buffer, 0, 3 * sizeof(DATA_BUFFER *));
-	
+
 	progress_cb = callback;
 	progress_counter = 0;
-	
-	if (!(flags & IS_PROGRESSIVE)) {
+
+	if (!(flags & IS_PROGRESSIVE))
+	{
 		/* Baseline decoding */
 		TRACE("Starting baseline decoding");
 		blocks_in_mcu = 0;
 		coefs_ptr = coefs_buffer;
-		for (i = 0; i < sampling; i++) {
+		for (i = 0; i < sampling; i++)
+		{
 			block_component[blocks_in_mcu] = 0;
 			block_ptr[blocks_in_mcu] = coefs_ptr;
 			coefs_ptr += 64;
 			blocks_in_mcu++;
 		}
-		for (i = 1; i < jpeg_components; i++) {
+		for (i = 1; i < jpeg_components; i++)
+		{
 			block_component[blocks_in_mcu] = i;
 			block_ptr[blocks_in_mcu] = coefs_ptr;
 			coefs_ptr += 64;
@@ -1235,41 +1338,48 @@ _jpeg_decode(RGB *pal, void (*callback)(int))
 		mcu_w = h_sampling * 8;
 		mcu_h = v_sampling * 8;
 		plot = plot_411;
-		if (sampling < 4) {
+		if (sampling < 4)
+		{
 			plot = plot_422_v;
 			if (h_sampling == 2)
 				plot = plot_422_h;
 			cb -= 128;
 			cr -= 128;
-			if (sampling < 2) {
+			if (sampling < 2)
+			{
 				plot = plot_444;
 				cb -= 64;
 				cr -= 64;
 			}
 		}
-		
+
 		progress_total = (bmp->w / mcu_w) * (bmp->h / mcu_h);
-		
+
 		TRACE("%dx%d %s image, %s mode", jpeg_w, jpeg_h, jpeg_components == 1 ? "greyscale" : "color", plot == plot_444 ? "444" : (((plot == plot_422_h) || (plot == plot_422_v)) ? "422" : "411"));
 		/* Start decoding! */
-		do {
-			for (i = 0; i < blocks_in_mcu; i++) {
+		do
+		{
+			for (i = 0; i < blocks_in_mcu; i++)
+			{
 				if (decode_baseline_block(block_ptr[i], (block_component[i] == 0) ? LUMINANCE : CHROMINANCE, &old_dc[block_component[i]]))
 					goto exit_error;
 			}
-			addr = (char*)bmp->line[block_y] + (block_x * (jpeg_components == 1 ? 1 : 3));
+			addr = (char*)bmp->pixels + block_y * bmp->pitch + (block_x * (jpeg_components == 1 ? 1 : 4));
 			plot(addr, pitch, y1, y2, y3, y4, cb, cr);
 			block_x += mcu_w;
-			if (block_x >= jpeg_w) {
+			if (block_x >= jpeg_w)
+			{
 				block_x = 0;
 				block_y += mcu_h;
 			}
 			restart_count++;
-			if ((flags & DRI_DEFINED) && (restart_count >= restart_interval)) {
+			if ((flags & DRI_DEFINED) && (restart_count >= restart_interval))
+			{
 				data = _jpeg_getw();
 				if (data == CHUNK_EOI)
 					break;
-				if ((data < CHUNK_RST0) || (data > CHUNK_RST7)) {
+				if ((data < CHUNK_RST0) || (data > CHUNK_RST7))
+				{
 					TRACE("Expected RSTx chunk not found, found 0x%X instead", data);
 					jpgalleg_error = JPG_ERROR_BAD_IMAGE;
 					goto exit_error;
@@ -1282,35 +1392,41 @@ _jpeg_decode(RGB *pal, void (*callback)(int))
 			progress_counter++;
 		} while (block_y < jpeg_h);
 	}
-	else {
+	else
+	{
 		/* Progressive decoding */
 		TRACE("Starting progressive decoding");
 		blocks_per_row[0] = bmp->w / 8;
 		data_buffer[0] = (DATA_BUFFER *)calloc(1, sizeof(DATA_BUFFER) * (bmp->w / 8) * (bmp->h / 8));
-		if (!data_buffer[0]) {
+		if (!data_buffer[0])
+		{
 			TRACE("Out of memory");
 			jpgalleg_error = JPG_ERROR_OUT_OF_MEMORY;
 			goto exit_error;
 		}
-		for (i = 1; i < jpeg_components; i++) {
+		for (i = 1; i < jpeg_components; i++)
+		{
 			blocks_per_row[i] = bmp->w / (h_sampling * 8);
 			component_w[i] = component_h[i] = 1;
 			data_buffer[i] = (DATA_BUFFER *)calloc(1, sizeof(DATA_BUFFER) * (bmp->w / 8) * (bmp->h / 8) / sampling);
-			if (!data_buffer[i]) {
+			if (!data_buffer[i])
+			{
 				TRACE("Out of memory");
 				jpgalleg_error = JPG_ERROR_OUT_OF_MEMORY;
 				goto exit_error;
 			}
 		}
-		
+
 		progress_total = (2 + (3 * jpeg_components)) * blocks_per_row[0] * (bmp->h / (v_sampling * 8));
-		
+
 		TRACE("%dx%d image, %s mode", jpeg_w, jpeg_h, sampling == 1 ? "444" : (sampling == 2 ? "422" : "411"));
-		while (1) {
+		while (1)
+		{
 			/* Decode new scan */
 			if (((spectrum_start > spectrum_end) || (spectrum_end > 63)) ||
 					((spectrum_start == 0) && (spectrum_end != 0)) ||
-					((successive_high != 0) && (successive_high != successive_low + 1))) {
+					((successive_high != 0) && (successive_high != successive_low + 1)))
+            {
 				TRACE("Bad progressive scan parameters");
 				jpgalleg_error = JPG_ERROR_BAD_IMAGE;
 				goto exit_error;
@@ -1321,21 +1437,25 @@ _jpeg_decode(RGB *pal, void (*callback)(int))
 			/* Setup MCU layout for this scan */
 			blocks_in_mcu = 0;
 			mcu_w = mcu_h = 8;
-			for (i = 0; i < scan_components; i++) {
-				switch (component[i]) {
+			for (i = 0; i < scan_components; i++)
+			{
+				switch (component[i])
+				{
 					case 1:
-						for (j = 0; j < sampling; j++) {
+						for (j = 0; j < sampling; j++)
+						{
 							block_component[blocks_in_mcu] = 0;
 							block_x_ofs[blocks_in_mcu] = x_ofs[j];
 							block_y_ofs[blocks_in_mcu] = y_ofs[j];
 							blocks_in_mcu++;
 						}
-						if ((h_sampling == 1) && (v_sampling == 2)) {
+						if ((h_sampling == 1) && (v_sampling == 2))
+						{
 							block_x_ofs[1] = x_ofs[2];
 							block_y_ofs[1] = y_ofs[2];
 						}
 						break;
-						
+
 					case 2:
 					case 3:
 						block_component[blocks_in_mcu] = component[i] - 1;
@@ -1350,11 +1470,13 @@ _jpeg_decode(RGB *pal, void (*callback)(int))
 			block_max_x = (((jpeg_w + mcu_w - 1) & ~(mcu_w - 1)) / mcu_w);
 			block_max_y = (((jpeg_h + mcu_h - 1) & ~(mcu_h - 1)) / mcu_h);
 			/* Remove sampling dependency from luminance only scans */
-			if ((scan_components == 1) && (block_component[0] == 0)) {
+			if ((scan_components == 1) && (block_component[0] == 0))
+			{
 				blocks_in_mcu = 1;
 				component_w[0] = component_h[0] = 1;
 			}
-			else {
+			else
+			{
 				component_w[0] = h_sampling;
 				component_h[0] = v_sampling;
 			}
@@ -1362,11 +1484,14 @@ _jpeg_decode(RGB *pal, void (*callback)(int))
 				(scan_components > 1 ? _jpeg_component_name[component[1] - 1] : ""),
 				(scan_components > 2 ? _jpeg_component_name[component[2] - 1] : ""), mcu_w, mcu_h);
 			/* Start decoding! */
-			do {
+			do
+			{
 				restart_count++;
-				if ((flags & DRI_DEFINED) && (restart_count >= restart_interval)) {
+				if ((flags & DRI_DEFINED) && (restart_count >= restart_interval))
+				{
 					data = _jpeg_getw();
-					if ((data < CHUNK_RST0) || (data > CHUNK_RST7)) {
+					if ((data < CHUNK_RST0) || (data > CHUNK_RST7))
+					{
 						TRACE("Expected RSTx chunk not found, found 0x%X instead", data);
 						jpgalleg_error = JPG_ERROR_BAD_IMAGE;
 						goto exit_error;
@@ -1374,14 +1499,16 @@ _jpeg_decode(RGB *pal, void (*callback)(int))
 					memset(old_dc, 0, 3 * sizeof(int));
 					restart_count = skip_count = 0;
 				}
-				for (i = 0; i < blocks_in_mcu; i++) {
+				for (i = 0; i < blocks_in_mcu; i++)
+				{
 					c = block_component[i];
 					addr = (char*)data_buffer[c][((block_y * component_h[c]) * blocks_per_row[c]) + (block_y_ofs[i] * blocks_per_row[c]) + (block_x * component_w[c]) + block_x_ofs[i]].data;
 					if (decode_progressive_block(addr, (c == 0) ? LUMINANCE : CHROMINANCE, &old_dc[c]))
 						goto exit_error;
 				}
 				block_x++;
-				if (block_x >= block_max_x) {
+				if (block_x >= block_max_x)
+				{
 					block_x = 0;
 					block_y++;
 				}
@@ -1392,31 +1519,39 @@ _jpeg_decode(RGB *pal, void (*callback)(int))
 					progress_total += (bmp->w / mcu_w) * (bmp->h / mcu_h);
 			} while (block_y < block_max_y);
 			/* Process inter-scan chunks */
-			while (1) {
+			while (1)
+			{
 				while ((data = _jpeg_getc()) == 0xff)
 					;
-				if (data == CHUNK_SOS) {
-					if (read_sos_chunk()) {
+				if (data == CHUNK_SOS)
+				{
+					if (read_sos_chunk())
+					{
 						jpgalleg_error = JPG_ERROR_BAD_IMAGE;
 						goto exit_error;
 					}
 					break;
 				}
-				else if (data == CHUNK_DHT) {
-					if (read_dht_chunk()) {
+				else if (data == CHUNK_DHT)
+				{
+					if (read_dht_chunk())
+					{
 						jpgalleg_error = JPG_ERROR_BAD_IMAGE;
 						goto exit_error;
 					}
 				}
-				else if (data == CHUNK_DRI) {
-					if (read_dri_chunk()) {
+				else if (data == CHUNK_DRI)
+				{
+					if (read_dri_chunk())
+					{
 						jpgalleg_error = JPG_ERROR_BAD_IMAGE;
 						goto exit_error;
 					}
 				}
 				else if (data == (CHUNK_EOI & 0xff))
 					goto eoi_found;
-				else {
+				else
+				{
 					TRACE("Unexpected inter-scan chunk found (0xFF%X)", data);
 					jpgalleg_error = JPG_ERROR_BAD_IMAGE;
 					goto exit_error;
@@ -1430,85 +1565,92 @@ eoi_found:
 		mcu_w = h_sampling * 8;
 		mcu_h = v_sampling * 8;
 		blocks_in_mcu = sampling;
-		for (i = 0; i < sampling; i++) {
+		for (i = 0; i < sampling; i++)
+		{
 			block_component[i] = 0;
 			block_x_ofs[i] = x_ofs[i];
 			block_y_ofs[i] = y_ofs[i];
 		}
-		if ((h_sampling == 1) && (v_sampling == 2)) {
+		if ((h_sampling == 1) && (v_sampling == 2))
+		{
 			block_x_ofs[1] = x_ofs[2];
 			block_y_ofs[1] = y_ofs[2];
 		}
-		for (i = 1; i < jpeg_components; i++) {
+		for (i = 1; i < jpeg_components; i++)
+		{
 			block_component[blocks_in_mcu] = i;
 			block_x_ofs[blocks_in_mcu] = 0;
 			block_y_ofs[blocks_in_mcu] = 0;
 			blocks_in_mcu++;
 		}
 		plot = plot_411;
-		if (sampling < 4) {
+		if (sampling < 4)
+		{
 			plot = plot_422_v;
 			if (h_sampling == 2)
 				plot = plot_422_h;
 			cb -= 128;
 			cr -= 128;
-			if (sampling < 2) {
+			if (sampling < 2)
+			{
 				plot = plot_444;
 				cb -= 64;
 				cr -= 64;
 			}
 		}
-		for (block_y = 0; block_y < bmp->h / mcu_h; block_y++) {
-			for (block_x = 0; block_x < bmp->w / mcu_w; block_x++) {
+		for (block_y = 0; block_y < bmp->h / mcu_h; block_y++)
+		{
+			for (block_x = 0; block_x < bmp->w / mcu_w; block_x++)
+			{
 				coefs_ptr = coefs_buffer;
-				for (i = 0; i < blocks_in_mcu; i++) {
+				for (i = 0; i < blocks_in_mcu; i++)
+				{
 					c = block_component[i];
 					temp_ptr = data_buffer[c][(block_y * blocks_per_row[c] * component_h[c]) + (blocks_per_row[c] * block_y_ofs[i]) + (block_x * component_w[c]) + block_x_ofs[i]].data;
 					zigzag_reorder(temp_ptr, coefs);
 					idct(coefs, coefs_ptr, (c == 0) ? luminance_quantization_table : chrominance_quantization_table, workspace);
 					coefs_ptr += 64;
 				}
-				addr = (char*)bmp->line[block_y * mcu_h] + (block_x * mcu_w * (jpeg_components == 1 ? 1 : 3));
+				addr = (char*)bmp->pixels + block_y * mcu_h * bmp->pitch + (block_x * mcu_w * (jpeg_components == 1 ? 1 : 4));
 				plot(addr, pitch, y1, y2, y3, y4, cb, cr);
 			}
 		}
 	}
 
 	/* Fixup image depth and size */
-	if (jpeg_components == 1) {
+	if (jpeg_components == 1)
+	{
 		for (i = 0; i < 256; i++)
 			pal[i].r = pal[i].g = pal[i].b = (i >> 2);
-		depth = _color_load_depth(8, FALSE);
+		depth = 8;
 	}
 	else
-		depth = _color_load_depth(24, FALSE);
-	if (((jpeg_components == 1) && (depth != 8)) || ((jpeg_components != 1) && (depth != 24)))
-		bmp = _fixup_loaded_bitmap(bmp, pal, depth);
-	if (depth != 8)
-		generate_332_palette(pal);
+		depth = 32;
 	/* Hack to set size; image may be really slightly bigger than reported.
 	 * We assume final user always to access data via line pointers and NEVER
 	 * assume data is linearly stored in memory starting at bmp->dat...
 	 */
-	bmp->w = bmp->cr = jpeg_w;
-	bmp->h = bmp->cb = jpeg_h;
-	
+	bmp->w = jpeg_w;
+	bmp->h = jpeg_h;
+
 exit_ok:
-	for (i = 0; i < jpeg_components; i++) {
+	for (i = 0; i < jpeg_components; i++)
+	{
 		if (data_buffer[i])
 			free(data_buffer[i]);
 	}
-	for (i = 0; i < 4; i++) {
+	for (i = 0; i < 4; i++)
+	{
 		free_huffman_table(&_jpeg_huffman_dc_table[i]);
 		free_huffman_table(&_jpeg_huffman_ac_table[i]);
 	}
-	
+
 	TRACE("################ Decode end ################");
-	
+
 	return bmp;
 
 exit_error:
-	destroy_bitmap(bmp);
+	SDL_FreeSurface(bmp);
 	bmp = NULL;
 	goto exit_ok;
 }

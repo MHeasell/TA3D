@@ -23,8 +23,7 @@
 #ifndef _JPGALLEG_INTERNAL_H_
 #define _JPGALLEG_INTERNAL_H_
 
-#include <allegro.h>
-#include <allegro/internal/aintern.h>
+#include "../stdafx.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -196,12 +195,12 @@ extern void _jpeg_chunk_putc(int);
 extern void _jpeg_chunk_putw(int);
 extern void _jpeg_chunk_puts(unsigned char *, int);
 
-extern BITMAP *_jpeg_decode(RGB *, void (*)(int));
+extern SDL_Surface *_jpeg_decode(SDL_Color *, void (*)(int));
 extern void _jpeg_mmx_idct(short *, short *, short *, short *);
 extern void _jpeg_mmx_ycbcr2rgb(int, int, int, int, int, int, int, int, int, int, int, int, int);
 extern void _jpeg_mmx_ycbcr2bgr(int, int, int, int, int, int, int, int, int, int, int, int, int);
 
-extern int _jpeg_encode(BITMAP *, AL_CONST RGB *, int, int, void (*)(int));
+extern int _jpeg_encode(SDL_Surface *, const SDL_Color *, int, int, void (*)(int));
 extern void _jpeg_mmx_rgb2ycbcr(int, short *, short *, short *, short *, short *, short *);
 extern void _jpeg_mmx_bgr2ycbcr(int, short *, short *, short *, short *, short *, short *);
 
@@ -213,5 +212,10 @@ extern IO_BUFFER _jpeg_io;
 extern const unsigned char _jpeg_zigzag_scan[];
 extern const char *_jpeg_component_name[];
 
+#define MID(x,y,z)   ((x) > (y) ? ((y) > (z) ? (y) : ((x) > (z) ?    \
+                       (z) : (x))) : ((y) > (z) ? ((z) > (x) ? (z) : \
+                       (x)): (y)))
+
+#define MAX(x,y)    (x > y ? x : y)
 
 #endif

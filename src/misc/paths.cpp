@@ -11,6 +11,9 @@
 #include "../logs/logs.h"
 #include <unistd.h>
 #include <fstream>
+#include <sys/types.h>
+#include <dirent.h>
+#include <errno.h>
 
 
 
@@ -332,50 +335,65 @@ namespace Paths
     }
 
     template<class T>
-    bool TmplGlob(T& out, const String& pattern, const bool emptyListBefore, const uint32 fileAttribs = FA_ALL, const uint32 required = 0)
+    bool TmplGlob(T& out, const String& pattern, const bool emptyListBefore, const uint32 fileAttribs = FA_ALL, const uint32 required = 0, const bool relative = false)
     {
         if (emptyListBefore)
             out.clear();
-        struct al_ffblk info;
-        if (al_findfirst(pattern.c_str(), &info, fileAttribs) != 0)
-            return false;
+
         String root = ExtractFilePath(pattern);
-        do
+        String filename_pattern = ExtractFileName(pattern);
+        DIR *dp;
+        struct dirent *dirp;
+        if((dp  = opendir(root.c_str())) == NULL)
         {
-            if((info.attrib&required) == required && String(info.name) != "." && String(info.name) != "..")
-                out.push_back(root + (const char*)info.name);
-        } while (al_findnext(&info) == 0);
+            LOG_ERROR( LOG_PREFIX_PATHS << "opening " << root << " failed: " << errno );
+            return true;
+        }
+
+        while ((dirp = readdir(dp)) != NULL)
+        {
+            String name = dirp->d_name;
+            if ((dirp->d_type & required) == required && name != "." && name != ".." && name.match(filename_pattern))
+            {
+                if (relative)
+                    out.push_back(name);
+                else
+                    out.push_back(root + name);
+            }
+        }
+        closedir(dp);
+
         return !out.empty();
     }
 
-    bool Glob(String::List& out, const String& pattern, const bool emptyListBefore)
+    bool Glob(String::List& out, const String& pattern, const bool emptyListBefore, const bool relative)
     {
-        return TmplGlob< String::List >(out, pattern, emptyListBefore);
+        return TmplGlob< String::List >(out, pattern, emptyListBefore, FA_ALL, 0, relative);
     }
 
-    bool Glob(String::Vector& out, const String& pattern, const bool emptyListBefore)
+    bool Glob(String::Vector& out, const String& pattern, const bool emptyListBefore, const bool relative)
     {
-        return TmplGlob< String::Vector >(out, pattern, emptyListBefore);
+        return TmplGlob< String::Vector >(out, pattern, emptyListBefore, FA_ALL, 0, relative);
     }
 
-    bool GlobFiles(String::List& out, const String& pattern, const bool emptyListBefore)
+    bool GlobFiles(String::List& out, const String& pattern, const bool emptyListBefore, const bool relative)
     {
-        return TmplGlob< String::List >(out, pattern, emptyListBefore, FA_RDONLY | FA_HIDDEN | FA_SYSTEM | FA_ARCH);
+        return TmplGlob< String::List >(out, pattern, emptyListBefore, FA_FILE, 0, relative);
     }
 
-    bool GlobFiles(String::Vector& out, const String& pattern, const bool emptyListBefore)
+    bool GlobFiles(String::Vector& out, const String& pattern, const bool emptyListBefore, const bool relative)
     {
-        return TmplGlob< String::Vector >(out, pattern, emptyListBefore, FA_RDONLY | FA_HIDDEN | FA_SYSTEM | FA_ARCH);
+        return TmplGlob< String::Vector >(out, pattern, emptyListBefore, FA_FILE, 0, relative);
     }
 
-    bool GlobDirs(String::List& out, const String& pattern, const bool emptyListBefore)
+    bool GlobDirs(String::List& out, const String& pattern, const bool emptyListBefore, const bool relative)
     {
-        return TmplGlob< String::List >(out, pattern, emptyListBefore, FA_ALL, FA_DIREC);
+        return TmplGlob< String::List >(out, pattern, emptyListBefore, FA_ALL, FA_DIREC, relative);
     }
 
-    bool GlobDirs(String::Vector& out, const String& pattern, const bool emptyListBefore)
+    bool GlobDirs(String::Vector& out, const String& pattern, const bool emptyListBefore, const bool relative)
     {
-        return TmplGlob< String::Vector >(out, pattern, emptyListBefore, FA_ALL, FA_DIREC);
+        return TmplGlob< String::Vector >(out, pattern, emptyListBefore, FA_ALL, FA_DIREC, relative);
     }
 
 
