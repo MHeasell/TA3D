@@ -29,7 +29,6 @@
 #include "gfx.h"
 #include "../misc/paths.h"
 #include "../logs/logs.h"
-#include <allegro/internal/aintern.h>
 #include <strings.h>
 #include "../misc/math.h"
 #include "../jpeg/ta3d_jpg.h"
@@ -41,65 +40,48 @@
 namespace TA3D
 {
 
-
-    void GFX::initAllegroGL()
+    void GFX::set_texture_format(GLuint gl_format)
     {
-        install_allegro_gl();
-        #ifndef TA3D_PLATFORM_DARWIN
-        allegro_gl_clear_settings();         // Initialise AllegroGL
-        allegro_gl_set (AGL_STENCIL_DEPTH, 8 );
-        allegro_gl_set (AGL_SAMPLE_BUFFERS, 0 );
-        allegro_gl_set (AGL_SAMPLES, TA3D::VARS::lp_CONFIG->fsaa );
-        allegro_gl_set (AGL_VIDEO_MEMORY_POLICY, AGL_RELEASE );
-        allegro_gl_set (AGL_COLOR_DEPTH, TA3D::VARS::lp_CONFIG->color_depth );
-        allegro_gl_set (AGL_Z_DEPTH, 32 );
-        allegro_gl_set (AGL_FULLSCREEN, TA3D::VARS::lp_CONFIG->fullscreen);
-        allegro_gl_set (AGL_DOUBLEBUFFER, 1 );
-        allegro_gl_set (AGL_RENDERMETHOD, 1 );
-        allegro_gl_set (AGL_SUGGEST, AGL_RENDERMETHOD | AGL_COLOR_DEPTH | AGL_Z_DEPTH
-                        | AGL_DOUBLEBUFFER | AGL_FULLSCREEN | AGL_SAMPLES
-                        | AGL_SAMPLE_BUFFERS | AGL_STENCIL_DEPTH
-                        | AGL_VIDEO_MEMORY_POLICY );
-        request_refresh_rate(85);
-        #else
-        allegro_gl_clear_settings();         // Initialise AllegroGL
-        allegro_gl_set(AGL_COLOR_DEPTH, TA3D::VARS::lp_CONFIG->color_depth);
-        allegro_gl_set(AGL_DOUBLEBUFFER, TRUE);
-        allegro_gl_set(AGL_Z_DEPTH, 32);
-        allegro_gl_set(AGL_WINDOWED, TRUE);
-        allegro_gl_set(AGL_RENDERMETHOD, TRUE);
-        allegro_gl_set (AGL_VIDEO_MEMORY_POLICY, AGL_RELEASE );
-        allegro_gl_set (AGL_FULLSCREEN, TA3D::VARS::lp_CONFIG->fullscreen);
-        allegro_gl_set(AGL_SAMPLES, TA3D::VARS::lp_CONFIG->fsaa);
-        allegro_gl_set(AGL_SAMPLE_BUFFERS, TRUE);
-        allegro_gl_set(AGL_SUGGEST, AGL_WINDOWED | AGL_SAMPLES | AGL_SAMPLE_BUFFERS | AGL_COLOR_DEPTH | AGL_VIDEO_MEMORY_POLICY);
-        allegro_gl_set(AGL_REQUIRE, AGL_RENDERMETHOD | AGL_DOUBLEBUFFER | AGL_Z_DEPTH);
-        #endif
+        texture_format = gl_format;
+    }
 
-        allegro_gl_use_mipmapping(TRUE);
-        allegro_gl_flip_texture(FALSE);
+    void GFX::use_mipmapping(bool use)
+    {
+        build_mipmaps = use;
+    }
 
+    void GFX::initSDL()
+    {
+        SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
+        SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, TA3D::VARS::lp_CONFIG->fsaa > 1);
+        SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, TA3D::VARS::lp_CONFIG->fsaa);
+        SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+        SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 32);
+        SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
+        SDL_GL_SetAttribute(SDL_GL_SWAP_CONTROL, 0);
+        SDL_GL_SetAttribute(SDL_GL_SWAP_CONTROL, 0);
+        SDL_GL_SetAttribute(SDL_GL_SWAP_CONTROL, 0);
+        SDL_GL_SetAttribute(SDL_GL_SWAP_CONTROL, 0);
 
         if (TA3D::VARS::lp_CONFIG->fullscreen )
-        {
-            # ifdef GFX_OPENGL_FULLSCREEN
-            set_gfx_mode(GFX_OPENGL_FULLSCREEN, TA3D::VARS::lp_CONFIG->screen_width, TA3D::VARS::lp_CONFIG->screen_height, 0, 0);
-            # else
-            allegro_message(TRANSLATE("WARNING: AllegroGL has been built without fullscreen support.\nrunning in fullscreen mode impossible\nplease install libxxf86vm and rebuild both Allegro and AllegroGL\nif you want fullscreen modes.").c_str());
-            set_gfx_mode(GFX_OPENGL_WINDOWED, TA3D::VARS::lp_CONFIG->screen_width, TA3D::VARS::lp_CONFIG->screen_height, 0, 0);
-            # endif
-        }
+            screen = SDL_SetVideoMode( TA3D::VARS::lp_CONFIG->screen_width, TA3D::VARS::lp_CONFIG->screen_height, TA3D::VARS::lp_CONFIG->color_depth, SDL_OPENGL | SDL_FULLSCREEN );
         else
-            set_gfx_mode(GFX_OPENGL_WINDOWED, TA3D::VARS::lp_CONFIG->screen_width, TA3D::VARS::lp_CONFIG->screen_height, 0, 0);
+            screen = SDL_SetVideoMode( TA3D::VARS::lp_CONFIG->screen_width, TA3D::VARS::lp_CONFIG->screen_height, TA3D::VARS::lp_CONFIG->color_depth, SDL_OPENGL );
+
+        if (screen == NULL)
+        {
+            LOG_ERROR(LOG_PREFIX_GFX << "Impossible to set OpenGL video mode!");
+            return;
+        }
 
         preCalculations();
         // Install OpenGL extensions
         installOpenGLExtensions();
 
         if(g_useTextureCompression && lp_CONFIG->use_texture_compression) // Try to enabled the Texture compression
-            allegro_gl_set_texture_format(GL_COMPRESSED_RGB_ARB);
+            set_texture_format(GL_COMPRESSED_RGB_ARB);
         else
-            allegro_gl_set_texture_format(GL_RGB8);
+            set_texture_format(GL_RGB8);
     }
 
 
@@ -131,7 +113,7 @@ namespace TA3D
 
     GFX::GFX()
     {
-        initAllegroGL();
+        initSDL();
         ati_workaround = checkVideoCardWorkaround();
 
         TA3D::VARS::pal = NULL;
@@ -171,9 +153,6 @@ namespace TA3D
         small_font.destroy();
         TA_font.destroy();
         ta3d_gui_font.destroy();
-
-        remove_allegro_gl();
-        set_gfx_mode(GFX_TEXT, 0, 0, 0, 0);
     }
 
 
@@ -181,7 +160,7 @@ namespace TA3D
     void GFX::Init()
     {
         LOG_DEBUG("Allocating palette memory...");
-        TA3D::VARS::pal = new RGB[256];      // Allocate a new palette
+        TA3D::VARS::pal = new SDL_Color[256];      // Allocate a new palette
 
         LOG_DEBUG("Loading TA's palette...");
         bool palette = TA3D::UTILS::HPI::load_palette(pal);
@@ -199,10 +178,6 @@ namespace TA3D
 
         LOG_DEBUG(LOG_PREFIX_GFX << "Loading the GUI font...");
         ta3d_gui_font.load_gaf_font( "anims\\hattfont12.gaf" , 1.0f );
-
-        LOG_DEBUG(LOG_PREFIX_GFX << "Activating the palette...");
-        if(palette)
-            set_palette(pal);      // Activate the palette
 
         LOG_DEBUG(LOG_PREFIX_GFX << "Loading background...");
         load_background();
@@ -228,12 +203,18 @@ namespace TA3D
 
     void GFX::set_2D_mode()
     {
-        allegro_gl_set_allegro_mode();
+        glPushAttrib(GL_ALL_ATTRIB_BITS);
+
+        glMatrixMode(GL_PROJECTION);
+        glLoadIdentity();
+        glOrtho(0, SCREEN_W, 0, SCREEN_H, -1.0, 1.0);
+        glMatrixMode(GL_MODELVIEW);
+        glLoadIdentity();
     }
 
     void GFX::unset_2D_mode()
     {
-        allegro_gl_unset_allegro_mode();
+        glPopAttrib();
     }
 
     void GFX::line(const float x1, const float y1, const float x2, const float y2)			// Basic drawing routines
@@ -712,7 +693,7 @@ namespace TA3D
         return max_tex_size;
     }
 
-    GLuint GFX::make_texture(BITMAP *bmp, byte filter_type, bool clamp )
+    GLuint GFX::make_texture(SDL_Surface *bmp, byte filter_type, bool clamp )
     {
         MutexLocker locker(pMutex);
 
@@ -721,11 +702,11 @@ namespace TA3D
 
         if (bmp->w > max_tex_size || bmp->h > max_tex_size )
         {
-            BITMAP *tmp = create_bitmap_ex(bitmap_color_depth( bmp ),
+            SDL_Surface *tmp = create_surface_ex( bmp->format->BitsPerPixel,
                                            Math::Min(bmp->w, max_tex_size), Math::Min(bmp->h, max_tex_size));
             stretch_blit( bmp, tmp, 0, 0, bmp->w, bmp->h, 0, 0, tmp->w, tmp->h );
             GLuint tex = make_texture( tmp, filter_type, clamp );
-            destroy_bitmap( tmp );
+            SDL_FreeSurface( tmp );
             return tex;
         }
 
@@ -735,13 +716,13 @@ namespace TA3D
             && ( !Math::IsPowerOfTwo(bmp->w) || !Math::IsPowerOfTwo(bmp->h)))
             filter_type = FILTER_LINEAR;
 
-        if (filter_type == FILTER_NONE || filter_type == FILTER_LINEAR )
-            allegro_gl_use_mipmapping(false);
-        else
-            allegro_gl_use_mipmapping(true);
+//        if (filter_type == FILTER_NONE || filter_type == FILTER_LINEAR )
+//            use_mipmapping(false);
+//        else
+//            use_mipmapping(true);
         GLuint gl_tex = allegro_gl_make_texture(bmp);
-        if (filter_type == FILTER_NONE || filter_type == FILTER_LINEAR )
-            allegro_gl_use_mipmapping(true);
+//        if (filter_type == FILTER_NONE || filter_type == FILTER_LINEAR )
+//            use_mipmapping(true);
         glBindTexture(GL_TEXTURE_2D, gl_tex);
 
         glMatrixMode(GL_TEXTURE);
@@ -790,13 +771,13 @@ namespace TA3D
 
         glPushAttrib( GL_ALL_ATTRIB_BITS );
 
-        allegro_gl_set_texture_format(GL_ALPHA32F_ARB);
+        set_texture_format(GL_ALPHA32F_ARB);
 
-        allegro_gl_use_mipmapping(false);
+        use_mipmapping(false);
 
         GLuint gl_tex = create_texture(w,h,FILTER_NONE,clamp);
 
-        allegro_gl_use_mipmapping(true);
+        use_mipmapping(true);
         glBindTexture(GL_TEXTURE_2D, gl_tex);
 
         glMatrixMode(GL_TEXTURE);
@@ -844,7 +825,7 @@ namespace TA3D
                          GL_FLOAT,
                          data );
 
-        allegro_gl_set_texture_format(GL_RGB8);
+        set_texture_format(GL_RGB8);
 
         glPopAttrib();
 
@@ -857,13 +838,13 @@ namespace TA3D
 
         glPushAttrib( GL_ALL_ATTRIB_BITS );
 
-        allegro_gl_set_texture_format(GL_ALPHA16F_ARB);
+        set_texture_format(GL_ALPHA16F_ARB);
 
-        allegro_gl_use_mipmapping(false);
+        use_mipmapping(false);
 
         GLuint gl_tex = create_texture(w,h,FILTER_NONE,clamp);
 
-        allegro_gl_use_mipmapping(true);
+        use_mipmapping(true);
         glBindTexture(GL_TEXTURE_2D, gl_tex);
 
         glMatrixMode(GL_TEXTURE);
@@ -911,7 +892,7 @@ namespace TA3D
                          GL_FLOAT,
                          data );
 
-        allegro_gl_set_texture_format(GL_RGB8);
+        set_texture_format(GL_RGB8);
 
         glPopAttrib();
 
@@ -923,13 +904,13 @@ namespace TA3D
 
         glPushAttrib( GL_ALL_ATTRIB_BITS );
 
-        allegro_gl_set_texture_format(GL_RGBA32F_ARB);
+        set_texture_format(GL_RGBA32F_ARB);
 
-        allegro_gl_use_mipmapping(false);
+        use_mipmapping(false);
 
         GLuint gl_tex = create_texture(w,h,FILTER_NONE,clamp);
 
-        allegro_gl_use_mipmapping(true);
+        use_mipmapping(true);
         glBindTexture(GL_TEXTURE_2D, gl_tex);
 
         glMatrixMode(GL_TEXTURE);
@@ -977,7 +958,7 @@ namespace TA3D
                          GL_FLOAT,
                          data );
 
-        allegro_gl_set_texture_format(GL_RGB8);
+        set_texture_format(GL_RGB8);
 
         glPopAttrib();
 
@@ -990,13 +971,13 @@ namespace TA3D
 
         glPushAttrib( GL_ALL_ATTRIB_BITS );
 
-        allegro_gl_set_texture_format(GL_RGBA16F_ARB);
+        set_texture_format(GL_RGBA16F_ARB);
 
-        allegro_gl_use_mipmapping(false);
+        use_mipmapping(false);
 
         GLuint gl_tex = create_texture(w,h,FILTER_NONE,clamp);
 
-        allegro_gl_use_mipmapping(true);
+        use_mipmapping(true);
         glBindTexture(GL_TEXTURE_2D, gl_tex);
 
         glMatrixMode(GL_TEXTURE);
@@ -1044,7 +1025,7 @@ namespace TA3D
                          GL_FLOAT,
                          data );
 
-        allegro_gl_set_texture_format(GL_RGB8);
+        set_texture_format(GL_RGB8);
 
         glPopAttrib();
 
@@ -1057,13 +1038,13 @@ namespace TA3D
 
         glPushAttrib( GL_ALL_ATTRIB_BITS );
 
-        allegro_gl_set_texture_format(GL_RGB32F_ARB);
+        set_texture_format(GL_RGB32F_ARB);
 
-        allegro_gl_use_mipmapping(false);
+        use_mipmapping(false);
 
         GLuint gl_tex = create_texture(w,h,FILTER_NONE,clamp);
 
-        allegro_gl_use_mipmapping(true);
+        use_mipmapping(true);
         glBindTexture(GL_TEXTURE_2D, gl_tex);
 
         glMatrixMode(GL_TEXTURE);
@@ -1111,7 +1092,7 @@ namespace TA3D
                          GL_FLOAT,
                          data );
 
-        allegro_gl_set_texture_format(GL_RGB8);
+        set_texture_format(GL_RGB8);
 
         glPopAttrib();
 
@@ -1124,13 +1105,13 @@ namespace TA3D
 
         glPushAttrib( GL_ALL_ATTRIB_BITS );
 
-        allegro_gl_set_texture_format(GL_RGB16F_ARB);
+        set_texture_format(GL_RGB16F_ARB);
 
-        allegro_gl_use_mipmapping(false);
+        use_mipmapping(false);
 
         GLuint gl_tex = create_texture(w,h,FILTER_NONE,clamp);
 
-        allegro_gl_use_mipmapping(true);
+        use_mipmapping(true);
         glBindTexture(GL_TEXTURE_2D, gl_tex);
 
         glMatrixMode(GL_TEXTURE);
@@ -1178,7 +1159,7 @@ namespace TA3D
                          GL_FLOAT,
                          data );
 
-        allegro_gl_set_texture_format(GL_RGB8);
+        set_texture_format(GL_RGB8);
 
         glPopAttrib();
 
@@ -1187,10 +1168,10 @@ namespace TA3D
 
     GLuint GFX::create_texture(int w, int h, byte filter_type, bool clamp )
     {
-        BITMAP* tmp = create_bitmap(w, h);
-        clear( tmp );
+        SDL_Surface* tmp = create_surface(w, h);
+        SDL_FillRect( tmp, NULL, 0 );
         GLuint tex = make_texture( tmp, filter_type, clamp );
-        destroy_bitmap( tmp );
+        SDL_FreeSurface( tmp );
         return tex;
     }
 
@@ -1226,7 +1207,7 @@ namespace TA3D
         return tex;
     }
 
-    void GFX::blit_texture( BITMAP *src, GLuint dst )
+    void GFX::blit_texture( SDL_Surface *src, GLuint dst )
     {
         if(!dst)
             return;
@@ -1237,11 +1218,11 @@ namespace TA3D
         glLoadIdentity();
         glMatrixMode(GL_MODELVIEW);
 
-        glTexSubImage2D( GL_TEXTURE_2D, 0, 0, 0, src->w, src->h, GL_RGBA, GL_UNSIGNED_BYTE, src->line[0] );
+        glTexSubImage2D( GL_TEXTURE_2D, 0, 0, 0, src->w, src->h, GL_RGBA, GL_UNSIGNED_BYTE, src->pixels );
     }
 
     // FIXME: ugly thing, we shouldn't need an extra temporary file, image should be loaded directly from memory
-    BITMAP *GFX::load_image(const String filename)
+    SDL_Surface *GFX::load_image(const String filename)
     {
         if (HPIManager)
         {
@@ -1256,7 +1237,7 @@ namespace TA3D
                     fwrite( data, image_file_size, 1, tmp );
                     fclose( tmp );
                     delete[] data;
-                    BITMAP *bmp = load_bitmap( tmp_file.c_str(), NULL );
+                    SDL_Surface *bmp = IMG_Load( tmp_file.c_str() );
                     return bmp;
                 }
                 else
@@ -1266,7 +1247,7 @@ namespace TA3D
             }
             return NULL;
         }
-        return load_bitmap(filename.c_str(), NULL);
+        return IMG_Load(filename.c_str());
     }
 
 
@@ -1275,41 +1256,40 @@ namespace TA3D
         if (!exists( file.c_str()) && (HPIManager == NULL || !HPIManager->Exists(file))) // The file doesn't exist
             return 0;
 
-        set_color_depth(32);
-        BITMAP *bmp = load_image( file );
+        SDL_Surface *bmp = load_image( file );
         if (bmp == NULL )	return 0;					// Operation failed
         if (width )		*width = bmp->w;
         if (height )	*height = bmp->h;
-        if (bitmap_color_depth(bmp) != 32 )
+        if (bmp->format->BitsPerPixel != 32 )
         {
-            BITMAP *tmp = create_bitmap_ex( 32, bmp->w, bmp->h );
+            SDL_Surface *tmp = create_surface_ex( 32, bmp->w, bmp->h );
             blit( bmp, tmp, 0, 0, 0, 0, bmp->w, bmp->h);
-            destroy_bitmap(bmp);
-            bmp=tmp;
+            SDL_FreeSurface(bmp);
+            bmp = tmp;
         }
-        bool with_alpha = (String::ToLower(get_extension(file.c_str())) == "tga");
+        bool with_alpha = (String::ToLower(Paths::ExtractFileExt(file)) == "tga");
         if (with_alpha)
         {
             with_alpha = false;
             for( int y = 0 ; y < bmp->h && !with_alpha ; y++ )
             {
                 for( int x = 0 ; x < bmp->w && !with_alpha ; x++ )
-                    with_alpha |= bmp->line[y][(x<<2)+3] != 255;
+                    with_alpha |= SurfaceByte(bmp,(x<<2)+3,y) != 255;
             }
         }
         if (texFormat == 0)
         {
             if (g_useTextureCompression && lp_CONFIG->use_texture_compression)
-                allegro_gl_set_texture_format( with_alpha ? GL_COMPRESSED_RGBA_ARB : GL_COMPRESSED_RGB_ARB );
+                set_texture_format( with_alpha ? GL_COMPRESSED_RGBA_ARB : GL_COMPRESSED_RGB_ARB );
             else
-                allegro_gl_set_texture_format( with_alpha ? GL_RGBA8 : GL_RGB8 );
+                set_texture_format( with_alpha ? GL_RGBA8 : GL_RGB8 );
         }
         else
-            allegro_gl_set_texture_format( texFormat );
-        allegro_gl_use_alpha_channel( with_alpha );
+            set_texture_format( texFormat );
+//        allegro_gl_use_alpha_channel( with_alpha );
         GLuint gl_tex = make_texture( bmp, filter_type, clamp );
-        allegro_gl_use_alpha_channel(false);
-        destroy_bitmap(bmp);
+//        allegro_gl_use_alpha_channel(false);
+        SDL_FreeSurface(bmp);
         return gl_tex;
     }
 
@@ -1318,53 +1298,52 @@ namespace TA3D
         if (!exists( file.c_str()) && (HPIManager == NULL || !HPIManager->Exists(file))) // The file doesn't exist
             return 0;
 
-        set_color_depth(32);
-        BITMAP *bmp = load_image(file);
+        SDL_Surface *bmp = load_image(file);
         if (bmp == NULL )	return 0;					// Operation failed
         if (width )		*width = bmp->w;
         if (height )	*height = bmp->h;
-        if (bitmap_color_depth(bmp) != 32 )
+        if (bmp->format->BitsPerPixel != 32 )
         {
-            BITMAP *tmp = create_bitmap_ex( 32, bmp->w, bmp->h );
+            SDL_Surface *tmp = create_surface_ex( 32, bmp->w, bmp->h );
             blit( bmp, tmp, 0, 0, 0, 0, bmp->w, bmp->h);
-            destroy_bitmap(bmp);
-            bmp=tmp;
+            SDL_FreeSurface(bmp);
+            bmp = tmp;
         }
-        bool with_alpha = (String::ToLower(get_extension(file.c_str())) == "tga");
+        bool with_alpha = (String::ToLower(Paths::ExtractFileExt(file)) == "tga");
         if (with_alpha)
         {
             with_alpha = false;
             for( int y = 0 ; y < bmp->h && !with_alpha ; y++ )
                 for( int x = 0 ; x < bmp->w && !with_alpha ; x++ )
-                    with_alpha |= bmp->line[y][(x<<2)+3] != 255;
+                    with_alpha |= SurfaceByte(bmp,(x<<2)+3,y) != 255;
         }
         else
         {
             for( int y = 0 ; y < bmp->h ; y++ )
                 for( int x = 0 ; x < bmp->w ; x++ )
-                    bmp->line[y][(x<<2)+3] = 255;
+                    SurfaceByte(bmp,(x<<2)+3,y) = 255;
         }
 
         for( int y = 0 ; y < bmp->h ; y++ )
         {
             for( int x = 0 ; x < bmp->w ; x++ )
             {
-                if (bmp->line[y][(x<<2)] < level && bmp->line[y][(x<<2)+1] < level
-                    && bmp->line[y][(x<<2)+2] < level)
+                if (SurfaceByte(bmp,(x<<2),y) < level && SurfaceByte(bmp,(x<<2)+1,y) < level
+                    && SurfaceByte(bmp,(x<<2)+2,y) < level)
                 {
-                    bmp->line[y][(x<<2)+3] = 0;
+                    SurfaceByte(bmp,(x<<2)+3,y) = 0;
                     with_alpha = true;
                 }
             }
         }
         if(g_useTextureCompression && lp_CONFIG->use_texture_compression)
-            allegro_gl_set_texture_format( with_alpha ? GL_COMPRESSED_RGBA_ARB : GL_COMPRESSED_RGB_ARB );
+            set_texture_format( with_alpha ? GL_COMPRESSED_RGBA_ARB : GL_COMPRESSED_RGB_ARB );
         else
-            allegro_gl_set_texture_format( with_alpha ? GL_RGBA8 : GL_RGB8 );
-        allegro_gl_use_alpha_channel( with_alpha );
+            set_texture_format( with_alpha ? GL_RGBA8 : GL_RGB8 );
+//        allegro_gl_use_alpha_channel( with_alpha );
         GLuint gl_tex = make_texture( bmp, filter_type, clamp );
-        allegro_gl_use_alpha_channel(false);
-        destroy_bitmap(bmp);
+//        allegro_gl_use_alpha_channel(false);
+        SDL_FreeSurface(bmp);
         return gl_tex;
     }
 
@@ -1540,32 +1519,28 @@ namespace TA3D
              || (!exists( mask.c_str()) && (HPIManager == NULL || !HPIManager->Exists(mask))))
             return 0;		// The file doesn't exist
 
-        set_color_depth(32);
-        BITMAP* bmp = load_image(file);
+        SDL_Surface *bmp = load_image(file);
         if (bmp == NULL )	return 0;					// Operation failed
-        BITMAP *alpha;
-        set_color_depth(8);
-        alpha=load_image( mask );
+        SDL_Surface *alpha = load_image( mask );
         if(! alpha)
         {
-            destroy_bitmap( alpha );
+            SDL_FreeSurface( alpha );
             return 0;
         }
-        set_color_depth(32);
         for(int y = 0; y < bmp->h; ++y)
         {
             for(int x=0;x<bmp->w;x++)
-                bmp->line[y][(x<<2)+3]=alpha->line[y][x];
+                SurfaceByte(bmp, (x<<2)+3, y) = SurfaceInt(alpha,x,y) & 0xFF;
         }
-        allegro_gl_use_alpha_channel(true);
+//        allegro_gl_use_alpha_channel(true);
         if(g_useTextureCompression && lp_CONFIG->use_texture_compression)
-            allegro_gl_set_texture_format(GL_COMPRESSED_RGBA_ARB);
+            set_texture_format(GL_COMPRESSED_RGBA_ARB);
         else
-            allegro_gl_set_texture_format(GL_RGBA8);
+            set_texture_format(GL_RGBA8);
         GLuint gl_tex = make_texture( bmp, filter_type );
-        allegro_gl_use_alpha_channel(false);
-        destroy_bitmap(bmp);
-        destroy_bitmap(alpha);
+//        allegro_gl_use_alpha_channel(false);
+        SDL_FreeSurface(bmp);
+        SDL_FreeSurface(alpha);
         return gl_tex;
     }
 
@@ -1596,9 +1571,7 @@ namespace TA3D
 
     GLuint GFX::make_texture_from_screen( byte filter_type)				// Copy pixel data from screen to a texture
     {
-        BITMAP *tmp = create_bitmap_ex(32, SCREEN_W, SCREEN_H);
-        GLuint gltex = make_texture(tmp, filter_type);
-        destroy_bitmap(tmp);
+        GLuint gltex = create_texture(SCREEN_W, SCREEN_H, filter_type);
 
         glBindTexture(GL_TEXTURE_2D,gltex);
         glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 0, 0, SCREEN_W, SCREEN_H, 0);
@@ -1817,21 +1790,25 @@ namespace TA3D
     {
 		InterfaceManager = new IInterfaceManager();
 
-		// Initalizing allegro
-		if( allegro_init() != 0 )
-			throw( "allegro_init() yielded unexpected result." );
+		// Initalizing SDL video
+		if( SDL_Init(SDL_INIT_VIDEO) < 0 )
+			throw( "SDL_Init(SDL_INIT_VIDEO) yielded unexpected result." );
 
-		// Installing allegro timer
-		if( install_timer() != 0 )
-			throw( "install_timer() yielded unexpected result." );
+		// Installing SDL timer
+		if( SDL_Init(SDL_INIT_TIMER) != 0 )
+			throw( "SDL_Init(SDL_INIT_TIMER) yielded unexpected result." );
 
-		// Installing allegro mouse handler
-		if( install_mouse() == -1 )
-			throw ( "install_mouse() yielded unexpected result." );
+		// Installing SDL timer
+		if( SDL_Init(SDL_INIT_EVENTTHREAD) != 0 )
+			throw( "SDL_Init(SDL_INIT_EVENTTHREAD) yielded unexpected result." );
 
-		// Installing allegro keyboard handler
-		if( install_keyboard() == -1 )
-			throw ( "install_mouse() yielded unexpected result." );
+//		// Installing allegro mouse handler
+//		if( install_mouse() == -1 )
+//			throw ( "install_mouse() yielded unexpected result." );
+
+//		// Installing allegro keyboard handler
+//		if( install_keyboard() == -1 )
+//			throw ( "install_mouse() yielded unexpected result." );
 
 		// Initalizing allegro JPG support
 		if( jpgalleg_init() < 0 )
@@ -1886,7 +1863,16 @@ namespace TA3D
         delete InterfaceManager;
     }
 
+    SDL_Surface *GFX::create_surface_ex(int bpp, int w, int h)
+    {
+        return SDL_CreateRGBSurface(SDL_SWSURFACE, w, h, bpp,
+                                    0xFF000000, 0x00FF0000, 0x0000FF00, 0x000000FF);
+    }
 
+    SDL_Surface *GFX::create_surface(int w, int h)
+    {
+        return create_surface_ex(32, w, h);
+    }
 
     void reset_keyboard()
     {

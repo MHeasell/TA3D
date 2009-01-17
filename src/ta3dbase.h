@@ -33,7 +33,7 @@ namespace TA3D
 {
     namespace VARS
     {
-        extern RGB *pal;
+        extern SDL_Color *pal;
 
         extern cHPIHandler *HPIManager;
     }

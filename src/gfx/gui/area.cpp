@@ -238,10 +238,10 @@ namespace TA3D
             vec_wnd[vec_z_order[i]]->draw(help_msg, i == 0, true, skin);
         if( !help_msg.empty())
         {
-            int old_u_format = get_uformat();
-            set_uformat(U_UTF8);
+//            int old_u_format = get_uformat();
+//            set_uformat(U_UTF8);
             PopupMenu( mouse_x + 20, mouse_y + 20, help_msg, skin );
-            set_uformat(old_u_format);
+//            set_uformat(old_u_format);
         }
 
         pMutex.unlock();
@@ -266,12 +266,12 @@ namespace TA3D
         String real_filename = filename;
         if (skin != NULL && !skin->prefix.empty())
         {
-            int name_len = strlen(get_filename(real_filename.c_str()));
+            int name_len = Paths::ExtractFileName(real_filename).size();
             if (name_len > 0)
             {
                 real_filename.clear();
                 real_filename << filename.substr(0, filename.size() - name_len) << skin->prefix
-                    << get_filename(filename.c_str());
+                    << Paths::ExtractFileName(filename);
             }
             else
                 real_filename << skin->prefix;
@@ -318,9 +318,9 @@ namespace TA3D
         {
             if(skin && !skin->prefix.empty())
             {
-                int name_len = strlen(get_filename(background_name.c_str()));
+                int name_len = Paths::ExtractFileName(background_name).size();
                 if (name_len > 0)
-                    background_name = background_name.substr(0, background_name.size() - name_len) + skin->prefix + get_filename(background_name.c_str());
+                    background_name = background_name.substr(0, background_name.size() - name_len) + skin->prefix + Paths::ExtractFileName(background_name);
                 else
                     background_name += skin->prefix;
             }

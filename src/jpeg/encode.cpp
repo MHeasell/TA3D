@@ -123,7 +123,7 @@ static int luminance_quant_table[64];
 static int chrominance_quant_table[64];
 static int current_pass, progress_counter, progress_total;
 static int sampling, greyscale, mcu_w, mcu_h, pitch;
-static BITMAP *fixed_bmp;
+static SDL_Surface *fixed_bmp;
 static void (*rgb2ycbcr)(char *address, short *y1, short *cb1, short *cr1, short *y2, short *cb2, short *cr2);
 static void (*progress_cb)(int percentage);
 
@@ -142,7 +142,7 @@ apply_fdct(short *data)
 	int z1, z2, z3, z4, z5;
 	short *dataptr = data;
 	int i;
-	
+
 	for (i = 8; i; i--) {
 		tmp0 = dataptr[0] + dataptr[7];
 		tmp7 = dataptr[0] - dataptr[7];
@@ -152,25 +152,25 @@ apply_fdct(short *data)
 		tmp5 = dataptr[2] - dataptr[5];
 		tmp3 = dataptr[3] + dataptr[4];
 		tmp4 = dataptr[3] - dataptr[4];
-		
+
 		tmp10 = tmp0 + tmp3;
 		tmp13 = tmp0 - tmp3;
 		tmp11 = tmp1 + tmp2;
 		tmp12 = tmp1 - tmp2;
-		
+
 		dataptr[0] = (tmp10 + tmp11) << 2;
 		dataptr[4] = (tmp10 - tmp11) << 2;
-		
+
 		z1 = (tmp12 + tmp13) * FIX_0_541196100;
 		dataptr[2] = (z1 + (tmp13 * FIX_0_765366865)) >> 11;
 		dataptr[6] = (z1 + (tmp12 * -FIX_1_847759065)) >> 11;
-		
+
 		z1 = tmp4 + tmp7;
 		z2 = tmp5 + tmp6;
 		z3 = tmp4 + tmp6;
 		z4 = tmp5 + tmp7;
 		z5 = (z3 + z4) * FIX_1_175875602;
-		
+
 		tmp4 *= FIX_0_298631336;
 		tmp5 *= FIX_2_053119869;
 		tmp6 *= FIX_3_072711026;
@@ -179,18 +179,18 @@ apply_fdct(short *data)
 		z2 *= -FIX_2_562915447;
 		z3 *= -FIX_1_961570560;
 		z4 *= -FIX_0_390180644;
-		
+
 		z3 += z5;
 		z4 += z5;
-		
+
 		dataptr[7] = (tmp4 + z1 + z3) >> 11;
 		dataptr[5] = (tmp5 + z2 + z4) >> 11;
 		dataptr[3] = (tmp6 + z2 + z3) >> 11;
 		dataptr[1] = (tmp7 + z1 + z4) >> 11;
-		
+
 		dataptr += 8;
 	}
-	
+
 	dataptr = data;
 	for (i = 8; i; i--) {
 		tmp0 = dataptr[0] + dataptr[56];
@@ -201,25 +201,25 @@ apply_fdct(short *data)
 		tmp5 = dataptr[16] - dataptr[40];
 		tmp3 = dataptr[24] + dataptr[32];
 		tmp4 = dataptr[24] - dataptr[32];
-		
+
 		tmp10 = tmp0 + tmp3;
 		tmp13 = tmp0 - tmp3;
 		tmp11 = tmp1 + tmp2;
 		tmp12 = tmp1 - tmp2;
-		
+
 		dataptr[0] = (tmp10 + tmp11) >> 2;
 		dataptr[32] = (tmp10 - tmp11) >> 2;
-		
+
 		z1 = (tmp12 + tmp13) * FIX_0_541196100;
 		dataptr[16] = (z1 + (tmp13 * FIX_0_765366865)) >> 15;
 		dataptr[48] = (z1 + (tmp12 * -FIX_1_847759065)) >> 15;
-		
+
 		z1 = tmp4 + tmp7;
 		z2 = tmp5 + tmp6;
 		z3 = tmp4 + tmp6;
 		z4 = tmp5 + tmp7;
 		z5 = (z3 + z4) * FIX_1_175875602;
-		
+
 		tmp4 *= FIX_0_298631336;
 		tmp5 *= FIX_2_053119869;
 		tmp6 *= FIX_3_072711026;
@@ -228,14 +228,14 @@ apply_fdct(short *data)
 		z2 *= -FIX_2_562915447;
 		z3 *= -FIX_1_961570560;
 		z4 *= -FIX_0_390180644;
-		
+
 		z3 += z5;
 		z4 += z5;
 		dataptr[56] = (tmp4 + z1 + z3) >> 15;
 		dataptr[40] = (tmp5 + z2 + z4) >> 15;
 		dataptr[24] = (tmp6 + z2 + z3) >> 15;
 		dataptr[8] = (tmp7 + z1 + z4) >> 15;
-		
+
 		dataptr++;
 	}
 }
@@ -244,11 +244,11 @@ apply_fdct(short *data)
 /* zigzag_reorder:
  *  Reorders a vector of coefficients by the zigzag scan.
  */
-static INLINE void
+static inline void
 zigzag_reorder(short *input, short *output)
 {
 	int i;
-	
+
 	for (i = 0; i < 64; i++)
 		output[_jpeg_zigzag_scan[i]] = input[i];
 }
@@ -289,7 +289,7 @@ static void
 setup_huffman_tree(HUFFMAN_TREE *tree, HUFFMAN_NODE *node, int bits_length, HUFFMAN_NODE **list)
 {
 	HUFFMAN_NODE *tail;
-	
+
 	if (node->entry) {
 		node->entry->bits_length = bits_length;
 		if (list) {
@@ -324,7 +324,7 @@ static HUFFMAN_NODE *
 find_leaf_at_level(HUFFMAN_NODE *node, int level, int cur_level)
 {
 	HUFFMAN_NODE *result;
-	
+
 	if (node->entry) {
 		if (cur_level == level)
 			return node;
@@ -362,7 +362,7 @@ compare_entries(const void *d1, const void *d2)
 {
 	HUFFMAN_ENTRY *e1 = (HUFFMAN_ENTRY *)d1;
 	HUFFMAN_ENTRY *e2 = (HUFFMAN_ENTRY *)d2;
-	
+
 	if (e1->frequency < e2->frequency)
 		return 1;
 	else if (e1->frequency > e2->frequency)
@@ -390,11 +390,13 @@ build_huffman_table(HUFFMAN_TABLE *table, unsigned char *num_codes, unsigned cha
 	table->entry[256].frequency = max_frequency - 1;
 	table->entry[256].value = -1;
 	qsort(table->entry, 257, sizeof(HUFFMAN_ENTRY), compare_entries);
-	for (i = 0; i < 257; i++) {
+	for (i = 0; i < 257; i++)
+	{
 		entry = &table->entry[i];
 		if (entry->value < 0)
 			fake_entry = entry;
-		if (entry->frequency > 0) {
+		if (entry->frequency > 0)
+		{
 			new_node = (HUFFMAN_NODE *)calloc(1, sizeof(HUFFMAN_NODE));
 			new_node->entry = entry;
 			new_node->frequency = entry->frequency;
@@ -407,7 +409,8 @@ build_huffman_table(HUFFMAN_TABLE *table, unsigned char *num_codes, unsigned cha
 				tree.head = tree.tail = new_node;
 		}
 	}
-	while (tree.head != tree.tail) {
+	while (tree.head != tree.tail)
+	{
 		new_node = (HUFFMAN_NODE *)calloc(1, sizeof(HUFFMAN_NODE));
 		new_node->left = tree.tail;
 		new_node->right = tree.tail->prev;
@@ -419,7 +422,8 @@ build_huffman_table(HUFFMAN_TABLE *table, unsigned char *num_codes, unsigned cha
 			tree.head = NULL;
 		for (node = tree.tail; node && (node->frequency < new_node->frequency); node = node->prev)
 			;
-		if (node) {
+		if (node)
+		{
 			new_node->prev = node;
 			new_node->next = node->next;
 			if (node->next)
@@ -428,7 +432,8 @@ build_huffman_table(HUFFMAN_TABLE *table, unsigned char *num_codes, unsigned cha
 				tree.tail = new_node;
 			node->next = new_node;
 		}
-		else {
+		else
+		{
 			new_node->next = tree.head;
 			new_node->prev = NULL;
 			if (tree.head)
@@ -440,7 +445,7 @@ build_huffman_table(HUFFMAN_TABLE *table, unsigned char *num_codes, unsigned cha
 	}
 
 	setup_huffman_tree(&tree, tree.head, 0, NULL);
-	
+
 	/*
 	 *  Adjusts the huffman tree by removing two leaves from a level and
 	 *  repositioning them at a lower level. Right leaf replaces the parent tree
@@ -448,14 +453,15 @@ build_huffman_table(HUFFMAN_TABLE *table, unsigned char *num_codes, unsigned cha
 	 *  This algorithm is used to reposition entries which appear to have a bits
 	 *  length higher than 16, which is the maximum allowed by the JPG standard.
 	 */
-	while (tree.depth > 16) {
+	while (tree.depth > 16)
+	{
 		TRACE("Tree depth > 16; adjusting leaves");
 		src_node = find_leaf_at_level(tree.head, tree.depth, 0);
 		right = src_node->parent->right;
 		left = src_node->parent->left;
 		src_node->parent->entry = right->entry;
 		src_node->parent->left = src_node->parent->right = NULL;
-		
+
 		level = 2;
 		while (!(dest_node = find_leaf_at_level(tree.head, tree.depth - level, 0)))
 			level++;
@@ -468,7 +474,7 @@ build_huffman_table(HUFFMAN_TABLE *table, unsigned char *num_codes, unsigned cha
 		tree.depth = 0;
 		setup_huffman_tree(&tree, tree.head, 0, NULL);
 	}
-	
+
 	/*
 	 *  Find rightmost leaf and replace it with fake entry. This is needed
 	 *  as the JPG standard doesn't allow huffman entries with all bits set
@@ -480,20 +486,22 @@ build_huffman_table(HUFFMAN_TABLE *table, unsigned char *num_codes, unsigned cha
 	TRACE("Exchanging rightmost leaf at level %d with fake leaf at level %d%s",
 		node->entry->bits_length, fake_entry->bits_length, (node->entry == fake_entry ? "(fake leaf == rightmost leaf)" : ""));
 	fake_entry->value = node->entry->value;
-	
+
 	/* Save generated huffman table */
 	memset(list, 0, 17 * sizeof(HUFFMAN_NODE *));
 	setup_huffman_tree(&tree, tree.head, 0, list);
-	for (i = 1; i <= 16; i++) {
+	for (i = 1; i <= 16; i++)
+	{
 		num_codes[i] = 0;
-		for (node = list[i]; node; node = node->next) {
+		for (node = list[i]; node; node = node->next)
+		{
 			*value++ = node->entry->value;
 			num_codes[i]++;
 		}
 	}
-	
+
 	destroy_huffman_tree(tree.head);
-	
+
 	return 0;
 }
 
@@ -507,14 +515,16 @@ write_huffman_table(HUFFMAN_TABLE *table, unsigned const char *num_codes, unsign
 {
 	HUFFMAN_ENTRY *entry;
 	int i, j, code, index;
-	
+
 	for (i = 1; i <= 16; i++)
 		_jpeg_chunk_putc(num_codes[i]);
 	memset(table, 0, sizeof(HUFFMAN_TABLE));
 	index = code = 0;
 	entry = table->entry;
-	for (i = 1; i <= 16; i++) {
-		for (j = 0; j < num_codes[i]; j++) {
+	for (i = 1; i <= 16; i++)
+	{
+		for (j = 0; j < num_codes[i]; j++)
+		{
 			entry->value = value[index];
 			entry->encoded_value = code;
 			entry->bits_length = i;
@@ -545,34 +555,37 @@ write_header(int sampling, int greyscale, int quality, int width, int height)
 	/* Y uses DC table 0 and AC table 0, Cb and Cr use DC table 1 and AC table 1 */
 	unsigned char sos_greyscale[] = { 1, 1, 0x00, 0, 63, 0 };
 	unsigned char sos_color[] = { 3, 1, 0x00, 2, 0x11, 3, 0x11, 0, 63, 0 };
-	
+
 	_jpeg_putw(CHUNK_SOI);
-	
+
 	/* APP0 chunk */
 	_jpeg_new_chunk(CHUNK_APP0);
 	_jpeg_chunk_puts(app0, 14);
 	_jpeg_write_chunk();
-	
+
 	/* COM chunk ;) */
 	_jpeg_new_chunk(CHUNK_COM);
 	_jpeg_chunk_puts((unsigned char*)comment, strlen(comment));
 	_jpeg_write_chunk();
-	
+
 	/* DQT chunk */
 	_jpeg_new_chunk(CHUNK_DQT);
 	_jpeg_chunk_putc(0);
 	write_quantization_table(luminance_quant_table, default_luminance_quant_table, quality);
-	if (!greyscale) {
+	if (!greyscale)
+	{
 		_jpeg_chunk_putc(1);
 		write_quantization_table(chrominance_quant_table, default_chrominance_quant_table, quality);
 	}
 	_jpeg_write_chunk();
-	
+
 	/* SOF0 chunk */
 	if (greyscale)
 		sof0[7] = 0x11;
-	else {
-		switch (sampling) {
+	else
+	{
+		switch (sampling)
+		{
 			case JPG_SAMPLING_411: sof0[7] = 0x22; break;
 			case JPG_SAMPLING_422: sof0[7] = 0x21; break;
 			case JPG_SAMPLING_444: sof0[7] = 0x11; break;
@@ -581,21 +594,22 @@ write_header(int sampling, int greyscale, int quality, int width, int height)
 	_jpeg_new_chunk(CHUNK_SOF0);
 	_jpeg_chunk_puts(sof0, greyscale ? 9 : 15);
 	_jpeg_write_chunk();
-	
+
 	/* DHT chunk */
 	_jpeg_new_chunk(CHUNK_DHT);
 	_jpeg_chunk_putc(0x00);		/* DC huffman table 0 (used for luminance) */
 	write_huffman_table(&_jpeg_huffman_dc_table[0], num_codes_dc_luminance, val_dc_luminance);
 	_jpeg_chunk_putc(0x10);		/* AC huffman table 0 (used for luminance) */
 	write_huffman_table(&_jpeg_huffman_ac_table[0], num_codes_ac_luminance, val_ac_luminance);
-	if (!greyscale) {
+	if (!greyscale)
+	{
 		_jpeg_chunk_putc(0x01);		/* DC huffman table 1 (used for chrominance) */
 		write_huffman_table(&_jpeg_huffman_dc_table[1], num_codes_dc_chrominance, val_dc_chrominance);
 		_jpeg_chunk_putc(0x11);		/* AC huffman table 1 (used for chrominance) */
 		write_huffman_table(&_jpeg_huffman_ac_table[1], num_codes_ac_chrominance, val_ac_chrominance);
 	}
 	_jpeg_write_chunk();
-	
+
 	/* SOS chunk */
 	_jpeg_new_chunk(CHUNK_SOS);
 	if (greyscale)
@@ -603,7 +617,7 @@ write_header(int sampling, int greyscale, int quality, int width, int height)
 	else
 		_jpeg_chunk_puts(sos_color, 10);
 	_jpeg_write_chunk();
-	
+
 	return 0;
 }
 
@@ -611,14 +625,14 @@ write_header(int sampling, int greyscale, int quality, int width, int height)
 /* format_number:
  *  Computes the category and bits of a given number.
  */
-static INLINE void
+static inline void
 format_number(int num, int *category, int *bits)
 {
 	int abs_num, mask, cat;
-	
+
 	mask = num >> 31;
 	abs_num = (num ^ mask) - mask;
-	
+
 	for (cat = 0; abs_num; cat++)
 		abs_num >>= 1;
 	*category = cat;
@@ -632,12 +646,13 @@ format_number(int num, int *category, int *bits)
 /* put_bits:
  *   Writes some bits to the output stream.
  */
-static INLINE int
+static inline int
 put_bits(int value, int num_bits)
 {
 	int i;
 
-	for (i = num_bits - 1; i >= 0; i--) {
+	for (i = num_bits - 1; i >= 0; i--)
+	{
 		if (_jpeg_put_bit((value >> i) & 0x1))
 			return -1;
 	}
@@ -648,12 +663,13 @@ put_bits(int value, int num_bits)
 /* huffman_encode:
  *  Writes the huffman code of a given value.
  */
-static INLINE int
+static inline int
 huffman_encode(HUFFMAN_TABLE *table, int value)
 {
 	HUFFMAN_ENTRY *entry;
-	
-	if (current_pass == PASS_COMPUTE_HUFFMAN) {
+
+	if (current_pass == PASS_COMPUTE_HUFFMAN)
+	{
 		table->entry[value].value = value;
 		table->entry[value].frequency++;
 		return 0;
@@ -680,25 +696,29 @@ encode_block(short *block, int type, int *old_dc)
 	int i, index;
 	int value, num_zeroes;
 	int category, bits;
-	
-	if (type == LUMINANCE) {
+
+	if (type == LUMINANCE)
+	{
 		dc_table = &_jpeg_huffman_dc_table[0];
 		ac_table = &_jpeg_huffman_ac_table[0];
 		quant_table = luminance_quant_table;
 	}
-	else {
+	else
+	{
 		dc_table = &_jpeg_huffman_dc_table[1];
 		ac_table = &_jpeg_huffman_ac_table[1];
 		quant_table = chrominance_quant_table;
 	}
-	
+
 	apply_fdct(block);
-	
+
 	zigzag_reorder(block, data);
 
-	for (i = 0; i < 64; i++) {
+	for (i = 0; i < 64; i++)
+	{
 		value = data[i];
-		if (value < 0) {
+		if (value < 0)
+		{
 			value = -value;
 			value = (value * quant_table[i]) + (quant_table[i] >> 1);
 			data[i] = -(value >> 19);
@@ -706,7 +726,7 @@ encode_block(short *block, int type, int *old_dc)
 		else
 			data[i] = ((value * quant_table[i]) + (quant_table[i] >> 1)) >> 19;
 	}
-	
+
 	value = data[0] - *old_dc;
 	*old_dc = data[0];
 	format_number(value, &category, &bits);
@@ -716,11 +736,14 @@ encode_block(short *block, int type, int *old_dc)
 		return -1;
 
 	num_zeroes = 0;
-	for (index = 1; index < 64; index++) {
+	for (index = 1; index < 64; index++)
+	{
 		if ((value = data[index]) == 0)
 			num_zeroes++;
-		else {
-			while (num_zeroes > 15) {
+		else
+		{
+			while (num_zeroes > 15)
+			{
 				if (huffman_encode(ac_table, 0xf0))
 					return -1;
 				num_zeroes -= 16;
@@ -734,11 +757,12 @@ encode_block(short *block, int type, int *old_dc)
 			num_zeroes = 0;
 		}
 	}
-	if (num_zeroes > 0) {
+	if (num_zeroes > 0)
+	{
 		if (huffman_encode(ac_table, 0x00))
 			return -1;
 	}
-	
+
 	return 0;
 }
 
@@ -752,7 +776,7 @@ _jpeg_c_rgb2ycbcr(char *addr, short *y1, short *cb1, short *cr1, short *y2, shor
 {
 	int r, g, b;
 	unsigned int *ptr = (unsigned int *)addr;
-	
+
 	r = getr32(ptr[0]);
 	g = getg32(ptr[0]);
 	b = getb32(ptr[0]);
@@ -775,7 +799,7 @@ _jpeg_c_rgb2ycbcr(char *addr, short *y1, short *cb1, short *cr1, short *y2, shor
  *  actually write encoded image).
  */
 static int
-encode_pass(BITMAP *bmp, int quality)
+encode_pass(SDL_Surface *bmp, int quality)
 {
 	short y_buf[256], cb_buf[256], cr_buf[256];
 	short y4[256], cb[64], cr[64], y_blocks_per_mcu;
@@ -783,22 +807,26 @@ encode_pass(BITMAP *bmp, int quality)
 	int dc_y, dc_cb, dc_cr;
 	int block_x, block_y, x, y, i;
 	char *addr;
-	
+
 	_jpeg_io.buffer = _jpeg_io.buffer_start;
-	
+
 	if (write_header(sampling, greyscale, quality, bmp->w, bmp->h))
 		return -1;
-	
+
 	dc_y = dc_cb = dc_cr = 0;
-	
-	for (block_y = 0; block_y < bmp->h; block_y += mcu_h) {
-		for (block_x = 0; block_x < bmp->w; block_x += mcu_w) {
-			addr = (char*)fixed_bmp->line[block_y] + (block_x * 4);
+
+	for (block_y = 0; block_y < bmp->h; block_y += mcu_h)
+	{
+		for (block_x = 0; block_x < bmp->w; block_x += mcu_w)
+		{
+			addr = (char*)fixed_bmp->pixels + block_y * fixed_bmp->pitch + (block_x * 4);
 			y_ptr = y_buf;
 			cb_ptr = cb_buf;
 			cr_ptr = cr_buf;
-			for (y = 0; y < mcu_h; y++) {
-				for (x = 0; x < mcu_w; x += 2) {
+			for (y = 0; y < mcu_h; y++)
+			{
+				for (x = 0; x < mcu_w; x += 2)
+				{
 					rgb2ycbcr(addr, y_ptr, cb_ptr, cr_ptr, y_ptr + 1, cb_ptr + 1, cr_ptr + 1);
 					y_ptr += 2;
 					cb_ptr += 2;
@@ -807,10 +835,13 @@ encode_pass(BITMAP *bmp, int quality)
 				}
 				addr += pitch;
 			}
-			if (mcu_w > 8) {
-				if (mcu_h > 8) {
+			if (mcu_w > 8)
+			{
+				if (mcu_h > 8)
+				{
 					/* 411 subsampling */
-					for (y = 0; y < 8; y++) for (x = 0; x < 8; x++) {
+					for (y = 0; y < 8; y++) for (x = 0; x < 8; x++)
+					{
 						cb[(y << 3) | x] = (cb_buf[(y << 5) | (x << 1)] + cb_buf[(y << 5) | (x << 1) | 1] +
 								   cb_buf[(y << 5) | (x << 1) | 16] + cb_buf[(y << 5) | (x << 1) | 17]) / 4;
 						cr[(y << 3) | x] = (cr_buf[(y << 5) | (x << 1)] + cr_buf[(y << 5) | (x << 1) | 1] +
@@ -822,9 +853,11 @@ encode_pass(BITMAP *bmp, int quality)
 						y_blocks_per_mcu = 4;
 					}
 				}
-				else {
+				else
+				{
 					/* 422 subsampling */
-					for (y = 0; y < 8; y++) for (x = 0; x < 8; x++) {
+					for (y = 0; y < 8; y++) for (x = 0; x < 8; x++)
+					{
 						cb[(y << 3) | x] = (cb_buf[(y << 4) | (x << 1)] + cb_buf[(y << 4) | (x << 1) | 1]) / 2;
 						cr[(y << 3) | x] = (cr_buf[(y << 4) | (x << 1)] + cr_buf[(y << 4) | (x << 1) | 1]) / 2;
 						y4[(y << 3) | x] = y_buf[(y << 4) | x];
@@ -836,19 +869,22 @@ encode_pass(BITMAP *bmp, int quality)
 				cb_ptr = cb;
 				cr_ptr = cr;
 			}
-			else {
+			else
+			{
 				/* 444 subsampling */
 				y_ptr = y_buf;
 				cb_ptr = cb_buf;
 				cr_ptr = cr_buf;
 				y_blocks_per_mcu = 1;
 			}
-			for (i = 0; i < y_blocks_per_mcu; i++) {
+			for (i = 0; i < y_blocks_per_mcu; i++)
+			{
 				if (encode_block(y_ptr, LUMINANCE, &dc_y))
 					return -1;
 				y_ptr += 64;
 			}
-			if (!greyscale) {
+			if (!greyscale)
+			{
 				if (encode_block(cb_ptr, CHROMINANCE, &dc_cb) ||
 				    encode_block(cr_ptr, CHROMINANCE, &dc_cr))
 					return -1;
@@ -858,10 +894,10 @@ encode_pass(BITMAP *bmp, int quality)
 			progress_counter++;
 		}
 	}
-	
+
 	_jpeg_flush_bits();
 	_jpeg_putw(CHUNK_EOI);
-	
+
 	return 0;
 }
 
@@ -870,17 +906,18 @@ encode_pass(BITMAP *bmp, int quality)
  *  Encodes specified image in JPG format.
  */
 int
-_jpeg_encode(BITMAP *bmp, AL_CONST RGB *pal, int quality, int flags, void (*callback)(int))
+_jpeg_encode(SDL_Surface *bmp, const SDL_Color *pal, int quality, int flags, void (*callback)(int))
 {
 	unsigned char *tables = NULL;
 	int i, result = -1;
-	
+
 	jpgalleg_error = JPG_ERROR_NONE;
-	
+
 	TRACE("############### Encode start ###############");
-	
+
 #ifdef JPGALLEG_MMX
-	if (cpu_capabilities & CPU_MMX) {
+	if (cpu_capabilities & CPU_MMX)
+	{
 		if (_rgb_r_shift_32 == 0)
 			rgb2ycbcr = _jpeg_mmx_rgb2ycbcr;
 		else if (_rgb_r_shift_32 == 16)
@@ -891,7 +928,7 @@ _jpeg_encode(BITMAP *bmp, AL_CONST RGB *pal, int quality, int flags, void (*call
 	else
 #endif
 	rgb2ycbcr = _jpeg_c_rgb2ycbcr;
-	
+
 	quality = MID(1, quality, 100);
 	sampling = flags & 0xf;
 	if ((sampling != JPG_SAMPLING_411) && (sampling != JPG_SAMPLING_422) && (sampling != JPG_SAMPLING_444)) {
@@ -901,34 +938,32 @@ _jpeg_encode(BITMAP *bmp, AL_CONST RGB *pal, int quality, int flags, void (*call
 	greyscale = flags & JPG_GREYSCALE;
 	if (greyscale)
 		sampling = JPG_SAMPLING_444;
-	
+
 	mcu_w = 8 * (sampling == JPG_SAMPLING_444 ? 1 : 2);
 	mcu_h = 8 * (sampling != JPG_SAMPLING_411 ? 1 : 2);
-	
-	fixed_bmp = create_bitmap_ex(32, (bmp->w + mcu_w - 1) & ~(mcu_w - 1), (bmp->h + mcu_h - 1) & ~(mcu_h - 1));
-	if (!fixed_bmp) {
+
+    fixed_bmp = SDL_CreateRGBSurface(SDL_SWSURFACE, (bmp->w + mcu_w - 1) & ~(mcu_w - 1), (bmp->h + mcu_h - 1) & ~(mcu_h - 1), 32,
+                                    0xFF000000, 0x00FF0000, 0x0000FF00, 0x000000FF);
+	if (!fixed_bmp)
+	{
 		TRACE("Out of memory");
 		return -1;
 	}
-	if (pal)
-		select_palette(pal);
-	blit(bmp, fixed_bmp, 0, 0, 0, 0, bmp->w, bmp->h);
-	if (pal)
-		unselect_palette();
+	TA3D::blit(bmp, fixed_bmp, 0, 0, 0, 0, bmp->w, bmp->h);
 	for (i = bmp->w; i < fixed_bmp->w; i++)
-		blit(fixed_bmp, fixed_bmp, bmp->w - 1, 0, i, 0, 1, bmp->h);
+		TA3D::blit(fixed_bmp, fixed_bmp, bmp->w - 1, 0, i, 0, 1, bmp->h);
 	for (i = bmp->h; i < fixed_bmp->h; i++)
-		blit(fixed_bmp, fixed_bmp, 0, bmp->h - 1, 0, i, fixed_bmp->w, 1);
-	pitch = (int)(fixed_bmp->line[1] - fixed_bmp->line[0]) - (mcu_w * 4);
-	
+		TA3D::blit(fixed_bmp, fixed_bmp, 0, bmp->h - 1, 0, i, fixed_bmp->w, 1);
+	pitch = (int)fixed_bmp->pitch - (mcu_w * 4);
+
 	progress_cb = callback;
 	progress_counter = 0;
 	progress_total = (fixed_bmp->w / mcu_w) * (fixed_bmp->h / mcu_h) * (flags & JPG_OPTIMIZE ? 2 : 1);
-	
+
 	TRACE("Saving %dx%d %s image in %s mode, quality %d%s", bmp->w, bmp->h, greyscale ? "greyscale" : "color",
 		sampling == JPG_SAMPLING_444 ? "444" : (sampling == JPG_SAMPLING_422 ? "422" : "411"), quality,
 		current_pass == PASS_COMPUTE_HUFFMAN ? " (first pass)" : "");
-	
+
 	if (flags & JPG_OPTIMIZE) {
 		tables = (unsigned char*) calloc(1, 1092);
 		if (!tables) {
@@ -974,11 +1009,11 @@ _jpeg_encode(BITMAP *bmp, AL_CONST RGB *pal, int quality, int flags, void (*call
 	result = encode_pass(bmp, quality);
 
 exit_error:
-	destroy_bitmap(fixed_bmp);
+	SDL_FreeSurface(fixed_bmp);
 	if (tables)
 		free(tables);
-	
+
 	TRACE("################ Encode end ################");
-	
+
 	return result;
 }

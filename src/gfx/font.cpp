@@ -7,7 +7,6 @@
 #include "gfx.h"
 #include "../misc/paths.h"
 #include "../logs/logs.h"
-#include <allegro/internal/aintern.h>
 
 
 
@@ -95,7 +94,7 @@ namespace TA3D
             pAl->height = h;
             pAl->vtable = font_vtable_color;
         }
-        else 
+        else
         {
             pAl = NULL;
             throw cError( "GfxFont::load_gafFont()", "file could not be read, data = NULL.", true );

@@ -131,7 +131,7 @@ namespace TA3D
         uint32		size;			// Quantité maximale de particules stockables dans le tableau
         std::vector<PARTICLE>	part;	// Liste des particules / Particle list
         GLuint		parttex;		// Textures des particules
-        BITMAP		*partbmp;		// Textures des particules
+        SDL_Surface	*partbmp;		// Textures des particules
         bool		dsmoke;
         uint32		ntex;
         std::vector< GLuint >	gltex;

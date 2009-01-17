@@ -14,6 +14,7 @@
  *      Public header file
  *
  *		This code has been adapted to support 64 bits platforms without crashing
+ *      and to use SDL instead of Allegro
  *
  *		This file is a module of TA3D
  *
@@ -23,7 +24,7 @@
 #ifndef _JPGALLEG_H_
 #define _JPGALLEG_H_
 
-#include <allegro.h>
+#include <SDL.h>
 
 /* Library version constat and string */
 #define JPGALLEG_VERSION 0x0205
@@ -58,6 +59,7 @@
 
 
 /* Datafile object type for JPG images */
+#define DAT_ID(a,b,c,d)         (((a)<<24) | ((b)<<16) | ((c)<<8) | (d))
 #define DAT_JPEG				DAT_ID('J','P','E','G')
 
 
@@ -68,15 +70,15 @@ extern "C" {
 
 extern int jpgalleg_init(void);
 
-extern BITMAP *load_jpg(AL_CONST char *filename, RGB *palette);
-extern BITMAP *load_jpg_ex(AL_CONST char *filename, RGB *palette, void (*callback)(int progress));
-extern BITMAP *load_memory_jpg(const void *buffer, int size, RGB *palette);
-extern BITMAP *load_memory_jpg_ex(const void *buffer, int size, RGB *palette, void (*callback)(int progress));
+extern SDL_Surface *load_jpg(const char *filename, SDL_Color *palette);
+extern SDL_Surface *load_jpg_ex(const char *filename, SDL_Color *palette, void (*callback)(int progress));
+extern SDL_Surface *load_memory_jpg(const void *buffer, int size, SDL_Color *palette);
+extern SDL_Surface *load_memory_jpg_ex(const void *buffer, int size, SDL_Color *palette, void (*callback)(int progress));
 
-extern int save_jpg(AL_CONST char *filename, BITMAP *image, AL_CONST RGB *palette);
-extern int save_jpg_ex(AL_CONST char *filename, BITMAP *image, AL_CONST RGB *palette, int quality, int flags, void (*callback)(int progress));
-extern int save_memory_jpg(void *buffer, int *size, BITMAP *image, AL_CONST RGB *palette);
-extern int save_memory_jpg_ex(void *buffer, int *size, BITMAP *image, AL_CONST RGB *palette, int quality, int flags, void (*callback)(int progress));
+extern int save_jpg(const char *filename, SDL_Surface *image, const SDL_Color *palette);
+extern int save_jpg_ex(const char *filename, SDL_Surface *image, const SDL_Color *palette, int quality, int flags, void (*callback)(int progress));
+extern int save_memory_jpg(void *buffer, int *size, SDL_Surface *image, const SDL_Color *palette);
+extern int save_memory_jpg_ex(void *buffer, int *size, SDL_Surface *image, const SDL_Color *palette, int quality, int flags, void (*callback)(int progress));
 
 extern int jpgalleg_error;
 

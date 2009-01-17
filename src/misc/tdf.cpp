@@ -142,7 +142,7 @@ namespace TA3D
             clear();
 
         StackInfos stack;
-        stack.gadgetMode = gadgetMode ? 0 /* The first index */ : -1 /* means disabled */; 
+        stack.gadgetMode = gadgetMode ? 0 /* The first index */ : -1 /* means disabled */;
         stack.caption = caption;
 
         uint32 pos(0);
@@ -161,7 +161,7 @@ namespace TA3D
                 if (stringStarted)
                 {
                     stringStarted = false;
-    
+
                     if (pos + 1 == size)
                     {
                         String::ToKeyValue(String(data + lastPos, pos - lastPos + 1), stack.key, stack.value,
@@ -181,7 +181,7 @@ namespace TA3D
                             if (pIgnoreCase)
                                 stack.value.toLower();
                             stack.sections.push(stack.currentSection);
-                            
+
                             stack.value = ReplaceString( stack.value, "\\n", "\n", false);
                             stack.value = ReplaceString( stack.value, "\\r", "\r", false);
 
@@ -261,9 +261,9 @@ namespace TA3D
         String iterFind = pTable.find(keyToFind);
         return ((iterFind.empty())
                 ? def
-                : (iterFind.size() == 10 && ustrtol(iterFind.substr(0,4).c_str(), NULL, 0) > 127
-                   ? (0xFF000000 | ustrtol( ("0x"+iterFind.substr(4,6)).c_str(), NULL, 0))
-                   : ustrtol(iterFind.c_str() , NULL, 0)));		// Uses ustrtol to deal with hexa numbers
+                : (iterFind.size() == 10 && String(iterFind.substr(0,4)).toUInt32() > 127
+                   ? (0xFF000000 | String("0x"+ iterFind.substr(4,6)).toUInt32())
+                   : iterFind.toUInt32()));		// Uses ustrtol to deal with hexa numbers
     }
 
     real32 TDFParser::pullAsFloat(const String& key, const real32 def)

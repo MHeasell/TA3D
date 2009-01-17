@@ -33,6 +33,11 @@ uint8					TA3D::VARS::players_thread_sync;
 ObjectSync				*TA3D::VARS::ThreadSynchroniser = NULL;
 String					TA3D::VARS::TA3D_CURRENT_MOD="";		// This string stores the path to current mod
 int						TA3D::VARS::ascii_to_scancode[ 256 ];
+SDL_Surface             *TA3D::VARS::screen = NULL;
+
+int                     mouse_x = 0, mouse_y = 0, mouse_z = 0, mouse_b = 0;
+int                     key[0x1000];
+std::list<int>          keybuf;
 
 
 
@@ -111,7 +116,25 @@ namespace TA3D
 	}
 
 
+	int readkey()
+	{
+	    int res = VARS::keybuf.front();
+	    VARS::keybuf.pop_front();
+	    return res;
+    }
 
+	void clear_keybuf()
+	{
+	    VARS::keybuf.clear();
+	}
+
+    void poll_keyboard()
+    {
+    }
+
+    void poll_mouse()
+    {
+    }
 } // namespace TA3D
 
 

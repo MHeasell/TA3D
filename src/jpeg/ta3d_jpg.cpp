@@ -51,7 +51,7 @@ _jpeg_trace(const char *msg, ...)
 {
 #ifdef DEBUG
 	va_list ap;
-	
+
 	va_start(ap, msg);
 	vfprintf(stderr, msg, ap);
 	va_end(ap);
@@ -64,21 +64,21 @@ _jpeg_trace(const char *msg, ...)
 
 /* load_datafile_jpg:
  *  Hook function for loading a JPEG object from a datafile. Returns the
- *  decoded JPG into a BITMAP or NULL on error.
+ *  decoded JPG into a SDL_Surface or NULL on error.
  */
 static void *
-load_datafile_jpg(PACKFILE *f, long size)
+load_datafile_jpg(FILE *f, long size)
 {
-	BITMAP *bmp;
+	SDL_Surface *bmp;
 	char *buffer;
-	
+
 	buffer = (char *)malloc(size);
 	if (!buffer)
 		return NULL;
-	pack_fread(buffer, size, f);
+	fread(buffer, size, 1, f);
 	bmp = load_memory_jpg(buffer, size, NULL);
 	free(buffer);
-	
+
 	return (void *)bmp;
 }
 
@@ -90,7 +90,7 @@ static void
 destroy_datafile_jpg(void *data)
 {
 	if (data)
-		destroy_bitmap((BITMAP *)data);
+		SDL_FreeSurface((SDL_Surface *)data);
 }
 
 
@@ -101,10 +101,8 @@ destroy_datafile_jpg(void *data)
 int
 jpgalleg_init(void)
 {
-	register_datafile_object(DAT_JPEG, load_datafile_jpg, destroy_datafile_jpg);
-	register_bitmap_file_type("jpg", load_jpg, save_jpg);
 	jpgalleg_error = JPG_ERROR_NONE;
-	
+
 	return 0;
 }
 
@@ -112,8 +110,8 @@ jpgalleg_init(void)
 /* load_jpg:
  *  Loads a JPG image from a file into a BITMAP, with no progress callback.
  */
-BITMAP *
-load_jpg(AL_CONST char *filename, RGB *palette)
+SDL_Surface *
+load_jpg(const char *filename, SDL_Color *palette)
 {
 	return load_jpg_ex(filename, palette, NULL);
 }
@@ -122,44 +120,42 @@ load_jpg(AL_CONST char *filename, RGB *palette)
 /* load_jpg_ex:
  *  Loads a JPG image from a file into a BITMAP.
  */
-BITMAP *
-load_jpg_ex(AL_CONST char *filename, RGB *palette, void (*callback)(int progress))
+SDL_Surface *
+load_jpg_ex(const char *filename, SDL_Color *palette, void (*callback)(int progress))
 {
-	PACKFILE *f;
-	BITMAP *bmp;
-	PALETTE pal;
+	FILE *f;
+	SDL_Surface *bmp;
+	SDL_Color pal[256];
 	int size;
-	
+
 	if (!palette)
 		palette = pal;
-	
-#if ((MAKE_VERSION(4, 2, 1) == MAKE_VERSION(ALLEGRO_VERSION, ALLEGRO_SUB_VERSION, ALLEGRO_WIP_VERSION)) && ALLEGRO_WIP_VERSION>0) \
-	|| (MAKE_VERSION(4, 2, 1) < MAKE_VERSION(ALLEGRO_VERSION, ALLEGRO_SUB_VERSION, ALLEGRO_WIP_VERSION))
-	size = file_size_ex(filename);
-#else
-	size = file_size(filename);
-#endif
+
+	size = TA3D::file_size(filename);
+
 	_jpeg_io.buffer = _jpeg_io.buffer_start = (unsigned char *)malloc(size);
 	_jpeg_io.buffer_end = _jpeg_io.buffer_start + size;
-	if (!_jpeg_io.buffer) {
+	if (!_jpeg_io.buffer)
+	{
 		TRACE("Out of memory");
 		jpgalleg_error = JPG_ERROR_OUT_OF_MEMORY;
 		return NULL;
 	}
-	f = pack_fopen(filename, F_READ);
-	if (!f) {
+	f = fopen(filename, "r");
+	if (!f)
+	{
 		TRACE("Cannot open %s for reading", filename);
 		jpgalleg_error = JPG_ERROR_READING_FILE;
 		free(_jpeg_io.buffer);
 		return NULL;
 	}
-	pack_fread(_jpeg_io.buffer, size, f);
-	pack_fclose(f);
-	
+	fread(_jpeg_io.buffer, size, 1, f);
+	fclose(f);
+
 	TRACE("Loading JPG from file %s", filename);
-	
+
 	bmp = _jpeg_decode(palette, callback);
-	
+
 	free(_jpeg_io.buffer_start);
 	return bmp;
 }
@@ -169,8 +165,8 @@ load_jpg_ex(AL_CONST char *filename, RGB *palette, void (*callback)(int progress
  *  Loads a JPG image from a memory buffer into a BITMAP, with no progress
  *  callback.
  */
-BITMAP *
-load_memory_jpg(const void *buffer, int size, RGB *palette)
+SDL_Surface *
+load_memory_jpg(const void *buffer, int size, SDL_Color *palette)
 {
 	return load_memory_jpg_ex(buffer, size, palette, NULL);
 }
@@ -179,20 +175,20 @@ load_memory_jpg(const void *buffer, int size, RGB *palette)
 /* load_memory_jpg:
  *  Loads a JPG image from a memory buffer into a BITMAP.
  */
-BITMAP *
-load_memory_jpg_ex(const void *buffer, int size, RGB *palette, void (*callback)(int progress))
+SDL_Surface *
+load_memory_jpg_ex(const void *buffer, int size, SDL_Color *palette, void (*callback)(int progress))
 {
-	BITMAP *bmp;
-	PALETTE pal;
-	
+	SDL_Surface *bmp;
+	SDL_Color pal[256];
+
 	if (!palette)
 		palette = pal;
-	
+
 	_jpeg_io.buffer = _jpeg_io.buffer_start = (unsigned char*)buffer;
 	_jpeg_io.buffer_end = _jpeg_io.buffer_start + size;
-	
+
 	TRACE("Loading JPG from memory buffer at %p (size = %d)", buffer, size);
-	
+
 	bmp = _jpeg_decode(palette, callback);
 
 	return bmp;
@@ -204,7 +200,7 @@ load_memory_jpg_ex(const void *buffer, int size, RGB *palette, void (*callback)(
  *  and no progress callback.
  */
 int
-save_jpg(AL_CONST char *filename, BITMAP *bmp, AL_CONST RGB *palette)
+save_jpg(const char *filename, SDL_Surface *bmp, const SDL_Color *palette)
 {
 	return save_jpg_ex(filename, bmp, palette, DEFAULT_QUALITY, DEFAULT_FLAGS, NULL);
 }
@@ -215,39 +211,40 @@ save_jpg(AL_CONST char *filename, BITMAP *bmp, AL_CONST RGB *palette)
  *  progress callback.
  */
 int
-save_jpg_ex(AL_CONST char *filename, BITMAP *bmp, AL_CONST RGB *palette, int quality, int flags, void (*callback)(int progress))
+save_jpg_ex(const char *filename, SDL_Surface *bmp, const SDL_Color *palette, int quality, int flags, void (*callback)(int progress))
 {
-	PACKFILE *f;
-	PALETTE pal;
+	FILE *f;
+	SDL_Color pal[256];
 	int result, size;
-	
+
 	if (!palette)
 		palette = pal;
-	
+
 	size = (bmp->w * bmp->h * 3) + 1000;    /* This extimation should be more than enough in all cases */
 	_jpeg_io.buffer = _jpeg_io.buffer_start = (unsigned char *)malloc(size);
 	_jpeg_io.buffer_end = _jpeg_io.buffer_start + size;
-	if (!_jpeg_io.buffer) {
+	if (!_jpeg_io.buffer)
+    {
 		TRACE("Out of memory");
 		jpgalleg_error = JPG_ERROR_OUT_OF_MEMORY;
 		return -1;
 	}
-	f = pack_fopen(filename, F_WRITE);
+	f = fopen(filename, "r");
 	if (!f) {
 		TRACE("Cannot open %s for writing", filename);
 		jpgalleg_error = JPG_ERROR_WRITING_FILE;
 		free(_jpeg_io.buffer);
 		return -1;
 	}
-	
+
 	TRACE("Saving JPG to file %s", filename);
-	
+
 	result = _jpeg_encode(bmp, palette, quality, flags, callback);
 	if (!result)
-		pack_fwrite(_jpeg_io.buffer_start, _jpeg_io.buffer - _jpeg_io.buffer_start, f);
-	
+		fwrite(_jpeg_io.buffer_start, _jpeg_io.buffer - _jpeg_io.buffer_start, 1, f);
+
 	free(_jpeg_io.buffer_start);
-	pack_fclose(f);
+	fclose(f);
 	return result;
 }
 
@@ -257,7 +254,7 @@ save_jpg_ex(AL_CONST char *filename, BITMAP *bmp, AL_CONST RGB *palette, int qua
  *  is saved with quality 75, no subsampling and no progress callback.
  */
 int
-save_memory_jpg(void *buffer, int *size, BITMAP *bmp, AL_CONST RGB *palette)
+save_memory_jpg(void *buffer, int *size, SDL_Surface *bmp, const SDL_Color *palette)
 {
 	return save_memory_jpg_ex(buffer, size, bmp, palette, DEFAULT_QUALITY, DEFAULT_FLAGS, NULL);
 }
@@ -268,23 +265,24 @@ save_memory_jpg(void *buffer, int *size, BITMAP *bmp, AL_CONST RGB *palette)
  *  and stores it into a memory buffer.
  */
 int
-save_memory_jpg_ex(void *buffer, int *size, BITMAP *bmp, AL_CONST RGB *palette, int quality, int flags, void (*callback)(int progress))
+save_memory_jpg_ex(void *buffer, int *size, SDL_Surface *bmp, const SDL_Color *palette, int quality, int flags, void (*callback)(int progress))
 {
 	int result;
-	
-	if (!buffer) {
+
+	if (!buffer)
+	{
 		TRACE("Invalid buffer pointer");
 		return -1;
 	}
-	
+
 	TRACE("Saving JPG to memory buffer at %p (size = %d)", buffer, *size);
-	
+
 	_jpeg_io.buffer = _jpeg_io.buffer_start = (unsigned char*)buffer;
 	_jpeg_io.buffer_end = _jpeg_io.buffer_start + *size;
 	*size = 0;
-	
+
 	result = _jpeg_encode(bmp, palette, quality, flags, callback);
-	
+
 	if (result == 0)
 		*size = _jpeg_io.buffer - _jpeg_io.buffer_start;
 	return result;

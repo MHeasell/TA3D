@@ -65,7 +65,7 @@ namespace TA3D
 
         GLuint get_gl_texture(const String& texture_name, const int frame = 0);
 
-        BITMAP *get_bmp_texture(const String& texture_name, const int frame = 0);
+        SDL_Surface *get_bmp_texture(const String& texture_name, const int frame = 0);
 
         int load_gaf(byte *data);
 
@@ -382,7 +382,7 @@ namespace TA3D
 
         byte *load_3dm(byte *data,const char *filename=NULL);
 
-        void create_from_2d(BITMAP *bmp,float w,float h,float max_h);
+        void create_from_2d(SDL_Surface *bmp,float w,float h,float max_h);
 
         void compute_coord(SCRIPT_DATA *data_s=NULL,Vector3D *pos=NULL,bool c_part=false,int p_tex=0,Vector3D *target=NULL,Vector3D *upos=NULL,MATRIX_4x4 *M=NULL,float size=0.0f,Vector3D *center=NULL,bool reverse=false,OBJECT *src=NULL,SCRIPT_DATA *src_data=NULL);
 
@@ -466,7 +466,7 @@ namespace TA3D
         /*!
         ** \brief
         */
-        void create_from_2d(BITMAP* bmp, float w, float h, float max_h);
+        void create_from_2d(SDL_Surface* bmp, float w, float h, float max_h);
 
         /*!
         ** \brief
@@ -578,7 +578,7 @@ namespace TA3D
         /*!
         ** \brief
         */
-        void create_from_2d(BITMAP *bmp, float w, float h, float max_h, const String& filename);
+        void create_from_2d(SDL_Surface *bmp, float w, float h, float max_h, const String& filename);
 
         /*!
         ** \brief we need this small function in order to process textures on-the-fly in game and at loading time in 3DMEditor
