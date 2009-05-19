@@ -1,6 +1,6 @@
 [Desktop Entry]
 Name=3DMEditor
-Version=0.5.4 WIP
+Version=0.5.4
 Comment=TA3D's model editor
 Encoding=UTF-8
 Exec=/usr/games/3dmeditor
