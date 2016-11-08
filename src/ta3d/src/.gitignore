@@ -1,0 +1,6 @@
+/.*.sw*
+/cmake_install.cmake
+/Makefile
+/CMakeFiles
+/*.app
+/CMakeCache.txt
