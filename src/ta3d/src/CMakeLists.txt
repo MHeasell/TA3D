@@ -420,10 +420,6 @@ ELSE(NOT APPLE)
 	BUNDLE_INSTALL_GLOB("gui" "gui" "*.tdf")
 	BUNDLE_INSTALL_GLOB("gui" "gui" "*.area")
 	BUNDLE_INSTALL_GLOB("gui" "gui" "*.skn")
-	# objects3d
-	Message(STATUS "[osx-bundle] Adding resources 'objects3d'...")
-	BUNDLE_INSTALL_GLOB("objects3d" "objects3d" "*.3dm")
-	BUNDLE_INSTALL_GLOB("objects3d" "objects3d" "*.3do")
 	# Fonts
 	Message(STATUS "[osx-bundle] Adding resources 'fonts'...")
 	BUNDLE_INSTALL_GLOB("fonts" "fonts" "*.ttf")
