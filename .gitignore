@@ -20,3 +20,20 @@
 /stderr.txt
 /stdout.txt
 /*.app
+
+
+# build cruft from luajit
+/src/ta3d/src/luajit/src/**/*.o
+/src/ta3d/src/luajit/src/**/*.a
+/src/ta3d/src/luajit/src/**/*.so
+/src/ta3d/src/luajit/src/host/buildvm
+/src/ta3d/src/luajit/src/host/buildvm_arch.h
+/src/ta3d/src/luajit/src/host/minilua
+/src/ta3d/src/luajit/src/jit/vmdef.lua
+/src/ta3d/src/luajit/src/lj_bcdef.h
+/src/ta3d/src/luajit/src/lj_ffdef.h
+/src/ta3d/src/luajit/src/lj_folddef.h
+/src/ta3d/src/luajit/src/lj_libdef.h
+/src/ta3d/src/luajit/src/lj_recdef.h
+/src/ta3d/src/luajit/src/lj_vm.s
+/src/ta3d/src/luajit/src/luajit
