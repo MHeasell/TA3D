@@ -299,10 +299,6 @@ ${MementoSection} "Resources (required)" SecResources
   ${SetOutPath} "$INSTDIR\Sky\"
   ${File} "..\..\sky\" "*.tdf"
 
-  ${SetOutPath} "$INSTDIR\Objects3D\"
-  ${File} "..\..\objects3d\" "*.3dm"
-  ${File} "..\..\objects3d\" "*.3do"
-
 ${MementoSectionEnd}
 
 ${MementoSection} "Documentation" SecDocs
