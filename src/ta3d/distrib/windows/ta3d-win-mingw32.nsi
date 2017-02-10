@@ -322,57 +322,6 @@ ${MementoSection} "Documentation" SecDocs
 
 ${MementoSectionEnd}
 
-${MementoSection} "Default Mod" SecDefaultMod
-
-  SetDetailsPrint textonly
-  DetailPrint "Installing the TA3D default mod..."
-  SetDetailsPrint listonly
-
-  SectionIn 1 
-
-  SetOverwrite on
-  ${AddItem} "$INSTDIR\Mods\"
-  ${SetOutPath} "$INSTDIR\Mods\TA3D\"
-  ${File} "..\..\mods\ta3d\" "*.sh"
-  ${File} "..\..\mods\ta3d\" "*.txt"
-  ${File} "..\..\mods\ta3d\" "TODO"
-  ${SetOutPath} "$INSTDIR\Mods\TA3D\Anims\"
-  ${SetOutPath} "$INSTDIR\Mods\TA3D\Download\"
-  ${SetOutPath} "$INSTDIR\Mods\TA3D\Features\"
-  ${SetOutPath} "$INSTDIR\Mods\TA3D\Features\acid\"
-  ${SetOutPath} "$INSTDIR\Mods\TA3D\Features\all\"
-  ${SetOutPath} "$INSTDIR\Mods\TA3D\Features\archi\"
-  ${SetOutPath} "$INSTDIR\Mods\TA3D\Features\corpses\"
-  ${SetOutPath} "$INSTDIR\Mods\TA3D\Features\crystal\"
-  ${SetOutPath} "$INSTDIR\Mods\TA3D\Features\desert\"
-  ${SetOutPath} "$INSTDIR\Mods\TA3D\Features\green\"
-  ${SetOutPath} "$INSTDIR\Mods\TA3D\Features\ice\"
-  ${SetOutPath} "$INSTDIR\Mods\TA3D\Features\lava\"
-  ${SetOutPath} "$INSTDIR\Mods\TA3D\Features\lush\"
-  ${SetOutPath} "$INSTDIR\Mods\TA3D\Features\mars\"
-  ${SetOutPath} "$INSTDIR\Mods\TA3D\Features\metal\"
-  ${SetOutPath} "$INSTDIR\Mods\TA3D\Features\moon\"
-  ${SetOutPath} "$INSTDIR\Mods\TA3D\Features\slate\"
-  ${SetOutPath} "$INSTDIR\Mods\TA3D\Features\urban\"
-  ${SetOutPath} "$INSTDIR\Mods\TA3D\Features\water\"
-  ${SetOutPath} "$INSTDIR\Mods\TA3D\Features\wetdesert\"
-  ${SetOutPath} "$INSTDIR\Mods\TA3D\Features\worlds\"
-  
-  ${SetOutPath} "$INSTDIR\Mods\TA3D\GameData\"
-  ${SetOutPath} "$INSTDIR\Mods\TA3D\Guis\"
-  ${SetOutPath} "$INSTDIR\Mods\TA3D\Objects3D\"
-  ${File} "..\..\mods\ta3d\objects3d\" "*.3dm"
-  ${File} "..\..\mods\ta3d\objects3d\" "*.3do"
-  ${SetOutPath} "$INSTDIR\Mods\TA3D\Scripts\"
-  ${SetOutPath} "$INSTDIR\Mods\TA3D\Sounds\"
-  ${SetOutPath} "$INSTDIR\Mods\TA3D\Textures\"
-  ${SetOutPath} "$INSTDIR\Mods\TA3D\UnitPics\"
-  ${SetOutPath} "$INSTDIR\Mods\TA3D\Units\"
-  ${SetOutPath} "$INSTDIR\Mods\TA3D\Weapons\"
-
-${MementoSectionEnd}
-
-
 ${MementoSection} "Desktop Shortcut" SecDekstopShortcuts
 
   SetDetailsPrint textonly
@@ -441,7 +390,6 @@ SectionEnd
 !insertmacro MUI_DESCRIPTION_TEXT ${SecDocs} "Documentation related to TA3D"
 !insertmacro MUI_DESCRIPTION_TEXT ${SecMenuShortcuts} "Menu shortcuts"
 !insertmacro MUI_DESCRIPTION_TEXT ${SecDekstopShortcuts} "Desktop shortcut"
-!insertmacro MUI_DESCRIPTION_TEXT ${SecDefaultMod} "Default MOD for TA3D"
 !insertmacro MUI_FUNCTION_DESCRIPTION_END
 
 ;--------------------------------
