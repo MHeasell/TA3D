@@ -420,11 +420,6 @@ ELSE(NOT APPLE)
 	BUNDLE_INSTALL_GLOB("gui" "gui" "*.tdf")
 	BUNDLE_INSTALL_GLOB("gui" "gui" "*.area")
 	BUNDLE_INSTALL_GLOB("gui" "gui" "*.skn")
-	# Mods
-	Message(STATUS "[osx-bundle] Adding resources 'mods'...")
-	BUNDLE_INSTALL("mods/ta3d" "mods/ta3d" "files.txt")
-	BUNDLE_INSTALL_GLOB("mods/ta3d/objects3d" "mods/ta3d/objects3d" "*.3dm")
-	BUNDLE_INSTALL_GLOB("mods/ta3d/objects3d" "mods/ta3d/objects3d" "*.3do")
 	# objects3d
 	Message(STATUS "[osx-bundle] Adding resources 'objects3d'...")
 	BUNDLE_INSTALL_GLOB("objects3d" "objects3d" "*.3dm")
