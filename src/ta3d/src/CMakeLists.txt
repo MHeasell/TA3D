@@ -314,7 +314,7 @@ else()
 
 	# OS X : Add a single file as a bundle resource
 	macro(BUNDLE_INSTALL srcfolder relfolder filename)
-		File(MAKE_DIRECTORY "${PROJECT_SOURCE_DIR}/ta3d.app/Contents/Resources/${relfolder}/")
+		file(MAKE_DIRECTORY "${PROJECT_SOURCE_DIR}/ta3d.app/Contents/Resources/${relfolder}/")
 		add_custom_command(OUTPUT "${PROJECT_SOURCE_DIR}/ta3d.app/Contents/Resources/${relfolder}/${filename}"
 			COMMAND cp ARGS -f "${PROJECT_SOURCE_DIR}/${srcfolder}/${filename}"
 				"${PROJECT_SOURCE_DIR}/ta3d.app/Contents/Resources/${relfolder}/${filename}"
@@ -323,8 +323,8 @@ else()
 	endmacro()
 
 	macro(BUNDLE_INSTALL_GLOB srcfolder relfolder globfiles)
-		File(MAKE_DIRECTORY "${PROJECT_SOURCE_DIR}/ta3d.app/Contents/Resources/${relfolder}/")
-		File(GLOB lst "${PROJECT_SOURCE_DIR}/${srcfolder}/${globfiles}")
+		file(MAKE_DIRECTORY "${PROJECT_SOURCE_DIR}/ta3d.app/Contents/Resources/${relfolder}/")
+		file(GLOB lst "${PROJECT_SOURCE_DIR}/${srcfolder}/${globfiles}")
 		ForEach(fl ${lst})
 			String(REGEX REPLACE "^/.*/([^/]+)$" "\\1" fl "${fl}")
 			add_custom_command(OUTPUT "${PROJECT_SOURCE_DIR}/ta3d.app/Contents/Resources/${relfolder}/${fl}"
@@ -336,7 +336,7 @@ else()
 	endmacro()
 
 	macro(BUNDLE_BASIC_INSTALL srcfolder relfolder filename)
-		File(MAKE_DIRECTORY "${PROJECT_SOURCE_DIR}/ta3d.app/Contents/${relfolder}/")
+		file(MAKE_DIRECTORY "${PROJECT_SOURCE_DIR}/ta3d.app/Contents/${relfolder}/")
 		add_custom_command(OUTPUT "${PROJECT_SOURCE_DIR}/ta3d.app/Contents/${relfolder}/${filename}"
 			COMMAND cp ARGS -f
 				"${PROJECT_SOURCE_DIR}/${srcfolder}/${filename}"
@@ -360,9 +360,9 @@ else()
 		)
 	endmacro()
 
-	File(MAKE_DIRECTORY "${PROJECT_SOURCE_DIR}/ta3d.app/Contents/Resources/")
-	File(MAKE_DIRECTORY "${PROJECT_SOURCE_DIR}/ta3d.app/Contents/Frameworks/")
-	File(MAKE_DIRECTORY "${PROJECT_SOURCE_DIR}/ta3d.app/Contents/MacOS/")
+	file(MAKE_DIRECTORY "${PROJECT_SOURCE_DIR}/ta3d.app/Contents/Resources/")
+	file(MAKE_DIRECTORY "${PROJECT_SOURCE_DIR}/ta3d.app/Contents/Frameworks/")
+	file(MAKE_DIRECTORY "${PROJECT_SOURCE_DIR}/ta3d.app/Contents/MacOS/")
 
 	# Ta3d mod
 	BUNDLE_BASIC_INSTALL("./" "MacOS" "ta3d.mod")
@@ -371,7 +371,7 @@ else()
 	# License
 	BUNDLE_BASIC_INSTALL("../../" "./" "COPYING")
 
-	Set(ExternalLibs libz.dylib libpng.dylib libfreetype.dylib libtiff.dylib
+	set(ExternalLibs libz.dylib libpng.dylib libfreetype.dylib libtiff.dylib
 		libSDL.dylib libSDL_mixer.dylib libSDL_image.dylib libSDL_net.dylib
 		libGLEW.dylib
 		libjpeg.dylib
@@ -387,17 +387,17 @@ else()
 
 	# --- Resources ---
 	# Sky
-	Message(STATUS "[osx-bundle] Adding resources 'sky'...")
+	message(STATUS "[osx-bundle] Adding resources 'sky'...")
 	BUNDLE_INSTALL_GLOB("sky" "sky" "*.tdf")
 	# Shaders
-	Message(STATUS "[osx-bundle] Adding resources 'shaders'...")
+	message(STATUS "[osx-bundle] Adding resources 'shaders'...")
 	BUNDLE_INSTALL_GLOB("shaders" "shaders" "*.vert")
 	BUNDLE_INSTALL_GLOB("shaders" "shaders" "*.frag")
 	# ai
-	Message(STATUS "[osx-bundle] Adding resources 'ai'...")
+	message(STATUS "[osx-bundle] Adding resources 'ai'...")
 	BUNDLE_INSTALL_GLOB("ai" "ai" "*.ai")
 	# Gfx
-	Message(STATUS "[osx-bundle] Adding resources 'gfx'...")
+	message(STATUS "[osx-bundle] Adding resources 'gfx'...")
 	BUNDLE_INSTALL_GLOB("gfx" "gfx" "*.jpg")
 	BUNDLE_INSTALL_GLOB("gfx" "gfx" "*.png")
 	BUNDLE_INSTALL_GLOB("gfx" "gfx" "*.tga")
@@ -416,24 +416,24 @@ else()
 	BUNDLE_INSTALL_GLOB("gfx/teams" "gfx/teams" "*.tga")
 	BUNDLE_INSTALL_GLOB("gfx/tactical_icons" "gfx/tactical_icons/" "*.tga")
 	# gui
-	Message(STATUS "[osx-bundle] Adding resources 'gui'...")
+	message(STATUS "[osx-bundle] Adding resources 'gui'...")
 	BUNDLE_INSTALL_GLOB("gui" "gui" "*.tdf")
 	BUNDLE_INSTALL_GLOB("gui" "gui" "*.area")
 	BUNDLE_INSTALL_GLOB("gui" "gui" "*.skn")
 	# Fonts
-	Message(STATUS "[osx-bundle] Adding resources 'fonts'...")
+	message(STATUS "[osx-bundle] Adding resources 'fonts'...")
 	BUNDLE_INSTALL_GLOB("fonts" "fonts" "*.ttf")
 	# Scripts
-	Message(STATUS "[osx-bundle] Adding resources 'scripts'...")
+	message(STATUS "[osx-bundle] Adding resources 'scripts'...")
 	BUNDLE_INSTALL_GLOB("scripts" "scripts" "*.lua")
 	BUNDLE_INSTALL_GLOB("scripts/game" "scripts/game" "*.lua")
 	BUNDLE_INSTALL_GLOB("scripts/game/ai" "scripts/ai" "*.lua")
 	BUNDLE_INSTALL_GLOB("scripts" "scripts" "*.lh")
 	# Intro
-	Message(STATUS "[osx-bundle] Adding resources 'intro'...")
+	message(STATUS "[osx-bundle] Adding resources 'intro'...")
 	BUNDLE_INSTALL_GLOB("resources/intro" "intro" "*.txt")
 	# Translations
-	Message(STATUS "[osx-bundle] Adding resources 'languages'...")
+	message(STATUS "[osx-bundle] Adding resources 'languages'...")
 	BUNDLE_INSTALL_GLOB("resources/languages" "languages" "*.po")
 
 	# OS X specific

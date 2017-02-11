@@ -1,9 +1,9 @@
 project(TA3DRepository)
 cmake_minimum_required(VERSION 2.6)
 
-Message(STATUS "")
-Message(STATUS "--- TA3D, Remake of the Total Annihilation engine ---")
-Message(STATUS "")
+message(STATUS "")
+message(STATUS "--- TA3D, Remake of the Total Annihilation engine ---")
+message(STATUS "")
 
 
 set(TA3D_WEBSITE                "http://www.ta3d.org")
@@ -39,7 +39,7 @@ execute_process(
 message(STATUS "Version : v${TA3D_VERSION_HI}.${TA3D_VERSION_LO}.${TA3D_VERSION_PATCH} (commit: ${GIT_COMMIT})")
 
 # Information about the current Operating System
-Message(STATUS " System : ${CMAKE_SYSTEM} (${CMAKE_SYSTEM_PROCESSOR})")
+message(STATUS " System : ${CMAKE_SYSTEM} (${CMAKE_SYSTEM_PROCESSOR})")
 
 
 
@@ -58,12 +58,12 @@ add_subdirectory(libs/yuni/src)
 # We have to provide the path where the file 'FindYuni.cmake' is located
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/libs/yuni/packages/cmake")
 # Trying to find the Yuni framework
-Find_Package(Yuni COMPONENTS core)
+find_package(Yuni COMPONENTS core)
 if(Yuni_FOUND)
 	# Infos
 	message(STATUS "The Yuni Framework : ${Yuni_INFOS}")
 else()
-	Message(SEND_ERROR "The Yuni Framework could not be found.")
+	message(SEND_ERROR "The Yuni Framework could not be found.")
 endif()
 
 

@@ -65,9 +65,9 @@ if("${CMAKE_BUILD_TYPE}" STREQUAL "release")
 	message(STATUS "Build Configuration: Release")
 
 	if(NOT WIN32)
-		Set(CMAKE_CXX_FLAGS "${TA3D_COMMON_CPP_FLAGS} -O2 -fomit-frame-pointer -mfpmath=sse -msse -msse2")
+		set(CMAKE_CXX_FLAGS "${TA3D_COMMON_CPP_FLAGS} -O2 -fomit-frame-pointer -mfpmath=sse -msse -msse2")
 		message(STATUS "Default C++ flags set to `${CMAKE_CXX_FLAGS}`")
-	Else(NOT WIN32)
+	else()
 		if(MINGW)
 			set(CMAKE_CXX_FLAGS "${TA3D_COMMON_CPP_FLAGS} -O2 -fomit-frame-pointer")
 		endif()
@@ -77,7 +77,7 @@ if("${CMAKE_BUILD_TYPE}" STREQUAL "release")
 	endif()
 	add_definitions("-DNDEBUG") # Remove asserts
 
-Else("${CMAKE_BUILD_TYPE}" STREQUAL "release")
+else()
 
 	#
 	# Build Configuration: Debug
@@ -86,20 +86,20 @@ Else("${CMAKE_BUILD_TYPE}" STREQUAL "release")
 
 	if(NOT WIN32)
 		Set(CMAKE_CXX_FLAGS "${TA3D_COMMON_CPP_FLAGS} -g -ggdb2")
-		If(APPLE)
-			Set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -gfull")
-		ENdif(APPLE)
+		if(APPLE)
+			set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -gfull")
+		endif()
 	else()
 		if(MINGW)
-			Set(CMAKE_CXX_FLAGS "${TA3D_COMMON_CPP_FLAGS} -g2")
+			set(CMAKE_CXX_FLAGS "${TA3D_COMMON_CPP_FLAGS} -g2")
 		endif()
 		if(MSVC)
-			Set(CMAKE_CXX_FLAGS "/GR /Ob2 /Ot /MDd /MTd /fp:except")
+			set(CMAKE_CXX_FLAGS "/GR /Ob2 /Ot /MDd /MTd /fp:except")
 		endif()
 	endif()
 	add_definitions("-DLOGS_USE_DEBUG")
 
-Endif("${CMAKE_BUILD_TYPE}" STREQUAL "release")
+endif()
 
 
 
@@ -121,17 +121,17 @@ else()
 endif()
 
 
-Include(CheckIncludeFile)
+include(CheckIncludeFile)
 
 
 #
 # --- SDL ---
 #
 set(SDL_PREFIX "[SDL]")
-Include(FindSDL)
-Include(FindSDL_image)
-Include(FindSDL_mixer)
-Include(FindSDL_net)
+include(FindSDL)
+include(FindSDL_image)
+include(FindSDL_mixer)
+include(FindSDL_net)
 
 # Manual setup for mingw32 (all required files are included in source tree)
 if (WIN32 OR (CMAKE_CROSSCOMPILING AND NOT UNIX))
