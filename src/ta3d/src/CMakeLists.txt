@@ -306,7 +306,7 @@ if(NOT APPLE)
 
 	add_executable(${TA3D_BIN} ${TA3D_SOURCES})
 
-else(NOT APPLE)
+else()
 
 	#
 	# --- TA3D Program / OS XBundle ---
@@ -320,7 +320,7 @@ else(NOT APPLE)
 				"${PROJECT_SOURCE_DIR}/ta3d.app/Contents/Resources/${relfolder}/${filename}"
 			DEPENDS "${PROJECT_SOURCE_DIR}/${srcfolder}/${filename}")
 		set(TA3D_SOURCES ${TA3D_SOURCES} "${PROJECT_SOURCE_DIR}/ta3d.app/Contents/Resources/${relfolder}/${filename}")
-	endmacro(BUNDLE_INSTALL)
+	endmacro()
 
 	macro(BUNDLE_INSTALL_GLOB srcfolder relfolder globfiles)
 		File(MAKE_DIRECTORY "${PROJECT_SOURCE_DIR}/ta3d.app/Contents/Resources/${relfolder}/")
@@ -333,7 +333,7 @@ else(NOT APPLE)
 				DEPENDS "${PROJECT_SOURCE_DIR}/${srcfolder}/${fl}")
 			set(TA3D_SOURCES ${TA3D_SOURCES} "${PROJECT_SOURCE_DIR}/ta3d.app/Contents/Resources/${relfolder}/${fl}")
 		EndForEach(fl ${lst})
-	endmacro(BUNDLE_INSTALL_GLOB)
+	endmacro()
 
 	macro(BUNDLE_BASIC_INSTALL srcfolder relfolder filename)
 		File(MAKE_DIRECTORY "${PROJECT_SOURCE_DIR}/ta3d.app/Contents/${relfolder}/")
@@ -343,7 +343,7 @@ else(NOT APPLE)
 				"${PROJECT_SOURCE_DIR}/ta3d.app/Contents/${relfolder}/${filename}"
 			DEPENDS "${PROJECT_SOURCE_DIR}/${srcfolder}/${filename}")
 		set(TA3D_SOURCES ${TA3D_SOURCES} "${PROJECT_SOURCE_DIR}/ta3d.app/Contents/${relfolder}/${filename}")
-	endmacro(BUNDLE_BASIC_INSTALL)
+	endmacro()
 
 	macro(BUNDLE_ADD_LIB libname)
 		add_custom_command(OUTPUT "${PROJECT_SOURCE_DIR}/ta3d.app/Contents/Frameworks/${libname}"
@@ -351,14 +351,14 @@ else(NOT APPLE)
 			COMMAND chmod ARGS 644 "${PROJECT_SOURCE_DIR}/ta3d.app/Contents/Frameworks/${libname}"
 			DEPENDS "/opt/local/lib/${libname}")
 		set(TA3D_SOURCES ${TA3D_SOURCES} "${PROJECT_SOURCE_DIR}/ta3d.app/Contents/Frameworks/${libname}")
-	endmacro(BUNDLE_ADD_LIB)
+	endmacro()
 
 	macro(BUNDLE_RELINK src libname)
 		add_custom_command(TARGET ${TA3D_BIN} POST_BUILD
 			COMMAND install_name_tool ARGS -change '/opt/local/lib/${libname}'
 				'@executable_path/../Frameworks/${libname}' "${PROJECT_SOURCE_DIR}/ta3d.app/${src}"
 		)
-	endmacro(BUNDLE_RELINK)
+	endmacro()
 
 	File(MAKE_DIRECTORY "${PROJECT_SOURCE_DIR}/ta3d.app/Contents/Resources/")
 	File(MAKE_DIRECTORY "${PROJECT_SOURCE_DIR}/ta3d.app/Contents/Frameworks/")
@@ -383,7 +383,7 @@ else(NOT APPLE)
 	# We have to copy those libs
 	foreach (LIB ${ExternalLibs})
 		BUNDLE_ADD_LIB(${LIB})
-	endforeach(LIB)
+	endforeach()
 
 	# --- Resources ---
 	# Sky
@@ -451,14 +451,14 @@ else(NOT APPLE)
 	# Relink
 	foreach (LIB ${ExternalLibs})
 		BUNDLE_RELINK("Contents/MacOS/ta3d" "${LIB}")
-	endforeach(LIB)
+	endforeach()
 	foreach (LIB ${ExternalLibs})
 		foreach (SUBLIB ${ExternalLibs})
 			BUNDLE_RELINK("Contents/Frameworks/${LIB}" "${SUBLIB}")
-		endforeach(SUBLIB)
-	endforeach(LIB)
+		endforeach()
+	endforeach()
 
-endif(NOT APPLE)
+endif()
 
 
 #
@@ -467,11 +467,11 @@ endif(NOT APPLE)
 set(LIBS  "${LIBS} ${FREETYPE_LIBRARIES}")
 if(WIN32)
 	set(${LIBS} "${LIBS} -llua -lgdi32 -lopengl32 -lglu32")
-endif(WIN32)
+endif()
 
 if(APPLE)
 	set(${LIBS} "${LIBS} -Wl,'-headerpad FF'")
-endif(APPLE)
+endif()
 
 string(STRIP "${LIBS}" LIBS)
 target_link_libraries(${TA3D_BIN} ${LIBS})
@@ -482,5 +482,5 @@ target_link_libraries(${TA3D_BIN} ${LIBS})
 #
 if(NOT APPLE)
 	install(TARGETS ${TA3D_BIN} RUNTIME DESTINATION ${TA3D_BINARIES_INSTALL_PATH})
-endif(NOT APPLE)
+endif()
 

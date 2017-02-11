@@ -12,5 +12,5 @@ if(${TA3D_REGRESSION_TEST} EQUAL 1)
     add_executable(regression-tdfparser  tdf.cpp)
     target_link_libraries(regression-tdfparser stdafx tdf logs threads misc)
 
-endif(${TA3D_REGRESSION_TEST} EQUAL 1)
+endif()
 

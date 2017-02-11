@@ -32,16 +32,16 @@ endif()
 if(WIN32 AND NOT CMAKE_CROSSCOMPILING)
 	execute_process(COMMAND "subwcrev.exe" "${PROJECT_SOURCE_DIR}" OUTPUT_VARIABLE SVN_REV)
 	string(REGEX REPLACE ".* committed at revision ([0-9]+).*" "\\1" SVN_REV "${SVN_REV}")
-else(WIN32 AND NOT CMAKE_CROSSCOMPILING)
+else()
 	execute_process(COMMAND "svnversion" "-n" "${PROJECT_SOURCE_DIR}" OUTPUT_VARIABLE SVN_REV)
 	string(REGEX REPLACE "[0-9]+:" "" SVN_REV "${SVN_REV}")
 	string(REPLACE "M" "" SVN_REV "${SVN_REV}")
-endif(WIN32 AND NOT CMAKE_CROSSCOMPILING)
+endif()
 
 # Dealing with bad revision numbers
 if(NOT "${SVN_REV}" GREATER 1)
 	set(SVN_REV 1)
-endif(NOT "${SVN_REV}" GREATER 1)
+endif()
 
 
 
@@ -71,16 +71,16 @@ Find_Package(Yuni COMPONENTS core)
 if(Yuni_FOUND)
 	# Infos
 	message(STATUS "The Yuni Framework : ${Yuni_INFOS}")
-else(Yuni_FOUND)
+else()
 	Message(SEND_ERROR "The Yuni Framework could not be found.")
-endif(Yuni_FOUND)
+endif()
 
 
 
 # FTGL
 if(NOT APPLE)
 	add_subdirectory(libs/ftgl)
-endif(NOT APPLE)
+endif()
 
 # SDL_sgui
 if (WIN32 OR (CMAKE_CROSSCOMPILING AND NOT UNIX))
@@ -88,7 +88,7 @@ if (WIN32 OR (CMAKE_CROSSCOMPILING AND NOT UNIX))
 	set( SDL_INCLUDE_DIR  "${CMAKE_CURRENT_SOURCE_DIR}/ta3d/src/tools/win32/mingw32/include/SDL")
 	set( SDL_LIBRARY "mingw32;${CMAKE_CURRENT_SOURCE_DIR}/ta3d/src/tools/win32/mingw32/libs/libSDLmain.a;${CMAKE_CURRENT_SOURCE_DIR}/src/tools/win32/mingw32/libs/SDL.dll")
 	include_directories(${CMAKE_CURRENT_SOURCE_DIR}/ta3d/src/tools/win32/mingw32/include)
-endif (WIN32 OR (CMAKE_CROSSCOMPILING AND NOT UNIX))
+endif ()
 add_subdirectory(libs/SDL_sgui)
 
 # TA3D
