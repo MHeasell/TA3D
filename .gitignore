@@ -21,6 +21,8 @@
 /stdout.txt
 /*.app
 
+/src/install_manifest.txt
+
 
 # build cruft from luajit
 /src/ta3d/src/luajit/src/**/*.o
