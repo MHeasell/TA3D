@@ -37,3 +37,9 @@
 /src/ta3d/src/luajit/src/lj_recdef.h
 /src/ta3d/src/luajit/src/lj_vm.s
 /src/ta3d/src/luajit/src/luajit
+
+# build cruft from ftgl
+/src/libs/ftgl/**/CMakeFiles
+/src/libs/ftgl/**/Makefile
+/src/libs/ftgl/**/cmake_install.cmake
+/src/libs/ftgl/**/*.a
