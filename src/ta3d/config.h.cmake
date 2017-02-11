@@ -22,8 +22,8 @@
 //! Tag for this version
 # define TA3D_VERSION_TAG "@TA3D_VERSION_TAG@"
 
-//! The current revision
-# define TA3D_CURRENT_REVISION   "@SVN_REV@"
+//! The current git commit
+# define TA3D_CURRENT_COMMIT   "@GIT_COMMIT@"
 
 
 //! The website

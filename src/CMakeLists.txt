@@ -26,26 +26,17 @@ if (APPLE)
 	set(CMAKE_OSX_ARCHITECTURES "i386;x86_64")
 endif()
 
-#
-# Getting the latest revision number
-#
-if(WIN32 AND NOT CMAKE_CROSSCOMPILING)
-	execute_process(COMMAND "subwcrev.exe" "${PROJECT_SOURCE_DIR}" OUTPUT_VARIABLE SVN_REV)
-	string(REGEX REPLACE ".* committed at revision ([0-9]+).*" "\\1" SVN_REV "${SVN_REV}")
-else()
-	execute_process(COMMAND "svnversion" "-n" "${PROJECT_SOURCE_DIR}" OUTPUT_VARIABLE SVN_REV)
-	string(REGEX REPLACE "[0-9]+:" "" SVN_REV "${SVN_REV}")
-	string(REPLACE "M" "" SVN_REV "${SVN_REV}")
-endif()
-
-# Dealing with bad revision numbers
-if(NOT "${SVN_REV}" GREATER 1)
-	set(SVN_REV 1)
-endif()
+# Get the current commit SHA1 from git
+execute_process(
+    COMMAND "git" "rev-parse" "--verify" "HEAD"
+    WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}"
+    OUTPUT_VARIABLE GIT_COMMIT
+    OUTPUT_STRIP_TRAILING_WHITESPACE
+)
 
 
 
-message(STATUS "Version : v${TA3D_VERSION_HI}.${TA3D_VERSION_LO}.${TA3D_VERSION_PATCH} (Rev: ${SVN_REV})")
+message(STATUS "Version : v${TA3D_VERSION_HI}.${TA3D_VERSION_LO}.${TA3D_VERSION_PATCH} (commit: ${GIT_COMMIT})")
 
 # Information about the current Operating System
 Message(STATUS " System : ${CMAKE_SYSTEM} (${CMAKE_SYSTEM_PROCESSOR})")

@@ -268,9 +268,9 @@ void bug_reporter(const String &trace)
 
 	// Engine version
 	report += TA3D_ENGINE_VERSION;
-#ifdef TA3D_CURRENT_REVISION
-	report += " r";
-	report += TA3D_CURRENT_REVISION;
+#ifdef TA3D_CURRENT_COMMIT
+	report += " g";
+	report += TA3D_CURRENT_COMMIT;
 #endif
 	report += '\n';
 

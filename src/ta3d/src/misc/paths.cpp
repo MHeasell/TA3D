@@ -263,7 +263,7 @@ namespace TA3D
 			// Welcome Commander !
 			logs.checkpoint() << "Welcome to TA3D";
 			logs.checkpoint() << "Version: " << TA3D_VERSION_HI << "." << TA3D_VERSION_LO << "-" << TA3D_VERSION_TAG
-				<< " (r" << TA3D_CURRENT_REVISION << ")";
+				<< " (g" << TA3D_CURRENT_COMMIT << ")";
 			logs.info();
 
 			LOG_INFO(LOG_PREFIX_PATHS << "Started from: `" << ApplicationRoot << "`");

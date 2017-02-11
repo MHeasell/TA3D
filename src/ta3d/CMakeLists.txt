@@ -27,8 +27,8 @@ set(CPACK_PACKAGE_NAME "TA3D")
 # -----------------------------------------------------------------------------
 #
 
-if(SVN_REV)
-	set(CPACK_PACKAGE_VERSION "${TA3D_VERSION_HI}.${TA3D_VERSION_LO}.${TA3D_VERSION_PATCH}.${TA3D_VERSION_TAG}.r${SVN_REV}")
+if(GIT_COMMIT)
+    set(CPACK_PACKAGE_VERSION "${TA3D_VERSION_HI}.${TA3D_VERSION_LO}.${TA3D_VERSION_PATCH}.${TA3D_VERSION_TAG}.g${GIT_COMMIT}")
 endif()
 
 
