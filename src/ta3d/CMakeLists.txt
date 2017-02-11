@@ -1,4 +1,4 @@
-PROJECT(TA3D)
+project(TA3D)
 cmake_minimum_required(VERSION 2.6)
 
 message(STATUS "")
@@ -134,7 +134,7 @@ Include(FindSDL_mixer)
 Include(FindSDL_net)
 
 # Manual setup for mingw32 (all required files are included in source tree)
-IF (WIN32 OR (CMAKE_CROSSCOMPILING AND NOT UNIX))
+if (WIN32 OR (CMAKE_CROSSCOMPILING AND NOT UNIX))
 
 	set( SDL_FOUND included )
 	set( SDLIMAGE_FOUND included )
@@ -181,11 +181,11 @@ if(NOT SDLNET_FOUND)
 	message(FATAL_ERROR "SDL_net not found, SDL_net is required")
 endif(NOT SDLNET_FOUND)
 
-LINK_LIBRARIES(${SDL_LIBRARY})
-LINK_LIBRARIES(${SDLIMAGE_LIBRARY})
-LINK_LIBRARIES(${SDLMIXER_LIBRARY})
-LINK_LIBRARIES(${SDLNET_LIBRARY})
-LINK_LIBRARIES(${SMPEG_LIBRARY})
+link_libraries(${SDL_LIBRARY})
+link_libraries(${SDLIMAGE_LIBRARY})
+link_libraries(${SDLMIXER_LIBRARY})
+link_libraries(${SDLNET_LIBRARY})
+link_libraries(${SMPEG_LIBRARY})
 
 include_DIRECTORIES(${SDL_INCLUDE_DIR})
 include_DIRECTORIES(${SDLIMAGE_include_DIR})
@@ -216,8 +216,8 @@ else()
 				set( MAKE_WIN "make")
 				set( RANLIB_WIN "${target}ranlib")
 			else( CMAKE_CROSSCOMPILING )
-				FIND_PROGRAM(MAKE_WIN "mingw32-make.exe")
-				FIND_PROGRAM(RANLIB_WIN "ranlib.exe")
+				find_program(MAKE_WIN "mingw32-make.exe")
+				find_program(RANLIB_WIN "ranlib.exe")
 			endif( CMAKE_CROSSCOMPILING )
 
 			if( NOT BUILT_LUA )
@@ -241,7 +241,7 @@ else()
 				set( LIBS "${LIBS} -lSDLmain")
 			endif(NOT CMAKE_CROSSCOMPILING)
 
-			LINK_DIRECTORIES("${CMAKE_CURRENT_SOURCE_DIR}/src/tools/win32/mingw32/libs/")
+			link_directories("${CMAKE_CURRENT_SOURCE_DIR}/src/tools/win32/mingw32/libs/")
 
 		else(WIN32 OR (CMAKE_CROSSCOMPILING AND NOT UNIX))
 
@@ -264,8 +264,8 @@ else()
 				set( MAKE_WIN "make")
 				set( RANLIB_WIN "${target}ranlib")
 			else( CMAKE_CROSSCOMPILING )
-				FIND_PROGRAM(MAKE_WIN "mingw32-make.exe")
-				FIND_PROGRAM(RANLIB_WIN "ranlib.exe")
+				find_program(MAKE_WIN "mingw32-make.exe")
+				find_program(RANLIB_WIN "ranlib.exe")
 			endif( CMAKE_CROSSCOMPILING )
 
 			if( NOT BUILT_LUAJIT )
@@ -281,7 +281,7 @@ else()
 				set( LIBS "${LIBS} -lSDLmain")
 			endif(NOT CMAKE_CROSSCOMPILING)
 
-		LINK_DIRECTORIES("${CMAKE_CURRENT_SOURCE_DIR}/src/tools/win32/mingw32/libs/")
+		link_directories("${CMAKE_CURRENT_SOURCE_DIR}/src/tools/win32/mingw32/libs/")
 
 		else(WIN32 OR (CMAKE_CROSSCOMPILING AND NOT UNIX))
 
@@ -369,7 +369,7 @@ if(NOT APPLE)
         set( FREETYPE_LIBRARIES "${CMAKE_CURRENT_SOURCE_DIR}/src/tools/win32/mingw32/libs/libfreetype.dll.a")
         message(STATUS "FreeType Library : ${FREETYPE_LIBRARIES}")
     else(WIN32 OR (CMAKE_CROSSCOMPILING AND NOT UNIX))
-        FIND_PACKAGE(Freetype)
+        find_package(Freetype)
     endif(WIN32 OR (CMAKE_CROSSCOMPILING AND NOT UNIX))
 
     include_directories( ${FREETYPE_INCLUDE_DIRS} )
@@ -477,7 +477,7 @@ if(NOT APPLE)
     #
 	# --- CPACK configuration ---
 	#
-	STRING(TOLOWER ${CMAKE_BUILD_TYPE} BTYPE)
+	string(TOLOWER ${CMAKE_BUILD_TYPE} BTYPE)
 
 	set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "TA3D (Total Annihilation 3D), RTS Engine")
 	set(CPACK_PACKAGE_VENDOR "the TA3D team")
@@ -527,5 +527,5 @@ endif(APPLE)
 
 
 # The source code
-ADD_SUBDIRECTORY(src)
+add_subdirectory(src)
 

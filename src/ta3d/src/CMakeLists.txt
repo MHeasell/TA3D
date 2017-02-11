@@ -1,10 +1,10 @@
 
-STRING(STRIP "${LIBS}" LIBS)
-LINK_LIBRARIES("${LIBS}")
+string(STRIP "${LIBS}" LIBS)
+link_libraries("${LIBS}")
 
 
 # Yuni Settins
-SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Yuni_CXXFLAGS}")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Yuni_CXXFLAGS}")
 link_libraries("${Yuni_LIBS}")
 
 
@@ -15,18 +15,18 @@ include_directories(BEFORE ${CMAKE_CURRENT_SOURCE_DIR})
 #
 # STDAFX
 #
-SET(SRC_STDAFX stdafx.h)
+set(SRC_STDAFX stdafx.h)
 
 #
 #
 #
-SET(SRC_FILEFORMATS
+set(SRC_FILEFORMATS
 		gaf.cpp gaf.h)
 
 #
 # Meshs
 #
-SET(SRC_MESHES
+set(SRC_MESHES
 		mesh/mesh.cpp mesh/mesh.h
 		mesh/3do.cpp mesh/3do.h
 		mesh/textures.cpp mesh/textures.h
@@ -40,12 +40,12 @@ SET(SRC_MESHES
 #
 # Logs
 #
-SET(SRC_LOGS
+set(SRC_LOGS
 		logs/logs.h logs/logs.hxx logs/logs.cpp)
 
 #
 # Languages
-SET(SRC_I18N
+set(SRC_I18N
 		languages/table.h languages/table.cpp
 		languages/i18n.h languages/i18n.hxx languages/i18n.cpp)
 
@@ -53,7 +53,7 @@ SET(SRC_I18N
 #
 # Threads
 #
-SET(SRC_THREADS
+set(SRC_THREADS
 		threads/mutex.h threads/mutex.cpp
 		threads/thread.h threads/thread.cpp)
 
@@ -61,7 +61,7 @@ SET(SRC_THREADS
 # Misc
 # TODO Must of those files should be removed/cleaned
 #
-SET(SRC_MISC
+set(SRC_MISC
 		misc/string.h misc/string.cpp
 		misc/stack.hxx
 		misc/progressnotifier.h
@@ -93,7 +93,7 @@ SET(SRC_MISC
 
 #
 # Mods
-SET(SRC_MODS
+set(SRC_MODS
 		mods/mods.h mods/mods.cpp
 		mods/modinfo.h mods/modinfo.cpp)
 
@@ -101,7 +101,7 @@ SET(SRC_MODS
 #
 # Scripts
 #
-SET(SRC_SCRIPTS
+set(SRC_SCRIPTS
 		scripts/cob.cpp scripts/cob.h
 		scripts/cob.vm.h scripts/cob.vm.cpp
 		scripts/lua.thread.h scripts/lua.thread.cpp
@@ -121,7 +121,7 @@ SET(SRC_SCRIPTS
 #
 # GFX
 #
-SET(SRC_GFX
+set(SRC_GFX
 		gfx/gfx.h gfx/gfx.cpp
 		gfx/gfx.toolkit.h gfx/gfx.toolkit.cpp
 		gfx/font.cpp gfx/font.h
@@ -140,7 +140,7 @@ SET(SRC_GFX
 #
 # GFX - GUI
 #
-SET(SRC_GFX_GUI
+set(SRC_GFX_GUI
 		gfx/gui/base.h gfx/gui/base.cpp
 		gfx/gui/object.h gfx/gui/object.cpp
 		gfx/gui/skin.h gfx/gui/skin.cpp
@@ -150,7 +150,7 @@ SET(SRC_GFX_GUI
 		gfx/gui/wnd.h gfx/gui/wnd.cpp
 		gfx/gui/area.h gfx/gui/area.cpp)
 
-SET(SRC_GFX_PARTICLES
+set(SRC_GFX_PARTICLES
 		gfx/particles/particles.h gfx/particles/particle.h
 		gfx/particles/particlessystem.h gfx/particles/particlessystem.cpp
 		gfx/particles/particlesengine.h gfx/particles/particlesengine.cpp
@@ -159,7 +159,7 @@ SET(SRC_GFX_PARTICLES
 #
 # Sound
 #
-SET(SRC_SOUND
+set(SRC_SOUND
 		sounds/manager.h sounds/manager.cpp
 		)
 
@@ -167,7 +167,7 @@ SET(SRC_SOUND
 #
 # Debug
 #
-SET(SRC_DEBUG
+set(SRC_DEBUG
 		backtrace.cpp backtrace.h
 		config.cpp)
 
@@ -175,14 +175,14 @@ SET(SRC_DEBUG
 #
 # Console
 #
-SET(SRC_CONSOLE
+set(SRC_CONSOLE
 		console/console.api.cpp console/console.api.h
 		console/console.cpp console/console.h)
 
 #
 # VFS (HPI, archives)
 #
-SET(SRC_VFS
+set(SRC_VFS
 		vfs/vfs.cpp vfs/vfs.h vfs/vfs.hxx
 		vfs/archive.cpp vfs/archive.h
 		vfs/hpi.cpp vfs/hpi.h
@@ -192,7 +192,7 @@ SET(SRC_VFS
 		vfs/virtualfile.cpp vfs/virtualfile.h)
 
 
-SET(SRC_ENGINE
+set(SRC_ENGINE
 		UnitEngine.cpp UnitEngine.h
 		EngineClass.cpp EngineClass.h
 		engine/weapondata.h  engine/weapondata.hxx
@@ -202,11 +202,11 @@ SET(SRC_ENGINE
 		)
 
 
-SET(SRC_INPUT
+set(SRC_INPUT
 		input/mouse.h input/mouse.cpp
 		input/keyboard.cpp input/keyboard.h)
 
-SET(SRC_NETWORK
+set(SRC_NETWORK
 		network/network.cpp network/network.h
 		network/socket.cpp network/socket.h
 		network/socket.tcp.cpp network/socket.tcp.h
@@ -219,7 +219,7 @@ SET(SRC_NETWORK
 		network/netclient.cpp network/netclient.h network/netclient.hxx
 		network/http.cpp network/http.h)
 
-SET(SRC_AI
+set(SRC_AI
 		ai/ai.h ai/ai.hxx ai/ai.cpp
 		ai/brain.h ai/brain.cpp
 		ai/weight.h ai/weight.cpp
@@ -227,7 +227,7 @@ SET(SRC_AI
 		ai/pathfinding.h ai/pathfinding.cpp	)
 
 
-SET(SRC_INGAME
+set(SRC_INGAME
 		ingame/sidedata.h ingame/sidedata.cpp
 		ingame/gamedata.h ingame/gamedata.cpp
 		ingame/players.h ingame/players.hxx ingame/players.cpp
@@ -236,14 +236,14 @@ SET(SRC_INGAME
 		ingame/fps.h ingame/fps.cpp
 		)
 
-SET(SRC_INGAME_WEAPONS
+set(SRC_INGAME_WEAPONS
 		ingame/weapons/weapons.h ingame/weapons/weapons.cpp
 		ingame/weapons/weapons.def.h ingame/weapons/weapons.def.cpp
 		ingame/weapons/weapons.ingame.h ingame/weapons/weapons.ingame.cpp
 		ingame/weapons/weapons.manager.h ingame/weapons/weapons.manager.cpp
 		ingame/weapons/weapons.single.h ingame/weapons/weapons.single.cpp)
 
-SET(SRC_INGAME_MENUS
+set(SRC_INGAME_MENUS
 		ingame/menus/base.h ingame/menus/base.cpp
 		ingame/menus/splash.h ingame/menus/splash.cpp
 		ingame/menus/intro.h ingame/menus/intro.cpp
@@ -267,10 +267,10 @@ SET(SRC_INGAME_MENUS
 # --------------------------------------------------------------------
 # --- TA3D
 # --------------------------------------------------------------------
-SET(TA3D_BIN ta3d)
+set(TA3D_BIN ta3d)
 
 
-SET(TA3D_SOURCES
+set(TA3D_SOURCES
 		${SRC_STDAFX} ${SRC_LOGS} ${SRC_I18N} ${SRC_MISC}
 		${SRC_THREADS} ${SRC_DEBUG} ${SRC_CONSOLE}
 		${SRC_GFX} ${SRC_GFX_GUI}
@@ -302,63 +302,63 @@ SET(TA3D_SOURCES
 
 
 
-IF(NOT APPLE)
+if(NOT APPLE)
 
-	ADD_EXECUTABLE(${TA3D_BIN} ${TA3D_SOURCES})
+	add_executable(${TA3D_BIN} ${TA3D_SOURCES})
 
-ELSE(NOT APPLE)
+else(NOT APPLE)
 
 	#
 	# --- TA3D Program / OS XBundle ---
 	#
 
 	# OS X : Add a single file as a bundle resource
-	MACRO(BUNDLE_INSTALL srcfolder relfolder filename)
+	macro(BUNDLE_INSTALL srcfolder relfolder filename)
 		File(MAKE_DIRECTORY "${PROJECT_SOURCE_DIR}/ta3d.app/Contents/Resources/${relfolder}/")
-		ADD_CUSTOM_COMMAND(OUTPUT "${PROJECT_SOURCE_DIR}/ta3d.app/Contents/Resources/${relfolder}/${filename}"
+		add_custom_command(OUTPUT "${PROJECT_SOURCE_DIR}/ta3d.app/Contents/Resources/${relfolder}/${filename}"
 			COMMAND cp ARGS -f "${PROJECT_SOURCE_DIR}/${srcfolder}/${filename}"
 				"${PROJECT_SOURCE_DIR}/ta3d.app/Contents/Resources/${relfolder}/${filename}"
 			DEPENDS "${PROJECT_SOURCE_DIR}/${srcfolder}/${filename}")
-		SET(TA3D_SOURCES ${TA3D_SOURCES} "${PROJECT_SOURCE_DIR}/ta3d.app/Contents/Resources/${relfolder}/${filename}")
-	ENDMACRO(BUNDLE_INSTALL)
+		set(TA3D_SOURCES ${TA3D_SOURCES} "${PROJECT_SOURCE_DIR}/ta3d.app/Contents/Resources/${relfolder}/${filename}")
+	endmacro(BUNDLE_INSTALL)
 
-	MACRO(BUNDLE_INSTALL_GLOB srcfolder relfolder globfiles)
+	macro(BUNDLE_INSTALL_GLOB srcfolder relfolder globfiles)
 		File(MAKE_DIRECTORY "${PROJECT_SOURCE_DIR}/ta3d.app/Contents/Resources/${relfolder}/")
 		File(GLOB lst "${PROJECT_SOURCE_DIR}/${srcfolder}/${globfiles}")
 		ForEach(fl ${lst})
 			String(REGEX REPLACE "^/.*/([^/]+)$" "\\1" fl "${fl}")
-			ADD_CUSTOM_COMMAND(OUTPUT "${PROJECT_SOURCE_DIR}/ta3d.app/Contents/Resources/${relfolder}/${fl}"
+			add_custom_command(OUTPUT "${PROJECT_SOURCE_DIR}/ta3d.app/Contents/Resources/${relfolder}/${fl}"
 				COMMAND cp ARGS -f "${PROJECT_SOURCE_DIR}/${srcfolder}/${fl}"
 					"${PROJECT_SOURCE_DIR}/ta3d.app/Contents/Resources/${relfolder}/${fl}"
 				DEPENDS "${PROJECT_SOURCE_DIR}/${srcfolder}/${fl}")
-			SET(TA3D_SOURCES ${TA3D_SOURCES} "${PROJECT_SOURCE_DIR}/ta3d.app/Contents/Resources/${relfolder}/${fl}")
+			set(TA3D_SOURCES ${TA3D_SOURCES} "${PROJECT_SOURCE_DIR}/ta3d.app/Contents/Resources/${relfolder}/${fl}")
 		EndForEach(fl ${lst})
-	ENDMACRO(BUNDLE_INSTALL_GLOB)
+	endmacro(BUNDLE_INSTALL_GLOB)
 
-	MACRO(BUNDLE_BASIC_INSTALL srcfolder relfolder filename)
+	macro(BUNDLE_BASIC_INSTALL srcfolder relfolder filename)
 		File(MAKE_DIRECTORY "${PROJECT_SOURCE_DIR}/ta3d.app/Contents/${relfolder}/")
-		ADD_CUSTOM_COMMAND(OUTPUT "${PROJECT_SOURCE_DIR}/ta3d.app/Contents/${relfolder}/${filename}"
+		add_custom_command(OUTPUT "${PROJECT_SOURCE_DIR}/ta3d.app/Contents/${relfolder}/${filename}"
 			COMMAND cp ARGS -f
 				"${PROJECT_SOURCE_DIR}/${srcfolder}/${filename}"
 				"${PROJECT_SOURCE_DIR}/ta3d.app/Contents/${relfolder}/${filename}"
 			DEPENDS "${PROJECT_SOURCE_DIR}/${srcfolder}/${filename}")
-		SET(TA3D_SOURCES ${TA3D_SOURCES} "${PROJECT_SOURCE_DIR}/ta3d.app/Contents/${relfolder}/${filename}")
-	ENDMACRO(BUNDLE_BASIC_INSTALL)
+		set(TA3D_SOURCES ${TA3D_SOURCES} "${PROJECT_SOURCE_DIR}/ta3d.app/Contents/${relfolder}/${filename}")
+	endmacro(BUNDLE_BASIC_INSTALL)
 
-	MACRO(BUNDLE_ADD_LIB libname)
-		ADD_CUSTOM_COMMAND(OUTPUT "${PROJECT_SOURCE_DIR}/ta3d.app/Contents/Frameworks/${libname}"
+	macro(BUNDLE_ADD_LIB libname)
+		add_custom_command(OUTPUT "${PROJECT_SOURCE_DIR}/ta3d.app/Contents/Frameworks/${libname}"
 			COMMAND cp ARGS -fH "/opt/local/lib/${libname}" "${PROJECT_SOURCE_DIR}/ta3d.app/Contents/Frameworks/${libname}"
 			COMMAND chmod ARGS 644 "${PROJECT_SOURCE_DIR}/ta3d.app/Contents/Frameworks/${libname}"
 			DEPENDS "/opt/local/lib/${libname}")
-		SET(TA3D_SOURCES ${TA3D_SOURCES} "${PROJECT_SOURCE_DIR}/ta3d.app/Contents/Frameworks/${libname}")
-	ENDMACRO(BUNDLE_ADD_LIB)
+		set(TA3D_SOURCES ${TA3D_SOURCES} "${PROJECT_SOURCE_DIR}/ta3d.app/Contents/Frameworks/${libname}")
+	endmacro(BUNDLE_ADD_LIB)
 
-	MACRO(BUNDLE_RELINK src libname)
-		ADD_CUSTOM_COMMAND(TARGET ${TA3D_BIN} POST_BUILD
+	macro(BUNDLE_RELINK src libname)
+		add_custom_command(TARGET ${TA3D_BIN} POST_BUILD
 			COMMAND install_name_tool ARGS -change '/opt/local/lib/${libname}'
 				'@executable_path/../Frameworks/${libname}' "${PROJECT_SOURCE_DIR}/ta3d.app/${src}"
 		)
-	ENDMACRO(BUNDLE_RELINK)
+	endmacro(BUNDLE_RELINK)
 
 	File(MAKE_DIRECTORY "${PROJECT_SOURCE_DIR}/ta3d.app/Contents/Resources/")
 	File(MAKE_DIRECTORY "${PROJECT_SOURCE_DIR}/ta3d.app/Contents/Frameworks/")
@@ -381,9 +381,9 @@ ELSE(NOT APPLE)
 
 
 	# We have to copy those libs
-	FOREACH (LIB ${ExternalLibs})
+	foreach (LIB ${ExternalLibs})
 		BUNDLE_ADD_LIB(${LIB})
-	ENDFOREACH(LIB)
+	endforeach(LIB)
 
 	# --- Resources ---
 	# Sky
@@ -437,50 +437,50 @@ ELSE(NOT APPLE)
 	BUNDLE_INSTALL_GLOB("resources/languages" "languages" "*.po")
 
 	# OS X specific
-	ADD_EXECUTABLE(${TA3D_BIN} MACOSX_BUNDLE ${TA3D_SOURCES})
-	SET(GUI_TYPE MACOSX_BUNDLE)
-	SET(MACOSX_BUNDLE_INFO_STRING            "")
-	SET(MACOSX_BUNDLE_ICON_FILE              "ta3d.icns")
-	SET(MACOSX_BUNDLE_GUI_IDENTIFIER         "org.ta3d.application")
-	SET(MACOSX_BUNDLE_LONG_VERSION_STRING    "${${PACKAGE_VERSION}}")
-	SET(MACOSX_BUNDLE_BUNDLE_NAME            "TA3D")
-	SET(MACOSX_BUNDLE_SHORT_VERSION_STRING   "${PACKAGE_VERSION}")
-	SET(MACOSX_BUNDLE_BUNDLE_VERSION         "${PACKAGE_VERSION}")
-	SET(MACOSX_BUNDLE_COPYRIGHT              "Ta3D.org - GPLv2")
+	add_executable(${TA3D_BIN} MACOSX_BUNDLE ${TA3D_SOURCES})
+	set(GUI_TYPE MACOSX_BUNDLE)
+	set(MACOSX_BUNDLE_INFO_STRING            "")
+	set(MACOSX_BUNDLE_ICON_FILE              "ta3d.icns")
+	set(MACOSX_BUNDLE_GUI_IDENTIFIER         "org.ta3d.application")
+	set(MACOSX_BUNDLE_LONG_VERSION_STRING    "${${PACKAGE_VERSION}}")
+	set(MACOSX_BUNDLE_BUNDLE_NAME            "TA3D")
+	set(MACOSX_BUNDLE_SHORT_VERSION_STRING   "${PACKAGE_VERSION}")
+	set(MACOSX_BUNDLE_BUNDLE_VERSION         "${PACKAGE_VERSION}")
+	set(MACOSX_BUNDLE_COPYRIGHT              "Ta3D.org - GPLv2")
 
 	# Relink
-	FOREACH (LIB ${ExternalLibs})
+	foreach (LIB ${ExternalLibs})
 		BUNDLE_RELINK("Contents/MacOS/ta3d" "${LIB}")
-	ENDFOREACH(LIB)
-	FOREACH (LIB ${ExternalLibs})
-		FOREACH (SUBLIB ${ExternalLibs})
+	endforeach(LIB)
+	foreach (LIB ${ExternalLibs})
+		foreach (SUBLIB ${ExternalLibs})
 			BUNDLE_RELINK("Contents/Frameworks/${LIB}" "${SUBLIB}")
-		ENDFOREACH(SUBLIB)
-	ENDFOREACH(LIB)
+		endforeach(SUBLIB)
+	endforeach(LIB)
 
-ENDIF(NOT APPLE)
+endif(NOT APPLE)
 
 
 #
 # --- Internal libraries ---
 #
-SET(LIBS  "${LIBS} ${FREETYPE_LIBRARIES}")
-IF(WIN32)
-	SET(${LIBS} "${LIBS} -llua -lgdi32 -lopengl32 -lglu32")
-ENDIF(WIN32)
+set(LIBS  "${LIBS} ${FREETYPE_LIBRARIES}")
+if(WIN32)
+	set(${LIBS} "${LIBS} -llua -lgdi32 -lopengl32 -lglu32")
+endif(WIN32)
 
-IF(APPLE)
-	SET(${LIBS} "${LIBS} -Wl,'-headerpad FF'")
-ENDIF(APPLE)
+if(APPLE)
+	set(${LIBS} "${LIBS} -Wl,'-headerpad FF'")
+endif(APPLE)
 
-STRING(STRIP "${LIBS}" LIBS)
+string(STRIP "${LIBS}" LIBS)
 target_link_libraries(${TA3D_BIN} ${LIBS})
 
 
 #
 # Install
 #
-IF(NOT APPLE)
+if(NOT APPLE)
 	install(TARGETS ${TA3D_BIN} RUNTIME DESTINATION ${TA3D_BINARIES_INSTALL_PATH})
-ENDIF(NOT APPLE)
+endif(NOT APPLE)
 
