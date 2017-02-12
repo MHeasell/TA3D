@@ -45,7 +45,8 @@ namespace TA3D
 		}
 
 		VirtualFile::VirtualFile() : buffer(NULL), bufferSize(0), pos(0), offset(0), streamSize(0)
-		{}
+		{
+		}
 
 		VirtualFile::VirtualFile(byte *buf, int s, int start, int end) : buffer(NULL), bufferSize(0), pos(0), offset(0), streamSize(0)
 		{
@@ -84,9 +85,9 @@ namespace TA3D
 
 		int VirtualFile::read(void *q, int s)
 		{
-			char *p = (char*)q;
+			char *p = (char *)q;
 			int k = 0;
-			for ( ; s && pos < offset && pos < streamSize ; ++pos, --s, ++p, ++k)
+			for (; s && pos < offset && pos < streamSize; ++pos, --s, ++p, ++k)
 				*p = 0;
 			if (pos == streamSize || s <= 0)
 				return k;
@@ -97,7 +98,7 @@ namespace TA3D
 			if (s)
 			{
 				p += n;
-				for ( ; s && pos < streamSize ; ++pos, --s, ++p, ++k)
+				for (; s && pos < streamSize; ++pos, --s, ++p, ++k)
 					*p = 0;
 			}
 			return k + n;
@@ -115,8 +116,8 @@ namespace TA3D
 				return true;
 			}
 
-			char *end = (char*)buffer + offset + bufferSize;
-			for(char *p = (char*)buffer + pos ; p != end && *p != 0 && *p != 13 && *p != 10 ; ++pos, ++p)
+			char *end = (char *)buffer + offset + bufferSize;
+			for (char *p = (char *)buffer + pos; p != end && *p != 0 && *p != 13 && *p != 10; ++pos, ++p)
 				line << *p;
 
 			return true;
@@ -124,7 +125,7 @@ namespace TA3D
 
 		const char *VirtualFile::data()
 		{
-			return (const char*)buffer;
+			return (const char *)buffer;
 		}
 
 		void VirtualFile::close()

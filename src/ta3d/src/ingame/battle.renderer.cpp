@@ -24,9 +24,6 @@
 #include <input/mouse.h>
 #include <misc/paths.h>
 
-
-
-
 namespace TA3D
 {
 
@@ -53,7 +50,6 @@ namespace TA3D
 			glUseProgramObjectARB(0);
 	}
 
-
 	void Battle::renderReflection()
 	{
 		// Dessine les reflets sur l'eau / Render water reflection
@@ -61,15 +57,15 @@ namespace TA3D
 		{
 			reflection_drawn_last_time = true;
 
-			gfx->clearAll();		// Clear screen
+			gfx->clearAll(); // Clear screen
 
 			glViewport(0, 0, 512, 512);
 
 			gfx->ReInitAllTex();
-			glColor4f(1.0f,1.0f,1.0f,1.0f);
+			glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 			glDisable(GL_BLEND);
 
-			double eqn[4]= { 0.0f, 1.0f, 0.0f, -map->sealvl };
+			double eqn[4] = {0.0f, 1.0f, 0.0f, -map->sealvl};
 
 			Camera refcam = cam;
 			refcam.zfar *= 2.0f;
@@ -85,7 +81,7 @@ namespace TA3D
 
 			refcam.zfar *= 100.0f;
 			refcam.setView();
-			glColor4ub(0xFF,0xFF,0xFF,0xFF);
+			glColor4ub(0xFF, 0xFF, 0xFF, 0xFF);
 			glEnable(GL_TEXTURE_2D);
 			if (lp_CONFIG->render_sky)
 			{
@@ -94,10 +90,10 @@ namespace TA3D
 				glDepthMask(GL_FALSE);
 
 				glCullFace(GL_FRONT);
-				glTranslatef(cam.rpos.x,-map->sealvl,cam.rpos.z);
-				glRotatef( sky_angle, 0.0f, 1.0f, 0.0f);
-				float scale_factor = 15.0f * ( cam.rpos.y + cam.shakeVector.y + sky.getW()) / sky.getW();
-				glScalef( scale_factor, scale_factor, scale_factor);
+				glTranslatef(cam.rpos.x, -map->sealvl, cam.rpos.z);
+				glRotatef(sky_angle, 0.0f, 1.0f, 0.0f);
+				float scale_factor = 15.0f * (cam.rpos.y + cam.shakeVector.y + sky.getW()) / sky.getW();
+				glScalef(scale_factor, scale_factor, scale_factor);
 				sky.draw();
 			}
 			refcam.zfar = (500.0f + (cam_h - 150.0f) * 2.0f) * 2.0f;
@@ -111,14 +107,14 @@ namespace TA3D
 			if (cam.rpos.y <= gfx->low_def_limit && lp_CONFIG->water_quality >= 4)
 			{
 				if (lp_CONFIG->wireframe)
-					glPolygonMode (GL_FRONT_AND_BACK, GL_LINE);
+					glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
-				map->draw(&refcam, byte(1 << players.local_human_id),  false, 0.0f, t,
+				map->draw(&refcam, byte(1 << players.local_human_id), false, 0.0f, t,
 						  dt * units.apparent_timefactor,
 						  false, false, false);
 
 				if (lp_CONFIG->wireframe)
-					glPolygonMode (GL_FRONT_AND_BACK, GL_FILL);
+					glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
 				// Dessine les éléments "2D" / "sprites"
 				features.draw(render_time);
@@ -145,10 +141,10 @@ namespace TA3D
 
 			gfx->ReInitAllTex(true);
 
-			glColor4ub(0xFF,0xFF,0xFF,0xFF);
+			glColor4ub(0xFF, 0xFF, 0xFF, 0xFF);
 			glDisable(GL_BLEND);
 
-			glBindTexture(GL_TEXTURE_2D,reflectex);								// Store what's on screen for reflection effect
+			glBindTexture(GL_TEXTURE_2D, reflectex); // Store what's on screen for reflection effect
 			glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 0, 0, 512, 512, 0);
 
 			glViewport(0, 0, SCREEN_W, SCREEN_H);
@@ -165,55 +161,55 @@ namespace TA3D
 		{
 			switch (lp_CONFIG->shadow_quality)
 			{
-			case 3:
-			case 2:                     // Render the shadow map
-				gfx->setShadowMapMode(true);
-				gfx->SetDefState();
-				gfx->renderToTextureDepth( gfx->get_shadow_map() );
-				gfx->clearDepth();
-				pSun.SetView( map->get_visible_volume() );
+				case 3:
+				case 2: // Render the shadow map
+					gfx->setShadowMapMode(true);
+					gfx->SetDefState();
+					gfx->renderToTextureDepth(gfx->get_shadow_map());
+					gfx->clearDepth();
+					pSun.SetView(map->get_visible_volume());
 
-				// We'll need this matrix later (when rendering with shadows)
-				gfx->readShadowMapProjectionMatrix();
+					// We'll need this matrix later (when rendering with shadows)
+					gfx->readShadowMapProjectionMatrix();
 
-				glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
-				glDisable(GL_FOG);
-				glShadeModel (GL_FLAT);
+					glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
+					glDisable(GL_FOG);
+					glShadeModel(GL_FLAT);
 
-				glEnable(GL_POLYGON_OFFSET_FILL);
-				glPolygonOffset(3.0f, 1.0f);
+					glEnable(GL_POLYGON_OFFSET_FILL);
+					glPolygonOffset(3.0f, 1.0f);
 
-				// Render all visible features from light's point of view
-				for(std::vector<int>::const_iterator i = features.list.begin() ; i != features.list.end() ; ++i)
-					features.feature[*i].draw = true;
-				features.draw(render_time, true);
+					// Render all visible features from light's point of view
+					for (std::vector<int>::const_iterator i = features.list.begin(); i != features.list.end(); ++i)
+						features.feature[*i].draw = true;
+					features.draw(render_time, true);
 
-				glEnable(GL_POLYGON_OFFSET_FILL);
-				glPolygonOffset(3.0f, 1.0f);
-				// Render all visible units from light's point of view
-				units.draw(true, false, true, false);
-				units.draw(false, false, true, false);
+					glEnable(GL_POLYGON_OFFSET_FILL);
+					glPolygonOffset(3.0f, 1.0f);
+					// Render all visible units from light's point of view
+					units.draw(true, false, true, false);
+					units.draw(false, false, true, false);
 
-				// Render all visible weapons from light's point of view
-				weapons.draw(true);
-				weapons.draw(false);
+					// Render all visible weapons from light's point of view
+					weapons.draw(true);
+					weapons.draw(false);
 
-				glDisable(GL_POLYGON_OFFSET_FILL);
-				glPolygonOffset(0.0f, 0.0f);
+					glDisable(GL_POLYGON_OFFSET_FILL);
+					glPolygonOffset(0.0f, 0.0f);
 
-				gfx->renderToTextureDepth(0);
-				glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+					gfx->renderToTextureDepth(0);
+					glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
 
-				glActiveTextureARB(GL_TEXTURE7_ARB);
-				glEnable(GL_TEXTURE_2D);
-				glBindTexture(GL_TEXTURE_2D, gfx->get_shadow_map());
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE_ARB, GL_COMPARE_R_TO_TEXTURE);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC_ARB, GL_LEQUAL);
-				glTexParameteri(GL_TEXTURE_2D, GL_DEPTH_TEXTURE_MODE_ARB, GL_INTENSITY);
+					glActiveTextureARB(GL_TEXTURE7_ARB);
+					glEnable(GL_TEXTURE_2D);
+					glBindTexture(GL_TEXTURE_2D, gfx->get_shadow_map());
+					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE_ARB, GL_COMPARE_R_TO_TEXTURE);
+					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC_ARB, GL_LEQUAL);
+					glTexParameteri(GL_TEXTURE_2D, GL_DEPTH_TEXTURE_MODE_ARB, GL_INTENSITY);
 
-				glActiveTextureARB(GL_TEXTURE0_ARB);
-				gfx->setShadowMapMode(false);
-				break;
+					glActiveTextureARB(GL_TEXTURE0_ARB);
+					gfx->setShadowMapMode(false);
+					break;
 			};
 		}
 	}
@@ -224,33 +220,33 @@ namespace TA3D
 		{
 			switch (lp_CONFIG->shadow_quality)
 			{
-					case 1:                     // Stencil Shadowing (shadow volumes)
-						if (rotate_light)
-						{
-							pSun.Dir.x = -1.0f;
-							pSun.Dir.y = 1.0f;
-							pSun.Dir.z = 1.0f;
-							pSun.Dir.unit();
-							Vector3D Dir(-pSun.Dir);
-							Dir.x = cosf(light_angle);
-							Dir.z = sinf(light_angle);
-							Dir.unit();
-							pSun.Dir = -Dir;
-							units.draw_shadow(render_time, Dir);
-						}
-						else
-						{
-							pSun.Dir.x = -1.0f;
-							pSun.Dir.y = 1.0f;
-							pSun.Dir.z = 1.0f;
-							pSun.Dir.unit();
-							units.draw_shadow(render_time, -pSun.Dir);
-						}
-						break;
-					case 2:                     // Shadow mapping
-					case 3:
-						break;
+				case 1: // Stencil Shadowing (shadow volumes)
+					if (rotate_light)
+					{
+						pSun.Dir.x = -1.0f;
+						pSun.Dir.y = 1.0f;
+						pSun.Dir.z = 1.0f;
+						pSun.Dir.unit();
+						Vector3D Dir(-pSun.Dir);
+						Dir.x = cosf(light_angle);
+						Dir.z = sinf(light_angle);
+						Dir.unit();
+						pSun.Dir = -Dir;
+						units.draw_shadow(render_time, Dir);
 					}
+					else
+					{
+						pSun.Dir.x = -1.0f;
+						pSun.Dir.y = 1.0f;
+						pSun.Dir.z = 1.0f;
+						pSun.Dir.unit();
+						units.draw_shadow(render_time, -pSun.Dir);
+					}
+					break;
+				case 2: // Shadow mapping
+				case 3:
+					break;
+			}
 		}
 	}
 
@@ -269,27 +265,27 @@ namespace TA3D
 				gfx->set_alpha_blending();
 				if (lp_CONFIG->water_quality == 1) // lp_CONFIG->water_quality=1
 				{
-					glColor4f(1.0f,1.0f,1.0f,0.5f);
+					glColor4f(1.0f, 1.0f, 1.0f, 0.5f);
 
 					glActiveTextureARB(GL_TEXTURE0_ARB);
 					glEnable(GL_TEXTURE_2D);
 					glClientActiveTextureARB(GL_TEXTURE0_ARB);
 
-					map->draw(&cam,1,true,map->sealvl,t,dt*lp_CONFIG->timefactor);
+					map->draw(&cam, 1, true, map->sealvl, t, dt * lp_CONFIG->timefactor);
 				}
-				else 	// lp_CONFIG->water_quality=0
+				else // lp_CONFIG->water_quality=0
 				{
-					glColor4f(1.0f,1.0f,1.0f,0.5f);
+					glColor4f(1.0f, 1.0f, 1.0f, 0.5f);
 					glDisable(GL_LIGHTING);
 
 					glActiveTextureARB(GL_TEXTURE0_ARB);
 					glEnable(GL_TEXTURE_2D);
-					glBindTexture(GL_TEXTURE_2D,map->low_tex);
+					glBindTexture(GL_TEXTURE_2D, map->low_tex);
 
 					cam.setView(true);
 					glTranslatef(0.0f, map->sealvl, map->sea_dec);
-					water_obj->draw(t,false);
-					glColor4f(1.0f,1.0f,1.0f,0.75f);
+					water_obj->draw(t, false);
+					glColor4f(1.0f, 1.0f, 1.0f, 0.75f);
 
 					glEnable(GL_LIGHTING);
 					glActiveTextureARB(GL_TEXTURE0_ARB);
@@ -304,43 +300,43 @@ namespace TA3D
 				glDisable(GL_LIGHTING);
 
 				// First pass of water rendering, store reflection vector
-				glBindFramebufferEXT(GL_FRAMEBUFFER_EXT,water_FBO);
-				glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT,GL_COLOR_ATTACHMENT0_EXT,GL_TEXTURE_2D,first_pass,0);
+				glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, water_FBO);
+				glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_TEXTURE_2D, first_pass, 0);
 
 				//			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);		// Efface la texture tampon
-				glClear(GL_DEPTH_BUFFER_BIT);		// Efface la texture tampon
+				glClear(GL_DEPTH_BUFFER_BIT); // Efface la texture tampon
 
-				glViewport(0,0,512,512);
+				glViewport(0, 0, 512, 512);
 
 				glActiveTextureARB(GL_TEXTURE0_ARB);
 				glEnable(GL_TEXTURE_2D);
-				glBindTexture(GL_TEXTURE_2D,map->lava_map);
+				glBindTexture(GL_TEXTURE_2D, map->lava_map);
 				glClientActiveTextureARB(GL_TEXTURE0_ARB);
 
 				glActiveTextureARB(GL_TEXTURE1_ARB);
 				glEnable(GL_TEXTURE_2D);
-				glBindTexture(GL_TEXTURE_2D,water);
+				glBindTexture(GL_TEXTURE_2D, water);
 				glClientActiveTextureARB(GL_TEXTURE1_ARB);
 
 				if (lp_CONFIG->water_quality == 2)
 				{
 					water_pass1_low.on();
-					water_pass1_low.setvar1i("lava",0);
-					water_pass1_low.setvar1i("map",1);
-					water_pass1_low.setvar1f("t",t);
+					water_pass1_low.setvar1i("lava", 0);
+					water_pass1_low.setvar1i("map", 1);
+					water_pass1_low.setvar1f("t", t);
 					water_pass1_low.setvar2f("factor", (float)water_obj->w / (float)map->map_w, (float)water_obj->w / (float)map->map_h);
 				}
 				else
 				{
 					water_pass1.on();
-					water_pass1.setvar1i("lava",0);
-					water_pass1.setvar1i("map",1);
-					water_pass1.setvar1f("t",t);
+					water_pass1.setvar1i("lava", 0);
+					water_pass1.setvar1i("map", 1);
+					water_pass1.setvar1f("t", t);
 					water_pass1.setvar2f("factor", (float)water_obj->w / (float)map->map_w, (float)water_obj->w / (float)map->map_h);
 				}
 
 				cam.setView(true);
-				glTranslatef(0.0f,map->sealvl,0.0f);
+				glTranslatef(0.0f, map->sealvl, 0.0f);
 				water_obj->draw(t, true);
 
 				if (lp_CONFIG->water_quality == 2)
@@ -348,10 +344,10 @@ namespace TA3D
 				else
 					water_pass1.off();
 
-				glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT,GL_COLOR_ATTACHMENT0_EXT,GL_TEXTURE_2D,second_pass,0);					// Second pass of water rendering, store viewing vector
+				glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_TEXTURE_2D, second_pass, 0); // Second pass of water rendering, store viewing vector
 
 				//			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);		// Efface la texture tampon
-				glClear(GL_DEPTH_BUFFER_BIT);		// Efface la texture tampon
+				glClear(GL_DEPTH_BUFFER_BIT); // Efface la texture tampon
 
 				glActiveTextureARB(GL_TEXTURE0_ARB);
 				glDisable(GL_TEXTURE_2D);
@@ -362,42 +358,42 @@ namespace TA3D
 				water_pass2.on();
 
 				cam.setView(true);
-				glTranslatef(0.0f,map->sealvl,0.0f);
+				glTranslatef(0.0f, map->sealvl, 0.0f);
 				water_obj->draw(t, true);
 
 				water_pass2.off();
 
 				if (lp_CONFIG->water_quality > 2)
 				{
-					glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT,GL_COLOR_ATTACHMENT0_EXT,GL_TEXTURE_2D,water_color,0);					// Third pass of water rendering, store water color
+					glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_TEXTURE_2D, water_color, 0); // Third pass of water rendering, store water color
 
-					glClear(GL_DEPTH_BUFFER_BIT);		// Efface la texture tampon
+					glClear(GL_DEPTH_BUFFER_BIT); // Efface la texture tampon
 
 					glActiveTextureARB(GL_TEXTURE0_ARB);
 					glEnable(GL_TEXTURE_2D);
-					glBindTexture(GL_TEXTURE_2D,map->low_tex);
+					glBindTexture(GL_TEXTURE_2D, map->low_tex);
 
 					cam.setView();
-					glTranslatef( 0.0f, map->sealvl, map->sea_dec);
+					glTranslatef(0.0f, map->sealvl, map->sea_dec);
 					water_obj->draw(t, false);
 				}
 
-				glBindFramebufferEXT(GL_FRAMEBUFFER_EXT,0);
+				glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);
 
 				glViewport(0, 0, SCREEN_W, SCREEN_H);
 
 				float logw = logf((float)SCREEN_W) / logf(2.0f);
 				float logh = logf((float)SCREEN_H) / logf(2.0f);
-				int wx = logw>(int)logw ? (int)logw+1 : (int)logw;
-				int wy = logh>(int)logh ? (int)logh+1 : (int)logh;
+				int wx = logw > (int)logw ? (int)logw + 1 : (int)logw;
+				int wy = logh > (int)logh ? (int)logh + 1 : (int)logh;
 				wx = 1 << wx;
 				wy = 1 << wy;
-				glBindTexture(GL_TEXTURE_2D,transtex);								// Store what's on screen for transparency effect
+				glBindTexture(GL_TEXTURE_2D, transtex); // Store what's on screen for transparency effect
 				glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 0, 0, wx, wy, 0);
 
-				glEnable(GL_STENCIL_TEST);											// Draw basic water in order to have correct texture mapping
+				glEnable(GL_STENCIL_TEST); // Draw basic water in order to have correct texture mapping
 				glClear(GL_STENCIL_BUFFER_BIT);
-				glStencilFunc(GL_ALWAYS,128, 0xffffffff);
+				glStencilFunc(GL_ALWAYS, 128, 0xffffffff);
 				glStencilOp(GL_KEEP, GL_KEEP, GL_INCR);
 
 				glActiveTextureARB(GL_TEXTURE0_ARB);
@@ -405,7 +401,7 @@ namespace TA3D
 				glClientActiveTextureARB(GL_TEXTURE0_ARB);
 
 				cam.setView(true);
-				glTranslatef(0.0f,map->sealvl,0.0f);
+				glTranslatef(0.0f, map->sealvl, 0.0f);
 				water_obj->draw(t, true);
 
 				glDisable(GL_STENCIL_TEST);
@@ -424,42 +420,42 @@ namespace TA3D
 				glEnable(GL_TEXTURE_2D);
 
 				glActiveTextureARB(GL_TEXTURE1_ARB);
-				glBindTexture(GL_TEXTURE_2D,transtex);
+				glBindTexture(GL_TEXTURE_2D, transtex);
 				glEnable(GL_TEXTURE_2D);
 
 				glActiveTextureARB(GL_TEXTURE2_ARB);
-				glBindTexture(GL_TEXTURE_2D,first_pass);
+				glBindTexture(GL_TEXTURE_2D, first_pass);
 				glEnable(GL_TEXTURE_2D);
 
 				glActiveTextureARB(GL_TEXTURE3_ARB);
-				glBindTexture(GL_TEXTURE_2D,second_pass);
+				glBindTexture(GL_TEXTURE_2D, second_pass);
 				glEnable(GL_TEXTURE_2D);
 
 				if (lp_CONFIG->water_quality == 2)
 				{
 					water_shader.on();
-					water_shader.setvar1i("sky",0);
-					water_shader.setvar1i("rtex",1);
-					water_shader.setvar1i("bump",2);
-					water_shader.setvar1i("view",3);
+					water_shader.setvar1i("sky", 0);
+					water_shader.setvar1i("rtex", 1);
+					water_shader.setvar1i("bump", 2);
+					water_shader.setvar1i("view", 3);
 					water_shader.setvar2f("coef", (float)SCREEN_W / (float)wx, (float)SCREEN_H / (float)wy);
 				}
 				else
 				{
 					glActiveTextureARB(GL_TEXTURE4_ARB);
-					glBindTexture(GL_TEXTURE_2D,water_color);
+					glBindTexture(GL_TEXTURE_2D, water_color);
 					glEnable(GL_TEXTURE_2D);
 
 					water_shader_reflec.on();
-					water_shader_reflec.setvar1i("sky",0);
-					water_shader_reflec.setvar1i("rtex",1);
-					water_shader_reflec.setvar1i("bump",2);
-					water_shader_reflec.setvar1i("view",3);
-					water_shader_reflec.setvar1i("water_color",4);
+					water_shader_reflec.setvar1i("sky", 0);
+					water_shader_reflec.setvar1i("rtex", 1);
+					water_shader_reflec.setvar1i("bump", 2);
+					water_shader_reflec.setvar1i("view", 3);
+					water_shader_reflec.setvar1i("water_color", 4);
 					water_shader_reflec.setvar2f("coef", (float)SCREEN_W / (float)wx, (float)SCREEN_H / (float)wy);
 				}
 
-				glColor4ub(0xFF,0xFF,0xFF,0xFF);
+				glColor4ub(0xFF, 0xFF, 0xFF, 0xFF);
 				glDisable(GL_DEPTH_TEST);
 
 				glMatrixMode(GL_PROJECTION);
@@ -469,13 +465,17 @@ namespace TA3D
 				glLoadIdentity();
 
 				glEnable(GL_STENCIL_TEST);
-				glStencilFunc(GL_NOTEQUAL,0, 0xffffffff);
-				glStencilOp(GL_KEEP,GL_KEEP,GL_KEEP);
+				glStencilFunc(GL_NOTEQUAL, 0, 0xffffffff);
+				glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
 				glBegin(GL_QUADS);
-				glTexCoord2f(0.0f,1.0f);	glVertex3f(0,0,0);
-				glTexCoord2f(1.0f,1.0f);	glVertex3f((float)SCREEN_W,0,0);
-				glTexCoord2f(1.0f,0.0f);	glVertex3f((float)SCREEN_W,(float)SCREEN_H,0);
-				glTexCoord2f(0.0f,0.0f);	glVertex3f(0,(float)SCREEN_H,0);
+				glTexCoord2f(0.0f, 1.0f);
+				glVertex3f(0, 0, 0);
+				glTexCoord2f(1.0f, 1.0f);
+				glVertex3f((float)SCREEN_W, 0, 0);
+				glTexCoord2f(1.0f, 0.0f);
+				glVertex3f((float)SCREEN_W, (float)SCREEN_H, 0);
+				glTexCoord2f(0.0f, 0.0f);
+				glVertex3f(0, (float)SCREEN_H, 0);
 				glEnd();
 				glDisable(GL_STENCIL_TEST);
 				glEnable(GL_DEPTH_TEST);
@@ -485,32 +485,32 @@ namespace TA3D
 				else
 					water_shader_reflec.off();
 			}
-			else                            // New Ultimate quality water renderer
+			else // New Ultimate quality water renderer
 			{
 				// Run water simulation entirely on the GPU
-				glBindFramebufferEXT(GL_FRAMEBUFFER_EXT,water_FBO);
+				glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, water_FBO);
 
-				glViewport(0,0,256,256);
+				glViewport(0, 0, 256, 256);
 
 				glDisable(GL_DEPTH_TEST);
 				glDisable(GL_LIGHTING);
 
-				glMatrixMode (GL_PROJECTION);
-				glLoadIdentity ();
-				glMatrixMode (GL_MODELVIEW);
+				glMatrixMode(GL_PROJECTION);
+				glLoadIdentity();
+				glMatrixMode(GL_MODELVIEW);
 				glLoadIdentity();
 
 				glActiveTextureARB(GL_TEXTURE0_ARB);
 				glEnable(GL_TEXTURE_2D);
 
 				const float time_step = 0.02f;
-				const float time_to_simulate = Math::Min( dt * units.apparent_timefactor, time_step * 3.0f );
+				const float time_to_simulate = Math::Min(dt * units.apparent_timefactor, time_step * 3.0f);
 
 				// Simulate water
-				for(float real_time = 0.0f ; real_time < time_to_simulate ; real_time += time_step)
+				for (float real_time = 0.0f; real_time < time_to_simulate; real_time += time_step)
 				{
-					glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT,GL_COLOR_ATTACHMENT0_EXT,GL_TEXTURE_2D,water_sim0,0);
-					glBindTexture(GL_TEXTURE_2D,water_sim1);
+					glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_TEXTURE_2D, water_sim0, 0);
+					glBindTexture(GL_TEXTURE_2D, water_sim1);
 
 					bool refresh = false;
 					if (msec_timer - last_water_refresh >= 100000)
@@ -518,52 +518,64 @@ namespace TA3D
 						last_water_refresh = msec_timer;
 						refresh = true;
 					}
-					float dt_step = Math::Min( time_to_simulate - real_time, time_step );
+					float dt_step = Math::Min(time_to_simulate - real_time, time_step);
 					water_simulator_shader.on();
-					water_simulator_shader.setvar1i("sim",0);
-					water_simulator_shader.setvar1f("fluid",50.0f * dt_step);
+					water_simulator_shader.setvar1i("sim", 0);
+					water_simulator_shader.setvar1f("fluid", 50.0f * dt_step);
 					water_simulator_shader.setvar1f("t", refresh ? 1.0f : 0.0f);
 
-					glBegin( GL_QUADS );
-					glTexCoord2i( 0, 0 ); glVertex2i( -1, -1 );
-					glTexCoord2i( 1, 0 ); glVertex2i( 1, -1 );
-					glTexCoord2i( 1, 1 ); glVertex2i( 1, 1 );
-					glTexCoord2i( 0, 1 ); glVertex2i( -1, 1 );
+					glBegin(GL_QUADS);
+					glTexCoord2i(0, 0);
+					glVertex2i(-1, -1);
+					glTexCoord2i(1, 0);
+					glVertex2i(1, -1);
+					glTexCoord2i(1, 1);
+					glVertex2i(1, 1);
+					glTexCoord2i(0, 1);
+					glVertex2i(-1, 1);
 					glEnd();
 
 					water_simulator_shader.off();
 
-					glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT,GL_COLOR_ATTACHMENT0_EXT,GL_TEXTURE_2D,water_sim1,0);
-					glBindTexture(GL_TEXTURE_2D,water_sim0);
+					glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_TEXTURE_2D, water_sim1, 0);
+					glBindTexture(GL_TEXTURE_2D, water_sim0);
 
 					water_simulator_shader2.on();
-					water_simulator_shader2.setvar1i("sim",0);
+					water_simulator_shader2.setvar1i("sim", 0);
 					water_simulator_shader2.setvar1f("dt", dt_step);
 
-					glBegin( GL_QUADS );
-					glTexCoord2i( 0, 0 ); glVertex2i( -1, -1 );
-					glTexCoord2i( 1, 0 ); glVertex2i( 1, -1 );
-					glTexCoord2i( 1, 1 ); glVertex2i( 1, 1 );
-					glTexCoord2i( 0, 1 ); glVertex2i( -1, 1 );
+					glBegin(GL_QUADS);
+					glTexCoord2i(0, 0);
+					glVertex2i(-1, -1);
+					glTexCoord2i(1, 0);
+					glVertex2i(1, -1);
+					glTexCoord2i(1, 1);
+					glVertex2i(1, 1);
+					glTexCoord2i(0, 1);
+					glVertex2i(-1, 1);
 					glEnd();
 
 					water_simulator_shader2.off();
 				}
 
-				glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT,GL_COLOR_ATTACHMENT0_EXT,GL_TEXTURE_2D,water_sim2,0);
+				glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_TEXTURE_2D, water_sim2, 0);
 
 				glActiveTextureARB(GL_TEXTURE0_ARB);
 				glEnable(GL_TEXTURE_2D);
-				glBindTexture(GL_TEXTURE_2D,water_sim1);
+				glBindTexture(GL_TEXTURE_2D, water_sim1);
 
 				water_simulator_shader3.on();
-				water_simulator_shader3.setvar1i("sim",0);
+				water_simulator_shader3.setvar1i("sim", 0);
 
-				glBegin( GL_QUADS );
-				glTexCoord2i( 0, 0 ); glVertex2i( -1, -1 );
-				glTexCoord2i( 1, 0 ); glVertex2i( 1, -1 );
-				glTexCoord2i( 1, 1 ); glVertex2i( 1, 1 );
-				glTexCoord2i( 0, 1 ); glVertex2i( -1, 1 );
+				glBegin(GL_QUADS);
+				glTexCoord2i(0, 0);
+				glVertex2i(-1, -1);
+				glTexCoord2i(1, 0);
+				glVertex2i(1, -1);
+				glTexCoord2i(1, 1);
+				glVertex2i(1, 1);
+				glTexCoord2i(0, 1);
+				glVertex2i(-1, 1);
 				glEnd();
 
 				water_simulator_shader3.off();
@@ -582,48 +594,48 @@ namespace TA3D
 				const int workwidth = g_useNonPowerOfTwoTextures ? SCREEN_W : 1 << ln2w;
 				const int workheight = g_useNonPowerOfTwoTextures ? SCREEN_H : 1 << ln2h;
 
-				glViewport(0,0,workwidth,workheight);
+				glViewport(0, 0, workwidth, workheight);
 
 				// Render water distortion effects (ripples, waves, ...)
-				glBindFramebufferEXT(GL_FRAMEBUFFER_EXT,water_FBO);
-				glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT,GL_COLOR_ATTACHMENT0_EXT,GL_TEXTURE_2D,water_distortions,0);
-				glClearColor(0,0,0,0);
-				glClear(GL_COLOR_BUFFER_BIT);		// Efface la texture tampon
+				glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, water_FBO);
+				glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_TEXTURE_2D, water_distortions, 0);
+				glClearColor(0, 0, 0, 0);
+				glClear(GL_COLOR_BUFFER_BIT); // Efface la texture tampon
 
 				cam.setView(true);
 				water_distortions_shader.on();
 				fx_manager.drawWaterDistortions();
 				water_distortions_shader.off();
 
-				glMatrixMode (GL_PROJECTION);
-				glLoadIdentity ();
-				glMatrixMode (GL_MODELVIEW);
+				glMatrixMode(GL_PROJECTION);
+				glLoadIdentity();
+				glMatrixMode(GL_MODELVIEW);
 				glLoadIdentity();
 
 				// First pass of water rendering, store reflection vector
-				glBindFramebufferEXT(GL_FRAMEBUFFER_EXT,water_FBO);
-				glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT,GL_COLOR_ATTACHMENT0_EXT,GL_TEXTURE_2D,first_pass,0);
+				glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, water_FBO);
+				glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_TEXTURE_2D, first_pass, 0);
 
-				glClear(GL_DEPTH_BUFFER_BIT);		// Efface la texture tampon
+				glClear(GL_DEPTH_BUFFER_BIT); // Efface la texture tampon
 
 				glActiveTextureARB(GL_TEXTURE0_ARB);
 				glEnable(GL_TEXTURE_2D);
-				glBindTexture(GL_TEXTURE_2D,map->lava_map);
+				glBindTexture(GL_TEXTURE_2D, map->lava_map);
 
 				water_simulator_shader4.on();
-				water_simulator_shader4.setvar1i("lava",0);
-				water_simulator_shader4.setvar1f("t",t);
-				water_simulator_shader4.setvar2f("factor",(float)water_obj->w / (float)map->map_w, (float)water_obj->w / (float)map->map_h);
+				water_simulator_shader4.setvar1i("lava", 0);
+				water_simulator_shader4.setvar1f("t", t);
+				water_simulator_shader4.setvar2f("factor", (float)water_obj->w / (float)map->map_w, (float)water_obj->w / (float)map->map_h);
 
 				cam.setView(true);
-				glTranslatef(0.0f,map->sealvl,0.0f);
+				glTranslatef(0.0f, map->sealvl, 0.0f);
 				water_obj->draw(t, true);
 
 				water_simulator_shader4.off();
 
-				glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT,GL_COLOR_ATTACHMENT0_EXT,GL_TEXTURE_2D,second_pass,0);					// Second pass of water rendering, store viewing vector
+				glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_TEXTURE_2D, second_pass, 0); // Second pass of water rendering, store viewing vector
 
-				glClear(GL_DEPTH_BUFFER_BIT);		// Efface la texture tampon
+				glClear(GL_DEPTH_BUFFER_BIT); // Efface la texture tampon
 
 				glActiveTextureARB(GL_TEXTURE0_ARB);
 				glDisable(GL_TEXTURE_2D);
@@ -634,47 +646,47 @@ namespace TA3D
 				water_pass2.on();
 
 				cam.setView(true);
-				glTranslatef(0.0f,map->sealvl,0.0f);
+				glTranslatef(0.0f, map->sealvl, 0.0f);
 				water_obj->draw(t, true);
 
 				water_pass2.off();
 
-				glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT,GL_COLOR_ATTACHMENT0_EXT,GL_TEXTURE_2D,water_color,0);					// Third pass of water rendering, store water color
+				glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_TEXTURE_2D, water_color, 0); // Third pass of water rendering, store water color
 
-				glClear(GL_DEPTH_BUFFER_BIT);		// Efface la texture tampon
+				glClear(GL_DEPTH_BUFFER_BIT); // Efface la texture tampon
 
-				glViewport(0,0,512,512);
+				glViewport(0, 0, 512, 512);
 
 				glActiveTextureARB(GL_TEXTURE0_ARB);
 				glEnable(GL_TEXTURE_2D);
-				glBindTexture(GL_TEXTURE_2D,map->low_tex);
+				glBindTexture(GL_TEXTURE_2D, map->low_tex);
 
 				cam.setView(true);
-				glTranslatef( 0.0f, map->sealvl, map->sea_dec);
+				glTranslatef(0.0f, map->sealvl, map->sea_dec);
 				water_obj->draw(t, false);
 
-				gfx->renderToTexture( 0 );
-				glViewport(0,0,workwidth,workheight);
+				gfx->renderToTexture(0);
+				glViewport(0, 0, workwidth, workheight);
 
 				float logw = logf((float)SCREEN_W) / logf(2.0f);
 				float logh = logf((float)SCREEN_H) / logf(2.0f);
-				int wx = logw>(int)logw ? (int)logw+1 : (int)logw;
-				int wy = logh>(int)logh ? (int)logh+1 : (int)logh;
+				int wx = logw > (int)logw ? (int)logw + 1 : (int)logw;
+				int wy = logh > (int)logh ? (int)logh + 1 : (int)logh;
 				wx = 1 << wx;
 				wy = 1 << wy;
-				glBindTexture(GL_TEXTURE_2D,transtex);								// Store what's on screen for transparency effect
+				glBindTexture(GL_TEXTURE_2D, transtex); // Store what's on screen for transparency effect
 				glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 0, 0, wx, wy, 0);
 
-				glEnable(GL_STENCIL_TEST);											// Draw basic water in order to have correct texture mapping
+				glEnable(GL_STENCIL_TEST); // Draw basic water in order to have correct texture mapping
 				glClear(GL_STENCIL_BUFFER_BIT);
-				glStencilFunc(GL_ALWAYS,128, 0xffffffff);
+				glStencilFunc(GL_ALWAYS, 128, 0xffffffff);
 				glStencilOp(GL_KEEP, GL_KEEP, GL_INCR);
 
 				glActiveTextureARB(GL_TEXTURE0_ARB);
 				glDisable(GL_TEXTURE_2D);
 
 				cam.setView(true);
-				glTranslatef(0.0f,map->sealvl,0.0f);
+				glTranslatef(0.0f, map->sealvl, 0.0f);
 				water_obj->draw(t, true);
 
 				glDisable(GL_STENCIL_TEST);
@@ -689,52 +701,52 @@ namespace TA3D
 				if (map->ota_data.lavaworld)
 					glBindTexture(GL_TEXTURE_2D, sky.skyTex());
 				else
-					glBindTexture(GL_TEXTURE_2D,reflectex);
+					glBindTexture(GL_TEXTURE_2D, reflectex);
 				glEnable(GL_TEXTURE_2D);
 
 				glActiveTextureARB(GL_TEXTURE1_ARB);
-				glBindTexture(GL_TEXTURE_2D,transtex);
+				glBindTexture(GL_TEXTURE_2D, transtex);
 				glEnable(GL_TEXTURE_2D);
 
 				glActiveTextureARB(GL_TEXTURE2_ARB);
-				glBindTexture(GL_TEXTURE_2D,first_pass);
+				glBindTexture(GL_TEXTURE_2D, first_pass);
 				glEnable(GL_TEXTURE_2D);
 
 				glActiveTextureARB(GL_TEXTURE3_ARB);
-				glBindTexture(GL_TEXTURE_2D,second_pass);
+				glBindTexture(GL_TEXTURE_2D, second_pass);
 				glEnable(GL_TEXTURE_2D);
 
 				glActiveTextureARB(GL_TEXTURE4_ARB);
-				glBindTexture(GL_TEXTURE_2D,water_color);
+				glBindTexture(GL_TEXTURE_2D, water_color);
 				glEnable(GL_TEXTURE_2D);
 
 				glActiveTextureARB(GL_TEXTURE5_ARB);
-				glBindTexture(GL_TEXTURE_2D,height_tex);
+				glBindTexture(GL_TEXTURE_2D, height_tex);
 				glEnable(GL_TEXTURE_2D);
 
 				glActiveTextureARB(GL_TEXTURE6_ARB);
-				glBindTexture(GL_TEXTURE_2D,water_sim2);
+				glBindTexture(GL_TEXTURE_2D, water_sim2);
 				glEnable(GL_TEXTURE_2D);
 
 				glActiveTextureARB(GL_TEXTURE7_ARB);
-				glBindTexture(GL_TEXTURE_2D,water_distortions);
+				glBindTexture(GL_TEXTURE_2D, water_distortions);
 				glEnable(GL_TEXTURE_2D);
 
 				water_simulator_reflec.on();
-				water_simulator_reflec.setvar1i("sky",0);
-				water_simulator_reflec.setvar1i("rtex",1);
-				water_simulator_reflec.setvar1i("bump",2);
-				water_simulator_reflec.setvar1i("view",3);
-				water_simulator_reflec.setvar1i("water_color",4);
-				water_simulator_reflec.setvar1i("height_map",5);
-				water_simulator_reflec.setvar1i("normal_map",6);
-				water_simulator_reflec.setvar1i("distort_map",7);
+				water_simulator_reflec.setvar1i("sky", 0);
+				water_simulator_reflec.setvar1i("rtex", 1);
+				water_simulator_reflec.setvar1i("bump", 2);
+				water_simulator_reflec.setvar1i("view", 3);
+				water_simulator_reflec.setvar1i("water_color", 4);
+				water_simulator_reflec.setvar1i("height_map", 5);
+				water_simulator_reflec.setvar1i("normal_map", 6);
+				water_simulator_reflec.setvar1i("distort_map", 7);
 				water_simulator_reflec.setvar2f("coef", (float)SCREEN_W / (float)wx, (float)SCREEN_H / (float)wy);
 				water_simulator_reflec.setvar1f("cam_h_factor", 1.0f / cam.rpos.y);
-				water_simulator_reflec.setvar2f("factor",(float)water_obj->w / (float)map->map_w, (float)water_obj->w / (float)map->map_h);
+				water_simulator_reflec.setvar2f("factor", (float)water_obj->w / (float)map->map_w, (float)water_obj->w / (float)map->map_h);
 				water_simulator_reflec.setvar1f("t", t);
 
-				glColor4ub(0xFF,0xFF,0xFF,0xFF);
+				glColor4ub(0xFF, 0xFF, 0xFF, 0xFF);
 				glDisable(GL_DEPTH_TEST);
 
 				glMatrixMode(GL_PROJECTION);
@@ -744,13 +756,17 @@ namespace TA3D
 				glLoadIdentity();
 
 				glEnable(GL_STENCIL_TEST);
-				glStencilFunc(GL_NOTEQUAL,0, 0xffffffff);
-				glStencilOp(GL_KEEP,GL_KEEP,GL_KEEP);
+				glStencilFunc(GL_NOTEQUAL, 0, 0xffffffff);
+				glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
 				glBegin(GL_QUADS);
-				glTexCoord2f(0.0f,1.0f);	glVertex3f(0,0,0);
-				glTexCoord2f(1.0f,1.0f);	glVertex3f((float)SCREEN_W,0,0);
-				glTexCoord2f(1.0f,0.0f);	glVertex3f((float)SCREEN_W,(float)SCREEN_H,0);
-				glTexCoord2f(0.0f,0.0f);	glVertex3f(0,(float)SCREEN_H,0);
+				glTexCoord2f(0.0f, 1.0f);
+				glVertex3f(0, 0, 0);
+				glTexCoord2f(1.0f, 1.0f);
+				glVertex3f((float)SCREEN_W, 0, 0);
+				glTexCoord2f(1.0f, 0.0f);
+				glVertex3f((float)SCREEN_W, (float)SCREEN_H, 0);
+				glTexCoord2f(0.0f, 0.0f);
+				glVertex3f(0, (float)SCREEN_H, 0);
 				glEnd();
 				glDisable(GL_STENCIL_TEST);
 				glEnable(GL_DEPTH_TEST);
@@ -771,8 +787,8 @@ namespace TA3D
 	void Battle::renderWorld()
 	{
 		gfx->SetDefState();
-		glClearColor(FogColor[0],FogColor[1],FogColor[2],FogColor[3]);
-		gfx->clearDepth();		// Clear screen
+		glClearColor(FogColor[0], FogColor[1], FogColor[2], FogColor[3]);
+		gfx->clearDepth(); // Clear screen
 
 		cam.setView();
 
@@ -796,7 +812,7 @@ namespace TA3D
 			if (lp_CONFIG->ortho_camera)
 			{
 				const float scale = cam.zoomFactor / 800.0f * std::sqrt(float(SCREEN_H * SCREEN_H + SCREEN_W * SCREEN_W));
-				glScalef( scale, scale, scale );
+				glScalef(scale, scale, scale);
 			}
 			sky.draw();
 		}
@@ -810,16 +826,16 @@ namespace TA3D
 		updateZFAR();
 
 		if (lp_CONFIG->wireframe)
-			glPolygonMode (GL_FRONT_AND_BACK, GL_LINE);
+			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
 		map->draw(&cam, byte(1 << players.local_human_id), false, 0.0f, t, dt * units.apparent_timefactor);
 
 		if (lp_CONFIG->wireframe)
-			glPolygonMode (GL_FRONT_AND_BACK, GL_FILL);
+			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
 		cam.setView(lp_CONFIG->shadow_quality < 2);
 
-		features.draw(render_time);		// Dessine les éléments "2D"
+		features.draw(render_time); // Dessine les éléments "2D"
 
 		/*----------------------------------------------------------------------------------------------*/
 
@@ -828,9 +844,9 @@ namespace TA3D
 		if (cam.rpos.y <= gfx->low_def_limit)
 		{
 			if (lp_CONFIG->shadow_quality >= 2)
-				glFogi (GL_FOG_COORD_SRC, GL_FOG_COORD);
+				glFogi(GL_FOG_COORD_SRC, GL_FOG_COORD);
 			units.draw(true, false, true, lp_CONFIG->height_line);
-			glFogi (GL_FOG_COORD_SRC, GL_FRAGMENT_DEPTH);
+			glFogi(GL_FOG_COORD_SRC, GL_FRAGMENT_DEPTH);
 		}
 
 		// Dessine les objets produits par les armes sous l'eau / Draw weapons which are under water
@@ -850,10 +866,10 @@ namespace TA3D
 
 		cam.setView(lp_CONFIG->shadow_quality < 2);
 		if (lp_CONFIG->shadow_quality >= 2)
-			glFogi (GL_FOG_COORD_SRC, GL_FOG_COORD);
+			glFogi(GL_FOG_COORD_SRC, GL_FOG_COORD);
 		// Dessine les unités non encore dessinées / Draw units which have not been drawn
 		units.draw(false, false, true, lp_CONFIG->height_line);
-		glFogi (GL_FOG_COORD_SRC, GL_FRAGMENT_DEPTH);
+		glFogi(GL_FOG_COORD_SRC, GL_FRAGMENT_DEPTH);
 
 		// Dessine les objets produits par les armes n'ayant pas été dessinés / Draw weapons which have not been drawn
 		weapons.draw(false);
@@ -861,7 +877,7 @@ namespace TA3D
 
 	void Battle::renderInfo()
 	{
-		if (build >= 0 && !IsOnGUI)	// Display the building we want to build (with nice selection quads)
+		if (build >= 0 && !IsOnGUI) // Display the building we want to build (with nice selection quads)
 		{
 			glDisable(GL_FOG);
 			Vector3D target(cursorOnMap(cam, *map));
@@ -874,7 +890,7 @@ namespace TA3D
 				pMouseRectSelection.y1 = pMouseRectSelection.y2;
 			}
 
-			int d = Math::Max(abs(pMouseRectSelection.x2 - pMouseRectSelection.x1), abs( pMouseRectSelection.y2 - pMouseRectSelection.y1));
+			int d = Math::Max(abs(pMouseRectSelection.x2 - pMouseRectSelection.x1), abs(pMouseRectSelection.y2 - pMouseRectSelection.y1));
 
 			int ox = pMouseRectSelection.x1 + 0xFFFF;
 			int oy = pMouseRectSelection.y1 + 0xFFFF;
@@ -884,13 +900,12 @@ namespace TA3D
 				target.x = float(pMouseRectSelection.x1 + (pMouseRectSelection.x2 - pMouseRectSelection.x1) * c / Math::Max(d, 1));
 				target.z = float(pMouseRectSelection.y1 + (pMouseRectSelection.y2 - pMouseRectSelection.y1) * c / Math::Max(d, 1));
 
-				if (abs( ox - (int)target.x) < unit_manager.unit_type[build]->FootprintX
-					&& abs( oy - (int)target.z) < unit_manager.unit_type[build]->FootprintZ)
+				if (abs(ox - (int)target.x) < unit_manager.unit_type[build]->FootprintX && abs(oy - (int)target.z) < unit_manager.unit_type[build]->FootprintZ)
 					continue;
 				ox = (int)target.x;
 				oy = (int)target.z;
 
-				target.y = map->get_max_rect_h((int)target.x,(int)target.z, unit_manager.unit_type[build]->FootprintX, unit_manager.unit_type[build]->FootprintZ);
+				target.y = map->get_max_rect_h((int)target.x, (int)target.z, unit_manager.unit_type[build]->FootprintX, unit_manager.unit_type[build]->FootprintZ);
 				if (unit_manager.unit_type[build]->floatting())
 					target.y = Math::Max(target.y, map->sealvl + ((float)unit_manager.unit_type[build]->AltFromSeaLevel - (float)unit_manager.unit_type[build]->WaterLine) * H_DIV);
 				target.x = target.x * 8.0f - (float)map->map_w_d;
@@ -900,83 +915,83 @@ namespace TA3D
 
 				cam.setView();
 
-				glTranslatef(target.x,target.y,target.z);
-				glScalef(unit_manager.unit_type[build]->Scale,unit_manager.unit_type[build]->Scale,unit_manager.unit_type[build]->Scale);
+				glTranslatef(target.x, target.y, target.z);
+				glScalef(unit_manager.unit_type[build]->Scale, unit_manager.unit_type[build]->Scale, unit_manager.unit_type[build]->Scale);
 				const float DX = float(unit_manager.unit_type[build]->FootprintX << 2);
 				const float DZ = float(unit_manager.unit_type[build]->FootprintZ << 2);
 				if (unit_manager.unit_type[build]->model)
 				{
 					glEnable(GL_CULL_FACE);
-					gfx->ReInitAllTex( true);
+					gfx->ReInitAllTex(true);
 					if (can_be_there)
-						glColor4ub(0xFF,0xFF,0xFF,0xFF);
+						glColor4ub(0xFF, 0xFF, 0xFF, 0xFF);
 					else
-						glColor4ub(0xFF,0,0,0xFF);
-					glDepthFunc( GL_GREATER );
-					unit_manager.unit_type[build]->model->draw(0.0f,NULL,false,false,false,0,NULL,NULL,NULL,0.0f,NULL,false,players.local_human_id,false);
-					glDepthFunc( GL_LESS );
-					unit_manager.unit_type[build]->model->draw(0.0f,NULL,false,false,false,0,NULL,NULL,NULL,0.0f,NULL,false,players.local_human_id,false);
+						glColor4ub(0xFF, 0, 0, 0xFF);
+					glDepthFunc(GL_GREATER);
+					unit_manager.unit_type[build]->model->draw(0.0f, NULL, false, false, false, 0, NULL, NULL, NULL, 0.0f, NULL, false, players.local_human_id, false);
+					glDepthFunc(GL_LESS);
+					unit_manager.unit_type[build]->model->draw(0.0f, NULL, false, false, false, 0, NULL, NULL, NULL, 0.0f, NULL, false, players.local_human_id, false);
 
 					const bool old_mode = gfx->getShadowMapMode();
 					gfx->setShadowMapMode(true);
-					double eqn[4]= { 0.0f, -1.0f, 0.0f, map->sealvl - target.y };
+					double eqn[4] = {0.0f, -1.0f, 0.0f, map->sealvl - target.y};
 					glClipPlane(GL_CLIP_PLANE2, eqn);
 
 					glEnable(GL_CLIP_PLANE2);
 
-					glEnable( GL_BLEND );
-					glBlendFunc( GL_ONE, GL_ONE );
-					glDepthFunc( GL_EQUAL );
-					glColor4ub( 0x7F, 0x7F, 0x7F, 0x7F );
-					unit_manager.unit_type[build]->model->draw(0.0f,NULL,false,true,false,0,NULL,NULL,NULL,0.0f,NULL,false,players.local_human_id,false);
-					glColor4ub( 0xFF, 0xFF, 0xFF, 0xFF );
-					glDepthFunc( GL_LESS );
-					glDisable( GL_BLEND );
+					glEnable(GL_BLEND);
+					glBlendFunc(GL_ONE, GL_ONE);
+					glDepthFunc(GL_EQUAL);
+					glColor4ub(0x7F, 0x7F, 0x7F, 0x7F);
+					unit_manager.unit_type[build]->model->draw(0.0f, NULL, false, true, false, 0, NULL, NULL, NULL, 0.0f, NULL, false, players.local_human_id, false);
+					glColor4ub(0xFF, 0xFF, 0xFF, 0xFF);
+					glDepthFunc(GL_LESS);
+					glDisable(GL_BLEND);
 
 					glDisable(GL_CLIP_PLANE2);
 					gfx->setShadowMapMode(old_mode);
 				}
 				cam.setView();
-				glTranslatef(target.x,Math::Max( target.y, map->sealvl ),target.z);
+				glTranslatef(target.x, Math::Max(target.y, map->sealvl), target.z);
 				byte red = 0xFF, green = 0x00;
 				if (can_be_there)
 				{
 					green = 0xFF;
-					red   = 0x00;
+					red = 0x00;
 				}
 				glDisable(GL_CULL_FACE);
 				glDisable(GL_TEXTURE_2D);
 				glDisable(GL_LIGHTING);
 				glEnable(GL_BLEND);
-				glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
+				glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 				glBegin(GL_QUADS);
-				glColor4ub(red,green,0x00,0xFF);
-				glVertex3f(-DX,0.0f,-DZ);			// First quad
-				glVertex3f(DX,0.0f,-DZ);
-				glColor4ub(red,green,0x00,0x00);
-				glVertex3f(DX+2.0f,5.0f,-DZ-2.0f);
-				glVertex3f(-DX-2.0f,5.0f,-DZ-2.0f);
+				glColor4ub(red, green, 0x00, 0xFF);
+				glVertex3f(-DX, 0.0f, -DZ); // First quad
+				glVertex3f(DX, 0.0f, -DZ);
+				glColor4ub(red, green, 0x00, 0x00);
+				glVertex3f(DX + 2.0f, 5.0f, -DZ - 2.0f);
+				glVertex3f(-DX - 2.0f, 5.0f, -DZ - 2.0f);
 
-				glColor4ub(red,green,0x00,0xFF);
-				glVertex3f(-DX,0.0f,-DZ);			// Second quad
-				glVertex3f(-DX,0.0f,DZ);
-				glColor4ub(red,green,0x00,0x00);
-				glVertex3f(-DX-2.0f,5.0f,DZ+2.0f);
-				glVertex3f(-DX-2.0f,5.0f,-DZ-2.0f);
+				glColor4ub(red, green, 0x00, 0xFF);
+				glVertex3f(-DX, 0.0f, -DZ); // Second quad
+				glVertex3f(-DX, 0.0f, DZ);
+				glColor4ub(red, green, 0x00, 0x00);
+				glVertex3f(-DX - 2.0f, 5.0f, DZ + 2.0f);
+				glVertex3f(-DX - 2.0f, 5.0f, -DZ - 2.0f);
 
-				glColor4ub(red,green,0x00,0xFF);
-				glVertex3f(DX,0.0f,-DZ);			// Third quad
-				glVertex3f(DX,0.0f,DZ);
-				glColor4ub(red,green,0x00,0x00);
-				glVertex3f(DX+2.0f,5.0f,DZ+2.0f);
-				glVertex3f(DX+2.0f,5.0f,-DZ-2.0f);
+				glColor4ub(red, green, 0x00, 0xFF);
+				glVertex3f(DX, 0.0f, -DZ); // Third quad
+				glVertex3f(DX, 0.0f, DZ);
+				glColor4ub(red, green, 0x00, 0x00);
+				glVertex3f(DX + 2.0f, 5.0f, DZ + 2.0f);
+				glVertex3f(DX + 2.0f, 5.0f, -DZ - 2.0f);
 
-				glColor4ub(red,green,0x00,0xFF);
-				glVertex3f(-DX,0.0f,DZ);			// Fourth quad
-				glVertex3f(DX,0.0f,DZ);
-				glColor4ub(red,green,0x00,0x00);
-				glVertex3f(DX+2.0f,5.0f,DZ+2.0f);
-				glVertex3f(-DX-2.0f,5.0f,DZ+2.0f);
+				glColor4ub(red, green, 0x00, 0xFF);
+				glVertex3f(-DX, 0.0f, DZ); // Fourth quad
+				glVertex3f(DX, 0.0f, DZ);
+				glColor4ub(red, green, 0x00, 0x00);
+				glVertex3f(DX + 2.0f, 5.0f, DZ + 2.0f);
+				glVertex3f(-DX - 2.0f, 5.0f, DZ + 2.0f);
 				glEnd();
 				glDisable(GL_BLEND);
 				glEnable(GL_LIGHTING);
@@ -985,7 +1000,6 @@ namespace TA3D
 			glEnable(GL_FOG);
 		}
 
-
 		if ((selected || units.last_on >= 0) && TA3D_SHIFT_PRESSED)
 		{
 			glDisable(GL_FOG);
@@ -993,12 +1007,10 @@ namespace TA3D
 			bool builders = false;
 			const float t = (float)msec_timer * 0.001f;
 			const float mt = std::fmod(0.5f * t, 1.0f);
-			for (unsigned int e = 0; e < units.index_list_size ; ++e)
+			for (unsigned int e = 0; e < units.index_list_size; ++e)
 			{
 				const int i = units.idx_list[e];
-				if ((units.unit[i].flags & 1)
-					&& units.unit[i].owner_id == players.local_human_id
-					&& (units.unit[i].sel || i == units.last_on))
+				if ((units.unit[i].flags & 1) && units.unit[i].owner_id == players.local_human_id && (units.unit[i].sel || i == units.last_on))
 				{
 					const int type_id = units.unit[i].type_id;
 					if (type_id >= 0)
@@ -1010,17 +1022,17 @@ namespace TA3D
 						const float z = units.unit[i].render.Pos.z;
 						if (pType->kamikaze)
 						{
-							the_map->drawCircleOnMap(x, z, pType->kamikazedistance, makeacol(0xFF,0x0,0x0,0xFF), 1.0f);
+							the_map->drawCircleOnMap(x, z, pType->kamikazedistance, makeacol(0xFF, 0x0, 0x0, 0xFF), 1.0f);
 							const int idx = weapon_manager.get_weapon_index(pType->SelfDestructAs);
 							const WeaponDef* const pWeapon = idx >= 0 && idx < weapon_manager.nb_weapons ? &(weapon_manager.weapon[idx]) : NULL;
 							if (pWeapon)
-								the_map->drawCircleOnMap(x, z, (float)pWeapon->areaofeffect * 0.25f * mt, makeacol(0xFF,0x0,0x0,0xFF), 1.0f);
+								the_map->drawCircleOnMap(x, z, (float)pWeapon->areaofeffect * 0.25f * mt, makeacol(0xFF, 0x0, 0x0, 0xFF), 1.0f);
 						}
 						if (pType->mincloakdistance && units.unit[i].cloaked)
-							the_map->drawCircleOnMap(x, z, (float)pType->mincloakdistance, makeacol(0xFF,0xFF,0xFF,0xFF), 1.0f);
+							the_map->drawCircleOnMap(x, z, (float)pType->mincloakdistance, makeacol(0xFF, 0xFF, 0xFF, 0xFF), 1.0f);
 					}
 					if (units.unit[i].sel)
-						units.unit[i].show_orders();					// Dessine les ordres reçus par l'unité / Draw given orders
+						units.unit[i].show_orders(); // Dessine les ordres reçus par l'unité / Draw given orders
 				}
 			}
 
@@ -1032,10 +1044,9 @@ namespace TA3D
 					const int type_id = units.unit[i].type_id;
 					if (type_id < 0)
 						continue;
-					if ((units.unit[i].flags & 1) && units.unit[i].owner_id == players.local_human_id && !units.unit[i].sel
-						&& unit_manager.unit_type[type_id]->Builder && unit_manager.unit_type[type_id]->BMcode)
+					if ((units.unit[i].flags & 1) && units.unit[i].owner_id == players.local_human_id && !units.unit[i].sel && unit_manager.unit_type[type_id]->Builder && unit_manager.unit_type[type_id]->BMcode)
 					{
-						units.unit[i].show_orders(true);					// Dessine les ordres reçus par l'unité / Draw given orders
+						units.unit[i].show_orders(true); // Dessine les ordres reçus par l'unité / Draw given orders
 					}
 				}
 			}
@@ -1048,12 +1059,10 @@ namespace TA3D
 			const float t = (float)msec_timer * 0.001f;
 			const float mt = std::fmod(0.5f * t, 1.0f);
 			const float mt2 = std::fmod(0.5f * t + 0.5f, 1.0f);
-			for (unsigned int e = 0; e < units.index_list_size ; ++e)
+			for (unsigned int e = 0; e < units.index_list_size; ++e)
 			{
 				const int i = units.idx_list[e];
-				if ((units.unit[i].flags & 1)
-					&& units.unit[i].owner_id == players.local_human_id
-					&& (units.unit[i].sel || i == units.last_on))
+				if ((units.unit[i].flags & 1) && units.unit[i].owner_id == players.local_human_id && (units.unit[i].sel || i == units.last_on))
 				{
 					const int type_id = units.unit[i].type_id;
 					if (type_id >= 0)
@@ -1066,25 +1075,25 @@ namespace TA3D
 						{
 							if (pType->kamikaze)
 							{
-								the_map->drawCircleOnMap(x, z, pType->kamikazedistance, makeacol(0xFF,0x0,0x0,0xFF), 1.0f);
+								the_map->drawCircleOnMap(x, z, pType->kamikazedistance, makeacol(0xFF, 0x0, 0x0, 0xFF), 1.0f);
 								const int idx = weapon_manager.get_weapon_index(pType->SelfDestructAs);
 								const WeaponDef* const pWeapon = idx >= 0 && idx < weapon_manager.nb_weapons ? &(weapon_manager.weapon[idx]) : NULL;
 								if (pWeapon)
-									the_map->drawCircleOnMap(x, z, (float)pWeapon->areaofeffect * 0.25f * mt, makeacol(0xFF,0x0,0x0,0xFF), 1.0f);
+									the_map->drawCircleOnMap(x, z, (float)pWeapon->areaofeffect * 0.25f * mt, makeacol(0xFF, 0x0, 0x0, 0xFF), 1.0f);
 							}
 							if (pType->mincloakdistance && units.unit[i].cloaked)
-								the_map->drawCircleOnMap(x, z, (float)pType->mincloakdistance, makeacol(0xFF,0xFF,0xFF,0xFF), 1.0f);
+								the_map->drawCircleOnMap(x, z, (float)pType->mincloakdistance, makeacol(0xFF, 0xFF, 0xFF, 0xFF), 1.0f);
 						}
 						if (!pType->onoffable || units.unit[i].port[ACTIVATION])
 						{
 							if (pType->RadarDistance)
-								the_map->drawCircleOnMap(x, z, (float)pType->RadarDistance * mt, makeacol(0x00,0x00,0xFF,0xFF), 1.0f);
+								the_map->drawCircleOnMap(x, z, (float)pType->RadarDistance * mt, makeacol(0x00, 0x00, 0xFF, 0xFF), 1.0f);
 							if (pType->RadarDistanceJam)
-								the_map->drawCircleOnMap(x, z, (float)pType->RadarDistanceJam * mt, makeacol(0x00,0x00,0x00,0xFF), 1.0f);
+								the_map->drawCircleOnMap(x, z, (float)pType->RadarDistanceJam * mt, makeacol(0x00, 0x00, 0x00, 0xFF), 1.0f);
 							if (pType->SonarDistance)
-								the_map->drawCircleOnMap(x, z, (float)pType->SonarDistance * mt2, makeacol(0xFF,0xFF,0xFF,0xFF), 1.0f);
+								the_map->drawCircleOnMap(x, z, (float)pType->SonarDistance * mt2, makeacol(0xFF, 0xFF, 0xFF, 0xFF), 1.0f);
 							if (pType->SonarDistanceJam)
-								the_map->drawCircleOnMap(x, z, (float)pType->SonarDistanceJam * mt2, makeacol(0x7F,0x7F,0x7F,0xFF), 1.0f);
+								the_map->drawCircleOnMap(x, z, (float)pType->SonarDistanceJam * mt2, makeacol(0x7F, 0x7F, 0x7F, 0xFF), 1.0f);
 						}
 					}
 				}
@@ -1100,11 +1109,11 @@ namespace TA3D
 
 	void Battle::renderPostEffects()
 	{
-		particle_engine.draw(&cam);	// Dessine les particules
+		particle_engine.draw(&cam); // Dessine les particules
 
 		if (!map->water)
-			fx_manager.draw(cam, map->sealvl, true);		// Effets spéciaux en surface
-		fx_manager.draw(cam, map->sealvl);		// Effets spéciaux en surface
+			fx_manager.draw(cam, map->sealvl, true); // Effets spéciaux en surface
+		fx_manager.draw(cam, map->sealvl);			 // Effets spéciaux en surface
 	}
 
 	void Battle::renderScene()
@@ -1134,26 +1143,23 @@ namespace TA3D
 		lp_CONFIG->ortho_camera = true;
 
 		while (!lp_CONFIG->paused)
-			rest( 100 );			// Wait for the engine to enter in pause mode so we can assemble several shots
-									// of the same game tick
+			rest(100); // Wait for the engine to enter in pause mode so we can assemble several shots
+					   // of the same game tick
 
 		Camera camBak = cam;
 
 		cam.znear = -255.0f;
-		SDL_Surface *poster = gfx->create_surface_ex(24,w,h);
-		SDL_Surface *buf = gfx->create_surface_ex(24,SCREEN_W,SCREEN_H);
+		SDL_Surface* poster = gfx->create_surface_ex(24, w, h);
+		SDL_Surface* buf = gfx->create_surface_ex(24, SCREEN_W, SCREEN_H);
 
 		for (int z = 0; z < h; z += SCREEN_H / 2)
 		{
 			for (int x = 0; x < w; x += SCREEN_W / 2)
 			{
-				reflection_drawn_last_time = false;		// We need to refresh everything
+				reflection_drawn_last_time = false; // We need to refresh everything
 
 				// Set camera to current part of the scene
-				cam.rpos = camBak.rpos
-						   + camBak.zoomFactor
-							* (float(x - w / 2 - SCREEN_W / 4) * camBak.side
-							   + float(z - h / 2 - SCREEN_H / 4) * camBak.up);
+				cam.rpos = camBak.rpos + camBak.zoomFactor * (float(x - w / 2 - SCREEN_W / 4) * camBak.side + float(z - h / 2 - SCREEN_H / 4) * camBak.up);
 				if (!Yuni::Math::Zero(camBak.dir.y))
 					cam.rpos = cam.rpos + ((camBak.rpos - cam.rpos).y / camBak.dir.y) * camBak.dir;
 
@@ -1182,9 +1188,4 @@ namespace TA3D
 		lp_CONFIG->ortho_camera = prevCameraType;
 	}
 
-
-
 } // namespace TA3D
-
-
-

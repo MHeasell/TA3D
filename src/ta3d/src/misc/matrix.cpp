@@ -17,71 +17,65 @@
 
 #include "matrix.h"
 
-
-
 namespace TA3D
 {
-
 
 	Matrix Transpose(const Matrix &A)
 	{
 		Matrix B;
-		for(int i = 0; i < 4; ++i)
+		for (int i = 0; i < 4; ++i)
 		{
-			for(int j = 0; j < 4; ++j)
+			for (int j = 0; j < 4; ++j)
 				B.E[i][j] = A.E[j][i];
 		}
 		return B;
 	}
 
-
 	float Norme_Ligne(const Matrix &A)
 	{
-		float n,n2;
-		n=0.0f;
-		for (int i=0;i<4; ++i)
+		float n, n2;
+		n = 0.0f;
+		for (int i = 0; i < 4; ++i)
 		{
-			n2=0.0f;
-			for (int j=0;j<4;j++)
-				n2+=fabsf(A.E[i][j]);
-			if(n2>n) n=n2;
+			n2 = 0.0f;
+			for (int j = 0; j < 4; j++)
+				n2 += fabsf(A.E[i][j]);
+			if (n2 > n)
+				n = n2;
 		}
 		return n;
 	}
-
 
 	float Norme_Colonne(const Matrix &A)
 	{
-		float n,n2;
-		n=0.0f;
+		float n, n2;
+		n = 0.0f;
 		for (int i = 0; i < 4; ++i)
 		{
-			n2=0.0f;
-			for (int j=0;j<4; ++j)
+			n2 = 0.0f;
+			for (int j = 0; j < 4; ++j)
 				n2 += fabsf(A.E[j][i]);
-			if(n2>n)
-				n=n2;
+			if (n2 > n)
+				n = n2;
 		}
 		return n;
 	}
 
-
-	inline Matrix Invert(const Matrix &A,const int P)
+	inline Matrix Invert(const Matrix &A, const int P)
 	{
-		Matrix I,E,B;
+		Matrix I, E, B;
 		I = Scale(1.0f);
 		B = 1.0f / (Norme_Ligne(A) * Norme_Colonne(A)) * Transpose(A);
 		int i;
-		for(i=0;i<P; ++i)
+		for (i = 0; i < P; ++i)
 		{
-			E = I - B*A;
-			B = (I+E) * B;
+			E = I - B * A;
+			B = (I + E) * B;
 			if (Yuni::Math::Zero(Norme_Ligne(E)))
 				i = P;
 		}
 		return B;
 	}
-
 
 	TA3D::Matrix RotateZYX(const float Rz, const float Ry, const float Rx)
 	{
@@ -111,7 +105,6 @@ namespace TA3D
 		return M;
 	}
 
-
 	TA3D::Matrix RotateXYZ(const float Rx, const float Ry, const float Rz)
 	{
 		const float cx = cosf(Rx);
@@ -139,8 +132,6 @@ namespace TA3D
 		M.E[3][3] = 1.0f;
 		return M;
 	}
-
-
 
 	TA3D::Matrix RotateXZY(const float Rx, const float Rz, const float Ry)
 	{
@@ -173,7 +164,6 @@ namespace TA3D
 		return M;
 	}
 
-
 	TA3D::Matrix RotateYZX(const float Ry, const float Rz, const float Rx)
 	{
 		const float cx = cosf(Rx);
@@ -205,8 +195,7 @@ namespace TA3D
 		return M;
 	}
 
-
-	TA3D::Vector3D glNMult(const TA3D::Vector3D &A,const TA3D::Matrix &B)
+	TA3D::Vector3D glNMult(const TA3D::Vector3D &A, const TA3D::Matrix &B)
 	{
 		TA3D::Vector3D C;
 		C.x = A.x * B.E[0][0] + A.y * B.E[0][1] + A.z * B.E[0][2] + B.E[0][3];
@@ -218,7 +207,6 @@ namespace TA3D
 		C.z *= w;
 		return C;
 	}
-
 
 	TA3D::Matrix Translate(const TA3D::Vector3D &A)
 	{
@@ -233,7 +221,6 @@ namespace TA3D
 		return B;
 	}
 
-
 	TA3D::Matrix Scale(const float Size)
 	{
 		TA3D::Matrix M;
@@ -243,8 +230,7 @@ namespace TA3D
 		M.E[3][3] = 1.0f;
 		return M;
 	}
-	
-	
+
 	TA3D::Matrix Perspective(const float w, const float h, const float zn, const float zf)
 	{
 		TA3D::Matrix M;
@@ -256,8 +242,6 @@ namespace TA3D
 
 		return M;
 	}
-
-
 
 	TA3D::Matrix RotateX(const float Theta)
 	{
@@ -271,7 +255,6 @@ namespace TA3D
 		return M;
 	}
 
-
 	TA3D::Matrix RotateY(const float Theta)
 	{
 		TA3D::Matrix M;
@@ -284,7 +267,6 @@ namespace TA3D
 		return M;
 	}
 
-
 	TA3D::Matrix RotateZ(const float Theta)
 	{
 		TA3D::Matrix M;
@@ -296,6 +278,5 @@ namespace TA3D
 		M.E[3][3] = 1.0f;
 		return M;
 	}
-
 
 } // namespace TA3D

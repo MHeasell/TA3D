@@ -23,50 +23,51 @@
 
 namespace TA3D
 {
-namespace Menus
-{
-
-	class BriefScreen : public Abstract
+	namespace Menus
 	{
-	public:
-		/*!
+
+		class BriefScreen : public Abstract
+		{
+		public:
+			/*!
 		** \brief Execute an instance of BriefScreen
 		*/
-		static Battle::Result Execute(const String &campaign_name, const int mission_id);
-	public:
-		BriefScreen(const String &campaign_name, const int mission_id);
-		//! Destructor
-		virtual ~BriefScreen();
+			static Battle::Result Execute(const String &campaign_name, const int mission_id);
 
-	protected:
-		virtual bool doInitialize();
-		virtual void doFinalize();
-		virtual void waitForEvent();
-		virtual bool maySwitchToAnotherMenu();
+		public:
+			BriefScreen(const String &campaign_name, const int mission_id);
+			//! Destructor
+			virtual ~BriefScreen();
 
-	private:
-		const String &campaign_name;
-		const int mission_id;
+		protected:
+			virtual bool doInitialize();
+			virtual void doFinalize();
+			virtual void waitForEvent();
+			virtual bool maySwitchToAnotherMenu();
 
-		Battle::Result exit_mode;
-		String map_filename;
-		TDFParser ota_parser;
-		TDFParser brief_parser;
+		private:
+			const String &campaign_name;
+			const int mission_id;
 
-		bool start_game;
-		int schema;
+			Battle::Result exit_mode;
+			String map_filename;
+			TDFParser ota_parser;
+			TDFParser brief_parser;
 
-		//! Animation data
-		Gaf::AnimationList planet_animation;
-		float planet_frame;
-		int pan_id;
-		int rotate_id;
-		float pan_x1;
-		float pan_x2;
-		int time_ref;
-	};
+			bool start_game;
+			int schema;
 
-} // namespace Menus
+			//! Animation data
+			Gaf::AnimationList planet_animation;
+			float planet_frame;
+			int pan_id;
+			int rotate_id;
+			float pan_x1;
+			float pan_x2;
+			int time_ref;
+		};
+
+	} // namespace Menus
 } // namespace TA3D
 
 #endif // BRIEFSCREEN_H

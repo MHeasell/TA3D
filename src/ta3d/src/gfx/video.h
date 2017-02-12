@@ -10,8 +10,10 @@ namespace TA3D
 	private:
 		static GLuint gltex;
 		static SDL_Surface *buf;
+
 	public:
 		static void play(const String &filename);
+
 	private:
 		static void update(SDL_Surface *img, sint32, sint32, uint32, uint32);
 	};

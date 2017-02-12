@@ -16,78 +16,83 @@
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA*/
 
 #ifndef NETMENU_H
-# define NETMENU_H
+#define NETMENU_H
 
-# include <stdafx.h>
-# include <misc/string.h>
-# include "base.h"
-# include <network/http.h>
+#include <stdafx.h>
+#include <misc/string.h>
+#include "base.h"
+#include <network/http.h>
 
 namespace TA3D
 {
-    namespace Menus
-    {
+	namespace Menus
+	{
 
-        class NetMenu : public Abstract
-        {
-        private:
-            class Download
-            {
-            public:
-                typedef std::list<Download*> List;
-            public:
-                ~Download();
+		class NetMenu : public Abstract
+		{
+		private:
+			class Download
+			{
+			public:
+				typedef std::list<Download *> List;
+
+			public:
+				~Download();
 				void start(const String &filename, const String &url, const int mID);
-                void stop();
-                void update();
-                bool downloading();
-				String getFilename() {   return filename;    }
-				int getModID()	{	return modID;	}
-            private:
-                String filename;
-                String wnd;
-                Http http;
+				void stop();
+				void update();
+				bool downloading();
+				String getFilename() { return filename; }
+				int getModID() { return modID; }
+			private:
+				String filename;
+				String wnd;
+				Http http;
 				int modID;
-                static int wndNumber;
+				static int wndNumber;
 				int lastProgress;
-            };
+			};
 
-        public:
-            /*!
+		public:
+			/*!
             ** \brief Execute an instance of NetMenu
             */
-            static bool Execute();
-        public:
-            NetMenu();
-            //! Destructor
-            virtual ~NetMenu();
+			static bool Execute();
 
-        protected:
-            virtual bool doInitialize();
-            virtual void doFinalize();
-            virtual void waitForEvent();
-            virtual bool maySwitchToAnotherMenu();
-            virtual void addChatMessage(const String &message);
-            virtual void parseServerMessages();
-            virtual void updateGUI();
+		public:
+			NetMenu();
+			//! Destructor
+			virtual ~NetMenu();
+
+		protected:
+			virtual bool doInitialize();
+			virtual void doFinalize();
+			virtual void waitForEvent();
+			virtual bool maySwitchToAnotherMenu();
+			virtual void addChatMessage(const String &message);
+			virtual void parseServerMessages();
+			virtual void updateGUI();
 			virtual void hostAGame();
 			virtual void joinAGame();
 			virtual void changeMod(const int ID);
 
-        private:
-            enum NetMode { NONE,
-                           LOGIN,
-                           LOGGED,
-                           REGISTER,
-                           PASSWORD };
+		private:
+			enum NetMode
+			{
+				NONE,
+				LOGIN,
+				LOGGED,
+				REGISTER,
+				PASSWORD
+			};
 
-            NetMode askMode;
-            NetMode netMode;
-            String  login;
-            String  password;
-            Download::List downloadList;
-        };
-    }
+			NetMode askMode;
+			NetMode netMode;
+			String login;
+			String password;
+			Download::List downloadList;
+		};
+	}
 }
 
 #endif // NETMENU_H

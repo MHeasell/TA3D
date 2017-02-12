@@ -15,35 +15,30 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA*/
 #ifndef __TA3D_GFX_FX_PARTICLE_H__
-# define __TA3D_GFX_FX_PARTICLE_H__
+#define __TA3D_GFX_FX_PARTICLE_H__
 
-# include <stdafx.h>
-# include <misc/vector.h>
-
-
+#include <stdafx.h>
+#include <misc/vector.h>
 
 namespace TA3D
 {
-    class RenderQueue;
+	class RenderQueue;
 
+	class FXParticle
+	{
+	public:
+		FXParticle(const Vector3D& P, const Vector3D& S, const float L);
+		bool move(const float dt);
+		void draw(RenderQueue& renderQueue);
 
-    class FXParticle
-    {
-    public:
-        FXParticle(const Vector3D& P, const Vector3D& S, const float L);
-        bool move(const float dt);
-        void draw(RenderQueue &renderQueue);
+	private:
+		Vector3D Pos;
+		Vector3D Speed;
+		float life;
+		float timer;
 
-    private:
-        Vector3D Pos;
-        Vector3D Speed;
-        float life;
-        float timer;
-
-    }; // class FXParticle
-
+	}; // class FXParticle
 
 } // namespace TA3D
-
 
 #endif // __TA3D_GFX_FX_PARTICLE_H__

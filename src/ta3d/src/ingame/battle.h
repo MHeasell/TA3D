@@ -15,26 +15,25 @@
 	along with this program; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA*/
 #ifndef __TA3D__INGAM__BATTLE_H__
-# define __TA3D__INGAM__BATTLE_H__
+#define __TA3D__INGAM__BATTLE_H__
 
-# include <stdafx.h>
-# include <misc/string.h>
-# include "gamedata.h"
-# include <memory> // auto_ptr
-# include <gfx/gui/area.h>
-# include <gfx/sky.h>
-# include <gfx/texture.h>
-# include <tdf.h>
-# include <EngineClass.h>
-# include <misc/rect.h>
-# include <misc/material.light.h>
-# include <scripts/script.h>
-# include "fps.h"
+#include <stdafx.h>
+#include <misc/string.h>
+#include "gamedata.h"
+#include <memory> // auto_ptr
+#include <gfx/gui/area.h>
+#include <gfx/sky.h>
+#include <gfx/texture.h>
+#include <tdf.h>
+#include <EngineClass.h>
+#include <misc/rect.h>
+#include <misc/material.light.h>
+#include <scripts/script.h>
+#include "fps.h"
 
-
-# ifndef SCROLL_SPEED
-#	define SCROLL_SPEED 	400.0f
-# endif
+#ifndef SCROLL_SPEED
+#define SCROLL_SPEED 400.0f
+#endif
 
 namespace TA3D
 {
@@ -47,9 +46,16 @@ namespace TA3D
 	{
 		friend class CAPI;
 		friend class Console;
+
 	public:
 		//! Results about the battle
-		enum Result {brUnknown, brVictory, brDefeat, brPat};
+		enum Result
+		{
+			brUnknown,
+			brVictory,
+			brDefeat,
+			brPat
+		};
 
 		/*!
 		** \brief Launch a game
@@ -75,13 +81,13 @@ namespace TA3D
 		/*!
 		** \brief The result of the battle
 		*/
-		Result result() const {return pResult;}
+		Result result() const { return pResult; }
 
-		void setCameraDirection(const Vector3D &dir);
+		void setCameraDirection(const Vector3D& dir);
 		void setFreeCamera(bool fc);
 
-		void setShowPing(bool b)	{	bShowPing = b;	}
-		bool getShowPing() const	{	return bShowPing;	}
+		void setShowPing(bool b) { bShowPing = b; }
+		bool getShowPing() const { return bShowPing; }
 
 		void setTimeFactor(const float f);
 
@@ -221,7 +227,6 @@ namespace TA3D
 
 		Vector3D cursorOnMap(const Camera& cam, MAP& map, bool on_mini_map = false);
 
-		
 		void handleGameStatusEvents();
 		/*!
 		** \brief Display some game informations (key `SPACE`)
@@ -242,11 +247,17 @@ namespace TA3D
 		//! Host a game
 		bool pNetworkIsServer;
 
-        //! The game script
-        LuaProgram game_script;
+		//! The game script
+		LuaProgram game_script;
 
 	private:
-		enum CurrentGUICache {cgcDot, cgcShow, cgcHide, cgcEnd};
+		enum CurrentGUICache
+		{
+			cgcDot,
+			cgcShow,
+			cgcHide,
+			cgcEnd
+		};
 		//! The current GUI
 		String pCurrentGUI;
 		//!
@@ -256,12 +267,12 @@ namespace TA3D
 
 	private:
 		//!
-		
+
 		//!
 		struct DebugInfo
 		{
 			//!
-			LuaThread *process;
+			LuaThread* process;
 		};
 
 	private:
@@ -290,25 +301,25 @@ namespace TA3D
 		//! \name Textures
 		//@{
 		//!
-		Interfaces::GfxTexture	freecam_on;
+		Interfaces::GfxTexture freecam_on;
 		//!
-		Interfaces::GfxTexture	freecam_off;
+		Interfaces::GfxTexture freecam_off;
 		//!
-		Interfaces::GfxTexture	arrow_texture;
+		Interfaces::GfxTexture arrow_texture;
 		//!
-		Interfaces::GfxTexture	circle_texture;
+		Interfaces::GfxTexture circle_texture;
 		//!
-		GLuint	water;
+		GLuint water;
 		//!
-		GLuint	water_sim0;
+		GLuint water_sim0;
 		//!
-		GLuint	water_sim1;
+		GLuint water_sim1;
 		//!
-		GLuint	water_sim2;
+		GLuint water_sim2;
 		//!
-		GLuint	water_distortions;
+		GLuint water_distortions;
 		//!
-		Interfaces::GfxTexture	pause_tex;
+		Interfaces::GfxTexture pause_tex;
 		//@}
 
 		//! \name Camera
@@ -376,7 +387,7 @@ namespace TA3D
 		//!
 		float show_gamestatus;
 		//!
-		int	unit_info_id;
+		int unit_info_id;
 		//!
 		float speed_limit;
 		//!
@@ -414,7 +425,7 @@ namespace TA3D
 		//!
 		bool selected;
 		//!
-		int	build; // Indique si l'utilisateur veut construire quelque chose
+		int build; // Indique si l'utilisateur veut construire quelque chose
 		//!
 		bool build_order_given;
 		//!
@@ -520,24 +531,22 @@ namespace TA3D
 	private:
 		bool pCacheShowGameStatus;
 
-        //! \name Debug information
-        DebugInfo debugInfo;
+		//! \name Debug information
+		DebugInfo debugInfo;
 
 		//! pointer to loading screen
-		Menus::Loading *loading;
+		Menus::Loading* loading;
 
 		//! show players ping
 		bool bShowPing;
 
 	private:
-		static Battle *pInstance;
+		static Battle* pInstance;
 
 	public:
-		static Battle *Instance();
+		static Battle* Instance();
 
 	}; // class Battle
-
-
 
 } // namespace TA3D
 

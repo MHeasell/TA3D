@@ -15,326 +15,318 @@
 	along with this program; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA*/
 #ifndef __TA3D_GFX_GUI_AREA_H__
-# define __TA3D_GFX_GUI_AREA_H__
+#define __TA3D_GFX_GUI_AREA_H__
 
-# include <stdafx.h>
-# include <misc/string.h>
-# include "wnd.h"
-# include <vector>
-# include <misc/interface.h>
-# include <yuni/core/smartptr/smartptr.h>
-
-
-
+#include <stdafx.h>
+#include <misc/string.h>
+#include "wnd.h"
+#include <vector>
+#include <misc/interface.h>
+#include <yuni/core/smartptr/smartptr.h>
 
 namespace TA3D
 {
-namespace Gui
-{
+	namespace Gui
+	{
 
-	/*!
+		/*!
 	** \brief This class is a window handler, so it will manage windows
 	** and signals given to them
 	*/
-	class AREA:	public Yuni::Policy::ObjectLevelLockable<AREA>, protected IInterface
-	{
-	public:
-		//! The threading policy
-		typedef Yuni::Policy::ObjectLevelLockable<AREA> ThreadingPolicy;
-		//! The best suitable smart pointer for an area
-		typedef Yuni::SmartPtr<AREA>  Ptr;
+		class AREA : public Yuni::Policy::ObjectLevelLockable<AREA>, protected IInterface
+		{
+		public:
+			//! The threading policy
+			typedef Yuni::Policy::ObjectLevelLockable<AREA> ThreadingPolicy;
+			//! The best suitable smart pointer for an area
+			typedef Yuni::SmartPtr<AREA> Ptr;
 
-	public:
-		//! \name Constructor && Destructor
-		//@{
-		/*!
+		public:
+			//! \name Constructor && Destructor
+			//@{
+			/*!
 		** \brief Constructor
 		** \param area_name Name of the area
 		*/
-		AREA(const String& nm = "unnamed_area");
-		//! Destructor
-		virtual ~AREA();
-		//@}
+			AREA(const String& nm = "unnamed_area");
+			//! Destructor
+			virtual ~AREA();
+			//@}
 
-		/*!
+			/*!
 		** \brief Reset the object
 		*/
-		void destroy();
+			void destroy();
 
-		/*!
+			/*!
 		** \brief Returns a pointer to current AREA object if one exists, otherwise returns NULL
 		*/
-		static AREA *current();
+			static AREA* current();
 
-		/*!
+			/*!
 		** \brief Load a window from a TDF file
 		**
 		** \param filename TDF File to load
         ** \param name is not empty, overrides the window name (allow having multiple copies of the same window)
         ** \return
 		*/
-        uint16 load_window(const String& filename, const String &name = String());
+			uint16 load_window(const String& filename, const String& name = String());
 
-        /*!
+			/*!
         ** \brief Returns the name of the idxth window
         **
         ** \param idx window number
         ** \return
         */
-        String get_window_name(const int idx);
+			String get_window_name(const int idx);
 
-		/*!
+			/*!
 		** \brief Check the user interface, manage events
 		*/
-		uint16 check();
+			uint16 check();
 
-		/*!
+			/*!
 		** \brief Draw all windows
 		*/
-		void draw();
+			void draw();
 
-		/*!
+			/*!
 		** \brief Load a TDF file, telling which windows to load and which skin to use
 		**
 		** \param filename TDF File to load
 		*/
-		void load_tdf(const String& filename);
+			void load_tdf(const String& filename);
 
-		/*!
+			/*!
 		** \brief Return the specified window
 		**
 		** This method is thread-safe
 		**
 		** \param message
 		*/
-		WND::Ptr get_wnd(const String& message);
+			WND::Ptr get_wnd(const String& message);
 
-		/*!
+			/*!
 		** \brief Return the state of specified object in the specified window
 		**
 		** \param message
 		** \return
 		*/
-		bool get_state(const String& message);
+			bool get_state(const String& message);
 
-		/*!
+			/*!
 		** \brief Return true if the given object has its activated flag set (mouse is on and button pressed)
 		**
 		** \param message
 		** \return
 		*/
-		bool is_activated(const String& message);
+			bool is_activated(const String& message);
 
-		/*!
+			/*!
 		** \brief Return true if the cursor is over the given object
 		**
 		** \param message
 		** \return
 		*/
-		bool is_mouse_over(const String& message);
+			bool is_mouse_over(const String& message);
 
-		/*!
+			/*!
 		** \brief Return the value of specified object in the specified window
 		**
 		** \param message
 		** \return
 		*/
-		sint32 get_value(const String& message);
+			sint32 get_value(const String& message);
 
-		/*!
+			/*!
 		** \brief Return a pointer to the specified object
 		**
 		** \param message
 		** \return
 		*/
-		GUIOBJ::Ptr get_object(const String& message);
+			GUIOBJ::Ptr get_object(const String& message);
 
-		/*!
+			/*!
 		** \brief Set the state of specified object in the specified window
 		**
 		** \param message
 		** \return
 		*/
-		void set_state(const String& message, const bool state);
+			void set_state(const String& message, const bool state);
 
-		/*!
+			/*!
 		** \brief Set the value of specified object in the specified window
 		**
 		** \param message
 		** \return
 		*/
-		void set_value(const String& message, const sint32 value);
+			void set_value(const String& message, const sint32 value);
 
-		/*!
+			/*!
 		** \brief Set the data of specified object in the specified window
 		**
 		** \param message
 		** \return
 		*/
-		void set_data(const String& message, const sint32 data);
+			void set_data(const String& message, const sint32 data);
 
-		/*!
+			/*!
 		** \brief Set the enabled/disabled state of specified object in the specified window
 		**
 		** \param message
 		** \return
 		*/
-		void set_enable_flag(const String& message, const bool enable);
+			void set_enable_flag(const String& message, const bool enable);
 
-
-		/*!
+			/*!
 		** \brief Return the caption of specified object in the specified window
 		**
 		** \param message
 		** \return
 		*/
-		String caption(const String& message);
+			String caption(const String& message);
 
-		/*!
+			/*!
 		** \brief Set the caption of specified object in the specified window
 		**
 		** \param message
 		** \return
 		*/
-		void caption(const String& message, const String& caption);
+			void caption(const String& message, const String& caption);
 
-		/*!
+			/*!
 		** \brief Set the title of specified window to title
 		**
 		** \param message
 		** \return
 		*/
-		void title(const String& message, const String& title);
+			void title(const String& message, const String& title);
 
-		/*!
+			/*!
 		** \brief Set the entry of specified object in the specified window to entry
 		**
 		** \param message
 		** \return
 		*/
-		void set_entry(const String& message, const std::list<String>& entry);
-		void set_entry(const String& message, const std::vector<String>& entry);
+			void set_entry(const String& message, const std::list<String>& entry);
+			void set_entry(const String& message, const std::vector<String>& entry);
 
-		/*!
+			/*!
 		** \brief Append line to the entry of specified object in the specified window
 		**
 		** \param message
 		** \return
 		*/
-		void append(const String& message, const String& line);
+			void append(const String& message, const String& line);
 
-		/*!
+			/*!
 		** \brief Set the function pointer of an object, it will be called when the widget is clicked
 		**
 		** \param message
 		** \return
 		*/
-		void set_action(const String& message, void (*Func)(int));
+			void set_action(const String& message, void (*Func)(int));
 
-		/*!
+			/*!
 		** \brief Send that message to the area
 		**
 		** \param message
 		** \return
 		*/
-		int	msg(String message);
+			int msg(String message);
 
-		/*!
+			/*!
 		** \brief Display a popup window, locking all other GUI elements until it's closed
 		** \param Title
 		** \param Msg
 		** \return
 		*/
-		void popup(const String &Title, const String &Msg);
+			void popup(const String& Title, const String& Msg);
 
-		/*!
+			/*!
 		** \brief Returns a pointer to current skin
 		*/
-		inline const Skin *getSkin() const	{	return skin;	}
+			inline const Skin* getSkin() const { return skin; }
 
-	public:
-		//!
-		bool scrolling;
-		//! Of course we need a background, not a single color :-)
-		GLuint background;
-		//!
-		bool key_pressed;
+		public:
+			//!
+			bool scrolling;
+			//! Of course we need a background, not a single color :-)
+			GLuint background;
+			//!
+			bool key_pressed;
 
-	private:
-		/*!
+		private:
+			/*!
 		** \brief Manage signals sent through the interface to GUI
 		**
 		** \param msg
 		** \return
 		*/
-		virtual uint32 InterfaceMsg(const uint32 MsgID, const String &msg);
+			virtual uint32 InterfaceMsg(const uint32 MsgID, const String& msg);
 
-		/*!
+			/*!
 		** \brief Same as get_object, but not thread-safe
 		** \see get_object()
 		*/
-		GUIOBJ::Ptr getObjectWL(const String& message);
+			GUIOBJ::Ptr getObjectWL(const String& message);
 
-		/*!
+			/*!
 		** \brief Same as get_wnd, but not thread-safe
 		** \see get_wnd()
 		*/
-		WND::Ptr getWindowWL(const String& message);
+			WND::Ptr getWindowWL(const String& message);
 
-		/*!
+			/*!
 		** \brief Same as load_tdf(), but not thread-safe
 		*/
-		void doLoadTDF(const String& filename);
+			void doLoadTDF(const String& filename);
 
-	private:
-		//! This list stores the stack of all AREA objects so you can grab the current one at any time
-		static std::deque<AREA*> area_stack;
-		//! Window list
-		typedef std::vector<WND::Ptr> WindowList;
+		private:
+			//! This list stores the stack of all AREA objects so you can grab the current one at any time
+			static std::deque<AREA*> area_stack;
+			//! Window list
+			typedef std::vector<WND::Ptr> WindowList;
 
-		//! This vector stores all the windows the area object deals with
-		WindowList  pWindowList;
-		//! This vector stores data about the z order of windows
-		std::vector<uint16> vec_z_order;
+			//! This vector stores all the windows the area object deals with
+			WindowList pWindowList;
+			//! This vector stores data about the z order of windows
+			std::vector<uint16> vec_z_order;
 
-		//! Name of the ares
-		String name;
+			//! Name of the ares
+			String name;
 
-		//! The last cursor x-position
-		int amx;
-		//! The last cursor y-position
-		int amy;
-		//! The last cursor z-position
-		int amz;
-		//! The last cursor button status
-		int amb;
+			//! The last cursor x-position
+			int amx;
+			//! The last cursor y-position
+			int amy;
+			//! The last cursor z-position
+			int amz;
+			//! The last cursor button status
+			int amb;
 
-		//! The skin used by the ares
-		Skin* skin;
+			//! The skin used by the ares
+			Skin* skin;
 
-		//! hashtable used to speed up loading of *.gui files and save memory
-		TA3D::UTILS::HashMap< std::vector< TA3D::Interfaces::GfxTexture >* >::Dense gui_hashtable;
-		//! hashtable used to speed up operations on WND objects
-		TA3D::UTILS::HashMap<int>::Dense  wnd_hashtable;
+			//! hashtable used to speed up loading of *.gui files and save memory
+			TA3D::UTILS::HashMap<std::vector<TA3D::Interfaces::GfxTexture>*>::Dense gui_hashtable;
+			//! hashtable used to speed up operations on WND objects
+			TA3D::UTILS::HashMap<int>::Dense wnd_hashtable;
 
-		//!
-		String  cached_key;
-		//!
-		WND::Ptr cached_wnd;
+			//!
+			String cached_key;
+			//!
+			WND::Ptr cached_wnd;
 
-		//!
-		uint32  scroll_timer;
+			//!
+			uint32 scroll_timer;
 
-		//! Message to display as popup hint
-		String pCacheHelpMsg;
+			//! Message to display as popup hint
+			String pCacheHelpMsg;
 
-	}; // class AREA
+		}; // class AREA
 
-
-
-
-
-} // namespace Gui
+	} // namespace Gui
 } // namespace TA3D
 
 #endif // __TA3D_GFX_GUI_AREA_H__

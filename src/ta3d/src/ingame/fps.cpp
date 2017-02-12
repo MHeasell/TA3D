@@ -3,16 +3,13 @@
 #include <ta3dbase.h>
 #include <gfx/gfx.h>
 
-
 namespace TA3D
 {
 
-
 	FPSInfos::FPSInfos()
-		:countSinceLastTime(0), average(0), lastTime(0)
-	{}
-
-
+		: countSinceLastTime(0), average(0), lastTime(0)
+	{
+	}
 
 	void FPSInfos::statisticsAddFrame()
 	{
@@ -27,7 +24,6 @@ namespace TA3D
 		}
 	}
 
-
 	void FPSInfos::draw() const
 	{
 		// Display
@@ -37,7 +33,5 @@ namespace TA3D
 		gfx->print(gfx->TA_font, 0.0f, 0.0f, 0.0f, 0xFFFFFFFFU, toStr);
 		glDisable(GL_BLEND);
 	}
-
-
 
 } // namespace TA3D

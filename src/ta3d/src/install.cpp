@@ -15,7 +15,7 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA*/
 #include "stdafx.h"
-#include "TA3D_NameSpace.h"			// our namespace, a MUST have.
+#include "TA3D_NameSpace.h" // our namespace, a MUST have.
 #include "ta3dbase.h"
 #include "misc/math.h"
 #include "misc/paths.h"
@@ -23,34 +23,33 @@
 
 using namespace Yuni::Core::IO::File;
 
-
 namespace TA3D
 {
 
-void install_TA_files( String HPI_file, String filename )
-{
-	SmartPtr<Archive> archive = Archive::load(HPI_file);
-	if (!archive)
-    {
-        LOG_ERROR("archive not found : '" << HPI_file << "'");
-        return;
-    }
-	std::deque<Archive::FileInfo*> lFiles;
-    archive->getFileList(lFiles);
-	File *file = archive->readFile(filename);			// Extract the file
-	if (file)
+	void install_TA_files(String HPI_file, String filename)
 	{
-		Stream dst(String(Paths::Resources) << Paths::ExtractFileName(filename), Yuni::Core::IO::OpenMode::write);
-
-		if (dst.opened())
+		SmartPtr<Archive> archive = Archive::load(HPI_file);
+		if (!archive)
 		{
-			dst.write(file->data(), file->size());
-
-			dst.flush();
-			dst.close();
+			LOG_ERROR("archive not found : '" << HPI_file << "'");
+			return;
 		}
-		delete file;
+		std::deque<Archive::FileInfo *> lFiles;
+		archive->getFileList(lFiles);
+		File *file = archive->readFile(filename); // Extract the file
+		if (file)
+		{
+			Stream dst(String(Paths::Resources) << Paths::ExtractFileName(filename), Yuni::Core::IO::OpenMode::write);
+
+			if (dst.opened())
+			{
+				dst.write(file->data(), file->size());
+
+				dst.flush();
+				dst.close();
+			}
+			delete file;
+		}
 	}
-}
 
 } // namespace TA3D

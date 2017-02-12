@@ -22,58 +22,55 @@
 \----------------------------------------------------------------------*/
 
 #ifndef _TA3D_XX_CLASSE_CONSOLE_H__
-# define _TA3D_XX_CLASSE_CONSOLE_H__
+#define _TA3D_XX_CLASSE_CONSOLE_H__
 
-# include <misc/string.h>
-# include <threads/mutex.h>
-# include <gfx/gfx.h>
+#include <misc/string.h>
+#include <threads/mutex.h>
+#include <gfx/gfx.h>
 #ifndef __LUA_INCLUDES__
 #define __LUA_INCLUDES__
 #ifdef LUA_NOJIT
-# include "../lua/lua.hpp"
+#include "../lua/lua.hpp"
 #else
-# include "../luajit/src/lua.hpp"
+#include "../luajit/src/lua.hpp"
 #endif
 #endif
-# include <deque>
-
+#include <deque>
 
 namespace TA3D
 {
 
-
-    /*! \class Console
+	/*! \class Console
     **
     ** \brief The user console
     */
-    class Console
-    {
-    public:
-        //! \name Constructor & Destructor
-        //@{
-        //! Default constructor
-        Console();
-        //! Destructor
-        ~Console();
-        //@}
+	class Console
+	{
+	public:
+		//! \name Constructor & Destructor
+		//@{
+		//! Default constructor
+		Console();
+		//! Destructor
+		~Console();
+		//@}
 
-
-        /*!
+		/*!
         ** \brief Toggle the state of the visibility of the console
         */
-        void toggleShow();
+		void toggleShow();
 
-        /*!
+		/*!
         ** \brief Get if the console is activated
         */
-        bool activated();
+		bool activated();
 
-        /*!
+		/*!
         ** \brief Add an entry in the console
         */
-        void addEntry(const String& newEntry);
+		void addEntry(const String &newEntry);
 
-        /*!
+		/*!
         ** \brief Draw the console
         **
         ** \param fnt Font
@@ -84,29 +81,30 @@ namespace TA3D
 		void draw(TA3D::Font *fnt, const float dt, const bool forceShow = false);
 
 		String execute(const String &cmd);
+
 	private:
 		void registerConsoleAPI();
 		void runInitScript();
 
-    private:
+	private:
 		typedef std::deque<String> EntryList;
-        //! Mutex
-        Mutex pMutex;
-        //!
+		//! Mutex
+		Mutex pMutex;
+		//!
 		EntryList pLastEntries;
-        //!
-        String::Vector pLastCommands;
-        //!
-        int pHistoryPos;
-        //!
+		//!
+		String::Vector pLastCommands;
+		//!
+		int pHistoryPos;
+		//!
 		uint32 pMaxItemsToDisplay;
-        //!
-        float pVisible;
-        //!
-        bool pShow;
-        //!
-        String pInputText;
-        //!
+		//!
+		float pVisible;
+		//!
+		bool pShow;
+		//!
+		String pInputText;
+		//!
 		uint32 cursorPos;
 
 		//! The Lua state used to execute commands
@@ -114,9 +112,10 @@ namespace TA3D
 
 	private:
 		static Console *pInstance;
+
 	public:
 		static Console *Instance();
-    }; //class Console
+	}; //class Console
 
 } // namespace TA3D
 

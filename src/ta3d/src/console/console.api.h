@@ -15,7 +15,7 @@
 	along with this program; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA*/
 #ifndef _TA3D_XX_CLASSE_CONSOLE_API_H__
-# define _TA3D_XX_CLASSE_CONSOLE_API_H__
+#define _TA3D_XX_CLASSE_CONSOLE_API_H__
 
 // We want to use part of game script API
 #include <scripts/script.h>
@@ -25,6 +25,7 @@ namespace TA3D
 	class CAPI
 	{
 		friend class Console;
+
 	private:
 		static int print(lua_State *L);
 		static int setFps(lua_State *L);
@@ -70,9 +71,9 @@ namespace TA3D
 		static int dumpUnitInfo(lua_State *L);
 		static int kill(lua_State *L);
 		static int setShootall(lua_State *L);
-		static int startScript(lua_State *L);					// Force l'éxecution d'un script
+		static int startScript(lua_State *L); // Force l'éxecution d'un script
 		static int setPause(lua_State *L);
-		static int give(lua_State *L);							// Give resources to player_id
+		static int give(lua_State *L); // Give resources to player_id
 		static int setMetalCheat(lua_State *L);
 		static int setEnergyCheat(lua_State *L);
 		static int setGUIalpha(lua_State *L);
@@ -81,15 +82,15 @@ namespace TA3D
 		static int _debugSetContext(lua_State *L);
 		static int _debugState(lua_State *L);
 		static int _debugLoad(lua_State *L);
-		static int _debugStop(lua_State* L);
+		static int _debugStop(lua_State *L);
 		static int _debugResume(lua_State *L);
-		static int _debugKill(lua_State* L);
-		static int _debugCrash(lua_State* L);
+		static int _debugKill(lua_State *L);
+		static int _debugCrash(lua_State *L);
 		static int _debugContinue(lua_State *L);
 		static int _debugRun(lua_State *L);
 		static int _debugMemory(lua_State *L);
 		// ---------------    OS specific commands    ---------------
-		static int setFullscreen(lua_State* L);
+		static int setFullscreen(lua_State *L);
 	};
 }
 

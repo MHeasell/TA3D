@@ -16,18 +16,15 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA*/
 
 #ifndef __TA3D_THREADS_MUTEX_H__
-# define __TA3D_THREADS_MUTEX_H__
+#define __TA3D_THREADS_MUTEX_H__
 
-# include <yuni/thread/mutex.h>
-# include <yuni/thread/condition.h>
-
+#include <yuni/thread/mutex.h>
+#include <yuni/thread/condition.h>
 
 namespace TA3D
 {
 
-
-	typedef Yuni::Mutex  Mutex;
-
+	typedef Yuni::Mutex Mutex;
 
 	/*! \class MutexLocker
 	**
@@ -64,7 +61,6 @@ namespace TA3D
 
 	}; // MutexLocker
 
-
 	class Synchronizer
 	{
 	public:
@@ -73,11 +69,11 @@ namespace TA3D
 
 		void sync();
 		void release();
-		void lock()	{	pMutex.lock();	}
-		void unlock()	{	pMutex.lock();	}
+		void lock() { pMutex.lock(); }
+		void unlock() { pMutex.lock(); }
 
-		int getNbWaitingThreads()	{	return nbThreadsWaiting;	}
-		void setNbThreadsToSync(int n)	{	nbThreadsToSync = n;	}
+		int getNbWaitingThreads() { return nbThreadsWaiting; }
+		void setNbThreadsToSync(int n) { nbThreadsToSync = n; }
 
 	protected:
 		int nbThreadsToSync;
@@ -85,13 +81,12 @@ namespace TA3D
 		Mutex pMutex;
 
 		//! The PThread Condition
-		pthread_cond_t  pCondition;
+		pthread_cond_t pCondition;
 
 		//! Have the condition been really signalled ?
 		volatile unsigned int pSignalled;
 	};
 
 } // namespace TA3D
-
 
 #endif // __TA3D_THREADS_MUTEX_H__

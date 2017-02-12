@@ -22,25 +22,20 @@
 #include <misc/paths.h>
 #include <TA3D_NameSpace.h>
 
-
-
-
 namespace TA3D
 {
 
 	I18N::Ptr I18N::pInstance = NULL;
 
-
-
 	I18N::Language::Language(const int indx, const String& englishID, const String& caption)
-		:pIndx(indx), pEnglishID(englishID), pCaption(caption)
-	{}
-
+		: pIndx(indx), pEnglishID(englishID), pCaption(caption)
+	{
+	}
 
 	I18N::Language::Language(const Language& l)
-		:pIndx(l.pIndx), pEnglishID(l.pEnglishID), pCaption(l.pCaption)
-	{}
-
+		: pIndx(l.pIndx), pEnglishID(l.pEnglishID), pCaption(l.pCaption)
+	{
+	}
 
 	I18N::Ptr I18N::Instance()
 	{
@@ -55,10 +50,9 @@ namespace TA3D
 		return pInstance;
 	}
 
-
 	I18N::I18N()
-		:pNextLangID(0), pDefaultLanguage(NULL), pCurrentLanguage(NULL),
-		pTranslations()
+		: pNextLangID(0), pDefaultLanguage(NULL), pCurrentLanguage(NULL),
+		  pTranslations()
 	{
 		// English
 		pDefaultLanguage = addNewLanguageWL("english", "English");
@@ -76,7 +70,6 @@ namespace TA3D
 			pLanguages.clear();
 		}
 	}
-
 
 	void I18N::Destroy()
 	{
@@ -113,7 +106,7 @@ namespace TA3D
 
 	const I18N::Language* I18N::languageFromLocal(const String& locale)
 	{
-		LOG_ASSERT(NULL != pDefaultLanguage /* initializeAllLanguages() must be called before */ );
+		LOG_ASSERT(NULL != pDefaultLanguage /* initializeAllLanguages() must be called before */);
 		if (locale.empty())
 			return pDefaultLanguage;
 		String s(Substr(locale, 0, 5));
@@ -121,21 +114,15 @@ namespace TA3D
 		s.toLower();
 
 		// French
-		if (s.contains("fr_fr") || s.contains("fr_ca") || s.contains("fr_ch") || s.contains("fr_be")
-			|| s.contains("fr_eu") || s.contains("fr_lu"))
+		if (s.contains("fr_fr") || s.contains("fr_ca") || s.contains("fr_ch") || s.contains("fr_be") || s.contains("fr_eu") || s.contains("fr_lu"))
 			return language("french");
 
 		// German
-		if (s.contains("de_de") || s.contains("de_ch") || s.contains("de_be") || s.contains("de_eu")
-			|| s.contains("de_at"))
+		if (s.contains("de_de") || s.contains("de_ch") || s.contains("de_be") || s.contains("de_eu") || s.contains("de_at"))
 			return language("german");
 
 		// Spanish
-		if (s.contains("es_ar") || s.contains("es_bo") || s.contains("es_cl") || s.contains("es_co")
-			|| s.contains("es_do") || s.contains("es_ec") || s.contains("es_eu") || s.contains("es_gt")
-			|| s.contains("es_hn") || s.contains("es_mx") || s.contains("es_pa") || s.contains("es_pe")
-			|| s.contains("es_py") || s.contains("es_sv") || s.contains("es_us") || s.contains("es_uy")
-			|| s.contains("es_ve") || s.contains("es_mx"))
+		if (s.contains("es_ar") || s.contains("es_bo") || s.contains("es_cl") || s.contains("es_co") || s.contains("es_do") || s.contains("es_ec") || s.contains("es_eu") || s.contains("es_gt") || s.contains("es_hn") || s.contains("es_mx") || s.contains("es_pa") || s.contains("es_pe") || s.contains("es_py") || s.contains("es_sv") || s.contains("es_us") || s.contains("es_uy") || s.contains("es_ve") || s.contains("es_mx"))
 			return language("spanish");
 
 		// Italian
@@ -156,7 +143,6 @@ namespace TA3D
 		return pDefaultLanguage;
 	}
 
-
 	bool I18N::currentLanguage(const I18N::Language* lng)
 	{
 		if (lng)
@@ -169,8 +155,8 @@ namespace TA3D
 				{
 					resetPrefix();
 					LOG_INFO(LOG_PREFIX_I18N << "Switching to `"
-						<< pCurrentLanguage->caption() << "`"
-						<< " (" << pCurrentLanguage->englishCaption() << ")");
+											 << pCurrentLanguage->caption() << "`"
+											 << " (" << pCurrentLanguage->englishCaption() << ")");
 					return true;
 				}
 			}
@@ -180,16 +166,16 @@ namespace TA3D
 
 	bool I18N::tryToDetermineTheLanguage()
 	{
-# ifndef TA3D_PLATFORM_WINDOWS
+#ifndef TA3D_PLATFORM_WINDOWS
 		String locale = getenv("LC_ALL");
-		if (locale.empty())		locale = getenv("LANG");
+		if (locale.empty())
+			locale = getenv("LANG");
 		LOG_INFO(LOG_PREFIX_I18N << "locale = " << locale);
 		return currentLanguage(languageFromLocal(locale));
-# else
+#else
 		return currentLanguage(pDefaultLanguage);
-# endif
+#endif
 	}
-
 
 	void I18N::retrieveAllLanguages(std::vector<I18N::Language>& out)
 	{
@@ -209,8 +195,8 @@ namespace TA3D
 		ThreadingPolicy::MutexLocker locker(*this);
 		k += pLanguageSuffix;
 		return (defaultValue.empty())
-			? pTranslations.pullAsString(k, key)
-			: pTranslations.pullAsString(k, defaultValue);
+				   ? pTranslations.pullAsString(k, key)
+				   : pTranslations.pullAsString(k, defaultValue);
 	}
 
 	void I18N::translate(String::Vector& out)
@@ -227,25 +213,24 @@ namespace TA3D
 			*i = translate(*i);
 	}
 
-
 	bool I18N::loadFromFile(const String& filename, const bool emptyBefore, const bool inASCII)
 	{
 		if (!VFS::Instance()->fileExists(filename))
 		{
 			LOG_WARNING(LOG_PREFIX_I18N << "Impossible to load translations from `"
-						<< filename << "` (file not found)");
+										<< filename << "` (file not found)");
 			return false;
 		}
 
 		ThreadingPolicy::MutexLocker locker(*this);
 		// Load the file
 		bool r = pTranslations.loadFromFile(filename, emptyBefore, inASCII);
-		const String &languageEnglishID = pTranslations.pullAsString( "info.name" );
-		const String &languageCaption = pTranslations.pullAsString( "info.caption" );
+		const String& languageEnglishID = pTranslations.pullAsString("info.name");
+		const String& languageCaption = pTranslations.pullAsString("info.caption");
 		// This file register a new language
 		if (!languageEnglishID.empty() && !languageCaption.empty() && language(languageEnglishID) == NULL)
 		{
-			(void) addNewLanguageWL(languageEnglishID, languageCaption);
+			(void)addNewLanguageWL(languageEnglishID, languageCaption);
 		}
 
 		// Success
@@ -282,10 +267,4 @@ namespace TA3D
 		return false;
 	}
 
-
-
-
-
-
 } // namespace TA3D
-

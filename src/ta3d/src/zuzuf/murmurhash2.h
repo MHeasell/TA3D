@@ -15,7 +15,7 @@
 #ifndef ZUZUF_MURMURHASH2_H
 #define ZUZUF_MURMURHASH2_H
 
-inline unsigned int MurmurHash2 (const void * key, unsigned int len, const unsigned int seed = 31)
+inline unsigned int MurmurHash2(const void *key, unsigned int len, const unsigned int seed = 31)
 {
 	// 'm' and 'r' are mixing constants generated offline.
 	// They're not really 'magic', they just happen to work well.
@@ -29,9 +29,9 @@ inline unsigned int MurmurHash2 (const void * key, unsigned int len, const unsig
 
 	// Mix 4 bytes at a time into the hash
 
-	const unsigned char * data = (const unsigned char *)key;
+	const unsigned char *data = (const unsigned char *)key;
 
-	while(len >= 4)
+	while (len >= 4)
 	{
 		unsigned int k = *(unsigned int *)data;
 
@@ -48,12 +48,15 @@ inline unsigned int MurmurHash2 (const void * key, unsigned int len, const unsig
 
 	// Handle the last few bytes of the input array
 
-	switch(len)
+	switch (len)
 	{
-	case 3:	h ^= data[2] << 16;
-	case 2:	h ^= data[1] << 8;
-	case 1:	h ^= data[0];
-		h *= m;
+		case 3:
+			h ^= data[2] << 16;
+		case 2:
+			h ^= data[1] << 8;
+		case 1:
+			h ^= data[0];
+			h *= m;
 	};
 
 	// Do a few final mixes of the hash to ensure the last few

@@ -22,108 +22,107 @@
 \-----------------------------------------------------------------------------*/
 
 #ifndef __AI_CONTROLLER_H__
-# define __AI_CONTROLLER_H__
+#define __AI_CONTROLLER_H__
 
-# include <misc/string.h>
-# include <misc/vector.h>
-# include <threads/thread.h>
-# include "brain.h"
-# include "weight.h"
-# include <misc/hash_table.h>
+#include <misc/string.h>
+#include <misc/vector.h>
+#include <threads/thread.h>
+#include "brain.h"
+#include "weight.h"
+#include <misc/hash_table.h>
 
 namespace TA3D
 {
 
-#define	ORDER_ARMY			0x00			// Order to build an army
-#define	ORDER_METAL_P		0x01			// Order to gather metal
-#define	ORDER_ENERGY_P		0x02			// Order to gather energy
-#define	ORDER_DEFENSE		0x03			// Order to build defensive units ( AA towers, but also atomic weapons ...)
-#define	ORDER_FACTORY		0x04			// Order to build factories
-#define	ORDER_BUILDER		0x05			// Order to build construction units
-#define	ORDER_METAL_S		0x06			// Order to store metal
-#define	ORDER_ENERGY_S		0x07			// Order to store energy
+#define ORDER_ARMY 0x00		// Order to build an army
+#define ORDER_METAL_P 0x01  // Order to gather metal
+#define ORDER_ENERGY_P 0x02 // Order to gather energy
+#define ORDER_DEFENSE 0x03  // Order to build defensive units ( AA towers, but also atomic weapons ...)
+#define ORDER_FACTORY 0x04  // Order to build factories
+#define ORDER_BUILDER 0x05  // Order to build construction units
+#define ORDER_METAL_S 0x06  // Order to store metal
+#define ORDER_ENERGY_S 0x07 // Order to store energy
 
-#define NB_ORDERS			0x8
+#define NB_ORDERS 0x8
 
-#define BRAIN_VALUE_NULL	0x0
-#define BRAIN_VALUE_LOW		0x1
-#define BRAIN_VALUE_MEDIUM	0x2
-#define BRAIN_VALUE_HIGH	0x4
-#define BRAIN_VALUE_MAX		0x8
+#define BRAIN_VALUE_NULL 0x0
+#define BRAIN_VALUE_LOW 0x1
+#define BRAIN_VALUE_MEDIUM 0x2
+#define BRAIN_VALUE_HIGH 0x4
+#define BRAIN_VALUE_MAX 0x8
 
-#define BRAIN_VALUE_BITS	0x4			// How many bits are needed to store a value in a neural network ?
+#define BRAIN_VALUE_BITS 0x4 // How many bits are needed to store a value in a neural network ?
 
-#define	AI_TYPE_EASY		0x0
-#define AI_TYPE_MEDIUM		0x1
-#define AI_TYPE_HARD		0x2
-#define AI_TYPE_BLOODY		0x3
-#define AI_TYPE_LUA         0x4
+#define AI_TYPE_EASY 0x0
+#define AI_TYPE_MEDIUM 0x1
+#define AI_TYPE_HARD 0x2
+#define AI_TYPE_BLOODY 0x3
+#define AI_TYPE_LUA 0x4
 
-	class AiController :	public ObjectSync,			// Class to manage players controled by AI
-                            public Thread
-    {
+	class AiController : public ObjectSync, // Class to manage players controled by AI
+						 public Thread
+	{
 	public:
-		typedef SmartPtr<AiController>	Ptr;
-    private:
-        String			name;			// Attention faudrait pas qu'il se prenne pour quelqu'un!! -> indique aussi le fichier correspondant Ã  l'IA (faut sauvegarder les cervelles)
-        int			    playerID;		// Identifiant du joueur / all is in the name :)
-		uint32			unit_id;		// Unit index to run throught the unit array
-		uint32			total_unit;
+		typedef SmartPtr<AiController> Ptr;
 
-        byte			AI_type;		// Which AI do we have to use?
+	private:
+		String name;	// Attention faudrait pas qu'il se prenne pour quelqu'un!! -> indique aussi le fichier correspondant Ã  l'IA (faut sauvegarder les cervelles)
+		int playerID;   // Identifiant du joueur / all is in the name :)
+		uint32 unit_id; // Unit index to run throught the unit array
+		uint32 total_unit;
 
-		std::vector<AiWeight> weights;		// Vector of weights used to decide what to build
-		UTILS::HashSet<int>::Dense enemy_table;   // A table used to speed up some look up
-		uint32			nb_units[ NB_AI_UNIT_TYPE ];
-		uint32			nb_enemy[ 10 ];				// Hom many units has each enemy ?
-        float			order_weight[NB_ORDERS];	// weights of orders
-        float			order_attack[ 10 ];			// weights of attack order per enemy player
-		std::vector<uint32>	builder_list;
-		std::vector<uint32>	factory_list;
-		std::vector<uint32>	army_list;
-		std::vector<uint32>	wip_builder_list;
-		std::vector<uint32>	wip_factory_list;
-		std::vector<uint32>	wip_army_list;
-		std::vector< std::deque<WeightCoef> > enemy_list;
+		byte AI_type; // Which AI do we have to use?
 
-    protected:
-        void	proc(void*);
-        void	signalExitThread();
+		std::vector<AiWeight> weights;			// Vector of weights used to decide what to build
+		UTILS::HashSet<int>::Dense enemy_table; // A table used to speed up some look up
+		uint32 nb_units[NB_AI_UNIT_TYPE];
+		uint32 nb_enemy[10];		   // Hom many units has each enemy ?
+		float order_weight[NB_ORDERS]; // weights of orders
+		float order_attack[10];		   // weights of attack order per enemy player
+		std::vector<uint32> builder_list;
+		std::vector<uint32> factory_list;
+		std::vector<uint32> army_list;
+		std::vector<uint32> wip_builder_list;
+		std::vector<uint32> wip_factory_list;
+		std::vector<uint32> wip_army_list;
+		std::vector<std::deque<WeightCoef>> enemy_list;
 
-		volatile bool	thread_running;
-		volatile bool	thread_ask_to_stop;
+	protected:
+		void proc(void*);
+		void signalExitThread();
 
-    public:
+		volatile bool thread_running;
+		volatile bool thread_ask_to_stop;
 
+	public:
 		AiController();
 		virtual ~AiController();
 
-    private:
-        void init();
-        void destroy();
-    public:
+	private:
+		void init();
+		void destroy();
 
-        void monitor();
+	public:
+		void monitor();
 
-        void changeName(const String& newName);		// Change AI's name (-> creates a new file)
-        void setPlayerID(int id);
-        int getPlayerID();
+		void changeName(const String& newName); // Change AI's name (-> creates a new file)
+		void setPlayerID(int id);
+		int getPlayerID();
 
-        void setType(int type);
-        int getType();
+		void setType(int type);
+		int getType();
 
-        void save();
-        void loadAI(const String& filename, const int id = 0);
+		void save();
+		void loadAI(const String& filename, const int id = 0);
 
-    private:
-        void scan_unit();
-        void refresh_unit_weights();
-        void think();
+	private:
+		void scan_unit();
+		void refresh_unit_weights();
+		void think();
 
-    public:
-        static bool findBuildPlace(Vector3D &target, int unit_idx, int playerID, int minRadius, int radius);
-    };
-
+	public:
+		static bool findBuildPlace(Vector3D& target, int unit_idx, int playerID, int minRadius, int radius);
+	};
 
 } // namespace TA3D
 

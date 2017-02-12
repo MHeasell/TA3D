@@ -21,10 +21,8 @@
 #include <input/mouse.h>
 #include <input/keyboard.h>
 
-
 namespace TA3D
 {
-
 
 	void Battle::preflightVars()
 	{
@@ -33,8 +31,7 @@ namespace TA3D
 		// Used to handle on mini map commands
 		IsOnMinimap = mouse_x < 128 && mouse_y < 128;
 		// Priority given to game interface
-		IsOnGUI = (mouse_x < 128 && ( mouse_y >= SCREEN_H - 64 || mouse_y < 128)) || mouse_y < 32
-			|| mouse_y >= SCREEN_H - 32;
+		IsOnGUI = (mouse_x < 128 && (mouse_y >= SCREEN_H - 64 || mouse_y < 128)) || mouse_y < 32 || mouse_y >= SCREEN_H - 32;
 
 		IsOnGUI |= (pArea.check() != 0);
 
@@ -56,7 +53,7 @@ namespace TA3D
 
 		if (video_shoot)
 		{
-            if (msec_timer - video_timer >= 1000 / 15)
+			if (msec_timer - video_timer >= 1000 / 15)
 			{
 				video_timer = msec_timer;
 				shoot = true;
@@ -66,7 +63,6 @@ namespace TA3D
 		// Restore the default cursor
 		cursor_type = CURSOR_DEFAULT;
 	}
-
 
 	void Battle::preflightChangeWindSpeedAndDirection()
 	{
@@ -97,10 +93,9 @@ namespace TA3D
 		units.set_wind_change();
 	}
 
-
 	void Battle::preflightUpdate3DSounds()
 	{
-		if (units.nb_attacked/(units.nb_attacked + units.nb_built + 1) >= 0.75f)
+		if (units.nb_attacked / (units.nb_attacked + units.nb_built + 1) >= 0.75f)
 			sound_manager->setMusicMode(true);
 		else
 		{
@@ -111,35 +106,32 @@ namespace TA3D
 		sound_manager->update3DSound();
 	}
 
-
 	void Battle::preflightAutomaticCamera()
 	{
 		float old_zscroll = camera_zscroll;
 		float delta = IsOnGUI ? 0.0f : float(mouse_z - omz);
-        if (key[KEY_PAGEUP])
-            delta = -10.0f * dt;
-        else if (key[KEY_PAGEDOWN])
-            delta = 10.0f * dt;
-        if (lp_CONFIG->ortho_camera)        // 2D zoom with orthographic camera
-        {
-            camera_zscroll += delta * lp_CONFIG->camera_zoom_speed;
-            if (camera_zscroll < -50.0f)
-                camera_zscroll = -50.0f;
-            else
-                if (camera_zscroll > 50.0f) camera_zscroll = 50.0f;
-        }
-        else
-        {
-            camera_zscroll += delta * 2.0f * lp_CONFIG->camera_zoom_speed;
-            if (camera_zscroll < -25.0f)
-                camera_zscroll = -25.0f;
-            else
-                if (camera_zscroll > 20.0f) camera_zscroll = 20.0f;
-        }
+		if (key[KEY_PAGEUP])
+			delta = -10.0f * dt;
+		else if (key[KEY_PAGEDOWN])
+			delta = 10.0f * dt;
+		if (lp_CONFIG->ortho_camera) // 2D zoom with orthographic camera
+		{
+			camera_zscroll += delta * lp_CONFIG->camera_zoom_speed;
+			if (camera_zscroll < -50.0f)
+				camera_zscroll = -50.0f;
+			else if (camera_zscroll > 50.0f)
+				camera_zscroll = 50.0f;
+		}
+		else
+		{
+			camera_zscroll += delta * 2.0f * lp_CONFIG->camera_zoom_speed;
+			if (camera_zscroll < -25.0f)
+				camera_zscroll = -25.0f;
+			else if (camera_zscroll > 20.0f)
+				camera_zscroll = 20.0f;
+		}
 
-		if (msec_timer - cam_def_timer >= 1000 && !Yuni::Math::Zero(delta)
-			&& ( ( camera_zscroll > 0.0f && old_zscroll <= 0.0f)
-				 || ( camera_zscroll < 0.0f && old_zscroll >= 0.0f)))			// Just to make it lock near def position
+		if (msec_timer - cam_def_timer >= 1000 && !Yuni::Math::Zero(delta) && ((camera_zscroll > 0.0f && old_zscroll <= 0.0f) || (camera_zscroll < 0.0f && old_zscroll >= 0.0f))) // Just to make it lock near def position
 		{
 			cam_def_timer = msec_timer;
 			old_zscroll = 0.0f;
@@ -149,48 +141,52 @@ namespace TA3D
 				old_zscroll -= 0.00001f;
 		}
 
-        if (msec_timer - cam_def_timer < 500)
+		if (msec_timer - cam_def_timer < 500)
 			camera_zscroll = old_zscroll;
 
-		if (lp_CONFIG->ortho_camera)        // 2D zoom with orthographic camera
+		if (lp_CONFIG->ortho_camera) // 2D zoom with orthographic camera
 		{
-			r1 = -lp_CONFIG->camera_def_angle;      // angle is constant
-			if (r1 > -45.0f) 		r1 = -45.0f;
-			else if (r1 < -90.0f)	r1 = -90.0f;
-			float zoom_min = Math::Max(((float)map->map_w) / (float)SCREEN_W, ((float)map->map_h) / (float)SCREEN_H);     // ==> x2
-            float zoom_max = 0.02f;                                                                          // ==> x0
-            float zoom_med = 0.5f;
-            float x0 = -50.0f;
-            float x2 = 50.0f;
-            float sm = 0.01f;
+			r1 = -lp_CONFIG->camera_def_angle; // angle is constant
+			if (r1 > -45.0f)
+				r1 = -45.0f;
+			else if (r1 < -90.0f)
+				r1 = -90.0f;
+			float zoom_min = Math::Max(((float)map->map_w) / (float)SCREEN_W, ((float)map->map_h) / (float)SCREEN_H); // ==> x2
+			float zoom_max = 0.02f;																					  // ==> x0
+			float zoom_med = 0.5f;
+			float x0 = -50.0f;
+			float x2 = 50.0f;
+			float sm = 0.01f;
 			float x1 = x0 + std::log((zoom_med - zoom_min) / (zoom_max - zoom_min) * (std::exp(sm * (x2 - x0)) - 1.0f) + 1.0f) / sm;
-//			cam.zoomFactor = 0.5f * expf(-camera_zscroll * 0.05f * logf(Math::Max(map->map_w / SCREEN_W, map->map_h / SCREEN_H)));
-            float x = camera_zscroll;
-            float xt = (x2 + x0) * 0.5f;
-            float z(0.0f);
-            if (x <= xt)
-                z = x0 + (x1 - x0) * (x - x0) / (xt - x0);
-            else
-                z = x1 + (x2 - x1) * (x - xt) / (x2 - xt);
-//            z = x;//Math::Max(Math::Min(x2, xt + x), x0);
-//            = x0 + (x1 - x0) * (x - x0) * (x - x2) / ((x1 - x0) * (x1 - x2))
-//                               + (x2 - x0) * (x - x0) * (x - x1) / ((x2 - x0) * (x2 - x1));
+			//			cam.zoomFactor = 0.5f * expf(-camera_zscroll * 0.05f * logf(Math::Max(map->map_w / SCREEN_W, map->map_h / SCREEN_H)));
+			float x = camera_zscroll;
+			float xt = (x2 + x0) * 0.5f;
+			float z(0.0f);
+			if (x <= xt)
+				z = x0 + (x1 - x0) * (x - x0) / (xt - x0);
+			else
+				z = x1 + (x2 - x1) * (x - xt) / (x2 - xt);
+			//            z = x;//Math::Max(Math::Min(x2, xt + x), x0);
+			//            = x0 + (x1 - x0) * (x - x0) * (x - x2) / ((x1 - x0) * (x1 - x2))
+			//                               + (x2 - x0) * (x - x0) * (x - x1) / ((x2 - x0) * (x2 - x1));
 			cam.zoomFactor = zoom_min + (zoom_max - zoom_min) * (std::exp(sm * (z - x0)) - 1.0f) / (std::exp(sm * (x2 - x0)) - 1.0f);
-            cam_h = lp_CONFIG->camera_def_h * 2.0f * cam.zoomFactor;
+			cam_h = lp_CONFIG->camera_def_h * 2.0f * cam.zoomFactor;
 		}
-		else                                // Mega zoom with a perspective camera
+		else // Mega zoom with a perspective camera
 		{
 			float angle_factor = Math::Max(fabsf(-lp_CONFIG->camera_def_angle + 45.0f) / 20.0f, fabsf(-lp_CONFIG->camera_def_angle + 90.0f) / 25.0f);
 
 			r1 = -lp_CONFIG->camera_def_angle + camera_zscroll * angle_factor;
-			if (r1 > -45.0f) 		r1 = -45.0f;
-			else if (r1 < -90.0f)	r1 = -90.0f;
+			if (r1 > -45.0f)
+				r1 = -45.0f;
+			else if (r1 < -90.0f)
+				r1 = -90.0f;
 
 			cam_h = lp_CONFIG->camera_def_h + (std::exp(-camera_zscroll * 0.15f) - 1.0f) / (std::exp(3.75f) - 1.0f) * (float)Math::Max(map->map_w, map->map_h);
 		}
 		if (delta > 0 && !IsOnGUI)
 		{
-			if (!cam_has_target || abs( mouse_x - cam_target_mx) > 2 || abs( mouse_y - cam_target_my) > 2)
+			if (!cam_has_target || abs(mouse_x - cam_target_mx) > 2 || abs(mouse_y - cam_target_my) > 2)
 			{
 				cam_target = cursorOnMap(cam, *map);
 				if (cam_target.x < -map->map_w_d)
@@ -211,7 +207,6 @@ namespace TA3D
 		omz = mouse_z;
 	}
 
-
 	void Battle::preflightFreeCamera()
 	{
 		const int delta = IsOnGUI ? 0 : mouse_z - omz;
@@ -220,7 +215,5 @@ namespace TA3D
 		// Save the Z-coordinate
 		omz = mouse_z;
 	}
-
-
 
 } // namespace TA3D

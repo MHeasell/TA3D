@@ -16,19 +16,17 @@
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA*/
 
 #ifndef __TA3D_MISC_SETTINGS_H__
-# define __TA3D_MISC_SETTINGS_H__
+#define __TA3D_MISC_SETTINGS_H__
 
-# include <stdafx.h>
-# include "string.h"
-
-
+#include <stdafx.h>
+#include "string.h"
 
 namespace TA3D
 {
-namespace Settings
-{
+	namespace Settings
+	{
 
-    /*!
+		/*!
     ** \brief
     **
     ** This function will eventually load our config file if it exists.
@@ -39,9 +37,9 @@ namespace Settings
     ** The call to this function is tried, but it only catches exceptions
     ** and strings, ie throw( "LoadConfigFile: some error occured" );
     */
-    bool Load();
+		bool Load();
 
-    /*!
+		/*!
     ** \brief Save settings
     **
     ** Upon application exit this will write out our config file.
@@ -54,22 +52,19 @@ namespace Settings
     ** The call to this function is tried, but it only catches exceptions
     ** and strings, ie throw( "LoadConfigFile: some error occured" );
     */
-    bool Save();
+		bool Save();
 
-    /*!
+		/*!
     ** \brief Make a copy of a given file
     **
     ** \param filename File which must be copied
     ** \return True if the operation succeeded, false otherwise
     */
-    bool Backup(const String& filename);
+		bool Backup(const String& filename);
 
-    bool Restore(const String& filename);
+		bool Restore(const String& filename);
 
-
-
-
-} // namespace Settings
+	} // namespace Settings
 } // namespace TA3D
 
 #endif // __TA3D_MISC_SETTINGS_H__

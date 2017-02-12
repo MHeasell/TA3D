@@ -21,36 +21,32 @@
 #include <misc/string.h>
 #include <gfx/font.h>
 
-
 namespace TA3D
 {
-namespace Gui
-{
-
-
-	class TEXT_COLOR
+	namespace Gui
 	{
-	public:
-		TEXT_COLOR();
 
-		void load(TA3D::TDFParser& parser, const String &prefix, float scale);
+		class TEXT_COLOR
+		{
+		public:
+			TEXT_COLOR();
 
-		void print(Font *font, const float x, const float y, const String &text) const;
+			void load(TA3D::TDFParser &parser, const String &prefix, float scale);
 
-		void print(Font *font, const float x, const float y, const uint32 col, const String &text) const;
+			void print(Font *font, const float x, const float y, const String &text) const;
 
-	public:
-		uint32      font_color;
-		uint32      shadow_color;
-		bool        shadow;
-		float       shadow_dx;
-		float       shadow_dy;
+			void print(Font *font, const float x, const float y, const uint32 col, const String &text) const;
 
-	}; // class TEXT_COLOR
+		public:
+			uint32 font_color;
+			uint32 shadow_color;
+			bool shadow;
+			float shadow_dx;
+			float shadow_dy;
 
+		}; // class TEXT_COLOR
 
-} // namespace Gui
+	} // namespace Gui
 } // namespace TA3D
-
 
 #endif

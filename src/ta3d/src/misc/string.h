@@ -16,36 +16,35 @@
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA*/
 
 #ifndef __TA3D_TOOLBOX_STRING_H__
-# define __TA3D_TOOLBOX_STRING_H__
+#define __TA3D_TOOLBOX_STRING_H__
 
-# include <stdafx.h>
-# include <yuni/core/string.h>
-
+#include <stdafx.h>
+#include <yuni/core/string.h>
 
 namespace TA3D
 {
-	inline String Substr(const String &str, unsigned int start, unsigned int len = 0xFFFFFFFF)
+	inline String Substr(const String& str, unsigned int start, unsigned int len = 0xFFFFFFFF)
 	{
 		len = std::min<unsigned int>(len, str.size() - start);
 		return String(str.data() + start, len);
 	}
 
-	inline String SubstrUTF8(const String &str, unsigned int start, unsigned int len = 0xFFFFFFFF)
+	inline String SubstrUTF8(const String& str, unsigned int start, unsigned int len = 0xFFFFFFFF)
 	{
 		return String(str.utf8begin() + start, str.utf8begin() + start + std::min<unsigned int>(len, str.utf8size() - start));
 	}
 
-	inline String ToUpper(const String &str)
+	inline String ToUpper(const String& str)
 	{
 		return String(str).toUpper();
 	}
 
-	inline String ToLower(const String &str)
+	inline String ToLower(const String& str)
 	{
 		return String(str).toLower();
 	}
 
-	int ASCIItoUTF8(const byte c, byte *out);
+	int ASCIItoUTF8(const byte c, byte* out);
 
 	String InttoUTF8(const uint16 c);
 
@@ -73,7 +72,6 @@ namespace TA3D
 	*/
 	String ConvertToUTF8(const String& s);
 
-
 	sint32 SearchString(const String& s, const String& stringToSearch, const bool ignoreCase);
 
 	/*!
@@ -90,9 +88,6 @@ namespace TA3D
 	*/
 	String Escape(const String& s);
 
-
-
-
 	/*!
 	** \brief Convert an UTF-8 String into a WideChar String
 	**
@@ -105,7 +100,7 @@ namespace TA3D
 		WString(const char* s);
 		WString(const String& str);
 
-		const wchar_t* cw_str() const {return pBuffer;}
+		const wchar_t* cw_str() const { return pBuffer; }
 	private:
 		void fromUtf8(const char* s, size_t length);
 
@@ -113,11 +108,6 @@ namespace TA3D
 		wchar_t pBuffer[5120];
 
 	}; // class WString
-
-
-
-
-
 
 } // namespace TA3D
 

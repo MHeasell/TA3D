@@ -21,24 +21,32 @@
 namespace TA3D
 {
 	AiWeight::AiWeight() : built_by()
-    {
-        nb = 0;
-        w = 0.0f;
-        o_w = 0.0f;
-        type = 0;
-        army = 0.0f;
-        defense = 0.0f;
-        metal_p = 0.0f;
-        energy_p = 0.0f;
-        metal_s = 0.0f;
-        energy_s = 0.0f;
-    }
+	{
+		nb = 0;
+		w = 0.0f;
+		o_w = 0.0f;
+		type = 0;
+		army = 0.0f;
+		defense = 0.0f;
+		metal_p = 0.0f;
+		energy_p = 0.0f;
+		metal_s = 0.0f;
+		energy_s = 0.0f;
+	}
 
 	AiWeight::~AiWeight()
-    {
-        built_by.clear();
-    }
+	{
+		built_by.clear();
+	}
 
-	WeightCoef::WeightCoef()	{	idx = 0;	c = 0;	}
-	WeightCoef::WeightCoef( uint32 a, uint32 b )	{	idx = a;	c = b;	}
+	WeightCoef::WeightCoef()
+	{
+		idx = 0;
+		c = 0;
+	}
+	WeightCoef::WeightCoef(uint32 a, uint32 b)
+	{
+		idx = a;
+		c = b;
+	}
 }

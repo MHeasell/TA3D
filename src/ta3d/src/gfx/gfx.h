@@ -22,30 +22,24 @@
 //
 
 #ifndef __TA3D_GFX_H__
-# define __TA3D_GFX_H__
+#define __TA3D_GFX_H__
 
+#include <stdafx.h>
+#include <misc/string.h>
+#include "gfx.toolkit.h"
+#include "font.h"
+#include "texture.h"
+#include "shader.h"
+#include <threads/thread.h>
+#include <misc/interface.h>
+#include <misc/hash_table.h>
 
+#define FILTER_NONE 0x0
+#define FILTER_LINEAR 0x1
+#define FILTER_BILINEAR 0x2
+#define FILTER_TRILINEAR 0x3
 
-# include <stdafx.h>
-# include <misc/string.h>
-# include "gfx.toolkit.h"
-# include "font.h"
-# include "texture.h"
-# include "shader.h"
-# include <threads/thread.h>
-# include <misc/interface.h>
-# include <misc/hash_table.h>
-
-
-# define FILTER_NONE			0x0
-# define FILTER_LINEAR		    0x1
-# define FILTER_BILINEAR		0x2
-# define FILTER_TRILINEAR	    0x3
-
-
-# define BYTE_TO_FLOAT  0.00390625f
-
-
+#define BYTE_TO_FLOAT 0.00390625f
 
 namespace TA3D
 {
@@ -53,11 +47,11 @@ namespace TA3D
 	class Font;
 	class Vector3D;
 
-
 	class GFX : public ObjectSync, protected IInterface
 	{
 	public:
-		typedef GFX*	Ptr;
+		typedef GFX *Ptr;
+
 	public:
 		//! \name 2D/3D Mode
 		//@{
@@ -87,7 +81,7 @@ namespace TA3D
 		** \param filealpha The mask
 		** \return A valid SDL_Surface
 		*/
-		static SDL_Surface* LoadMaskedTextureToBmp(const String& file, const String& filealpha);
+		static SDL_Surface *LoadMaskedTextureToBmp(const String &file, const String &filealpha);
 
 	public:
 		//! \name Constructor & Destructor
@@ -100,7 +94,6 @@ namespace TA3D
 
 		//! Default configurator based on platform detection
 		void detectDefaultSettings();
-
 
 		//! Set current texture format
 		void set_texture_format(GLuint gl_format);
@@ -132,51 +125,63 @@ namespace TA3D
 		/*!
 		** \brief Get if we have to deal with some specific ATI workaround
 		*/
-		bool atiWorkaround() const {return ati_workaround;}
+		bool atiWorkaround() const { return ati_workaround; }
 
 		//! \name Color management
 		//@{
 		void set_color(const float r, const float g, const float b) const
-		{ glColor3f(r,g,b); }
+		{
+			glColor3f(r, g, b);
+		}
 
 		void set_color(const float r, const float g, const float b, const float a) const
-		{ glColor4f(r,g,b,a); }
+		{
+			glColor4f(r, g, b, a);
+		}
 
 		void set_color(const uint32 col) const
-		{ glColor4ub( (GLubyte)getr(col), (GLubyte)getg(col), (GLubyte)getb(col), (GLubyte)geta(col)); }
+		{
+			glColor4ub((GLubyte)getr(col), (GLubyte)getg(col), (GLubyte)getb(col), (GLubyte)geta(col));
+		}
 
 		void set_alpha(const float a) const;
 
 		/*!
 		** \brief
 		*/
-		float get_r(const uint32 col) const  {return (float)getr(col) * BYTE_TO_FLOAT;}
+		float get_r(const uint32 col) const { return (float)getr(col) * BYTE_TO_FLOAT; }
 		/*!
 		**
 		*/
-		float get_g(const uint32 col) const  {return (float)getg(col) * BYTE_TO_FLOAT; }
+		float get_g(const uint32 col) const { return (float)getg(col) * BYTE_TO_FLOAT; }
 		/*!
 		**
 		*/
-		float get_b(const uint32 col) const {return (float)getb(col) * BYTE_TO_FLOAT;}
+		float get_b(const uint32 col) const { return (float)getb(col) * BYTE_TO_FLOAT; }
 		/*!
 		**
 		*/
-		float get_a(const uint32 col) const {return (float)geta(col) * BYTE_TO_FLOAT;}
+		float get_a(const uint32 col) const { return (float)geta(col) * BYTE_TO_FLOAT; }
 
 		inline void loadVertex(const Vector3D &v) const
-		{	glVertex3fv((const GLfloat*)&v);	}
+		{
+			glVertex3fv((const GLfloat *)&v);
+		}
 
 		/*!
 		**
 		*/
 		uint32 makeintcol(float r, float g, float b) const
-		{ return (uint32)(255.0f * r) | ((uint32)(255.0f * g) << 8) | ((uint32)(255.0f * b) << 16) | 0xFF000000; }
+		{
+			return (uint32)(255.0f * r) | ((uint32)(255.0f * g) << 8) | ((uint32)(255.0f * b) << 16) | 0xFF000000;
+		}
 		/*!
 		**
 		*/
 		uint32 makeintcol(float r, float g, float b, float a) const
-		{ return (uint32)(255.0f * r) | ((uint32)(255.0f * g) << 8) | ((uint32)(255.0f * b) << 16) | ((uint32)(255.0f * a) << 24); }
+		{
+			return (uint32)(255.0f * r) | ((uint32)(255.0f * g) << 8) | ((uint32)(255.0f * b) << 16) | ((uint32)(255.0f * a) << 24);
+		}
 
 		//@} // Color management
 
@@ -189,7 +194,7 @@ namespace TA3D
 		void setShadowMapMode(bool mode);
 		bool getShadowMapMode();
 
-		void line(const float x1, const float y1, const float x2, const float y2);			// Basic drawing routines
+		void line(const float x1, const float y1, const float x2, const float y2); // Basic drawing routines
 		void rect(const float x1, const float y1, const float x2, const float y2);
 		void rectfill(const float x1, const float y1, const float x2, const float y2);
 		void circle(const float x, const float y, const float r);
@@ -201,7 +206,7 @@ namespace TA3D
 		void drawtexture_flip(const GLuint &tex, const float x1, const float y1, const float x2, const float y2);
 		void drawtexture(const GLuint &tex, const float x1, const float y1, const float x2, const float y2, const float u1, const float v1, const float u2, const float v2);
 
-		void line(const float x1, const float y1, const float x2, const float y2, const uint32 col);			// Basic drawing routines (with color arguments)
+		void line(const float x1, const float y1, const float x2, const float y2, const uint32 col); // Basic drawing routines (with color arguments)
 		void rect(const float x1, const float y1, const float x2, const float y2, const uint32 col);
 		void rectfill(const float x1, const float y1, const float x2, const float y2, const uint32 col);
 		void circle(const float x, const float y, const float r, const uint32 col);
@@ -214,45 +219,45 @@ namespace TA3D
 
 		//! \name Text manipulation
 		//@{
-		void print(Font *font, const float x, const float y, const float z, const String &text);		// Font related routines
+		void print(Font *font, const float x, const float y, const float z, const String &text); // Font related routines
 		void print(Font *font, const float x, const float y, const float z, const uint32 col, const String &text);
 
-		void print_center(Font *font, const float x, const float y, const float z, const String &text);		// Font related routines
+		void print_center(Font *font, const float x, const float y, const float z, const String &text); // Font related routines
 		void print_center(Font *font, const float x, const float y, const float z, const uint32 col, const String &text);
 
-		void print_right(Font *font, const float x, const float y, const float z, const String &text);		// Font related routines
+		void print_right(Font *font, const float x, const float y, const float z, const String &text); // Font related routines
 		void print_right(Font *font, const float x, const float y, const float z, const uint32 col, const String &text);
 		//@} // Text manipilation
 
-		GLuint	make_texture( SDL_Surface *bmp, int filter_type = FILTER_TRILINEAR, bool clamp = true);
-		GLuint	create_color_texture(uint32 color);
-		GLuint	create_texture( int w, int h, int filter_type = FILTER_TRILINEAR, bool clamp = true);
-		void	blit_texture( SDL_Surface *src, GLuint dst);
-		GLuint	load_texture(const String& file, int filter_type = FILTER_TRILINEAR, uint32 *width = NULL, uint32 *height = NULL, bool clamp = true, GLuint texFormat = 0, bool *useAlpha = NULL, bool checkSize = false);
-		GLuint	load_texture_mask(const String& file, uint32 level, int filter_type = FILTER_TRILINEAR, uint32 *width = NULL, uint32 *height = NULL, bool clamp = true);
-		GLuint	load_texture_from_cache(const String& file, int filter_type = FILTER_TRILINEAR, uint32 *width = NULL, uint32 *height = NULL, bool clamp = true, bool *useAlpha = NULL);
-		GLuint	load_masked_texture( String file, String mask, int filter_type = FILTER_TRILINEAR);
-		void	save_texture_to_cache( String file, GLuint tex, uint32 width, uint32 height, bool useAlpha);
-		uint32	texture_width(const GLuint gltex);
-		uint32	texture_height(const GLuint gltex);
-		void	destroy_texture( GLuint &gltex);
-		void	disable_texturing();
-		void	enable_texturing();
-		bool    is_texture_in_cache(const String& file);
-		int     max_texture_size();
+		GLuint make_texture(SDL_Surface *bmp, int filter_type = FILTER_TRILINEAR, bool clamp = true);
+		GLuint create_color_texture(uint32 color);
+		GLuint create_texture(int w, int h, int filter_type = FILTER_TRILINEAR, bool clamp = true);
+		void blit_texture(SDL_Surface *src, GLuint dst);
+		GLuint load_texture(const String &file, int filter_type = FILTER_TRILINEAR, uint32 *width = NULL, uint32 *height = NULL, bool clamp = true, GLuint texFormat = 0, bool *useAlpha = NULL, bool checkSize = false);
+		GLuint load_texture_mask(const String &file, uint32 level, int filter_type = FILTER_TRILINEAR, uint32 *width = NULL, uint32 *height = NULL, bool clamp = true);
+		GLuint load_texture_from_cache(const String &file, int filter_type = FILTER_TRILINEAR, uint32 *width = NULL, uint32 *height = NULL, bool clamp = true, bool *useAlpha = NULL);
+		GLuint load_masked_texture(String file, String mask, int filter_type = FILTER_TRILINEAR);
+		void save_texture_to_cache(String file, GLuint tex, uint32 width, uint32 height, bool useAlpha);
+		uint32 texture_width(const GLuint gltex);
+		uint32 texture_height(const GLuint gltex);
+		void destroy_texture(GLuint &gltex);
+		void disable_texturing();
+		void enable_texturing();
+		bool is_texture_in_cache(const String &file);
+		int max_texture_size();
 
-		GLuint  make_texture_RGB32F( int w, int h, float *data, int filter_type = FILTER_NONE, bool clamp = false);
-		GLuint  make_texture_RGBA32F( int w, int h, float *data, int filter_type = FILTER_NONE, bool clamp = false);
-		GLuint  make_texture_RGB16F( int w, int h, float *data, int filter_type = FILTER_NONE, bool clamp = false);
-		GLuint  make_texture_RGBA16F( int w, int h, float *data, int filter_type = FILTER_NONE, bool clamp = false);
-		GLuint  make_texture_A16F( int w, int h, float *data, int filter_type = FILTER_NONE, bool clamp = false);
-		GLuint  make_texture_A32F( int w, int h, float *data, int filter_type = FILTER_NONE, bool clamp = false);
+		GLuint make_texture_RGB32F(int w, int h, float *data, int filter_type = FILTER_NONE, bool clamp = false);
+		GLuint make_texture_RGBA32F(int w, int h, float *data, int filter_type = FILTER_NONE, bool clamp = false);
+		GLuint make_texture_RGB16F(int w, int h, float *data, int filter_type = FILTER_NONE, bool clamp = false);
+		GLuint make_texture_RGBA16F(int w, int h, float *data, int filter_type = FILTER_NONE, bool clamp = false);
+		GLuint make_texture_A16F(int w, int h, float *data, int filter_type = FILTER_NONE, bool clamp = false);
+		GLuint make_texture_A32F(int w, int h, float *data, int filter_type = FILTER_NONE, bool clamp = false);
 
-		GLuint	create_texture_RGB32F( int w, int h, int filter_type = FILTER_NONE, bool clamp = true);
-		GLuint	create_texture_RGBA32F( int w, int h, int filter_type = FILTER_NONE, bool clamp = true);
-		GLuint	create_texture_RGB16F( int w, int h, int filter_type = FILTER_NONE, bool clamp = true);
-		GLuint	create_texture_RGBA16F( int w, int h, int filter_type = FILTER_NONE, bool clamp = true);
-		GLuint  create_shadow_map(int w, int h);
+		GLuint create_texture_RGB32F(int w, int h, int filter_type = FILTER_NONE, bool clamp = true);
+		GLuint create_texture_RGBA32F(int w, int h, int filter_type = FILTER_NONE, bool clamp = true);
+		GLuint create_texture_RGB16F(int w, int h, int filter_type = FILTER_NONE, bool clamp = true);
+		GLuint create_texture_RGBA16F(int w, int h, int filter_type = FILTER_NONE, bool clamp = true);
+		GLuint create_shadow_map(int w, int h);
 
 		GLuint make_texture_from_screen(int filter_type = FILTER_NONE);
 
@@ -266,8 +271,8 @@ namespace TA3D
 		void unset_alpha_blending();
 
 		void ReInitArrays();
-		void ReInitTexSys( bool matrix_reset = true);
-		void ReInitAllTex( bool disable = false);
+		void ReInitTexSys(bool matrix_reset = true);
+		void ReInitAllTex(bool disable = false);
 		void SetDefState();
 
 		//! \brief clearScreen() && clearDepth()
@@ -280,7 +285,11 @@ namespace TA3D
 		/*!
 		** \brief Flip the backbuffer to the screen
 		*/
-		void flip() const { SDL_ShowCursor(SDL_DISABLE);    SDL_GL_SwapBuffers(); }
+		void flip() const
+		{
+			SDL_ShowCursor(SDL_DISABLE);
+			SDL_GL_SwapBuffers();
+		}
 
 		/*!
 		** \brief set a texture as render target, goes back to normal when passing 0 (do not forget to detach the texture when you're done!)
@@ -300,8 +309,8 @@ namespace TA3D
 		/*!
 		** \brief returns default texture formats for RGB and RGBA textures
 		*/
-		GLuint defaultTextureFormat_RGB() const	{	return defaultRGBTextureFormat;	}
-		GLuint defaultTextureFormat_RGBA() const	{	return defaultRGBATextureFormat;	}
+		GLuint defaultTextureFormat_RGB() const { return defaultRGBTextureFormat; }
+		GLuint defaultTextureFormat_RGBA() const { return defaultRGBATextureFormat; }
 		GLuint defaultTextureFormat_RGB_compressed() const;
 		GLuint defaultTextureFormat_RGBA_compressed() const;
 
@@ -311,42 +320,42 @@ namespace TA3D
 		void restoreShadowMappingState() const;
 
 	public:
-		int			width;				// Size of this window on the screen
-		int			height;
-		int			x,y;				// Position on the screen
-		Font        *normal_font;		// Fonts
-		Font        *small_font;
-		Font        *TA_font;
-		Font        *ta3d_gui_font;
-		Font        *big_font;
+		int width; // Size of this window on the screen
+		int height;
+		int x, y;		   // Position on the screen
+		Font *normal_font; // Fonts
+		Font *small_font;
+		Font *TA_font;
+		Font *ta3d_gui_font;
+		Font *big_font;
 
-		sint32		SCREEN_W_HALF;
-		sint32		SCREEN_H_HALF;
-		float		SCREEN_W_INV;
-		float		SCREEN_H_INV;
-		float		SCREEN_W_TO_640;				// To have mouse sensibility undependent from the resolution
-		float		SCREEN_H_TO_480;
+		sint32 SCREEN_W_HALF;
+		sint32 SCREEN_H_HALF;
+		float SCREEN_W_INV;
+		float SCREEN_H_INV;
+		float SCREEN_W_TO_640; // To have mouse sensibility undependent from the resolution
+		float SCREEN_H_TO_480;
 
-		float		low_def_limit;
+		float low_def_limit;
 
-		GLuint		glfond;
-		GLuint      textureFBO;         // FBO used by renderToTexture functions
-		GLuint      textureDepth;
-		GLuint      textureColor;       // Default color texture used by FBO when rendering to depth texture
-		GLuint      shadowMap;
+		GLuint glfond;
+		GLuint textureFBO; // FBO used by renderToTexture functions
+		GLuint textureDepth;
+		GLuint textureColor; // Default color texture used by FBO when rendering to depth texture
+		GLuint shadowMap;
 
-		GLfloat     shadowMapProjectionMatrix[16];
+		GLfloat shadowMapProjectionMatrix[16];
 
-		Shader      model_shader;
+		Shader model_shader;
 
-		bool		ati_workaround;		// Need to use workarounds for ATI cards ?
+		bool ati_workaround; // Need to use workarounds for ATI cards ?
 
-		int         max_tex_size;
+		int max_tex_size;
 		//! A default texture, loaded at initialization, used for rendering non textured objects with some shaders
-		GLuint      default_texture;
+		GLuint default_texture;
 
 		//! A bool to store shadowMap texture ID state
-		bool		shadowMapWasActive;
+		bool shadowMapWasActive;
 
 	private:
 		virtual uint32 InterfaceMsg(const uint32 MsgID, const String &msg);
@@ -359,35 +368,30 @@ namespace TA3D
 		*/
 		bool checkVideoCardWorkaround() const;
 
-
 	private:
 		// One of our friend
 		friend class Font;
 
-		bool		alpha_blending_set;
-		GLuint      texture_format;
-		bool        build_mipmaps;
-		bool        shadowMapMode;
-		GLuint		defaultRGBTextureFormat;
-		GLuint		defaultRGBATextureFormat;
+		bool alpha_blending_set;
+		GLuint texture_format;
+		bool build_mipmaps;
+		bool shadowMapMode;
+		GLuint defaultRGBTextureFormat;
+		GLuint defaultRGBATextureFormat;
 		//! Store all texture IDs
-		UTILS::HashMap<Interfaces::GfxTexture>::Sparse	textureIDs;
+		UTILS::HashMap<Interfaces::GfxTexture>::Sparse textureIDs;
 		//! And for each texture ID, how many times it is used
-		UTILS::HashMap<int, GLuint>::Sparse				textureLoad;
+		UTILS::HashMap<int, GLuint>::Sparse textureLoad;
 		//! And for each texture ID, if there is alpga
-		UTILS::HashSet<GLuint>::Sparse					textureAlpha;
+		UTILS::HashSet<GLuint>::Sparse textureAlpha;
 		//! And for each texture ID the file which contains the original texture
-		UTILS::HashMap<String, GLuint>::Sparse			textureFile;
+		UTILS::HashMap<String, GLuint>::Sparse textureFile;
 	}; // class GFX
-
-
-
 
 	// Those function should be removed
 	void reset_keyboard();
 	void reset_mouse();
 
 } // namespace TA3D
-
 
 #endif // __TA3D_GFX_H__

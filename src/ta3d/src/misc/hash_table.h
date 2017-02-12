@@ -16,22 +16,22 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA*/
 
 #ifndef __TA3D_XX_HASH_TABLE_H__
-# define __TA3D_XX_HASH_TABLE_H__
+#define __TA3D_XX_HASH_TABLE_H__
 
-# include <stdafx.h>
-# include "string.h"
-# include <zuzuf/hashmap.h>
-# include <zuzuf/hashset.h>
+#include <stdafx.h>
+#include "string.h"
+#include <zuzuf/hashmap.h>
+#include <zuzuf/hashset.h>
 
 namespace TA3D
 {
 	namespace UTILS
 	{
 		template <class T>
-				class hash
+		class hash
 		{
 		public:
-			inline hash()	{}
+			inline hash() {}
 
 			inline size_t operator()(const T& key) const
 			{
@@ -39,11 +39,11 @@ namespace TA3D
 			}
 		};
 
-		template < >
-				class hash<String>
+		template <>
+		class hash<String>
 		{
 		public:
-			inline hash()	{}
+			inline hash() {}
 
 			inline size_t operator()(const String& key) const
 			{
@@ -64,11 +64,11 @@ namespace TA3D
 
 				// Mix 4 bytes at a time into the hash
 
-				const uint8 * data = (const uint8 *)key.data();
+				const uint8* data = (const uint8*)key.data();
 
-				while(len >= 4)
+				while (len >= 4)
 				{
-					uint32 k = *(uint32 *)data;
+					uint32 k = *(uint32*)data;
 
 					k *= m;
 					k ^= k >> r;
@@ -83,12 +83,15 @@ namespace TA3D
 
 				// Handle the last few bytes of the input array
 
-				switch(len)
+				switch (len)
 				{
-				case 3: h ^= data[2] << 16;
-				case 2: h ^= data[1] << 8;
-				case 1: h ^= data[0];
-					h *= m;
+					case 3:
+						h ^= data[2] << 16;
+					case 2:
+						h ^= data[1] << 8;
+					case 1:
+						h ^= data[0];
+						h *= m;
 				};
 
 				// Do a few final mixes of the hash to ensure the last few
@@ -102,25 +105,25 @@ namespace TA3D
 			}
 		};
 
-		template<typename T, typename K = String>
-				class HashMap
+		template <typename T, typename K = String>
+		class HashMap
 		{
 		public:
-			typedef zuzuf::hashmap<K, T, TA3D::UTILS::hash<K> >			Dense;
-			typedef zuzuf::hashmap<K, T, TA3D::UTILS::hash<K>, 250 >	Sparse;
+			typedef zuzuf::hashmap<K, T, TA3D::UTILS::hash<K>> Dense;
+			typedef zuzuf::hashmap<K, T, TA3D::UTILS::hash<K>, 250> Sparse;
 		};
 
-		template<typename K = String>
-				class HashSet
+		template <typename K = String>
+		class HashSet
 		{
 		public:
-			typedef zuzuf::hashset<K, TA3D::UTILS::hash<K> >		Dense;
-			typedef zuzuf::hashset<K, TA3D::UTILS::hash<K>, 250 >	Sparse;
+			typedef zuzuf::hashset<K, TA3D::UTILS::hash<K>> Dense;
+			typedef zuzuf::hashset<K, TA3D::UTILS::hash<K>, 250> Sparse;
 		};
 
-		template<class T, class U>
-				uint32
-				wildCardSearch( const T& container, const String& pattern, U& li)
+		template <class T, class U>
+		uint32
+		wildCardSearch(const T& container, const String& pattern, U& li)
 		{
 			if (container.empty())
 				return 0;
@@ -145,7 +148,7 @@ namespace TA3D
 			uint32 nb(0);
 			String::size_type firstLen = first.length();
 			String::size_type lastLen = last.length();
-			for (typename T::const_iterator cur = container.begin() ; cur != container.end() ; ++cur)
+			for (typename T::const_iterator cur = container.begin(); cur != container.end(); ++cur)
 			{
 				const String f = cur.key();
 				String::size_type fLen = f.length();

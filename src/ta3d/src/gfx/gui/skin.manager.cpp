@@ -19,56 +19,48 @@
 
 namespace TA3D
 {
-namespace Gui
-{
-
-
-
-	SKIN_MANAGER skin_manager;
-
-
-
-	SKIN_MANAGER::SKIN_MANAGER()
+	namespace Gui
 	{
-		init();
-	}
 
-	SKIN_MANAGER::~SKIN_MANAGER()
-	{
-		destroy();
-	}
+		SKIN_MANAGER skin_manager;
 
-	void SKIN_MANAGER::init()
-	{
-		skins.clear();
-		hash_skin.clear();
-	}
-
-	void SKIN_MANAGER::destroy()
-	{
-		for (std::vector<Skin*>::iterator it = skins.begin() ; it != skins.end() ; ++it)
-			delete *it;
-		init();
-	}
-
-	Skin *SKIN_MANAGER::load(const String& filename, const float scale)
-	{
-		String key(filename);
-		key.appendFormat("-%.2f", scale);
-		Skin *pSkin = hash_skin[key];
-		if (!pSkin)
+		SKIN_MANAGER::SKIN_MANAGER()
 		{
-			pSkin = new Skin();
-			pSkin->loadTDFFromFile(filename, scale);
-			hash_skin[key] = pSkin;
-			skins.push_back(pSkin);
+			init();
 		}
-		return pSkin;
-	}
 
+		SKIN_MANAGER::~SKIN_MANAGER()
+		{
+			destroy();
+		}
 
+		void SKIN_MANAGER::init()
+		{
+			skins.clear();
+			hash_skin.clear();
+		}
 
+		void SKIN_MANAGER::destroy()
+		{
+			for (std::vector<Skin *>::iterator it = skins.begin(); it != skins.end(); ++it)
+				delete *it;
+			init();
+		}
 
-} // namespace Gui
+		Skin *SKIN_MANAGER::load(const String &filename, const float scale)
+		{
+			String key(filename);
+			key.appendFormat("-%.2f", scale);
+			Skin *pSkin = hash_skin[key];
+			if (!pSkin)
+			{
+				pSkin = new Skin();
+				pSkin->loadTDFFromFile(filename, scale);
+				hash_skin[key] = pSkin;
+				skins.push_back(pSkin);
+			}
+			return pSkin;
+		}
+
+	} // namespace Gui
 } // namespace TA3D
-

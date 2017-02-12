@@ -15,9 +15,8 @@
 	along with this program; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA*/
 
-
 // Disabled the Sound System
-# define TA3D_NO_SOUND
+#define TA3D_NO_SOUND
 
 #include "stdafx.h"
 #include "misc/matrix.h"
@@ -43,11 +42,11 @@ using namespace TA3D;
 
 using namespace Yuni::Core::IO::File;
 
-# ifdef TA3D_PLATFORM_WINDOWS
-#   define PREFIX "  /"
-# else
-#   define PREFIX "  --"
-# endif
+#ifdef TA3D_PLATFORM_WINDOWS
+#define PREFIX "  /"
+#else
+#define PREFIX "  --"
+#endif
 
 static String appName;
 
@@ -56,46 +55,43 @@ void configWindow();
 namespace TA3D
 {
 
+	void install_TA_files(String HPI_file, String filename);
 
-
-	void install_TA_files( String HPI_file, String filename );
-
-	static bool hpiviewCmdHelp(String::Vector& /*args*/)
+	static bool hpiviewCmdHelp(String::Vector & /*args*/)
 	{
 		std::cout << "Available commands :" << std::endl
-			<< PREFIX << "config         : failsafe config GUI" << std::endl
-			<< PREFIX << "create_gaf     : create a 24/32bits gaf from sprites" << std::endl
-			<< PREFIX << "create_buildpic: create a build picture from a model and a background image" << std::endl
-			<< PREFIX << "extract        : extract a file" << std::endl
-			<< PREFIX << "extract_gaf    : extract a gaf into sprites" << std::endl
-			<< PREFIX << "help           : this screen" << std::endl
-			<< PREFIX << "install        : install TA files" << std::endl
-			<< PREFIX << "listfiles      : list all archives used by the VFS" << std::endl
-			<< PREFIX << "listmods       : list all available mods" << std::endl
-			<< PREFIX << "mapdescription : extract a map description" << std::endl
-			<< PREFIX << "minimap        : extract a minimap" << std::endl
-			<< PREFIX << "print          : show the content of a file" << std::endl
-			<< PREFIX << "show           : show files matching a pattern" << std::endl
-			<< PREFIX << "quiet          : runs in quiet mode (no logs)" << std::endl
-			<< std::endl
-			<< "For more information on a command type :" << std::endl
-			<< "# " << appName << " command_name" << std::endl;
+				  << PREFIX << "config         : failsafe config GUI" << std::endl
+				  << PREFIX << "create_gaf     : create a 24/32bits gaf from sprites" << std::endl
+				  << PREFIX << "create_buildpic: create a build picture from a model and a background image" << std::endl
+				  << PREFIX << "extract        : extract a file" << std::endl
+				  << PREFIX << "extract_gaf    : extract a gaf into sprites" << std::endl
+				  << PREFIX << "help           : this screen" << std::endl
+				  << PREFIX << "install        : install TA files" << std::endl
+				  << PREFIX << "listfiles      : list all archives used by the VFS" << std::endl
+				  << PREFIX << "listmods       : list all available mods" << std::endl
+				  << PREFIX << "mapdescription : extract a map description" << std::endl
+				  << PREFIX << "minimap        : extract a minimap" << std::endl
+				  << PREFIX << "print          : show the content of a file" << std::endl
+				  << PREFIX << "show           : show files matching a pattern" << std::endl
+				  << PREFIX << "quiet          : runs in quiet mode (no logs)" << std::endl
+				  << std::endl
+				  << "For more information on a command type :" << std::endl
+				  << "# " << appName << " command_name" << std::endl;
 		return true;
 	}
-
 
 	/*!
 	 * \brief
 	 */
 	static bool hpiviewCmdShow(String::Vector &args)
 	{
-		if (args.size() >= 1 )
+		if (args.size() >= 1)
 		{
 			String::Vector file_list;
 			String ext = args[0];
 			VFS::Instance()->getFilelist(ext, file_list);
 			sort(file_list.begin(), file_list.end());
-			for (String::Vector::const_iterator cur_file = file_list.begin() ; cur_file != file_list.end() ; ++cur_file)
+			for (String::Vector::const_iterator cur_file = file_list.begin(); cur_file != file_list.end(); ++cur_file)
 				std::cout << *cur_file << std::endl;
 
 			args.erase(args.begin());
@@ -108,13 +104,13 @@ namespace TA3D
 	/*!
 	 * \brief
 	 */
-	static bool hpiviewCmdListFiles(String::Vector &/*args*/)
+	static bool hpiviewCmdListFiles(String::Vector & /*args*/)
 	{
 		String::Vector lArchives;
 
 		VFS::Instance()->getArchivelist(lArchives);
 		sort(lArchives.begin(), lArchives.end());
-		for (String::Vector::const_iterator it = lArchives.begin() ; it != lArchives.end() ; ++it)
+		for (String::Vector::const_iterator it = lArchives.begin(); it != lArchives.end(); ++it)
 			std::cout << *it << std::endl;
 
 		return true;
@@ -130,11 +126,11 @@ namespace TA3D
 			TA3D::VARS::pal = new SDL_Color[256];
 			TA3D::UTILS::load_palette(pal);
 
-			SDL_Surface* minimap = load_tnt_minimap_fast_bmp( args[0] );
+			SDL_Surface *minimap = load_tnt_minimap_fast_bmp(args[0]);
 			if (minimap)
 			{
-				SDL_SetPalette(minimap, SDL_LOGPAL|SDL_PHYSPAL, pal, 0, 256);
-				SDL_SaveBMP( minimap, args[1].c_str() );
+				SDL_SetPalette(minimap, SDL_LOGPAL | SDL_PHYSPAL, pal, 0, 256);
+				SDL_SaveBMP(minimap, args[1].c_str());
 			}
 
 			DELETE_ARRAY(TA3D::VARS::pal);
@@ -148,7 +144,6 @@ namespace TA3D
 		return true;
 	}
 
-
 	/*!
 	 * \brief
 	 */
@@ -157,7 +152,7 @@ namespace TA3D
 		if (args.size() >= 2)
 		{
 			MAP_OTA map_data;
-			map_data.load( args[0] );
+			map_data.load(args[0]);
 			Stream m_File(args[1], Yuni::Core::IO::OpenMode::write);
 
 			if (m_File.opened())
@@ -190,7 +185,6 @@ namespace TA3D
 		return true;
 	}
 
-
 	/*!
 	 * \brief
 	 */
@@ -198,7 +192,7 @@ namespace TA3D
 	{
 		if (args.size() >= 1)
 		{
-			Stream m_File( args[0], Yuni::Core::IO::OpenMode::write );
+			Stream m_File(args[0], Yuni::Core::IO::OpenMode::write);
 
 			if (m_File.opened())
 			{
@@ -218,8 +212,6 @@ namespace TA3D
 		return true;
 	}
 
-
-
 	/*!
 	 * \brief
 	 */
@@ -233,7 +225,7 @@ namespace TA3D
 			{
 				String name = Paths::ExtractFileName(args[0]);
 				Stream dst(name, Yuni::Core::IO::OpenMode::write);
-				dst.write((const char*)file->data(), file->size());
+				dst.write((const char *)file->data(), file->size());
 				dst.close();
 				delete file;
 			}
@@ -243,7 +235,6 @@ namespace TA3D
 		std::cerr << "SYNTAX: " << appName << " extract <filename>" << std::endl;
 		return true;
 	}
-
 
 	/*!
 	 * \brief
@@ -259,10 +250,10 @@ namespace TA3D
 
 			for (String::Vector::iterator cur_file = file_list.begin(); cur_file != file_list.end(); ++cur_file)
 			{
-				File* file = VFS::Instance()->readFile(*cur_file);
+				File *file = VFS::Instance()->readFile(*cur_file);
 				if (file)
 				{
-					std::cout << (const char*)file->data() << std::endl;
+					std::cout << (const char *)file->data() << std::endl;
 					delete file;
 				}
 				else
@@ -274,7 +265,6 @@ namespace TA3D
 		std::cerr << "SYNTAX: " << appName << " print pattern" << std::endl;
 		return true;
 	}
-
 
 	/*!
 	 * \brief
@@ -292,7 +282,6 @@ namespace TA3D
 		return true;
 	}
 
-
 	/*!
 	 * \brief Extract images from a GAF file
 	 */
@@ -305,12 +294,12 @@ namespace TA3D
 			if (file)
 			{
 				SDL_SetVideoMode(320, 200, 32, 0);
-				TA3D::VARS::pal = new SDL_Color[256];      // Allocate a new palette
+				TA3D::VARS::pal = new SDL_Color[256]; // Allocate a new palette
 				TA3D::UTILS::load_palette(pal);
 
 				Gaf::AnimationList anims;
 				anims.loadGAFFromRawData(file);
-				Stream m_File( (Paths::ExtractFileName(args[0]) << ".txt"), Yuni::Core::IO::OpenMode::write );
+				Stream m_File((Paths::ExtractFileName(args[0]) << ".txt"), Yuni::Core::IO::OpenMode::write);
 
 				m_File << "[gadget0]\n{\n";
 				m_File << "    filename=" << args[0] << ";\n";
@@ -334,11 +323,11 @@ namespace TA3D
 							filename << '0';
 						filename << e << ".tga";
 						m_File << "    [frame" << e << "]\n    {\n";
-						m_File << "        XPos=" << anims[i].ofs_x[ e ] << ";\n";
-						m_File << "        YPos=" << anims[i].ofs_y[ e ] << ";\n";
+						m_File << "        XPos=" << anims[i].ofs_x[e] << ";\n";
+						m_File << "        YPos=" << anims[i].ofs_y[e] << ";\n";
 						m_File << "        filename=" << filename << ";\n";
 						m_File << "    }\n";
-						save_bitmap( filename, anims[i].bmp[e] );
+						save_bitmap(filename, anims[i].bmp[e]);
 					}
 					m_File << "}\n";
 				}
@@ -355,9 +344,6 @@ namespace TA3D
 		return true;
 	}
 
-
-
-
 	/*!
 	 * \brief Create a truecolor GAF from images
 	 */
@@ -365,9 +351,9 @@ namespace TA3D
 	{
 		if (args.size() >= 1)
 		{
-			TDFParser parser( args[0], false, false, true, true );
-			String filename = parser.pullAsString( "gadget0.filename" );
-			Stream gaf_file( Paths::ExtractFileName( filename ), Yuni::Core::IO::OpenMode::write );
+			TDFParser parser(args[0], false, false, true, true);
+			String filename = parser.pullAsString("gadget0.filename");
+			Stream gaf_file(Paths::ExtractFileName(filename), Yuni::Core::IO::OpenMode::write);
 
 			LOG_DEBUG("opening '" << filename << "'");
 
@@ -378,59 +364,59 @@ namespace TA3D
 				SDL_SetVideoMode(320, 200, 32, 0);
 				Gaf::Header header;
 				header.IDVersion = TA3D_GAF_TRUECOLOR;
-				header.Entries   = parser.pullAsInt("gadget0.entries");
-				header.Unknown1  = 0;
+				header.Entries = parser.pullAsInt("gadget0.entries");
+				header.Unknown1 = 0;
 
-				gaf_file.write((const char*)&header, 12);
+				gaf_file.write((const char *)&header, 12);
 
 				for (int i = 0; i < header.Entries * 4; ++i)
-					gaf_file.put( 0 );
+					gaf_file.put(0);
 
 				for (int i = 0; i < header.Entries; ++i)
 				{
 					int pos = int(gaf_file.tell());
-					gaf_file.seekFromBeginning( 12 + i * 4 );
-					gaf_file.write( (const char*)&pos, 4 );
-					gaf_file.seekFromBeginning( pos );
+					gaf_file.seekFromBeginning(12 + i * 4);
+					gaf_file.write((const char *)&pos, 4);
+					gaf_file.seekFromBeginning(pos);
 
 					Gaf::Entry Entry;
 
-					Entry.Frames = sint16(parser.pullAsInt( String("gadget") << (i + 1) << ".frames" ));
+					Entry.Frames = sint16(parser.pullAsInt(String("gadget") << (i + 1) << ".frames"));
 					Entry.Unknown1 = 1;
 					Entry.Unknown2 = 0;
-					Entry.name = parser.pullAsString( String("gadget") << (i + 1) << ".name" );
+					Entry.name = parser.pullAsString(String("gadget") << (i + 1) << ".name");
 
-					gaf_file.write( (const char*)&Entry.Frames, 2 );
-					gaf_file.write( (const char*)&Entry.Unknown1, 2 );
-					gaf_file.write( (const char*)&Entry.Unknown2, 4 );
+					gaf_file.write((const char *)&Entry.Frames, 2);
+					gaf_file.write((const char *)&Entry.Unknown1, 2);
+					gaf_file.write((const char *)&Entry.Unknown2, 4);
 					char tmp[32];
 					memset(tmp, 0, 32);
 					memcpy(tmp, Entry.name.c_str(), Math::Min((int)Entry.name.size(), 32));
 					tmp[31] = 0;
-					gaf_file.write((const char*)tmp, 32);
+					gaf_file.write((const char *)tmp, 32);
 
 					Gaf::Frame::Entry FrameEntry;
 					int FrameEntryPos = int(gaf_file.tell());
 					FrameEntry.PtrFrameTable = 0;
 					for (int e = 0; e < Entry.Frames; ++e)
-						gaf_file.write( (const char*)&(FrameEntry), 8 );
+						gaf_file.write((const char *)&(FrameEntry), 8);
 
 					for (int e = 0; e < Entry.Frames; ++e)
 					{
 						pos = int(gaf_file.tell());
-						gaf_file.seekFromBeginning( FrameEntryPos + e * 8 );
+						gaf_file.seekFromBeginning(FrameEntryPos + e * 8);
 						FrameEntry.PtrFrameTable = pos;
-						gaf_file.write( (const char*)&(FrameEntry), 8 );
-						gaf_file.seekFromBeginning( pos );
+						gaf_file.write((const char *)&(FrameEntry), 8);
+						gaf_file.seekFromBeginning(pos);
 
 						Gaf::Frame::Data FrameData;
-						FrameData.XPos = sint16(parser.pullAsInt( String("gadget") << (i+1) << ".frame" << e << ".XPos" ) );
-						FrameData.YPos = sint16(parser.pullAsInt( String("gadget") << (i+1) << ".frame" << e << ".YPos" ) );
+						FrameData.XPos = sint16(parser.pullAsInt(String("gadget") << (i + 1) << ".frame" << e << ".XPos"));
+						FrameData.YPos = sint16(parser.pullAsInt(String("gadget") << (i + 1) << ".frame" << e << ".YPos"));
 						FrameData.FramePointers = 0;
 						FrameData.Unknown2 = 0;
 						FrameData.Compressed = 1;
 
-						SDL_Surface *frame_img = IMG_Load( parser.pullAsString( String("gadget") << (i + 1) << ".frame" << e << ".filename" ).c_str() );
+						SDL_Surface *frame_img = IMG_Load(parser.pullAsString(String("gadget") << (i + 1) << ".frame" << e << ".filename").c_str());
 						if (frame_img)
 						{
 							frame_img = convert_format(frame_img);
@@ -438,33 +424,33 @@ namespace TA3D
 							FrameData.Height = sint16(frame_img->h);
 							bool alpha = false;
 							SDL_LockSurface(frame_img);
-							for( int y = 0 ; y < frame_img->h && !alpha ; y++ )
-								for( int x = 0 ; x < frame_img->w && !alpha ; x++ )
+							for (int y = 0; y < frame_img->h && !alpha; y++)
+								for (int x = 0; x < frame_img->w && !alpha; x++)
 									alpha |= (getr(SurfaceInt(frame_img, x, y)) != 255);
 							SDL_UnlockSurface(frame_img);
 							FrameData.Transparency = alpha ? 1 : 0;
 							FrameData.PtrFrameData = sint32(gaf_file.tell()) + 24;
 
-							gaf_file.write( (const char*)&FrameData, 24 );
+							gaf_file.write((const char *)&FrameData, 24);
 
 							int buf_size = frame_img->w * frame_img->h * 5 + 10240;
-							byte *buffer = new byte[ buf_size ];
+							byte *buffer = new byte[buf_size];
 
 							int img_size = buf_size;
 							uLongf __size = img_size;
-							compress2 ( buffer, &__size, (Bytef*) frame_img->pixels, frame_img->w * frame_img->h * frame_img->format->BytesPerPixel, 9);
+							compress2(buffer, &__size, (Bytef *)frame_img->pixels, frame_img->w * frame_img->h * frame_img->format->BytesPerPixel, 9);
 							img_size = int(__size);
 
-							gaf_file.write( (const char*)&img_size, sizeof( img_size ) );		// Save the result
-							gaf_file.write( (const char*)buffer, img_size );
+							gaf_file.write((const char *)&img_size, sizeof(img_size)); // Save the result
+							gaf_file.write((const char *)buffer, img_size);
 
 							DELETE_ARRAY(buffer);
-							SDL_FreeSurface( frame_img );
+							SDL_FreeSurface(frame_img);
 						}
 						else
 						{
 							std::cerr << "Error: In frame " << e << ", could not load "
-								<< parser.pullAsString(String("gadget") << (i + 1) << ".frame" << e << ".filename" ) << std::endl;
+									  << parser.pullAsString(String("gadget") << (i + 1) << ".frame" << e << ".filename") << std::endl;
 							i = header.Entries;
 							break;
 						}
@@ -496,30 +482,30 @@ namespace TA3D
 			InterfaceManager = new IInterfaceManager();
 
 			// Initalizing SDL video
-			if (SDL_Init(SDL_INIT_VIDEO) < 0 )
-				throw( "SDL_Init(SDL_INIT_VIDEO) yielded unexpected result." );
+			if (SDL_Init(SDL_INIT_VIDEO) < 0)
+				throw("SDL_Init(SDL_INIT_VIDEO) yielded unexpected result.");
 
 			// Installing SDL timer
-			if (SDL_InitSubSystem(SDL_INIT_TIMER) != 0 )
-				throw( "SDL_InitSubSystem(SDL_INIT_TIMER) yielded unexpected result." );
+			if (SDL_InitSubSystem(SDL_INIT_TIMER) != 0)
+				throw("SDL_InitSubSystem(SDL_INIT_TIMER) yielded unexpected result.");
 
 			// Installing SDL timer
-			if (SDL_InitSubSystem(SDL_INIT_EVENTTHREAD) != 0 )
-				throw( "SDL_InitSubSystem(SDL_INIT_EVENTTHREAD) yielded unexpected result." );
+			if (SDL_InitSubSystem(SDL_INIT_EVENTTHREAD) != 0)
+				throw("SDL_InitSubSystem(SDL_INIT_EVENTTHREAD) yielded unexpected result.");
 
 			gfx = new GFX();
 
 			init_keyboard();
 
 			// Now we can load the model and its textures, set up a basic camera and render the model
-			if (Paths::ExtractFileExt(modelname).toLower() == ".3do")		// Load textures
+			if (Paths::ExtractFileExt(modelname).toLower() == ".3do") // Load textures
 				texture_manager.all_texture();
 
 			Model *model = MeshTypeManager::load(modelname);
 			SDL_Surface *background = gfx->load_image(filename);
 			if (model && background)
 			{
-				glViewport(0, 0, background->w, background->h);           // Use picture viewport
+				glViewport(0, 0, background->w, background->h); // Use picture viewport
 				gfx->width = background->w;
 				gfx->height = background->h;
 
@@ -533,14 +519,14 @@ namespace TA3D
 				sun.Dir.z = 1.0f;
 				sun.Dir.unit();
 				// Lights
-				sun.LightAmbient[0]  = 0.25f;
-				sun.LightAmbient[1]  = 0.25f;
-				sun.LightAmbient[2]  = 0.25f;
-				sun.LightAmbient[3]  = 0.25f;
-				sun.LightDiffuse[0]  = 1.0f;
-				sun.LightDiffuse[1]  = 1.0f;
-				sun.LightDiffuse[2]  = 1.0f;
-				sun.LightDiffuse[3]  = 1.0f;
+				sun.LightAmbient[0] = 0.25f;
+				sun.LightAmbient[1] = 0.25f;
+				sun.LightAmbient[2] = 0.25f;
+				sun.LightAmbient[3] = 0.25f;
+				sun.LightDiffuse[0] = 1.0f;
+				sun.LightDiffuse[1] = 1.0f;
+				sun.LightDiffuse[2] = 1.0f;
+				sun.LightDiffuse[3] = 1.0f;
 				sun.LightSpecular[0] = 0.0f;
 				sun.LightSpecular[1] = 0.0f;
 				sun.LightSpecular[2] = 0.0f;
@@ -620,7 +606,7 @@ namespace TA3D
 	 */
 	int hpiview(int argc, char *argv[])
 	{
-		SDL_Init(SDL_INIT_AUDIO|SDL_INIT_VIDEO);
+		SDL_Init(SDL_INIT_AUDIO | SDL_INIT_VIDEO);
 
 		if (argc >= 2)
 		{
@@ -629,7 +615,7 @@ namespace TA3D
 
 			// TODO Use a better implementation to parse arguments
 			String::Vector args;
-			for (int i = 1 ; i < argc ; i++)
+			for (int i = 1; i < argc; i++)
 				args.push_back(argv[i]);
 			bool ok = false;
 			while (!args.empty())

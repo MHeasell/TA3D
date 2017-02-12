@@ -26,84 +26,79 @@
 #include "glfunc.h"
 #include <logs/logs.h>
 
-
-
-# define CHECK_OPENGL_FUNCTION( extension, function, var ) \
-		if ((function) == NULL)\
-		{\
-			LOG_WARNING( LOG_PREFIX_OPENGL << "OpenGL reports supporting " #extension " but " #function " is lacking");\
-			(var) = false;\
-		}
-
-
+#define CHECK_OPENGL_FUNCTION(extension, function, var)                                                            \
+	if ((function) == NULL)                                                                                        \
+	{                                                                                                              \
+		LOG_WARNING(LOG_PREFIX_OPENGL << "OpenGL reports supporting " #extension " but " #function " is lacking"); \
+		(var) = false;                                                                                             \
+	}
 
 namespace TA3D
 {
 
-	bool	MultiTexturing;
-	bool	g_useTextureCompression = false;
-	bool	g_useStencilTwoSide = false;
-	bool	g_useProgram = false;
-	bool	g_useFBO = false;
-	bool    g_useGenMipMaps = false;
-	bool    g_useNonPowerOfTwoTextures = false;
-
+	bool MultiTexturing;
+	bool g_useTextureCompression = false;
+	bool g_useStencilTwoSide = false;
+	bool g_useProgram = false;
+	bool g_useFBO = false;
+	bool g_useGenMipMaps = false;
+	bool g_useNonPowerOfTwoTextures = false;
 
 	static void checkOpenGLExtensionsPointers()
 	{
 		if (MultiTexturing)
 		{
-			CHECK_OPENGL_FUNCTION( MultiTexturing, glActiveTextureARB, MultiTexturing )
-			CHECK_OPENGL_FUNCTION( MultiTexturing, glMultiTexCoord2fARB, MultiTexturing )
-			CHECK_OPENGL_FUNCTION( MultiTexturing, glClientActiveTextureARB, MultiTexturing )
+			CHECK_OPENGL_FUNCTION(MultiTexturing, glActiveTextureARB, MultiTexturing)
+			CHECK_OPENGL_FUNCTION(MultiTexturing, glMultiTexCoord2fARB, MultiTexturing)
+			CHECK_OPENGL_FUNCTION(MultiTexturing, glClientActiveTextureARB, MultiTexturing)
 			if (!MultiTexturing)
-				LOG_WARNING( LOG_PREFIX_OPENGL << "MultiTexturing support will be disbaled");
+				LOG_WARNING(LOG_PREFIX_OPENGL << "MultiTexturing support will be disbaled");
 		}
 		if (g_useFBO)
 		{
-			CHECK_OPENGL_FUNCTION( FBO, glDeleteFramebuffersEXT, g_useFBO)
-			CHECK_OPENGL_FUNCTION( FBO, glDeleteRenderbuffersEXT, g_useFBO)
-			CHECK_OPENGL_FUNCTION( FBO, glBindFramebufferEXT, g_useFBO)
-			CHECK_OPENGL_FUNCTION( FBO, glFramebufferTexture2DEXT, g_useFBO)
-			CHECK_OPENGL_FUNCTION( FBO, glFramebufferRenderbufferEXT, g_useFBO)
+			CHECK_OPENGL_FUNCTION(FBO, glDeleteFramebuffersEXT, g_useFBO)
+			CHECK_OPENGL_FUNCTION(FBO, glDeleteRenderbuffersEXT, g_useFBO)
+			CHECK_OPENGL_FUNCTION(FBO, glBindFramebufferEXT, g_useFBO)
+			CHECK_OPENGL_FUNCTION(FBO, glFramebufferTexture2DEXT, g_useFBO)
+			CHECK_OPENGL_FUNCTION(FBO, glFramebufferRenderbufferEXT, g_useFBO)
 			if (!g_useFBO)
-				LOG_WARNING( LOG_PREFIX_OPENGL << "FBO support will be disbaled");
+				LOG_WARNING(LOG_PREFIX_OPENGL << "FBO support will be disbaled");
 		}
 		if (g_useStencilTwoSide)
 		{
-			CHECK_OPENGL_FUNCTION( StencilTwoSide, glActiveStencilFaceEXT, g_useStencilTwoSide)
+			CHECK_OPENGL_FUNCTION(StencilTwoSide, glActiveStencilFaceEXT, g_useStencilTwoSide)
 			if (!g_useStencilTwoSide)
-				LOG_WARNING( LOG_PREFIX_OPENGL << "StencilTwoSide support will be disbaled");
+				LOG_WARNING(LOG_PREFIX_OPENGL << "StencilTwoSide support will be disbaled");
 		}
 		if (g_useProgram)
 		{
-			CHECK_OPENGL_FUNCTION( GLSL, glCreateShaderObjectARB, g_useProgram )
-			CHECK_OPENGL_FUNCTION( GLSL, glShaderSourceARB, g_useProgram )
-			CHECK_OPENGL_FUNCTION( GLSL, glCompileShaderARB, g_useProgram )
-			CHECK_OPENGL_FUNCTION( GLSL, glGetObjectParameterivARB, g_useProgram )
-			CHECK_OPENGL_FUNCTION( GLSL, glGetInfoLogARB, g_useProgram )
-			CHECK_OPENGL_FUNCTION( GLSL, glGenFramebuffersEXT, g_useProgram )
-			CHECK_OPENGL_FUNCTION( GLSL, glGenRenderbuffersEXT, g_useProgram )
-			CHECK_OPENGL_FUNCTION( GLSL, glBindRenderbufferEXT, g_useProgram )
-			CHECK_OPENGL_FUNCTION( GLSL, glRenderbufferStorageEXT, g_useProgram )
-			CHECK_OPENGL_FUNCTION( GLSL, glCreateProgramObjectARB, g_useProgram )
-			CHECK_OPENGL_FUNCTION( GLSL, glAttachObjectARB, g_useProgram )
-			CHECK_OPENGL_FUNCTION( GLSL, glLinkProgramARB, g_useProgram )
-			CHECK_OPENGL_FUNCTION( GLSL, glUseProgramObjectARB, g_useProgram )
-			CHECK_OPENGL_FUNCTION( GLSL, glDetachObjectARB, g_useProgram )
-			CHECK_OPENGL_FUNCTION( GLSL, glDeleteObjectARB, g_useProgram )
-			CHECK_OPENGL_FUNCTION( GLSL, glUniform1fARB, g_useProgram )
-			CHECK_OPENGL_FUNCTION( GLSL, glUniform2fARB, g_useProgram )
-			CHECK_OPENGL_FUNCTION( GLSL, glUniform3fARB, g_useProgram )
-			CHECK_OPENGL_FUNCTION( GLSL, glUniform4fARB, g_useProgram )
-			CHECK_OPENGL_FUNCTION( GLSL, glUniform1iARB, g_useProgram )
-			CHECK_OPENGL_FUNCTION( GLSL, glUniform2iARB, g_useProgram )
-			CHECK_OPENGL_FUNCTION( GLSL, glUniform3iARB, g_useProgram )
-			CHECK_OPENGL_FUNCTION( GLSL, glUniform4iARB, g_useProgram )
-			CHECK_OPENGL_FUNCTION( GLSL, glUniformMatrix4fv, g_useProgram )
-			CHECK_OPENGL_FUNCTION( GLSL, glGetUniformLocationARB, g_useProgram )
+			CHECK_OPENGL_FUNCTION(GLSL, glCreateShaderObjectARB, g_useProgram)
+			CHECK_OPENGL_FUNCTION(GLSL, glShaderSourceARB, g_useProgram)
+			CHECK_OPENGL_FUNCTION(GLSL, glCompileShaderARB, g_useProgram)
+			CHECK_OPENGL_FUNCTION(GLSL, glGetObjectParameterivARB, g_useProgram)
+			CHECK_OPENGL_FUNCTION(GLSL, glGetInfoLogARB, g_useProgram)
+			CHECK_OPENGL_FUNCTION(GLSL, glGenFramebuffersEXT, g_useProgram)
+			CHECK_OPENGL_FUNCTION(GLSL, glGenRenderbuffersEXT, g_useProgram)
+			CHECK_OPENGL_FUNCTION(GLSL, glBindRenderbufferEXT, g_useProgram)
+			CHECK_OPENGL_FUNCTION(GLSL, glRenderbufferStorageEXT, g_useProgram)
+			CHECK_OPENGL_FUNCTION(GLSL, glCreateProgramObjectARB, g_useProgram)
+			CHECK_OPENGL_FUNCTION(GLSL, glAttachObjectARB, g_useProgram)
+			CHECK_OPENGL_FUNCTION(GLSL, glLinkProgramARB, g_useProgram)
+			CHECK_OPENGL_FUNCTION(GLSL, glUseProgramObjectARB, g_useProgram)
+			CHECK_OPENGL_FUNCTION(GLSL, glDetachObjectARB, g_useProgram)
+			CHECK_OPENGL_FUNCTION(GLSL, glDeleteObjectARB, g_useProgram)
+			CHECK_OPENGL_FUNCTION(GLSL, glUniform1fARB, g_useProgram)
+			CHECK_OPENGL_FUNCTION(GLSL, glUniform2fARB, g_useProgram)
+			CHECK_OPENGL_FUNCTION(GLSL, glUniform3fARB, g_useProgram)
+			CHECK_OPENGL_FUNCTION(GLSL, glUniform4fARB, g_useProgram)
+			CHECK_OPENGL_FUNCTION(GLSL, glUniform1iARB, g_useProgram)
+			CHECK_OPENGL_FUNCTION(GLSL, glUniform2iARB, g_useProgram)
+			CHECK_OPENGL_FUNCTION(GLSL, glUniform3iARB, g_useProgram)
+			CHECK_OPENGL_FUNCTION(GLSL, glUniform4iARB, g_useProgram)
+			CHECK_OPENGL_FUNCTION(GLSL, glUniformMatrix4fv, g_useProgram)
+			CHECK_OPENGL_FUNCTION(GLSL, glGetUniformLocationARB, g_useProgram)
 			if (!g_useProgram)
-				LOG_WARNING( LOG_PREFIX_OPENGL << "GLSL support will be disbaled");
+				LOG_WARNING(LOG_PREFIX_OPENGL << "GLSL support will be disbaled");
 		}
 	}
 
@@ -115,9 +110,9 @@ namespace TA3D
 		else
 		{
 			LOG_WARNING(LOG_PREFIX_OPENGL << "GLEW initialization failed!");
-			LOG_WARNING(LOG_PREFIX_OPENGL << "GLEW error: " << (const char*) glewGetErrorString(err));
+			LOG_WARNING(LOG_PREFIX_OPENGL << "GLEW error: " << (const char*)glewGetErrorString(err));
 		}
-		LOG_DEBUG(LOG_PREFIX_OPENGL << "Using GLEW " << (const char*) glewGetString(GLEW_VERSION));
+		LOG_DEBUG(LOG_PREFIX_OPENGL << "Using GLEW " << (const char*)glewGetString(GLEW_VERSION));
 
 		MultiTexturing = GLEW_ARB_multitexture;
 
@@ -135,6 +130,4 @@ namespace TA3D
 			MultiTexturing = true;
 	}
 
-
 } // namespace TA3D
-

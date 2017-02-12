@@ -44,8 +44,8 @@ namespace TA3D
 		File *file = VFS::Instance()->readFile(filename);
 		if (file)
 		{
-			if (file->isReal())					// Check if the file is real
-				tmp = file->getRealFilename();	// if it is we don't need to copy it
+			if (file->isReal())				   // Check if the file is real
+				tmp = file->getRealFilename(); // if it is we don't need to copy it
 			else if (!Yuni::Core::IO::File::Exists(tmp) || Yuni::Core::IO::File::Size(tmp) != (uint32)file->size())
 			{
 				Stream tmp_file;
@@ -55,7 +55,7 @@ namespace TA3D
 				if (tmp_file.opened())
 				{
 					char *buf = new char[10240];
-					for(int i = 0 ; i < file->size() ; i += 10240)
+					for (int i = 0; i < file->size(); i += 10240)
 					{
 						int l = Math::Min(10240, file->size() - i);
 						file->read(buf, l);
@@ -64,9 +64,9 @@ namespace TA3D
 					delete[] buf;
 					tmp_file.flush();
 					tmp_file.close();
-# ifdef TA3D_PLATFORM_WINDOWS
+#ifdef TA3D_PLATFORM_WINDOWS
 					tmp.convertSlashesIntoBackslashes();
-# endif
+#endif
 				}
 				else
 				{
@@ -93,8 +93,8 @@ namespace TA3D
 		{
 			SMPEG_delete(mpeg);
 			Mix_CloseAudio();
-			SDL_QuitSubSystem( SDL_INIT_CDROM );
-			SDL_QuitSubSystem( SDL_INIT_AUDIO );
+			SDL_QuitSubSystem(SDL_INIT_CDROM);
+			SDL_QuitSubSystem(SDL_INIT_AUDIO);
 			SDL_AudioQuit();
 			LOG_ERROR(LOG_PREFIX_VIDEO << "could not read file '" << filename << "'");
 			if (audioRunning)
@@ -124,7 +124,7 @@ namespace TA3D
 				h <<= 1;
 		}
 
-		gfx->set_texture_format( gfx->defaultTextureFormat_RGB() );
+		gfx->set_texture_format(gfx->defaultTextureFormat_RGB());
 		SDL_Surface *img = gfx->create_surface(w, h);
 		buf = gfx->create_surface(w, h);
 		gltex = gfx->create_texture(w, h, FILTER_LINEAR, true);
@@ -185,8 +185,8 @@ namespace TA3D
 		SDL_FreeSurface(buf);
 
 		Mix_CloseAudio();
-		SDL_QuitSubSystem( SDL_INIT_CDROM );
-		SDL_QuitSubSystem( SDL_INIT_AUDIO );
+		SDL_QuitSubSystem(SDL_INIT_CDROM);
+		SDL_QuitSubSystem(SDL_INIT_AUDIO);
 		SDL_AudioQuit();
 		if (audioRunning)
 		{

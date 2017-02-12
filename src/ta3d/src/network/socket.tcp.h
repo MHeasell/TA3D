@@ -1,7 +1,7 @@
 #ifndef __SOCKET_TCP_H__
 #define __SOCKET_TCP_H__
 
-# include <misc/string.h>
+#include <misc/string.h>
 #include "socket.h"
 #include <threads/thread.h>
 #include <deque>
@@ -10,50 +10,53 @@
 namespace TA3D
 {
 
-    class SocketTCP : public Socket
-    {
-    protected:
-        TCPsocket           sock;
-        SDLNet_SocketSet    set;
-        bool                checked;
-        bool                nonBlockingMode;
+	class SocketTCP : public Socket
+	{
+	protected:
+		TCPsocket sock;
+		SDLNet_SocketSet set;
+		bool checked;
+		bool nonBlockingMode;
 		// Do we have to use compression ? (disabled by default)
-		bool				compression;
-		z_streamp			zSend;
-		z_streamp			zRecv;
-		byte				*sendBuf;
-		byte				*recvBuf;
-		uint32				bytesSent;
-		uint32				bytesProcessed;
+		bool compression;
+		z_streamp zSend;
+		z_streamp zRecv;
+		byte *sendBuf;
+		byte *recvBuf;
+		uint32 bytesSent;
+		uint32 bytesProcessed;
+
 	public:
 		SocketTCP(bool enableCompression = false);
-        virtual ~SocketTCP();
+		virtual ~SocketTCP();
 
-        void setNonBlockingMode(bool mode);
+		void setNonBlockingMode(bool mode);
 
-        void reset();
+		void reset();
 
-        /*virtual*/ bool isOpen() const;
+		/*virtual*/ bool isOpen() const;
 
-        /*virtual*/ void open(const String &hostname, uint16 port);
-        /*virtual*/ void close();
-        void open(uint16 port);
-        SocketTCP *accept();
+		/*virtual*/ void open(const String &hostname, uint16 port);
+		/*virtual*/ void close();
+		void open(uint16 port);
+		SocketTCP *accept();
 
-        /*virtual*/ void check(uint32 msec);
+		/*virtual*/ void check(uint32 msec);
 		/*virtual*/ bool ready();
 
-        /*virtual*/ void send(const String &str);
-        /*virtual*/ void send(const char *data, int size);
-        /*virtual*/ int recv(char *data, int size);
+		/*virtual*/ void send(const String &str);
+		/*virtual*/ void send(const char *data, int size);
+		/*virtual*/ int recv(char *data, int size);
 
 		String getLine();
+
 	private:
 		static volatile bool forceFlush;
+
 	public:
 		static void enableFlush();
 		static void disableFlush();
-    };
+	};
 }
 
 #endif

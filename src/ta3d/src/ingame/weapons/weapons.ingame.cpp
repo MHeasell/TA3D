@@ -29,7 +29,6 @@ namespace TA3D
 
 	InGameWeapons weapons;
 
-
 	void InGameWeapons::init(bool real)
 	{
 		pMutex.lock();
@@ -44,7 +43,7 @@ namespace TA3D
 		nuclogo.init();
 		if (real)
 		{
-			File *file = VFS::Instance()->readFile("anims\\fx.gaf");
+			File* file = VFS::Instance()->readFile("anims\\fx.gaf");
 			if (file)
 			{
 				nuclogo.loadGAFFromRawData(file, Gaf::RawDataGetEntryIndex(file, "nuclogo"));
@@ -55,7 +54,6 @@ namespace TA3D
 		}
 		pMutex.unlock();
 	}
-
 
 	void InGameWeapons::destroy()
 	{
@@ -70,7 +68,6 @@ namespace TA3D
 		init(false);
 	}
 
-
 	InGameWeapons::InGameWeapons()
 	{
 		init(false);
@@ -81,15 +78,14 @@ namespace TA3D
 		destroy();
 	}
 
-
-	int InGameWeapons::add_weapon(int weapon_id,int shooter)
+	int InGameWeapons::add_weapon(int weapon_id, int shooter)
 	{
 		if (weapon_id < 0)
 			return -1;
 
 		MutexLocker locker(pMutex);
 
-		if (nb_weapon < weapon.size())// S'il y a encore de la place
+		if (nb_weapon < weapon.size()) // S'il y a encore de la place
 		{
 			uint32 i = free_idx.back();
 			free_idx.pop_back();
@@ -102,10 +98,10 @@ namespace TA3D
 			weapon[i].f_time = weapon_manager.weapon[weapon_id].flighttime;
 			return i;
 		}
-		weapon.resize( weapon.size() + 1 );
+		weapon.resize(weapon.size() + 1);
 
 		uint32 index = uint32(weapon.size() - 1);
-		idx_list.push_back( index );
+		idx_list.push_back(index);
 		++nb_weapon;
 		weapon.back().init();
 		weapon.back().weapon_id = weapon_id;
@@ -120,10 +116,10 @@ namespace TA3D
 		if (nb_weapon <= 0 || weapon.size() <= 0)
 			return;
 
-		static MemoryPool<BVH<BVH_UnitTKit::T, BVH_UnitTKit> > pool(256000U);
+		static MemoryPool<BVH<BVH_UnitTKit::T, BVH_UnitTKit>> pool(256000U);
 
 		std::vector<BVH_UnitTKit::T> allUnits;
-		for (uint32 i = 0U ; i < units.max_unit ; ++i) // Compte les stocks de ressources et les productions
+		for (uint32 i = 0U; i < units.max_unit; ++i) // Compte les stocks de ressources et les productions
 		{
 			const Unit* const pUnit = &(units.unit[i]);
 			if (!(pUnit->flags & 1))
@@ -146,22 +142,22 @@ namespace TA3D
 			return;
 		}
 
-		for (uint32 e = 0 ; e < idx_list.size() ; )
+		for (uint32 e = 0; e < idx_list.size();)
 		{
 			// TODO Check if it is really necessary by now
-			pMutex.unlock();// Pause to give the renderer the time to work and to go at the given engine speed (in ticks per sec.)
+			pMutex.unlock(); // Pause to give the renderer the time to work and to go at the given engine speed (in ticks per sec.)
 			pMutex.lock();
 			if (e >= idx_list.size())
 				break;
 
 			const uint32 i = idx_list[e];
-			for ( ; weapon[i].ticks_to_compute > 0U && weapon[i].weapon_id >= 0 ; --weapon[i].ticks_to_compute)
+			for (; weapon[i].ticks_to_compute > 0U && weapon[i].weapon_id >= 0; --weapon[i].ticks_to_compute)
 				weapon[i].move(dt);
 			weapon[i].move(dt);
 			if (weapon[i].weapon_id < 0) // Remove it from the "alive" list
 			{
 				--nb_weapon;
-				free_idx.push_back( i );
+				free_idx.push_back(i);
 				idx_list[e] = idx_list.back();
 				idx_list.pop_back();
 			}
@@ -172,12 +168,10 @@ namespace TA3D
 		pool.release(bvhUnits);
 	}
 
-
-
 	void InGameWeapons::draw(bool underwater)
 	{
 		pMutex.lock();
-		if(nb_weapon<=0 || weapon.size()<=0)
+		if (nb_weapon <= 0 || weapon.size() <= 0)
 		{
 			pMutex.unlock();
 			return;
@@ -185,9 +179,9 @@ namespace TA3D
 
 		gfx->lock();
 
-		for(std::vector<uint32>::iterator e = idx_list.begin() ; e != idx_list.end() ; ++e)
+		for (std::vector<uint32>::iterator e = idx_list.begin(); e != idx_list.end(); ++e)
 		{
-			if(!underwater ^ (weapon[*e].Pos.y < the_map->sealvl))
+			if (!underwater ^ (weapon[*e].Pos.y < the_map->sealvl))
 				weapon[*e].draw();
 		}
 
@@ -195,13 +189,11 @@ namespace TA3D
 		pMutex.unlock();
 	}
 
-
-
-	void InGameWeapons::draw_mini(float map_w,float map_h,int mini_w,int mini_h)				// Repère les unités sur la mini-carte
+	void InGameWeapons::draw_mini(float map_w, float map_h, int mini_w, int mini_h) // Repère les unités sur la mini-carte
 	{
 		MutexLocker locker(pMutex);
 
-		if(nb_weapon <= 0 || weapon.size() <= 0)
+		if (nb_weapon <= 0 || weapon.size() <= 0)
 			return;
 
 		float rw = 128.0f * float(mini_w) / (252.0f * map_w);
@@ -213,19 +205,19 @@ namespace TA3D
 
 		glColor4ub(0xFF, 0xFF, 0xFF, 0xFF);
 		glEnable(GL_TEXTURE_2D);
-		for (std::vector<uint32>::iterator e = idx_list.begin() ; e != idx_list.end() ; ++e)
+		for (std::vector<uint32>::iterator e = idx_list.begin(); e != idx_list.end(); ++e)
 		{
 			const uint32 i = *e;
-			if(weapon_manager.weapon[weapon[i].weapon_id].cruise || weapon_manager.weapon[weapon[i].weapon_id].interceptor)
+			if (weapon_manager.weapon[weapon[i].weapon_id].cruise || weapon_manager.weapon[weapon[i].weapon_id].interceptor)
 			{
 				glEnable(GL_TEXTURE_2D);
 				glEnable(GL_BLEND);
-				glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
+				glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 				const int idx = weapon[i].owner;
 				GFX::PutTextureInsideRect(nuclogo.glbmp[idx], weapon[i].Pos.x * rw + 64.0f - float(nuclogo.ofs_x[idx]),
-										  weapon[i].Pos.z * rh + 64.0f - float(nuclogo.ofs_y[idx]),
-										  weapon[i].Pos.x * rw + 63.0f - float(nuclogo.ofs_x[idx] + nuclogo.w[idx]),
-										  weapon[i].Pos.z * rh + 63.0f - float(nuclogo.ofs_y[idx] + nuclogo.h[idx]));
+										  weapon[i].Pos.z* rh + 64.0f - float(nuclogo.ofs_y[idx]),
+										  weapon[i].Pos.x* rw + 63.0f - float(nuclogo.ofs_x[idx] + nuclogo.w[idx]),
+										  weapon[i].Pos.z* rh + 63.0f - float(nuclogo.ofs_y[idx] + nuclogo.h[idx]));
 				glDisable(GL_BLEND);
 			}
 			else
@@ -237,17 +229,16 @@ namespace TA3D
 		}
 		glDisable(GL_TEXTURE_2D);
 
-		glDisableClientState(GL_NORMAL_ARRAY);              // Render all points in one pass
+		glDisableClientState(GL_NORMAL_ARRAY); // Render all points in one pass
 		glDisableClientState(GL_COLOR_ARRAY);
 		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 		glEnableClientState(GL_VERTEX_ARRAY);
-		glVertexPointer( 2, GL_FLOAT, 0, &(points.front()));
+		glVertexPointer(2, GL_FLOAT, 0, &(points.front()));
 
-		glDrawArrays( GL_POINTS, 0, n );
+		glDrawArrays(GL_POINTS, 0, n);
 
 		glEnable(GL_TEXTURE_2D);
 	}
-
 
 	void InGameWeapons::proc(void*)
 	{
@@ -259,8 +250,8 @@ namespace TA3D
 		while (!thread_ask_to_stop)
 		{
 			++counter;
-			move(dt);					// Animate weapons
-			features.move_forest(dt);			// Animate the forest
+			move(dt);				  // Animate weapons
+			features.move_forest(dt); // Animate the forest
 
 			Engine::sync();
 		}
@@ -269,13 +260,9 @@ namespace TA3D
 		LOG_INFO("Weapon engine: " << (float)(counter * 1000) / float(msec_timer - weapon_timer) << " ticks/sec");
 	}
 
-
 	void InGameWeapons::signalExitThread()
 	{
 		if (thread_running)
 			thread_ask_to_stop = true;
 	}
-
-
-
 }

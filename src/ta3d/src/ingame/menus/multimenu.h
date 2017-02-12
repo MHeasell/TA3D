@@ -22,29 +22,30 @@
 
 namespace TA3D
 {
-namespace Menus
-{
-
-	class MultiMenu : public Abstract
+	namespace Menus
 	{
-	public:
-		/*!
+
+		class MultiMenu : public Abstract
+		{
+		public:
+			/*!
 		** \brief Execute an instance of MultiMenu
 		*/
-		static bool Execute();
-	public:
-		MultiMenu();
-		//! Destructor
-		virtual ~MultiMenu();
+			static bool Execute();
 
-	protected:
-		virtual bool doInitialize();
-		virtual void doFinalize();
-		virtual void waitForEvent();
-		virtual bool maySwitchToAnotherMenu();
-	};
+		public:
+			MultiMenu();
+			//! Destructor
+			virtual ~MultiMenu();
 
-} // namespace Menus
+		protected:
+			virtual bool doInitialize();
+			virtual void doFinalize();
+			virtual void waitForEvent();
+			virtual bool maySwitchToAnotherMenu();
+		};
+
+	} // namespace Menus
 } // namespace TA3D
 
 #endif // MULTIMENU_H

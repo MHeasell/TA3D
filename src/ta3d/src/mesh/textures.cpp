@@ -6,15 +6,11 @@
 namespace TA3D
 {
 
-
-
-	TEXTURE_MANAGER	texture_manager;
+	TEXTURE_MANAGER texture_manager;
 
 	TEXTURE_MANAGER::TEXTURE_MANAGER() : nbtex(0), tex(NULL)
 	{
 	}
-
-
 
 	void TEXTURE_MANAGER::init()
 	{
@@ -29,15 +25,12 @@ namespace TA3D
 		init();
 	}
 
-
-
 	int TEXTURE_MANAGER::get_texture_index(const String& texture_name)
 	{
 		if (nbtex == 0)
 			return -1;
-		return tex_hashtable[ ToUpper(texture_name) ] - 1;
+		return tex_hashtable[ToUpper(texture_name)] - 1;
 	}
-
 
 	GLuint TEXTURE_MANAGER::get_gl_texture(const String& texture_name, const int frame)
 	{
@@ -45,13 +38,11 @@ namespace TA3D
 		return (index == -1) ? 0 : tex[index].glbmp[frame];
 	}
 
-
 	SDL_Surface* TEXTURE_MANAGER::get_bmp_texture(const String& texture_name, const int frame)
 	{
 		int index = get_texture_index(texture_name);
-		return (index== -1) ? NULL : tex[index].bmp[frame];
+		return (index == -1) ? NULL : tex[index].bmp[frame];
 	}
-
 
 	int TEXTURE_MANAGER::all_texture()
 	{
@@ -73,7 +64,7 @@ namespace TA3D
 			tex[i].ofs_y[0] = 0;
 			tex[i].w[0] = 16;
 			tex[i].h[0] = 16;
-			tex[i].bmp[0] = gfx->create_surface_ex(32,16,16);
+			tex[i].bmp[0] = gfx->create_surface_ex(32, 16, 16);
 			SDL_FillRect(tex[i].bmp[0], NULL, makeacol(pal[i].r, pal[i].g, pal[i].b, 0xFF));
 
 			tex_hashtable[tex[i].name] = i + 1;
@@ -85,7 +76,7 @@ namespace TA3D
 			const String::Vector::const_iterator end = file_list.end();
 			for (String::Vector::const_iterator cur_file = file_list.begin(); cur_file != end; ++cur_file)
 			{
-				File *file = VFS::Instance()->readFile(*cur_file);
+				File* file = VFS::Instance()->readFile(*cur_file);
 				String filename = ToUpper(Paths::ExtractFileName(*cur_file));
 				load_gaf(file, filename == "LOGOS.GAF" || filename == "LOGOS");
 				delete file;
@@ -104,7 +95,6 @@ namespace TA3D
 
 		return 0;
 	}
-
 
 	void TEXTURE_MANAGER::load_gaf(File* file, bool logo)
 	{
@@ -127,8 +117,7 @@ namespace TA3D
 		nbtex += nb_entry;
 	}
 
-
-	void TEXTURE_MANAGER::load_gaf(const String &filename, bool logo)
+	void TEXTURE_MANAGER::load_gaf(const String& filename, bool logo)
 	{
 		String::Vector elts;
 		sint32 nb_entry = VFS::Instance()->getDirlist(String(filename) << "\\*", elts);

@@ -18,47 +18,47 @@
 #ifndef __TA3D__TA3D__NETWORK__H
 #define __TA3D__TA3D__NETWORK__H
 
-# include <ta3dbase.h>
-# include <threads/thread.h>
-# include <ingame/gamedata.h>
-# include <deque>
-# include <gfx/gui/area.h>
-# include <misc/string.h>
-
+#include <ta3dbase.h>
+#include <threads/thread.h>
+#include <ingame/gamedata.h>
+#include <deque>
+#include <gfx/gui/area.h>
+#include <misc/string.h>
 
 namespace TA3D
 {
 
-
 	class TA3DNetwork : public ObjectSync
 	{
 	public:
-		typedef SmartPtr<TA3DNetwork>	Ptr;
+		typedef SmartPtr<TA3DNetwork> Ptr;
+
 	private:
 		class NetworkMessage
 		{
 		public:
-			String	text;
-			uint32	timer;
+			String text;
+			uint32 timer;
 
-			NetworkMessage(const String& m, uint32 t): text(m), timer(t) {}
-			~NetworkMessage() {text.clear();}
+			NetworkMessage(const String &m, uint32 t) : text(m), timer(t) {}
+			~NetworkMessage() { text.clear(); }
 		};
 
-		std::deque<NetworkMessage>	messages;
-		bool						enter;
-		Gui::AREA					*area;
+		std::deque<NetworkMessage> messages;
+		bool enter;
+		Gui::AREA *area;
+
 	public:
-		GameData					*game_data;
+		GameData *game_data;
+
 	private:
-
-		int							signal;
+		int signal;
 
 	public:
-		TA3DNetwork(Gui::AREA *area, GameData *game_data );
+		TA3DNetwork(Gui::AREA *area, GameData *game_data);
 		virtual ~TA3DNetwork();
 
-		void set_signal( int s )	{	signal = s;	}
+		void set_signal(int s) { signal = s; }
 		int get_signal() const { return signal; }
 
 		void check();
@@ -66,20 +66,16 @@ namespace TA3D
 
 		bool isLocal(const unsigned int id) const;
 		bool isRemoteHuman(const unsigned int id) const;
-		void sendDamageEvent( int idx, float damage );
-		void sendParalyzeEvent( int idx, float damage );
-		void sendFeatureCreationEvent( int idx );
-		void sendFeatureDeathEvent( int idx );
-		void sendFeatureFireEvent( int idx );
-		void sendUnitNanolatheEvent( int idx, int target, bool feature, bool reverse );
-		int getNetworkID( int unit_id );
+		void sendDamageEvent(int idx, float damage);
+		void sendParalyzeEvent(int idx, float damage);
+		void sendFeatureCreationEvent(int idx);
+		void sendFeatureDeathEvent(int idx);
+		void sendFeatureFireEvent(int idx);
+		void sendUnitNanolatheEvent(int idx, int target, bool feature, bool reverse);
+		int getNetworkID(int unit_id);
 	};
 
-
-
-
 	extern TA3DNetwork::Ptr g_ta3d_network;
-
 
 } // namespace TA3D
 

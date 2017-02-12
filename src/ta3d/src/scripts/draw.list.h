@@ -22,57 +22,53 @@
 \----------------------------------------------------------------------*/
 
 #ifndef __DrawList_H__
-# define __DrawList_H__
+#define __DrawList_H__
 
-# include <misc/string.h>
+#include <misc/string.h>
 
-
-
-# define DRAW_TYPE_NONE     0x0
-# define DRAW_TYPE_POINT    0x1
-# define DRAW_TYPE_LINE     0x2
-# define DRAW_TYPE_CIRCLE   0x3
-# define DRAW_TYPE_TRIANGLE 0x4
-# define DRAW_TYPE_BOX      0x5
-# define DRAW_TYPE_FILLBOX  0x6
-# define DRAW_TYPE_TEXT     0x7
-# define DRAW_TYPE_BITMAP   0x8
-
-
+#define DRAW_TYPE_NONE 0x0
+#define DRAW_TYPE_POINT 0x1
+#define DRAW_TYPE_LINE 0x2
+#define DRAW_TYPE_CIRCLE 0x3
+#define DRAW_TYPE_TRIANGLE 0x4
+#define DRAW_TYPE_BOX 0x5
+#define DRAW_TYPE_FILLBOX 0x6
+#define DRAW_TYPE_TEXT 0x7
+#define DRAW_TYPE_BITMAP 0x8
 
 namespace TA3D
 {
 
+	struct DrawObject // Pour mémoriser le traçage des primitives
+	{
+		byte type;
+		float x[4];
+		float y[4];
+		float r[2], g[2], b[2];
+		String text;
+		GLuint tex;
+	};
 
-    struct DrawObject                  // Pour mémoriser le traçage des primitives
-    {
-        byte    type;
-        float   x[4];
-        float   y[4];
-        float   r[2],g[2],b[2];
-        String  text;
-        GLuint  tex;
-    };
-
-    class DrawList
-    {
+	class DrawList
+	{
 	public:
-		typedef SmartPtr<DrawList>	Ptr;
-    public:
-		DrawObject			prim;
-		DrawList::Ptr		next;
+		typedef SmartPtr<DrawList> Ptr;
 
-        void init();
+	public:
+		DrawObject prim;
+		DrawList::Ptr next;
 
-        void destroy();
+		void init();
 
-		DrawList()  {   init(); }
-		~DrawList()  {   destroy(); }
+		void destroy();
 
-        void add(DrawObject &obj);
+		DrawList() { init(); }
+		~DrawList() { destroy(); }
 
-        void draw(Font *fnt);
-    };
+		void add(DrawObject &obj);
+
+		void draw(Font *fnt);
+	};
 
 } // namespace TA3D
 

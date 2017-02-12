@@ -23,43 +23,43 @@
 
 namespace TA3D
 {
-    struct NEURON
-    {
-        float	var;			// Variable pour les opérations
-        float	*weight;		// Poids des différents neurones sources
-    };
+	struct NEURON
+	{
+		float var;	 // Variable pour les opérations
+		float *weight; // Poids des différents neurones sources
+	};
 
-    class BRAIN		// NEURON network with n NEURON in input layer and p in output layer
-    {
-    public:
-        int		nb_neuron;		// Number of NEURONs
-        NEURON	*neuron;		// Array of NEURONs
-        int		n;				// Number of inputs
-        int		p;				// Number of outputs
-        int		q;				// Size of middle layers
-        float	*n_out;			// Result array
+	class BRAIN // NEURON network with n NEURON in input layer and p in output layer
+	{
+	public:
+		int nb_neuron;  // Number of NEURONs
+		NEURON *neuron; // Array of NEURONs
+		int n;			// Number of inputs
+		int p;			// Number of outputs
+		int q;			// Size of middle layers
+		float *n_out;   // Result array
 
-        void init();
-        void destroy();
-        BRAIN();
-        ~BRAIN();
+		void init();
+		void destroy();
+		BRAIN();
+		~BRAIN();
 
-        void build(int nb_in,int nb_out,int rg);			// Create the neural network
+		void build(int nb_in, int nb_out, int rg); // Create the neural network
 
-        void active_neuron(int i);
+		void active_neuron(int i);
 
-        float *work(float entry[],bool seuil = false);			// Make NEURONs work and return the network results
+		float *work(float entry[], bool seuil = false); // Make NEURONs work and return the network results
 
-        void mutation();			// Make some changes to the neural network
+		void mutation(); // Make some changes to the neural network
 
-        void learn(float *result,float coef = 1.0f);		// Make it learn
+		void learn(float *result, float coef = 1.0f); // Make it learn
 
-		void save(Yuni::Core::IO::File::Stream *file);		// Save the network
+		void save(Yuni::Core::IO::File::Stream *file); // Save the network
 
-		int load(TA3D::UTILS::File *file);		// Load the network
-    };
+		int load(TA3D::UTILS::File *file); // Load the network
+	};
 
-    BRAIN *copy_brain(BRAIN *brain, BRAIN *dst = NULL);		// Make a copy
+	BRAIN *copy_brain(BRAIN *brain, BRAIN *dst = NULL); // Make a copy
 }
 
 #endif

@@ -12,41 +12,41 @@ namespace TA3D
 	int CAPI::print(lua_State *L)
 	{
 		String tmp;
-		for(int i = 1 ; i <= lua_gettop(L) ; ++i)
+		for (int i = 1; i <= lua_gettop(L); ++i)
 		{
 			if (!tmp.empty())
 				tmp << ' ';
-			switch(lua_type(L, i))
+			switch (lua_type(L, i))
 			{
-			case LUA_TNIL:
-				tmp << "<nil>";
-				break;
-			case LUA_TNUMBER:
-				tmp << lua_tonumber(L, i);
-				break;
-			case LUA_TBOOLEAN:
-				tmp << (lua_toboolean(L, i) ? "true" : "false");
-				break;
-			case LUA_TSTRING:
-				tmp << lua_tostring(L, i);
-				break;
-			case LUA_TTABLE:
-				tmp << "<table>";
-				break;
-			case LUA_TFUNCTION:
-				tmp << "<function>";
-				break;
-			case LUA_TUSERDATA:
-				tmp << "<userdata>";
-				break;
-			case LUA_TTHREAD:
-				tmp << "<thread>";
-				break;
-			case LUA_TLIGHTUSERDATA:
-				tmp << "<lightuserdata>";
-				break;
-			default:
-				tmp << "<unknown>";
+				case LUA_TNIL:
+					tmp << "<nil>";
+					break;
+				case LUA_TNUMBER:
+					tmp << lua_tonumber(L, i);
+					break;
+				case LUA_TBOOLEAN:
+					tmp << (lua_toboolean(L, i) ? "true" : "false");
+					break;
+				case LUA_TSTRING:
+					tmp << lua_tostring(L, i);
+					break;
+				case LUA_TTABLE:
+					tmp << "<table>";
+					break;
+				case LUA_TFUNCTION:
+					tmp << "<function>";
+					break;
+				case LUA_TUSERDATA:
+					tmp << "<userdata>";
+					break;
+				case LUA_TTHREAD:
+					tmp << "<thread>";
+					break;
+				case LUA_TLIGHTUSERDATA:
+					tmp << "<lightuserdata>";
+					break;
+				default:
+					tmp << "<unknown>";
 			};
 		}
 		Console::Instance()->addEntry(tmp);
@@ -71,9 +71,9 @@ namespace TA3D
 
 	int CAPI::zshoot(lua_State *)
 	{
-		SDL_Surface *bmp = gfx->create_surface_ex(32,SCREEN_W,SCREEN_H);
+		SDL_Surface *bmp = gfx->create_surface_ex(32, SCREEN_W, SCREEN_H);
 		SDL_FillRect(bmp, NULL, 0);
-		glReadPixels(0,0,SCREEN_W,SCREEN_H,GL_DEPTH_COMPONENT,GL_INT,bmp->pixels);
+		glReadPixels(0, 0, SCREEN_W, SCREEN_H, GL_DEPTH_COMPONENT, GL_INT, bmp->pixels);
 		//                        save_bitmap(String(TA3D::Paths::Screenshots) << "z.tga",bmp);
 		SDL_FreeSurface(bmp);
 		return 0;
@@ -100,7 +100,7 @@ namespace TA3D
 		if (lua_gettop(L) > 0)
 		{
 			lp_CONFIG->sound_volume = (int)lua_tointeger(L, -1);
-			sound_manager->setVolume( lp_CONFIG->sound_volume );
+			sound_manager->setVolume(lp_CONFIG->sound_volume);
 		}
 		lua_pushinteger(L, lp_CONFIG->sound_volume);
 		return 1;
@@ -111,7 +111,7 @@ namespace TA3D
 		if (lua_gettop(L) > 0)
 		{
 			lp_CONFIG->music_volume = (int)lua_tointeger(L, -1);
-			sound_manager->setMusicVolume( lp_CONFIG->music_volume );
+			sound_manager->setMusicVolume(lp_CONFIG->music_volume);
 		}
 		lua_pushinteger(L, lp_CONFIG->music_volume);
 		return 1;
@@ -360,7 +360,7 @@ namespace TA3D
 		int unit_type = -1;
 		int player_id = players.local_human_id;
 		int nb_to_spawn = 1;
-		unit_type = lua_gettop(L) > 0 ? unit_manager.get_unit_index( lua_tostring(L, 1) ) : -1;
+		unit_type = lua_gettop(L) > 0 ? unit_manager.get_unit_index(lua_tostring(L, 1)) : -1;
 		if (lua_gettop(L) >= 2)
 		{
 			player_id = (int)lua_tointeger(L, 2);
@@ -372,9 +372,9 @@ namespace TA3D
 		{
 			int id = 0;
 			if (unit_type < 0 || unit_type >= unit_manager.nb_unit)
-				id = units.create( abs( TA3D_RAND()) % unit_manager.nb_unit,player_id);
+				id = units.create(abs(TA3D_RAND()) % unit_manager.nb_unit, player_id);
 			else
-				id = units.create(unit_type,player_id);
+				id = units.create(unit_type, player_id);
 			if (id == -1) // Ho ho no more space to store that unit, limit reached
 				break;
 			units.unit[id].lock();
@@ -393,31 +393,31 @@ namespace TA3D
 				units.kill(id, units.index_list_size - 1);
 			}
 			else
-			{								// Compute unit's Y coordinate
+			{ // Compute unit's Y coordinate
 				Vector3D target_pos(units.unit[id].Pos);
 				target_pos.x = (float)(((int)(target_pos.x) + the_map->map_w_d) >> 3);
 				target_pos.z = (float)(((int)(target_pos.z) + the_map->map_h_d) >> 3);
-				target_pos.y = Math::Max(the_map->get_max_rect_h((int)target_pos.x,(int)target_pos.z,
-															 unit_manager.unit_type[ units.unit[id].type_id ]->FootprintX,
-															 unit_manager.unit_type[ units.unit[id].type_id ]->FootprintZ),
+				target_pos.y = Math::Max(the_map->get_max_rect_h((int)target_pos.x, (int)target_pos.z,
+																 unit_manager.unit_type[units.unit[id].type_id]->FootprintX,
+																 unit_manager.unit_type[units.unit[id].type_id]->FootprintZ),
 										 the_map->sealvl);
 
-				units.unit[id].Pos.y  = target_pos.y;
+				units.unit[id].Pos.y = target_pos.y;
 				units.unit[id].cur_px = (int)target_pos.x;
 				units.unit[id].cur_py = (int)target_pos.z;
-				units.unit[id].Pos.x  = target_pos.x * 8.0f - static_cast<float>(the_map->map_w_d);
-				units.unit[id].Pos.z  = target_pos.z * 8.0f - static_cast<float>(the_map->map_h_d);
+				units.unit[id].Pos.x = target_pos.x * 8.0f - static_cast<float>(the_map->map_w_d);
+				units.unit[id].Pos.z = target_pos.z * 8.0f - static_cast<float>(the_map->map_h_d);
 				units.unit[id].draw_on_map();
 
-				if (unit_manager.unit_type[units.unit[id].type_id]->ActivateWhenBuilt)// Start activated
+				if (unit_manager.unit_type[units.unit[id].type_id]->ActivateWhenBuilt) // Start activated
 				{
-					units.unit[id].port[ ACTIVATION ] = 0;
+					units.unit[id].port[ACTIVATION] = 0;
 					units.unit[id].activate();
 				}
-				if (unit_manager.unit_type[units.unit[id].type_id]->init_cloaked)				// Start cloaked
+				if (unit_manager.unit_type[units.unit[id].type_id]->init_cloaked) // Start cloaked
 					units.unit[id].cloaking = true;
 			}
-			units.unit[ id ].unlock();
+			units.unit[id].unlock();
 		}
 		units.unlock();
 
@@ -443,7 +443,7 @@ namespace TA3D
 			for (unsigned int e = 0; e < units.index_list_size; ++e)
 			{
 				const int i = units.idx_list[e];
-				if ((units.unit[i].flags & 1) && units.unit[i].owner_id==players.local_human_id && units.unit[i].sel)
+				if ((units.unit[i].flags & 1) && units.unit[i].owner_id == players.local_human_id && units.unit[i].sel)
 				{
 					units.unit[i].hp += (float)value;
 					if (units.unit[i].hp < 0)
@@ -468,7 +468,7 @@ namespace TA3D
 			for (unsigned int e = 0; e < units.index_list_size; ++e)
 			{
 				const int i = units.idx_list[e];
-				if ((units.unit[i].flags & 1) && units.unit[i].owner_id==players.local_human_id && units.unit[i].sel)
+				if ((units.unit[i].flags & 1) && units.unit[i].owner_id == players.local_human_id && units.unit[i].sel)
 					units.unit[i].deactivate();
 			}
 			units.unlock();
@@ -484,7 +484,7 @@ namespace TA3D
 			for (unsigned int e = 0; e < units.index_list_size; ++e)
 			{
 				const int i = units.idx_list[e];
-				if ((units.unit[i].flags & 1) && units.unit[i].owner_id==players.local_human_id && units.unit[i].sel)
+				if ((units.unit[i].flags & 1) && units.unit[i].owner_id == players.local_human_id && units.unit[i].sel)
 					units.unit[i].activate();
 			}
 			units.unlock();
@@ -501,7 +501,7 @@ namespace TA3D
 			{
 				const int i = units.idx_list[e];
 				units.unlock();
-				if ((units.unit[i].flags & 1) && units.unit[i].owner_id==players.local_human_id && units.unit[i].sel)
+				if ((units.unit[i].flags & 1) && units.unit[i].owner_id == players.local_human_id && units.unit[i].sel)
 					units.unit[i].resetScript();
 				units.lock();
 			}
@@ -512,26 +512,25 @@ namespace TA3D
 
 	int CAPI::dumpUnitInfo(lua_State *)
 	{
-		if (Battle::Instance()->selected && Battle::Instance()->cur_sel != -1)	// Sur les unités sélectionnées
+		if (Battle::Instance()->selected && Battle::Instance()->cur_sel != -1) // Sur les unités sélectionnées
 		{
 			static const char *unit_info[] =
-			{
-				"ACTIVATION","STANDINGMOVEORDERS","STANDINGFIREORDERS",
-				"HEALTH","INBUILDSTANCE","BUSY","PIECE_XZ","PIECE_Y","UNIT_XZ","UNIT_Y",
-				"UNIT_HEIGHT","XZ_ATAN","XZ_HYPOT","ATAN",
-				"HYPOT","GROUND_HEIGHT","BUILD_PERCENT_LEFT","YARD_OPEN",
-				"BUGGER_OFF","ARMORED"
-			};
+				{
+					"ACTIVATION", "STANDINGMOVEORDERS", "STANDINGFIREORDERS",
+					"HEALTH", "INBUILDSTANCE", "BUSY", "PIECE_XZ", "PIECE_Y", "UNIT_XZ", "UNIT_Y",
+					"UNIT_HEIGHT", "XZ_ATAN", "XZ_HYPOT", "ATAN",
+					"HYPOT", "GROUND_HEIGHT", "BUILD_PERCENT_LEFT", "YARD_OPEN",
+					"BUGGER_OFF", "ARMORED"};
 			units.lock();
 			for (unsigned int e = 0; e < units.index_list_size; ++e)
 			{
 				const int i = units.idx_list[e];
-				if ((units.unit[i].flags & 1) && units.unit[i].owner_id==players.local_human_id && units.unit[i].sel)
+				if ((units.unit[i].flags & 1) && units.unit[i].owner_id == players.local_human_id && units.unit[i].sel)
 				{
 					Console::Instance()->addEntry(String("flags=") << int(units.unit[i].flags));
 					String tmp;
 					for (int f = 1; f < 21; ++f)
-						tmp << unit_info[f-1] << '=' << units.unit[i].port[f] << ", ";
+						tmp << unit_info[f - 1] << '=' << units.unit[i].port[f] << ", ";
 					if (!tmp.empty())
 						Console::Instance()->addEntry(tmp);
 				}
@@ -550,7 +549,7 @@ namespace TA3D
 			{
 				const int i = units.idx_list[e];
 				units.unlock();
-				if ((units.unit[i].flags & 1) && units.unit[i].owner_id==players.local_human_id && units.unit[i].sel)
+				if ((units.unit[i].flags & 1) && units.unit[i].owner_id == players.local_human_id && units.unit[i].sel)
 				{
 					units.kill(i, e);
 					--e;
@@ -572,14 +571,14 @@ namespace TA3D
 		return 1;
 	}
 
-	int CAPI::startScript(lua_State *L)					// Force l'éxecution d'un script
+	int CAPI::startScript(lua_State *L) // Force l'éxecution d'un script
 	{
 		if (lua_gettop(L) == 0)
 			return 0;
 		if (Battle::Instance()->selected) // Sur les unités sélectionnées
 		{
 			units.lock();
-			for (uint32 e = 0 ; e < units.index_list_size ; ++e)
+			for (uint32 e = 0; e < units.index_list_size; ++e)
 			{
 				const int i = units.idx_list[e];
 				if ((units.unit[i].flags & 1) && units.unit[i].owner_id == players.local_human_id && units.unit[i].sel)
@@ -598,7 +597,7 @@ namespace TA3D
 		return 1;
 	}
 
-	int CAPI::give(lua_State *L)							// Give resources to player_id
+	int CAPI::give(lua_State *L) // Give resources to player_id
 	{
 		bool success = false;
 		if (lua_gettop(L) == 3)
@@ -610,12 +609,12 @@ namespace TA3D
 				String type = lua_tostring(L, 1);
 				if (type == "metal" || type == "both")
 				{
-					players.metal[playerID] = players.c_metal[playerID] = players.c_metal[playerID] + amount;					// cheat codes
+					players.metal[playerID] = players.c_metal[playerID] = players.c_metal[playerID] + amount; // cheat codes
 					success = true;
 				}
 				if (type == "energy" || type == "both")
 				{
-					players.energy[playerID] = players.c_energy[playerID] = players.c_energy[playerID] + amount;					// cheat codes
+					players.energy[playerID] = players.c_energy[playerID] = players.c_energy[playerID] + amount; // cheat codes
 					success = true;
 				}
 			}
@@ -650,7 +649,7 @@ namespace TA3D
 	}
 
 	// ---------------    Debug commands    ---------------
-	int CAPI::_debugSetContext(lua_State *L)			// Switch debug context
+	int CAPI::_debugSetContext(lua_State *L) // Switch debug context
 	{
 		const String context = lua_gettop(L) > 0 ? lua_tostring(L, 1) : String();
 		if (context == "mission")
@@ -671,7 +670,7 @@ namespace TA3D
 		return 0;
 	}
 
-	int CAPI::_debugState(lua_State *)												// Print LuaThread state
+	int CAPI::_debugState(lua_State *) // Print LuaThread state
 	{
 		if (Battle::Instance()->debugInfo.process == NULL)
 			return 0;
@@ -687,7 +686,7 @@ namespace TA3D
 		return 0;
 	}
 
-	int CAPI::_debugLoad(lua_State *L)				// Load a Lua script into the Lua thread
+	int CAPI::_debugLoad(lua_State *L) // Load a Lua script into the Lua thread
 	{
 		if (Battle::Instance()->debugInfo.process == NULL || lua_gettop(L) == 0)
 			return 0;
@@ -696,7 +695,7 @@ namespace TA3D
 		return 0;
 	}
 
-	int CAPI::_debugStop(lua_State *)				// Stop the LuaThread (it doesn't kill it)
+	int CAPI::_debugStop(lua_State *) // Stop the LuaThread (it doesn't kill it)
 	{
 		if (Battle::Instance()->debugInfo.process == NULL)
 			return 0;
@@ -705,7 +704,7 @@ namespace TA3D
 		return 0;
 	}
 
-	int CAPI::_debugResume(lua_State *)				// Resume the LuaThread (it doesn't uncrash it)
+	int CAPI::_debugResume(lua_State *) // Resume the LuaThread (it doesn't uncrash it)
 	{
 		if (Battle::Instance()->debugInfo.process == NULL)
 			return 0;
@@ -714,7 +713,7 @@ namespace TA3D
 		return 0;
 	}
 
-	int CAPI::_debugKill(lua_State *)	// Kill the LuaThread
+	int CAPI::_debugKill(lua_State *) // Kill the LuaThread
 	{
 		if (Battle::Instance()->debugInfo.process == NULL)
 			return 0;
@@ -723,7 +722,7 @@ namespace TA3D
 		return 0;
 	}
 
-	int CAPI::_debugCrash(lua_State *)				// Crash the LuaThread
+	int CAPI::_debugCrash(lua_State *) // Crash the LuaThread
 	{
 		if (Battle::Instance()->debugInfo.process == NULL)
 			return 0;
@@ -732,7 +731,7 @@ namespace TA3D
 		return 0;
 	}
 
-	int CAPI::_debugContinue(lua_State *)			// Uncrash the LuaThread
+	int CAPI::_debugContinue(lua_State *) // Uncrash the LuaThread
 	{
 		if (Battle::Instance()->debugInfo.process == NULL)
 			return 0;
@@ -758,7 +757,7 @@ namespace TA3D
 		return 0;
 	}
 
-	int CAPI::_debugMemory(lua_State *)						// Show the memory used by the select Lua VM
+	int CAPI::_debugMemory(lua_State *) // Show the memory used by the select Lua VM
 	{
 		if (Battle::Instance()->debugInfo.process == NULL)
 			return 0;
@@ -768,7 +767,7 @@ namespace TA3D
 	}
 
 	// ---------------    OS specific commands    ---------------
-	int CAPI::setFullscreen(lua_State* L)      // This works only on Linux/X11
+	int CAPI::setFullscreen(lua_State *L) // This works only on Linux/X11
 	{
 #ifdef TA3D_PLATFORM_LINUX
 		if (lua_gettop(L) == 1 && lua_toboolean(L, 1) != lp_CONFIG->fullscreen)
@@ -783,64 +782,64 @@ namespace TA3D
 
 	void Console::registerConsoleAPI()
 	{
-		lua_gc( L, LUA_GCSTOP, 0 );		// Load libraries
-		luaL_openlibs( L );
-		lua_gc( L, LUA_GCRESTART, 0 );
+		lua_gc(L, LUA_GCSTOP, 0); // Load libraries
+		luaL_openlibs(L);
+		lua_gc(L, LUA_GCRESTART, 0);
 
 		// Reuse part of game script API
-		lua_register( L, "time", program_time );
-		lua_register( L, "nb_players", program_nb_players );
-		lua_register( L, "get_unit_number_for_player", program_get_unit_number_for_player );
-		lua_register( L, "get_unit_owner", program_get_unit_owner );
-		lua_register( L, "get_unit_number", program_get_unit_number );
-		lua_register( L, "get_max_unit_number", program_get_max_unit_number );
-		lua_register( L, "annihilated", program_annihilated );
-		lua_register( L, "has_unit", program_has_unit );
-		lua_register( L, "create_unit", program_create_unit );
-		lua_register( L, "change_unit_owner", program_change_unit_owner );
-		lua_register( L, "local_player", program_local_player );
-		lua_register( L, "map_w", program_map_w );
-		lua_register( L, "map_h", program_map_h );
-		lua_register( L, "player_side", program_player_side );
-		lua_register( L, "unit_x", program_unit_x );
-		lua_register( L, "unit_y", program_unit_y );
-		lua_register( L, "unit_z", program_unit_z );
-		lua_register( L, "move_unit", program_move_unit );
-		lua_register( L, "kill_unit", program_kill_unit );
-		lua_register( L, "kick_unit", program_kick_unit );
-		lua_register( L, "play", program_play );
-		lua_register( L, "play_for", program_play_for );
-		lua_register( L, "set_cam_pos", program_set_cam_pos );
-		lua_register( L, "clf", program_clf );
-		lua_register( L, "start_x", program_start_x );
-		lua_register( L, "start_z", program_start_z );
-		lua_register( L, "give_metal", program_give_metal );
-		lua_register( L, "give_energy", program_give_energy );
-		lua_register( L, "commander", program_commander );
-		lua_register( L, "attack", program_attack );
-		lua_register( L, "set_unit_health", program_set_unit_health );
-		lua_register( L, "get_unit_health", program_get_unit_health );
-		lua_register( L, "is_unit_of_type", program_is_unit_of_type );
-		lua_register( L, "add_build_mission", program_add_build_mission );
-		lua_register( L, "add_move_mission", program_add_move_mission );
-		lua_register( L, "add_attack_mission", program_add_attack_mission );
-		lua_register( L, "add_patrol_mission", program_add_patrol_mission );
-		lua_register( L, "add_wait_mission", program_add_wait_mission );
-		lua_register( L, "add_wait_attacked_mission", program_add_wait_attacked_mission );
-		lua_register( L, "add_guard_mission", program_add_guard_mission );
-		lua_register( L, "set_standing_orders", program_set_standing_orders );
-		lua_register( L, "unlock_orders", program_unlock_orders );
-		lua_register( L, "lock_orders", program_lock_orders );
-		lua_register( L, "nb_unit_of_type", program_nb_unit_of_type );
-		lua_register( L, "create_feature", program_create_feature );
-		lua_register( L, "has_mobile_units", program_has_mobile_units );
-		lua_register( L, "send_signal", program_send_signal );
-		lua_register( L, "allied", program_allied );
+		lua_register(L, "time", program_time);
+		lua_register(L, "nb_players", program_nb_players);
+		lua_register(L, "get_unit_number_for_player", program_get_unit_number_for_player);
+		lua_register(L, "get_unit_owner", program_get_unit_owner);
+		lua_register(L, "get_unit_number", program_get_unit_number);
+		lua_register(L, "get_max_unit_number", program_get_max_unit_number);
+		lua_register(L, "annihilated", program_annihilated);
+		lua_register(L, "has_unit", program_has_unit);
+		lua_register(L, "create_unit", program_create_unit);
+		lua_register(L, "change_unit_owner", program_change_unit_owner);
+		lua_register(L, "local_player", program_local_player);
+		lua_register(L, "map_w", program_map_w);
+		lua_register(L, "map_h", program_map_h);
+		lua_register(L, "player_side", program_player_side);
+		lua_register(L, "unit_x", program_unit_x);
+		lua_register(L, "unit_y", program_unit_y);
+		lua_register(L, "unit_z", program_unit_z);
+		lua_register(L, "move_unit", program_move_unit);
+		lua_register(L, "kill_unit", program_kill_unit);
+		lua_register(L, "kick_unit", program_kick_unit);
+		lua_register(L, "play", program_play);
+		lua_register(L, "play_for", program_play_for);
+		lua_register(L, "set_cam_pos", program_set_cam_pos);
+		lua_register(L, "clf", program_clf);
+		lua_register(L, "start_x", program_start_x);
+		lua_register(L, "start_z", program_start_z);
+		lua_register(L, "give_metal", program_give_metal);
+		lua_register(L, "give_energy", program_give_energy);
+		lua_register(L, "commander", program_commander);
+		lua_register(L, "attack", program_attack);
+		lua_register(L, "set_unit_health", program_set_unit_health);
+		lua_register(L, "get_unit_health", program_get_unit_health);
+		lua_register(L, "is_unit_of_type", program_is_unit_of_type);
+		lua_register(L, "add_build_mission", program_add_build_mission);
+		lua_register(L, "add_move_mission", program_add_move_mission);
+		lua_register(L, "add_attack_mission", program_add_attack_mission);
+		lua_register(L, "add_patrol_mission", program_add_patrol_mission);
+		lua_register(L, "add_wait_mission", program_add_wait_mission);
+		lua_register(L, "add_wait_attacked_mission", program_add_wait_attacked_mission);
+		lua_register(L, "add_guard_mission", program_add_guard_mission);
+		lua_register(L, "set_standing_orders", program_set_standing_orders);
+		lua_register(L, "unlock_orders", program_unlock_orders);
+		lua_register(L, "lock_orders", program_lock_orders);
+		lua_register(L, "nb_unit_of_type", program_nb_unit_of_type);
+		lua_register(L, "create_feature", program_create_feature);
+		lua_register(L, "has_mobile_units", program_has_mobile_units);
+		lua_register(L, "send_signal", program_send_signal);
+		lua_register(L, "allied", program_allied);
 
-		lua_register( L, "logmsg", thread_logmsg );
+		lua_register(L, "logmsg", thread_logmsg);
 
-		// Register CAPI functions
-#define CAPI_REGISTER(x) lua_register( L, #x, CAPI::x)
+// Register CAPI functions
+#define CAPI_REGISTER(x) lua_register(L, #x, CAPI::x)
 		CAPI_REGISTER(print);
 		CAPI_REGISTER(setFps);
 		CAPI_REGISTER(zshoot);

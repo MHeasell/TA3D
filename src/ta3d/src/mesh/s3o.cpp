@@ -37,7 +37,6 @@
 #include <zlib.h>
 #include "joins.h"
 
-
 namespace TA3D
 {
 	Shader MeshS3O::s3oShader;
@@ -56,8 +55,6 @@ namespace TA3D
 		root = NULL;
 	}
 
-
-
 	void MeshS3O::destroyS3O()
 	{
 		destroy();
@@ -70,24 +67,24 @@ namespace TA3D
 		bool explodes = script_index >= 0 && data_s && (data_s->data[script_index].flag & FLAG_EXPLODE);
 		bool hide = false;
 		bool set = false;
-		if ( !tex_cache_name.empty() )
+		if (!tex_cache_name.empty())
 		{
 			if (!tex_cache_name[0].empty())
 			{
 				const String &textureName = tex_cache_name[0];
-				if (!lp_CONFIG->disable_GLSL && g_useProgram)			// GLSL-enabled code
+				if (!lp_CONFIG->disable_GLSL && g_useProgram) // GLSL-enabled code
 				{
-					GLuint tex = gfx->load_texture( textureName, FILTER_TRILINEAR, NULL, NULL, true, gfx->defaultTextureFormat_RGBA_compressed(), NULL, true);
+					GLuint tex = gfx->load_texture(textureName, FILTER_TRILINEAR, NULL, NULL, true, gfx->defaultTextureFormat_RGBA_compressed(), NULL, true);
 					if (tex)
 						gltex.push_back(tex);
 				}
-				else		// Fixed pipeline
+				else // Fixed pipeline
 				{
-					GLuint tex = gfx->load_texture( textureName, FILTER_TRILINEAR, NULL, NULL, true, gfx->defaultTextureFormat_RGB_compressed(), NULL, true);
+					GLuint tex = gfx->load_texture(textureName, FILTER_TRILINEAR, NULL, NULL, true, gfx->defaultTextureFormat_RGB_compressed(), NULL, true);
 					if (tex)
 					{
 						gltex.push_back(tex);
-						tex = gfx->load_texture( textureName, FILTER_TRILINEAR, NULL, NULL, true, GL_ALPHA8, NULL, true);
+						tex = gfx->load_texture(textureName, FILTER_TRILINEAR, NULL, NULL, true, GL_ALPHA8, NULL, true);
 						if (tex)
 							gltex.push_back(tex);
 					}
@@ -96,13 +93,13 @@ namespace TA3D
 			if (tex_cache_name.size() == 2)
 			{
 				const String &textureName = tex_cache_name[1];
-				if (!lp_CONFIG->disable_GLSL && g_useProgram)			// GLSL-enabled code
+				if (!lp_CONFIG->disable_GLSL && g_useProgram) // GLSL-enabled code
 				{
-					GLuint tex = gfx->load_texture( textureName, FILTER_TRILINEAR, NULL, NULL, true, gfx->defaultTextureFormat_RGBA_compressed(), NULL, true);
+					GLuint tex = gfx->load_texture(textureName, FILTER_TRILINEAR, NULL, NULL, true, gfx->defaultTextureFormat_RGBA_compressed(), NULL, true);
 					if (tex)
 						gltex.push_back(tex);
 				}
-				else		// Fixed pipeline
+				else // Fixed pipeline
 				{
 					// Get the RED channel
 					SDL_Surface *bmp = gfx->load_image(textureName);
@@ -118,8 +115,8 @@ namespace TA3D
 
 						SDL_Surface *red = gfx->create_surface_ex(8, bmp->w, bmp->h);
 
-						for(int y = 0 ; y < bmp->h ; ++y)
-							for(int x = 0 ; x < bmp->w ; ++x)
+						for (int y = 0; y < bmp->h; ++y)
+							for (int x = 0; x < bmp->w; ++x)
 								SurfaceByte(red, x, y) = getr32(getpixel(bmp, x, y));
 
 						gfx->set_texture_format(GL_LUMINANCE8);
@@ -170,52 +167,52 @@ namespace TA3D
 			{
 				if (nb_t_index > 0 && nb_vtx > 0 && t_index != NULL)
 				{
-					if ((!lp_CONFIG->disable_GLSL && g_useProgram) || notex)					// GLSL-enabled code/texture-less option (because it's single pass)
+					if ((!lp_CONFIG->disable_GLSL && g_useProgram) || notex) // GLSL-enabled code/texture-less option (because it's single pass)
 					{
 						bool activated_tex = false;
 						if (!alset)
 						{
-							glEnableClientState(GL_VERTEX_ARRAY);		// Les sommets
+							glEnableClientState(GL_VERTEX_ARRAY); // Les sommets
 							glEnableClientState(GL_NORMAL_ARRAY);
 							glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-							glAlphaFunc( GL_GREATER, 0.1f );
+							glAlphaFunc(GL_GREATER, 0.1f);
 							glEnable(GL_LIGHTING);
 							alset = true;
 							set = true;
 						}
 						glEnable(GL_BLEND);
-						glEnable( GL_ALPHA_TEST );
+						glEnable(GL_ALPHA_TEST);
 
 						if (!notex) // Les textures et effets de texture
 						{
 							if (lp_CONFIG->shadow_quality >= 2)
 							{
 								s3oShader.on();
-								s3oShader.setvar1i( "tex0", 0 );
-								s3oShader.setvar1i( "tex1", 1 );
-								s3oShader.setvar1i( "shadowMap", 7 );
-								s3oShader.setvar1f( "t", 0.5f - 0.5f * cosf(t * PI) );
-								s3oShader.setvar4f( "team", player_color[player_color_map[side] * 3], player_color[player_color_map[side] * 3 + 1], player_color[player_color_map[side] * 3 + 2], 1.0f);
+								s3oShader.setvar1i("tex0", 0);
+								s3oShader.setvar1i("tex1", 1);
+								s3oShader.setvar1i("shadowMap", 7);
+								s3oShader.setvar1f("t", 0.5f - 0.5f * cosf(t * PI));
+								s3oShader.setvar4f("team", player_color[player_color_map[side] * 3], player_color[player_color_map[side] * 3 + 1], player_color[player_color_map[side] * 3 + 2], 1.0f);
 								s3oShader.setmat4f("light_Projection", gfx->shadowMapProjectionMatrix);
 							}
 							else
 							{
 								s3oShader_woShadows.on();
-								s3oShader_woShadows.setvar1i( "tex0", 0 );
-								s3oShader_woShadows.setvar1i( "tex1", 1 );
-								s3oShader_woShadows.setvar1f( "t", 0.5f - 0.5f * cosf(t * PI) );
-								s3oShader_woShadows.setvar4f( "team", player_color[player_color_map[side] * 3], player_color[player_color_map[side] * 3 + 1], player_color[player_color_map[side] * 3 + 2], 1.0f);
+								s3oShader_woShadows.setvar1i("tex0", 0);
+								s3oShader_woShadows.setvar1i("tex1", 1);
+								s3oShader_woShadows.setvar1f("t", 0.5f - 0.5f * cosf(t * PI));
+								s3oShader_woShadows.setvar4f("team", player_color[player_color_map[side] * 3], player_color[player_color_map[side] * 3 + 1], player_color[player_color_map[side] * 3 + 2], 1.0f);
 							}
 
 							activated_tex = true;
-							for (uint32 j = 0; j < pTex->size() ; ++j)
+							for (uint32 j = 0; j < pTex->size(); ++j)
 							{
 								glActiveTextureARB(GL_TEXTURE0_ARB + j);
 								glEnable(GL_TEXTURE_2D);
 								glBindTexture(GL_TEXTURE_2D, (*pTex)[j]);
 							}
 							glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-							for (uint32 j = 0; j < pTex->size() ; ++j)
+							for (uint32 j = 0; j < pTex->size(); ++j)
 							{
 								glClientActiveTextureARB(GL_TEXTURE0_ARB + j);
 								glTexCoordPointer(2, GL_FLOAT, 0, tcoord);
@@ -236,28 +233,28 @@ namespace TA3D
 						}
 						glVertexPointer(3, GL_FLOAT, 0, points);
 						glNormalPointer(GL_FLOAT, 0, N);
-						switch(type)
+						switch (type)
 						{
-						case MESH_TYPE_TRIANGLES:
-							glDrawRangeElements(GL_TRIANGLES, 0, nb_vtx - 1, nb_t_index, GL_UNSIGNED_SHORT, t_index);				// draw everything
-							break;
-						case MESH_TYPE_TRIANGLE_STRIP:
-							glDisable( GL_CULL_FACE );
-							glDrawRangeElements(GL_TRIANGLE_STRIP, 0, nb_vtx - 1, nb_t_index, GL_UNSIGNED_SHORT, t_index);		// draw everything
-							glEnable( GL_CULL_FACE );
-							break;
+							case MESH_TYPE_TRIANGLES:
+								glDrawRangeElements(GL_TRIANGLES, 0, nb_vtx - 1, nb_t_index, GL_UNSIGNED_SHORT, t_index); // draw everything
+								break;
+							case MESH_TYPE_TRIANGLE_STRIP:
+								glDisable(GL_CULL_FACE);
+								glDrawRangeElements(GL_TRIANGLE_STRIP, 0, nb_vtx - 1, nb_t_index, GL_UNSIGNED_SHORT, t_index); // draw everything
+								glEnable(GL_CULL_FACE);
+								break;
 						};
 
 						if (activated_tex)
 						{
-							for (uint32 j = 0; j < pTex->size() ; ++j)
+							for (uint32 j = 0; j < pTex->size(); ++j)
 							{
 								glClientActiveTextureARB(GL_TEXTURE0_ARB + j);
 								glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 
 								glActiveTextureARB(GL_TEXTURE0_ARB + j);
 								glDisable(GL_TEXTURE_2D);
-								glTexEnvi(GL_TEXTURE_ENV,GL_TEXTURE_ENV_MODE,GL_MODULATE);
+								glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 								glDisable(GL_TEXTURE_GEN_S);
 								glDisable(GL_TEXTURE_GEN_T);
 								glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -272,11 +269,11 @@ namespace TA3D
 						glDisable(GL_BLEND);
 						glDisable(GL_ALPHA_TEST);
 					}
-					else															// GLSL-disabled code
+					else // GLSL-disabled code
 					{
 						if (!alset)
 						{
-							glEnableClientState(GL_VERTEX_ARRAY);		// Les sommets
+							glEnableClientState(GL_VERTEX_ARRAY); // Les sommets
 							glEnableClientState(GL_NORMAL_ARRAY);
 							glEnable(GL_LIGHTING);
 							alset = true;
@@ -300,26 +297,26 @@ namespace TA3D
 							glClientActiveTextureARB(GL_TEXTURE0_ARB);
 							glTexCoordPointer(2, GL_FLOAT, 0, tcoord);
 						}
-						switch(type)
+						switch (type)
 						{
-						case MESH_TYPE_TRIANGLES:
-							glDrawRangeElements(GL_TRIANGLES, 0, nb_vtx - 1, nb_t_index, GL_UNSIGNED_SHORT, t_index);				// draw everything
-							break;
-						case MESH_TYPE_TRIANGLE_STRIP:
-							glDisable( GL_CULL_FACE );
-							glDrawRangeElements(GL_TRIANGLE_STRIP, 0, nb_vtx - 1, nb_t_index, GL_UNSIGNED_SHORT, t_index);		// draw everything
-							glEnable( GL_CULL_FACE );
-							break;
+							case MESH_TYPE_TRIANGLES:
+								glDrawRangeElements(GL_TRIANGLES, 0, nb_vtx - 1, nb_t_index, GL_UNSIGNED_SHORT, t_index); // draw everything
+								break;
+							case MESH_TYPE_TRIANGLE_STRIP:
+								glDisable(GL_CULL_FACE);
+								glDrawRangeElements(GL_TRIANGLE_STRIP, 0, nb_vtx - 1, nb_t_index, GL_UNSIGNED_SHORT, t_index); // draw everything
+								glEnable(GL_CULL_FACE);
+								break;
 						};
 
-						if (pTex->size() > 1)		// Second and third passes needed only with textures
+						if (pTex->size() > 1) // Second and third passes needed only with textures
 						{
 							// Second pass : team color
-							glBindTexture(GL_TEXTURE_2D, (*pTex)[1]);		// Alpha texture
+							glBindTexture(GL_TEXTURE_2D, (*pTex)[1]); // Alpha texture
 							glEnable(GL_BLEND);
 							glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-							glAlphaFunc( GL_GREATER, 0.0 );
-							glEnable( GL_ALPHA_TEST );
+							glAlphaFunc(GL_GREATER, 0.0);
+							glEnable(GL_ALPHA_TEST);
 							glDepthFunc(GL_LEQUAL);
 
 							GLfloat col[4];
@@ -330,36 +327,36 @@ namespace TA3D
 									  player_color[player_color_map[side] * 3 + 2],
 									  1.0f);
 
-							switch(type)
+							switch (type)
 							{
-							case MESH_TYPE_TRIANGLES:
-								glDrawRangeElements(GL_TRIANGLES, 0, nb_vtx - 1, nb_t_index, GL_UNSIGNED_SHORT, t_index);				// draw everything
-								break;
-							case MESH_TYPE_TRIANGLE_STRIP:
-								glDisable( GL_CULL_FACE );
-								glDrawRangeElements(GL_TRIANGLE_STRIP, 0, nb_vtx - 1, nb_t_index, GL_UNSIGNED_SHORT, t_index);		// draw everything
-								glEnable( GL_CULL_FACE );
-								break;
+								case MESH_TYPE_TRIANGLES:
+									glDrawRangeElements(GL_TRIANGLES, 0, nb_vtx - 1, nb_t_index, GL_UNSIGNED_SHORT, t_index); // draw everything
+									break;
+								case MESH_TYPE_TRIANGLE_STRIP:
+									glDisable(GL_CULL_FACE);
+									glDrawRangeElements(GL_TRIANGLE_STRIP, 0, nb_vtx - 1, nb_t_index, GL_UNSIGNED_SHORT, t_index); // draw everything
+									glEnable(GL_CULL_FACE);
+									break;
 							};
 
-							if (pTex->size() > 2)		// Third pass : light emission
+							if (pTex->size() > 2) // Third pass : light emission
 							{
-								glBindTexture(GL_TEXTURE_2D, (*pTex)[2]);		// Alpha texture
+								glBindTexture(GL_TEXTURE_2D, (*pTex)[2]); // Alpha texture
 								const float c = 0.5f - 0.5f * cosf(t * PI);
 								glColor4f(c, c, c, 1.0f);
 								glBlendFunc(GL_SRC_COLOR, GL_ONE);
 								glDisable(GL_LIGHTING);
 
-								switch(type)
+								switch (type)
 								{
-								case MESH_TYPE_TRIANGLES:
-									glDrawRangeElements(GL_TRIANGLES, 0, nb_vtx - 1, nb_t_index, GL_UNSIGNED_SHORT, t_index);				// draw everything
-									break;
-								case MESH_TYPE_TRIANGLE_STRIP:
-									glDisable( GL_CULL_FACE );
-									glDrawRangeElements(GL_TRIANGLE_STRIP, 0, nb_vtx - 1, nb_t_index, GL_UNSIGNED_SHORT, t_index);		// draw everything
-									glEnable( GL_CULL_FACE );
-									break;
+									case MESH_TYPE_TRIANGLES:
+										glDrawRangeElements(GL_TRIANGLES, 0, nb_vtx - 1, nb_t_index, GL_UNSIGNED_SHORT, t_index); // draw everything
+										break;
+									case MESH_TYPE_TRIANGLE_STRIP:
+										glDisable(GL_CULL_FACE);
+										glDrawRangeElements(GL_TRIANGLE_STRIP, 0, nb_vtx - 1, nb_t_index, GL_UNSIGNED_SHORT, t_index); // draw everything
+										glEnable(GL_CULL_FACE);
+										break;
 								};
 
 								glEnable(GL_LIGHTING);
@@ -386,11 +383,11 @@ namespace TA3D
 				glDisable(GL_FOG);
 				glDisable(GL_BLEND);
 				if (!set)
-					glVertexPointer( 3, GL_FLOAT, 0, points);
-				glColor3ub(0,0xFF,0);
-				glTranslatef( 0.0f, 2.0f, 0.0f );
-				glDrawRangeElements(GL_LINE_LOOP, 0, nb_vtx-1, 4,GL_UNSIGNED_SHORT,sel);		// dessine la primitive de sélection
-				glTranslatef( 0.0f, -2.0f, 0.0f );
+					glVertexPointer(3, GL_FLOAT, 0, points);
+				glColor3ub(0, 0xFF, 0);
+				glTranslatef(0.0f, 2.0f, 0.0f);
+				glDrawRangeElements(GL_LINE_LOOP, 0, nb_vtx - 1, 4, GL_UNSIGNED_SHORT, sel); // dessine la primitive de sélection
+				glTranslatef(0.0f, -2.0f, 0.0f);
 				if (notex)
 				{
 					byte var = (byte)abs(0xFF - (msec_timer % 1000) * 0x200 / 1000);
@@ -403,7 +400,7 @@ namespace TA3D
 				glEnable(GL_FOG);
 			}
 			if (child && !(explodes && !exploding_parts))
-				alset = child->draw(t, data_s, sel_primitive, alset, notex, side, chg_col, exploding_parts && !explodes );
+				alset = child->draw(t, data_s, sel_primitive, alset, notex, side, chg_col, exploding_parts && !explodes);
 			glPopMatrix();
 		}
 		if (next)
@@ -423,19 +420,19 @@ namespace TA3D
 		{
 			if (!alset)
 			{
-				glEnableClientState(GL_VERTEX_ARRAY);		// Les sommets
+				glEnableClientState(GL_VERTEX_ARRAY); // Les sommets
 				glEnableClientState(GL_NORMAL_ARRAY);
 				glEnable(GL_BLEND);
 				glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-				glAlphaFunc( GL_GREATER, 0.1f );
-				glEnable( GL_ALPHA_TEST );
+				glAlphaFunc(GL_GREATER, 0.1f);
+				glEnable(GL_ALPHA_TEST);
 				glEnable(GL_LIGHTING);
 				alset = true;
 			}
 
 			std::vector<GLuint> *pTex = &(root->gltex);
 
-			for (uint32 j = 0; j < pTex->size() ; ++j)
+			for (uint32 j = 0; j < pTex->size(); ++j)
 			{
 				glClientActiveTextureARB(GL_TEXTURE0_ARB);
 				glEnableClientState(GL_TEXTURE_COORD_ARRAY);
@@ -446,26 +443,26 @@ namespace TA3D
 			}
 			glVertexPointer(3, GL_FLOAT, 0, points);
 			glNormalPointer(GL_FLOAT, 0, N);
-			switch(type)
+			switch (type)
 			{
 				case MESH_TYPE_TRIANGLES:
-					glDrawRangeElements(GL_TRIANGLES, 0, nb_vtx - 1, nb_t_index, GL_UNSIGNED_SHORT, t_index);				// draw everything
+					glDrawRangeElements(GL_TRIANGLES, 0, nb_vtx - 1, nb_t_index, GL_UNSIGNED_SHORT, t_index); // draw everything
 					break;
 				case MESH_TYPE_TRIANGLE_STRIP:
-					glDisable( GL_CULL_FACE );
-					glDrawRangeElements(GL_TRIANGLE_STRIP, 0, nb_vtx - 1, nb_t_index, GL_UNSIGNED_SHORT, t_index);		// draw everything
-					glEnable( GL_CULL_FACE );
+					glDisable(GL_CULL_FACE);
+					glDrawRangeElements(GL_TRIANGLE_STRIP, 0, nb_vtx - 1, nb_t_index, GL_UNSIGNED_SHORT, t_index); // draw everything
+					glEnable(GL_CULL_FACE);
 					break;
 			};
 
-			for (uint32 j = 0; j < pTex->size() ; ++j)
+			for (uint32 j = 0; j < pTex->size(); ++j)
 			{
 				glClientActiveTextureARB(GL_TEXTURE0_ARB + j);
 				glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 
 				glActiveTextureARB(GL_TEXTURE0_ARB + j);
 				glDisable(GL_TEXTURE_2D);
-				glTexEnvi(GL_TEXTURE_ENV,GL_TEXTURE_ENV_MODE,GL_MODULATE);
+				glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 				glDisable(GL_TEXTURE_GEN_S);
 				glDisable(GL_TEXTURE_GEN_T);
 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -484,9 +481,9 @@ namespace TA3D
 		return alset;
 	}
 
-	MeshS3O* MeshS3O::LoadPiece(File* file, MeshS3O* model, MeshS3O *root)
+	MeshS3O *MeshS3O::LoadPiece(File *file, MeshS3O *model, MeshS3O *root)
 	{
-		MeshS3O* piece = model ? model : new MeshS3O;
+		MeshS3O *piece = model ? model : new MeshS3O;
 		piece->type = MESH_TYPE_TRIANGLES;
 		piece->root = root;
 
@@ -496,7 +493,7 @@ namespace TA3D
 		piece->pos_from_parent.x = 0.5f * fp.xoffset;
 		piece->pos_from_parent.y = 0.5f * fp.yoffset;
 		piece->pos_from_parent.z = 0.5f * fp.zoffset;
-		switch(fp.primitiveType)
+		switch (fp.primitiveType)
 		{
 			case S3O_PRIMTYPE_QUADS:
 			case S3O_PRIMTYPE_TRIANGLES:
@@ -527,19 +524,18 @@ namespace TA3D
 			piece->tcoord[a * 2 + 1] = v.textureY;
 		}
 
-
 		// retrieve the draw order for the vertices
 
 		std::vector<int> index;
 
 		file->seek(fp.vertexTable);
-		for (int a = 0; a < fp.vertexTableSize ; ++a)
+		for (int a = 0; a < fp.vertexTableSize; ++a)
 		{
 			int vertexDrawIdx;
 			*file >> vertexDrawIdx;
 
 			index.push_back(vertexDrawIdx);
-			if (fp.primitiveType == S3O_PRIMTYPE_QUADS && (a % 4) == 2)        // QUADS need to be split into triangles (this would be done internally by OpenGL anyway since quads are rendered as 2 triangles)
+			if (fp.primitiveType == S3O_PRIMTYPE_QUADS && (a % 4) == 2) // QUADS need to be split into triangles (this would be done internally by OpenGL anyway since quads are rendered as 2 triangles)
 			{
 				index.push_back(index[index.size() - 3]);
 				index.push_back(vertexDrawIdx);
@@ -560,7 +556,7 @@ namespace TA3D
 
 		piece->nb_t_index = (short)index.size();
 		piece->t_index = new GLushort[piece->nb_t_index];
-		for(size_t i = 0 ; i < index.size() ; ++i)
+		for (size_t i = 0; i < index.size(); ++i)
 			piece->t_index[i] = GLushort(index[i]);
 
 		for (int a = 0; a < fp.numChilds; ++a)
@@ -570,7 +566,7 @@ namespace TA3D
 			*file >> childOffset;
 
 			file->seek(childOffset);
-			MeshS3O* childPiece = LoadPiece(file, NULL, root);
+			MeshS3O *childPiece = LoadPiece(file, NULL, root);
 			if (piece->child)
 			{
 				childPiece->next = piece->child;
@@ -589,13 +585,13 @@ namespace TA3D
 
 		S3OHeader header;
 		*file >> header;
-		if (memcmp(header.magic, "Spring unit\0", 12))      // File corrupt or wrong format
+		if (memcmp(header.magic, "Spring unit\0", 12)) // File corrupt or wrong format
 		{
 			LOG_ERROR(LOG_PREFIX_S3O << "Spring Model Loader error : File is corrupt or in wrong format");
 			return;
 		}
 
-		MeshS3O* model = this;
+		MeshS3O *model = this;
 		model->type = MESH_TYPE_TRIANGLES;
 		model->name = filename;
 		if (header.texture1 > 0)
@@ -638,7 +634,6 @@ namespace TA3D
 		return model;
 	}
 
-
 	void MeshS3O::init_shaders()
 	{
 		if (!s3oShader.isLoaded())
@@ -647,4 +642,3 @@ namespace TA3D
 			s3oShader_woShadows.load("shaders/s3o_wos.frag", "shaders/s3o_wos.vert");
 	}
 } // namespace TA3D
-

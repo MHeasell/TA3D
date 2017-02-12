@@ -25,10 +25,9 @@
   \-----------------------------------------------------------------------------------*/
 
 #include "cob.h"
-#include <misc/matrix.h>				// Some math routines
+#include <misc/matrix.h> // Some math routines
 #include <TA3D_NameSpace.h>
 #include <ta3dbase.h>
-
 
 namespace TA3D
 {
@@ -48,7 +47,7 @@ namespace TA3D
 		//!
 		int CodeLength;
 		//!
-		int StaticVariableCount ;
+		int StaticVariableCount;
 		//! Always seems to be 0
 		int Unknown_0;
 
@@ -66,7 +65,6 @@ namespace TA3D
 
 	}; // class COBHeader
 
-
 	CobScript::CobScript()
 	{
 		init();
@@ -79,7 +77,7 @@ namespace TA3D
 
 	void CobScript::load(const String &filename)
 	{
-		destroy();				// Au cas où
+		destroy(); // Au cas où
 
 		File *file = VFS::Instance()->readFile(filename);
 
@@ -90,7 +88,7 @@ namespace TA3D
 		*file >> header;
 
 #ifdef DEBUG_MODE
-		/*		printf("header.NumberOfScripts=%d\n",header.NumberOfScripts);
+/*		printf("header.NumberOfScripts=%d\n",header.NumberOfScripts);
 				printf("header.NumberOfPieces=%d\n",header.NumberOfPieces);
 				printf("header.OffsetToScriptCodeIndexArray=%d\n",header.OffsetToScriptCodeIndexArray);
 				printf("header.header.OffsetToScriptNameOffsetArray=%d\n",header.OffsetToScriptNameOffsetArray);
@@ -102,7 +100,7 @@ namespace TA3D
 		nb_script = header.NumberOfScripts;
 		nb_piece = header.NumberOfPieces;
 		names.resize(nb_script);
-		piece_name.resize( nb_piece );
+		piece_name.resize(nb_piece);
 
 		int i;
 		for (i = 0; i < nb_script; ++i)
@@ -113,7 +111,7 @@ namespace TA3D
 			file->seek(ofs);
 			names[i] = file->getString().toUpper();
 		}
-		for(i = 0; i < nb_piece; ++i)
+		for (i = 0; i < nb_piece; ++i)
 		{
 			file->seek(header.OffsetToPieceNameOffsetArray + 4 * i);
 			int ofs;
@@ -125,14 +123,14 @@ namespace TA3D
 		Data = new byte[codeSize];
 		file->seek(header.OffsetToScriptCode);
 		file->read(Data, codeSize);
-		script_code = new int*[nb_script];
+		script_code = new int *[nb_script];
 		dec_offset = new int[nb_script];
 		file->seek(header.OffsetToScriptCodeIndexArray);
 		file->read(dec_offset, (int)sizeof(int) * nb_script);
 		for (i = 0; i < nb_script; ++i)
 		{
 			file->seek(4 * dec_offset[i]);
-			script_code[i] = (int*)(Data + 4 * dec_offset[i]);
+			script_code[i] = (int *)(Data + 4 * dec_offset[i]);
 		}
 
 		delete file;
@@ -161,8 +159,7 @@ namespace TA3D
 		codeSize = 0;
 	}
 
-
-	int CobScript::findFromName(const String& name)
+	int CobScript::findFromName(const String &name)
 	{
 		String nameUpper = name;
 		nameUpper.toUpper();
@@ -175,7 +172,6 @@ namespace TA3D
 		return -1;
 	}
 
-
 	int CobScript::identify(const String &name)
 	{
 		for (int i = 0; i < nb_piece; ++i)
@@ -186,7 +182,4 @@ namespace TA3D
 		return -1;
 	}
 
-
-
 } // namespace TA3D
-

@@ -16,18 +16,16 @@
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA*/
 
 #ifndef __TA3D_XX__TDF_H__
-# define __TA3D_XX__TDF_H__
+#define __TA3D_XX__TDF_H__
 
-# include "string.h"
-# include "hash_table.h"
-# include <stack>
+#include "string.h"
+#include "hash_table.h"
+#include <stack>
 
-
-# define TDFPARSER_HASHTABLE_SIZE       0x400
+#define TDFPARSER_HASHTABLE_SIZE 0x400
 
 namespace TA3D
 {
-
 
 	/*!
 	** \brief
@@ -37,7 +35,8 @@ namespace TA3D
 	class TDFParser
 	{
 	public:
-		typedef SmartPtr<TDFParser>	Ptr;
+		typedef SmartPtr<TDFParser> Ptr;
+
 	public:
 		//! \name Constructors & Destructor
 		//@{
@@ -56,7 +55,7 @@ namespace TA3D
 		** \see loadFromFile()
 		*/
 		explicit TDFParser(const String& filename, const bool caSensitive = false, const bool toUTF8 = false,
-			const bool gadgetMode = false, const bool realFS = false, const bool widgetMode = false);
+						   const bool gadgetMode = false, const bool realFS = false, const bool widgetMode = false);
 
 		//! Destructor
 		~TDFParser();
@@ -67,7 +66,6 @@ namespace TA3D
 		** \brief Clear all stored keys
 		*/
 		void clear();
-
 
 		//! \name Import Data
 		//@{
@@ -97,7 +95,6 @@ namespace TA3D
 							const bool toUTF8 = false, const bool gadgetMode = false, const bool widgetMode = false);
 		//@}
 
-
 		//! \name Keys & Values
 		//@{
 		/*!
@@ -106,8 +103,10 @@ namespace TA3D
 		** \param def The default value if the key could not be found
 		** \return The value of the key that has been found, def otherwise
 		*/
-		template<class K> sint32  pullAsInt(const K& key, const sint32 def);
-		template<class K> sint32  pullAsInt(const K& key);
+		template <class K>
+		sint32 pullAsInt(const K& key, const sint32 def);
+		template <class K>
+		sint32 pullAsInt(const K& key);
 
 		/*!
 		** \brief Get the value for a given key
@@ -115,7 +114,7 @@ namespace TA3D
 		** \param def The default value if the key could not be found
 		** \return The value of the key that has been found, def otherwise
 		*/
-		float  pullAsFloat(const String& key, const float def = 0.0f);
+		float pullAsFloat(const String& key, const float def = 0.0f);
 
 		/*!
 		** \brief Get the value for a given key
@@ -123,8 +122,10 @@ namespace TA3D
 		** \param def The default value if the key could not be found
 		** \return The value of the key that has been found, def otherwise
 		*/
-		template<class K, class V> String pullAsString(const K& key, const V& def);
-		template<class K> String pullAsString(const K& key);
+		template <class K, class V>
+		String pullAsString(const K& key, const V& def);
+		template <class K>
+		String pullAsString(const K& key);
 
 		/*!
 		** \brief Get the value for a given key
@@ -140,28 +141,28 @@ namespace TA3D
 		** \param def The default value if the key could not be found
 		** \return The value of the key that has been found, def otherwise
 		*/
-		uint32  pullAsColor(const String& key, const uint32 def = 0);
+		uint32 pullAsColor(const String& key, const uint32 def = 0);
 
 		/*!
 		** \brief Insert or update the value of a key
 		** \param key The key
 		** \param value The new value of the key
 		*/
-		void insertOrUpdate(const String& key, const String& value) {pTable[key] = value;}
+		void insertOrUpdate(const String& key, const String& value) { pTable[key] = value; }
 
 		/*!
 		** \brief Remove a key if exists
 		** \param key The key to remove
 		*/
-		void remove(const String& key) {pTable.erase(key);}
+		void remove(const String& key) { pTable.erase(key); }
 
-		bool exists(const String& key) {return pTable.count(key) != 0;}
+		bool exists(const String& key) { return pTable.count(key) != 0; }
 
 		/*!
 		** \brief Set the special section
 		** \param special section name
 		*/
-		void setSpecialSection(const String &section);
+		void setSpecialSection(const String& section);
 
 		/*!
 		** \brief Call a callback for each key
@@ -187,14 +188,14 @@ namespace TA3D
 		** }
 		** \endcode
 		*/
-		template<typename C> void forEach(C callback)
+		template <typename C>
+		void forEach(C callback)
 		{
-			for(TA3D::UTILS::HashMap<String>::Dense::iterator it = pTable.begin() ; it != pTable.end() ; ++it)
+			for (TA3D::UTILS::HashMap<String>::Dense::iterator it = pTable.begin(); it != pTable.end(); ++it)
 				callback(it.key(), it.value());
 		}
 
 		//@}
-
 
 	private:
 		//! The hash table
@@ -208,12 +209,8 @@ namespace TA3D
 
 	}; // class TDFParser
 
-
-
-
-
 } // namespace TA3D
 
-# include "tdf.hxx"
+#include "tdf.hxx"
 
 #endif // __TA3D_XX__TDF_H__

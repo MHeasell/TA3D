@@ -6,13 +6,13 @@
 #include "kdtree.h"
 #include <algorithm>
 
-#define KDTREE_MAX_SET_SIZE		8
-#define KDTREE_MAX_DEPTH		48
+#define KDTREE_MAX_SET_SIZE 8
+#define KDTREE_MAX_DEPTH 48
 
 namespace TA3D
 {
-	template<typename T, class TKit>
-		inline void KDTree<T, TKit>::build(MemoryPool< KDTree<T, TKit> > *pool, const typename std::vector<T>::iterator &begin, const typename std::vector<T>::iterator &end, const unsigned int l)
+	template <typename T, class TKit>
+	inline void KDTree<T, TKit>::build(MemoryPool<KDTree<T, TKit>> *pool, const typename std::vector<T>::iterator &begin, const typename std::vector<T>::iterator &end, const unsigned int l)
 	{
 		this->pool = pool;
 		if ((end - begin) <= KDTREE_MAX_SET_SIZE || l >= KDTREE_MAX_DEPTH)
@@ -34,8 +34,8 @@ namespace TA3D
 		rChild->build(pool, begin, mid, l + 1U);
 	}
 
-	template<typename T, class TKit>
-		inline KDTree<T, TKit>::~KDTree()
+	template <typename T, class TKit>
+	inline KDTree<T, TKit>::~KDTree()
 	{
 		if (lChild)
 			pool->release(lChild);
@@ -43,13 +43,13 @@ namespace TA3D
 			pool->release(rChild);
 	}
 
-	template<typename T, class TKit>
-		inline void KDTree<T, TKit>::maxDistanceQuery(std::deque<T> &result, const Vec &center, const float maxDist) const
+	template <typename T, class TKit>
+	inline void KDTree<T, TKit>::maxDistanceQuery(std::deque<T> &result, const Vec &center, const float maxDist) const
 	{
 		if (rChild == NULL && lChild == NULL)
 		{
 			const float dist2 = maxDist * maxDist;
-			for(typename std::vector<T>::const_iterator i = elements_begin ; i != elements_end ; ++i)
+			for (typename std::vector<T>::const_iterator i = elements_begin; i != elements_end; ++i)
 				if ((TKit::pos(*i) - center).sq() <= dist2)
 					result.push_back(*i);
 			return;

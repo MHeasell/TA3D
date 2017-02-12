@@ -25,7 +25,6 @@
 namespace TA3D
 {
 
-
 	ScriptData *ScriptData::loadScriptFile(const String &filename)
 	{
 		const String tmp_cob = String(filename) << ".cob";
@@ -45,6 +44,4 @@ namespace TA3D
 		}
 		return NULL;
 	}
-
-
 }

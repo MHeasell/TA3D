@@ -22,15 +22,15 @@
 \-----------------------------------------------------------------*/
 
 #ifndef __TA3D_AI_PATH_FINDING_H__
-# define __TA3D_AI_PATH_FINDING_H__
+#define __TA3D_AI_PATH_FINDING_H__
 
-# include <EngineClass.h>
-# include <yuni/core/smartptr/smartptr.h>
-# include <threads/thread.h>
-# include <threads/mutex.h>
-# include <zlib.h>
+#include <EngineClass.h>
+#include <yuni/core/smartptr/smartptr.h>
+#include <threads/thread.h>
+#include <threads/mutex.h>
+#include <zlib.h>
 
-#define MAX_PATH_EXEC		1
+#define MAX_PATH_EXEC 1
 
 namespace TA3D
 {
@@ -50,33 +50,33 @@ namespace TA3D
 			class Node
 			{
 			public:
-				Node(int x, int z) : _x(x), _z(z)	{}
-				int &x() {	return _x;	}
-				int &z() {	return _z;	}
-				int x() const {	return _x;	}
-				int z() const {	return _z;	}
+				Node(int x, int z) : _x(x), _z(z) {}
+				int &x() { return _x; }
+				int &z() { return _z; }
+				int x() const { return _x; }
+				int z() const { return _z; }
 			private:
 				int _x, _z;
 			};
 
 		public:
-			Path() : pos(), nodes(), _ready(false)	{}
-			~Path()	{}
+			Path() : pos(), nodes(), _ready(false) {}
+			~Path() {}
 
 			void next();
-			bool empty() const	{	return nodes.empty();	}
+			bool empty() const { return nodes.empty(); }
 			void clear();
-			bool ready() const	{	return _ready;	}
-			Node &front()	{	return nodes.front();	}
-			Node &back()	{	return nodes.back();	}
-			const Node &front() const	{	return nodes.front();	}
-			const Node &back() const	{	return nodes.back();	}
-			void push_back(const Node &n) {	nodes.push_back(n);	}
-			void push_front(const Node &n) {	nodes.push_front(n);	}
-			int length() const	{	return int(nodes.size());	}
+			bool ready() const { return _ready; }
+			Node &front() { return nodes.front(); }
+			Node &back() { return nodes.back(); }
+			const Node &front() const { return nodes.front(); }
+			const Node &back() const { return nodes.back(); }
+			void push_back(const Node &n) { nodes.push_back(n); }
+			void push_front(const Node &n) { nodes.push_front(n); }
+			int length() const { return int(nodes.size()); }
 
-			void setPos(const Vector3D &pos)	{	this->pos = pos;	}
-			const Vector3D &Pos()	const	{	return pos;	}
+			void setPos(const Vector3D &pos) { this->pos = pos; }
+			const Vector3D &Pos() const { return pos; }
 
 			void replaceWith(Path &p)
 			{
@@ -90,10 +90,10 @@ namespace TA3D
 
 			typedef std::deque<Node>::iterator iterator;
 			typedef std::deque<Node>::const_iterator const_iterator;
-			iterator begin()	{	return nodes.begin();	}
-			iterator end()	{	return nodes.end();	}
-			const_iterator begin() const	{	return nodes.begin();	}
-			const_iterator end() const	{	return nodes.end();	}
+			iterator begin() { return nodes.begin(); }
+			iterator end() { return nodes.end(); }
+			const_iterator begin() const { return nodes.begin(); }
+			const_iterator end() const { return nodes.end(); }
 		private:
 			void computeCoord();
 
@@ -126,27 +126,28 @@ namespace TA3D
 
 	private:
 		virtual ~Pathfinder();
-		virtual void proc(void* param);
+		virtual void proc(void *param);
 		virtual void signalExitThread();
 
 	private:
 		typedef std::deque<Task> TaskList;
-		typedef HashMap< int, int >::Dense TaskSet;
+		typedef HashMap<int, int>::Dense TaskSet;
 		TaskList tasks;
 		TaskSet stasks;
 		int taskOffset;
 		int nbCores;
 		Synchronizer pSync;
-		HashMap<BitMap*>::Dense hBitMap;
+		HashMap<BitMap *>::Dense hBitMap;
 		volatile bool bRunning;
 
 	private:
 		static inline bool checkRectFast(const int x1, const int y1, const UnitType *pType);
 		static bool checkRectFull(int x1, int y1, const UnitType *pType);
 		static Mutex sMutex;
+
 	public:
 		static Pathfinder *instance();
-		static void findPath( AI::Path &path, const Task &task );
+		static void findPath(AI::Path &path, const Task &task);
 		static AI::Path directPath(const Vector3D &end);
 	};
 } // namespace TA3D

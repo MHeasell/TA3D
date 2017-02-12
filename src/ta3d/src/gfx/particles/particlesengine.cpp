@@ -25,41 +25,33 @@
 #include <engine.h>
 #include <EngineClass.h>
 
-
 namespace TA3D
 {
 
-
-	PARTICLE_ENGINE	particle_engine;
-
-
-
+	PARTICLE_ENGINE particle_engine;
 
 	PARTICLE_ENGINE::PARTICLE_ENGINE()
-		:nb_part(0), size(0), part(), parttex(0), partbmp(NULL), dsmoke(false),
-		ntex(0), gltex(), point(NULL),
-		texcoord(NULL), color(NULL), thread_running(false), thread_ask_to_stop(false),
-		p_wind_dir(NULL), p_g(NULL), particle_systems()
+		: nb_part(0), size(0), part(), parttex(0), partbmp(NULL), dsmoke(false),
+		  ntex(0), gltex(), point(NULL),
+		  texcoord(NULL), color(NULL), thread_running(false), thread_ask_to_stop(false),
+		  p_wind_dir(NULL), p_g(NULL), particle_systems()
 	{
 		init(false);
 	}
-
 
 	PARTICLE_ENGINE::~PARTICLE_ENGINE()
 	{
 		destroy();
 	}
 
-
-
-	int PARTICLE_ENGINE::addtex(const String& file, const String& filealpha)
+	int PARTICLE_ENGINE::addtex(const String &file, const String &filealpha)
 	{
 		MutexLocker locker(pMutex);
 
 		dsmoke = true;
 		if (NULL == partbmp)
 			partbmp = gfx->create_surface_ex(32, 256, 256);
-		SDL_Surface* bmp;
+		SDL_Surface *bmp;
 		if (!filealpha.empty())
 			bmp = GFX::LoadMaskedTextureToBmp(file, filealpha); // Avec canal alpha séparé
 		else
@@ -67,21 +59,20 @@ namespace TA3D
 
 		gltex.push_back(gfx->make_texture(bmp));
 
-		stretch_blit(bmp, partbmp, 0,0, bmp->w, bmp->h, 64 * (ntex & 3), 64 * (ntex >> 2), 64, 64);
+		stretch_blit(bmp, partbmp, 0, 0, bmp->w, bmp->h, 64 * (ntex & 3), 64 * (ntex >> 2), 64, 64);
 		++ntex;
 		SDL_FreeSurface(bmp);
 		gfx->destroy_texture(parttex);
 		gfx->set_texture_format(gfx->defaultTextureFormat_RGBA());
 		parttex = gfx->make_texture(partbmp, FILTER_TRILINEAR);
 
-		return (ntex-1);
+		return (ntex - 1);
 	}
 
-
-	void PARTICLE_ENGINE::emit_part(const Vector3D &pos, const Vector3D &Dir,int tex,int nb,float speed,float life,float psize,bool white,float trans_factor)
+	void PARTICLE_ENGINE::emit_part(const Vector3D &pos, const Vector3D &Dir, int tex, int nb, float speed, float life, float psize, bool white, float trans_factor)
 	{
 		MutexLocker locker(pMutex);
-		if (!lp_CONFIG->particle)	// If particles are OFF don't add particles
+		if (!lp_CONFIG->particle) // If particles are OFF don't add particles
 			return;
 		if (Camera::inGame != NULL && (Camera::inGame->pos - pos).sq() >= Camera::inGame->zfar2)
 			return;
@@ -93,7 +84,7 @@ namespace TA3D
 			new_part.py = 0;
 			new_part.slow_factor = 0.0f;
 			new_part.Pos = pos;
-			new_part.V = speed*Dir;
+			new_part.V = speed * Dir;
 			new_part.life = life;
 			new_part.mass = 0.0f;
 			new_part.smoking = -1.0f;
@@ -132,7 +123,7 @@ namespace TA3D
 		}
 	}
 
-	ParticlesSystem *PARTICLE_ENGINE::emit_part_fast( ParticlesSystem *system, const Vector3D &pos, const Vector3D &Dir, int tex, int nb, float speed, float life, float psize, bool white, float trans_factor )
+	ParticlesSystem *PARTICLE_ENGINE::emit_part_fast(ParticlesSystem *system, const Vector3D &pos, const Vector3D &Dir, int tex, int nb, float speed, float life, float psize, bool white, float trans_factor)
 	{
 		if (!lp_CONFIG->particle) // If particles are OFF don't add particles
 			return NULL;
@@ -140,17 +131,17 @@ namespace TA3D
 			return NULL;
 		if (system) // Step by step
 		{
-			system->pos[ system->cur_idx ] = pos;
-			system->V[ system->cur_idx ] = speed * Dir;
+			system->pos[system->cur_idx] = pos;
+			system->V[system->cur_idx] = speed * Dir;
 			system->cur_idx++;
 		}
 		else
 		{
-			if (Camera::inGame != NULL && (Camera::inGame->pos - pos).sq()>=Camera::inGame->zfar2)
+			if (Camera::inGame != NULL && (Camera::inGame->pos - pos).sq() >= Camera::inGame->zfar2)
 				return NULL;
 
 			system = new ParticlesSystem;
-			system->create( abs( nb ), gltex[ tex ] );
+			system->create(abs(nb), gltex[tex]);
 
 			system->life = life;
 			system->mass = 0.0f;
@@ -168,10 +159,10 @@ namespace TA3D
 				system->col[2] = 1.0f;
 				system->col[3] = trans_factor;
 			}
-			system->dcol[0]=0.0f;
-			system->dcol[1]=0.0f;
-			system->dcol[2]=0.0f;
-			if (life > 0.0f )
+			system->dcol[0] = 0.0f;
+			system->dcol[1] = 0.0f;
+			system->dcol[2] = 0.0f;
+			if (life > 0.0f)
 				system->dcol[3] = -trans_factor / life;
 			else
 				system->dcol[3] = -0.1f;
@@ -182,7 +173,7 @@ namespace TA3D
 
 			system->common_pos.reset();
 
-			for( int i = 0 ; i < ( nb < 0 ? 1 : nb ) ; ++i)
+			for (int i = 0; i < (nb < 0 ? 1 : nb); ++i)
 			{
 				system->pos[i] = pos;
 				system->V[i] = speed * Dir;
@@ -199,22 +190,22 @@ namespace TA3D
 		return system;
 	}
 
-	void PARTICLE_ENGINE::emit_lava(const Vector3D &pos, const Vector3D &Dir,int tex,int nb,float speed,float life)
+	void PARTICLE_ENGINE::emit_lava(const Vector3D &pos, const Vector3D &Dir, int tex, int nb, float speed, float life)
 	{
-		if (!lp_CONFIG->particle ) // If particles are OFF don't add particles
+		if (!lp_CONFIG->particle) // If particles are OFF don't add particles
 			return;
-		if (Camera::inGame!=NULL && (Camera::inGame->pos - pos).sq() >= Camera::inGame->zfar2)
+		if (Camera::inGame != NULL && (Camera::inGame->pos - pos).sq() >= Camera::inGame->zfar2)
 			return;
 
 		pMutex.lock();
 
-		for (int i = 0 ; i < nb ; ++i)
+		for (int i = 0; i < nb; ++i)
 		{
 			PARTICLE new_part;
 			new_part.px = -1;
 			new_part.py = 0;
 			new_part.slow_factor = 0.0f;
-			new_part.Pos=pos;
+			new_part.Pos = pos;
 			float speed_mul = (float(Math::RandomTable() % 100) * 0.01f + 0.01f);
 			new_part.V = speed_mul * speed * Dir;
 			new_part.life = life;
@@ -243,7 +234,7 @@ namespace TA3D
 		pMutex.unlock();
 	}
 
-	void PARTICLE_ENGINE::make_shockwave(const Vector3D &pos,int tex,int nb,float speed)
+	void PARTICLE_ENGINE::make_shockwave(const Vector3D &pos, int tex, int nb, float speed)
 	{
 		if (!lp_CONFIG->particle) // If particles are OFF don't add particles
 			return;
@@ -253,7 +244,7 @@ namespace TA3D
 		pMutex.lock();
 
 		float pre = speed * 0.01f;
-		for (int i = 0 ; i < nb ; ++i)
+		for (int i = 0; i < nb; ++i)
 		{
 			if (nb_part > 20000)
 				break;
@@ -298,13 +289,13 @@ namespace TA3D
 			new_part.light_emitter = false;
 			new_part.slow_down = true;
 			new_part.slow_factor = 0.01f;
-			part.push_back( new_part );
+			part.push_back(new_part);
 			++nb_part;
 		}
 		pMutex.unlock();
 	}
 
-	void PARTICLE_ENGINE::make_nuke(const Vector3D &pos,int tex,int nb,float speed)
+	void PARTICLE_ENGINE::make_nuke(const Vector3D &pos, int tex, int nb, float speed)
 	{
 		if (!lp_CONFIG->particle) // If particles are OFF don't add particles
 			return;
@@ -314,7 +305,7 @@ namespace TA3D
 		pMutex.lock();
 
 		float pre = speed * 0.01f;
-		for (int i=0;i<nb; ++i)
+		for (int i = 0; i < nb; ++i)
 		{
 			if (nb_part > 20000)
 				break;
@@ -349,22 +340,22 @@ namespace TA3D
 			new_part.light_emitter = (i & 1);
 			new_part.slow_down = true;
 			new_part.slow_factor = 1.0f;
-			part.push_back( new_part );
+			part.push_back(new_part);
 			++nb_part;
 		}
 		pMutex.unlock();
 	}
 
-	void PARTICLE_ENGINE::make_smoke(const Vector3D &pos,int tex,int nb,float speed,float mass,float ddsize,float alpha)
+	void PARTICLE_ENGINE::make_smoke(const Vector3D &pos, int tex, int nb, float speed, float mass, float ddsize, float alpha)
 	{
-		if (!lp_CONFIG->particle ) // If particles are OFF don't add particles
+		if (!lp_CONFIG->particle) // If particles are OFF don't add particles
 			return;
-		if (Camera::inGame!=NULL && (Camera::inGame->pos - pos).sq()>=Camera::inGame->zfar2)
+		if (Camera::inGame != NULL && (Camera::inGame->pos - pos).sq() >= Camera::inGame->zfar2)
 			return;
 
 		pMutex.lock();
 
-		float pre=speed*0.01f;
+		float pre = speed * 0.01f;
 		for (int i = 0; i < nb; ++i)
 		{
 			PARTICLE new_part;
@@ -377,33 +368,33 @@ namespace TA3D
 			new_part.V.unit();
 			new_part.V = float((Math::RandomTable() % 100) + 1) * pre * new_part.V;
 
-			new_part.life          = 3.0f;
-			new_part.mass          = mass;
-			new_part.smoking       = -1.0f;
-			new_part.gltex         = tex;
-			new_part.col[0]        = 1.0f;
-			new_part.col[1]        = 1.0f;
-			new_part.col[2]        = 1.0f;
-			new_part.col[3]        = alpha;
-			new_part.dcol[0]       = 0.0f;
-			new_part.dcol[1]       = 0.0f;
-			new_part.dcol[2]       = 0.0f;
-			new_part.dcol[3]       = -0.3333f * alpha;
-			new_part.angle         = 0.0f;
-			new_part.v_rot         = float(Math::RandomTable() % 200) * 0.01f - 0.1f;
-			new_part.size          = 1.0f;
-			new_part.use_wind      = ((!Yuni::Math::Zero(mass)) ? true : false);
-			new_part.dsize         = 10.0f;
-			new_part.ddsize        = ddsize;
+			new_part.life = 3.0f;
+			new_part.mass = mass;
+			new_part.smoking = -1.0f;
+			new_part.gltex = tex;
+			new_part.col[0] = 1.0f;
+			new_part.col[1] = 1.0f;
+			new_part.col[2] = 1.0f;
+			new_part.col[3] = alpha;
+			new_part.dcol[0] = 0.0f;
+			new_part.dcol[1] = 0.0f;
+			new_part.dcol[2] = 0.0f;
+			new_part.dcol[3] = -0.3333f * alpha;
+			new_part.angle = 0.0f;
+			new_part.v_rot = float(Math::RandomTable() % 200) * 0.01f - 0.1f;
+			new_part.size = 1.0f;
+			new_part.use_wind = ((!Yuni::Math::Zero(mass)) ? true : false);
+			new_part.dsize = 10.0f;
+			new_part.ddsize = ddsize;
 			new_part.light_emitter = false;
-			new_part.slow_down     = false;
+			new_part.slow_down = false;
 			part.push_back(new_part);
 			++nb_part;
 		}
 		pMutex.unlock();
 	}
 
-	void PARTICLE_ENGINE::make_dark_smoke(const Vector3D &pos,int tex,int nb,float speed,float mass,float ddsize,float alpha)
+	void PARTICLE_ENGINE::make_dark_smoke(const Vector3D &pos, int tex, int nb, float speed, float mass, float ddsize, float alpha)
 	{
 		if (!lp_CONFIG->particle) // If particles are OFF don't add particles
 			return;
@@ -413,7 +404,7 @@ namespace TA3D
 		pMutex.lock();
 
 		float pre = speed * 0.01f;
-		for(int i = 0 ; i < nb ; ++i)
+		for (int i = 0; i < nb; ++i)
 		{
 			PARTICLE new_part;
 
@@ -444,15 +435,15 @@ namespace TA3D
 			new_part.ddsize = ddsize;
 			new_part.light_emitter = false;
 			new_part.slow_down = false;
-			part.push_back( new_part );
+			part.push_back(new_part);
 			++nb_part;
 		}
 		pMutex.unlock();
 	}
 
-	void PARTICLE_ENGINE::make_fire(const Vector3D &pos,int tex,int nb,float speed)
+	void PARTICLE_ENGINE::make_fire(const Vector3D &pos, int tex, int nb, float speed)
 	{
-		if (!lp_CONFIG->particle ) // If particles are OFF don't add particles
+		if (!lp_CONFIG->particle) // If particles are OFF don't add particles
 			return;
 		if (Camera::inGame != NULL && (Camera::inGame->pos - pos).sq() >= Camera::inGame->zfar2)
 			return;
@@ -490,7 +481,7 @@ namespace TA3D
 			new_part.ddsize = -23.0f;
 			new_part.light_emitter = true;
 			new_part.slow_down = false;
-			part.push_back( new_part );
+			part.push_back(new_part);
 			++nb_part;
 		}
 		pMutex.unlock();
@@ -510,10 +501,10 @@ namespace TA3D
 		const float factor2 = expf(-dt);
 		const float dt_reduced = dt * 0.0025f;
 
-		for (std::vector< ParticlesSystem* >::iterator i = particle_systems.begin() ; i != particle_systems.end() ; )
+		for (std::vector<ParticlesSystem *>::iterator i = particle_systems.begin(); i != particle_systems.end();)
 		{
-			(*i)->move( dt, factor, factor2 );
-			if ((*i)->life >= 0.0f )
+			(*i)->move(dt, factor, factor2);
+			if ((*i)->life >= 0.0f)
 				++i;
 			else
 			{
@@ -532,12 +523,12 @@ namespace TA3D
 		const Vector3D w_dir = dt * wind_dir;
 
 		Vector3D RAND;
-		for (std::vector<PARTICLE>::iterator e = part.begin() ; e != part.end() ;)
+		for (std::vector<PARTICLE>::iterator e = part.begin(); e != part.end();)
 		{
 			e->life -= dt;
 			if (e->life < 0.0f)
 			{
-				bool quit =  (e + 1 == part.end());
+				bool quit = (e + 1 == part.end());
 				*e = part.back();
 				part.pop_back();
 				--nb_part;
@@ -553,8 +544,8 @@ namespace TA3D
 			else
 				e->V = e->V - e->mass * G + RAND;
 			if (e->slow_down)
-				e->V = expf( -dt * e->slow_factor ) * e->V;
-			if (e->mass>0.0f)
+				e->V = expf(-dt * e->slow_factor) * e->V;
+			if (e->mass > 0.0f)
 				e->V = factor * e->V;
 			else
 				e->V = factor2 * e->V;
@@ -586,10 +577,9 @@ namespace TA3D
 		pMutex.unlock();
 	}
 
-
 	void PARTICLE_ENGINE::draw(Camera *cam)
 	{
-		if ((part.empty() || nb_part == 0) && particle_systems.empty())	// no need to run the code if there is nothing to draw
+		if ((part.empty() || nb_part == 0) && particle_systems.empty()) // no need to run the code if there is nothing to draw
 			return;
 
 		pMutex.lock();
@@ -609,18 +599,18 @@ namespace TA3D
 		glDisable(GL_LIGHTING);
 		glDisable(GL_CULL_FACE);
 		glDepthMask(GL_FALSE);
-		glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glEnable(GL_BLEND);
 
 		glDisableClientState(GL_NORMAL_ARRAY);
-		glEnableClientState(GL_VERTEX_ARRAY);		// Les sommets
+		glEnableClientState(GL_VERTEX_ARRAY); // Les sommets
 		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 		glEnableClientState(GL_COLOR_ARRAY);
-		glBindTexture(GL_TEXTURE_2D,parttex);
+		glBindTexture(GL_TEXTURE_2D, parttex);
 
-		glVertexPointer( 3, GL_FLOAT, 0, point);
+		glVertexPointer(3, GL_FLOAT, 0, point);
 		glTexCoordPointer(2, GL_FLOAT, 0, texcoord);
-		glColorPointer(4,GL_UNSIGNED_BYTE,0,color);
+		glColorPointer(4, GL_UNSIGNED_BYTE, 0, color);
 
 		for (int light_emitters = 0; light_emitters <= 1; ++light_emitters)
 		{
@@ -647,7 +637,7 @@ namespace TA3D
 						continue;
 				}
 				else
-					continue;	// Particule en dehors de la carte donc hors champ
+					continue; // Particule en dehors de la carte donc hors champ
 				++j;
 				if (!j || !Yuni::Math::Equals(oangle, e->angle))
 				{
@@ -671,51 +661,55 @@ namespace TA3D
 				int i_ter = j << 3;
 				const float px = 0.25f * float(e->gltex & 3) + 0.001f;
 				const float py = 0.25f * float(e->gltex >> 2) + 0.001f;
-				texcoord[i_ter++] = px;			texcoord[i_ter++] = py;
-				texcoord[i_ter++] = px+0.248f;	texcoord[i_ter++] = py;
-				texcoord[i_ter++] = px+0.248f;	texcoord[i_ter++] = py+0.248f;
-				texcoord[i_ter++] = px;			texcoord[i_ter]= py+0.248f;
+				texcoord[i_ter++] = px;
+				texcoord[i_ter++] = py;
+				texcoord[i_ter++] = px + 0.248f;
+				texcoord[i_ter++] = py;
+				texcoord[i_ter++] = px + 0.248f;
+				texcoord[i_ter++] = py + 0.248f;
+				texcoord[i_ter++] = px;
+				texcoord[i_ter] = py + 0.248f;
 
 				uint32 col = 0;
-				if (e->col[0] >= 0.0f && e->col[0] <= 1.0f )
+				if (e->col[0] >= 0.0f && e->col[0] <= 1.0f)
 					col |= ((uint32)(e->col[0] * 255));
 				else
 					col |= e->col[0] < 0.0f ? 0 : 0xFF;
 
-				if (e->col[1] >= 0.0f && e->col[1] <= 1.0f )
+				if (e->col[1] >= 0.0f && e->col[1] <= 1.0f)
 					col |= ((uint32)(e->col[1] * 255)) << 8;
 				else
 					col |= e->col[1] < 0.0f ? 0 : 0xFF00;
 
-				if (e->col[2] >= 0.0f && e->col[2] <= 1.0f )
+				if (e->col[2] >= 0.0f && e->col[2] <= 1.0f)
 					col |= ((uint32)(e->col[2] * 255)) << 16;
 				else
 					col |= e->col[2] < 0.0f ? 0 : 0xFF0000;
 
-				if (e->col[3] >= 0.0f && e->col[3] <= 1.0f )
+				if (e->col[3] >= 0.0f && e->col[3] <= 1.0f)
 					col |= ((uint32)(e->col[3] * 255)) << 24;
 				else
 					col |= e->col[3] < 0.0f ? 0 : 0xFF000000;
 
-				((uint32*)color)[i_bis - 3] = ((uint32*)color)[i_bis - 2] = ((uint32*)color)[i_bis - 1] = ((uint32*)color)[i_bis] = col;
+				((uint32 *)color)[i_bis - 3] = ((uint32 *)color)[i_bis - 2] = ((uint32 *)color)[i_bis - 1] = ((uint32 *)color)[i_bis] = col;
 
-				if (j >= 1023 )
+				if (j >= 1023)
 				{
-					glDrawArrays( GL_QUADS, 0, (j + 1) << 2 );					// Draw everything
+					glDrawArrays(GL_QUADS, 0, (j + 1) << 2); // Draw everything
 					j = -1;
 				}
 			}
-			if (j >= 0 )
-				glDrawArrays( GL_QUADS, 0, (j + 1) << 2 );					// Draw everything
+			if (j >= 0)
+				glDrawArrays(GL_QUADS, 0, (j + 1) << 2); // Draw everything
 
-			glBlendFunc(GL_SRC_ALPHA,GL_ONE);
+			glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 		}
 
 		pMutex.unlock();
 
-		glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glDisableClientState(GL_NORMAL_ARRAY);
-		glEnableClientState(GL_VERTEX_ARRAY);				// Vertices
+		glEnableClientState(GL_VERTEX_ARRAY); // Vertices
 		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 		glDisableClientState(GL_COLOR_ARRAY);
 
@@ -731,20 +725,20 @@ namespace TA3D
 			glPointParameterfv(GL_POINT_DISTANCE_ATTENUATION, coeffs);
 
 		// Point size
-		glPointParameterf (GL_POINT_SIZE_MAX, 3200000.0f);
-		glPointParameterf (GL_POINT_SIZE_MIN, 1.0f);
+		glPointParameterf(GL_POINT_SIZE_MAX, 3200000.0f);
+		glPointParameterf(GL_POINT_SIZE_MIN, 1.0f);
 
 		// Set the texture center on the point
-		glTexEnvf (GL_POINT_SPRITE, GL_COORD_REPLACE, GL_TRUE);
+		glTexEnvf(GL_POINT_SPRITE, GL_COORD_REPLACE, GL_TRUE);
 
 		// We're using point sprites
-		glEnable (GL_POINT_SPRITE);
+		glEnable(GL_POINT_SPRITE);
 
 		pMutex.lock();
-		for (std::vector<ParticlesSystem*>::iterator i = particle_systems.begin() ; i != particle_systems.end() ; ++i)
+		for (std::vector<ParticlesSystem *>::iterator i = particle_systems.begin(); i != particle_systems.end(); ++i)
 			(*i)->draw();
 		pMutex.unlock();
-		glDisable (GL_POINT_SPRITE);
+		glDisable(GL_POINT_SPRITE);
 		coeffs[0] = 1.0f;
 		coeffs[1] = 0.0f;
 		coeffs[2] = 0.0f;
@@ -759,7 +753,7 @@ namespace TA3D
 
 	void PARTICLE_ENGINE::drawUW()
 	{
-		if (particle_systems.empty())	// no need to run the code if there is nothing to draw
+		if (particle_systems.empty()) // no need to run the code if there is nothing to draw
 			return;
 
 		Camera::inGame->setView(true);
@@ -772,9 +766,9 @@ namespace TA3D
 		glDepthMask(GL_FALSE);
 		glEnable(GL_BLEND);
 
-		glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glDisableClientState(GL_NORMAL_ARRAY);
-		glEnableClientState(GL_VERTEX_ARRAY);				// Vertices
+		glEnableClientState(GL_VERTEX_ARRAY); // Vertices
 		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 		glDisableClientState(GL_COLOR_ARRAY);
 
@@ -790,28 +784,28 @@ namespace TA3D
 			glPointParameterfv(GL_POINT_DISTANCE_ATTENUATION, coeffs);
 
 		// Point size
-		glPointParameterf (GL_POINT_SIZE_MAX, 3200000.0f);
-		glPointParameterf (GL_POINT_SIZE_MIN, 1.0f);
+		glPointParameterf(GL_POINT_SIZE_MAX, 3200000.0f);
+		glPointParameterf(GL_POINT_SIZE_MIN, 1.0f);
 
 		// Set the texture center on the point
-		glTexEnvf (GL_POINT_SPRITE, GL_COORD_REPLACE, GL_TRUE);
+		glTexEnvf(GL_POINT_SPRITE, GL_COORD_REPLACE, GL_TRUE);
 
 		// We're using point sprites
-		glEnable (GL_POINT_SPRITE);
+		glEnable(GL_POINT_SPRITE);
 
-		double eqn[4]= { 0.0f, -1.0f, 0.0f, the_map->sealvl };
+		double eqn[4] = {0.0f, -1.0f, 0.0f, the_map->sealvl};
 
 		glClipPlane(GL_CLIP_PLANE1, eqn);
 		glEnable(GL_CLIP_PLANE1);
 
 		pMutex.lock();
-		for (std::vector<ParticlesSystem*>::iterator i = particle_systems.begin() ; i != particle_systems.end() ; ++i)
+		for (std::vector<ParticlesSystem *>::iterator i = particle_systems.begin(); i != particle_systems.end(); ++i)
 			(*i)->draw();
 		pMutex.unlock();
 
 		glDisable(GL_CLIP_PLANE1);
 
-		glDisable (GL_POINT_SPRITE);
+		glDisable(GL_POINT_SPRITE);
 		coeffs[0] = 1.0f;
 		coeffs[1] = 0.0f;
 		coeffs[2] = 0.0f;
@@ -835,14 +829,14 @@ namespace TA3D
 		thread_ask_to_stop = false;
 		p_wind_dir = NULL;
 		p_g = NULL;
-		dsmoke=load;
-		ntex=0;
-		partbmp=NULL;
+		dsmoke = load;
+		ntex = 0;
+		partbmp = NULL;
 
 		if (load)
 		{
-			partbmp = gfx->create_surface_ex(32,256,256);
-			SDL_Surface* bmp = gfx->load_image("gfx/smoke.tga");
+			partbmp = gfx->create_surface_ex(32, 256, 256);
+			SDL_Surface *bmp = gfx->load_image("gfx/smoke.tga");
 
 			gltex.push_back(gfx->make_texture(bmp));
 			stretch_blit(bmp, partbmp, 0, 0, bmp->w, bmp->h, 0, 0, 64, 64);
@@ -851,12 +845,12 @@ namespace TA3D
 			gfx->set_texture_format(gfx->defaultTextureFormat_RGBA());
 			parttex = gfx->make_texture(partbmp, FILTER_TRILINEAR);
 		}
-		size=0;
-		nb_part=0;
+		size = 0;
+		nb_part = 0;
 		part.clear();
-		point=NULL;
-		texcoord=NULL;
-		color=NULL;
+		point = NULL;
+		texcoord = NULL;
+		color = NULL;
 
 		pMutex.unlock();
 	}
@@ -865,11 +859,11 @@ namespace TA3D
 	{
 		pMutex.lock();
 
-		for (unsigned int i = 0 ; i < gltex.size() ; ++i)
+		for (unsigned int i = 0; i < gltex.size(); ++i)
 			gfx->destroy_texture(gltex[i]);
 		gltex.clear();
 
-		for (std::vector<ParticlesSystem*>::iterator i = particle_systems.begin() ; i != particle_systems.end() ; ++i)
+		for (std::vector<ParticlesSystem *>::iterator i = particle_systems.begin(); i != particle_systems.end(); ++i)
 			(*i)->destroy();
 
 		particle_systems.clear();
@@ -891,9 +885,7 @@ namespace TA3D
 		pMutex.unlock();
 	}
 
-
-
-	void PARTICLE_ENGINE::proc(void*)
+	void PARTICLE_ENGINE::proc(void *)
 	{
 		thread_running = true;
 		float dt = 1.0f / TICKS_PER_SEC;
@@ -903,7 +895,7 @@ namespace TA3D
 		while (!thread_ask_to_stop)
 		{
 			++counter;
-			move(dt,*p_wind_dir, *p_g);	// Animate particles
+			move(dt, *p_wind_dir, *p_g); // Animate particles
 
 			Engine::sync();
 		}
@@ -912,13 +904,10 @@ namespace TA3D
 		LOG_INFO("Particle engine: " << (float)(counter * 1000) / float(msec_timer - particle_timer) << " ticks/sec.");
 	}
 
-
 	void PARTICLE_ENGINE::signalExitThread()
 	{
 		if (thread_running)
 			thread_ask_to_stop = true;
 	}
 
-
 } // namespace TA3D
-

@@ -23,8 +23,8 @@ namespace TA3D
 {
 	namespace VARS
 	{
-		extern int                              mouse_x, mouse_y, mouse_z, mouse_b;
-		extern float                            fmouse_x, fmouse_y;
+		extern int mouse_x, mouse_y, mouse_z, mouse_b;
+		extern float fmouse_x, fmouse_y;
 	}
 
 	/*!
@@ -74,7 +74,7 @@ extern int CURSOR_PATROL;
 extern int CURSOR_REPAIR;
 extern int CURSOR_ATTACK;
 extern int CURSOR_BLUE;
-#define CURSOR_DEFAULT		CURSOR_BLUE
+#define CURSOR_DEFAULT CURSOR_BLUE
 extern int CURSOR_AIR_LOAD;
 extern int CURSOR_BOMB_ATTACK;
 extern int CURSOR_BALANCE;

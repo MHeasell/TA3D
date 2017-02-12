@@ -22,83 +22,84 @@
 */
 
 #ifndef __TA3D_UTILS_VFS_REALFS_H__
-# define __TA3D_UTILS_VFS_REALFS_H__
+#define __TA3D_UTILS_VFS_REALFS_H__
 
-# include "archive.h"
-# include <misc/hash_table.h>
+#include "archive.h"
+#include <misc/hash_table.h>
 
 namespace TA3D
 {
-    namespace UTILS
-    {
-        /*! \class RealFS
+	namespace UTILS
+	{
+		/*! \class RealFS
         **
         ** \brief abstract class defining the interface required to manipulate real files
         */
-        class RealFS : public Archive
-        {
-        public:
+		class RealFS : public Archive
+		{
+		public:
 			class RealFile : public Archive::FileInfo
-            {
-            public:
-                String pathToFile;
-            public:
-                virtual ~RealFile() {}
-				inline void setName(const String &name)   {  Archive::FileInfo::name = name; }
-				inline void setParent(Archive *parent)   {  Archive::FileInfo::parent = parent; }
-            };
-        public:
-            //! Constructor
-            RealFS(const String &filename);
-            //! Destructor
-            virtual ~RealFS();
+			{
+			public:
+				String pathToFile;
 
-            /*!
+			public:
+				virtual ~RealFile() {}
+				inline void setName(const String &name) { Archive::FileInfo::name = name; }
+				inline void setParent(Archive *parent) { Archive::FileInfo::parent = parent; }
+			};
+
+		public:
+			//! Constructor
+			RealFS(const String &filename);
+			//! Destructor
+			virtual ~RealFS();
+
+			/*!
             ** \brief Loads an archive
             */
-            virtual void open(const String& filename);
+			virtual void open(const String &filename);
 
-            /*!
+			/*!
             ** \brief Just close the opened archive
             */
-            virtual void close();
+			virtual void close();
 
-            /*!
+			/*!
             ** \brief Return the list of all files in the archive
             */
-			virtual void getFileList(std::deque<FileInfo*> &lFiles);
+			virtual void getFileList(std::deque<FileInfo *> &lFiles);
 
-            /*!
+			/*!
             ** \brief
             */
-			virtual File* readFile(const String& filename);
-			virtual File* readFile(const FileInfo *file);
+			virtual File *readFile(const String &filename);
+			virtual File *readFile(const FileInfo *file);
 
-            /*!
+			/*!
             ** \brief
             ** \param filename
             ** \param start
             ** \param length
             ** \return
             */
-			virtual File* readFileRange(const String& filename, const uint32 start, const uint32 length);
-			virtual File* readFileRange(const FileInfo *file, const uint32 start, const uint32 length);
+			virtual File *readFileRange(const String &filename, const uint32 start, const uint32 length);
+			virtual File *readFileRange(const FileInfo *file, const uint32 start, const uint32 length);
 
-            /*!
+			/*!
             ** \brief returns true if using the cache is a good idea (real FS will return false)
             ** \return
             */
-            virtual bool needsCaching();
+			virtual bool needsCaching();
 
-        private:
-			HashMap<RealFile*>::Sparse files;
+		private:
+			HashMap<RealFile *>::Sparse files;
 
-        public:
-            static void finder(String::List &fileList, const String &path);
-            static Archive* loader(const String &filename);
-        }; // class RealFS
-    } // namespace utils
+		public:
+			static void finder(String::List &fileList, const String &path);
+			static Archive *loader(const String &filename);
+		}; // class RealFS
+	}	  // namespace utils
 } // namespace TA3D
-
 
 #endif // __TA3D_UTILS_VFS_REALFS_H__

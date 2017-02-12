@@ -18,22 +18,19 @@
 #include "stdafx.h"
 #include "TA3D_NameSpace.h"
 #if defined TA3D_PLATFORM_LINUX || defined TA3D_PLATFORM_DARWIN
-#   include <sys/stat.h>
+#include <sys/stat.h>
 #endif
 #include "misc/paths.h"
-
-
-
 
 namespace TA3D
 {
 
 	// global variables:
-	TA3D::TA3DCONFIG::Ptr		TA3D::VARS::lp_CONFIG = NULL;
-	TA3D::GFX::Ptr				TA3D::VARS::gfx = NULL;						// The gfx object we will use to draw basic things and manage fonts, textures, ...
-	SDL_Color					*TA3D::VARS::pal = NULL;
-	String						TA3D::VARS::TA3D_CURRENT_MOD = "";		// This string stores the path to current mod
-	SDL_Surface					*TA3D::VARS::screen = NULL;
+	TA3D::TA3DCONFIG::Ptr TA3D::VARS::lp_CONFIG = NULL;
+	TA3D::GFX::Ptr TA3D::VARS::gfx = NULL; // The gfx object we will use to draw basic things and manage fonts, textures, ...
+	SDL_Color *TA3D::VARS::pal = NULL;
+	String TA3D::VARS::TA3D_CURRENT_MOD = ""; // This string stores the path to current mod
+	SDL_Surface *TA3D::VARS::screen = NULL;
 
 	TA3DCONFIG::TA3DCONFIG()
 	{
@@ -69,7 +66,7 @@ namespace TA3D
 
 		right_click_interface = false;
 
-		disable_GLSL = false;           // By default we want shaders
+		disable_GLSL = false; // By default we want shaders
 
 		underwater_bright = false;
 
@@ -92,24 +89,24 @@ namespace TA3D
 		skin_name = "";
 
 		camera_zoom = ZOOM_NORMAL;
-		camera_def_angle = 63.44f;        // TA angle
+		camera_def_angle = 63.44f; // TA angle
 		camera_def_h = 200.0f;
 		camera_zoom_speed = 1.0f;
 
 		player_name = "player";
 		serializedGameData.clear();
 
-		draw_console_loading = false;    // default set to false since it's a developer feature
-		detail_tex = false;                // default set to false because of fragment program dependency ( and it's only an eye candy feature )
+		draw_console_loading = false; // default set to false since it's a developer feature
+		detail_tex = false;			  // default set to false because of fragment program dependency ( and it's only an eye candy feature )
 
 		fps_limit = -1.0f;
 		timefactor = 1.0f;
 		shadow_quality = 2;
 		shadowmap_size = 2;
 		priority_level = 0;
-		water_quality = 1;              // For now only because we have shaders issues with ati board
+		water_quality = 1; // For now only because we have shaders issues with ati board
 		fsaa = 0;
-		Lang = "english";               // English
+		Lang = "english"; // English
 		screen_width = 800;
 		screen_height = 600;
 		color_depth = 32;
@@ -119,7 +116,7 @@ namespace TA3D
 		explosion_particles = true;
 		waves = true;
 		height_line = false;
-		fullscreen = false;            // For now, later will be true when we will reach a beta release
+		fullscreen = false; // For now, later will be true when we will reach a beta release
 
 		last_MOD = "";
 
@@ -136,5 +133,3 @@ namespace TA3D
 	}
 
 } // namespace TA3D
-
-

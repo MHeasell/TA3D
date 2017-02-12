@@ -24,23 +24,20 @@
   \-----------------------------------------------------------------------------------*/
 
 #ifndef __TA3D_MISC_GAF_H__
-# define __TA3D_MISC_GAF_H__
+#define __TA3D_MISC_GAF_H__
 
-# include "stdafx.h"
-# include "misc/string.h"
-# include <vector>
-# include "logs/logs.h"
-# include "sdl.h"
+#include "stdafx.h"
+#include "misc/string.h"
+#include <vector>
+#include "logs/logs.h"
+#include "sdl.h"
 
-# define TA3D_GAF_STANDARD      0x00010100
-# define TA3D_GAF_TRUECOLOR     0x00010101
+#define TA3D_GAF_STANDARD 0x00010100
+#define TA3D_GAF_TRUECOLOR 0x00010101
 
 #if not defined FILTER_TRILINEAR
-# define FILTER_TRILINEAR   0x3
+#define FILTER_TRILINEAR 0x3
 #endif
-
-
-
 
 namespace TA3D
 {
@@ -69,7 +66,7 @@ namespace TA3D
 			//! \name Constructors
 			//@{
 			//! Default constructor
-			Header() :IDVersion(0), Entries(0), Unknown1(0) {}
+			Header() : IDVersion(0), Entries(0), Unknown1(0) {}
 			/*!
 			** \brief Constructor with RAW data from file
 			*/
@@ -78,8 +75,9 @@ namespace TA3D
 			** \brief Constructor
 			*/
 			Header(const sint32 v, const sint32 e, const sint32 u)
-				:IDVersion(v), Entries(e), Unknown1(u)
-			{}
+				: IDVersion(v), Entries(e), Unknown1(u)
+			{
+			}
 			//@}
 
 			//! Version stamp - always 0x00010100 */ // 0x00010101 is used for truecolor mode
@@ -98,7 +96,7 @@ namespace TA3D
 			//! \name Constructors
 			//@{
 			//! Default constructor
-			Entry() :Frames(0), Unknown1(1), Unknown2(0) {}
+			Entry() : Frames(0), Unknown1(1), Unknown2(0) {}
 			//@}
 
 			//! Number of frames in this entry
@@ -123,7 +121,6 @@ namespace TA3D
 				//! Unknown - varies
 				sint32 Unknown1;
 			};
-
 
 			/*!
 			** \brief Data for a single frame
@@ -154,17 +151,15 @@ namespace TA3D
 				//! Count of subframes
 				sint16 FramePointers;
 				//! Unknown - always 0
-				sint32  Unknown2;
+				sint32 Unknown2;
 				//! Pointer to pixels or subframes
-				sint32  PtrFrameData;
+				sint32 PtrFrameData;
 				//! Unknown - value varies
-				sint32  Unknown3;
+				sint32 Unknown3;
 
 			}; // class Data
 
 		}; // class Frame
-
-
 
 	public:
 		/*!
@@ -182,13 +177,13 @@ namespace TA3D
 		** \param[out] h The height of the image
 		** \param truecolor
 		*/
-		static void ToTexturesList(std::vector<GLuint>& out, const String& filename, const String &imgname,
+		static void ToTexturesList(std::vector<GLuint>& out, const String& filename, const String& imgname,
 								   int* w = NULL, int* h = NULL, const bool truecolor = true, const int filter = FILTER_TRILINEAR);
 
 		/*!
 		** \brief Load a GAF image into a SDL_Surface
 		*/
-		static SDL_Surface* RawDataToBitmap(UTILS::File* file, const sint32 entry_idx, const sint32 img_idx, short* ofs_x = NULL, short* ofs_y = NULL, const bool truecolor = true);			// Lit une image d'un fichier gaf en mémoire
+		static SDL_Surface* RawDataToBitmap(UTILS::File* file, const sint32 entry_idx, const sint32 img_idx, short* ofs_x = NULL, short* ofs_y = NULL, const bool truecolor = true); // Lit une image d'un fichier gaf en mémoire
 
 		/*!
 		** \brief Get the number of entries from raw data
@@ -198,11 +193,9 @@ namespace TA3D
 
 		static String RawDataGetEntryName(UTILS::File* file, int entry_idx);
 
-		static sint32 RawDataGetEntryIndex(UTILS::File *file, const String& name);
+		static sint32 RawDataGetEntryIndex(UTILS::File* file, const String& name);
 
-		static sint32 RawDataImageCount(UTILS::File *file, const int entry_idx);
-
-
+		static sint32 RawDataImageCount(UTILS::File* file, const int entry_idx);
 
 	public:
 		/*!
@@ -214,17 +207,17 @@ namespace TA3D
 			//! \name Constructor & Destructor
 			//@{
 			//! Default constructor
-			Animation() {init();}
+			Animation() { init(); }
 			//! Destructor
-			~Animation() {destroy();}
+			~Animation() { destroy(); }
 			//@}
 
 			void init();
 			void destroy();
 
-			void loadGAFFromRawData(UTILS::File *file, const int entry_idx = 0, const bool truecolor = true, const String& fname = String());
+			void loadGAFFromRawData(UTILS::File* file, const int entry_idx = 0, const bool truecolor = true, const String& fname = String());
 
-			void loadGAFFromDirectory(const String &folderName, const String &entryName);
+			void loadGAFFromDirectory(const String& folderName, const String& entryName);
 
 			void convert(bool NO_FILTER = false, bool COMPRESSED = false);
 
@@ -248,16 +241,15 @@ namespace TA3D
 			//!
 			String name;
 			//!
-			String  filename;
+			String filename;
 			//!
-			bool    logo;       // Logo flag, used to prevent animated logos
+			bool logo; // Logo flag, used to prevent animated logos
 
 		private:
 			//! True when convert() has already been called
 			bool pAnimationConverted;
 
 		}; // class Animation
-
 
 		/*! \class AnimationList
 		**
@@ -269,7 +261,7 @@ namespace TA3D
 			//! \name Constructor & Destructor
 			//@{
 			//! Default constructor
-			AnimationList() :pList() {}
+			AnimationList() : pList() {}
 			//! Destructor
 			~AnimationList();
 			//@}
@@ -298,7 +290,7 @@ namespace TA3D
 			** \param fname
 			** \return The number of animation found
 			*/
-			sint32 loadGAFFromDirectory(const String &folderName, const bool doConvert = false);
+			sint32 loadGAFFromDirectory(const String& folderName, const bool doConvert = false);
 
 			/*!
 			** \brief
@@ -321,19 +313,25 @@ namespace TA3D
 			/*!
 			** \brief The number of Animation in the list
 			*/
-			sint32 size() const {return sint32(pList.size());}
+			sint32 size() const { return sint32(pList.size()); }
 
 			/*!
 			** \brief Get an animation given its index
 			*/
-			const Gaf::Animation& operator[] (const sint32 indx) const
-			{ LOG_ASSERT((unsigned int)indx < pList.size()); return pList[indx]; }
+			const Gaf::Animation& operator[](const sint32 indx) const
+			{
+				LOG_ASSERT((unsigned int)indx < pList.size());
+				return pList[indx];
+			}
 
 			/*!
 			** \brief Get an animation given its index
 			*/
-			Gaf::Animation& operator[] (const sint32 indx)
-			{ LOG_ASSERT((unsigned int)indx < pList.size()); return pList[indx]; }
+			Gaf::Animation& operator[](const sint32 indx)
+			{
+				LOG_ASSERT((unsigned int)indx < pList.size());
+				return pList[indx];
+			}
 
 		private:
 			typedef std::vector<Gaf::Animation> AnimationVector;
@@ -341,13 +339,8 @@ namespace TA3D
 			AnimationVector pList;
 		}; // class AnimationList
 
-
 	}; // class Gaf
 
-
-
-
 } // namespace TA3D
-
 
 #endif // __TA3D_MISC_GAF_H__

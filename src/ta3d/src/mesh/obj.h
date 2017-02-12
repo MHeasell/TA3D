@@ -21,7 +21,7 @@
 #include "3dm.h"
 #include <vfs/file.h>
 
-#define LOG_PREFIX_OBJ               "[obj] "
+#define LOG_PREFIX_OBJ "[obj] "
 
 namespace TA3D
 {
@@ -34,7 +34,7 @@ namespace TA3D
 		};
 	}
 
-	class MeshOBJ : public Mesh3DM		// Classe pour la gestion des (sous-)objets des modèles 3do
+	class MeshOBJ : public Mesh3DM // Classe pour la gestion des (sous-)objets des modèles 3do
 	{
 	public:
 		MeshOBJ();
@@ -43,8 +43,10 @@ namespace TA3D
 		virtual void load_texture_id(int id);
 
 		void load(File *file, const String &filename);
+
 	private:
-		void obj_finalize(const String &filename, const std::vector<int> &face, const std::vector<Vector3D> &vertex, const std::vector<Vector2D> &tcoord, MOBJ::Material* mtl = NULL);
+		void obj_finalize(const String &filename, const std::vector<int> &face, const std::vector<Vector3D> &vertex, const std::vector<Vector2D> &tcoord, MOBJ::Material *mtl = NULL);
+
 	public:
 		static Model *load(const String &filename);
 		static const char *getExt();

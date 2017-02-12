@@ -22,7 +22,7 @@
 \--------------------------------------------------------------*/
 
 #ifndef __TA3D_GFX_GL_FUNCTIONS_H__
-# define __TA3D_GFX_GL_FUNCTIONS_H__
+#define __TA3D_GFX_GL_FUNCTIONS_H__
 
 #include <stdafx.h>
 #include "gl.extensions.h"
@@ -31,7 +31,7 @@
 namespace TA3D
 {
 
-	extern bool	MultiTexturing;
+	extern bool MultiTexturing;
 	extern bool g_useTextureCompression;
 	extern bool g_useStencilTwoSide;
 	extern bool g_useProgram;
@@ -43,7 +43,6 @@ namespace TA3D
 	** \brief Try to enable some specific OpenGL extensions
 	*/
 	void installOpenGLExtensions();
-
 
 } // namespace TA3D
 

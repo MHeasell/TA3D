@@ -40,10 +40,8 @@
 #include "menus/loading.h"
 #include <cache.h>
 
-
 using namespace Yuni;
 using namespace Yuni::Core::IO::File;
-
 
 namespace TA3D
 {
@@ -55,39 +53,39 @@ namespace TA3D
 
 		water_shader.destroy();
 		if (map->ota_data.whitefog)
-			water_shader.load("shaders/water_fog.frag","shaders/water.vert");
+			water_shader.load("shaders/water_fog.frag", "shaders/water.vert");
 		else
-			water_shader.load("shaders/water.frag","shaders/water.vert");
+			water_shader.load("shaders/water.frag", "shaders/water.vert");
 		water_shader_reflec.destroy();
 		if (map->ota_data.whitefog)
-			water_shader_reflec.load("shaders/water_fog.frag","shaders/water.vert");
+			water_shader_reflec.load("shaders/water_fog.frag", "shaders/water.vert");
 		else
-			water_shader_reflec.load("shaders/water_reflec.frag","shaders/water.vert");
+			water_shader_reflec.load("shaders/water_reflec.frag", "shaders/water.vert");
 		water_pass1.destroy();
-		water_pass1.load("shaders/water_pass1.frag","shaders/water_pass1.vert");
+		water_pass1.load("shaders/water_pass1.frag", "shaders/water_pass1.vert");
 		water_pass1_low.destroy();
-		water_pass1_low.load("shaders/water_pass1_low.frag","shaders/water_pass1.vert");
+		water_pass1_low.load("shaders/water_pass1_low.frag", "shaders/water_pass1.vert");
 		water_pass2.destroy();
-		water_pass2.load("shaders/water_pass2.frag","shaders/water_pass2.vert");
+		water_pass2.load("shaders/water_pass2.frag", "shaders/water_pass2.vert");
 		map->detail_shader.destroy();
-		map->detail_shader.load( "shaders/details.frag", "shaders/details.vert");
+		map->detail_shader.load("shaders/details.frag", "shaders/details.vert");
 		map->shadow2_shader.destroy();
 		map->shadow2_shader.load("shaders/map_shadow.frag", "shaders/map_shadow.vert");
 		water_simulator_shader.destroy();
-		water_simulator_shader.load("shaders/water_simulator.frag","shaders/water_simulator.vert");
+		water_simulator_shader.load("shaders/water_simulator.frag", "shaders/water_simulator.vert");
 		water_simulator_shader2.destroy();
-		water_simulator_shader2.load("shaders/water_simulator2.frag","shaders/water_simulator.vert");
+		water_simulator_shader2.load("shaders/water_simulator2.frag", "shaders/water_simulator.vert");
 		water_simulator_shader3.destroy();
-		water_simulator_shader3.load("shaders/water_simulator3.frag","shaders/water_simulator.vert");
+		water_simulator_shader3.load("shaders/water_simulator3.frag", "shaders/water_simulator.vert");
 		water_simulator_shader4.destroy();
-		water_simulator_shader4.load("shaders/water_simulator4.frag","shaders/water_simulator4.vert");
+		water_simulator_shader4.load("shaders/water_simulator4.frag", "shaders/water_simulator4.vert");
 		water_distortions_shader.destroy();
-		water_distortions_shader.load("shaders/water_distortions.frag","shaders/water_distortions.vert");
+		water_distortions_shader.load("shaders/water_distortions.frag", "shaders/water_distortions.vert");
 		water_simulator_reflec.destroy();
 		if (map->ota_data.whitefog)
-			water_simulator_reflec.load("shaders/water_sim_fog.frag","shaders/water.vert");
+			water_simulator_reflec.load("shaders/water_sim_fog.frag", "shaders/water.vert");
 		else
-			water_simulator_reflec.load("shaders/water_sim_reflec.frag","shaders/water.vert");
+			water_simulator_reflec.load("shaders/water_sim_reflec.frag", "shaders/water.vert");
 		gfx->model_shader.destroy();
 		gfx->model_shader.load("shaders/3do_shadow.frag", "shaders/3do_shadow.vert");
 	}
@@ -98,29 +96,28 @@ namespace TA3D
 		return battle.execute();
 	}
 
-
 	Battle::Battle(GameData* g)
-		:pResult(brUnknown), pGameData(g), pNetworkEnabled(false), pNetworkIsServer(false),
-		map(NULL),
-		sky(),
-        water(0),
-		water_sim0(0),
-		water_sim1(0),
-		water_sim2(0),
-		water_distortions(0),
-		escMenuWasVisible(false),
-		height_tex(0),
-        transtex(0),
-        reflectex(0),
-        first_pass(0),
-        second_pass(0),
-		water_color(0),
-		bShowPing(false)
+		: pResult(brUnknown), pGameData(g), pNetworkEnabled(false), pNetworkIsServer(false),
+		  map(NULL),
+		  sky(),
+		  water(0),
+		  water_sim0(0),
+		  water_sim1(0),
+		  water_sim2(0),
+		  water_distortions(0),
+		  escMenuWasVisible(false),
+		  height_tex(0),
+		  transtex(0),
+		  reflectex(0),
+		  first_pass(0),
+		  second_pass(0),
+		  water_color(0),
+		  bShowPing(false)
 	{
 		LOG_INFO(LOG_PREFIX_BATTLE << "Preparing a new battle...");
 		grab_mouse(lp_CONFIG->grab_inputs);
 		pInstance = this;
-    }
+	}
 
 	Battle::~Battle()
 	{
@@ -180,8 +177,6 @@ namespace TA3D
 			grab_mouse(false);
 	}
 
-
-
 	bool Battle::loadFromGameData(GameData* g)
 	{
 		pResult = brUnknown;
@@ -200,14 +195,14 @@ namespace TA3D
 		water_sim0 = 0;
 		water_sim1 = 0;
 		water_sim2 = 0;
-        height_tex = 0;
-        transtex = 0;
-        reflectex = 0;
-        first_pass = 0;
-        second_pass = 0;
-        water_color = 0;
+		height_tex = 0;
+		transtex = 0;
+		reflectex = 0;
+		first_pass = 0;
+		second_pass = 0;
+		water_color = 0;
 
-        // We don't want to load things we won't be able to use
+		// We don't want to load things we won't be able to use
 		gfx->checkConfig();
 
 		// Here we go
@@ -288,37 +283,36 @@ namespace TA3D
 #define TA3D_LOADING_STATS
 #ifdef TA3D_LOADING_STATS
 		LOG_INFO(LOG_PREFIX_BATTLE << "statistics:");
-		const char *functionName[] = {  "initPreflight(g)",
-			"initTextures()",
-			"init3DModels()",
-			"initGraphicalFeatures()",
-			"initWeapons()",
-			"initUnits()",
-			"initIntermediateCleanup()",
-			"initEngine()",
-			"initPlayers()",
-			"initRestrictions()",
-			"initGUI()",
-			"initTheMap()",
-			"initTheSky()",
-			"initTheSun()",
-			"initAllTextures()",
-			"initTheCamera()",
-			"initTheWind()",
-			"initTheFog()",
-			"initParticules()",
-			"initTheWater()",
-			"initPostFlight()",
-			"waitUntilReady()"};
-		for (int i = 0 ; i < 22 ; ++i)
-			LOG_INFO(LOG_PREFIX_BATTLE << functionName[i] << " done in " << timer[i+1] - timer[i] << " msec.");
+		const char* functionName[] = {"initPreflight(g)",
+									  "initTextures()",
+									  "init3DModels()",
+									  "initGraphicalFeatures()",
+									  "initWeapons()",
+									  "initUnits()",
+									  "initIntermediateCleanup()",
+									  "initEngine()",
+									  "initPlayers()",
+									  "initRestrictions()",
+									  "initGUI()",
+									  "initTheMap()",
+									  "initTheSky()",
+									  "initTheSun()",
+									  "initAllTextures()",
+									  "initTheCamera()",
+									  "initTheWind()",
+									  "initTheFog()",
+									  "initParticules()",
+									  "initTheWater()",
+									  "initPostFlight()",
+									  "waitUntilReady()"};
+		for (int i = 0; i < 22; ++i)
+			LOG_INFO(LOG_PREFIX_BATTLE << functionName[i] << " done in " << timer[i + 1] - timer[i] << " msec.");
 #endif
 
 		TranslationTable::Update();
 
 		return true;
 	}
-
 
 	bool Battle::initPreflight(GameData* g)
 	{
@@ -352,7 +346,6 @@ namespace TA3D
 
 		return true;
 	}
-
 
 	bool Battle::initTextures()
 	{
@@ -448,17 +441,17 @@ namespace TA3D
 
 	bool Battle::initRestrictions()
 	{
-		if (!pGameData->use_only.empty()) 			// We are told not to use all units !!
+		if (!pGameData->use_only.empty()) // We are told not to use all units !!
 		{
 			LOG_DEBUG(LOG_PREFIX_BATTLE << "Loading restrictions...");
 			TDFParser useonly_parser(pGameData->use_only, false, false, true); // In gadgets mode so we can read the special key :)
-			for (int i = 0; i < unit_manager.nb_unit ; i++)
+			for (int i = 0; i < unit_manager.nb_unit; i++)
 				unit_manager.unit_type[i]->not_used = true;
 			String unit_name;
 			int i = 0;
 			while (!(unit_name = useonly_parser.pullAsString(String("gadget") << i)).empty())
 			{
-				int idx = unit_manager.get_unit_index( unit_name );
+				int idx = unit_manager.get_unit_index(unit_name);
 				if (idx >= 0)
 					unit_manager.unit_type[idx]->not_used = false;
 				++i;
@@ -476,21 +469,21 @@ namespace TA3D
 		try
 		{
 			pArea.load_window(String(ta3dSideData.guis_dir) << ta3dSideData.side_pref[players.side_view] << "gen.gui"); // Load the order interface
-			pArea.msg( String(ta3dSideData.side_pref[players.side_view]) << "gen.hide" );	// Hide it
-			pArea.msg( String(ta3dSideData.side_pref[players.side_view]) << "gen.enableScrolling" );	// Enable scrolling
+			pArea.msg(String(ta3dSideData.side_pref[players.side_view]) << "gen.hide");									// Hide it
+			pArea.msg(String(ta3dSideData.side_pref[players.side_view]) << "gen.enableScrolling");						// Enable scrolling
 		}
-		catch(...)
+		catch (...)
 		{
 			LOG_WARNING(LOG_PREFIX_BATTLE << "`gen.gui` is missing or can not be loaded");
 		}
 
 		try
 		{
-			pArea.load_window(String(ta3dSideData.guis_dir) << ta3dSideData.side_pref[players.side_view] << "dl.gui");			// Load the default build interface
-			pArea.msg( String(ta3dSideData.side_pref[players.side_view]) << "dl.hide" );	// Hide it
-			pArea.msg( String(ta3dSideData.side_pref[players.side_view]) << "dl.enableScrolling" );	// Enable scrolling
+			pArea.load_window(String(ta3dSideData.guis_dir) << ta3dSideData.side_pref[players.side_view] << "dl.gui"); // Load the default build interface
+			pArea.msg(String(ta3dSideData.side_pref[players.side_view]) << "dl.hide");								   // Hide it
+			pArea.msg(String(ta3dSideData.side_pref[players.side_view]) << "dl.enableScrolling");					   // Enable scrolling
 		}
-		catch(...)
+		catch (...)
 		{
 			LOG_WARNING(LOG_PREFIX_BATTLE << "`dl.gui` is missing or can not be loaded");
 		}
@@ -524,7 +517,6 @@ namespace TA3D
 		return true;
 	}
 
-
 	bool Battle::initTheMap()
 	{
 		LOG_INFO(LOG_PREFIX_BATTLE << "Loading the map...");
@@ -541,7 +533,7 @@ namespace TA3D
 		delete map_file;
 
 		LOG_INFO(LOG_PREFIX_BATTLE << "Loading details texture...");
-		map->load_details_texture( "gfx/details.jpg");			// Load the details texture
+		map->load_details_texture("gfx/details.jpg"); // Load the details texture
 
 		LOG_INFO(LOG_PREFIX_BATTLE << "Initialising the Fog Of War...");
 		map->clear_FOW(pGameData->fog_of_war);
@@ -561,7 +553,7 @@ namespace TA3D
 			{
 				gfx->destroy_texture(map->lava_map);
 
-				SDL_Surface *tmp = gfx->create_surface_ex(32, 16, 16);
+				SDL_Surface* tmp = gfx->create_surface_ex(32, 16, 16);
 				SDL_FillRect(tmp, NULL, 0xFFFFFFFF);
 				map->lava_map = gfx->make_texture(tmp);
 				SDL_FreeSurface(tmp);
@@ -577,7 +569,6 @@ namespace TA3D
 		return true;
 	}
 
-
 	bool Battle::initTheSky()
 	{
 		// The sky
@@ -586,7 +577,6 @@ namespace TA3D
 		sky_angle = sky.rotationOffset();
 		return true;
 	}
-
 
 	bool Battle::initTheSun()
 	{
@@ -597,14 +587,14 @@ namespace TA3D
 		pSun.Dir.z = 1.0f;
 		pSun.Dir.unit();
 		// Lights
-		pSun.LightAmbient[0]  = 0.25f;
-		pSun.LightAmbient[1]  = 0.25f;
-		pSun.LightAmbient[2]  = 0.25f;
-		pSun.LightAmbient[3]  = 0.25f;
-		pSun.LightDiffuse[0]  = 1.0f;
-		pSun.LightDiffuse[1]  = 1.0f;
-		pSun.LightDiffuse[2]  = 1.0f;
-		pSun.LightDiffuse[3]  = 1.0f;
+		pSun.LightAmbient[0] = 0.25f;
+		pSun.LightAmbient[1] = 0.25f;
+		pSun.LightAmbient[2] = 0.25f;
+		pSun.LightAmbient[3] = 0.25f;
+		pSun.LightDiffuse[0] = 1.0f;
+		pSun.LightDiffuse[1] = 1.0f;
+		pSun.LightDiffuse[2] = 1.0f;
+		pSun.LightDiffuse[3] = 1.0f;
 		pSun.LightSpecular[0] = 0.0f;
 		pSun.LightSpecular[1] = 0.0f;
 		pSun.LightSpecular[2] = 0.0f;
@@ -613,7 +603,6 @@ namespace TA3D
 		pSun.Directionnal = true;
 		return true;
 	}
-
 
 	bool Battle::initAllTextures()
 	{
@@ -632,13 +621,13 @@ namespace TA3D
 
 		cam.reset();
 		cam_target.reset();
-		camera_zscroll =  -0.00001f;
+		camera_zscroll = -0.00001f;
 
 		cam_target_mx = gfx->SCREEN_W_HALF;
 		cam_target_my = gfx->SCREEN_H_HALF;
 		cam_has_target = false;
 		freecam = false;
-		cam_def_timer = msec_timer;		// Just to see if the cam has been long enough at the default angle
+		cam_def_timer = msec_timer; // Just to see if the cam has been long enough at the default angle
 		track_mode = -1;			// Tracking a unit ? negative value => no
 		last_time_activated_track_mode = false;
 		Camera::inGame = &cam;
@@ -654,7 +643,6 @@ namespace TA3D
 		return true;
 	}
 
-
 	bool Battle::initTheWind()
 	{
 		wind_t = 0.0f; // To handle wind variations
@@ -663,7 +651,6 @@ namespace TA3D
 			map->wind = float((TA3D_RAND() % (map->ota_data.maxwindspeed - map->ota_data.minwindspeed)) + map->ota_data.minwindspeed);
 		return true;
 	}
-
 
 	bool Battle::initTheFog()
 	{
@@ -690,7 +677,6 @@ namespace TA3D
 		return true;
 	}
 
-
 	bool Battle::initParticules()
 	{
 		fire = particle_engine.addtex("gfx/fire.tga");
@@ -698,7 +684,6 @@ namespace TA3D
 		fx_manager.loadData();
 		return true;
 	}
-
 
 	bool Battle::initTheWater()
 	{
@@ -711,46 +696,46 @@ namespace TA3D
 			glGenFramebuffersEXT(1, &water_FBO);
 
 			if (2 == lp_CONFIG->water_quality)
-				water_pass1_low.load("shaders/water_pass1_low.frag","shaders/water_pass1.vert");
+				water_pass1_low.load("shaders/water_pass1_low.frag", "shaders/water_pass1.vert");
 			else
-				water_pass1.load("shaders/water_pass1.frag","shaders/water_pass1.vert");
-			water_pass2.load("shaders/water_pass2.frag","shaders/water_pass2.vert");
+				water_pass1.load("shaders/water_pass1.frag", "shaders/water_pass1.vert");
+			water_pass2.load("shaders/water_pass2.frag", "shaders/water_pass2.vert");
 			if (2 == lp_CONFIG->water_quality)
 			{
 				if (map->ota_data.whitefog)
-					water_shader.load("shaders/water_fog.frag","shaders/water.vert");
+					water_shader.load("shaders/water_fog.frag", "shaders/water.vert");
 				else
-					water_shader.load("shaders/water.frag","shaders/water.vert");
+					water_shader.load("shaders/water.frag", "shaders/water.vert");
 			}
 			else
 			{
 				if (map->ota_data.whitefog)
-					water_shader_reflec.load("shaders/water_fog.frag","shaders/water.vert");
+					water_shader_reflec.load("shaders/water_fog.frag", "shaders/water.vert");
 				else
-					water_shader_reflec.load("shaders/water_reflec.frag","shaders/water.vert");
+					water_shader_reflec.load("shaders/water_reflec.frag", "shaders/water.vert");
 			}
 
 			if (5 == lp_CONFIG->water_quality)
 			{
-				water_simulator_shader.load("shaders/water_simulator.frag","shaders/water_simulator.vert");     // Compute variation speed
-				water_simulator_shader2.load("shaders/water_simulator2.frag","shaders/water_simulator.vert");   // Compute variation
-				water_simulator_shader3.load("shaders/water_simulator3.frag","shaders/water_simulator.vert");   // Copy to a normal RGB filtered texture (faster than filtering an RGB32F texture)
-				water_simulator_shader4.load("shaders/water_simulator4.frag","shaders/water_simulator4.vert");  // Compute normals on screen
-				water_distortions_shader.load("shaders/water_distortions.frag","shaders/water_distortions.vert");	// Distortions renderer
+				water_simulator_shader.load("shaders/water_simulator.frag", "shaders/water_simulator.vert");	   // Compute variation speed
+				water_simulator_shader2.load("shaders/water_simulator2.frag", "shaders/water_simulator.vert");	 // Compute variation
+				water_simulator_shader3.load("shaders/water_simulator3.frag", "shaders/water_simulator.vert");	 // Copy to a normal RGB filtered texture (faster than filtering an RGB32F texture)
+				water_simulator_shader4.load("shaders/water_simulator4.frag", "shaders/water_simulator4.vert");	// Compute normals on screen
+				water_distortions_shader.load("shaders/water_distortions.frag", "shaders/water_distortions.vert"); // Distortions renderer
 				if (map->ota_data.whitefog)
-					water_simulator_reflec.load("shaders/water_sim_fog.frag","shaders/water.vert");
+					water_simulator_reflec.load("shaders/water_sim_fog.frag", "shaders/water.vert");
 				else
-					water_simulator_reflec.load("shaders/water_sim_reflec.frag","shaders/water.vert");
+					water_simulator_reflec.load("shaders/water_sim_reflec.frag", "shaders/water.vert");
 			}
 
 			gfx->set_texture_format(gfx->defaultTextureFormat_RGBA());
 
-			SDL_Surface* tmp = gfx->create_surface_ex(32,512,512);
+			SDL_Surface* tmp = gfx->create_surface_ex(32, 512, 512);
 
 			// Water transparency
-			transtex = gfx->make_texture( tmp, FILTER_LINEAR);
+			transtex = gfx->make_texture(tmp, FILTER_LINEAR);
 			// Water reflection
-			reflectex = gfx->make_texture( tmp, FILTER_LINEAR);
+			reflectex = gfx->make_texture(tmp, FILTER_LINEAR);
 			int ln2w = Math::Log2(SCREEN_W);
 			int ln2h = Math::Log2(SCREEN_H);
 			if ((1 << ln2w) < SCREEN_W)
@@ -763,14 +748,14 @@ namespace TA3D
 			if (lp_CONFIG->water_quality >= 5)
 				first_pass = gfx->create_texture_RGBA32F(workwidth, workheight, FILTER_NONE, false);
 			else
-				first_pass = gfx->make_texture( tmp, FILTER_LINEAR);
+				first_pass = gfx->make_texture(tmp, FILTER_LINEAR);
 			// Water transparency/reflection
 			if (lp_CONFIG->water_quality >= 5)
 				second_pass = gfx->create_texture_RGBA16F(workwidth, workheight, FILTER_LINEAR, false);
 			else
-				second_pass = gfx->make_texture( tmp, FILTER_LINEAR);
+				second_pass = gfx->make_texture(tmp, FILTER_LINEAR);
 			// Water transparency/reflection
-			water_color = gfx->make_texture( tmp, FILTER_LINEAR);
+			water_color = gfx->make_texture(tmp, FILTER_LINEAR);
 			// Water simulation data
 			if (lp_CONFIG->water_quality >= 5)
 			{
@@ -779,7 +764,7 @@ namespace TA3D
 				const int simulation_h = 256;
 				water_sim2 = gfx->create_texture_RGBA16F(simulation_w, simulation_h, FILTER_LINEAR, false);
 				water_distortions = gfx->create_texture_RGB16F(workwidth, workheight, FILTER_NONE, false);
-				float *data = new float[ simulation_w * simulation_h * 4 ];
+				float* data = new float[simulation_w * simulation_h * 4];
 				const int water_map_size = simulation_w * simulation_h;
 				const int water_map_size4 = simulation_w * simulation_h * 4;
 				const uint32 water_map_size4m = water_map_size4 - 1U;
@@ -791,33 +776,25 @@ namespace TA3D
 
 				if (!TA3D::Paths::Exists(water_cache))
 				{
-					for( int i = 0 ; i < 500 ; i++ )                    // Initialize it with multiscale data
+					for (int i = 0; i < 500; i++) // Initialize it with multiscale data
 					{
-                        float coef = 5.0f * sqrtf(500.0f - float(i));
-						for( int e = 0 ; e < water_map_size ; e++ )
-                            data[(e << 2) + 1] += (float(rand() % 2000) * 0.000001f - 0.001f) * coef;
-						for( int e = 0 ; e < water_map_size ; e++ )
+						float coef = 5.0f * sqrtf(500.0f - float(i));
+						for (int e = 0; e < water_map_size; e++)
+							data[(e << 2) + 1] += (float(rand() % 2000) * 0.000001f - 0.001f) * coef;
+						for (int e = 0; e < water_map_size; e++)
 						{
 							uint32 offset = (e << 2) | 1u;
-							data[offset] = (data[offset] * 4.0f
-											+ data[(offset + 4) & water_map_size4m]
-											+ data[(offset + simulation_w4) & water_map_size4m]
-											+ data[(offset + water_map_size4 - 4) & water_map_size4m]
-											+ data[(offset + water_map_size4 - simulation_w * 4) & water_map_size4m]
-											+ (data[(offset + 4 + simulation_w4) & water_map_size4m]
-											+ data[(offset + 4 + water_map_size4 - simulation_w4) & water_map_size4m]
-											+ data[(offset + water_map_size4 - 4 + simulation_w4) & water_map_size4m]
-											+ data[(offset + water_map_size4 - 4 - simulation_w4) & water_map_size4m]) * 0.25f) * 0.11111111111111111f;
+							data[offset] = (data[offset] * 4.0f + data[(offset + 4) & water_map_size4m] + data[(offset + simulation_w4) & water_map_size4m] + data[(offset + water_map_size4 - 4) & water_map_size4m] + data[(offset + water_map_size4 - simulation_w * 4) & water_map_size4m] + (data[(offset + 4 + simulation_w4) & water_map_size4m] + data[(offset + 4 + water_map_size4 - simulation_w4) & water_map_size4m] + data[(offset + water_map_size4 - 4 + simulation_w4) & water_map_size4m] + data[(offset + water_map_size4 - 4 - simulation_w4) & water_map_size4m]) * 0.25f) * 0.11111111111111111f;
 						}
 					}
 					float sum = 0.0f;
-					for( int e = 0 ; e < water_map_size ; e++ )
+					for (int e = 0; e < water_map_size; e++)
 						sum += data[(e << 2) | 1];
 					sum /= simulation_h * simulation_w;
-					for( int e = 0 ; e < water_map_size ; e++ )
+					for (int e = 0; e < water_map_size; e++)
 						data[(e << 2) | 1] -= sum;
-					for (int y = 0 ; y < simulation_h ; ++y)
-						for (int x = 0 ; x < simulation_w ; ++x)
+					for (int y = 0; y < simulation_h; ++y)
+						for (int x = 0; x < simulation_w; ++x)
 							data[(y * simulation_w + x) * 4 + 3] = data[(y * simulation_w + x) * 4 + 1];
 					Stream file(water_cache, Yuni::Core::IO::OpenMode::write);
 					if (file.opened())
@@ -835,33 +812,33 @@ namespace TA3D
 						file.close();
 					}
 				}
-				water_sim0 = gfx->make_texture_RGBA32F(256,256,data,FILTER_NONE,false);
-				water_sim1 = gfx->make_texture_RGBA32F(256,256,data,FILTER_NONE,false);
+				water_sim0 = gfx->make_texture_RGBA32F(256, 256, data, FILTER_NONE, false);
+				water_sim1 = gfx->make_texture_RGBA32F(256, 256, data, FILTER_NONE, false);
 				DELETE_ARRAY(data);
 
 				//  Let's create the height map texture used to render progressive water effects using water depth
-				int h_w = Math::Min( map->bloc_w_db, gfx->max_texture_size() );
-				int h_h = Math::Min( map->bloc_h_db, gfx->max_texture_size() );
-				data = new float[ h_w * h_h ];
-				for(int y = 0 ; y < h_h ; y++)
-					for(int x = 0 ; x < h_w ; x++)
-						data[y * h_w + x] = (map->sealvl - map->get_h(x * map->bloc_w_db / h_w, y * map->bloc_h_db / h_h)) * 0.00392156862745098f;	// / 255
-				height_tex = gfx->make_texture_A16F( h_w, h_h, data, FILTER_LINEAR, true );
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER );
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER );
+				int h_w = Math::Min(map->bloc_w_db, gfx->max_texture_size());
+				int h_h = Math::Min(map->bloc_h_db, gfx->max_texture_size());
+				data = new float[h_w * h_h];
+				for (int y = 0; y < h_h; y++)
+					for (int x = 0; x < h_w; x++)
+						data[y * h_w + x] = (map->sealvl - map->get_h(x * map->bloc_w_db / h_w, y * map->bloc_h_db / h_h)) * 0.00392156862745098f; // / 255
+				height_tex = gfx->make_texture_A16F(h_w, h_h, data, FILTER_LINEAR, true);
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
 				DELETE_ARRAY(data);
 			}
 
-			for (int z = 0 ; z < 512 ; ++z) // The wave base model
+			for (int z = 0; z < 512; ++z) // The wave base model
 			{
-				for (int x = 0 ; x < 512 ; ++x)
+				for (int x = 0; x < 512; ++x)
 				{
 					// equation : y = ( 1 - sqrtf( 1 - (x*z)^2)) * z / 3 + (1-z) * sinf( x * PI / 2) ^ 2 where z is a parameter
 					// Stores the gradient vector clamped into 0.0 - 1.0 ( 0 - 0xFF)
-					float X = (float(x) - 256.0f) * 0.00390625f;		// / 256
-					float Z = float(z) * 0.001953125f;					// / 512
-					float DX = -X * Z * Z / ( 3.0f * sqrtf( 1.0f - X * Z * X * Z)) + ( 1.0f - Z) * PI * sinf( X * PI * 0.5f) * cosf( X * PI * 0.5f);
-					float L = sqrtf( DX * DX + 1.0f);
+					float X = (float(x) - 256.0f) * 0.00390625f; // / 256
+					float Z = float(z) * 0.001953125f;			 // / 512
+					float DX = -X * Z * Z / (3.0f * sqrtf(1.0f - X * Z * X * Z)) + (1.0f - Z) * PI * sinf(X * PI * 0.5f) * cosf(X * PI * 0.5f);
+					float L = sqrtf(DX * DX + 1.0f);
 
 					DX = DX / L * 127.0f + 127.0f;
 					if (DX < 0.0f)
@@ -872,17 +849,17 @@ namespace TA3D
 							DX = 255.0f;
 					}
 
-                    SurfaceByte(tmp,(x<<2),z) = uint8(Math::Clamp(int(DX), 0, 255));
-                    SurfaceByte(tmp,(x<<2)+1,z) = uint8(Math::Clamp((int)((127.0f / L) + 127.0f), 0, 255));
-					SurfaceByte(tmp,(x<<2)+2,z) = 0;
-					SurfaceByte(tmp,(x<<2)+3,z) = 0;
+					SurfaceByte(tmp, (x << 2), z) = uint8(Math::Clamp(int(DX), 0, 255));
+					SurfaceByte(tmp, (x << 2) + 1, z) = uint8(Math::Clamp((int)((127.0f / L) + 127.0f), 0, 255));
+					SurfaceByte(tmp, (x << 2) + 2, z) = 0;
+					SurfaceByte(tmp, (x << 2) + 3, z) = 0;
 				}
 			}
 
 			gfx->set_texture_format(gfx->defaultTextureFormat_RGB());
-			water = gfx->make_texture( tmp, FILTER_LINEAR, false);
+			water = gfx->make_texture(tmp, FILTER_LINEAR, false);
 			SDL_FreeSurface(tmp);
-			glBindFramebufferEXT(GL_FRAMEBUFFER_EXT,0);
+			glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);
 
 			// Enable the texture compression
 			if (g_useTextureCompression && lp_CONFIG->use_texture_compression)
@@ -897,7 +874,6 @@ namespace TA3D
 
 		return true;
 	}
-
 
 	bool Battle::initPostFlight()
 	{
@@ -916,7 +892,7 @@ namespace TA3D
 		old_gui_sel = -1;
 		old_sel = false;
 		selected = false;
-		build = -1;				// Indique si l'utilisateur veut construire quelque chose
+		build = -1; // Indique si l'utilisateur veut construire quelque chose
 		build_order_given = false;
 		cur_sel_index = -1;
 		omz = mouse_z;
@@ -928,7 +904,7 @@ namespace TA3D
 		tilde = false;
 		done = false;
 
-		show_model = false;	// Affichage les noms des sous objets du modèle 3D de l'unité sélectionnée
+		show_model = false; // Affichage les noms des sous objets du modèle 3D de l'unité sélectionnée
 		rotate_light = false;
 		light_angle = 0.0f;
 		cheat_metal = false;
@@ -959,11 +935,10 @@ namespace TA3D
 		do
 		{
 			nb_shoot = (nb_shoot + 1) % 1000000;
-		}while (TA3D::Paths::Exists(String(TA3D::Paths::Screenshots) << String().format("ta3d-shoot%.6d.tga", nb_shoot)) && nb_shoot != 999999);
+		} while (TA3D::Paths::Exists(String(TA3D::Paths::Screenshots) << String().format("ta3d-shoot%.6d.tga", nb_shoot)) && nb_shoot != 999999);
 
 		return true;
 	}
-
 
 	void Battle::updateCurrentGUICacheNames()
 	{
@@ -976,14 +951,13 @@ namespace TA3D
 		pCurrentGUICache[cgcHide] << ".hide";
 	}
 
-
 	void Battle::waitForNetworkPlayers()
 	{
 		g_ta3d_network = new TA3DNetwork(&pArea, pGameData);
 		if (pNetworkEnabled)
 		{
 			players.set_network(g_ta3d_network);
-			if (!network_manager.isServer())                // Only server is able to save a game
+			if (!network_manager.isServer()) // Only server is able to save a game
 				pArea.msg("esc_menu.b_save.disable");
 		}
 		sound_manager->playMusic();

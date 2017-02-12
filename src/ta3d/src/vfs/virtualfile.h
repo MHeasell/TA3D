@@ -22,9 +22,9 @@
 */
 
 #ifndef __TA3D_UTILS_VIRTUALFILE_H__
-# define __TA3D_UTILS_VIRTUALFILE_H__
+#define __TA3D_UTILS_VIRTUALFILE_H__
 
-# include "file.h"
+#include "file.h"
 
 namespace TA3D
 {
@@ -69,7 +69,7 @@ namespace TA3D
 
 		private:
 			// Copying this kind of objects if forbidden!
-			virtual File &operator=(const File&)	{	return *this;	}
+			virtual File &operator=(const File &) { return *this; }
 
 		private:
 			byte *buffer;

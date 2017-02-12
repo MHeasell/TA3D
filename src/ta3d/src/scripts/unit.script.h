@@ -18,77 +18,77 @@
 #ifndef __UnitScript_H__
 #define __UnitScript_H__
 
-# include <stdafx.h>
-# include <misc/string.h>
-# include "unit.script.interface.h"
+#include <stdafx.h>
+#include <misc/string.h>
+#include "unit.script.interface.h"
 #ifndef __LUA_INCLUDES__
 #define __LUA_INCLUDES__
 #ifdef LUA_NOJIT
-# include "../lua/lua.hpp"
+#include "../lua/lua.hpp"
 #else
-# include "../luajit/src/lua.hpp"
+#include "../luajit/src/lua.hpp"
 #endif
 #endif
 
 namespace TA3D
 {
-    /*!
+	/*!
     ** This class represents unit scripts, it's used to script unit behavior
     ** This is a Lua version of TA COB/BOS scripts
     */
-    class UnitScript : public UnitScriptInterface
-    {
-        friend class LuaData;
-    public:
+	class UnitScript : public UnitScriptInterface
+	{
+		friend class LuaData;
 
-        UnitScript();
-        virtual ~UnitScript();
+	public:
+		UnitScript();
+		virtual ~UnitScript();
 
-        /*virtual*/ void load(ScriptData *data);
-        /*virtual*/ int run(float dt, bool alone = false);                  // Run the script
+		/*virtual*/ void load(ScriptData *data);
+		/*virtual*/ int run(float dt, bool alone = false); // Run the script
 
-        //! functions used to call/run Lua functions
-        /*virtual*/ void call(const String &functionName, int *parameters = NULL, int nb_params = 0);
-        /*virtual*/ int execute(const String &functionName, int *parameters = NULL, int nb_params = 0);
+		//! functions used to call/run Lua functions
+		/*virtual*/ void call(const String &functionName, int *parameters = NULL, int nb_params = 0);
+		/*virtual*/ int execute(const String &functionName, int *parameters = NULL, int nb_params = 0);
 
-        //! functions used to create new threads sharing the same environment
-        /*virtual*/ UnitScript *fork();
-        /*virtual*/ UnitScript *fork(const String &functionName, int *parameters = NULL, int nb_params = 0);
-        UnitScript *fork(lua_State *cL, int n);
+		//! functions used to create new threads sharing the same environment
+		/*virtual*/ UnitScript *fork();
+		/*virtual*/ UnitScript *fork(const String &functionName, int *parameters = NULL, int nb_params = 0);
+		UnitScript *fork(lua_State *cL, int n);
 
-        //! functions used to save/restore scripts state
-        /*virtual*/ void save_thread_state(gzFile file);
-        /*virtual*/ void restore_thread_state(gzFile file);
+		//! functions used to save/restore scripts state
+		/*virtual*/ void save_thread_state(gzFile file);
+		/*virtual*/ void restore_thread_state(gzFile file);
 
-        int getNextID();
+		int getNextID();
 
-    private:
-        lua_State *L;
+	private:
+		lua_State *L;
 
-        int nextID;
+		int nextID;
 
-        int n_args;
+		int n_args;
 
-        String name;
+		String name;
 
-    private:
+	private:
 		static void load(const String &filename);
 		static void register_functions(lua_State *L);
-        void register_info();
+		void register_info();
 
-        /*virtual*/ void setUnitID(uint32 ID);
-        /*virtual*/ int getNbPieces();
+		/*virtual*/ void setUnitID(uint32 ID);
+		/*virtual*/ int getNbPieces();
 
-        void lua_getUnitTable();
+		void lua_getUnitTable();
 
-        void init();
-        void destroy();
-    private:
-        static lua_State *pLuaVM;
-        static lua_State *luaVM();
+		void init();
+		void destroy();
+
+	private:
+		static lua_State *pLuaVM;
+		static lua_State *luaVM();
 		static Mutex mLuaVM;
-    };
-
+	};
 }
 
 #endif

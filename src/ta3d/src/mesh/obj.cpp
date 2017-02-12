@@ -16,7 +16,7 @@ namespace TA3D
 	/*!
 * \brief fill the Mesh with gathered data
 */
-	void MeshOBJ::obj_finalize(const String &, const vector<int> &face, const vector<Vector3D> &vertex, const vector<Vector2D> &tcoord, Material* mtl)
+	void MeshOBJ::obj_finalize(const String &, const vector<int> &face, const vector<Vector3D> &vertex, const vector<Vector2D> &tcoord, Material *mtl)
 	{
 		nb_vtx = short(face.size() >> 1);
 		nb_t_index = short(face.size() >> 1);
@@ -25,9 +25,9 @@ namespace TA3D
 		this->tcoord = new float[2 * nb_vtx];
 		type = MESH_TYPE_TRIANGLES;
 
-		for (int i = 0 ; i < nb_t_index ; i++)
+		for (int i = 0; i < nb_t_index; i++)
 		{
-			this->points[i] = vertex[ face[i * 2] ];
+			this->points[i] = vertex[face[i * 2]];
 			if (face[i * 2 + 1] == -1)
 			{
 				this->tcoord[i * 2] = 0.0f;
@@ -35,7 +35,7 @@ namespace TA3D
 			}
 			else
 			{
-				this->tcoord[i * 2] = tcoord[ face[i * 2 + 1]].x;
+				this->tcoord[i * 2] = tcoord[face[i * 2 + 1]].x;
 				this->tcoord[i * 2 + 1] = 1.0f - tcoord[face[i * 2 + 1]].y;
 			}
 			this->t_index[i] = GLushort(i);
@@ -48,11 +48,11 @@ namespace TA3D
 			for (int i = 0; i < nb_vtx; ++i)
 				N[i].reset();
 			int e = 0;
-			for (int i = 0 ; i < nb_t_index ; i += 3)
+			for (int i = 0; i < nb_t_index; i += 3)
 			{
 				Vector3D AB, AC, Normal;
-				AB = points[t_index[i+1]] - points[t_index[i]];
-				AC = points[t_index[i+2]] - points[t_index[i]];
+				AB = points[t_index[i + 1]] - points[t_index[i]];
+				AC = points[t_index[i + 2]] - points[t_index[i]];
 				Normal = AB * AC;
 				Normal.unit();
 				F_N[e++] = Normal;
@@ -68,7 +68,7 @@ namespace TA3D
 		if (mtl)
 		{
 			tex_cache_name.push_back(mtl->textureName);
-			if (mtl->name == "team")				// The magic team material
+			if (mtl->name == "team") // The magic team material
 				Flag |= SURFACE_PLAYER_COLOR;
 		}
 	}
@@ -79,7 +79,7 @@ namespace TA3D
 			return;
 		bool useAlpha(false);
 		LOG_DEBUG(LOG_PREFIX_OBJ << "loading texture : '" << tex_cache_name[id] << "'");
-		gltex.push_back( gfx->load_texture( tex_cache_name[id], FILTER_TRILINEAR, NULL, NULL, true, 0, &useAlpha, true ) );
+		gltex.push_back(gfx->load_texture(tex_cache_name[id], FILTER_TRILINEAR, NULL, NULL, true, 0, &useAlpha, true));
 		if (gltex.back())
 		{
 			Flag |= SURFACE_TEXTURED;
@@ -97,11 +97,11 @@ namespace TA3D
 		MeshOBJ *cur = this;
 		name = "default";
 		bool firstObject = true;
-		vector<Vector3D>	lVertex;
-		vector<Vector2D>	lTcoord;
-		vector<int>			face;
-		HashMap<Material>::Dense	mtllib;
-		Material                    currentMtl;
+		vector<Vector3D> lVertex;
+		vector<Vector2D> lTcoord;
+		vector<int> face;
+		HashMap<Material>::Dense mtllib;
+		Material currentMtl;
 
 		while (!file->eof()) // Reads the whole file
 		{
@@ -112,23 +112,23 @@ namespace TA3D
 			line.explode(args, ' ', false, false, true);
 			if (!args.empty())
 			{
-				if ( (args[0] == "o" || args[0] == "g") && args.size() > 1)      // Creates a new object
+				if ((args[0] == "o" || args[0] == "g") && args.size() > 1) // Creates a new object
 				{
 					if (!face.empty())
 					{
 						if (firstObject && cur->name.empty())
 							cur->name = "default";
-						cur->obj_finalize( filename, face, lVertex, lTcoord, &currentMtl );
+						cur->obj_finalize(filename, face, lVertex, lTcoord, &currentMtl);
 						face.clear();
 						cur->child = new MeshOBJ();
-						cur = static_cast<MeshOBJ*>(cur->child);
+						cur = static_cast<MeshOBJ *>(cur->child);
 					}
 					firstObject = false;
 					cur->name = args[1];
 				}
-				else if (args[0] == "mtllib" && args.size() > 1)        // Read given material libraries
+				else if (args[0] == "mtllib" && args.size() > 1) // Read given material libraries
 				{
-					for(String::Vector::iterator s = args.begin() + 1 ; s != args.end() ; ++s)
+					for (String::Vector::iterator s = args.begin() + 1; s != args.end(); ++s)
 					{
 						File *src_mtl = VFS::Instance()->readFile(String("objects3d/") << *s);
 						if (!src_mtl)
@@ -160,25 +160,26 @@ namespace TA3D
 				}
 				else
 				{
-					if (args[0] == "usemtl" && args.size() > 1)        // Change current material
+					if (args[0] == "usemtl" && args.size() > 1) // Change current material
 					{
 						if (mtllib.count(args[1]))
 							currentMtl = mtllib[args[1]];
 						else
 							currentMtl.textureName.clear();
 					}
-					else if (args[0] == "v" && args.size() > 3)  // Add a vertex to current object
-						lVertex.push_back( Vector3D(args[1].to<float>(), args[2].to<float>(), args[3].to<float>()));
-					else if (args[0] == "vn" && args.size() > 3)  // Add a normal vector to current object
-					{}
-					else if (args[0] == "vt" && args.size() > 2)  // Add a texture coordinate vector to current object
-						lTcoord.push_back( Vector2D( args[1].to<float>(), args[2].to<float>()));
-					else if (args[0] == "f" && args.size() > 1)  // Add a face to current object
+					else if (args[0] == "v" && args.size() > 3) // Add a vertex to current object
+						lVertex.push_back(Vector3D(args[1].to<float>(), args[2].to<float>(), args[3].to<float>()));
+					else if (args[0] == "vn" && args.size() > 3) // Add a normal vector to current object
 					{
-						vector<int>  vertex_idx;
-						vector<int>  tcoord_idx;
+					}
+					else if (args[0] == "vt" && args.size() > 2) // Add a texture coordinate vector to current object
+						lTcoord.push_back(Vector2D(args[1].to<float>(), args[2].to<float>()));
+					else if (args[0] == "f" && args.size() > 1) // Add a face to current object
+					{
+						vector<int> vertex_idx;
+						vector<int> tcoord_idx;
 						bool first_string = true;
-						for(String::Vector::iterator s = args.begin() ; s != args.end() ; ++s)
+						for (String::Vector::iterator s = args.begin(); s != args.end(); ++s)
 						{
 							// The first string is crap if we read it as vertex data !!
 							if (first_string)
@@ -193,9 +194,11 @@ namespace TA3D
 
 							if (!data.empty())
 							{
-								vertex_idx.push_back( data[0].to<int>() - 1);
+								vertex_idx.push_back(data[0].to<int>() - 1);
 								if (vertex_idx.back() < 0)
-								{	LOG_DEBUG(LOG_PREFIX_OBJ << "parser : " << line << " -> " << *s << " -> " << vertex_idx.back());	}
+								{
+									LOG_DEBUG(LOG_PREFIX_OBJ << "parser : " << line << " -> " << *s << " -> " << vertex_idx.back());
+								}
 								if (data.size() >= 2)
 									tcoord_idx.push_back(data[1].to<int>() - 1);
 								else
@@ -208,8 +211,8 @@ namespace TA3D
 							face.push_back(vertex_idx[0]);
 							face.push_back(tcoord_idx[0]);
 
-							face.push_back(vertex_idx[i-1]);
-							face.push_back(tcoord_idx[i-1]);
+							face.push_back(vertex_idx[i - 1]);
+							face.push_back(tcoord_idx[i - 1]);
 
 							face.push_back(vertex_idx[i]);
 							face.push_back(tcoord_idx[i]);

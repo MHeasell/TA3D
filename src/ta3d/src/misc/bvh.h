@@ -23,20 +23,21 @@ namespace TA3D
 	 * TKit::Predicate - a TKit::Vec predicate type to be used with std::partition
 	 *                    and containing the direction of the projection and a position (the split point)
 	 */
-	template<typename T, typename TKit>
-			class BVH
+	template <typename T, typename TKit>
+	class BVH
 	{
 	public:
-		typedef typename TKit::Vec	Vec;
+		typedef typename TKit::Vec Vec;
+
 	public:
-		inline BVH() : lChild(NULL), rChild(NULL)	{}
+		inline BVH() : lChild(NULL), rChild(NULL) {}
 		inline ~BVH();
 
-		inline void build(MemoryPool< BVH<T, TKit> > *pool, const typename std::vector<T>::iterator &begin, const typename std::vector<T>::iterator &end, const unsigned int l = 0U);
+		inline void build(MemoryPool<BVH<T, TKit>> *pool, const typename std::vector<T>::iterator &begin, const typename std::vector<T>::iterator &end, const unsigned int l = 0U);
 
 		inline void boxCollisionQuery(std::deque<T> &result, const Vec &center, const float maxDist) const;
 
-		static inline BVH *create(MemoryPool< BVH<T, TKit> > *pool, const typename std::vector<T>::iterator &begin, const typename std::vector<T>::iterator &end)
+		static inline BVH *create(MemoryPool<BVH<T, TKit>> *pool, const typename std::vector<T>::iterator &begin, const typename std::vector<T>::iterator &end)
 		{
 			BVH *bvh = pool->alloc();
 			bvh->build(pool, begin, end);
@@ -47,9 +48,9 @@ namespace TA3D
 		typename std::vector<T>::const_iterator elements_begin;
 		typename std::vector<T>::const_iterator elements_end;
 		Vec bottom, top;
-		BVH<T, TKit>	*lChild;
-		BVH<T, TKit>	*rChild;
-		MemoryPool< BVH<T, TKit> > *pool;
+		BVH<T, TKit> *lChild;
+		BVH<T, TKit> *rChild;
+		MemoryPool<BVH<T, TKit>> *pool;
 	};
 }
 

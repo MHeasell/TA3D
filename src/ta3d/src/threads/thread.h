@@ -15,14 +15,12 @@
 	along with this program; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA*/
 
-
 #ifndef __TA3D_THREAD_H__
 #define __TA3D_THREAD_H__
 
 #include "mutex.h"
 #include <yuni/core/smartptr/smartptr.h>
 #include <yuni/thread/thread.h>
-
 
 namespace TA3D
 {
@@ -33,13 +31,15 @@ namespace TA3D
 		class ThreadObject : public Yuni::Thread::IThread
 		{
 		public:
-			bool suspend(int ms)	{	return Yuni::Thread::IThread::suspend(ms);	}
+			bool suspend(int ms) { return Yuni::Thread::IThread::suspend(ms); }
 		protected:
 			virtual bool onExecute();
+
 		public:
-			void *more;
-			Thread *thisthread;
+			void* more;
+			Thread* thisthread;
 		};
+
 	protected:
 		volatile int pDead;
 		ThreadObject threadObj;
@@ -54,26 +54,23 @@ namespace TA3D
 		// Call this to end the Thread, it will signal the thread to tell it to end
 		//   and will block until the thread ends.
 		void destroyThread() { join(); }
-		bool isRunning() const    { return pDead == 0;    }
+		bool isRunning() const { return pDead == 0; }
 		bool isDead() const { return !isRunning(); }
 
-		bool suspend(int ms)	{ return threadObj.suspend(ms); }
+		bool suspend(int ms) { return threadObj.suspend(ms); }
 
-		void start()	{	spawn(NULL);	}
+		void start() { spawn(NULL); }
 
 		virtual void spawn(void* param);
 		virtual void join();
 
 	}; // class Thread
 
-
-
-
-
 	class ObjectSync
 	{
 	public:
-		typedef Yuni::SmartPtr<ObjectSync>	Ptr;
+		typedef Yuni::SmartPtr<ObjectSync> Ptr;
+
 	public:
 		//! \name Constructor & Destructor
 		//@{
@@ -91,10 +88,6 @@ namespace TA3D
 		Mutex pMutex;
 	};
 
-
-
-
-
 } // namespace TA3D
 
-#endif      // __TA3D_THREAD_H__
+#endif // __TA3D_THREAD_H__

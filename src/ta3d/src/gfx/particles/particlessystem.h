@@ -15,16 +15,14 @@
 	along with this program; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA*/
 #ifndef __TA3D_GFX_PARTICLES_SYSTEM_H__
-# define __TA3D_GFX_PARTICLES_SYSTEM_H__
+#define __TA3D_GFX_PARTICLES_SYSTEM_H__
 
-# include <stdafx.h>
-# include <misc/vector.h>
-# include <sdl.h>
-
+#include <stdafx.h>
+#include <misc/vector.h>
+#include <sdl.h>
 
 namespace TA3D
 {
-
 
 	/*! \class ParticlesSystem
 	**
@@ -79,9 +77,6 @@ namespace TA3D
 		uint16 cur_idx;
 
 	}; // class ParticlesSystem
-
-
-
 
 } // namespace TA3D
 

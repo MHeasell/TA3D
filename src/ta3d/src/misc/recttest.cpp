@@ -19,25 +19,24 @@
 #include "recttest.h"
 #include <sdl.h>
 
-
 namespace TA3D
 {
 
-	RectTest::RectTest (Camera& cam, const Rect<int>& pos) : cam(cam)
+	RectTest::RectTest(Camera& cam, const Rect<int>& pos) : cam(cam)
 	{
 		cam.setView();
 		Matrix modelView;
 		Matrix project;
 
-		int	viewportCoords[4] = {0, 0, 0, 0};
+		int viewportCoords[4] = {0, 0, 0, 0};
 		glGetIntegerv(GL_VIEWPORT, viewportCoords);
-		glGetFloatv(GL_MODELVIEW_MATRIX,  (float*)modelView.E);
+		glGetFloatv(GL_MODELVIEW_MATRIX, (float*)modelView.E);
 		glGetFloatv(GL_PROJECTION_MATRIX, (float*)project.E);
 
 		modelView = Transpose(modelView);
 		project = Transpose(project);
 
-		VW =  static_cast<float>(viewportCoords[2] - viewportCoords[0]) * 0.5f;
+		VW = static_cast<float>(viewportCoords[2] - viewportCoords[0]) * 0.5f;
 		VH = -static_cast<float>(viewportCoords[3] - viewportCoords[1]) * 0.5f;
 
 		T = modelView * project; // Matrice de transformation
@@ -48,8 +47,7 @@ namespace TA3D
 		Y2 = Math::Max(pos.y1, pos.y2);
 	}
 
-
-	bool RectTest::contains(const Vector3D &point) const
+	bool RectTest::contains(const Vector3D& point) const
 	{
 		Vector3D Vec(point - cam.pos);
 		float d = Vec.sq();
@@ -57,12 +55,10 @@ namespace TA3D
 		if (d > 16384.0f && (Vec % cam.dir) <= 0.0f)
 			return false;
 
-		Vector3D UPos (glNMult(point, T));
+		Vector3D UPos(glNMult(point, T));
 		UPos.x = UPos.x * VW + VW;
 		UPos.y = UPos.y * VH - VH;
 		return X1 <= UPos.x && X2 >= UPos.x && Y1 <= UPos.y && Y2 >= UPos.y;
 	}
-
-
 
 } // namespace TA3D

@@ -27,21 +27,18 @@
 
 using namespace Yuni::Core::IO::File;
 
-
 namespace TA3D
 {
 
 	FontManager font_manager;
 
-
-
 	Font::Font()
-		:ObjectSync(), font((FTFont*)NULL), pFontFilename(), pType(typeTexture), bBold(false)
-	{}
-
+		: ObjectSync(), font((FTFont*)NULL), pFontFilename(), pType(typeTexture), bBold(false)
+	{
+	}
 
 	Font::Font(const Font& rhs)
-		:ObjectSync(), font((FTFont*)NULL), pFontFilename(rhs.pFontFilename), pType(rhs.pType), bBold(false)
+		: ObjectSync(), font((FTFont*)NULL), pFontFilename(rhs.pFontFilename), pType(rhs.pType), bBold(false)
 	{
 		if (!pFontFilename.empty())
 			this->loadWL(pFontFilename, rhs.font->FaceSize(), pType);
@@ -52,8 +49,7 @@ namespace TA3D
 		font = NULL;
 	}
 
-
-	Font& Font::operator = (const Font& rhs)
+	Font& Font::operator=(const Font& rhs)
 	{
 		MutexLocker locker(pMutex);
 		font = NULL;
@@ -63,15 +59,12 @@ namespace TA3D
 		return *this;
 	}
 
-
 	void Font::init()
 	{
 		MutexLocker locker(pMutex);
 		font = NULL;
 		pFontFilename.clear();
 	}
-
-
 
 	void Font::print(float x, float y, float z, const String& text)
 	{
@@ -82,27 +75,26 @@ namespace TA3D
 			return;
 
 		glScalef(1.0f, -1.0f, 1.0f);
-		for(int k = 0 ; k < (bBold ? 3 : 1) ; ++k)
+		for (int k = 0; k < (bBold ? 3 : 1); ++k)
 		{
 #ifdef __FTGL__lower__
-			font->Render( text.c_str(), -1,
-				FTPoint(x, -(y + 0.5f * (-font->Descender() + font->Ascender())), z),
-				FTPoint(), FTGL::RENDER_ALL);
+			font->Render(text.c_str(), -1,
+						 FTPoint(x, -(y + 0.5f * (-font->Descender() + font->Ascender())), z),
+						 FTPoint(), FTGL::RENDER_ALL);
 #else
 			glPushMatrix();
-			glTranslatef( x, -(y + 0.5f * (-font->Descender() + font->Ascender())), z );
-# ifndef TA3D_PLATFORM_DARWIN
+			glTranslatef(x, -(y + 0.5f * (-font->Descender() + font->Ascender())), z);
+#ifndef TA3D_PLATFORM_DARWIN
 			WString wstr(text);
 			font->Render(wstr.cw_str());
-# else
+#else
 			font->Render(text.c_str());
-# endif
+#endif
 			glPopMatrix();
 #endif
 		}
 		glScalef(1.0f, -1.0f, 1.0f);
 	}
-
 
 	void Font::destroy()
 	{
@@ -111,8 +103,7 @@ namespace TA3D
 		pFontFilename.clear();
 	}
 
-
-	float Font::length(const String &txt)
+	float Font::length(const String& txt)
 	{
 		if (txt.empty())
 			return 0.0f;
@@ -123,20 +114,19 @@ namespace TA3D
 		if (!font)
 			return 0.0f;
 #ifdef __FTGL__lower__
-		FTBBox box = font->BBox( txt.c_str() );
+		FTBBox box = font->BBox(txt.c_str());
 		return fabsf((box.Upper().Xf() - box.Lower().Xf()));
 #else
 		float x0, y0, z0, x1, y1, z1;
-# ifndef TA3D_PLATFORM_DARWIN
-        WString wstr(txt);
-        font->BBox(wstr.cw_str(), x0, y0, z0, x1, y1, z1);
-# else
+#ifndef TA3D_PLATFORM_DARWIN
+		WString wstr(txt);
+		font->BBox(wstr.cw_str(), x0, y0, z0, x1, y1, z1);
+#else
 		font->BBox(txt.c_str(), x0, y0, z0, x1, y1, z1);
-# endif
+#endif
 		return fabsf(x0 - x1);
 #endif
 	}
-
 
 	float Font::height()
 	{
@@ -149,7 +139,6 @@ namespace TA3D
 		MutexLocker locker(pMutex);
 		return (font) ? font->FaceSize() : 0;
 	}
-
 
 	FontManager::FontManager()
 	{
@@ -171,9 +160,7 @@ namespace TA3D
 		font_table.clear();
 	}
 
-
-
-	static void find_font(String& out, const String &path, const String &name)
+	static void find_font(String& out, const String& path, const String& name)
 	{
 		LOG_DEBUG(LOG_PREFIX_FONT << "looking for " << name);
 		out.clear();
@@ -187,7 +174,7 @@ namespace TA3D
 		// Looking for the file
 		{
 			const String::Vector::iterator end = file_list.end();
-			for (String::Vector::iterator i = file_list.begin() ; i != end; ++i)
+			for (String::Vector::iterator i = file_list.begin(); i != end; ++i)
 			{
 				tmp = Paths::ExtractFileName(*i);
 				tmp.toLower();
@@ -199,13 +186,13 @@ namespace TA3D
 			}
 		}
 
-		if (!out.empty())       // If we have a font in our VFS, then we have to extract it to a temporary location
-		{                       // in order to load it with FTGL
+		if (!out.empty()) // If we have a font in our VFS, then we have to extract it to a temporary location
+		{				  // in order to load it with FTGL
 			LOG_DEBUG(LOG_PREFIX_FONT << "font found: " << out);
 			tmp.clear();
 			tmp << TA3D::Paths::Caches << Paths::ExtractFileName(name) << ".ttf";
 
-			File *file = VFS::Instance()->readFile(out);
+			File* file = VFS::Instance()->readFile(out);
 			if (file)
 			{
 				if (file->isReal())
@@ -218,8 +205,8 @@ namespace TA3D
 					tmp_file.open(tmp, Yuni::Core::IO::OpenMode::write);
 					if (tmp_file.opened())
 					{
-						char *buf = new char[10240];
-						for(int i = 0 ; i < file->size() ; i += 10240)
+						char* buf = new char[10240];
+						for (int i = 0; i < file->size(); i += 10240)
 						{
 							const int l = Math::Min(10240, file->size() - i);
 							file->read(buf, l);
@@ -238,23 +225,21 @@ namespace TA3D
 				}
 				out.clear();
 				out << tmp;
-# ifdef TA3D_PLATFORM_WINDOWS
+#ifdef TA3D_PLATFORM_WINDOWS
 				out.convertSlashesIntoBackslashes();
-# endif
+#endif
 				delete file;
 			}
 		}
 	}
 
-
-	bool Font::load(const String &filename, const int size, const Font::Type type)
+	bool Font::load(const String& filename, const int size, const Font::Type type)
 	{
 		MutexLocker locker(pMutex);
 		return this->loadWL(filename, size, type);
 	}
 
-
-	bool Font::loadWL(const String &filename, const int size, const Font::Type type)
+	bool Font::loadWL(const String& filename, const int size, const Font::Type type)
 	{
 		pFontFilename = filename;
 		pType = type;
@@ -263,7 +248,7 @@ namespace TA3D
 		if (!filename.empty())
 		{
 			LOG_DEBUG(LOG_PREFIX_FONT << "Loading `" << filename << "`");
-			switch(type)
+			switch (type)
 			{
 				case typeBitmap:
 					font = new FTBitmapFont(filename.c_str());
@@ -298,23 +283,19 @@ namespace TA3D
 		return (!font);
 	}
 
-
-
-	Font *FontManager::find(const String& filename, const int size, const Font::Type type)
+	Font* FontManager::find(const String& filename, const int size, const Font::Type type)
 	{
 		String key(filename);
 		key << "_" << int(type) << "_" << size;
 		key.toLower();
 
 		return (font_table.count(key) != 0)
-			? font_table[key]
-			: internalRegisterFont(key, filename, size, type);
+				   ? font_table[key]
+				   : internalRegisterFont(key, filename, size, type);
 	}
 
-
-
 	Font* FontManager::internalRegisterFont(const String& key, const String& filename, const int size,
-		const Font::Type type)
+											const Font::Type type)
 	{
 		String foundFilename;
 		find_font(foundFilename, TA3D_FONT_PATH, filename);
@@ -325,7 +306,7 @@ namespace TA3D
 			find_font(foundFilename, TA3D_FONT_PATH, "FreeSerif");
 		}
 
-		Font *font = new Font();
+		Font* font = new Font();
 		font->load(foundFilename, size, type);
 
 		pFontList.push_back(font);
@@ -333,7 +314,5 @@ namespace TA3D
 
 		return font;
 	}
-
-
 
 } // namespace TA3D

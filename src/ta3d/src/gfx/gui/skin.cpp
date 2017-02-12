@@ -21,211 +21,252 @@
 #include <misc/math.h>
 #include "base.h"
 
-
-
 namespace TA3D
 {
-namespace Gui
-{
-
-
-
-	Skin::Skin()
-		:wnd_background(0), bkg_w(0), bkg_h(0), text_y_offset(0.f),
-		pCacheFontHeight(gui_font-> height())
+	namespace Gui
 	{
-		init();
-	}
 
-	Skin::~Skin()
-	{
-		destroy();
-	}
-
-
-	void Skin::init()
-	{
-		pPrefix.clear();
-		pName.clear();
-		text_y_offset = 0.f;
-
-		for (int i = 0; i < 2 ; ++i)
-			button_img[i].init();
-		text_background.init();
-		menu_background.init();
-		wnd_border.init();
-		wnd_title_bar.init();
-		selection_gfx.init();
-		for (int i = 0; i < 2; ++i)
-			progress_bar[i].init();
-
-		wnd_background = 0;
-		checkbox[1].init();
-		checkbox[0].init();
-		option[1].init();
-		option[0].init();
-		scroll[2].init();
-		scroll[1].init();
-		scroll[0].init();
-		bkg_h = bkg_w = 0;
-	}
-
-	void Skin::destroy()
-	{
-		for (int i = 0; i < 2; ++i)
+		Skin::Skin()
+			: wnd_background(0), bkg_w(0), bkg_h(0), text_y_offset(0.f),
+			  pCacheFontHeight(gui_font->height())
 		{
-			progress_bar[i].destroy();
-			button_img[i].destroy();
-			checkbox[i].destroy();
-			option[i].destroy();
-			scroll[i].destroy();
+			init();
 		}
-		scroll[2].destroy();
-		text_background.destroy();
-		menu_background.destroy();
-		wnd_border.destroy();
-		wnd_title_bar.destroy();
-		selection_gfx.destroy();
-		pPrefix.clear();
-		pName.clear();
-		gfx->destroy_texture(wnd_background);
-	}
 
-
-	void Skin::loadTDFFromFile(const String& filename, const float scale)
-	{
-		destroy();		// In case there is a skin loaded so we don't waste memory
-
-		if (filename.empty())
+		Skin::~Skin()
 		{
-			LOG_WARNING("TDF: Attempting to load an empty file");
-			return;
+			destroy();
 		}
-		TDFParser skinFile(filename);
 
-		// Grab the skin's name, so we can now if a skin is already in use
-		String tmp(Paths::ExtractFileNameWithoutExtension(filename));
-
-		pName = skinFile.pullAsString("skin.name", tmp); // The TDF may override the skin name
-
-		pPrefix = skinFile.pullAsString("skin.prefix", String()); // The pPrefix to use for
-		text_y_offset = float(skinFile.pullAsInt("skin.text.y offset", 0)) * scale;
-
-		wnd_border.load(skinFile, "skin.window.border.", scale);
-		wnd_title_bar.load(skinFile, "skin.window.title.", scale);
-
-		button_img[0].load(skinFile, "skin.button.up.", scale);
-		button_img[1].load(skinFile, "skin.button.down.", scale);
-		button_color.load(skinFile, "skin.button.", scale);
-		button_color_disabled = button_color;
-		button_color_disabled.font_color = ((button_color.font_color & 0x00FEFEFE) >> 1) | (button_color.font_color & 0xFF000000);
-
-		text_background.load(skinFile, "skin.text bar.", scale);
-		text_color.load(skinFile, "skin.text.", scale);
-
-		menu_background.load(skinFile, "skin.menu.", scale);
-
-		progress_bar[0].load(skinFile, "skin.progress bar.background.", scale);
-		progress_bar[1].load(skinFile, "skin.progress bar.bar.", scale);
-
-		selection_gfx.load(skinFile, "skin.selection.", scale);
-
-		option[0].load(skinFile, "skin.option.off.", scale);
-		option[1].load(skinFile, "skin.option.on.", scale);
-
-		checkbox[0].load(skinFile, "skin.checkbox.off.", scale);
-		checkbox[1].load(skinFile, "skin.checkbox.on.", scale);
-
-		scroll[0].load(skinFile, "skin.scroll.v.", scale);
-		scroll[1].load(skinFile, "skin.scroll.h.", scale);
-		scroll[2].load(skinFile, "skin.scroll.s.", scale);
-
-		String tex_file_name (skinFile.pullAsString("skin.window.image"));
-		if (VFS::Instance()->fileExists(tex_file_name))
-			wnd_background = gfx->load_texture( tex_file_name, FILTER_LINEAR, &bkg_w, &bkg_h, false);
-	}
-
-
-	void Skin::button(const float x, const float y, const float x2, const float y2, const String &Title, const bool State, const bool enabled) const
-	{
-		gfx->set_alpha_blending();
-		if (enabled)
-			gfx->set_color(0xFFFFFFFF);
-		else
-			gfx->set_color(0xFF7F7F7F);
-
-		button_img[(State ? 1 : 0)].draw( x, y, x2, y2);
-		gfx->unset_alpha_blending();
-
-		if (!Title.empty())
+		void Skin::init()
 		{
-			const TEXT_COLOR &color = enabled ? button_color : button_color_disabled;
-			if (State)
-				color.print(gui_font, (x + x2) * 0.5f - (gui_font->length(Title) * 0.5f) + 1.0f, (y + y2 - pCacheFontHeight) * 0.5f + 1.0f, Title);
+			pPrefix.clear();
+			pName.clear();
+			text_y_offset = 0.f;
+
+			for (int i = 0; i < 2; ++i)
+				button_img[i].init();
+			text_background.init();
+			menu_background.init();
+			wnd_border.init();
+			wnd_title_bar.init();
+			selection_gfx.init();
+			for (int i = 0; i < 2; ++i)
+				progress_bar[i].init();
+
+			wnd_background = 0;
+			checkbox[1].init();
+			checkbox[0].init();
+			option[1].init();
+			option[0].init();
+			scroll[2].init();
+			scroll[1].init();
+			scroll[0].init();
+			bkg_h = bkg_w = 0;
+		}
+
+		void Skin::destroy()
+		{
+			for (int i = 0; i < 2; ++i)
+			{
+				progress_bar[i].destroy();
+				button_img[i].destroy();
+				checkbox[i].destroy();
+				option[i].destroy();
+				scroll[i].destroy();
+			}
+			scroll[2].destroy();
+			text_background.destroy();
+			menu_background.destroy();
+			wnd_border.destroy();
+			wnd_title_bar.destroy();
+			selection_gfx.destroy();
+			pPrefix.clear();
+			pName.clear();
+			gfx->destroy_texture(wnd_background);
+		}
+
+		void Skin::loadTDFFromFile(const String &filename, const float scale)
+		{
+			destroy(); // In case there is a skin loaded so we don't waste memory
+
+			if (filename.empty())
+			{
+				LOG_WARNING("TDF: Attempting to load an empty file");
+				return;
+			}
+			TDFParser skinFile(filename);
+
+			// Grab the skin's name, so we can now if a skin is already in use
+			String tmp(Paths::ExtractFileNameWithoutExtension(filename));
+
+			pName = skinFile.pullAsString("skin.name", tmp); // The TDF may override the skin name
+
+			pPrefix = skinFile.pullAsString("skin.prefix", String()); // The pPrefix to use for
+			text_y_offset = float(skinFile.pullAsInt("skin.text.y offset", 0)) * scale;
+
+			wnd_border.load(skinFile, "skin.window.border.", scale);
+			wnd_title_bar.load(skinFile, "skin.window.title.", scale);
+
+			button_img[0].load(skinFile, "skin.button.up.", scale);
+			button_img[1].load(skinFile, "skin.button.down.", scale);
+			button_color.load(skinFile, "skin.button.", scale);
+			button_color_disabled = button_color;
+			button_color_disabled.font_color = ((button_color.font_color & 0x00FEFEFE) >> 1) | (button_color.font_color & 0xFF000000);
+
+			text_background.load(skinFile, "skin.text bar.", scale);
+			text_color.load(skinFile, "skin.text.", scale);
+
+			menu_background.load(skinFile, "skin.menu.", scale);
+
+			progress_bar[0].load(skinFile, "skin.progress bar.background.", scale);
+			progress_bar[1].load(skinFile, "skin.progress bar.bar.", scale);
+
+			selection_gfx.load(skinFile, "skin.selection.", scale);
+
+			option[0].load(skinFile, "skin.option.off.", scale);
+			option[1].load(skinFile, "skin.option.on.", scale);
+
+			checkbox[0].load(skinFile, "skin.checkbox.off.", scale);
+			checkbox[1].load(skinFile, "skin.checkbox.on.", scale);
+
+			scroll[0].load(skinFile, "skin.scroll.v.", scale);
+			scroll[1].load(skinFile, "skin.scroll.h.", scale);
+			scroll[2].load(skinFile, "skin.scroll.s.", scale);
+
+			String tex_file_name(skinFile.pullAsString("skin.window.image"));
+			if (VFS::Instance()->fileExists(tex_file_name))
+				wnd_background = gfx->load_texture(tex_file_name, FILTER_LINEAR, &bkg_w, &bkg_h, false);
+		}
+
+		void Skin::button(const float x, const float y, const float x2, const float y2, const String &Title, const bool State, const bool enabled) const
+		{
+			gfx->set_alpha_blending();
+			if (enabled)
+				gfx->set_color(0xFFFFFFFF);
 			else
-				color.print(gui_font, (x + x2) * 0.5f - (gui_font->length(Title) * 0.5f), (y + y2 - pCacheFontHeight) * 0.5f, Title);
+				gfx->set_color(0xFF7F7F7F);
+
+			button_img[(State ? 1 : 0)].draw(x, y, x2, y2);
+			gfx->unset_alpha_blending();
+
+			if (!Title.empty())
+			{
+				const TEXT_COLOR &color = enabled ? button_color : button_color_disabled;
+				if (State)
+					color.print(gui_font, (x + x2) * 0.5f - (gui_font->length(Title) * 0.5f) + 1.0f, (y + y2 - pCacheFontHeight) * 0.5f + 1.0f, Title);
+				else
+					color.print(gui_font, (x + x2) * 0.5f - (gui_font->length(Title) * 0.5f), (y + y2 - pCacheFontHeight) * 0.5f, Title);
+			}
 		}
-	}
 
-
-	/*---------------------------------------------------------------------------\
+		/*---------------------------------------------------------------------------\
 	|        Draw a list box displaying the content of Entry                     |
 	\---------------------------------------------------------------------------*/
 
-	void Skin::ListBox(float x1,float y1, float x2, float y2,const String::Vector &Entry,int Index, int Scroll, uint32 flags) const
-	{
-        gfx->set_color(0xFFFFFFFF);
-
-		if( !(flags & FLAG_NO_BORDER) )
+		void Skin::ListBox(float x1, float y1, float x2, float y2, const String::Vector &Entry, int Index, int Scroll, uint32 flags) const
 		{
-			gfx->set_alpha_blending();
-			text_background.draw( x1, y1, x2, y2);
-			gfx->unset_alpha_blending();
+			gfx->set_color(0xFFFFFFFF);
+
+			if (!(flags & FLAG_NO_BORDER))
+			{
+				gfx->set_alpha_blending();
+				text_background.draw(x1, y1, x2, y2);
+				gfx->unset_alpha_blending();
+			}
+
+			uint32 line = 0;
+			String rest;
+			String pCacheDrawTextStr;
+			for (unsigned int i = 0; i < Entry.size(); ++i, ++line)
+			{
+				int e = i + Scroll;
+				if (e >= (int)Entry.size() || pCacheFontHeight * float(line + 1) > y2 - y1 - text_background.y1 + text_background.y2)
+					break; // If we are out break the loop
+				pCacheDrawTextStr = Entry[e];
+				if (pCacheDrawTextStr.size() > 3 && pCacheDrawTextStr[0] == '<' && pCacheDrawTextStr[1] == 'H' && pCacheDrawTextStr[2] == '>') // Highlight this line
+				{
+					pCacheDrawTextStr = Substr(pCacheDrawTextStr, 3, pCacheDrawTextStr.size() - 3);
+					glDisable(GL_TEXTURE_2D);
+					gfx->rectfill(x1 + text_background.x1, y1 + text_background.y1 + pCacheFontHeight * float(line),
+								  x2 + text_background.x2 - scroll[0].sw, y1 + text_background.y1 + pCacheFontHeight * float(line + 1), makeacol(0x7F, 0x7F, 0xFF, 0xFF));
+				}
+				rest.clear();
+				do
+				{
+					if (!rest.empty())
+					{
+						++line;
+						pCacheDrawTextStr = rest;
+						rest.clear();
+					}
+					if (pCacheFontHeight * float(line + 1) > y2 - y1 - text_background.y1 + text_background.y2)
+						break; // If we are out break the loop
+					if (e == Index)
+					{
+						gfx->set_alpha_blending();
+						selection_gfx.draw(x1 + text_background.x1, y1 + text_background.y1 + pCacheFontHeight * float(line), x2 + text_background.x2 - scroll[0].sw, y1 + text_background.y1 + pCacheFontHeight * float(line + 1));
+						gfx->unset_alpha_blending();
+					}
+					if (gui_font->length(pCacheDrawTextStr) >= x2 - x1 - text_background.x1 + text_background.x2 - scroll[0].sw - 10.0f)
+					{
+						// Dychotomic search of the longest string that fits
+						rest = pCacheDrawTextStr;
+						int top = rest.size();
+						int bottom = 0;
+						while (top != bottom)
+						{
+							const int mid = (top + bottom) >> 1;
+							pCacheDrawTextStr = Substr(rest, 0, mid);
+							if (gui_font->length(pCacheDrawTextStr) >= x2 - x1 - text_background.x1 + text_background.x2 - scroll[0].sw - 10)
+								top = mid;
+							else
+							{
+								if (bottom == mid)
+									break;
+								bottom = mid;
+							}
+						}
+						pCacheDrawTextStr = Substr(rest, 0, bottom);
+						rest = Substr(rest, bottom);
+					}
+					else
+						rest.clear();
+					gfx->print(gui_font, 10.0f + x1 + text_background.x1, y1 + text_background.y1 + pCacheFontHeight * float(line),
+							   0.0f, White, pCacheDrawTextStr);
+				} while (!rest.empty());
+			}
+
+			int TotalScroll = (int)Entry.size() - (int)((y2 - y1 - text_background.y1 + text_background.y2) / pCacheFontHeight);
+			if (TotalScroll < 0)
+				TotalScroll = 0;
+
+			ScrollBar(x2 + text_background.x2 - scroll[0].sw, y1 + text_background.y1,
+					  x2 + text_background.x2, y2 + text_background.y2,
+					  TotalScroll ? ((float)Scroll) / (float)TotalScroll : 0.0f, true);
 		}
 
-		uint32 line = 0;
-		String rest;
-		String pCacheDrawTextStr;
-		for (unsigned int i = 0; i < Entry.size(); ++i, ++line)
+		void Skin::AppendLineToListBox(String::Vector &Entry, float x1, float x2, String line) const
 		{
-			int e = i + Scroll;
-			if (e >= (int)Entry.size() || pCacheFontHeight * float(line + 1) > y2 - y1 - text_background.y1 + text_background.y2) break;		// If we are out break the loop
-            pCacheDrawTextStr = Entry[e];
-			if (pCacheDrawTextStr.size() > 3 && pCacheDrawTextStr[0] == '<'  && pCacheDrawTextStr[1] == 'H' && pCacheDrawTextStr[2] == '>')       // Highlight this line
-			{
-				pCacheDrawTextStr = Substr(pCacheDrawTextStr, 3, pCacheDrawTextStr.size() - 3);
-				glDisable(GL_TEXTURE_2D);
-				gfx->rectfill(x1 + text_background.x1, y1 + text_background.y1 + pCacheFontHeight * float(line),
-					x2 + text_background.x2 - scroll[ 0 ].sw, y1 + text_background.y1 + pCacheFontHeight * float(line+1), makeacol( 0x7F, 0x7F, 0xFF, 0xFF ));
-			}
-			rest.clear();
+			String rest;
 			do
 			{
 				if (!rest.empty())
 				{
-					++line;
-					pCacheDrawTextStr = rest;
+					line = rest;
 					rest.clear();
 				}
-				if (pCacheFontHeight * float(line + 1) > y2 - y1 - text_background.y1 + text_background.y2)
-					break;		// If we are out break the loop
-				if (e == Index)
-				{
-					gfx->set_alpha_blending();
-					selection_gfx.draw( x1 + text_background.x1, y1 + text_background.y1 + pCacheFontHeight * float(line), x2 + text_background.x2 - scroll[ 0 ].sw, y1 + text_background.y1 + pCacheFontHeight * float(line + 1));
-					gfx->unset_alpha_blending();
-				}
-				if (gui_font->length(pCacheDrawTextStr) >= x2 - x1 - text_background.x1 + text_background.x2 - scroll[0].sw - 10.0f)
+				if (gui_font->length(line) >= x2 - x1 - text_background.x1 + text_background.x2 - scroll[0].sw - 10.0f)
 				{
 					// Dychotomic search of the longest string that fits
-					rest = pCacheDrawTextStr;
-					int top = rest.size();
+					rest = line;
+					int top = (int)rest.size();
 					int bottom = 0;
 					while (top != bottom)
 					{
-						const int mid = (top + bottom) >> 1;
-						pCacheDrawTextStr = Substr(rest, 0, mid);
-						if (gui_font->length(pCacheDrawTextStr) >= x2 - x1 - text_background.x1 + text_background.x2 - scroll[0].sw - 10)
+						int mid = (top + bottom) >> 1;
+						line = Substr(rest, 0, mid);
+						if (gui_font->length(line) >= x2 - x1 - text_background.x1 + text_background.x2 - scroll[0].sw - 10.0f)
 							top = mid;
 						else
 						{
@@ -234,614 +275,558 @@ namespace Gui
 							bottom = mid;
 						}
 					}
-					pCacheDrawTextStr = Substr(rest, 0, bottom);
+					line = Substr(rest, 0, bottom);
 					rest = Substr(rest, bottom);
 				}
 				else
 					rest.clear();
-				gfx->print(gui_font, 10.0f + x1 + text_background.x1, y1 + text_background.y1 + pCacheFontHeight * float(line),
-					0.0f, White, pCacheDrawTextStr);
-			} while(!rest.empty());
+				Entry.push_back(line);
+			} while (!rest.empty());
 		}
 
-		int TotalScroll = (int)Entry.size() - (int)((y2 - y1 - text_background.y1 + text_background.y2) / pCacheFontHeight);
-		if (TotalScroll < 0)
-			TotalScroll = 0;
-
-		ScrollBar(	x2 + text_background.x2 - scroll[ 0 ].sw, y1 + text_background.y1,
-					x2 + text_background.x2, y2 + text_background.y2,
-					TotalScroll ? ((float)Scroll) / (float)TotalScroll : 0.0f, true);
-	}
-
-	void Skin::AppendLineToListBox(String::Vector &Entry, float x1, float x2, String line) const
-	{
-		String rest;
-		do
-		{
-			if (!rest.empty())
-			{
-				line = rest;
-				rest.clear();
-			}
-			if (gui_font->length(line) >= x2 - x1 - text_background.x1 + text_background.x2 - scroll[0].sw - 10.0f)
-			{
-				// Dychotomic search of the longest string that fits
-				rest = line;
-				int top = (int)rest.size();
-				int bottom = 0;
-				while (top != bottom)
-				{
-					int mid = (top + bottom) >> 1;
-					line = Substr(rest, 0, mid);
-					if (gui_font->length(line) >= x2 - x1 - text_background.x1 + text_background.x2 - scroll[0].sw - 10.0f)
-						top = mid;
-					else
-					{
-						if (bottom == mid)
-							break;
-						bottom = mid;
-					}
-				}
-				line = Substr(rest, 0, bottom);
-				rest = Substr(rest, bottom);
-			}
-			else
-				rest.clear();
-			Entry.push_back(line);
-		} while(!rest.empty());
-	}
-
-	/*---------------------------------------------------------------------------\
+		/*---------------------------------------------------------------------------\
 	  |        Draw a popup menu displaying the text msg using the skin object     |
 	  \---------------------------------------------------------------------------*/
 
-	void Skin::PopupMenu( float x1, float y1, const String &msg) const
-	{
-		float x2 = x1;
-		std::vector< String > Entry;
-		unsigned int last = 0;
-		for (unsigned int i = 0; i < msg.length(); ++i)
+		void Skin::PopupMenu(float x1, float y1, const String &msg) const
 		{
-			if (msg[i] == '\n')
+			float x2 = x1;
+			std::vector<String> Entry;
+			unsigned int last = 0;
+			for (unsigned int i = 0; i < msg.length(); ++i)
 			{
-				Entry.push_back(Substr(msg, last, i - last));
-				x2 = Math::Max(x2, x1 + gui_font->length(Entry.back()));
-				last = i + 1;
+				if (msg[i] == '\n')
+				{
+					Entry.push_back(Substr(msg, last, i - last));
+					x2 = Math::Max(x2, x1 + gui_font->length(Entry.back()));
+					last = i + 1;
+				}
 			}
+			if (last + 1 < msg.length())
+			{
+				Entry.push_back(Substr(msg, last, msg.length() - last));
+				x2 = Math::Max(x2, x1 + gui_font->length(Entry.back()));
+			}
+
+			x2 += menu_background.x1 - menu_background.x2;
+			float y2 = y1 + menu_background.y1 - menu_background.y2 + pCacheFontHeight * (float)Entry.size();
+			const float screen_w = static_cast<float>(SCREEN_W);
+			const float screen_h = static_cast<float>(SCREEN_H);
+			if (x2 >= screen_w)
+			{
+				x1 += screen_w - x2 - 1;
+				x2 = screen_w - 1;
+			}
+			if (y2 >= screen_h)
+			{
+				y1 += screen_h - y2 - 1;
+				y2 = screen_h - 1;
+			}
+
+			ObjectShadow(x1, y1,
+						 x2, y2,
+						 2, 2,
+						 0.5f, 4.0f);
+
+			gfx->set_alpha_blending();
+			gfx->set_color(0xFFFFFFFF);
+
+			menu_background.draw(x1, y1, x2, y2);
+			gfx->unset_alpha_blending();
+
+			for (unsigned int e = 0; e < Entry.size(); ++e)
+				text_color.print(gui_font, x1 + menu_background.x1, y1 + menu_background.y1 + pCacheFontHeight * float(e), Entry[e]);
+			Entry.clear();
 		}
-		if (last + 1 < msg.length())
-		{
-			Entry.push_back( Substr(msg, last, msg.length() - last));
-			x2 = Math::Max(x2, x1 + gui_font->length(Entry.back()));
-		}
 
-		x2 += menu_background.x1 - menu_background.x2;
-		float y2 = y1 + menu_background.y1 - menu_background.y2 + pCacheFontHeight * (float)Entry.size();
-		const float screen_w = static_cast<float>(SCREEN_W);
-		const float screen_h = static_cast<float>(SCREEN_H);
-		if (x2 >= screen_w)
-		{
-			x1 += screen_w - x2 - 1;
-			x2 = screen_w - 1;
-		}
-		if (y2 >= screen_h)
-		{
-			y1 += screen_h - y2 - 1;
-			y2 = screen_h - 1;
-		}
-
-		ObjectShadow( x1, y1,
-					  x2, y2,
-					  2, 2,
-					  0.5f, 4.0f);
-
-		gfx->set_alpha_blending();
-		gfx->set_color( 0xFFFFFFFF);
-
-		menu_background.draw( x1, y1, x2, y2);
-		gfx->unset_alpha_blending();
-
-		for (unsigned int e = 0; e < Entry.size(); ++e)
-			text_color.print(gui_font, x1 + menu_background.x1, y1 + menu_background.y1 + pCacheFontHeight * float(e), Entry[e]);
-		Entry.clear();
-	}
-
-	/*---------------------------------------------------------------------------\
+		/*---------------------------------------------------------------------------\
 	  |        Draw a floatting menu with the parameters from Entry[]              |
 	  \---------------------------------------------------------------------------*/
 
-	void Skin::FloatMenu(float x, float y, const String::Vector &Entry, int Index, int StartEntry) const
-	{
-		if (StartEntry < (int)Entry.size())
+		void Skin::FloatMenu(float x, float y, const String::Vector &Entry, int Index, int StartEntry) const
 		{
-			float width = 168.0f;
-			for (unsigned int i = 0; i < Entry.size() - StartEntry; ++i)
-				width = Math::Max(width, gui_font->length(Entry[i]));
-
-			width += menu_background.x1 - menu_background.x2;
-
-			ObjectShadow( x, y,
-						  x + width, y + menu_background.y1 - menu_background.y2 + pCacheFontHeight * float(Entry.size() - StartEntry),
-						  2, 2,
-						  0.5f, 4.0f);
-
-			gfx->set_color( 0xFFFFFFFF);
-			gfx->set_alpha_blending();
-			menu_background.draw( x, y, x + width, y + menu_background.y1 - menu_background.y2 + pCacheFontHeight * float(Entry.size() - StartEntry));
-
-			for (unsigned int i = 0; i < Entry.size() - StartEntry; ++i)
+			if (StartEntry < (int)Entry.size())
 			{
-				unsigned int e = i + StartEntry;
-				if (e == (uint32)Index)
-					selection_gfx.draw( x + menu_background.x1, y + menu_background.y1 + pCacheFontHeight * float(i), x + width + menu_background.x2, y + menu_background.y1 + pCacheFontHeight * float(i + 1));
-				gfx->print(gui_font, x + menu_background.x1, y + menu_background.y1 + pCacheFontHeight * float(i), 0.0f, White, Entry[e]);
-			}
-			gfx->unset_alpha_blending();
-		}
-	}
+				float width = 168.0f;
+				for (unsigned int i = 0; i < Entry.size() - StartEntry; ++i)
+					width = Math::Max(width, gui_font->length(Entry[i]));
 
-	/*---------------------------------------------------------------------------\
+				width += menu_background.x1 - menu_background.x2;
+
+				ObjectShadow(x, y,
+							 x + width, y + menu_background.y1 - menu_background.y2 + pCacheFontHeight * float(Entry.size() - StartEntry),
+							 2, 2,
+							 0.5f, 4.0f);
+
+				gfx->set_color(0xFFFFFFFF);
+				gfx->set_alpha_blending();
+				menu_background.draw(x, y, x + width, y + menu_background.y1 - menu_background.y2 + pCacheFontHeight * float(Entry.size() - StartEntry));
+
+				for (unsigned int i = 0; i < Entry.size() - StartEntry; ++i)
+				{
+					unsigned int e = i + StartEntry;
+					if (e == (uint32)Index)
+						selection_gfx.draw(x + menu_background.x1, y + menu_background.y1 + pCacheFontHeight * float(i), x + width + menu_background.x2, y + menu_background.y1 + pCacheFontHeight * float(i + 1));
+					gfx->print(gui_font, x + menu_background.x1, y + menu_background.y1 + pCacheFontHeight * float(i), 0.0f, White, Entry[e]);
+				}
+				gfx->unset_alpha_blending();
+			}
+		}
+
+		/*---------------------------------------------------------------------------\
 	  |        Draw an option button with text Title                               |
 	  \---------------------------------------------------------------------------*/
 
-	void Skin::OptionButton(float x,float y,const String &Title,bool State) const
-	{
-		gfx->set_color( 0xFFFFFFFF);
-		gfx->set_alpha_blending();
+		void Skin::OptionButton(float x, float y, const String &Title, bool State) const
+		{
+			gfx->set_color(0xFFFFFFFF);
+			gfx->set_alpha_blending();
 
-		option[ State ? 1 : 0 ].draw( x, y, x + option[ State ? 1 : 0 ].sw, y + option[ State ? 1 : 0 ].sh);
-		gfx->unset_alpha_blending();
+			option[State ? 1 : 0].draw(x, y, x + option[State ? 1 : 0].sw, y + option[State ? 1 : 0].sh);
+			gfx->unset_alpha_blending();
 
-		text_color.print(gui_font, x + option[ State ? 1 : 0 ].sw + 4.0f, y + ( option[ State ? 1 : 0 ].sh - pCacheFontHeight ) * 0.5f, Title);
-	}
+			text_color.print(gui_font, x + option[State ? 1 : 0].sw + 4.0f, y + (option[State ? 1 : 0].sh - pCacheFontHeight) * 0.5f, Title);
+		}
 
-	/*---------------------------------------------------------------------------\
+		/*---------------------------------------------------------------------------\
 	  |        Draw an option case with text Title                                 |
 	  \---------------------------------------------------------------------------*/
 
-	void Skin::OptionCase(float x,float y,const String &Title,bool State) const
-	{
-		gfx->set_color( 0xFFFFFFFF);
-		gfx->set_alpha_blending();
+		void Skin::OptionCase(float x, float y, const String &Title, bool State) const
+		{
+			gfx->set_color(0xFFFFFFFF);
+			gfx->set_alpha_blending();
 
-		checkbox[ State ? 1 : 0 ].draw( x, y, x + checkbox[ State ? 1 : 0 ].sw, y + checkbox[ State ? 1 : 0 ].sh);
-		gfx->unset_alpha_blending();
+			checkbox[State ? 1 : 0].draw(x, y, x + checkbox[State ? 1 : 0].sw, y + checkbox[State ? 1 : 0].sh);
+			gfx->unset_alpha_blending();
 
-		text_color.print(gui_font, x + checkbox[ State ? 1 : 0 ].sw + 4.0f, y + ( checkbox[ State ? 1 : 0 ].sh - pCacheFontHeight ) * 0.5f, Title);
-	}
+			text_color.print(gui_font, x + checkbox[State ? 1 : 0].sw + 4.0f, y + (checkbox[State ? 1 : 0].sh - pCacheFontHeight) * 0.5f, Title);
+		}
 
-	/*---------------------------------------------------------------------------\
+		/*---------------------------------------------------------------------------\
 	  |        Draw a TEXTEDITOR widget (a large text input widget)                |
 	  \---------------------------------------------------------------------------*/
 
-	void Skin::TextEditor(float x1, float y1, float x2, float y2, const String::Vector &Entry, int row, int col, bool State) const
-	{
-		bool blink = State && (msec_timer % 1000) >= 500;
-
-		gfx->set_color( 0xFFFFFFFF);
-		gfx->set_alpha_blending();
-
-		text_background.draw( x1, y1, x2, y2);
-		gfx->unset_alpha_blending();
-
-		float maxlength = x2 - x1 + text_background.x2 - text_background.x1 - gui_font->length( "_");
-		float maxheight = y2 - y1 + text_background.y2 - text_background.y1 - text_y_offset;
-		int H = Math::Max( row - (int)(0.5f * maxheight / pCacheFontHeight), 0);
-		int y = 0;
-		int row_size = Entry[row].utf8size();
-		while (pCacheFontHeight * float(y + 1) <= maxheight && y + H < (int)Entry.size())
+		void Skin::TextEditor(float x1, float y1, float x2, float y2, const String::Vector &Entry, int row, int col, bool State) const
 		{
-			String strtoprint;
-			String buf = Entry[y+H];
-			for(int x = 0; !buf.empty() ; )
+			bool blink = State && (msec_timer % 1000) >= 500;
+
+			gfx->set_color(0xFFFFFFFF);
+			gfx->set_alpha_blending();
+
+			text_background.draw(x1, y1, x2, y2);
+			gfx->unset_alpha_blending();
+
+			float maxlength = x2 - x1 + text_background.x2 - text_background.x1 - gui_font->length("_");
+			float maxheight = y2 - y1 + text_background.y2 - text_background.y1 - text_y_offset;
+			int H = Math::Max(row - (int)(0.5f * maxheight / pCacheFontHeight), 0);
+			int y = 0;
+			int row_size = Entry[row].utf8size();
+			while (pCacheFontHeight * float(y + 1) <= maxheight && y + H < (int)Entry.size())
 			{
-				uint32 k = 0;
-				while(k < buf.size() && buf[k] == ' ')			// Removes useless spaces (it's unlikely we find any other type of blank character here)
-					++k;
-				if (k)
+				String strtoprint;
+				String buf = Entry[y + H];
+				for (int x = 0; !buf.empty();)
 				{
-					buf = Substr(buf, k);
-					x += k;
-				}
+					uint32 k = 0;
+					while (k < buf.size() && buf[k] == ' ') // Removes useless spaces (it's unlikely we find any other type of blank character here)
+						++k;
+					if (k)
+					{
+						buf = Substr(buf, k);
+						x += k;
+					}
 
-				int len = buf.utf8size();
-				int smax = len + 1;
-				int smin = 0;
-				int s = (smax + smin) >> 1;
-				do
-				{
-					s = (smax + smin) >> 1;
-					strtoprint = SubstrUTF8(buf, 0, s);
-					if (s == smin)
-						break;
-
-					if (gui_font->length(strtoprint) > maxlength)
-						smax = s;
-					else
-						smin = s;
-					if (smax == smin)
-						strtoprint = SubstrUTF8(buf, 0, smin);
-				} while(smax != smin);
-
-				if (len > s && SubstrUTF8(strtoprint,s-1,1) != " " && SubstrUTF8(buf,s,1) != " ")		// We're splitting a word :s
-				{
-					int olds = s;
-					while (s > 0 && SubstrUTF8(strtoprint,s-1,1) != " " && SubstrUTF8(buf,s,1) != " ")
-						--s;
-					if (s == 0)
-						s = olds;
-					else
+					int len = buf.utf8size();
+					int smax = len + 1;
+					int smin = 0;
+					int s = (smax + smin) >> 1;
+					do
+					{
+						s = (smax + smin) >> 1;
 						strtoprint = SubstrUTF8(buf, 0, s);
-				}
+						if (s == smin)
+							break;
 
-				buf = SubstrUTF8(buf, s);
+						if (gui_font->length(strtoprint) > maxlength)
+							smax = s;
+						else
+							smin = s;
+						if (smax == smin)
+							strtoprint = SubstrUTF8(buf, 0, smin);
+					} while (smax != smin);
 
-				gfx->print( gui_font,
-							x1 + text_background.x1,
-							y1 + text_background.y1 + text_y_offset + pCacheFontHeight * float(y),
-							0.0f,
-							White,
-							strtoprint);
-				if (row == y + H && x <= col && col < x + s && blink)
-				{
-					gfx->print( gui_font, x1 + text_background.x1 + gui_font->length(SubstrUTF8(strtoprint, 0, col - x)),
-								y1 + text_background.y1 + text_y_offset + pCacheFontHeight * float(y),
-								0.0f, White, "_");
+					if (len > s && SubstrUTF8(strtoprint, s - 1, 1) != " " && SubstrUTF8(buf, s, 1) != " ") // We're splitting a word :s
+					{
+						int olds = s;
+						while (s > 0 && SubstrUTF8(strtoprint, s - 1, 1) != " " && SubstrUTF8(buf, s, 1) != " ")
+							--s;
+						if (s == 0)
+							s = olds;
+						else
+							strtoprint = SubstrUTF8(buf, 0, s);
+					}
+
+					buf = SubstrUTF8(buf, s);
+
+					gfx->print(gui_font,
+							   x1 + text_background.x1,
+							   y1 + text_background.y1 + text_y_offset + pCacheFontHeight * float(y),
+							   0.0f,
+							   White,
+							   strtoprint);
+					if (row == y + H && x <= col && col < x + s && blink)
+					{
+						gfx->print(gui_font, x1 + text_background.x1 + gui_font->length(SubstrUTF8(strtoprint, 0, col - x)),
+								   y1 + text_background.y1 + text_y_offset + pCacheFontHeight * float(y),
+								   0.0f, White, "_");
+					}
+					x += s;
+					if (!buf.empty())
+					{
+						y++;
+						H--;
+					}
+					if (pCacheFontHeight * float(y + 1) >= maxheight)
+						break;
 				}
-				x += s;
-				if (!buf.empty())
+				if (y + H == row && col == row_size && blink)
 				{
-					y++;
-					H--;
+					gfx->print(gui_font, x1 + text_background.x1 + gui_font->length(strtoprint),
+							   y1 + text_background.y1 + text_y_offset + pCacheFontHeight * float(y),
+							   0.0f, White, "_");
 				}
-				if (pCacheFontHeight * float(y + 1) >= maxheight)
-					break;
+				++y;
 			}
-			if (y + H == row && col == row_size && blink)
-			{
-				gfx->print( gui_font, x1 + text_background.x1 + gui_font->length(strtoprint),
-							y1 + text_background.y1 + text_y_offset + pCacheFontHeight * float(y),
-							0.0f, White, "_");
-			}
-			++y;
 		}
-	}
 
-
-
-	/*---------------------------------------------------------------------------\
+		/*---------------------------------------------------------------------------\
 	  |        Draw a text input bar, a way for user to enter text                 |
 	  \---------------------------------------------------------------------------*/
 
-	void Skin::TextBar(float x1,float y1,float x2,float y2,const String &Caption,bool State) const
-	{
-		bool blink = State && (msec_timer % 1000) >= 500;
-
-		gfx->set_color(0xFFFFFFFF);
-		gfx->set_alpha_blending();
-
-		text_background.draw( x1, y1, x2, y2);
-		gfx->unset_alpha_blending();
-
-		const float maxlength = x2 - x1 + text_background.x2 - text_background.x1 - gui_font->length( "_");
-		int dec = 0;
-		String strtoprint = Substr(Caption, dec, Caption.length() - dec);
-		while (gui_font->length( Substr(Caption, dec, Caption.length() - dec ) ) >= maxlength && dec < (int)Caption.length())
+		void Skin::TextBar(float x1, float y1, float x2, float y2, const String &Caption, bool State) const
 		{
-			++dec;
-			strtoprint = Substr(Caption, dec, Caption.length() - dec);
+			bool blink = State && (msec_timer % 1000) >= 500;
+
+			gfx->set_color(0xFFFFFFFF);
+			gfx->set_alpha_blending();
+
+			text_background.draw(x1, y1, x2, y2);
+			gfx->unset_alpha_blending();
+
+			const float maxlength = x2 - x1 + text_background.x2 - text_background.x1 - gui_font->length("_");
+			int dec = 0;
+			String strtoprint = Substr(Caption, dec, Caption.length() - dec);
+			while (gui_font->length(Substr(Caption, dec, Caption.length() - dec)) >= maxlength && dec < (int)Caption.length())
+			{
+				++dec;
+				strtoprint = Substr(Caption, dec, Caption.length() - dec);
+			}
+
+			gfx->print(gui_font, x1 + text_background.x1, y1 + text_background.y1 + text_y_offset, 0.0f, White, strtoprint);
+			if (blink)
+				gfx->print(gui_font, x1 + text_background.x1 + gui_font->length(strtoprint), y1 + text_background.y1 + text_y_offset, 0.0f, White, "_");
 		}
 
-		gfx->print(gui_font,x1+text_background.x1,y1+text_background.y1+text_y_offset,0.0f,White,strtoprint);
-		if (blink)
-			gfx->print(gui_font,x1+text_background.x1+gui_font->length( strtoprint ),y1+text_background.y1+text_y_offset,0.0f,White,"_");
-	}
-
-
-
-	/*---------------------------------------------------------------------------\
+		/*---------------------------------------------------------------------------\
 	  |                              Draw a scroll bar                             |
 	  \---------------------------------------------------------------------------*/
-	void Skin::ScrollBar( float x1, float y1, float x2, float y2, float Value, bool vertical) const
-	{
-		gfx->set_color( 0xFFFFFFFF);
-		gfx->set_alpha_blending();
-
-		if( Value < 0.0f )	Value = 0.0f;
-		else if( Value > 1.0f )	Value = 1.0f;
-		scroll[ vertical ? 0 : 1 ].draw( x1, y1, x2, y2);
-
-		if (vertical)
+		void Skin::ScrollBar(float x1, float y1, float x2, float y2, float Value, bool vertical) const
 		{
-			float y = y1 + scroll[ 0 ].y1;
-			float dx = x2 - x1 - scroll[ 0 ].x1 + scroll[ 0 ].x2;
-			y += (y2 - y1 - scroll[ 0 ].y1 + scroll[ 0 ].y2 - dx) * Value;
-			scroll[ 2 ].draw( x1 + scroll[ 0 ].x1, y, x2 + scroll[ 0 ].x2, y + dx);
-		}
-		else
-		{
-			float x = x1 + scroll[ 1 ].x1;
-			float dy = y2 - y1 - scroll[ 1 ].y1 + scroll[ 1 ].y2;
-			x += (x2 - x1 - scroll[ 1 ].x1 + scroll[ 1 ].x2 - dy) * Value;
-			scroll[ 2 ].draw( x, y1 + scroll[ 1 ].y1, x + dy, y2 + scroll[ 1 ].y2);
-		}
-		gfx->unset_alpha_blending();
-	}
+			gfx->set_color(0xFFFFFFFF);
+			gfx->set_alpha_blending();
 
-	/*---------------------------------------------------------------------------\
+			if (Value < 0.0f)
+				Value = 0.0f;
+			else if (Value > 1.0f)
+				Value = 1.0f;
+			scroll[vertical ? 0 : 1].draw(x1, y1, x2, y2);
+
+			if (vertical)
+			{
+				float y = y1 + scroll[0].y1;
+				float dx = x2 - x1 - scroll[0].x1 + scroll[0].x2;
+				y += (y2 - y1 - scroll[0].y1 + scroll[0].y2 - dx) * Value;
+				scroll[2].draw(x1 + scroll[0].x1, y, x2 + scroll[0].x2, y + dx);
+			}
+			else
+			{
+				float x = x1 + scroll[1].x1;
+				float dy = y2 - y1 - scroll[1].y1 + scroll[1].y2;
+				x += (x2 - x1 - scroll[1].x1 + scroll[1].x2 - dy) * Value;
+				scroll[2].draw(x, y1 + scroll[1].y1, x + dy, y2 + scroll[1].y2);
+			}
+			gfx->unset_alpha_blending();
+		}
+
+		/*---------------------------------------------------------------------------\
 	  |                     Draw a progress bar                                    |
 	  \---------------------------------------------------------------------------*/
 
-	void Skin::ProgressBar(float x1,float y1,float x2,float y2,int Value) const
-	{
-		gfx->set_color( 0xFFFFFFFF);
-		gfx->set_alpha_blending();
-		progress_bar[0].draw( x1, y1, x2, y2);
-		progress_bar[1].draw( x1 + progress_bar[0].x1, y1 + progress_bar[0].y1, x1 + progress_bar[0].x1 + (progress_bar[0].x2 + x2 - x1 - progress_bar[0].x1) * float(Value) * 0.01f, y2 + progress_bar[0].y2);			// Draw the bar
-		gfx->unset_alpha_blending();
+		void Skin::ProgressBar(float x1, float y1, float x2, float y2, int Value) const
+		{
+			gfx->set_color(0xFFFFFFFF);
+			gfx->set_alpha_blending();
+			progress_bar[0].draw(x1, y1, x2, y2);
+			progress_bar[1].draw(x1 + progress_bar[0].x1, y1 + progress_bar[0].y1, x1 + progress_bar[0].x1 + (progress_bar[0].x2 + x2 - x1 - progress_bar[0].x1) * float(Value) * 0.01f, y2 + progress_bar[0].y2); // Draw the bar
+			gfx->unset_alpha_blending();
 
-		String Buf;
-		Buf << Value << "%";
+			String Buf;
+			Buf << Value << "%";
 
-		gfx->print(gui_font,(x1+x2)*0.5f-gui_font->length(Buf) * 0.5f, (y1 + y2) * 0.5f - pCacheFontHeight * 0.5f, 0.0f, White, Buf);
-	}
+			gfx->print(gui_font, (x1 + x2) * 0.5f - gui_font->length(Buf) * 0.5f, (y1 + y2) * 0.5f - pCacheFontHeight * 0.5f, 0.0f, White, Buf);
+		}
 
-	/*---------------------------------------------------------------------------\
+		/*---------------------------------------------------------------------------\
 	  |        Draw a the given text within the given space                        |
 	  \---------------------------------------------------------------------------*/
 
-	int Skin::draw_text_adjust(float x1, float y1, float x2, float y2, const String& msg, int pos, bool missionMode) const
-	{
-		int last = 0;
-		String pCacheDrawTextStr;
-		String pCacheDrawTextCurrent;
-		String pCacheDrawTextWord;
-		String::Vector pCacheDrawTextVector;
-
-		for (unsigned int i = 0 ; i < msg.length(); ++i)
+		int Skin::draw_text_adjust(float x1, float y1, float x2, float y2, const String &msg, int pos, bool missionMode) const
 		{
-			pCacheDrawTextStr.clear();
-			if (((byte)msg[i]) < 0x80)
-				pCacheDrawTextStr << msg[i];
-			else
-			{
-				if (i + 1 < msg.length())
-				{
-					pCacheDrawTextStr << msg[i] << msg[i+1];
-					i++;
-				}
-			}
+			int last = 0;
+			String pCacheDrawTextStr;
+			String pCacheDrawTextCurrent;
+			String pCacheDrawTextWord;
+			String::Vector pCacheDrawTextVector;
 
-			if (pCacheDrawTextStr == "\r")
-				continue;
-			else
+			for (unsigned int i = 0; i < msg.length(); ++i)
 			{
-				String tmp;
-				tmp << pCacheDrawTextCurrent << ' ' << pCacheDrawTextWord << pCacheDrawTextStr;
-				if (pCacheDrawTextStr == "\n" || gui_font->length(tmp) >= x2 - x1)
-				{
-					bool line_too_long = true;
-					if (gui_font->length(tmp) < x2 - x1)
-					{
-						pCacheDrawTextCurrent << ' ' << pCacheDrawTextWord;
-						pCacheDrawTextWord.clear();
-						line_too_long = false;
-					}
-					else if (pCacheDrawTextStr != "\n")
-						pCacheDrawTextWord << pCacheDrawTextStr;
-					pCacheDrawTextVector.push_back(pCacheDrawTextCurrent);
-					last = i + 1;
-					pCacheDrawTextCurrent.clear();
-					if (pCacheDrawTextStr == "\n" && line_too_long)
-					{
-						pCacheDrawTextVector.push_back(pCacheDrawTextWord);
-						pCacheDrawTextWord.clear();
-					}
-				}
+				pCacheDrawTextStr.clear();
+				if (((byte)msg[i]) < 0x80)
+					pCacheDrawTextStr << msg[i];
 				else
 				{
-					if (pCacheDrawTextStr == " ")
+					if (i + 1 < msg.length())
 					{
-						if (!pCacheDrawTextCurrent.empty())
-							pCacheDrawTextCurrent << ' ';
-						pCacheDrawTextCurrent << pCacheDrawTextWord;
-						pCacheDrawTextWord.clear();
+						pCacheDrawTextStr << msg[i] << msg[i + 1];
+						i++;
+					}
+				}
+
+				if (pCacheDrawTextStr == "\r")
+					continue;
+				else
+				{
+					String tmp;
+					tmp << pCacheDrawTextCurrent << ' ' << pCacheDrawTextWord << pCacheDrawTextStr;
+					if (pCacheDrawTextStr == "\n" || gui_font->length(tmp) >= x2 - x1)
+					{
+						bool line_too_long = true;
+						if (gui_font->length(tmp) < x2 - x1)
+						{
+							pCacheDrawTextCurrent << ' ' << pCacheDrawTextWord;
+							pCacheDrawTextWord.clear();
+							line_too_long = false;
+						}
+						else if (pCacheDrawTextStr != "\n")
+							pCacheDrawTextWord << pCacheDrawTextStr;
+						pCacheDrawTextVector.push_back(pCacheDrawTextCurrent);
+						last = i + 1;
+						pCacheDrawTextCurrent.clear();
+						if (pCacheDrawTextStr == "\n" && line_too_long)
+						{
+							pCacheDrawTextVector.push_back(pCacheDrawTextWord);
+							pCacheDrawTextWord.clear();
+						}
 					}
 					else
-						pCacheDrawTextWord << pCacheDrawTextStr;
+					{
+						if (pCacheDrawTextStr == " ")
+						{
+							if (!pCacheDrawTextCurrent.empty())
+								pCacheDrawTextCurrent << ' ';
+							pCacheDrawTextCurrent << pCacheDrawTextWord;
+							pCacheDrawTextWord.clear();
+						}
+						else
+							pCacheDrawTextWord << pCacheDrawTextStr;
+					}
 				}
 			}
-		}
 
-		if (!pCacheDrawTextCurrent.empty())
-			pCacheDrawTextCurrent << ' ' << pCacheDrawTextWord;
-		else
-			pCacheDrawTextCurrent << pCacheDrawTextWord;
+			if (!pCacheDrawTextCurrent.empty())
+				pCacheDrawTextCurrent << ' ' << pCacheDrawTextWord;
+			else
+				pCacheDrawTextCurrent << pCacheDrawTextWord;
 
-		if (last + 1 < (int)msg.length() && !pCacheDrawTextCurrent.empty())
-			pCacheDrawTextVector.push_back(pCacheDrawTextCurrent);
+			if (last + 1 < (int)msg.length() && !pCacheDrawTextCurrent.empty())
+				pCacheDrawTextVector.push_back(pCacheDrawTextCurrent);
 
-		gfx->set_color( 0xFFFFFFFF);
+			gfx->set_color(0xFFFFFFFF);
 
-		if (missionMode)
-		{
-			uint32	current_color = 0xFFFFFFFF;
-			for (unsigned int e = pos ; e < pCacheDrawTextVector.size() ; ++e)
+			if (missionMode)
 			{
-				const String& item = pCacheDrawTextVector[e];
-				if (y1 + pCacheFontHeight * float(e + 1 - pos) <= y2)
+				uint32 current_color = 0xFFFFFFFF;
+				for (unsigned int e = pos; e < pCacheDrawTextVector.size(); ++e)
 				{
-					float x_offset = 0.0f;
-					String buf;
-					for (unsigned int i = 0 ; i < item.size(); ++i)
+					const String &item = pCacheDrawTextVector[e];
+					if (y1 + pCacheFontHeight * float(e + 1 - pos) <= y2)
 					{
-						pCacheDrawTextStr.clear();
-						if (((byte)item[i]) < 0x80)
-							pCacheDrawTextStr << item[i];
-						else
+						float x_offset = 0.0f;
+						String buf;
+						for (unsigned int i = 0; i < item.size(); ++i)
 						{
-							if (i + 1 < item.size())
-							{
-								pCacheDrawTextStr << item[i] << item[i + 1];
-								i++;
-							}
-						}
-						if (pCacheDrawTextStr == "&")
-						{
-							text_color.print( gui_font, x1 + x_offset, y1 + pCacheFontHeight * float(e - pos), current_color, buf);
-							x_offset += gui_font->length( buf);
-							buf.clear();
-
-							current_color = 0xFFFFFFFF;									// Default: white
-							if (i + 1 < item.size() && item[i+1] == 'R')
-							{
-								current_color = 0xFF0000FF;								// Red
-								i++;
-							}
+							pCacheDrawTextStr.clear();
+							if (((byte)item[i]) < 0x80)
+								pCacheDrawTextStr << item[i];
 							else
 							{
-								if (i + 1 < item.size() && item[i+1] == 'Y')
+								if (i + 1 < item.size())
 								{
-									current_color = 0xFF00FFFF;								// Yellow
+									pCacheDrawTextStr << item[i] << item[i + 1];
 									i++;
 								}
 							}
+							if (pCacheDrawTextStr == "&")
+							{
+								text_color.print(gui_font, x1 + x_offset, y1 + pCacheFontHeight * float(e - pos), current_color, buf);
+								x_offset += gui_font->length(buf);
+								buf.clear();
+
+								current_color = 0xFFFFFFFF; // Default: white
+								if (i + 1 < item.size() && item[i + 1] == 'R')
+								{
+									current_color = 0xFF0000FF; // Red
+									i++;
+								}
+								else
+								{
+									if (i + 1 < item.size() && item[i + 1] == 'Y')
+									{
+										current_color = 0xFF00FFFF; // Yellow
+										i++;
+									}
+								}
+							}
+							else
+								buf << pCacheDrawTextStr;
 						}
-						else
-							buf << pCacheDrawTextStr;
+						text_color.print(gui_font, x1 + x_offset, y1 + pCacheFontHeight * float(e - pos), current_color, buf);
 					}
-					text_color.print( gui_font, x1 + x_offset, y1 + pCacheFontHeight * float(e - pos), current_color, buf);
 				}
 			}
-		}
-		else
-		{
-			for (unsigned int e = pos; e < pCacheDrawTextVector.size(); ++e)
+			else
 			{
-				if (y1 + pCacheFontHeight * float(e + 1 - pos) <= y2)
-					text_color.print(gui_font, x1, y1 + pCacheFontHeight * float(e - pos), pCacheDrawTextVector[e]);
+				for (unsigned int e = pos; e < pCacheDrawTextVector.size(); ++e)
+				{
+					if (y1 + pCacheFontHeight * float(e + 1 - pos) <= y2)
+						text_color.print(gui_font, x1, y1 + pCacheFontHeight * float(e - pos), pCacheDrawTextVector[e]);
+				}
 			}
+
+			return (int)pCacheDrawTextVector.size();
 		}
 
-		return (int)pCacheDrawTextVector.size();
-	}
+		void Skin::ObjectShadow(float x1, float y1, float x2, float y2, float dx, float dy, float alpha, float fuzzy) const
+		{
+			// Normalize shadow offsets
+			dx *= float(SCREEN_W) / 800.0f;
+			dy *= float(SCREEN_H) / 800.0f;
+			fuzzy *= float(SCREEN_H) / 800.0f;
 
+			x1 += dx;
+			y1 += dy;
+			x2 += dx;
+			y2 += dy;
 
+			x1 += fuzzy * 0.5f;
+			y1 += fuzzy * 0.5f;
+			x2 -= fuzzy * 0.5f;
+			y2 -= fuzzy * 0.5f;
 
-	void Skin::ObjectShadow(float x1, float y1, float x2, float y2, float dx, float dy, float alpha, float fuzzy) const
-	{
-		// Normalize shadow offsets
-		dx *= float(SCREEN_W) / 800.0f;
-		dy *= float(SCREEN_H) / 800.0f;
-		fuzzy *= float(SCREEN_H) / 800.0f;
+			glDisable(GL_TEXTURE_2D);
+			gfx->set_alpha_blending();
 
-		x1 += dx;
-		y1 += dy;
-		x2 += dx;
-		y2 += dy;
+			float fuzzy2 = fuzzy / sqrtf(2.0f);
 
-		x1 += fuzzy * 0.5f;
-		y1 += fuzzy * 0.5f;
-		x2 -= fuzzy * 0.5f;
-		y2 -= fuzzy * 0.5f;
+			gfx->set_color(0.0f, 0.0f, 0.0f, alpha);
+			gfx->rectfill(x1, y1, x2, y2);
 
-		glDisable(GL_TEXTURE_2D);
-		gfx->set_alpha_blending();
+			glBegin(GL_QUADS);
+			// Left
+			gfx->set_color(0.0f, 0.0f, 0.0f, 0.0f);
+			glVertex2f(x1 - fuzzy, y1);
 
-		float fuzzy2 = fuzzy / sqrtf(2.0f);
+			gfx->set_color(0.0f, 0.0f, 0.0f, alpha);
+			glVertex2f(x1, y1);
+			glVertex2f(x1, y2);
 
-		gfx->set_color(0.0f, 0.0f, 0.0f, alpha);
-		gfx->rectfill( x1, y1, x2, y2);
+			gfx->set_color(0.0f, 0.0f, 0.0f, 0.0f);
+			glVertex2f(x1 - fuzzy, y2);
 
-		glBegin(GL_QUADS);
-		// Left
-		gfx->set_color(0.0f, 0.0f, 0.0f, 0.0f);
-		glVertex2f( x1 - fuzzy, y1);
+			// Right
+			gfx->set_color(0.0f, 0.0f, 0.0f, 0.0f);
+			glVertex2f(x2 + fuzzy, y1);
 
-		gfx->set_color(0.0f, 0.0f, 0.0f, alpha);
-		glVertex2f( x1, y1);
-		glVertex2f( x1, y2);
+			gfx->set_color(0.0f, 0.0f, 0.0f, alpha);
+			glVertex2f(x2, y1);
+			glVertex2f(x2, y2);
 
-		gfx->set_color(0.0f, 0.0f, 0.0f, 0.0f);
-		glVertex2f( x1 - fuzzy, y2);
+			gfx->set_color(0.0f, 0.0f, 0.0f, 0.0f);
+			glVertex2f(x2 + fuzzy, y2);
 
-		// Right
-		gfx->set_color(0.0f, 0.0f, 0.0f, 0.0f);
-		glVertex2f( x2 + fuzzy, y1);
+			// Top
+			gfx->set_color(0.0f, 0.0f, 0.0f, 0.0f);
+			glVertex2f(x1, y1 - fuzzy);
+			glVertex2f(x2, y1 - fuzzy);
 
-		gfx->set_color(0.0f, 0.0f, 0.0f, alpha);
-		glVertex2f( x2, y1);
-		glVertex2f( x2, y2);
+			gfx->set_color(0.0f, 0.0f, 0.0f, alpha);
+			glVertex2f(x2, y1);
+			glVertex2f(x1, y1);
 
-		gfx->set_color(0.0f, 0.0f, 0.0f, 0.0f);
-		glVertex2f( x2 + fuzzy, y2);
+			// Bottom
+			gfx->set_color(0.0f, 0.0f, 0.0f, 0.0f);
+			glVertex2f(x1, y2 + fuzzy);
+			glVertex2f(x2, y2 + fuzzy);
 
-		// Top
-		gfx->set_color(0.0f, 0.0f, 0.0f, 0.0f);
-		glVertex2f( x1, y1 - fuzzy);
-		glVertex2f( x2, y1 - fuzzy);
+			gfx->set_color(0.0f, 0.0f, 0.0f, alpha);
+			glVertex2f(x2, y2);
+			glVertex2f(x1, y2);
 
-		gfx->set_color(0.0f, 0.0f, 0.0f, alpha);
-		glVertex2f( x2, y1);
-		glVertex2f( x1, y1);
+			// Top Left
+			gfx->set_color(0.0f, 0.0f, 0.0f, 0.0f);
+			glVertex2f(x1 - fuzzy2, y1 - fuzzy2);
+			glVertex2f(x1, y1 - fuzzy);
 
-		// Bottom
-		gfx->set_color(0.0f, 0.0f, 0.0f, 0.0f);
-		glVertex2f( x1, y2 + fuzzy);
-		glVertex2f( x2, y2 + fuzzy);
+			gfx->set_color(0.0f, 0.0f, 0.0f, alpha);
+			glVertex2f(x1, y1);
 
-		gfx->set_color(0.0f, 0.0f, 0.0f, alpha);
-		glVertex2f( x2, y2);
-		glVertex2f( x1, y2);
+			gfx->set_color(0.0f, 0.0f, 0.0f, 0.0f);
+			glVertex2f(x1 - fuzzy, y1);
 
-		// Top Left
-		gfx->set_color(0.0f, 0.0f, 0.0f, 0.0f);
-		glVertex2f( x1 - fuzzy2, y1 - fuzzy2);
-		glVertex2f( x1, y1 - fuzzy);
+			// Top Right
+			gfx->set_color(0.0f, 0.0f, 0.0f, 0.0f);
+			glVertex2f(x2 + fuzzy, y1);
+			glVertex2f(x2 + fuzzy2, y1 - fuzzy2);
+			glVertex2f(x2, y1 - fuzzy);
 
-		gfx->set_color(0.0f, 0.0f, 0.0f, alpha);
-		glVertex2f( x1, y1);
+			gfx->set_color(0.0f, 0.0f, 0.0f, alpha);
+			glVertex2f(x2, y1);
 
-		gfx->set_color(0.0f, 0.0f, 0.0f, 0.0f);
-		glVertex2f( x1 - fuzzy, y1);
+			// Bottom Right
+			gfx->set_color(0.0f, 0.0f, 0.0f, 0.0f);
+			glVertex2f(x2 + fuzzy, y2);
+			glVertex2f(x2 + fuzzy2, y2 + fuzzy2);
+			glVertex2f(x2, y2 + fuzzy);
 
-		// Top Right
-		gfx->set_color(0.0f, 0.0f, 0.0f, 0.0f);
-		glVertex2f( x2 + fuzzy, y1);
-		glVertex2f( x2 + fuzzy2, y1 - fuzzy2);
-		glVertex2f( x2, y1 - fuzzy);
+			gfx->set_color(0.0f, 0.0f, 0.0f, alpha);
+			glVertex2f(x2, y2);
 
-		gfx->set_color(0.0f, 0.0f, 0.0f, alpha);
-		glVertex2f( x2, y1);
+			// Bottom Left
+			gfx->set_color(0.0f, 0.0f, 0.0f, 0.0f);
+			glVertex2f(x1 - fuzzy2, y2 + fuzzy2);
+			glVertex2f(x1, y2 + fuzzy);
 
-		// Bottom Right
-		gfx->set_color(0.0f, 0.0f, 0.0f, 0.0f);
-		glVertex2f( x2 + fuzzy, y2);
-		glVertex2f( x2 + fuzzy2, y2 + fuzzy2);
-		glVertex2f( x2, y2 + fuzzy);
+			gfx->set_color(0.0f, 0.0f, 0.0f, alpha);
+			glVertex2f(x1, y2);
 
-		gfx->set_color(0.0f, 0.0f, 0.0f, alpha);
-		glVertex2f( x2, y2);
+			gfx->set_color(0.0f, 0.0f, 0.0f, 0.0f);
+			glVertex2f(x1 - fuzzy, y2);
+			glEnd();
 
-		// Bottom Left
-		gfx->set_color(0.0f, 0.0f, 0.0f, 0.0f);
-		glVertex2f( x1 - fuzzy2, y2 + fuzzy2);
-		glVertex2f( x1, y2 + fuzzy);
+			gfx->unset_alpha_blending();
+			glEnable(GL_TEXTURE_2D);
+		}
 
-		gfx->set_color(0.0f, 0.0f, 0.0f, alpha);
-		glVertex2f( x1, y2);
-
-		gfx->set_color(0.0f, 0.0f, 0.0f, 0.0f);
-		glVertex2f( x1 - fuzzy, y2);
-		glEnd();
-
-		gfx->unset_alpha_blending();
-		glEnable(GL_TEXTURE_2D);
-	}
-
-
-
-
-} // namespace Gui
+	} // namespace Gui
 } // namespace TA3D
-

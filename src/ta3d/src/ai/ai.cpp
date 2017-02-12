@@ -25,7 +25,7 @@
 #include <misc/matrix.h>
 #include <TA3D_NameSpace.h>
 #include <ta3dbase.h>
-#include <scripts/cob.h>             // To read and execute scripts
+#include <scripts/cob.h> // To read and execute scripts
 #include <EngineClass.h>
 #include <UnitEngine.h>
 #include <misc/paths.h>
@@ -33,22 +33,18 @@
 #include <logs/logs.h>
 #include <ingame/players.h>
 
-
-
-
 namespace TA3D
 {
 	//#define AI_DEBUG
 
 	AI_PLAYER::AI_PLAYER()
-		:ID(0)
+		: ID(0)
 	{
 	}
 
 	AI_PLAYER::~AI_PLAYER()
 	{
 	}
-
 
 	void AI_PLAYER::stop()
 	{
@@ -77,7 +73,7 @@ namespace TA3D
 	{
 		this->type = type;
 
-		switch(type)
+		switch (type)
 		{
 			case AI_TYPE_EASY:
 			case AI_TYPE_MEDIUM:
@@ -86,17 +82,16 @@ namespace TA3D
 				ai_script = NULL;
 				if (!ai_controller)
 					ai_controller = new AiController();
-				ai_controller->setPlayerID( ID );
+				ai_controller->setPlayerID(ID);
 				break;
 			case AI_TYPE_LUA:
 				ai_controller = NULL;
 				if (!ai_script)
 					ai_script = new AiScript();
-				ai_script->setPlayerID( ID );
+				ai_script->setPlayerID(ID);
 				break;
 		};
 	}
-
 
 	void AI_PLAYER::setPlayerID(int id)
 	{
@@ -107,7 +102,6 @@ namespace TA3D
 			ai_controller->setPlayerID(id);
 	}
 
-
 	int AI_PLAYER::getPlayerID()
 	{
 		if (ai_script)
@@ -117,7 +111,7 @@ namespace TA3D
 		return ID;
 	}
 
-	void AI_PLAYER::changeName(const String& newName)		// Change AI's name (-> creates a new file)
+	void AI_PLAYER::changeName(const String& newName) // Change AI's name (-> creates a new file)
 	{
 		name = newName;
 		if (ai_script)
@@ -125,7 +119,6 @@ namespace TA3D
 		if (ai_controller)
 			ai_controller->changeName(newName);
 	}
-
 
 	void AI_PLAYER::save()
 	{
@@ -135,7 +128,6 @@ namespace TA3D
 			ai_controller->save();
 	}
 
-
 	void AI_PLAYER::load(const String& filename, const int id)
 	{
 		if (ai_script)
@@ -144,13 +136,12 @@ namespace TA3D
 			ai_controller->loadAI(filename, id);
 	}
 
-
 	String::Vector AI_PLAYER::getAvailableAIs()
 	{
 		String::Vector l_AI;
 		VFS::Instance()->getFilelist("scripts/ai/*.lua", l_AI);
 
-		for (String::Vector::iterator i = l_AI.begin() ; i != l_AI.end() ; ++i)
+		for (String::Vector::iterator i = l_AI.begin(); i != l_AI.end(); ++i)
 		{
 			LOG_DEBUG(LOG_PREFIX_AI << "AI script found : " << *i);
 			*i = String("[LUA] ") << Paths::ExtractFileNameWithoutExtension(*i);
@@ -164,21 +155,20 @@ namespace TA3D
 		return l_AI;
 	}
 
-
-	void AI_PLAYER::setAI(const String &AI)
+	void AI_PLAYER::setAI(const String& AI)
 	{
 		this->AI = AI;
 
 		if (AI == "[C] EASY")
-			setType( AI_TYPE_EASY );
+			setType(AI_TYPE_EASY);
 		else if (AI == "[C] MEDIUM")
-			setType( AI_TYPE_MEDIUM );
+			setType(AI_TYPE_MEDIUM);
 		else if (AI == "[C] HARD")
-			setType( AI_TYPE_HARD );
+			setType(AI_TYPE_HARD);
 		else if (AI == "[C] BLOODY")
-			setType( AI_TYPE_BLOODY );
+			setType(AI_TYPE_BLOODY);
 		else
-			setType( AI_TYPE_LUA );
+			setType(AI_TYPE_LUA);
 
 		if (ai_script && AI.size() > 6)
 		{
@@ -188,8 +178,4 @@ namespace TA3D
 		}
 	}
 
-
-
-
 } // namespace TA3D
-

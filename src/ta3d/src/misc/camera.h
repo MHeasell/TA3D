@@ -15,19 +15,16 @@
 	along with this program; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA*/
 #ifndef __TA3D_XX_MISC_CAMERA_H__
-# define __TA3D_XX_MISC_CAMERA_H__
+#define __TA3D_XX_MISC_CAMERA_H__
 
-# include <vector>
-# include "matrix.h"
-# include "vector.h"
-
+#include <vector>
+#include "matrix.h"
+#include "vector.h"
 
 namespace TA3D
 {
 
-
-
-	class Camera		// Classe pour la gestion de la caméra
+	class Camera // Classe pour la gestion de la caméra
 	{
 	public:
 		static Camera* inGame;
@@ -76,19 +73,20 @@ namespace TA3D
 		** \brief Returns the 8 points defining the frustum volume
 		*/
 		void getFrustum(std::vector<Vector3D>& list);
+
 	public:
-		Vector3D up;					// Haut de la caméra
-		Vector3D side;				// Coté de la caméra(optimisation pour les particules)
+		Vector3D up;   // Haut de la caméra
+		Vector3D side; // Coté de la caméra(optimisation pour les particules)
 
 		//! Position
 		Vector3D pos;
-		Vector3D rpos;				// Position de la caméra
+		Vector3D rpos; // Position de la caméra
 		//! Direction
-		Vector3D dir;				// Direction de la caméra
-		float zfar;				// Pour le volume visible
+		Vector3D dir; // Direction de la caméra
+		float zfar;   // Pour le volume visible
 		float znear;
-		float zfar2;				// Carré de la distance maximale
-		bool mirror;				// Mirroir ??
+		float zfar2; // Carré de la distance maximale
+		bool mirror; // Mirroir ??
 		float mirrorPos;
 
 		float shakeMagnitude;
@@ -103,9 +101,6 @@ namespace TA3D
 
 	}; // class Camera
 
-
-
 } // namespace TA3D
-
 
 #endif // __TA3D_XX_MISC_CAMERA_H__

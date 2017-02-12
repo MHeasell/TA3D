@@ -12,21 +12,21 @@ namespace TA3D
 		if (mesh == NULL)
 			return NULL;
 
-		typedef UTILS::HashMap<Mesh*>::Dense ObjectMap;
-		typedef UTILS::HashSet<Mesh*>::Sparse ObjectSet;
-		typedef UTILS::HashMap<Vector3D, Mesh*>::Dense ObjectPos;
+		typedef UTILS::HashMap<Mesh *>::Dense ObjectMap;
+		typedef UTILS::HashSet<Mesh *>::Sparse ObjectSet;
+		typedef UTILS::HashMap<Vector3D, Mesh *>::Dense ObjectPos;
 		ObjectMap objects;
 		ObjectSet rootObjects;
 		ObjectPos objectPos;
 
 		// Link all objects to their name
-		std::vector<Mesh*> queue;
+		std::vector<Mesh *> queue;
 		queue.push_back(mesh);
-		while(!queue.empty())
+		while (!queue.empty())
 		{
 			Mesh *cur = queue.back();
 			queue.pop_back();
-			while(cur)
+			while (cur)
 			{
 				if (!cur->name.empty())
 					objects[cur->name] = cur;
@@ -38,7 +38,7 @@ namespace TA3D
 		}
 
 		// Break the structure
-		for(ObjectMap::iterator i = objects.begin() ; i != objects.end() ; ++i)
+		for (ObjectMap::iterator i = objects.begin(); i != objects.end(); ++i)
 		{
 			i.value()->child = NULL;
 			i.value()->next = NULL;
@@ -47,7 +47,7 @@ namespace TA3D
 		}
 
 		// Build the new structure
-		for(ObjectMap::iterator i = objects.begin() ; i != objects.end() ; ++i)
+		for (ObjectMap::iterator i = objects.begin(); i != objects.end(); ++i)
 		{
 			// If we have a "linker", remove it and link its 2 objects
 			if (!i.key().contains('_') || *i == NULL)
@@ -65,19 +65,19 @@ namespace TA3D
 				continue;
 			}
 			Vector3D pos;
-			for(int j = 0 ; j < i.value()->nb_vtx ; ++j)
+			for (int j = 0; j < i.value()->nb_vtx; ++j)
 				pos += i.value()->points[j];
-			pos = 1.0f / (float)i.value()->nb_vtx  * pos;
+			pos = 1.0f / (float)i.value()->nb_vtx * pos;
 
 			ObjectMap::iterator it_parent = objects.find(elts[0]);
 			ObjectMap::iterator it_child = objects.find(elts[1]);
 
-			if (it_parent == objects.end())		// Object missing ?
+			if (it_parent == objects.end()) // Object missing ?
 			{
 				LOG_WARNING("[mesh] [joins] object not found : '" << elts[0] << "' (" << filename << ')');
 				continue;
 			}
-			if (it_child == objects.end())		// Object missing ?
+			if (it_child == objects.end()) // Object missing ?
 			{
 				LOG_WARNING("[mesh] [joins] object not found : '" << elts[1] << "' (" << filename << ')');
 				continue;
@@ -87,19 +87,19 @@ namespace TA3D
 
 			child->pos_from_parent = pos - objectPos[parent];
 			objectPos[child] = pos;
-			for(int j = 0 ; j < child->nb_vtx ; ++j)
+			for (int j = 0; j < child->nb_vtx; ++j)
 				child->points[j] -= pos;
 			Mesh *cur = child->child;
-			while(cur)
+			while (cur)
 			{
 				cur->pos_from_parent -= pos;
 				cur = cur->next;
 			}
 
-			if (parent->child)		// Let's make a list
+			if (parent->child) // Let's make a list
 			{
 				Mesh *cur = parent->child;
-				while(cur->next)
+				while (cur->next)
 					cur = cur->next;
 				cur->next = child;
 			}
@@ -118,7 +118,7 @@ namespace TA3D
 
 		Mesh *root = NULL;
 
-		for(ObjectSet::iterator i = rootObjects.begin() ; i != rootObjects.end() ; ++i)
+		for (ObjectSet::iterator i = rootObjects.begin(); i != rootObjects.end(); ++i)
 		{
 			LOG_DEBUG("[mesh] [joins] root object : '" << (*i)->name << "' (" << filename << ')');
 			if (root == NULL)
@@ -127,7 +127,7 @@ namespace TA3D
 				continue;
 			}
 			Mesh *cur = root;
-			while(cur->next)
+			while (cur->next)
 				cur = cur->next;
 			cur->next = *i;
 		}
@@ -140,19 +140,19 @@ namespace TA3D
 		if (model == NULL || model->mesh == NULL)
 			return;
 		float s = 0.0f;
-		vector<Mesh*> queue;
-		vector< Vector3D > pqueue;
+		vector<Mesh *> queue;
+		vector<Vector3D> pqueue;
 		queue.push_back(model->mesh);
 		pqueue.push_back(Vector3D());
-		while(!queue.empty())
+		while (!queue.empty())
 		{
 			Mesh *cur = queue.back();
 			Vector3D P = pqueue.back();
 			queue.pop_back();
 			pqueue.pop_back();
-			while(cur)
+			while (cur)
 			{
-				for(int i = 0 ; i < cur->nb_vtx ; ++i)
+				for (int i = 0; i < cur->nb_vtx; ++i)
 				{
 					s = Math::Max(s, abs(P.x + cur->pos_from_parent.x + cur->points[i].x));
 					s = Math::Max(s, abs(P.z + cur->pos_from_parent.z + cur->points[i].z));

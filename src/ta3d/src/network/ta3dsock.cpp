@@ -24,54 +24,52 @@
 
 using namespace Yuni::Core::IO::File;
 
-
 namespace TA3D
 {
 
 	Stream dump_file;
 
-	chat* strtochat(struct chat *chat_msg, String msg)
+	chat* strtochat(struct chat* chat_msg, String msg)
 	{
 		if (chat_msg == NULL)
 			return chat_msg;
-		memset( chat_msg->message, 0, 253 );
-		memcpy( chat_msg->message, msg.c_str(), Math::Min(253, (int)msg.size() + 1));
+		memset(chat_msg->message, 0, 253);
+		memcpy(chat_msg->message, msg.c_str(), Math::Min(253, (int)msg.size() + 1));
 		return chat_msg;
 	}
 
-	String chattostr(struct chat *chat_msg)
+	String chattostr(struct chat* chat_msg)
 	{
 		if (chat_msg == NULL)
 			return "";
 		String msg(chat_msg->message, 253);
-		msg = msg.c_str();								// Make sure it represents a null terminated string
+		msg = msg.c_str(); // Make sure it represents a null terminated string
 		return msg;
 	}
 
-	TA3DSock::TA3DSock() : tcpsock(true)		// Enable compression
+	TA3DSock::TA3DSock() : tcpsock(true) // Enable compression
 	{
 		obp = 0;
 		tibp = 0;
 		tiremain = -1;
 	}
 
-	int TA3DSock::open(const String &hostname, uint16 port)
+	int TA3DSock::open(const String& hostname, uint16 port)
 	{
 		if (!dump_file.opened())
 			dump_file.open(String(TA3D::Paths::Logs) << "net.dump", Yuni::Core::IO::OpenMode::write);
 		tcpsock.open(hostname, port);
-		if(!tcpsock.isOpen())
+		if (!tcpsock.isOpen())
 			return -1;
 		return 0;
 	}
-
 
 	int TA3DSock::open(uint16 port)
 	{
 		if (!dump_file.opened())
 			dump_file.open(String(TA3D::Paths::Logs) << "net.dump", Yuni::Core::IO::OpenMode::write);
 		tcpsock.open(port);
-		if(!tcpsock.isOpen())
+		if (!tcpsock.isOpen())
 			return -1;
 		return 0;
 	}
@@ -79,7 +77,7 @@ namespace TA3D
 	int TA3DSock::accept(TA3DSock** sock)
 	{
 		tcpsock.check(0);
-		SocketTCP *newSock = tcpsock.accept();
+		SocketTCP* newSock = tcpsock.accept();
 
 		if (newSock)
 		{
@@ -88,7 +86,7 @@ namespace TA3D
 			(*sock)->tcpsock = *newSock;
 			newSock->reset();
 
-			if(!(*sock)->tcpsock.isOpen())
+			if (!(*sock)->tcpsock.isOpen())
 			{
 				delete *sock;
 				*sock = NULL;
@@ -100,10 +98,10 @@ namespace TA3D
 		return -1;
 	}
 
-	int TA3DSock::accept(TA3DSock** sock,int timeout)
+	int TA3DSock::accept(TA3DSock** sock, int timeout)
 	{
 		tcpsock.check(timeout);
-		SocketTCP *newSock = tcpsock.accept();
+		SocketTCP* newSock = tcpsock.accept();
 
 		if (newSock)
 		{
@@ -112,7 +110,7 @@ namespace TA3D
 			(*sock)->tcpsock = *newSock;
 			newSock->reset();
 
-			if(!(*sock)->tcpsock.isOpen())
+			if (!(*sock)->tcpsock.isOpen())
 			{
 				delete *sock;
 				*sock = NULL;
@@ -137,8 +135,6 @@ namespace TA3D
 			dump_file.close();
 	}
 
-
-
 	//byte shuffling
 	void TA3DSock::putLong(uint32_t x)
 	{
@@ -161,7 +157,7 @@ namespace TA3D
 	void TA3DSock::putString(const char* x)
 	{
 		const size_t n = strlen(x);
-		if(n < size_t(TA3DSOCK_BUFFER_SIZE - obp - 1))
+		if (n < size_t(TA3DSOCK_BUFFER_SIZE - obp - 1))
 		{
 			memcpy(outbuf + obp, x, n);
 			obp += (int)n;
@@ -177,9 +173,12 @@ namespace TA3D
 	void TA3DSock::putFloat(float x)
 	{
 		uint16 test = 1;
-		if (SDLNet_Read16( &test ) != 1)
+		if (SDLNet_Read16(&test) != 1)
 		{
-			union { float t;    byte b[4]; } temp;
+			union {
+				float t;
+				byte b[4];
+			} temp;
 			temp.t = x;
 			temp.b[0] ^= temp.b[3];
 			temp.b[3] ^= temp.b[0];
@@ -195,30 +194,30 @@ namespace TA3D
 		obp += 4;
 	}
 
-	uint32 TA3DSock::getLong()	//uint32
+	uint32 TA3DSock::getLong() //uint32
 	{
-		uint32 result = SDLNet_Read32( tcpinbuf + tibrp );
+		uint32 result = SDLNet_Read32(tcpinbuf + tibrp);
 		tibrp += 4;
 		return result;
 	}
 
 	uint16 TA3DSock::getShort()
 	{
-		uint16 result = SDLNet_Read16( tcpinbuf + tibrp );
+		uint16 result = SDLNet_Read16(tcpinbuf + tibrp);
 		tibrp += 2;
 		return result;
 	}
 
 	byte TA3DSock::getByte()
 	{
-		byte result = *((byte*)(tcpinbuf+tibrp));
-		tibrp ++;
+		byte result = *((byte*)(tcpinbuf + tibrp));
+		tibrp++;
 		return result;
 	}
 
 	void TA3DSock::getString(char* x)
 	{
-		while ((*x = *((char*)(tcpinbuf+tibrp))))
+		while ((*x = *((char*)(tcpinbuf + tibrp))))
 		{
 			++tibrp;
 			++x;
@@ -228,17 +227,20 @@ namespace TA3D
 
 	void TA3DSock::getBuffer(char* x, int size)
 	{
-		memcpy( x, tcpinbuf + tibrp, size );
+		memcpy(x, tcpinbuf + tibrp, size);
 		tibrp += size;
 	}
 
 	float TA3DSock::getFloat()
 	{
 		uint16 test = 1;
-		if (SDLNet_Read16( &test ) != 1)
+		if (SDLNet_Read16(&test) != 1)
 		{
-			union { float t;    byte b[4]; } temp;
-			temp.t = *((float*)(tcpinbuf+tibrp));
+			union {
+				float t;
+				byte b[4];
+			} temp;
+			temp.t = *((float*)(tcpinbuf + tibrp));
 			temp.b[0] ^= temp.b[3];
 			temp.b[3] ^= temp.b[0];
 			temp.b[0] ^= temp.b[3];
@@ -251,19 +253,18 @@ namespace TA3D
 			return temp.t;
 		}
 
-		float result = *((float*)(tcpinbuf+tibrp));
+		float result = *((float*)(tcpinbuf + tibrp));
 		tibrp += 4;
 		return result;
 	}
 
-
-	void TA3DSock::send(const byte *data, int size)
+	void TA3DSock::send(const byte* data, int size)
 	{
 		tcpmutex.lock();
 
 		const uint16 length = (uint16)size;
-		tcpsock.send( (const char*)&length, 2 );
-		tcpsock.send( (const char*)data, size );
+		tcpsock.send((const char*)&length, 2);
+		tcpsock.send((const char*)data, size);
 		if (dump_file.opened())
 		{
 			dump_file.write((const char*)data, size);
@@ -292,14 +293,14 @@ namespace TA3D
 
 	void TA3DSock::recv()
 	{
-		if(!tiremain)
+		if (!tiremain)
 			return;
 
 		if (tiremain == -1)
 			tibp = 0;
 
-		int p = tcpsock.recv( tcpinbuf + tibp, tiremain == -1 ? 2 : tiremain );
-		if( p <= 0 && tiremain <= 0 )
+		int p = tcpsock.recv(tcpinbuf + tibp, tiremain == -1 ? 2 : tiremain);
+		if (p <= 0 && tiremain <= 0)
 		{
 			rest(1);
 			tiremain = -1;
@@ -317,7 +318,6 @@ namespace TA3D
 		}
 	}
 
-
 	void TA3DSock::pumpIn()
 	{
 		recv();
@@ -325,14 +325,14 @@ namespace TA3D
 
 	char TA3DSock::getPacket()
 	{
-		if(tiremain != 0)
+		if (tiremain != 0)
 			return 0;
 		return tcpinbuf[0];
 	}
 
 	void TA3DSock::cleanPacket()
 	{
-		if(tiremain<=0)
+		if (tiremain <= 0)
 		{
 			tcpinbuf[tibp] = 0;
 			printf("tcpinbuf = '%s'\n", tcpinbuf);
@@ -341,18 +341,15 @@ namespace TA3D
 		}
 	}
 
-
-
 	void TA3DSock::check(int time)
 	{
-		tcpsock.check( time );
+		tcpsock.check(time);
 	}
-
 
 	int TA3DSock::sendSpecial(struct chat* chat, bool all)
 	{
 		tcpmutex.lock();
-		if( all )
+		if (all)
 			putByte('A');
 		else
 			putByte('X');
@@ -432,13 +429,13 @@ namespace TA3D
 		tcpmutex.lock();
 		putByte('E');
 		putByte(event->type);
-		switch( event->type )
+		switch (event->type)
 		{
 			case EVENT_UNIT_NANOLATHE:
 				putShort(event->opt1);
 				putShort(event->opt2);
 				putLong(event->opt3);
-				if( event->opt2 & 2 )			// It's a feature, so we send its coordinates, not its index since we cannot sync it
+				if (event->opt2 & 2) // It's a feature, so we send its coordinates, not its index since we cannot sync it
 					putLong(event->opt4);
 				break;
 			case EVENT_FEATURE_CREATION:
@@ -519,7 +516,7 @@ namespace TA3D
 				putShort(event->opt1);
 				putByte((uint8)event->opt2);
 				putByte((uint8)event->opt3);
-				for (unsigned int i = 0 ; i < event->opt3 ; ++i)
+				for (unsigned int i = 0; i < event->opt3; ++i)
 					putLong(((sint32*)(event->str))[i]);
 				break;
 			case EVENT_UNIT_DEATH:
@@ -539,10 +536,9 @@ namespace TA3D
 		return 0;
 	}
 
-
 	int TA3DSock::makeSpecial(struct chat* chat)
 	{
-		if(tcpinbuf[0] != 'X' && tcpinbuf[0] != 'A')
+		if (tcpinbuf[0] != 'X' && tcpinbuf[0] != 'A')
 		{
 			LOG_ERROR(LOG_PREFIX_NET_SOCKET << "The data doesn't start with a 'X' or a 'A'");
 			return -1;
@@ -551,7 +547,7 @@ namespace TA3D
 			return -1;
 		tibrp = 1;
 		chat->from = getShort();
-		getBuffer(chat->message,253);
+		getBuffer(chat->message, 253);
 		(chat->message)[252] = '\0';
 		tibp = 0;
 		tiremain = -1;
@@ -570,7 +566,7 @@ namespace TA3D
 			return -1;
 		tibrp = 1;
 		chat->from = getShort();
-		getBuffer(chat->message,253);
+		getBuffer(chat->message, 253);
 		(chat->message)[252] = '\0';
 		tibp = 0;
 		tiremain = -1;
@@ -615,7 +611,7 @@ namespace TA3D
 			LOG_ERROR(LOG_PREFIX_NET_SOCKET << "The data doesn't start with an 'S'. Impossible to synchronize");
 			return -1;
 		}
-		if(tiremain == -1)
+		if (tiremain == -1)
 			return -1;
 		tibrp = 1;
 
@@ -665,7 +661,7 @@ namespace TA3D
 				event->opt1 = getShort();
 				event->opt2 = getShort();
 				event->opt3 = getLong();
-				if( event->opt2 & 2 )			// It's a feature, so we send its coordinates, not its index since we cannot sync it
+				if (event->opt2 & 2) // It's a feature, so we send its coordinates, not its index since we cannot sync it
 					event->opt4 = getLong();
 				break;
 			case EVENT_FEATURE_CREATION:
@@ -674,7 +670,7 @@ namespace TA3D
 				event->x = getFloat();
 				event->y = getFloat();
 				event->z = getFloat();
-				getBuffer((char*)(event->str),128);
+				getBuffer((char*)(event->str), 128);
 				break;
 			case EVENT_FEATURE_DEATH:
 			case EVENT_FEATURE_FIRE:
@@ -698,17 +694,17 @@ namespace TA3D
 				event->y = getFloat();
 				event->z = getFloat();
 				event->opt3 = getLong();
-				getBuffer((char*)(event->str),128);
+				getBuffer((char*)(event->str), 128);
 				break;
 			case EVENT_PRINT:
 				event->opt1 = getShort();
 				event->x = getFloat();
 				event->y = getFloat();
-				getBuffer((char*)(event->str),128);
+				getBuffer((char*)(event->str), 128);
 				break;
 			case EVENT_PLAY:
 				event->opt1 = getShort();
-				getBuffer((char*)(event->str),128);
+				getBuffer((char*)(event->str), 128);
 				break;
 			case EVENT_CLS:
 				event->opt1 = getShort();
@@ -740,13 +736,13 @@ namespace TA3D
 				event->dx = getShort();
 				event->dy = getShort();
 				event->dz = getShort();
-				getBuffer((char*)(event->str),128);
+				getBuffer((char*)(event->str), 128);
 				break;
 			case EVENT_UNIT_SCRIPT:
 				event->opt1 = getShort();
 				event->opt2 = getByte();
 				event->opt3 = getByte();
-				for (unsigned int i = 0 ; i < event->opt3 ; ++i)
+				for (unsigned int i = 0; i < event->opt3; ++i)
 					((sint32*)(event->str))[i] = getLong();
 				break;
 			case EVENT_UNIT_DEATH:
@@ -757,7 +753,7 @@ namespace TA3D
 				event->opt2 = getShort();
 				event->x = getFloat();
 				event->z = getFloat();
-				getBuffer((char*)(event->str),128);
+				getBuffer((char*)(event->str), 128);
 				break;
 		}
 
@@ -777,19 +773,19 @@ namespace TA3D
 		return 0;
 	}
 
-	int TA3DSock::getFilePort()				// For file transfer, first call this one to get the port which allows us to grab the right thread and buffer
+	int TA3DSock::getFilePort() // For file transfer, first call this one to get the port which allows us to grab the right thread and buffer
 	{
-		if( tcpinbuf[0] != 'F' && tcpinbuf[0] != 'R' )
+		if (tcpinbuf[0] != 'F' && tcpinbuf[0] != 'R')
 		{
 			LOG_ERROR(LOG_PREFIX_NET_SOCKET << "The data doesn't start with an 'F' or an 'R'. Impossible to start the file transfer");
 			return -1;
 		}
 		if (tiremain == -1)
 			return -1;
-		return *((uint16*)(tcpinbuf+1));
+		return *((uint16*)(tcpinbuf + 1));
 	}
 
-	int TA3DSock::getFileData(byte *buffer)	// Fill the buffer with the data and returns the size of the paquet
+	int TA3DSock::getFileData(byte* buffer) // Fill the buffer with the data and returns the size of the paquet
 	{
 		if (tcpinbuf[0] != 'F' && tcpinbuf[0] != 'R')
 		{
@@ -799,15 +795,12 @@ namespace TA3D
 		if (tiremain == -1)
 			return -1;
 		int size = tibp - 3;
-		if( buffer )
-			memcpy( buffer, tcpinbuf + 3, size );
+		if (buffer)
+			memcpy(buffer, tcpinbuf + 3, size);
 		tibp = 0;
 		tiremain = -1;
 
 		return size;
 	}
 
-
-
 } // namespace TA3D
-

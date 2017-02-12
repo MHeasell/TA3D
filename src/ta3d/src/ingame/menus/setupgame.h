@@ -25,82 +25,81 @@
 namespace TA3D
 {
 	class MAP_OTA;
-namespace Menus
-{
-
-	class SetupGame : public Abstract
+	namespace Menus
 	{
-	public:
-		/*!
+
+		class SetupGame : public Abstract
+		{
+		public:
+			/*!
 		** \brief Execute an instance of SetupGame
 		*/
-		static bool Execute(const bool client = false, const String& host = String(), const String &saved_game = String(), const bool bNetServer = false, const bool instantStart = false);
-	public:
-		SetupGame(const bool client, const String& host, const String &saved_game, const bool bNetServer, const bool instantStart);
-		//! Destructor
-		virtual ~SetupGame();
+			static bool Execute(const bool client = false, const String& host = String(), const String& saved_game = String(), const bool bNetServer = false, const bool instantStart = false);
 
-	protected:
-		virtual bool doInitialize();
-		virtual void doFinalize();
-		virtual void waitForEvent();
-		virtual bool maySwitchToAnotherMenu();
-		bool checkNetworkMessages();
+		public:
+			SetupGame(const bool client, const String& host, const String& saved_game, const bool bNetServer, const bool instantStart);
+			//! Destructor
+			virtual ~SetupGame();
 
-	private:
-		const bool client;
-		const String& host;
-		String saved_game;
-		const bool bNetServer;
-		const bool instantStart;
+		protected:
+			virtual bool doInitialize();
+			virtual void doFinalize();
+			virtual void waitForEvent();
+			virtual bool maySwitchToAnotherMenu();
+			bool checkNetworkMessages();
 
-		int my_player_id;
-		String status;
-		uint16  player_str_n;
-		String  player_str[4];
-		byte    player_control[4];
-		String::Vector  side_str;
-		String::Vector  AI_list;
-		GameData game_data;
+		private:
+			const bool client;
+			const String& host;
+			String saved_game;
+			const bool bNetServer;
+			const bool instantStart;
 
-		int net_id_table[10];           // Table used to identify players joining a multiplayer saved game
-		float ldx;
-		float ldy;
-		GLuint glimg;
-		MAP_OTA *map_data;
+			int my_player_id;
+			String status;
+			uint16 player_str_n;
+			String player_str[4];
+			byte player_control[4];
+			String::Vector side_str;
+			String::Vector AI_list;
+			GameData game_data;
 
+			int net_id_table[10]; // Table used to identify players joining a multiplayer saved game
+			float ldx;
+			float ldy;
+			GLuint glimg;
+			MAP_OTA* map_data;
 
-		//! minimap stuffs
-		Gui::GUIOBJ::Ptr minimap_obj;
-		float mini_map_x1;
-		float mini_map_y1;
-		float mini_map_x2;
-		float mini_map_y2;
-		float mini_map_x;
-		float mini_map_y;
+			//! minimap stuffs
+			Gui::GUIOBJ::Ptr minimap_obj;
+			float mini_map_x1;
+			float mini_map_y1;
+			float mini_map_x2;
+			float mini_map_y2;
+			float mini_map_x;
+			float mini_map_y;
 
+			bool start_game;
 
-		bool start_game;
+			String set_map;
+			String previous_tnt_port;
+			String previous_ota_port;
+			String previous_lua_port;
 
-		String set_map;
-		String previous_tnt_port;
-		String previous_ota_port;
-		String previous_lua_port;
+			int progress_timer;
+			int ping_timer; // Used to send simple PING requests in order to detect when a connection fails
 
-		int progress_timer;
-		int ping_timer;                    // Used to send simple PING requests in order to detect when a connection fails
+			bool statusUpdateRequired;
 
-		bool statusUpdateRequired;
-
-		//! Network stuffs
-		String broadcast_msg;
-		String chat_msg;
-		String special_msg;
-		struct chat received_chat_msg;
-		struct chat received_special_msg;
-		bool playerDropped;
-	};
-} // namespace Menus
+			//! Network stuffs
+			String broadcast_msg;
+			String chat_msg;
+			String special_msg;
+			struct chat received_chat_msg;
+			struct chat received_special_msg;
+			bool playerDropped;
+		};
+	} // namespace Menus
 } // namespace TA3D
 
 #endif // SETUPGAME_H

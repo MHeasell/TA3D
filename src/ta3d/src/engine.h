@@ -16,17 +16,14 @@
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA*/
 
 #ifndef __TA3D_ENGINE_H__
-# define __TA3D_ENGINE_H__
+#define __TA3D_ENGINE_H__
 
-# include <yuni/yuni.h>
-# include "threads/thread.h"
-# include <yuni/thread/thread.h>
-
-
+#include <yuni/yuni.h>
+#include "threads/thread.h"
+#include <yuni/thread/thread.h>
 
 namespace TA3D
 {
-
 
 	class Engine : public Yuni::Thread::IThread
 	{
@@ -36,6 +33,7 @@ namespace TA3D
 		friend class PARTICLE_ENGINE;
 		friend class PLAYERS;
 		friend class Battle;
+
 	public:
 		//! \name Constructor & Destructor
 		//@{
@@ -71,12 +69,10 @@ namespace TA3D
 		{
 			synchronizer.sync();
 		}
+
 	private:
 		static Synchronizer synchronizer;
 	}; // class Engine
-
-
-
 
 } // namespace TA3D
 

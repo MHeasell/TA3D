@@ -19,22 +19,19 @@ namespace TA3D
 		return p;
 	}
 
-
 	bool Mission::Target::isUnit() const
 	{
 		return type == TargetUnit && idx >= 0 && idx < (int)units.max_unit && units.unit[idx].ID == UID;
 	}
-
 
 	bool Mission::Target::isWeapon() const
 	{
 		return type == TargetWeapon && idx >= 0 && idx < (int)weapons.weapon.size();
 	}
 
-
 	bool Mission::Target::isValid() const
 	{
-		switch(type)
+		switch (type)
 		{
 			case TargetNone:
 			case TargetStatic:
@@ -47,28 +44,27 @@ namespace TA3D
 		return false;
 	}
 
-
 	const Vector3D &Mission::Target::getPos() const
 	{
-		switch(type)
+		switch (type)
 		{
-		case TargetUnit:
+			case TargetUnit:
 			{
 				const Unit *p = getUnit();
 				if (p)
 					return p->Pos;
 			}
 			break;
-		case TargetWeapon:
+			case TargetWeapon:
 			{
 				const Weapon *p = getWeapon();
 				if (p)
 					return p->Pos;
 			}
 			break;
-		case TargetNone:
-		case TargetStatic:
-			return Pos;
+			case TargetNone:
+			case TargetStatic:
+				return Pos;
 		};
 
 		return Pos;
@@ -76,30 +72,21 @@ namespace TA3D
 
 	bool MissionStack::doNothing() const
 	{
-		return empty() || ((this->mission() == MISSION_STOP
-							 || this->mission() == MISSION_STANDBY
-							 || this->mission() == MISSION_VTOL_STANDBY)
-							&& size() == 1 && front().size() == 1);
+		return empty() || ((this->mission() == MISSION_STOP || this->mission() == MISSION_STANDBY || this->mission() == MISSION_VTOL_STANDBY) && size() == 1 && front().size() == 1);
 	}
 
 	bool MissionStack::doingNothing() const
 	{
-		return empty() || (this->mission() == MISSION_STOP
-							 || this->mission() == MISSION_STANDBY
-							 || this->mission() == MISSION_VTOL_STANDBY);
+		return empty() || (this->mission() == MISSION_STOP || this->mission() == MISSION_STANDBY || this->mission() == MISSION_VTOL_STANDBY);
 	}
 
 	bool MissionStack::doNothingAI() const
 	{
-		return empty() || ((this->mission() == MISSION_STOP
-							|| this->mission() == MISSION_STANDBY
-							|| this->mission() == MISSION_VTOL_STANDBY
-							|| this->mission() == MISSION_MOVE)
-							&& size() == 1 && front().size() == 1);
+		return empty() || ((this->mission() == MISSION_STOP || this->mission() == MISSION_STANDBY || this->mission() == MISSION_VTOL_STANDBY || this->mission() == MISSION_MOVE) && size() == 1 && front().size() == 1);
 	}
 
-#define SAVE( i )	gzwrite( file, (void*)&(i), sizeof( i ) )
-#define LOAD( i )	gzread( file, (void*)&(i), sizeof( i ) )
+#define SAVE(i) gzwrite(file, (void *)&(i), sizeof(i))
+#define LOAD(i) gzread(file, (void *)&(i), sizeof(i))
 
 	void Mission::Target::save(gzFile file) const
 	{
@@ -148,7 +135,7 @@ namespace TA3D
 
 		const int s = (int)qStep.size();
 		SAVE(s);
-		for(int i = 0 ; i < s ; ++i)
+		for (int i = 0; i < s; ++i)
 			qStep[i].save(file);
 	}
 
@@ -165,7 +152,7 @@ namespace TA3D
 		int s;
 		LOAD(s);
 		qStep.clear();
-		for(int i = 0 ; i < s ; ++i)
+		for (int i = 0; i < s; ++i)
 		{
 			qStep.push(MissionStep());
 			qStep.top().load(file);
@@ -174,7 +161,7 @@ namespace TA3D
 
 	void MissionStack::save(gzFile file)
 	{
-		for(Container::iterator i = sMission.begin() ; i != sMission.end() ; ++i)
+		for (Container::iterator i = sMission.begin(); i != sMission.end(); ++i)
 		{
 			gzputc(file, 1);
 			i->save(file);

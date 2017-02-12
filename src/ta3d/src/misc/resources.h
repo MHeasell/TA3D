@@ -16,26 +16,23 @@
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA*/
 
 #ifndef _TA3D_TOOLS_RESOURCES_H__
-# define _TA3D_TOOLS_RESOURCES_H__
+#define _TA3D_TOOLS_RESOURCES_H__
 
-# include <stdafx.h>
-# include "string.h"
-# include <vector>
-# include <list>
-
-
+#include <stdafx.h>
+#include "string.h"
+#include <vector>
+#include <list>
 
 namespace TA3D
 {
 
-/*!
+	/*!
 ** \brief Thread-safe Tools to handle Resources for TA3D
 */
-namespace Resources
-{
+	namespace Resources
+	{
 
-
-    /*!
+		/*!
     ** \brief Find a relative resource filename in the list of search paths for resources
     **
     ** This method is thread safe
@@ -44,10 +41,9 @@ namespace Resources
     ** \param[out] out The absolute filename that has been found
     ** \return True if the resource has been found, false otherwise
     */
-    bool Find(const String& relFilename, String& out);
+		bool Find(const String& relFilename, String& out);
 
-
-    /*!
+		/*!
     ** \brief Add a search path for resources
     **
     ** This method is thread safe
@@ -55,10 +51,9 @@ namespace Resources
     ** \param folder The folder to add
     ** \return True if the folder has been added, false otherwise
     */
-    bool AddSearchPath(String folder);
+		bool AddSearchPath(String folder);
 
-
-    /*!
+		/*!
     ** \brief Find pathnames in the resources folders matching a pattern
     **
     ** \param[out] out The list of file that has been found
@@ -79,27 +74,25 @@ namespace Resources
     ** }
     ** \endcode
     */
-    bool Glob(String::Vector& out, const String& pattern, const bool emptyListBefore = true);
-    bool Glob(String::List& out, const String& pattern, const bool emptyListBefore = true);
-    bool GlobDirs(String::Vector& out, const String& pattern, const bool emptyListBefore = true);
-    bool GlobDirs(String::List& out, const String& pattern, const bool emptyListBefore = true);
+		bool Glob(String::Vector& out, const String& pattern, const bool emptyListBefore = true);
+		bool Glob(String::List& out, const String& pattern, const bool emptyListBefore = true);
+		bool GlobDirs(String::Vector& out, const String& pattern, const bool emptyListBefore = true);
+		bool GlobDirs(String::List& out, const String& pattern, const bool emptyListBefore = true);
 
-
-    /*!
+		/*!
     ** \brief Return all resource paths
     **
     ** This method is thread safe
     **
     */
-    String::Vector GetPaths();
+		String::Vector GetPaths();
 
-
-    /*!
+		/*!
     ** \brief Initialize default search paths
     */
-    void Initialize();
+		void Initialize();
 
-} // namespace Resources
+	} // namespace Resources
 } // namespace TA3D
 
 #endif // _TA3D_TOOLS_RESOURCES_H__

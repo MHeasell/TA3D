@@ -25,14 +25,14 @@
   \----------------------------------------------------------------------*/
 
 #ifndef CLASSE_SCRIPT
-# define CLASSE_SCRIPT
+#define CLASSE_SCRIPT
 
-# include <stdafx.h>
-# include "lua.thread.h"
-# include <threads/thread.h>
-# include <misc/string.h>
-# include <misc/tdf.h>
-# include "draw.list.h"
+#include <stdafx.h>
+#include "lua.thread.h"
+#include <threads/thread.h>
+#include <misc/string.h>
+#include <misc/tdf.h>
+#include "draw.list.h"
 
 namespace TA3D
 {
@@ -41,37 +41,37 @@ namespace TA3D
 	{
 	private:
 		//  Variables to control execution flow
-		int         amx,amy,amz;    // Cursor coordinates
-		int         amb;            // Mouse button
-		int         signal;         // Current signal (0 is none)
+		int amx, amy, amz; // Cursor coordinates
+		int amb;		   // Mouse button
+		int signal;		   // Current signal (0 is none)
 
 	public:
-		DrawList    draw_list;      // Display commands list
+		DrawList draw_list; // Display commands list
 
-		static bool passive;        // Passive mode, won't do anything like creating units, move units, etc... used to resync a multiplayer game
+		static bool passive; // Passive mode, won't do anything like creating units, move units, etc... used to resync a multiplayer game
 
 		void init();
 		void destroy();
 
 		LuaProgram();
 
-		virtual ~LuaProgram()  {   destroy();  }
+		virtual ~LuaProgram() { destroy(); }
 
-		virtual int run(float dt, bool alone = false);                  // Run the script
-		int check();                        // Display DRAW_LIST commands and check if a signal was sent
+		virtual int run(float dt, bool alone = false); // Run the script
+		int check();								   // Display DRAW_LIST commands and check if a signal was sent
 
 	private:
 		virtual void register_functions();
 
 	protected:
-		virtual void proc(void* param);
+		virtual void proc(void *param);
 		virtual void signalExitThread();
 
 	public:
-		static LuaProgram	*inGame;
+		static LuaProgram *inGame;
 	};
 
-	void generate_script_from_mission( String Filename, TDFParser& ota_parser, int schema = 0 );
+	void generate_script_from_mission(String Filename, TDFParser &ota_parser, int schema = 0);
 
 	int program_print(lua_State *L);
 	int program_print_for(lua_State *L);

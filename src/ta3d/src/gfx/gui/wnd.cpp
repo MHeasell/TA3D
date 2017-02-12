@@ -26,25 +26,23 @@
 #include <input/keyboard.h>
 #include <input/mouse.h>
 
-#define FIX_COLOR(col)  col = makeacol(getb(col), getg(col), getr(col), getr(col))
-
+#define FIX_COLOR(col) col = makeacol(getb(col), getg(col), getr(col), getr(col))
 
 namespace TA3D
 {
 	namespace Gui
 	{
 
-
 		WND::WND()
-			:x(SCREEN_W >> 2), y(SCREEN_H >> 2), width(SCREEN_W >> 1), height(SCREEN_H >> 1),
-			title_h(0), Title(), Name(), obj_hashtable(),
-			background(0), repeat_bkg(false), bkg_w(1), bkg_h(1), Lock(false), show_title(true),
-			draw_borders(true), hidden(false), was_hidden(false), tab_was_pressed(false),
-			background_wnd(false), get_focus(false), delete_gltex(false), size_factor(1.),
-			ingame_window(false)
+			: x(SCREEN_W >> 2), y(SCREEN_H >> 2), width(SCREEN_W >> 1), height(SCREEN_H >> 1),
+			  title_h(0), Title(), Name(), obj_hashtable(),
+			  background(0), repeat_bkg(false), bkg_w(1), bkg_h(1), Lock(false), show_title(true),
+			  draw_borders(true), hidden(false), was_hidden(false), tab_was_pressed(false),
+			  background_wnd(false), get_focus(false), delete_gltex(false), size_factor(1.),
+			  ingame_window(false)
 		{
 			color = makeacol(0x7F, 0x7F, 0x7F, 0xFF); // Default : grey
-			pCacheFontHeight = gui_font ->height();
+			pCacheFontHeight = gui_font->height();
 			scrolling = 0;
 			scrollable = false;
 			background_clamp = false;
@@ -52,32 +50,27 @@ namespace TA3D
 			background_height = 1;
 		}
 
-
 		WND::WND(const String& filename)
-			:x(SCREEN_W >> 2), y(SCREEN_H >> 2), width(SCREEN_W >> 1), height(SCREEN_H >> 1),
-			title_h(0), Title(), Name(), obj_hashtable(),
-			background(0), repeat_bkg(false), bkg_w(1), bkg_h(1), Lock(false), show_title(true),
-			draw_borders(true), hidden(false), was_hidden(false), tab_was_pressed(false),
-			background_wnd(false), get_focus(false), delete_gltex(false), size_factor(1.),
-			ingame_window(false)
+			: x(SCREEN_W >> 2), y(SCREEN_H >> 2), width(SCREEN_W >> 1), height(SCREEN_H >> 1),
+			  title_h(0), Title(), Name(), obj_hashtable(),
+			  background(0), repeat_bkg(false), bkg_w(1), bkg_h(1), Lock(false), show_title(true),
+			  draw_borders(true), hidden(false), was_hidden(false), tab_was_pressed(false),
+			  background_wnd(false), get_focus(false), delete_gltex(false), size_factor(1.),
+			  ingame_window(false)
 
 		{
 			scrolling = 0;
 			scrollable = false;
 			color = makeacol(0x7F, 0x7F, 0x7F, 0xFF); // Default : grey
-			pCacheFontHeight = gui_font ->height();
+			pCacheFontHeight = gui_font->height();
 			load_tdf(filename);
 		}
-
-
 
 		WND::~WND()
 		{
 			obj_hashtable.clear();
 			destroy();
 		}
-
-
 
 		void WND::draw(String& helpMsg, const bool focus, const bool deg, Skin* skin)
 		{
@@ -139,24 +132,21 @@ namespace TA3D
 			}
 		}
 
-
-
 		void WND::doDrawWindowShadow(Skin* skin)
 		{
 			if (!skin || !draw_borders || Lock)
 				return;
 
-			skin->ObjectShadow( (float)x - skin->wnd_border.x1, (float)y - skin->wnd_border.y1,
-								(float)(x + width) - skin->wnd_border.x2, (float)(y + height) - skin->wnd_border.y2,
-								3, 3,
-								0.5f, 10.0f);
+			skin->ObjectShadow((float)x - skin->wnd_border.x1, (float)y - skin->wnd_border.y1,
+							   (float)(x + width) - skin->wnd_border.x2, (float)(y + height) - skin->wnd_border.y2,
+							   3, 3,
+							   0.5f, 10.0f);
 		}
-
 
 		void WND::doDrawWindowBackground(Skin* skin)
 		{
-			if (!geta(color))       // We don't need to render things in full transparency
-				return;             // we can just not render them
+			if (!geta(color)) // We don't need to render things in full transparency
+				return;		  // we can just not render them
 			glEnable(GL_BLEND);
 			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 			if (!background)
@@ -190,20 +180,19 @@ namespace TA3D
 			glDisable(GL_BLEND);
 		}
 
-
 		void WND::doDrawWindowSkin(Skin* skin, const bool focus, const bool deg)
 		{
 			if (skin)
 			{
 				glEnable(GL_BLEND);
-				glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);		// Alpha blending activated
+				glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); // Alpha blending activated
 				gfx->set_color(color);
 				if (draw_borders && skin->wnd_border.tex)
 				{
 					skin->wnd_border.draw((float)x - skin->wnd_border.x1,
 										  (float)y - skin->wnd_border.y1,
 										  (float)(x + width) - skin->wnd_border.x2,
-										  (float)(y + height) - skin->wnd_border.y2,  false);
+										  (float)(y + height) - skin->wnd_border.y2, false);
 				}
 				if (show_title && skin->wnd_title_bar.tex)
 				{
@@ -236,7 +225,7 @@ namespace TA3D
 									break;
 								smin = s;
 							}
-						} while(s > 0 && smin != smax);
+						} while (s > 0 && smin != smax);
 					}
 					gfx->print(gui_font,
 							   (float)(x + 5) + skin->wnd_title_bar.x1,
@@ -255,11 +244,11 @@ namespace TA3D
 					const float y0 = (float)y;
 					const float y1 = (float)(y + height);
 					gfx->rect(x0 - 2, y0 - 2, x1 + 1, y1 + 1, Black);
-					gfx->rect(x0 - 1, y0 - 1,     x1,     y1, DGray);
+					gfx->rect(x0 - 1, y0 - 1, x1, y1, DGray);
 					gfx->line(x0 - 2, y0 - 2, x1 + 1, y0 - 2, White);
 					gfx->line(x0 - 2, y0 - 2, x0 - 2, y1 + 1, White);
-					gfx->line(x0 - 1, y0 - 1,     x1, y0 - 1, LGray);
-					gfx->line(x0 - 1, y0 - 1, x0 - 1,     y1, LGray);
+					gfx->line(x0 - 1, y0 - 1, x1, y0 - 1, LGray);
+					gfx->line(x0 - 1, y0 - 1, x0 - 1, y1, LGray);
 				}
 				if (show_title)
 				{
@@ -269,19 +258,27 @@ namespace TA3D
 						if (focus)
 						{
 							glBegin(GL_QUADS);
-							glColor3f(0.0f, 0.0f, 1.0f);   glVertex2f((float)(x + 3),	(float)(y + 3));
-							glColor3f(0.5f, 0.5f, 0.75f);  glVertex2f((float)(x + width - 4), (float)(y + 3));
-							glColor3f(0.5f, 0.5f, 0.75f);  glVertex2f((float)(x + width - 4), (float)(y + 5) + pCacheFontHeight);
-							glColor3f(0.0f, 0.0f, 1.0f);   glVertex2f((float)(x + 3),         (float)(y + 5) + pCacheFontHeight);
+							glColor3f(0.0f, 0.0f, 1.0f);
+							glVertex2f((float)(x + 3), (float)(y + 3));
+							glColor3f(0.5f, 0.5f, 0.75f);
+							glVertex2f((float)(x + width - 4), (float)(y + 3));
+							glColor3f(0.5f, 0.5f, 0.75f);
+							glVertex2f((float)(x + width - 4), (float)(y + 5) + pCacheFontHeight);
+							glColor3f(0.0f, 0.0f, 1.0f);
+							glVertex2f((float)(x + 3), (float)(y + 5) + pCacheFontHeight);
 							glEnd();
 						}
 						else
 						{
 							glBegin(GL_QUADS);
-							glColor3f(0.75f, 0.75f, 0.75f); glVertex2f((float)(x + 3),         (float)(y + 3));
-							glColor3f(0.5f,  0.5f,  0.5f);  glVertex2f((float)(x + width - 4), (float)(y + 3));
-							glColor3f(0.5f,  0.5f,  0.5f);  glVertex2f((float)(x + width - 4), (float)(y + 5) + pCacheFontHeight);
-							glColor3f(0.75f, 0.75f, 0.75f); glVertex2f((float)(x + 3),         (float)(y + 5) + pCacheFontHeight);
+							glColor3f(0.75f, 0.75f, 0.75f);
+							glVertex2f((float)(x + 3), (float)(y + 3));
+							glColor3f(0.5f, 0.5f, 0.5f);
+							glVertex2f((float)(x + width - 4), (float)(y + 3));
+							glColor3f(0.5f, 0.5f, 0.5f);
+							glVertex2f((float)(x + width - 4), (float)(y + 5) + pCacheFontHeight);
+							glColor3f(0.75f, 0.75f, 0.75f);
+							glVertex2f((float)(x + 3), (float)(y + 5) + pCacheFontHeight);
 							glEnd();
 						}
 					}
@@ -296,7 +293,6 @@ namespace TA3D
 				}
 			}
 		}
-
 
 		void WND::doDrawWindowBackgroundObject(String& helpMsg, const int i, const bool focus, Skin* skin)
 		{
@@ -316,53 +312,57 @@ namespace TA3D
 			switch (object->Type)
 			{
 
-			case OBJ_IMG:
-				if (object->Data)     // Draws the texture associated with the image
-				{
-					gfx->set_alpha_blending();
-					glEnable(GL_TEXTURE_2D);
-					glBindTexture(GL_TEXTURE_2D, (GLuint)object->Data);
-					gfx->set_color(0xFFFFFFFF);
-					glBegin(GL_QUADS);
-					glTexCoord2f(object->u1,object->v1);  glVertex2f(x+object->x1,y+object->y1);
-					glTexCoord2f(object->u2,object->v1);  glVertex2f(x+object->x2,y+object->y1);
-					glTexCoord2f(object->u2,object->v2);  glVertex2f(x+object->x2,y+object->y2);
-					glTexCoord2f(object->u1,object->v2);  glVertex2f(x+object->x1,y+object->y2);
-					glEnd();
-					gfx->unset_alpha_blending();
-					glBindTexture(GL_TEXTURE_2D, 0);
-				}
-				else                    // No texture present, draw a black frame
-				{
-					gfx->rect( x+object->x1,y+object->y1, x+object->x2,y+object->y2, makeacol(0x7F, 0x7F, 0x7F, 0xFF));
-					gfx->line( x+object->x1,y+object->y1, x+object->x2,y+object->y2, makeacol(0x7F, 0x7F, 0x7F, 0xFF));
-					gfx->line( x+object->x2,y+object->y1, x+object->x1,y+object->y2, makeacol(0x7F, 0x7F, 0x7F, 0xFF));
-				}
-				break;
+				case OBJ_IMG:
+					if (object->Data) // Draws the texture associated with the image
+					{
+						gfx->set_alpha_blending();
+						glEnable(GL_TEXTURE_2D);
+						glBindTexture(GL_TEXTURE_2D, (GLuint)object->Data);
+						gfx->set_color(0xFFFFFFFF);
+						glBegin(GL_QUADS);
+						glTexCoord2f(object->u1, object->v1);
+						glVertex2f(x + object->x1, y + object->y1);
+						glTexCoord2f(object->u2, object->v1);
+						glVertex2f(x + object->x2, y + object->y1);
+						glTexCoord2f(object->u2, object->v2);
+						glVertex2f(x + object->x2, y + object->y2);
+						glTexCoord2f(object->u1, object->v2);
+						glVertex2f(x + object->x1, y + object->y2);
+						glEnd();
+						gfx->unset_alpha_blending();
+						glBindTexture(GL_TEXTURE_2D, 0);
+					}
+					else // No texture present, draw a black frame
+					{
+						gfx->rect(x + object->x1, y + object->y1, x + object->x2, y + object->y2, makeacol(0x7F, 0x7F, 0x7F, 0xFF));
+						gfx->line(x + object->x1, y + object->y1, x + object->x2, y + object->y2, makeacol(0x7F, 0x7F, 0x7F, 0xFF));
+						gfx->line(x + object->x2, y + object->y1, x + object->x1, y + object->y2, makeacol(0x7F, 0x7F, 0x7F, 0xFF));
+					}
+					break;
 
-			case OBJ_TEXT:
-				if (object->Text.empty())
-					object->Text.push_back(nullptr);
-				if (!(object->Flag & FLAG_TEXT_ADJUST))
-				{
-					skin->text_color.print(gui_font, x + object->x1, object->y1 + y, object->Data, object->Text.front());
-				}
-				else
-				{
-					object->Data = skin->draw_text_adjust(x + object->x1, y + object->y1, x + object->x2, y + object->y2,
-														  object->Text[0], object->Pos, object->Flag & FLAG_MISSION_MODE);
-					if (object->Data > 0)
-						object->Pos %= object->Data;
-				}
-				break;
+				case OBJ_TEXT:
+					if (object->Text.empty())
+						object->Text.push_back(nullptr);
+					if (!(object->Flag & FLAG_TEXT_ADJUST))
+					{
+						skin->text_color.print(gui_font, x + object->x1, object->y1 + y, object->Data, object->Text.front());
+					}
+					else
+					{
+						object->Data = skin->draw_text_adjust(x + object->x1, y + object->y1, x + object->x2, y + object->y2,
+															  object->Text[0], object->Pos, object->Flag & FLAG_MISSION_MODE);
+						if (object->Data > 0)
+							object->Pos %= object->Data;
+					}
+					break;
 
 				// Button
-			case OBJ_TA_BUTTON:
+				case OBJ_TA_BUTTON:
 				{
 					const int cur_img = (object->Flag & FLAG_DISABLED)
-										? (int)object->gltex_states.size() - 1
+											? (int)object->gltex_states.size() - 1
 											: ((object->activated && object->nb_stages == 1)
-											   ? (int)object->gltex_states.size() - 2
+												   ? (int)object->gltex_states.size() - 2
 												   : (int)object->current_state);
 					if (cur_img < (int)object->gltex_states.size() && cur_img >= 0)
 					{
@@ -375,93 +375,93 @@ namespace TA3D
 					break;
 				}
 
-			case OBJ_BUTTON:		// Button
-				if (object->Text.empty())
-					object->Text.push_back(nullptr);
-				skin->button(x + object->x1, y + object->y1, x + object->x2, y + object->y2, object->Text.front(), object->activated, !disabled);
-				if (object->Focus && focus)
-					gfx->rectdot(object->x1+x-2,object->y1+y-2,object->x2+x+2,object->y2+y+2,DGray);
-				disabled = false;
-				break;
-
-			case OBJ_HSLIDER:
-			case OBJ_VSLIDER:
-				skin->ScrollBar(x + object->x1, y + object->y1, x + object->x2, y + object->y2,
-								((float)(object->Value - object->Data)) / float(object->Pos - object->Data),
-								object->Type == OBJ_VSLIDER);
-				break;
-
-			case OBJ_LIST:
-				skin->ListBox(x + object->x1, y + object->y1, x + object->x2, y + object->y2,
-							  object->Text, object->Pos, object->Data, object->Flag);
-				break;
-
-			case OBJ_LINE:
-				gfx->disable_texturing();
-				gfx->line(x + object->x1, y + object->y1, x + object->x2, y + object->y2, object->Data);
-				gfx->enable_texturing();
-				break;
-
-			case OBJ_BOX:
-				gfx->set_alpha_blending();
-				gfx->disable_texturing();
-				if (object->Flag & FLAG_FILL)
-					gfx->rectfill(x + object->x1, y + object->y1,
-								  x + object->x2, y + object->y2, object->Data);
-				else
-					gfx->rect(x + object->x1, y + object->y1, x + object->x2, y + object->y2, object->Data);
-				gfx->enable_texturing();
-				gfx->unset_alpha_blending();
-				break;
-
-			case OBJ_OPTIONC:		// Checkbox
-				if (object->Text.empty())
-					object->Text.push_back(nullptr);
-				skin->OptionCase(x + object->x1, y + object->y1, object->Text[0], object->Etat);
-				if (object->Focus && focus)
-					gfx->rectdot(object->x1 + x - 2, object->y1 + y - 2, object->x2 + x + 2, object->y2 + y + 2, DGray);
-				break;
-
-			case OBJ_OPTIONB:		// Boutton d'option
-				if (object->Text.empty())
-					object->Text.push_back(nullptr);
-				skin->OptionButton(x + object->x1, y + object->y1, object->Text[0], object->Etat);
-				if (object->Focus && focus)
-					gfx->rectdot(object->x1 + x - 2, object->y1 + y - 2, object->x2 + x + 2, object->y2 + y + 2, DGray);
-				break;
-
-			case OBJ_PBAR:			// Progress Bar
-				skin->ProgressBar(x + object->x1, y + object->y1, x + object->x2, y + object->y2, object->Data);
-				if (object->Focus && focus)
-					gfx->rectdot(object->x1 + x - 2, object->y1 + y - 2, object->x2 + x + 2, object->y2 + y + 2, DGray);
-				break;
-
-			case OBJ_TEXTBAR:		// Text edit
-				if (object->Text.empty())
-					object->Text.push_back(nullptr);
-				skin->TextBar(x + object->x1, y + object->y1, x + object->x2, y + object->y2, object->Text[0], object->Focus);
-				if (object->Focus && focus)
-					gfx->rectdot(object->x1 + x - 2, object->y1 + y - 2, object->x2 + x + 2, object->y2 + y + 2, DGray);
-				break;
-
-			case OBJ_TEXTEDITOR:	// Large text edit
-				if (object->Text.empty())
-					object->Text.push_back(nullptr);
-				skin->TextEditor(x + object->x1, y + object->y1, x + object->x2, y + object->y2, object->Text, object->Data, object->Pos, object->Focus);
-				if (object->Focus && focus)
-					gfx->rectdot(object->x1 + x - 2, object->y1 + y - 2, object->x2 + x + 2, object->y2 + y + 2, DGray);
-				break;
-
-			case OBJ_MENU:			// Menu
-				if (object->Text.empty())
-					object->Text.push_back(nullptr);
-				if (!object->Etat)
-				{
-					skin->button(x + object->x1, y + object->y1, x + object->x2, y + object->y2,
-								 object->Text[0], object->activated || object->Etat, !disabled);
+				case OBJ_BUTTON: // Button
+					if (object->Text.empty())
+						object->Text.push_back(nullptr);
+					skin->button(x + object->x1, y + object->y1, x + object->x2, y + object->y2, object->Text.front(), object->activated, !disabled);
+					if (object->Focus && focus)
+						gfx->rectdot(object->x1 + x - 2, object->y1 + y - 2, object->x2 + x + 2, object->y2 + y + 2, DGray);
 					disabled = false;
-				}
-				break;
+					break;
+
+				case OBJ_HSLIDER:
+				case OBJ_VSLIDER:
+					skin->ScrollBar(x + object->x1, y + object->y1, x + object->x2, y + object->y2,
+									((float)(object->Value - object->Data)) / float(object->Pos - object->Data),
+									object->Type == OBJ_VSLIDER);
+					break;
+
+				case OBJ_LIST:
+					skin->ListBox(x + object->x1, y + object->y1, x + object->x2, y + object->y2,
+								  object->Text, object->Pos, object->Data, object->Flag);
+					break;
+
+				case OBJ_LINE:
+					gfx->disable_texturing();
+					gfx->line(x + object->x1, y + object->y1, x + object->x2, y + object->y2, object->Data);
+					gfx->enable_texturing();
+					break;
+
+				case OBJ_BOX:
+					gfx->set_alpha_blending();
+					gfx->disable_texturing();
+					if (object->Flag & FLAG_FILL)
+						gfx->rectfill(x + object->x1, y + object->y1,
+									  x + object->x2, y + object->y2, object->Data);
+					else
+						gfx->rect(x + object->x1, y + object->y1, x + object->x2, y + object->y2, object->Data);
+					gfx->enable_texturing();
+					gfx->unset_alpha_blending();
+					break;
+
+				case OBJ_OPTIONC: // Checkbox
+					if (object->Text.empty())
+						object->Text.push_back(nullptr);
+					skin->OptionCase(x + object->x1, y + object->y1, object->Text[0], object->Etat);
+					if (object->Focus && focus)
+						gfx->rectdot(object->x1 + x - 2, object->y1 + y - 2, object->x2 + x + 2, object->y2 + y + 2, DGray);
+					break;
+
+				case OBJ_OPTIONB: // Boutton d'option
+					if (object->Text.empty())
+						object->Text.push_back(nullptr);
+					skin->OptionButton(x + object->x1, y + object->y1, object->Text[0], object->Etat);
+					if (object->Focus && focus)
+						gfx->rectdot(object->x1 + x - 2, object->y1 + y - 2, object->x2 + x + 2, object->y2 + y + 2, DGray);
+					break;
+
+				case OBJ_PBAR: // Progress Bar
+					skin->ProgressBar(x + object->x1, y + object->y1, x + object->x2, y + object->y2, object->Data);
+					if (object->Focus && focus)
+						gfx->rectdot(object->x1 + x - 2, object->y1 + y - 2, object->x2 + x + 2, object->y2 + y + 2, DGray);
+					break;
+
+				case OBJ_TEXTBAR: // Text edit
+					if (object->Text.empty())
+						object->Text.push_back(nullptr);
+					skin->TextBar(x + object->x1, y + object->y1, x + object->x2, y + object->y2, object->Text[0], object->Focus);
+					if (object->Focus && focus)
+						gfx->rectdot(object->x1 + x - 2, object->y1 + y - 2, object->x2 + x + 2, object->y2 + y + 2, DGray);
+					break;
+
+				case OBJ_TEXTEDITOR: // Large text edit
+					if (object->Text.empty())
+						object->Text.push_back(nullptr);
+					skin->TextEditor(x + object->x1, y + object->y1, x + object->x2, y + object->y2, object->Text, object->Data, object->Pos, object->Focus);
+					if (object->Focus && focus)
+						gfx->rectdot(object->x1 + x - 2, object->y1 + y - 2, object->x2 + x + 2, object->y2 + y + 2, DGray);
+					break;
+
+				case OBJ_MENU: // Menu
+					if (object->Text.empty())
+						object->Text.push_back(nullptr);
+					if (!object->Etat)
+					{
+						skin->button(x + object->x1, y + object->y1, x + object->x2, y + object->y2,
+									 object->Text[0], object->activated || object->Etat, !disabled);
+						disabled = false;
+					}
+					break;
 			}
 
 			// Make it darker when disabled
@@ -469,7 +469,7 @@ namespace TA3D
 			{
 				glEnable(GL_BLEND);
 				glDisable(GL_TEXTURE_2D);
-				glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
+				glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 				glColor4f(0.0f, 0.0f, 0.0f, 0.5f);
 				gfx->rectfill(x + object->x1, y + object->y1, x + object->x2, y + object->y2);
 				glEnable(GL_TEXTURE_2D);
@@ -481,15 +481,13 @@ namespace TA3D
 			{
 				glEnable(GL_BLEND);
 				glDisable(GL_TEXTURE_2D);
-				glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
+				glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 				glColor4f(1.0f, 1.0f, 1.0f, 0.5f);
 				gfx->rectfill(x + object->x1, y + object->y1, x + object->x2, y + object->y2);
 				glEnable(GL_TEXTURE_2D);
 				glDisable(GL_BLEND);
 			}
 		}
-
-
 
 		void WND::doDrawWindowForegroundObject(Skin* skin, const int i)
 		{
@@ -498,25 +496,24 @@ namespace TA3D
 			const float y = (float)this->y;
 			switch (object->Type)
 			{
-			case OBJ_FMENU:			// Menu flottant
-				skin->FloatMenu(x + object->x1, y + object->y1, object->Text,
-								object->Data, 0);
-				break;
-			case OBJ_MENU: // Menu déroulant
-				if (object->Etat)
-				{
-					skin->button(x + object->x1, y + object->y1,
-								 x + object->x2, y + object->y2,
-								 object->Text[0],
-								 object->activated || object->Etat, true);
-					skin->FloatMenu(x + object->x1, y + object->y2 + 1.0f,
-									object->Text, object->Data + 1,
-									1 + object->Pos);
-				}
-				break;
+				case OBJ_FMENU: // Menu flottant
+					skin->FloatMenu(x + object->x1, y + object->y1, object->Text,
+									object->Data, 0);
+					break;
+				case OBJ_MENU: // Menu déroulant
+					if (object->Etat)
+					{
+						skin->button(x + object->x1, y + object->y1,
+									 x + object->x2, y + object->y2,
+									 object->Text[0],
+									 object->activated || object->Etat, true);
+						skin->FloatMenu(x + object->x1, y + object->y2 + 1.0f,
+										object->Text, object->Data + 1,
+										1 + object->Pos);
+					}
+					break;
 			}
 		}
-
 
 		byte WND::WinMov(const int AMx, const int AMy, const int AMb, const int Mx, const int My, const int Mb, Skin* skin)
 		{
@@ -534,8 +531,7 @@ namespace TA3D
 			}
 			if (skin)
 			{
-				if ((float)Mx >= (float)x - skin->wnd_border.x1 && (float)Mx <= (float)x + (float)width - skin->wnd_border.x2
-					&& (float)My >= (float)y - skin->wnd_border.y1 && (float)My <= (float)y + (float)height - skin->wnd_border.y2)
+				if ((float)Mx >= (float)x - skin->wnd_border.x1 && (float)Mx <= (float)x + (float)width - skin->wnd_border.x2 && (float)My >= (float)y - skin->wnd_border.y1 && (float)My <= (float)y + (float)height - skin->wnd_border.y2)
 					return 1;
 			}
 			else
@@ -545,8 +541,6 @@ namespace TA3D
 			}
 			return 0;
 		}
-
-
 
 		void WND::destroy()
 		{
@@ -564,20 +558,18 @@ namespace TA3D
 			pMutex.unlock();
 		}
 
-
 		void WND::doCheckWasOnFLoattingMenu(const int i, bool& wasOnFloattingMenu, int& indxMenu, Skin* skin)
 		{
 			GUIOBJ::Ptr object = pObjects[i];
 
 			if (object->Type == OBJ_TA_BUTTON && object->current_state < object->gltex_states.size())
 			{
-				object->x2 = object->x1 + float(object->gltex_states[ object->current_state ].width  - 1);
-				object->y2 = object->y1 + float(object->gltex_states[ object->current_state ].height - 1);
+				object->x2 = object->x1 + float(object->gltex_states[object->current_state].width - 1);
+				object->y2 = object->y1 + float(object->gltex_states[object->current_state].height - 1);
 			}
 
 			// Vérifie si la souris est sur l'objet
-			if ((float)mouse_x >= (float)x + object->x1 && (float)mouse_x <= (float)x + object->x2
-				&& (float)mouse_y >= (float)y + object->y1 && (float)mouse_y <= (float)y + object->y2)
+			if ((float)mouse_x >= (float)x + object->x1 && (float)mouse_x <= (float)x + object->x2 && (float)mouse_y >= (float)y + object->y1 && (float)mouse_y <= (float)y + object->y2)
 				return;
 
 			if (object->Type == OBJ_MENU && object->Etat && object->MouseOn && !wasOnFloattingMenu)
@@ -585,17 +577,15 @@ namespace TA3D
 				float m_width = 168.0f;
 				if (skin)
 				{
-					for (unsigned int e = 0 ; e < object->Text.size() - (1 + object->Pos) ; ++e)
-						m_width = Math::Max(m_width, gui_font->length(object->Text[ e ]));
+					for (unsigned int e = 0; e < object->Text.size() - (1 + object->Pos); ++e)
+						m_width = Math::Max(m_width, gui_font->length(object->Text[e]));
 
 					m_width += skin->menu_background.x1 - skin->menu_background.x2;
 				}
 				else
 					m_width = 168.0f;
 
-				if ((float)mouse_x >= (float)x + object->x1 && (float)mouse_x <= (float)x + object->x1 + m_width
-					&& (float)mouse_y > (float)y + object->y2
-					&& (float)mouse_y <= (float)y + object->y2 + 1.0f + pCacheFontHeight * (float)object->Text.size())
+				if ((float)mouse_x >= (float)x + object->x1 && (float)mouse_x <= (float)x + object->x1 + m_width && (float)mouse_y > (float)y + object->y2 && (float)mouse_y <= (float)y + object->y2 + 1.0f + pCacheFontHeight * (float)object->Text.size())
 				{
 					wasOnFloattingMenu = true;
 					indxMenu = i;
@@ -603,14 +593,13 @@ namespace TA3D
 			}
 		}
 
-
-		int WND::check(int AMx,int AMy,int AMz,int AMb,bool timetoscroll, Skin* skin)
+		int WND::check(int AMx, int AMy, int AMz, int AMb, bool timetoscroll, Skin* skin)
 		{
 			MutexLocker locker(pMutex);
 			if (hidden)
 			{
 				was_hidden = true;
-				return 0;		// if it's hidden you cannot interact with it
+				return 0; // if it's hidden you cannot interact with it
 			}
 			if (was_hidden)
 			{
@@ -638,10 +627,10 @@ namespace TA3D
 			}
 
 			// Interactions utilisateur/objets
-			unsigned int index,e;
+			unsigned int index, e;
 			uint16 Key;
 			bool was_on_floating_menu = false;
-			int  on_menu = -1;
+			int on_menu = -1;
 			bool close_all = false;
 			bool already_clicked = false;
 			int hasFocus = -1;
@@ -658,7 +647,7 @@ namespace TA3D
 				if (object->Focus && object->Type != OBJ_TEXTEDITOR)
 					hasFocus = i;
 			}
-			if (hasFocus >= 0 && key[KEY_TAB] && !tab_was_pressed)      // Select another widget with TAB key
+			if (hasFocus >= 0 && key[KEY_TAB] && !tab_was_pressed) // Select another widget with TAB key
 			{
 				for (unsigned int e = 1; e < pObjects.size(); ++e)
 				{
@@ -695,8 +684,7 @@ namespace TA3D
 					was_on_floating_menu = false;
 
 				// Vérifie si la souris est sur l'objet
-				if ((float)mouse_x >= (float)x + object->x1 && (float)mouse_x <= (float)x + object->x2
-					&& (float)mouse_y >= (float)y + object->y1 && (float)mouse_y <= (float)y + object->y2 && !was_on_floating_menu)
+				if ((float)mouse_x >= (float)x + object->x1 && (float)mouse_x <= (float)x + object->x2 && (float)mouse_y >= (float)y + object->y1 && (float)mouse_y <= (float)y + object->y2 && !was_on_floating_menu)
 				{
 					object->MouseOn = true;
 				}
@@ -712,15 +700,14 @@ namespace TA3D
 						m_width += skin->menu_background.x1 - skin->menu_background.x2;
 					}
 
-					if ((float)mouse_x >= (float)x + object->x1 && (float)mouse_x <= (float)x + object->x1 + m_width
-						&& (float)mouse_y > (float)y + object->y2 && (float)mouse_y <= (float)y + object->y2 + 1.0f + pCacheFontHeight * (float)object->Text.size())
+					if ((float)mouse_x >= (float)x + object->x1 && (float)mouse_x <= (float)x + object->x1 + m_width && (float)mouse_y > (float)y + object->y2 && (float)mouse_y <= (float)y + object->y2 + 1.0f + pCacheFontHeight * (float)object->Text.size())
 						object->MouseOn = true;
 				}
 
 				if (object->MouseOn)
 					IsOnGUI |= 2;
 
-				if (mouse_b!=0 && object->MouseOn && !was_on_floating_menu) // Obtient le focus
+				if (mouse_b != 0 && object->MouseOn && !was_on_floating_menu) // Obtient le focus
 				{
 					for (e = 0; e < pObjects.size(); ++e)
 						pObjects[e]->Focus = false;
@@ -732,13 +719,13 @@ namespace TA3D
 					object->Focus = false;
 					switch (object->Type)
 					{
-					case OBJ_MENU:
-						object->Etat = false;
-						break;
+						case OBJ_MENU:
+							object->Etat = false;
+							break;
 					}
 				}
 
-				if (object->MouseOn && (object->Type==OBJ_FMENU || object->Type == OBJ_MENU))
+				if (object->MouseOn && (object->Type == OBJ_FMENU || object->Type == OBJ_MENU))
 				{
 					for (e = 0; e < pObjects.size(); ++e)
 					{
@@ -757,9 +744,9 @@ namespace TA3D
 
 				switch (object->Type)
 				{
-				case OBJ_MENU:			// Choses à faire quoi qu'il arrive
+					case OBJ_MENU: // Choses à faire quoi qu'il arrive
 					{
-						object->Data = (unsigned int)(-1);		// Pas de séléction
+						object->Data = (unsigned int)(-1); // Pas de séléction
 						if (!object->Etat)
 							object->Value = -1;
 						{
@@ -774,9 +761,7 @@ namespace TA3D
 							else
 								m_width = 168.0f;
 
-							if (object->MouseOn && (float)mouse_x >= (float)x + object->x1 && (float)mouse_x <= (float)x + object->x1 + m_width
-								&& (float)mouse_y > (float)y + object->y2 + 4.0f && (float)mouse_y <= (float)y + object->y2 + 1.0f + pCacheFontHeight * (float)object->Text.size()
-								&& object->Etat)
+							if (object->MouseOn && (float)mouse_x >= (float)x + object->x1 && (float)mouse_x <= (float)x + object->x1 + m_width && (float)mouse_y > (float)y + object->y2 + 4.0f && (float)mouse_y <= (float)y + object->y2 + 1.0f + pCacheFontHeight * (float)object->Text.size() && object->Etat)
 							{
 								if (timetoscroll)
 								{
@@ -792,12 +777,10 @@ namespace TA3D
 						}
 						break;
 					}
-				case OBJ_FMENU:
+					case OBJ_FMENU:
 					{
-						object->Data = (unsigned int)(-1);		// Pas de séléction
-						if (object->MouseOn
-							&& (float)mouse_y >= (float)y + object->y1 + 4.0f
-							&& (float)mouse_y <= (float)y + object->y2 - 4.0f)
+						object->Data = (unsigned int)(-1); // Pas de séléction
+						if (object->MouseOn && (float)mouse_y >= (float)y + object->y1 + 4.0f && (float)mouse_y <= (float)y + object->y2 - 4.0f)
 						{
 							object->Data = (int)(((float)mouse_y - (float)y - object->y1 - 4.0f) / float(pCacheFontHeight));
 							if (object->Data >= object->Text.size())
@@ -805,7 +788,7 @@ namespace TA3D
 						}
 						break;
 					}
-				case OBJ_TEXTBAR:				// Permet l'entrée de texte
+					case OBJ_TEXTBAR: // Permet l'entrée de texte
 					{
 						object->Etat = false;
 						if (object->Focus && keypressed())
@@ -814,44 +797,44 @@ namespace TA3D
 							Key = keyCode & 0xFFFF;
 							const uint16 scancode = uint16(keyCode >> 16);
 
-							switch(scancode)
+							switch (scancode)
 							{
-							case KEY_ENTER:
-								object->Etat = true;
-								if (object->Func!=NULL)
-									(*object->Func)(object->Text[0].utf8size());
-								break;
-							case KEY_BACKSPACE:
-								if (object->Text[0].utf8size()>0)
-									object->Text[0] = SubstrUTF8(object->Text[0], 0, object->Text[0].utf8size() - 1);
-								break;
-							case KEY_TAB:
-							case KEY_ESC:
-								break;
-							default:
-								switch (Key)
-								{
-								case 9:
-								case 27:
-								case 0:
+								case KEY_ENTER:
+									object->Etat = true;
+									if (object->Func != NULL)
+										(*object->Func)(object->Text[0].utf8size());
+									break;
+								case KEY_BACKSPACE:
+									if (object->Text[0].utf8size() > 0)
+										object->Text[0] = SubstrUTF8(object->Text[0], 0, object->Text[0].utf8size() - 1);
+									break;
+								case KEY_TAB:
+								case KEY_ESC:
 									break;
 								default:
-									if (object->Text[0].utf8size() + 1 < object->Data)
-										object->Text[0] << InttoUTF8( Key);
-								}
+									switch (Key)
+									{
+										case 9:
+										case 27:
+										case 0:
+											break;
+										default:
+											if (object->Text[0].utf8size() + 1 < object->Data)
+												object->Text[0] << InttoUTF8(Key);
+									}
 							}
 						}
 						break;
 					}
 
-				case OBJ_TEXTEDITOR:				// Permet l'entrée de texte / Enable text input
+					case OBJ_TEXTEDITOR: // Permet l'entrée de texte / Enable text input
 					{
 						if (object->Text.empty())
 							object->Text.push_back(nullptr);
 						if (object->Data >= object->Text.size())
 							object->Data = GLuint(object->Text.size() - 1);
 
-						if(object->Pos > object->Text[object->Data].utf8size())
+						if (object->Pos > object->Text[object->Data].utf8size())
 							object->Pos = object->Text[object->Pos].utf8size();
 						object->Etat = false;
 						if (object->Focus && keypressed())
@@ -861,138 +844,125 @@ namespace TA3D
 							const uint16 scancode = uint16(keyCode >> 16);
 							switch (scancode)
 							{
-							case KEY_ESC:
-								break;
-							case KEY_TAB:
-								object->Text[object->Data] << "    ";
-								object->Pos += 4;
-								break;
-							case KEY_ENTER:
-								object->Text.push_back(nullptr);
-								if (object->Data + 1 < object->Text.size())
-								{
-									for (uint32 e = (uint32)object->Text.size() - 1 ; e > object->Data + 1 ; --e)
-										object->Text[e] = object->Text[e - 1];
-								}
+								case KEY_ESC:
+									break;
+								case KEY_TAB:
+									object->Text[object->Data] << "    ";
+									object->Pos += 4;
+									break;
+								case KEY_ENTER:
+									object->Text.push_back(nullptr);
+									if (object->Data + 1 < object->Text.size())
+									{
+										for (uint32 e = (uint32)object->Text.size() - 1; e > object->Data + 1; --e)
+											object->Text[e] = object->Text[e - 1];
+									}
 
-								if (object->Text[ object->Data ].utf8size() - object->Pos > 0)
-									object->Text[ object->Data + 1 ] = SubstrUTF8(object->Text[ object->Data ], object->Pos, object->Text[ object->Data ].utf8size() - object->Pos);
-								else
-									object->Text[ object->Data + 1 ].clear();
-								object->Text[ object->Data ] = SubstrUTF8(object->Text[ object->Data ], 0, object->Pos);
-								object->Pos = 0;
-								object->Data++;
-								break;
-							case KEY_DEL:
-								// Remove next character
-								if (object->Pos < object->Text[object->Data].utf8size())
-								{
-									object->Text[object->Data] = SubstrUTF8(object->Text[object->Data],0,object->Pos)
-																 << SubstrUTF8(object->Text[object->Data],object->Pos+1, object->Text[object->Data].utf8size() - object->Pos-1);
-								}
-								else if (object->Data + 1 < object->Text.size())
-								{
-									object->Text[object->Data] << object->Text[object->Data+1];
-									for(uint32 e = object->Data + 1 ; e < object->Text.size() - 1 ; e++ )
-										object->Text[e] = object->Text[e+1];
-									object->Text.resize(object->Text.size()-1);
-								}
-								break;
-							case KEY_BACKSPACE:                                 // Remove previous character
-								if (object->Pos > 0)
-								{
-									object->Text[object->Data] = SubstrUTF8(object->Text[object->Data],0,object->Pos-1)
-																 << SubstrUTF8(object->Text[object->Data], object->Pos, object->Text[object->Data].utf8size() - object->Pos);
-									object->Pos--;
-								}
-								else if (object->Data > 0)
-								{
-									object->Data--;
-									object->Pos = object->Text[object->Data].utf8size();
-									object->Text[object->Data] << object->Text[object->Data + 1];
-									for (unsigned int e = object->Data + 1 ; e < object->Text.size() - 1; ++e)
-										object->Text[e] = object->Text[e + 1];
-									object->Text.resize(object->Text.size() - 1);
-								}
-								break;
-							case KEY_LEFT:            // Left
-								if (object->Pos > 0)
-									object->Pos--;
-								else if (object->Data > 0)
-								{
-									object->Data--;
-									object->Pos = object->Text[object->Data].utf8size();
-								}
-								break;
-							case KEY_RIGHT:            // Right
-								if (object->Pos < object->Text[object->Data].utf8size())
-									object->Pos++;
-								else if (object->Data + 1 < object->Text.size())
-								{
-									object->Data++;
+									if (object->Text[object->Data].utf8size() - object->Pos > 0)
+										object->Text[object->Data + 1] = SubstrUTF8(object->Text[object->Data], object->Pos, object->Text[object->Data].utf8size() - object->Pos);
+									else
+										object->Text[object->Data + 1].clear();
+									object->Text[object->Data] = SubstrUTF8(object->Text[object->Data], 0, object->Pos);
 									object->Pos = 0;
-								}
-								break;
-							case KEY_UP:            // Up
-								if (object->Data > 0)
-								{
-									object->Data--;
-									object->Pos = Math::Min( (uint32)object->Text[object->Data].utf8size(), object->Pos);
-								}
-								break;
-							case KEY_DOWN:            // Down
-								if (object->Data + 1 < object->Text.size())
-								{
 									object->Data++;
-									object->Pos = Math::Min( (uint32)object->Text[object->Data].utf8size(), object->Pos);
-								}
-								break;
-							default:
-								switch (Key)
-								{
-								case 0:
-								case 27:
+									break;
+								case KEY_DEL:
+									// Remove next character
+									if (object->Pos < object->Text[object->Data].utf8size())
+									{
+										object->Text[object->Data] = SubstrUTF8(object->Text[object->Data], 0, object->Pos)
+																	 << SubstrUTF8(object->Text[object->Data], object->Pos + 1, object->Text[object->Data].utf8size() - object->Pos - 1);
+									}
+									else if (object->Data + 1 < object->Text.size())
+									{
+										object->Text[object->Data] << object->Text[object->Data + 1];
+										for (uint32 e = object->Data + 1; e < object->Text.size() - 1; e++)
+											object->Text[e] = object->Text[e + 1];
+										object->Text.resize(object->Text.size() - 1);
+									}
+									break;
+								case KEY_BACKSPACE: // Remove previous character
+									if (object->Pos > 0)
+									{
+										object->Text[object->Data] = SubstrUTF8(object->Text[object->Data], 0, object->Pos - 1)
+																	 << SubstrUTF8(object->Text[object->Data], object->Pos, object->Text[object->Data].utf8size() - object->Pos);
+										object->Pos--;
+									}
+									else if (object->Data > 0)
+									{
+										object->Data--;
+										object->Pos = object->Text[object->Data].utf8size();
+										object->Text[object->Data] << object->Text[object->Data + 1];
+										for (unsigned int e = object->Data + 1; e < object->Text.size() - 1; ++e)
+											object->Text[e] = object->Text[e + 1];
+										object->Text.resize(object->Text.size() - 1);
+									}
+									break;
+								case KEY_LEFT: // Left
+									if (object->Pos > 0)
+										object->Pos--;
+									else if (object->Data > 0)
+									{
+										object->Data--;
+										object->Pos = object->Text[object->Data].utf8size();
+									}
+									break;
+								case KEY_RIGHT: // Right
+									if (object->Pos < object->Text[object->Data].utf8size())
+										object->Pos++;
+									else if (object->Data + 1 < object->Text.size())
+									{
+										object->Data++;
+										object->Pos = 0;
+									}
+									break;
+								case KEY_UP: // Up
+									if (object->Data > 0)
+									{
+										object->Data--;
+										object->Pos = Math::Min((uint32)object->Text[object->Data].utf8size(), object->Pos);
+									}
+									break;
+								case KEY_DOWN: // Down
+									if (object->Data + 1 < object->Text.size())
+									{
+										object->Data++;
+										object->Pos = Math::Min((uint32)object->Text[object->Data].utf8size(), object->Pos);
+									}
 									break;
 								default:
-									object->Text[object->Data] = SubstrUTF8(object->Text[ object->Data ], 0, object->Pos )
-																 << InttoUTF8( Key )
-																 << SubstrUTF8(object->Text[ object->Data ], object->Pos, object->Text[ object->Data ].utf8size() - object->Pos);
-									object->Pos++;
-								}
+									switch (Key)
+									{
+										case 0:
+										case 27:
+											break;
+										default:
+											object->Text[object->Data] = SubstrUTF8(object->Text[object->Data], 0, object->Pos)
+																		 << InttoUTF8(Key)
+																		 << SubstrUTF8(object->Text[object->Data], object->Pos, object->Text[object->Data].utf8size() - object->Pos);
+											object->Pos++;
+									}
 							}
 						}
 						break;
 					}
 
-				case OBJ_LIST:
+					case OBJ_LIST:
 					{
 						if ((object->MouseOn || object->Focus) && skin)
 						{
-							bool onDeco = (mouse_x - x <= object->x1 + skin->text_background.x1
-										   || mouse_x - x >= object->x2 + skin->text_background.x2
-										   || mouse_y - y <= object->y1 + skin->text_background.y1
-										   || mouse_y - y >= object->y2 + skin->text_background.y2);			// We're on ListBox decoration!
+							bool onDeco = (mouse_x - x <= object->x1 + skin->text_background.x1 || mouse_x - x >= object->x2 + skin->text_background.x2 || mouse_y - y <= object->y1 + skin->text_background.y1 || mouse_y - y >= object->y2 + skin->text_background.y2); // We're on ListBox decoration!
 							int widgetSize = (int)((object->y2 - object->y1 - skin->text_background.y1 + skin->text_background.y2) / pCacheFontHeight);
 							int TotalScroll = (int)object->Text.size() - widgetSize;
 							if (TotalScroll < 0)
 								TotalScroll = 0;
 
-							if (mouse_b == 1 && !onDeco
-								&& mouse_x - x >= object->x2 + skin->text_background.x2 - skin->scroll[0].sw
-								&& mouse_x - x <= object->x2 + skin->text_background.x2
-								&& mouse_y - y >= object->y1 + skin->text_background.y1
-								&& mouse_y - y <= object->y2 + skin->text_background.y2) // We're on the scroll bar!
+							if (mouse_b == 1 && !onDeco && mouse_x - x >= object->x2 + skin->text_background.x2 - skin->scroll[0].sw && mouse_x - x <= object->x2 + skin->text_background.x2 && mouse_y - y >= object->y1 + skin->text_background.y1 && mouse_y - y <= object->y2 + skin->text_background.y2) // We're on the scroll bar!
 							{
 
-								if (mouse_y - y > object->y1 + skin->text_background.y1 + skin->scroll[0].y1
-									&& mouse_y - y < object->y2 + skin->text_background.y2 + skin->scroll[0].y2) // Set scrolling position
+								if (mouse_y - y > object->y1 + skin->text_background.y1 + skin->scroll[0].y1 && mouse_y - y < object->y2 + skin->text_background.y2 + skin->scroll[0].y2) // Set scrolling position
 								{
-									object->Data = (int)(0.5f + (float)TotalScroll
-														 * ((float)mouse_y - (float)y - object->y1 - skin->text_background.y1 - skin->scroll[0].y1
-															- (skin->scroll[0].sw - skin->scroll[ 0 ].x1 + skin->scroll[ 0 ].x2) * 0.5f)
-														 / (object->y2 - object->y1 - skin->text_background.y1 + skin->text_background.y2
-															- skin->scroll[0].y1 + skin->scroll[0].y2
-															- (skin->scroll[0].sw - skin->scroll[ 0 ].x1 + skin->scroll[ 0 ].x2) * 0.5f));
+									object->Data = (int)(0.5f + (float)TotalScroll * ((float)mouse_y - (float)y - object->y1 - skin->text_background.y1 - skin->scroll[0].y1 - (skin->scroll[0].sw - skin->scroll[0].x1 + skin->scroll[0].x2) * 0.5f) / (object->y2 - object->y1 - skin->text_background.y1 + skin->text_background.y2 - skin->scroll[0].y1 + skin->scroll[0].y2 - (skin->scroll[0].sw - skin->scroll[0].x1 + skin->scroll[0].x2) * 0.5f));
 								}
 								if (object->Data > (unsigned int)TotalScroll)
 									object->Data = TotalScroll;
@@ -1010,7 +980,8 @@ namespace TA3D
 										npos++;
 									if (npos != (int)object->Pos)
 									{
-										if (npos < 0)   npos = 0;
+										if (npos < 0)
+											npos = 0;
 										if (npos >= (int)object->Text.size())
 											npos = (int)object->Text.size() - 1;
 										if (nscroll > npos)
@@ -1022,9 +993,8 @@ namespace TA3D
 
 								if (nscroll < 0)
 									nscroll = 0;
-								else
-									if (nscroll > TotalScroll)
-										nscroll = TotalScroll;
+								else if (nscroll > TotalScroll)
+									nscroll = TotalScroll;
 
 								object->Data = nscroll;
 								object->Pos = npos;
@@ -1032,23 +1002,20 @@ namespace TA3D
 						}
 						break;
 					}
-				case OBJ_VSLIDER:
+					case OBJ_VSLIDER:
 					{
 						if (object->MouseOn)
 						{
-							if (mouse_y - y <= object->y1 + skin->scroll[0].y1)           // Decrease
+							if (mouse_y - y <= object->y1 + skin->scroll[0].y1) // Decrease
 							{
 							}
-							else if (mouse_y - y >= object->y2 + skin->scroll[0].y2)      // Increase
+							else if (mouse_y - y >= object->y2 + skin->scroll[0].y2) // Increase
 							{
 							}
-							else if (mouse_b == 1)                    // Set
+							else if (mouse_b == 1) // Set
 							{
 								const int s = (int)skin->scroll[2].sh;
-								const int nValue = (int)(((float)mouse_y - (float)y - object->y1 - skin->scroll[0].y1 - (float)(s / 2))
-												   * (float)(object->Pos - object->Data + 1)
-												   / (object->y2 - object->y1 - skin->scroll[0].y1 + skin->scroll[0].y2 - (float)s))
-												   + object->Data;
+								const int nValue = (int)(((float)mouse_y - (float)y - object->y1 - skin->scroll[0].y1 - (float)(s / 2)) * (float)(object->Pos - object->Data + 1) / (object->y2 - object->y1 - skin->scroll[0].y1 + skin->scroll[0].y2 - (float)s)) + object->Data;
 								if (nValue >= (int)object->Data && nValue <= (int)object->Pos)
 									object->Value = nValue;
 							}
@@ -1063,23 +1030,20 @@ namespace TA3D
 						}
 						break;
 					}
-				case OBJ_HSLIDER:
+					case OBJ_HSLIDER:
 					{
 						if (object->MouseOn)
 						{
-							if (mouse_x - x <= object->x1 + skin->scroll[1].x1)           // Decrease
+							if (mouse_x - x <= object->x1 + skin->scroll[1].x1) // Decrease
 							{
 							}
-							else if (mouse_x - x >= object->x2 + skin->scroll[1].x2)      // Increase
+							else if (mouse_x - x >= object->x2 + skin->scroll[1].x2) // Increase
 							{
 							}
-							else if (mouse_b == 1)                    // Set
+							else if (mouse_b == 1) // Set
 							{
 								const int s = (int)skin->scroll[2].sw;
-								const int nValue = (int)(((float)mouse_x - (float)x - object->x1 - skin->scroll[1].x1 - (float)(s / 2))
-												   * (float)(object->Pos - object->Data + 1)
-												   / (object->x2 - object->x1 - skin->scroll[1].x1 + skin->scroll[1].x2 - (float)s))
-												   + object->Data;
+								const int nValue = (int)(((float)mouse_x - (float)x - object->x1 - skin->scroll[1].x1 - (float)(s / 2)) * (float)(object->Pos - object->Data + 1) / (object->x2 - object->x1 - skin->scroll[1].x1 + skin->scroll[1].x2 - (float)s)) + object->Data;
 								if (nValue >= (int)object->Data && nValue <= (int)object->Pos)
 									object->Value = nValue;
 							}
@@ -1102,227 +1066,199 @@ namespace TA3D
 				}
 				else
 				{
-					if ((mouse_b != 1 || !object->MouseOn || mouse_b == AMb) && (object->Flag & FLAG_CAN_BE_CLICKED)
-						&& !(object->Flag & FLAG_SWITCH) && !(object->Etat ^ previous_state)
-						&& object->Etat && !was_on_floating_menu)
-						{
-						if (object->Func!=NULL)
-							(*object->Func)(0);		// Lance la fonction associée
-						object->Etat=false;
-					}
-					if (!object->activated && mouse_b==1 && object->MouseOn && ((object->Flag & FLAG_CAN_BE_CLICKED) || (object->Flag & FLAG_SWITCH)))
+					if ((mouse_b != 1 || !object->MouseOn || mouse_b == AMb) && (object->Flag & FLAG_CAN_BE_CLICKED) && !(object->Flag & FLAG_SWITCH) && !(object->Etat ^ previous_state) && object->Etat && !was_on_floating_menu)
 					{
-						switch(object->Type)
+						if (object->Func != NULL)
+							(*object->Func)(0); // Lance la fonction associée
+						object->Etat = false;
+					}
+					if (!object->activated && mouse_b == 1 && object->MouseOn && ((object->Flag & FLAG_CAN_BE_CLICKED) || (object->Flag & FLAG_SWITCH)))
+					{
+						switch (object->Type)
 						{
-						case OBJ_BOX:
-						case OBJ_BUTTON:
-						case OBJ_MENU:
-						case OBJ_TA_BUTTON:
-						case OBJ_OPTIONB:
-						case OBJ_OPTIONC:
-							if (sound_manager)
-								sound_manager->playTDFSoundNow("SPECIALORDERS.sound");
+							case OBJ_BOX:
+							case OBJ_BUTTON:
+							case OBJ_MENU:
+							case OBJ_TA_BUTTON:
+							case OBJ_OPTIONB:
+							case OBJ_OPTIONC:
+								if (sound_manager)
+									sound_manager->playTDFSoundNow("SPECIALORDERS.sound");
 						}
 					}
-					object->activated = mouse_b==1 && object->MouseOn;
+					object->activated = mouse_b == 1 && object->MouseOn;
 
 					bool clicked = false;
-					if (object->shortcut_key >= 0 && object->shortcut_key <= 255 && lp_CONFIG->enable_shortcuts && !TA3D_CTRL_PRESSED && !TA3D_SHIFT_PRESSED && !Console::Instance()->activated()
-						&& (key[ ascii_to_scancode[ object->shortcut_key ] ]
-							|| (object->shortcut_key >= 65 && object->shortcut_key <= 90 && key[ ascii_to_scancode[ object->shortcut_key + 32 ] ])
-							|| (object->shortcut_key >= 97 && object->shortcut_key <= 122 && key[ ascii_to_scancode[ object->shortcut_key - 32 ] ])))
-						{
+					if (object->shortcut_key >= 0 && object->shortcut_key <= 255 && lp_CONFIG->enable_shortcuts && !TA3D_CTRL_PRESSED && !TA3D_SHIFT_PRESSED && !Console::Instance()->activated() && (key[ascii_to_scancode[object->shortcut_key]] || (object->shortcut_key >= 65 && object->shortcut_key <= 90 && key[ascii_to_scancode[object->shortcut_key + 32]]) || (object->shortcut_key >= 97 && object->shortcut_key <= 122 && key[ascii_to_scancode[object->shortcut_key - 32]])))
+					{
 						if (!object->Etat)
 							clicked = true;
 						object->activated = object->Etat = true;
 					}
 
-					if (((mouse_b!=1 && AMb==1) || clicked) && object->MouseOn && MouseWasOn
-						&& ((object->Flag & FLAG_CAN_BE_CLICKED) || (object->Flag & FLAG_SWITCH)) && !already_clicked) // Click sur l'objet
+					if (((mouse_b != 1 && AMb == 1) || clicked) && object->MouseOn && MouseWasOn && ((object->Flag & FLAG_CAN_BE_CLICKED) || (object->Flag & FLAG_SWITCH)) && !already_clicked) // Click sur l'objet
 					{
 						already_clicked = true;
 						switch (object->Type)
 						{
-						case OBJ_VSLIDER:
+							case OBJ_VSLIDER:
 							{
-								if (mouse_y - y <= object->y1 + skin->scroll[0].y1)     // Decrease
+								if (mouse_y - y <= object->y1 + skin->scroll[0].y1) // Decrease
 								{
 									object->Value--;
 									if (object->Value < (int)object->Data)
 										object->Value = (int)object->Data;
 								}
-								else if ((float)mouse_y - (float)y >= object->y2 + skin->scroll[0].y2)     // Increase
+								else if ((float)mouse_y - (float)y >= object->y2 + skin->scroll[0].y2) // Increase
 								{
 									object->Value++;
 									if (object->Value > (int)object->Pos)
 										object->Value = (int)object->Pos;
 								}
-								else                    // Set
+								else // Set
 								{
 									const int s = (int)skin->scroll[2].sh;
-									const int nValue = (int)(((float)mouse_y - (float)y - object->y1 - skin->scroll[0].y1 - (float)(s / 2))
-													   * (float)(object->Pos - object->Data + 1)
-													   / (object->y2 - object->y1 - skin->scroll[0].y1 + skin->scroll[0].y2 - (float)s))
-													   + object->Data;
+									const int nValue = (int)(((float)mouse_y - (float)y - object->y1 - skin->scroll[0].y1 - (float)(s / 2)) * (float)(object->Pos - object->Data + 1) / (object->y2 - object->y1 - skin->scroll[0].y1 + skin->scroll[0].y2 - (float)s)) + object->Data;
 									if (nValue >= (int)object->Data && nValue <= (int)object->Pos)
 										object->Value = nValue;
 								}
 								break;
 							}
-						case OBJ_HSLIDER:
+							case OBJ_HSLIDER:
 							{
-								if ((float)mouse_x - (float)x <= object->x1 + skin->scroll[1].x1)     // Decrease
+								if ((float)mouse_x - (float)x <= object->x1 + skin->scroll[1].x1) // Decrease
 								{
 									object->Value--;
 									if (object->Value < (int)object->Data)
 										object->Value = (int)object->Data;
 								}
-								else if ((float)mouse_x - (float)x >= object->x2 + skin->scroll[1].x2)     // Increase
+								else if ((float)mouse_x - (float)x >= object->x2 + skin->scroll[1].x2) // Increase
 								{
 									object->Value++;
 									if (object->Value > (int)object->Pos)
 										object->Value = (int)object->Pos;
 								}
-								else                    // Set
+								else // Set
 								{
 									const int s = (int)skin->scroll[2].sw;
-									int nValue = (int)(((float)mouse_x - (float)x - object->x1 - skin->scroll[1].x1 - (float)(s / 2))
-												 * (float)(object->Pos - object->Data + 1)
-												 / (object->x2 - object->x1 - skin->scroll[1].x1 + skin->scroll[1].x2 - (float)s))
-												 + object->Data;
+									int nValue = (int)(((float)mouse_x - (float)x - object->x1 - skin->scroll[1].x1 - (float)(s / 2)) * (float)(object->Pos - object->Data + 1) / (object->x2 - object->x1 - skin->scroll[1].x1 + skin->scroll[1].x2 - (float)s)) + object->Data;
 									if (nValue >= (int)object->Data && nValue <= (int)object->Pos)
 										object->Value = nValue;
 								}
 								break;
 							}
-						case OBJ_LIST:
-							if (skin
-								&& mouse_x - x >= object->x2 + skin->text_background.x2 - skin->scroll[0].sw
-								&& mouse_x - x <= object->x2 + skin->text_background.x2
-								&& mouse_y - y >= object->y1 + skin->text_background.y1
-								&& mouse_y - y <= object->y2 + skin->text_background.y2) // We're on the scroll bar!
-							{
-
-								int TotalScroll = (int)object->Text.size() - (int)((object->y2 - object->y1 - skin->text_background.y1 + skin->text_background.y2) / pCacheFontHeight);
-								if (TotalScroll < 0)
-									TotalScroll = 0;
-
-								if ((float)mouse_y - (float)y <= object->y1 + skin->text_background.y1 + skin->scroll[0].y1)// Scroll up
+							case OBJ_LIST:
+								if (skin && mouse_x - x >= object->x2 + skin->text_background.x2 - skin->scroll[0].sw && mouse_x - x <= object->x2 + skin->text_background.x2 && mouse_y - y >= object->y1 + skin->text_background.y1 && mouse_y - y <= object->y2 + skin->text_background.y2) // We're on the scroll bar!
 								{
-									if (object->Data > 0)
-										object->Data--;
-									if (sound_manager)
-										sound_manager->playTDFSoundNow("SPECIALORDERS.sound");
-								}
-								else
-								{
-									if ((float)mouse_y - (float)y >= object->y2 + skin->text_background.y2 + skin->scroll[0].y2) // Scroll down
+
+									int TotalScroll = (int)object->Text.size() - (int)((object->y2 - object->y1 - skin->text_background.y1 + skin->text_background.y2) / pCacheFontHeight);
+									if (TotalScroll < 0)
+										TotalScroll = 0;
+
+									if ((float)mouse_y - (float)y <= object->y1 + skin->text_background.y1 + skin->scroll[0].y1) // Scroll up
 									{
-										object->Data++;
+										if (object->Data > 0)
+											object->Data--;
 										if (sound_manager)
 											sound_manager->playTDFSoundNow("SPECIALORDERS.sound");
 									}
 									else
-									{							// Set scrolling position
-										object->Data = (int)(0.5f + (float)TotalScroll * ((float)mouse_y - (float)y - object->y1 - skin->text_background.y1 - skin->scroll[0].y1
-																						  - (skin->scroll[0].sw - skin->scroll[ 0 ].x1 + skin->scroll[ 0 ].x2) * 0.5f)
-															 / (object->y2 - object->y1 - skin->text_background.y1 + skin->text_background.y2
-																- skin->scroll[0].y1 + skin->scroll[0].y2 - (skin->scroll[0].sw - skin->scroll[ 0 ].x1 + skin->scroll[ 0 ].x2) * 0.5f));
+									{
+										if ((float)mouse_y - (float)y >= object->y2 + skin->text_background.y2 + skin->scroll[0].y2) // Scroll down
+										{
+											object->Data++;
+											if (sound_manager)
+												sound_manager->playTDFSoundNow("SPECIALORDERS.sound");
+										}
+										else
+										{ // Set scrolling position
+											object->Data = (int)(0.5f + (float)TotalScroll * ((float)mouse_y - (float)y - object->y1 - skin->text_background.y1 - skin->scroll[0].y1 - (skin->scroll[0].sw - skin->scroll[0].x1 + skin->scroll[0].x2) * 0.5f) / (object->y2 - object->y1 - skin->text_background.y1 + skin->text_background.y2 - skin->scroll[0].y1 + skin->scroll[0].y2 - (skin->scroll[0].sw - skin->scroll[0].x1 + skin->scroll[0].x2) * 0.5f));
+										}
 									}
+									if (object->Data > (unsigned int)TotalScroll)
+										object->Data = (unsigned int)TotalScroll;
 								}
-								if (object->Data > (unsigned int)TotalScroll)
-									object->Data = (unsigned int)TotalScroll;
-							}
-							else
-							{
-								if (skin && (
-										mouse_x - x <= object->x1 + skin->text_background.x1
-										|| mouse_x - x >= object->x2 + skin->text_background.x2
-										|| mouse_y - y <= object->y1 + skin->text_background.y1
-										|| mouse_y - y >= object->y2 + skin->text_background.y2))			// We're on ListBox decoration!
-									break;
-								object->Pos = (uint32) (((float)mouse_y - (float)y - object->y1 - (skin ? skin->text_background.y1 : 4)) / pCacheFontHeight + (float)object->Data);
+								else
+								{
+									if (skin && (mouse_x - x <= object->x1 + skin->text_background.x1 || mouse_x - x >= object->x2 + skin->text_background.x2 || mouse_y - y <= object->y1 + skin->text_background.y1 || mouse_y - y >= object->y2 + skin->text_background.y2)) // We're on ListBox decoration!
+										break;
+									object->Pos = (uint32)(((float)mouse_y - (float)y - object->y1 - (skin ? skin->text_background.y1 : 4)) / pCacheFontHeight + (float)object->Data);
+									object->Etat = true;
+								}
+								break;
+
+							case OBJ_TA_BUTTON:
+								if (object->nb_stages > 0)
+									object->current_state = (++object->current_state) % object->nb_stages;
 								object->Etat = true;
-							}
-							break;
+								break;
 
-						case OBJ_TA_BUTTON:
-							if (object->nb_stages > 0)
-								object->current_state = (++object->current_state) % object->nb_stages;
-							object->Etat = true;
-							break;
+							case OBJ_BOX:	// Rectangle
+							case OBJ_IMG:	// Image
+							case OBJ_BUTTON: // Boutton
+								if (was_on_floating_menu)
+									break;
+								object->Etat = true;
+								break;
 
-						case OBJ_BOX:			// Rectangle
-						case OBJ_IMG:			// Image
-						case OBJ_BUTTON:		// Boutton
-							if (was_on_floating_menu)	break;
-							object->Etat = true;
-							break;
-
-						case OBJ_OPTIONC:		// Case à cocher
-							if (was_on_floating_menu)	break;
-							if (skin && skin->checkbox[0].tex && skin->checkbox[1].tex)
-							{
-								if ((float)mouse_x <= (float)x + object->x1 + skin->checkbox[object->Etat ? 1 : 0].sw && (float)mouse_y <= (float)y + object->y1 + skin->checkbox[object->Etat ? 1 : 0].sh)
+							case OBJ_OPTIONC: // Case à cocher
+								if (was_on_floating_menu)
+									break;
+								if (skin && skin->checkbox[0].tex && skin->checkbox[1].tex)
+								{
+									if ((float)mouse_x <= (float)x + object->x1 + skin->checkbox[object->Etat ? 1 : 0].sw && (float)mouse_y <= (float)y + object->y1 + skin->checkbox[object->Etat ? 1 : 0].sh)
+										object->Etat ^= true;
+								}
+								else if ((float)mouse_x <= (float)x + object->x1 + 12.0f && (float)mouse_y <= (float)y + object->y1 + 12.0f)
 									object->Etat ^= true;
-							}
-							else
-								if ((float)mouse_x <= (float)x + object->x1 + 12.0f && (float)mouse_y <= (float)y + object->y1 + 12.0f)
-									object->Etat ^= true;
-							if (object->Func != NULL)
-								(*object->Func)(object->Etat);	// Lance la fonction associée
-							break;
-
-						case OBJ_OPTIONB:		// Bouton d'option
-							if (was_on_floating_menu)	break;
-							if (skin && skin->option[0].tex && skin->option[1].tex)
-							{
-								if ((float)mouse_x <= (float)x + object->x1 + skin->option[object->Etat ? 1 : 0].sw
-									&& (float)mouse_y <= (float)y + object->y1 + skin->option[object->Etat ? 1 : 0].sh)
-									object->Etat ^= true;
-							}
-							else
-								if ((float)mouse_x <= (float)x + object->x1 + 12.0f && (float)mouse_y <= (float)y + object->y1 + 12.0f)
-									object->Etat ^= true;
-							if (object->Func != NULL)
-								(*object->Func)(object->Etat);	// Lance la fonction associée
-							break;
-
-						case OBJ_FMENU:			// Menu Flottant
-							if ((float)mouse_y >= (float)y + object->y1 + (skin ? skin->menu_background.y1 : 0.0f) + 4.0f
-								&& (float)mouse_y <= (float)y + object->y2 + (skin ? skin->menu_background.y2 : 0.0f) - 4.0f)
-							{
-								index = (int)(((float)mouse_y - (float)y - object->y1 - 4.0f - (skin ? skin->menu_background.y1 : 0.0f)) / pCacheFontHeight);
-								if (index >= object->Text.size())
-									index = (int)object->Text.size() - 1;
 								if (object->Func != NULL)
-									(*object->Func)(index);		// Lance la fonction associée
-							}
-							break;
+									(*object->Func)(object->Etat); // Lance la fonction associée
+								break;
 
-						case OBJ_MENU:			// Menu déroulant
+							case OBJ_OPTIONB: // Bouton d'option
+								if (was_on_floating_menu)
+									break;
+								if (skin && skin->option[0].tex && skin->option[1].tex)
+								{
+									if ((float)mouse_x <= (float)x + object->x1 + skin->option[object->Etat ? 1 : 0].sw && (float)mouse_y <= (float)y + object->y1 + skin->option[object->Etat ? 1 : 0].sh)
+										object->Etat ^= true;
+								}
+								else if ((float)mouse_x <= (float)x + object->x1 + 12.0f && (float)mouse_y <= (float)y + object->y1 + 12.0f)
+									object->Etat ^= true;
+								if (object->Func != NULL)
+									(*object->Func)(object->Etat); // Lance la fonction associée
+								break;
+
+							case OBJ_FMENU: // Menu Flottant
+								if ((float)mouse_y >= (float)y + object->y1 + (skin ? skin->menu_background.y1 : 0.0f) + 4.0f && (float)mouse_y <= (float)y + object->y2 + (skin ? skin->menu_background.y2 : 0.0f) - 4.0f)
+								{
+									index = (int)(((float)mouse_y - (float)y - object->y1 - 4.0f - (skin ? skin->menu_background.y1 : 0.0f)) / pCacheFontHeight);
+									if (index >= object->Text.size())
+										index = (int)object->Text.size() - 1;
+									if (object->Func != NULL)
+										(*object->Func)(index); // Lance la fonction associée
+								}
+								break;
+
+							case OBJ_MENU: // Menu déroulant
 							{
 								float m_width = 168.0f;
 								if (skin)
 								{
-									for (unsigned int e = 0 ; e < object->Text.size() - (1 + object->Pos) ; e++)
-										m_width = Math::Max(m_width, gui_font->length(object->Text[ e ]));
+									for (unsigned int e = 0; e < object->Text.size() - (1 + object->Pos); e++)
+										m_width = Math::Max(m_width, gui_font->length(object->Text[e]));
 
 									m_width += skin->menu_background.x1 - skin->menu_background.x2;
 								}
 								else
 									m_width = 168.0f;
-								if ((float)mouse_x >= (float)x + object->x1 + (skin ? skin->menu_background.x1 : 0.0f)
-									&& (float)mouse_x <= (float)x + object->x1 + m_width + (skin ? skin->menu_background.x2 : 0.0f)
-									&& (float)mouse_y > (float)y + object->y2 + (skin ? skin->menu_background.y1 : 0.0f)
-									&& (float)mouse_y <= (float)y + object->y2 + (skin ? skin->menu_background.y2 : 0.0f) + 1.0f + pCacheFontHeight * (float)object->Text.size()
-									&& object->Etat)
+								if ((float)mouse_x >= (float)x + object->x1 + (skin ? skin->menu_background.x1 : 0.0f) && (float)mouse_x <= (float)x + object->x1 + m_width + (skin ? skin->menu_background.x2 : 0.0f) && (float)mouse_y > (float)y + object->y2 + (skin ? skin->menu_background.y1 : 0.0f) && (float)mouse_y <= (float)y + object->y2 + (skin ? skin->menu_background.y2 : 0.0f) + 1.0f + pCacheFontHeight * (float)object->Text.size() && object->Etat)
 								{
 									index = (int)(((float)mouse_y - (float)y - object->y2 - 5.0f - (skin ? skin->menu_background.y1 : 0.0f)) / pCacheFontHeight + (float)object->Pos);
 									if (index >= (unsigned int)(object->Text.size() - 1))
 										index = (int)object->Text.size() - 2;
 									if (object->Func != NULL)
-										(*object->Func)(index);		// Lance la fonction associée
+										(*object->Func)(index); // Lance la fonction associée
 									object->Value = object->Data;
 									object->Etat = false;
 									close_all = true;
@@ -1332,15 +1268,15 @@ namespace TA3D
 							}
 							break;
 
-						default:
-							object->Etat = true;
+							default:
+								object->Etat = true;
 						}
 						// Send a signal to the interface (the OnClick signal defined at initialization time)
 						for (unsigned int cur = 0; cur < object->OnClick.size(); ++cur)
 							I_Msg(TA3D::TA3D_IM_GUI_MSG, object->OnClick[cur]);
 					}
-					else if (object->MouseOn)			// Send a signal to the interface (the OnHover signal defined at initialization time)
-						for (unsigned int cur = 0 ; cur < object->OnHover.size(); cur++)
+					else if (object->MouseOn) // Send a signal to the interface (the OnHover signal defined at initialization time)
+						for (unsigned int cur = 0; cur < object->OnHover.size(); cur++)
 							I_Msg(TA3D::TA3D_IM_GUI_MSG, object->OnHover[cur]);
 				}
 
@@ -1352,7 +1288,7 @@ namespace TA3D
 						unsigned int target = Substr(object->SendDataTo[cur], 0, e).to<unsigned int>();
 						if (target < pObjects.size())
 						{
-							if (Substr(object->SendDataTo[cur], e+1, object->SendDataTo[cur].length()-e) == "data")
+							if (Substr(object->SendDataTo[cur], e + 1, object->SendDataTo[cur].length() - e) == "data")
 								pObjects[target]->Data = object->Data;
 							else
 								pObjects[target]->Pos = object->Data;
@@ -1367,7 +1303,7 @@ namespace TA3D
 						unsigned int target = Substr(object->SendPosTo[cur], 0, e).to<unsigned int>();
 						if (target < pObjects.size())
 						{
-							if (Substr(object->SendPosTo[cur], e+1, object->SendPosTo[cur].length()-e) == "data")
+							if (Substr(object->SendPosTo[cur], e + 1, object->SendPosTo[cur].length() - e) == "data")
 								pObjects[target]->Data = object->Pos;
 							else
 								pObjects[target]->Pos = object->Pos;
@@ -1387,9 +1323,6 @@ namespace TA3D
 			y += scrolling;
 			return IsOnGUI;
 		}
-
-
-
 
 		uint32 WND::msg(const String& message)
 		{
@@ -1428,8 +1361,6 @@ namespace TA3D
 			return INTERFACE_RESULT_CONTINUE;
 		}
 
-
-
 		bool WND::get_state(const String& message)
 		{
 			MutexLocker locker(pMutex);
@@ -1460,18 +1391,18 @@ namespace TA3D
 					{
 						String result = obj->Text[0];
 						for (size_t i = 1; i < obj->Text.size(); ++i)
-							result << '\n' << obj->Text[i];
+							result << '\n'
+								   << obj->Text[i];
 						return result;
 					}
-					return  obj->Text[0];
+					return obj->Text[0];
 				}
 				return nullptr;
 			}
 			return (message.empty()) ? Title : nullptr;
 		}
 
-
-		GUIOBJ::Ptr WND::doGetObject(const String &message)
+		GUIOBJ::Ptr WND::doGetObject(const String& message)
 		{
 			if (message.empty())
 				return GUIOBJ::Ptr();
@@ -1480,7 +1411,7 @@ namespace TA3D
 			return (e >= 0) ? pObjects[e] : GUIOBJ::Ptr();
 		}
 
-		GUIOBJ::Ptr WND::get_object(const String &message)
+		GUIOBJ::Ptr WND::get_object(const String& message)
 		{
 			if (message.empty())
 				return GUIOBJ::Ptr();
@@ -1493,9 +1424,7 @@ namespace TA3D
 			return (e >= 0) ? pObjects[e] : GUIOBJ::Ptr();
 		}
 
-
-
-		void WND::load_gui(const String& filename, TA3D::UTILS::HashMap< std::vector< TA3D::Interfaces::GfxTexture >* >::Dense &gui_hashtable)
+		void WND::load_gui(const String& filename, TA3D::UTILS::HashMap<std::vector<TA3D::Interfaces::GfxTexture>*>::Dense& gui_hashtable)
 		{
 			ingame_window = true;
 
@@ -1510,7 +1439,7 @@ namespace TA3D
 			x = wndFile.pullAsInt("gadget0.common.xpos");
 			y = wndFile.pullAsInt("gadget0.common.ypos");
 
-			width  = wndFile.pullAsInt("gadget0.common.width");
+			width = wndFile.pullAsInt("gadget0.common.width");
 			height = wndFile.pullAsInt("gadget0.common.height");
 
 			float x_factor = 1.0f;
@@ -1528,18 +1457,18 @@ namespace TA3D
 			if (!background)
 			{
 				background = Gaf::ToTexture(String("anims\\") << Name, panel, &w, &h, true);
-				if (background == 0)		// Try GAF-like directory structure
+				if (background == 0) // Try GAF-like directory structure
 					background = Gaf::ToTexture(String("anims\\") << Name << ".gaf", panel, &w, &h, true);
-				if (background == 0)		// Try GAF-like directory structure
+				if (background == 0) // Try GAF-like directory structure
 					background = Gaf::ToTexture("anims\\commongui", panel, &w, &h, true);
 				if (background == 0)
 					background = Gaf::ToTexture("anims\\commongui.gaf", panel, &w, &h, true);
 				if (background == 0)
 				{
 					String::Vector file_list;
-					VFS::Instance()->getDirlist("anims\\*", file_list);				// GAF-like directories
-					VFS::Instance()->getFilelist("anims\\*.gaf", file_list);		// Normal GAF files
-					for (String::Vector::const_iterator i = file_list.begin(); i != file_list.end() && background == 0 ; ++i)
+					VFS::Instance()->getDirlist("anims\\*", file_list);		 // GAF-like directories
+					VFS::Instance()->getFilelist("anims\\*.gaf", file_list); // Normal GAF files
+					for (String::Vector::const_iterator i = file_list.begin(); i != file_list.end() && background == 0; ++i)
 					{
 						LOG_DEBUG("trying(1) " << *i << " (" << Name << ")");
 						background = Gaf::ToTexture(*i, panel, &w, &h, true, FILTER_LINEAR);
@@ -1561,7 +1490,7 @@ namespace TA3D
 			pObjects.reserve(NbObj);
 
 			String obj_key;
-			for (unsigned int i = 0; i < NbObj ; ++i)
+			for (unsigned int i = 0; i < NbObj; ++i)
 			{
 				GUIOBJ::Ptr object = new GUIOBJ();
 				pObjects.push_back(object);
@@ -1573,10 +1502,10 @@ namespace TA3D
 				object->Name = wndFile.pullAsString(String(obj_key) << "common.name", String("gadget") << (i + 1));
 				obj_hashtable[ToLower(object->Name)] = i + 1;
 
-				int X1 = (int)((float)wndFile.pullAsInt(String(obj_key) << "common.xpos")   * x_factor); // Reads data from TDF
-				int Y1 = (int)((float)wndFile.pullAsInt(String(obj_key) << "common.ypos")   * y_factor);
-				int W  = (int)((float)wndFile.pullAsInt(String(obj_key) << "common.width")  * x_factor - 1);
-				int H  = (int)((float)wndFile.pullAsInt(String(obj_key) << "common.height") * y_factor - 1);
+				int X1 = (int)((float)wndFile.pullAsInt(String(obj_key) << "common.xpos") * x_factor); // Reads data from TDF
+				int Y1 = (int)((float)wndFile.pullAsInt(String(obj_key) << "common.ypos") * y_factor);
+				int W = (int)((float)wndFile.pullAsInt(String(obj_key) << "common.width") * x_factor - 1);
+				int H = (int)((float)wndFile.pullAsInt(String(obj_key) << "common.height") * y_factor - 1);
 
 				//float size = Math::Min(x_factor, y_factor);
 				uint32 obj_flags = 0;
@@ -1607,7 +1536,7 @@ namespace TA3D
 					if (!result)
 					{
 						Gaf::ToTexturesList(gaf_imgs, String("anims\\") << Name, object->Name, t_w, t_h, true, FILTER_LINEAR);
-						if (!gaf_imgs.size())		// Try GAF-like directory
+						if (!gaf_imgs.size()) // Try GAF-like directory
 							Gaf::ToTexturesList(gaf_imgs, String("anims\\") << Name << ".gaf", object->Name, t_w, t_h, true, FILTER_LINEAR);
 						if (!gaf_imgs.size())
 						{
@@ -1622,9 +1551,9 @@ namespace TA3D
 						if (!gaf_imgs.size())
 						{
 							String::Vector file_list;
-							VFS::Instance()->getDirlist("anims\\*", file_list);				// GAF-like directories
-							VFS::Instance()->getFilelist("anims\\*.gaf", file_list);		// Normal GAF files
-							for (String::Vector::const_iterator e = file_list.begin() ; e != file_list.end() && gaf_imgs.size() == 0 ; ++e)
+							VFS::Instance()->getDirlist("anims\\*", file_list);		 // GAF-like directories
+							VFS::Instance()->getFilelist("anims\\*.gaf", file_list); // Normal GAF files
+							for (String::Vector::const_iterator e = file_list.begin(); e != file_list.end() && gaf_imgs.size() == 0; ++e)
 							{
 								LOG_DEBUG("trying(0) " << *e << " (" << Name << ")");
 								Gaf::ToTexturesList(gaf_imgs, *e, object->Name, t_w, t_h, true, FILTER_LINEAR);
@@ -1636,7 +1565,7 @@ namespace TA3D
 					else
 					{
 						gaf_imgs.resize(result->size());
-						for (unsigned int e = 0 ; e < result->size() ; ++e)
+						for (unsigned int e = 0; e < result->size(); ++e)
 						{
 							gaf_imgs[e] = (*result)[e].tex;
 							t_w[e] = (*result)[e].width;
@@ -1676,7 +1605,7 @@ namespace TA3D
 						{
 							if (obj_type == TA_ID_BLANK_IMG || obj_type == TA_ID_IMG)
 							{
-								object->create_img((float)X1, (float)Y1, (float)X1 + (float)W, (float)Y1 + (float)H, gfx->load_texture(wndFile.pullAsString(String(obj_key) << "source"),FILTER_LINEAR));
+								object->create_img((float)X1, (float)Y1, (float)X1 + (float)W, (float)Y1 + (float)H, gfx->load_texture(wndFile.pullAsString(String(obj_key) << "source"), FILTER_LINEAR));
 								object->destroy_img = object->Data != 0 ? true : false;
 							}
 							else
@@ -1699,7 +1628,6 @@ namespace TA3D
 			}
 		}
 
-
 		void WND::print(std::ostream& out)
 		{
 			out << "[Window]\n{\n";
@@ -1707,9 +1635,9 @@ namespace TA3D
 			out << "\ty = " << y << "\n";
 			out << "\tname = " << Name << "\n";
 			out << "\ttitle = " << Title << "\n";
-			out << "}\n" << std::endl;
+			out << "}\n"
+				<< std::endl;
 		}
-
 
 		void WND::load_tdf(const String& filename, Skin* skin)
 		{
@@ -1738,7 +1666,7 @@ namespace TA3D
 					x_factor = ((float)gfx->width) / (float)ref_width;
 				if (ref_height > 0.0f)
 					y_factor = ((float)gfx->height) / (float)ref_height;
-				width  = (int)((float)width  * x_factor);
+				width = (int)((float)width * x_factor);
 				height = (int)((float)height * y_factor);
 				x = (int)((float)x * x_factor);
 				y = (int)((float)y * y_factor);
@@ -1759,7 +1687,7 @@ namespace TA3D
 				y = (SCREEN_H - height) >> 1;
 			}
 
-			size_factor = (float)gfx->height / 600.0f;			// For title bar
+			size_factor = (float)gfx->height / 600.0f; // For title bar
 
 			ingame_window = wndFile.pullAsBool("window.ingame", false);
 
@@ -1781,7 +1709,7 @@ namespace TA3D
 				bkg_h = skin->bkg_h;
 				delete_gltex = false;
 			}
-			color = wndFile.pullAsInt("window.color", delete_gltex ?  0xFFFFFFFF : makeacol(0x7F, 0x7F, 0x7F, 0xFF));
+			color = wndFile.pullAsInt("window.color", delete_gltex ? 0xFFFFFFFF : makeacol(0x7F, 0x7F, 0x7F, 0xFF));
 			FIX_COLOR(color);
 
 			pObjects.clear();
@@ -1792,7 +1720,7 @@ namespace TA3D
 			String::Vector Entry;
 			String entryList;
 
-			for (unsigned int i = 0 ; wndFile.exists(String("widget") << i) ; ++i) // Loads each object
+			for (unsigned int i = 0; wndFile.exists(String("widget") << i); ++i) // Loads each object
 			{
 				obj_key.clear();
 				obj_key << "window.widget" << i << ".";
@@ -1811,7 +1739,7 @@ namespace TA3D
 				obj_hashtable[ToLower(object->Name)] = i + 1;
 				object->help_msg = I18N::Translate(wndFile.pullAsString(String(obj_key) << "help"));
 
-				float X1 = wndFile.pullAsFloat(String(obj_key) << "x1") * x_factor;				// Reads data from TDF
+				float X1 = wndFile.pullAsFloat(String(obj_key) << "x1") * x_factor; // Reads data from TDF
 				float Y1 = wndFile.pullAsFloat(String(obj_key) << "y1") * y_factor;
 				float X2 = wndFile.pullAsFloat(String(obj_key) << "x2") * x_factor;
 				float Y2 = wndFile.pullAsFloat(String(obj_key) << "y2") * y_factor;
@@ -1822,10 +1750,14 @@ namespace TA3D
 				uint32 obj_flags = 0;
 				uint32 obj_negative_flags = 0;
 
-				if (X1 < 0) X1 += (float)width;
-				if (X2 < 0) X2 += (float)width;
-				if (Y1 < 0) Y1 += (float)height;
-				if (Y2 < 0) Y2 += (float)height;
+				if (X1 < 0)
+					X1 += (float)width;
+				if (X2 < 0)
+					X2 += (float)width;
+				if (Y1 < 0)
+					Y1 += (float)height;
+				if (Y2 < 0)
+					Y2 += (float)height;
 
 				if (wndFile.pullAsBool(String(obj_key) << "can be clicked"))
 					obj_flags |= FLAG_CAN_BE_CLICKED;
@@ -1857,7 +1789,7 @@ namespace TA3D
 
 				switch (obj_type.first())
 				{
-				case 'B' :
+					case 'B':
 					{
 						if (obj_type == "BUTTON")
 						{
@@ -1871,13 +1803,13 @@ namespace TA3D
 						}
 						break;
 					}
-				case 'F' :
+					case 'F':
 					{
 						if (obj_type == "FMENU")
 							object->create_menu(X1, Y1, Entry, NULL, size);
 						break;
 					}
-				case 'H' :
+					case 'H':
 					{
 						if (obj_type == "HSLIDER")
 						{
@@ -1886,7 +1818,7 @@ namespace TA3D
 						}
 						break;
 					}
-				case 'I' :
+					case 'I':
 					{
 						if (obj_type == "IMG")
 						{
@@ -1895,7 +1827,7 @@ namespace TA3D
 						}
 						break;
 					}
-				case 'M' :
+					case 'M':
 					{
 						if (obj_type == "MENU")
 						{
@@ -1910,7 +1842,7 @@ namespace TA3D
 							std::vector<uint32> t_w;
 							std::vector<uint32> t_h;
 
-							for (String::Vector::iterator e = imageNames.begin() ; e != imageNames.end() ; e++)
+							for (String::Vector::iterator e = imageNames.begin(); e != imageNames.end(); e++)
 							{
 								uint32 tw, th;
 								GLuint texHandle = gfx->load_texture(*e, FILTER_LINEAR, &tw, &th);
@@ -1929,7 +1861,7 @@ namespace TA3D
 								object->y2 = Y1 + (float)t_h[e] * size_factor * y_factor;
 								object->gltex_states[e].width = (int)((float)t_w[e] * size_factor * x_factor);
 								object->gltex_states[e].height = (int)((float)t_h[e] * size_factor * x_factor);
-								object->gltex_states[e].destroy_tex = true;       // Make sure it'll be destroyed
+								object->gltex_states[e].destroy_tex = true; // Make sure it'll be destroyed
 							}
 							break;
 						}
@@ -1946,7 +1878,7 @@ namespace TA3D
 						}
 						break;
 					}
-				case 'L' :
+					case 'L':
 					{
 						if (obj_type == "LINE")
 						{
@@ -1958,7 +1890,7 @@ namespace TA3D
 							object->create_list(X1, Y1, X2, Y2, Entry, size);
 						break;
 					}
-				case 'O' :
+					case 'O':
 					{
 						if (obj_type == "OPTIONB")
 						{
@@ -1972,13 +1904,13 @@ namespace TA3D
 						}
 						break;
 					}
-				case 'P' :
+					case 'P':
 					{
 						if (obj_type == "PBAR")
 							object->create_pbar(X1, Y1, X2, Y2, val, size);
 						break;
 					}
-				case 'T' :
+					case 'T':
 					{
 						if (obj_type == "TEXTEDITOR")
 						{
@@ -2004,7 +1936,7 @@ namespace TA3D
 						}
 						break;
 					}
-				case 'V' :
+					case 'V':
 					{
 						if (obj_type == "VSLIDER")
 						{
@@ -2026,7 +1958,6 @@ namespace TA3D
 			}
 		}
 
-
 		unsigned int WND::size()
 		{
 			MutexLocker locker(pMutex);
@@ -2039,8 +1970,6 @@ namespace TA3D
 			return (unsigned int)pObjects.size();
 		}
 
-
-
 		void WND::focus(bool value)
 		{
 			MutexLocker locker(pMutex);
@@ -2049,15 +1978,12 @@ namespace TA3D
 				(*i)->Focus = value;
 		}
 
-
 		GUIOBJ::Ptr WND::object(unsigned int indx)
 		{
 			MutexLocker locker(pMutex);
 			assert(indx < pObjects.size());
 			return pObjects[indx];
 		}
-
-
 
 	} // namespace Gui
 } // namespace TA3D

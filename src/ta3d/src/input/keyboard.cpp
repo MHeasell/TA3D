@@ -25,14 +25,13 @@ namespace TA3D
 {
 	namespace VARS
 	{
-		int						ascii_to_scancode[ 256 ];
-		bool                    key[0x1000];
-		bool                    prevkey_down[0x1000];
-		bool                    prevkey_up[0x1000];
-		std::deque<uint32>      keybuf;
-		int                     remap[0x1000];
+		int ascii_to_scancode[256];
+		bool key[0x1000];
+		bool prevkey_down[0x1000];
+		bool prevkey_up[0x1000];
+		std::deque<uint32> keybuf;
+		int remap[0x1000];
 	}
-
 
 	uint32 readkey()
 	{
@@ -64,14 +63,14 @@ namespace TA3D
 		memset(remap, 0, 0x1000 * sizeof(int));
 
 		remap[KEY_ENTER_PAD] = KEY_ENTER;
-		remap[38]  = KEY_1;
+		remap[38] = KEY_1;
 		remap[233] = KEY_2;
-		remap[34]  = KEY_3;
-		remap[39]  = KEY_4;
-		remap[40]  = KEY_5;
-		remap[45]  = KEY_6;
+		remap[34] = KEY_3;
+		remap[39] = KEY_4;
+		remap[40] = KEY_5;
+		remap[45] = KEY_6;
 		remap[232] = KEY_7;
-		remap[95]  = KEY_8;
+		remap[95] = KEY_8;
 		remap[231] = KEY_9;
 		remap[224] = KEY_0;
 
@@ -109,7 +108,7 @@ namespace TA3D
 		ascii_to_scancode[int('z')] = KEY_Z;
 
 		for (int i = 0; i < 26; ++i)
-			ascii_to_scancode[int('A' + i) ] = ascii_to_scancode[int('a' + i)];
+			ascii_to_scancode[int('A' + i)] = ascii_to_scancode[int('a' + i)];
 
 		ascii_to_scancode[int('0')] = KEY_0;
 		ascii_to_scancode[int('1')] = KEY_1;
@@ -127,7 +126,6 @@ namespace TA3D
 		ascii_to_scancode[27] = KEY_ESC;
 	}
 
-
 	void set_key_down(uint16 keycode)
 	{
 		if (keycode >= 0x1000)
@@ -138,7 +136,6 @@ namespace TA3D
 		VARS::key[keycode] = true;
 	}
 
-
 	void set_key_up(uint16 keycode)
 	{
 		if (keycode >= 0x1000)
@@ -148,7 +145,6 @@ namespace TA3D
 			VARS::key[remap[keycode]] = false;
 		VARS::key[keycode] = false;
 	}
-
 
 	bool key_down_event(uint16 keycode)
 	{
@@ -163,7 +159,6 @@ namespace TA3D
 		prevkey_down[keycode] = key[keycode];
 		return false;
 	}
-
 
 	bool key_up_event(uint16 keycode)
 	{
@@ -184,9 +179,4 @@ namespace TA3D
 		return key_down_event(keycode) || key_up_event(keycode);
 	}
 
-
-
-
-
 } // namespace TA3D
-

@@ -25,69 +25,63 @@
 namespace TA3D
 {
 
+	GameData::GameData()
+		: map_filename(), nb_players(2), max_unit_per_player(2000)
+	{
+		saved_file.clear();
 
-
-    GameData::GameData()
-		:map_filename(), nb_players(2), max_unit_per_player(2000)
-    {
-        saved_file.clear();
-
-        use_only.clear();
-        campaign = false;
-        fog_of_war = FOW_DISABLED;
+		use_only.clear();
+		campaign = false;
+		fog_of_war = FOW_DISABLED;
 		game_script = "scripts\\game\\default.lua";
 
-        team.resize(TA3D_PLAYERS_HARD_LIMIT);
-        player_names.resize(TA3D_PLAYERS_HARD_LIMIT);
-        player_sides.resize(TA3D_PLAYERS_HARD_LIMIT);
-        player_control.resize(TA3D_PLAYERS_HARD_LIMIT);
-        ai_level.resize(TA3D_PLAYERS_HARD_LIMIT);
-        energy.resize(TA3D_PLAYERS_HARD_LIMIT);
-        metal.resize(TA3D_PLAYERS_HARD_LIMIT);
-        ready.resize(TA3D_PLAYERS_HARD_LIMIT);
-        player_network_id.resize(TA3D_PLAYERS_HARD_LIMIT);
+		team.resize(TA3D_PLAYERS_HARD_LIMIT);
+		player_names.resize(TA3D_PLAYERS_HARD_LIMIT);
+		player_sides.resize(TA3D_PLAYERS_HARD_LIMIT);
+		player_control.resize(TA3D_PLAYERS_HARD_LIMIT);
+		ai_level.resize(TA3D_PLAYERS_HARD_LIMIT);
+		energy.resize(TA3D_PLAYERS_HARD_LIMIT);
+		metal.resize(TA3D_PLAYERS_HARD_LIMIT);
+		ready.resize(TA3D_PLAYERS_HARD_LIMIT);
+		player_network_id.resize(TA3D_PLAYERS_HARD_LIMIT);
 		for (int i = 0; i < TA3D_PLAYERS_HARD_LIMIT; ++i)
-        {
-            energy[i] = metal[i] = 10000;
-            player_network_id[i] = -1;
-            ready[i] = false;
+		{
+			energy[i] = metal[i] = 10000;
+			player_network_id[i] = -1;
+			ready[i] = false;
 			team[i] = uint16(1 << i);
 			player_control[i] = PLAYER_CONTROL_NONE;
 			player_names[i] = I18N::Translate("open");
-        }
-    }
+		}
+	}
 
+	GameData::~GameData()
+	{
+		use_only.clear();
+		map_filename.clear();
+		game_script.clear();
+		nb_players = 0;
+		team.clear();
+		player_names.clear();
+		player_sides.clear();
+		player_control.clear();
+		player_network_id.clear();
+		ai_level.clear();
+		energy.clear();
+		metal.clear();
+		ready.clear();
+		saved_file.clear();
+	}
 
-
-    GameData::~GameData()
-    {
-        use_only.clear();
-        map_filename.clear();
-        game_script.clear();
-        nb_players=0;
-        team.clear();
-        player_names.clear();
-        player_sides.clear();
-        player_control.clear();
-        player_network_id.clear();
-        ai_level.clear();
-        energy.clear();
-        metal.clear();
-        ready.clear();
-        saved_file.clear();
-    }
-
-
-
-    int GameData::net2id(const int id ) const
-    {
-		for( int i = 0 ; i < TA3D_PLAYERS_HARD_LIMIT ; ++i)
-        {
+	int GameData::net2id(const int id) const
+	{
+		for (int i = 0; i < TA3D_PLAYERS_HARD_LIMIT; ++i)
+		{
 			if (player_network_id[i] == id && (player_control[i] == PLAYER_CONTROL_LOCAL_HUMAN || player_control[i] == PLAYER_CONTROL_REMOTE_HUMAN))
-                return i;
-        }
-        return -1;
-    }
+				return i;
+		}
+		return -1;
+	}
 
 	String GameData::serialize() const
 	{
@@ -98,7 +92,7 @@ namespace TA3D
 			 << use_only << ','
 			 << int(fog_of_war) << ','
 			 << nb_players << ',';
-		for(int i = 0 ; i < nb_players ; ++i)
+		for (int i = 0; i < nb_players; ++i)
 		{
 			data << player_names[i] << ','
 				 << player_sides[i] << ','
@@ -116,7 +110,7 @@ namespace TA3D
 		String::Vector args;
 		data.explode(args, ',', false, true, true);
 
-		if (args.size() < 6)		// Not enough fields
+		if (args.size() < 6) // Not enough fields
 		{
 			LOG_ERROR(LOG_PREFIX_GAMEDATA << "not enought fields");
 			return;
@@ -132,7 +126,7 @@ namespace TA3D
 			LOG_ERROR(LOG_PREFIX_GAMEDATA << "player data missing");
 			return;
 		}
-		for(int i = 0 ; i < nb_players ; ++i)
+		for (int i = 0; i < nb_players; ++i)
 		{
 			player_names[i] = args[6 + i * 7];
 			player_sides[i] = args[7 + i * 7];

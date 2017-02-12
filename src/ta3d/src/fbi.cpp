@@ -47,15 +47,12 @@
 #include <omp.h>
 #endif
 
-
 namespace TA3D
 {
 
-
-
 	UnitManager unit_manager;
 
-	inline bool overlaps( int x1, int y1, int w1, int h1, int x2, int y2, int w2, int h2 )
+	inline bool overlaps(int x1, int y1, int w1, int h1, int x2, int y2, int w2, int h2)
 	{
 		const int w = w1 + w2;
 		const int h = h1 + h2;
@@ -71,7 +68,7 @@ namespace TA3D
 		if (index < -1)
 			return;
 
-		if (!BuildList.empty() && nb_unit > 0)		// Vérifie si l'unité n'est pas déjà répertoriée / check if not already there
+		if (!BuildList.empty() && nb_unit > 0) // Vérifie si l'unité n'est pas déjà répertoriée / check if not already there
 		{
 			for (int i = 0; i < nb_unit; ++i)
 			{
@@ -86,23 +83,22 @@ namespace TA3D
 
 		if (p == -1)
 		{
-			if (dl_data == NULL)		// We can't add a menu entry if we don't know where to add it
+			if (dl_data == NULL) // We can't add a menu entry if we don't know where to add it
 			{
 				LOG_ERROR(LOG_PREFIX_RESOURCES << "I can't add this menu entry without a list of available menu buttons");
 				if (Pic)
 					gfx->destroy_texture(Pic);
 				return;
 			}
-			for(int i = 0 ; i <= nb_pages && p == -1 ; ++i)
+			for (int i = 0; i <= nb_pages && p == -1; ++i)
 			{
-				for(uint32 k = 0 ; k < dl_data->size() && p == -1 ; ++k)
+				for (uint32 k = 0; k < dl_data->size() && p == -1; ++k)
 				{
 					bool found = true;
-					for(int j = 0 ; j < nb_unit && found ; ++j)
+					for (int j = 0; j < nb_unit && found; ++j)
 					{
-						if (Pic_p[j] == i
-							&& overlaps(Pic_x[j], Pic_y[j], Pic_w[j], Pic_h[j],
-										(*dl_data)[k].x, (*dl_data)[k].y, (*dl_data)[k].w, (*dl_data)[k].h))
+						if (Pic_p[j] == i && overlaps(Pic_x[j], Pic_y[j], Pic_w[j], Pic_h[j],
+													  (*dl_data)[k].x, (*dl_data)[k].y, (*dl_data)[k].w, (*dl_data)[k].h))
 							found = false;
 					}
 					if (found)
@@ -133,18 +129,18 @@ namespace TA3D
 	{
 		if (name.empty())
 			return 0;
-		
+
 		if (unit_manager.name2gaf.empty())
 		{
 			const String::Vector &animsList = unit_manager.animsList;
 
-			for(String::Vector::const_iterator it = animsList.begin() ; it != animsList.end() ; ++it)
+			for (String::Vector::const_iterator it = animsList.begin(); it != animsList.end(); ++it)
 			{
 				const String &gafName = *it;
 				String::Vector entries;
-				if (VFS::Instance()->getDirlist(String(gafName) << "\\*", entries))				// GAF-like directory
+				if (VFS::Instance()->getDirlist(String(gafName) << "\\*", entries)) // GAF-like directory
 				{
-					for(uint32 i = 0 ; i < entries.size() ; ++i)
+					for (uint32 i = 0; i < entries.size(); ++i)
 					{
 						const String key = Paths::ExtractFileName(entries[i]).toUpper();
 						if (key.empty())
@@ -153,13 +149,13 @@ namespace TA3D
 							unit_manager.name2gaf[key] = gafName;
 					}
 				}
-				else																	// normal GAF
+				else // normal GAF
 				{
-					File* gaf_file = VFS::Instance()->readFile( gafName );
+					File *gaf_file = VFS::Instance()->readFile(gafName);
 					if (gaf_file)
 					{
 						const int nbEntries = Gaf::RawDataEntriesCount(gaf_file);
-						for(int i = 0 ; i < nbEntries ; ++i)
+						for (int i = 0; i < nbEntries; ++i)
 						{
 							const String key = Gaf::RawDataGetEntryName(gaf_file, i).toUpper();
 							if (key.empty())
@@ -177,18 +173,18 @@ namespace TA3D
 		gfx->set_texture_format(gfx->defaultTextureFormat_RGB());
 
 		String key = ToUpper(name);
-		HashMap< String >::Dense::iterator item = unit_manager.name2gaf.find(key);
+		HashMap<String>::Dense::iterator item = unit_manager.name2gaf.find(key);
 		if (item != unit_manager.name2gaf.end())
 		{
 			String::Vector test;
 			if (ToUpper(*item) != ToUpper(gafFileName))
 				test.push_back(gafFileName);
 			test.push_back(*item);
-			for(String::Vector::iterator it = test.begin() ; it != test.end() && tex == 0 ; ++it)
+			for (String::Vector::iterator it = test.begin(); it != test.end() && tex == 0; ++it)
 			{
-				if (it->find(".gaf") != String::npos)						// Is it a normal GAF ?
+				if (it->find(".gaf") != String::npos) // Is it a normal GAF ?
 				{
-					File* gaf_file = VFS::Instance()->readFile( *it );
+					File *gaf_file = VFS::Instance()->readFile(*it);
 					if (gaf_file)
 					{
 						SDL_Surface *img = Gaf::RawDataToBitmap(gaf_file, Gaf::RawDataGetEntryIndex(gaf_file, name), 0);
@@ -205,7 +201,7 @@ namespace TA3D
 						delete gaf_file;
 					}
 				}
-				else								// GAF-like directory
+				else // GAF-like directory
 				{
 					tex = Gaf::ToTexture(*it, name, w, h, true, FILTER_LINEAR);
 				}
@@ -214,7 +210,7 @@ namespace TA3D
 		return tex;
 	}
 
-	void UnitManager::analyse(const String &filename,int unit_index)
+	void UnitManager::analyse(const String &filename, int unit_index)
 	{
 		TDFParser gui_parser(filename, false, false, true);
 
@@ -223,9 +219,9 @@ namespace TA3D
 		while (first >= 0 && number[first] >= '0' && number[first] <= '9')
 			--first;
 		++first;
-		number = Substr(number,first, number.size() - first);
+		number = Substr(number, first, number.size() - first);
 
-		const int page = number.to<int>() - 1;		// Extract the page number
+		const int page = number.to<int>() - 1; // Extract the page number
 
 		const int NbObj = gui_parser.pullAsInt("gadget0.totalgadgets");
 
@@ -236,11 +232,11 @@ namespace TA3D
 		String name;
 		for (int i = 1; i <= NbObj; ++i)
 		{
-			const int attribs = gui_parser.pullAsInt( String("gadget") << i << ".common.commonattribs" );
-			if (!(attribs & 4) && !(attribs & 8))	// Neither a unit nor a weapon
+			const int attribs = gui_parser.pullAsInt(String("gadget") << i << ".common.commonattribs");
+			if (!(attribs & 4) && !(attribs & 8)) // Neither a unit nor a weapon
 				continue;
-			name = gui_parser.pullAsString( String("gadget") << i << ".common.name" );
-			const int idx = (attribs & 4) ? get_unit_index(name) : -1;		// attribs & 4 ==> unit, attribs & 8 ==> weapon
+			name = gui_parser.pullAsString(String("gadget") << i << ".common.name");
+			const int idx = (attribs & 4) ? get_unit_index(name) : -1; // attribs & 4 ==> unit, attribs & 8 ==> weapon
 			if ((attribs & 4) && idx == -1)
 			{
 				if (name != "IGPATCH")
@@ -250,16 +246,14 @@ namespace TA3D
 
 			if (unit_type[unit_index]->canBuild(idx))
 				continue;
-			int w = gui_parser.pullAsInt( String("gadget") << i << ".common.width" );
-			int h = gui_parser.pullAsInt( String("gadget") << i << ".common.height" );
-			const GLuint tex = loadBuildPic( String("anims\\") << unit_type[unit_index]->Unitname << page + 1 << ".gaf", name, &w, &h);
-			const int x = gui_parser.pullAsInt( String("gadget") << i << ".common.xpos" ) + x_offset;
-			const int y = gui_parser.pullAsInt( String("gadget") << i << ".common.ypos" ) + y_offset;
+			int w = gui_parser.pullAsInt(String("gadget") << i << ".common.width");
+			int h = gui_parser.pullAsInt(String("gadget") << i << ".common.height");
+			const GLuint tex = loadBuildPic(String("anims\\") << unit_type[unit_index]->Unitname << page + 1 << ".gaf", name, &w, &h);
+			const int x = gui_parser.pullAsInt(String("gadget") << i << ".common.xpos") + x_offset;
+			const int y = gui_parser.pullAsInt(String("gadget") << i << ".common.ypos") + y_offset;
 			unit_type[unit_index]->AddUnitBuild(idx, x, y, w, h, page, tex);
 		}
 	}
-
-
 
 	void UnitManager::analyse2(File *file)
 	{
@@ -267,25 +261,26 @@ namespace TA3D
 		parser.loadFromMemory("analyse2", file->data(), file->size(), false, false, true);
 		file->close();
 
-		for(int g = 0 ; parser.exists(String("gadget") << g) ; g++)
+		for (int g = 0; parser.exists(String("gadget") << g); g++)
 		{
 			String unitmenu = parser.pullAsString(String("gadget") << g << ".unitmenu");
 			String unitname = parser.pullAsString(String("gadget") << g << ".unitname");
 
-			if (unitmenu.empty() || unitname.empty()) continue;
+			if (unitmenu.empty() || unitname.empty())
+				continue;
 
 			int unit_index = get_unit_index(unitmenu);
 			if (unit_index == -1)
 			{
 				LOG_DEBUG("unit '" << unitmenu << "' not found");
-				continue;		// Au cas où l'unité n'existerait pas
+				continue; // Au cas où l'unité n'existerait pas
 			}
 			int idx = get_unit_index(unitname);
 			if (idx >= 0 && idx < nb_unit)
 			{
 				if (!unit_type[unit_index]->canBuild(idx))
 				{
-					GLuint tex = loadBuildPic( String("anims\\") << unitname << "_gadget.gaf", unitname);
+					GLuint tex = loadBuildPic(String("anims\\") << unitname << "_gadget.gaf", unitname);
 					if (!tex && !unit_type[idx]->glpic && unit_type[idx]->unitpic)
 					{
 						gfx->set_texture_format(gfx->defaultTextureFormat_RGB());
@@ -296,17 +291,19 @@ namespace TA3D
 					if (tex || unit_type[idx]->glpic)
 						unit_type[unit_index]->AddUnitBuild(idx, -1, -1, 64, 64, -1, tex);
 					else
-					{	LOG_DEBUG("no build picture found for unit '" << unitname << "', cannot add it to " << unitmenu << " build menu");	}
+					{
+						LOG_DEBUG("no build picture found for unit '" << unitname << "', cannot add it to " << unitmenu << " build menu");
+					}
 				}
 			}
 			else
-			{	LOG_DEBUG("unit '" << unitname << "' not found, cannot add it to " << unitmenu << " build menu");	}
+			{
+				LOG_DEBUG("unit '" << unitname << "' not found, cannot add it to " << unitmenu << " build menu");
+			}
 		}
 	}
 
-
-
-	UnitType *UnitManager::load_unit(const String &filename)			// Ajoute une nouvelle unité
+	UnitType *UnitManager::load_unit(const String &filename) // Ajoute une nouvelle unité
 	{
 		UnitType *pUnitType = new UnitType();
 		pUnitType->load(filename);
@@ -327,16 +324,14 @@ namespace TA3D
 		return pUnitType;
 	}
 
-
-
 	void UnitManager::gather_build_data()
 	{
 		String::Vector file_list;
-		VFS::Instance()->getFilelist( String(ta3dSideData.download_dir) << "*.tdf", file_list);
+		VFS::Instance()->getFilelist(String(ta3dSideData.download_dir) << "*.tdf", file_list);
 
 		for (String::Vector::const_iterator f = file_list.begin(); f != file_list.end(); ++f) // Cherche un fichier pouvant contenir des informations sur l'unité unit_name
 		{
-			File* file = VFS::Instance()->readFile(*f);		// Lit le fichier
+			File *file = VFS::Instance()->readFile(*f); // Lit le fichier
 			if (file)
 			{
 				analyse2(file);
@@ -351,39 +346,39 @@ namespace TA3D
 		new UnitDataLoader;
 	}
 
-
 	void UnitManager::gather_all_build_data()
 	{
 		animsList.clear();
-		VFS::Instance()->getDirlist("anims\\*", animsList);				// GAF-like directories
-		VFS::Instance()->getFilelist("anims\\*.gaf", animsList);		// normal GAF files
+		VFS::Instance()->getDirlist("anims\\*", animsList);		 // GAF-like directories
+		VFS::Instance()->getFilelist("anims\\*.gaf", animsList); // normal GAF files
 		name2gaf.clear();
 
 		// Cherche un fichier pouvant contenir des informations sur l'unité unit_name
 		for (int i = 0; i < nb_unit; ++i)
 		{
 			String name;
-			for(int n = 1 ; VFS::Instance()->fileExists(name = String(ta3dSideData.guis_dir) << unit_type[i]->Unitname << n << ".gui") ; ++n)
+			for (int n = 1; VFS::Instance()->fileExists(name = String(ta3dSideData.guis_dir) << unit_type[i]->Unitname << n << ".gui"); ++n)
 				analyse(name, i);
 		}
 
 		// Fill build menus with information parsed from the sidedata.tdf file
 		TDFParser sidedata_parser(String(ta3dSideData.gamedata_dir) << "sidedata.tdf", false, true);
-		for (int i = 0 ; i < nb_unit; ++i)
+		for (int i = 0; i < nb_unit; ++i)
 		{
 			int n = 1;
-			while(!sidedata_parser.pullAsString(ToLower(String("canbuild.") << unit_type[i]->Unitname << ".canbuild" << n ) ).empty())  n++;
+			while (!sidedata_parser.pullAsString(ToLower(String("canbuild.") << unit_type[i]->Unitname << ".canbuild" << n)).empty())
+				n++;
 
 			n--;
-			String canbuild = sidedata_parser.pullAsString(ToLower(String("canbuild.") << unit_type[i]->Unitname << ".canbuild" << n ) );
+			String canbuild = sidedata_parser.pullAsString(ToLower(String("canbuild.") << unit_type[i]->Unitname << ".canbuild" << n));
 			while (n > 0)
 			{
-				int idx = get_unit_index( canbuild );
+				int idx = get_unit_index(canbuild);
 				if (idx >= 0 && idx < nb_unit)
 				{
-					if (!unit_type[i]->canBuild(idx))		// Check if it's already in the list
+					if (!unit_type[i]->canBuild(idx)) // Check if it's already in the list
 					{
-						GLuint tex = loadBuildPic( String("anims\\") << canbuild << "_gadget", canbuild);
+						GLuint tex = loadBuildPic(String("anims\\") << canbuild << "_gadget", canbuild);
 						if (!tex && !unit_type[idx]->glpic && unit_type[idx]->unitpic)
 						{
 							unit_type[idx]->glpic = gfx->make_texture(unit_type[idx]->unitpic, FILTER_LINEAR, true);
@@ -395,25 +390,28 @@ namespace TA3D
 						{
 							const int px = ((n - 1) & 1) * 64;
 							const int py = 155 + (((n - 1) >> 1) % 3) * 64;
-							const int p = (n - 1)  / 6;
+							const int p = (n - 1) / 6;
 							unit_type[i]->AddUnitBuild(idx, px, py, 64, 64, p, tex);
 						}
 						else
-						{	LOG_DEBUG("unit '" << canbuild << "' picture not found in build menu for unit '" << unit_type[i]->Unitname << "'");	}
+						{
+							LOG_DEBUG("unit '" << canbuild << "' picture not found in build menu for unit '" << unit_type[i]->Unitname << "'");
+						}
 					}
 				}
 				else
-				{	LOG_DEBUG("unit '" << canbuild << "' not found (" << __FILE__ << " l." << __LINE__ << ')');	}
+				{
+					LOG_DEBUG("unit '" << canbuild << "' not found (" << __FILE__ << " l." << __LINE__ << ')');
+				}
 				--n;
-				canbuild = sidedata_parser.pullAsString( String("canbuild.") << unit_type[i]->Unitname << ".canbuild" << n );
+				canbuild = sidedata_parser.pullAsString(String("canbuild.") << unit_type[i]->Unitname << ".canbuild" << n);
 			}
 		}
 
-		gather_build_data();			// Read additionnal build data
+		gather_build_data(); // Read additionnal build data
 		animsList.clear();
 		name2gaf.clear();
 	}
-
 
 	void UnitManager::load_script_file(const String &unit_name)
 	{
@@ -426,8 +424,7 @@ namespace TA3D
 		unit_type[unit_index]->script = ScriptData::loadScriptFile(String("scripts\\") << uprname);
 	}
 
-
-	void UnitManager::Identify()			// Identifie les pièces aux quelles les scripts font référence
+	void UnitManager::Identify() // Identifie les pièces aux quelles les scripts font référence
 	{
 		for (int i = 0; i < nb_unit; ++i)
 		{
@@ -490,9 +487,9 @@ namespace TA3D
 
 	void UnitType::init()
 	{
-        sweetspot_cached = -1;
+		sweetspot_cached = -1;
 
-        not_used = false;
+		not_used = false;
 		commander = false;
 		selfdestructcountdown = 5;
 
@@ -505,10 +502,10 @@ namespace TA3D
 		isfeature = false;
 		antiweapons = false;
 
-		weapon.clear();         // No weapons
+		weapon.clear(); // No weapons
 		aim_data.clear();
 
-		script = NULL;		// Aucun script
+		script = NULL; // Aucun script
 
 		page = 0;
 
@@ -516,11 +513,11 @@ namespace TA3D
 		nb_unit = 0;
 		BuildList.clear();
 		PicList.clear();
-		Pic_x.clear();				// Coordinates
+		Pic_x.clear(); // Coordinates
 		Pic_y.clear();
-		Pic_w.clear();				// Coordinates
+		Pic_w.clear(); // Coordinates
 		Pic_h.clear();
-		Pic_p.clear();				// Page where the pic has to be shown
+		Pic_p.clear(); // Page where the pic has to be shown
 
 		dl_data = NULL;
 
@@ -564,75 +561,74 @@ namespace TA3D
 		norestrict = false;
 		BuildAngle = 10;
 		canresurrect = false;
-		Designation_Name.clear();	// Nom visible de l'unité
-		Description.clear();		// Description
-		BuildCostEnergy = 0;		// Energie nécessaire pour la construire
-		BuildCostMetal = 0;			// Metal nécessaire pour la construire
-		MaxDamage = 10;				// Points de dégats maximum que l'unité peut encaisser
-		EnergyUse = 0;				// Energie nécessaire pour faire quelque chose
-		BuildTime = 0;				// Temps de construction
-		WorkerTime = 1;				// Vitesse de construction
-		AutoFire = false;			// Tire automatique
-		SightDistance = 50;			// Distance maximale de vue de l'unité
-		RadarDistance = 0;			// Distance maximale de detection radar
-		RadarDistanceJam = 0;		// For Radar jammers
-		EnergyStorage = 0;			// Quantité d'énergie stockable par l'unité
-		MetalStorage = 0;			// Quantité de metal stockable par l'unité
-		ExplodeAs.clear();			// Type d'explosion lorsque l'unité est détruite
-		SelfDestructAs.clear();		// Type d'explosion lors de l'autodestruction
-		Corpse.clear();				// Restes de l'unité
-		UnitNumber = 0;				// ID de l'unité
-		canmove = false;			// Indique si l'unité peut bouger
-		canpatrol = false;			// si elle peut patrouiller
-		canstop = false;			// si elle peut s'arrêter
-		canguard = false;			// si elle peut garder une autre unité
-		MaxVelocity = 1;			// Vitesse maximale
-		BrakeRate = 1;				// Vitesse de freinage
-		Acceleration = 1;			// Accélération
-		TurnRate = 1;				// Vitesse de tournage
+		Designation_Name.clear(); // Nom visible de l'unité
+		Description.clear();	  // Description
+		BuildCostEnergy = 0;	  // Energie nécessaire pour la construire
+		BuildCostMetal = 0;		  // Metal nécessaire pour la construire
+		MaxDamage = 10;			  // Points de dégats maximum que l'unité peut encaisser
+		EnergyUse = 0;			  // Energie nécessaire pour faire quelque chose
+		BuildTime = 0;			  // Temps de construction
+		WorkerTime = 1;			  // Vitesse de construction
+		AutoFire = false;		  // Tire automatique
+		SightDistance = 50;		  // Distance maximale de vue de l'unité
+		RadarDistance = 0;		  // Distance maximale de detection radar
+		RadarDistanceJam = 0;	 // For Radar jammers
+		EnergyStorage = 0;		  // Quantité d'énergie stockable par l'unité
+		MetalStorage = 0;		  // Quantité de metal stockable par l'unité
+		ExplodeAs.clear();		  // Type d'explosion lorsque l'unité est détruite
+		SelfDestructAs.clear();   // Type d'explosion lors de l'autodestruction
+		Corpse.clear();			  // Restes de l'unité
+		UnitNumber = 0;			  // ID de l'unité
+		canmove = false;		  // Indique si l'unité peut bouger
+		canpatrol = false;		  // si elle peut patrouiller
+		canstop = false;		  // si elle peut s'arrêter
+		canguard = false;		  // si elle peut garder une autre unité
+		MaxVelocity = 1;		  // Vitesse maximale
+		BrakeRate = 1;			  // Vitesse de freinage
+		Acceleration = 1;		  // Accélération
+		TurnRate = 1;			  // Vitesse de tournage
 		SteeringMode = 0;
-		canfly = false;				// si l'unité peut voler
-		Scale = 1.0f;				// Echelle
+		canfly = false; // si l'unité peut voler
+		Scale = 1.0f;   // Echelle
 		BankScale = 0;
-		BuildDistance = 0.0f;		// Distance maximale de construction
-		CanReclamate = false;		// si elle peut récupérer
-		EnergyMake = 0;				// Production d'énergie de l'unité
-		MetalMake = 0.0f;			// Production de métal de l'unité
-		MovementClass.clear();		// Type de mouvement
-		Upright = false;			// Si l'unité est debout
-		w_badTargetCategory.clear();	// Type d'unité non ciblable par les armes
-		BadTargetCategory.clear();	// Type d'unité non attacable
-		DamageModifier = 1.0f;		// How much of the weapon damage it takes
-		canattack = false;			// Si l'unité peut attaquer
-		ActivateWhenBuilt = false;	// L'unité s'active lorsqu'elle est achevée
-		onoffable = false;			// (Dés)activable
-		MaxWaterDepth = 0;			// Profondeur maximale où l'unité peut aller
-		MinWaterDepth = -0xFFF;		// Profondeur minimale où l'unité peut aller
-		NoShadow = false;			// Si l'unité n'a pas d'ombre
-		canload = false;			// Si elle peut charger d'autres unités
-		WeaponID.clear();			// Arme 2
-		Floater = false;			// Si l'unité flotte
-		canhover = false;			// For hovercrafts
-		NoChaseCategory.clear();	// Type d'unité non chassable
-		SonarDistance = 0;			// Portée du sonar
-		SonarDistanceJam = 0;		// For Sonar jammers
-		candgun = false;			// si l'unité peut utiliser l'arme ravage
-		CloakCost = 0;				// Coût en energie pour rendre l'unité invisible
-		CloakCostMoving = 0;		// Idem mais quand l'unité bouge
-		HealTime = 0;				// Temps nécessaire à l'unité pour se réparer
-		CanCapture = false;			// Si elle peut capturer d'autres unités
-		HideDamage = false;			// Cache la vie de l'unité aux autres joueurs
-		ImmuneToParalyzer = false;	// Immunisation
+		BuildDistance = 0.0f;		 // Distance maximale de construction
+		CanReclamate = false;		 // si elle peut récupérer
+		EnergyMake = 0;				 // Production d'énergie de l'unité
+		MetalMake = 0.0f;			 // Production de métal de l'unité
+		MovementClass.clear();		 // Type de mouvement
+		Upright = false;			 // Si l'unité est debout
+		w_badTargetCategory.clear(); // Type d'unité non ciblable par les armes
+		BadTargetCategory.clear();   // Type d'unité non attacable
+		DamageModifier = 1.0f;		 // How much of the weapon damage it takes
+		canattack = false;			 // Si l'unité peut attaquer
+		ActivateWhenBuilt = false;   // L'unité s'active lorsqu'elle est achevée
+		onoffable = false;			 // (Dés)activable
+		MaxWaterDepth = 0;			 // Profondeur maximale où l'unité peut aller
+		MinWaterDepth = -0xFFF;		 // Profondeur minimale où l'unité peut aller
+		NoShadow = false;			 // Si l'unité n'a pas d'ombre
+		canload = false;			 // Si elle peut charger d'autres unités
+		WeaponID.clear();			 // Arme 2
+		Floater = false;			 // Si l'unité flotte
+		canhover = false;			 // For hovercrafts
+		NoChaseCategory.clear();	 // Type d'unité non chassable
+		SonarDistance = 0;			 // Portée du sonar
+		SonarDistanceJam = 0;		 // For Sonar jammers
+		candgun = false;			 // si l'unité peut utiliser l'arme ravage
+		CloakCost = 0;				 // Coût en energie pour rendre l'unité invisible
+		CloakCostMoving = 0;		 // Idem mais quand l'unité bouge
+		HealTime = 0;				 // Temps nécessaire à l'unité pour se réparer
+		CanCapture = false;			 // Si elle peut capturer d'autres unités
+		HideDamage = false;			 // Cache la vie de l'unité aux autres joueurs
+		ImmuneToParalyzer = false;   // Immunisation
 		Stealth = false;
-		MakesMetal = 0;				// production de métal de l'unité
-		ExtractsMetal = 0.0f;		// métal extrait par l'unité
-		TidalGenerator = false;		// Si l'unité est une centrale marée-motrice
-		TransportMaxUnits = 0;		// Maximum d'unités transportables
-		kamikaze = false;			// Unité kamikaze
+		MakesMetal = 0;			// production de métal de l'unité
+		ExtractsMetal = 0.0f;   // métal extrait par l'unité
+		TidalGenerator = false; // Si l'unité est une centrale marée-motrice
+		TransportMaxUnits = 0;  // Maximum d'unités transportables
+		kamikaze = false;		// Unité kamikaze
 		kamikazedistance = 0;
-		WindGenerator = 0;			// Centrale de type Eolienne
+		WindGenerator = 0; // Centrale de type Eolienne
 	}
-
 
 	void UnitType::show_info()
 	{
@@ -644,7 +640,7 @@ namespace TA3D
 		Gui::AREA::current()->caption("unit_info.tBuildTime", I18N::Translate("Build time") << ": " << BuildTime);
 
 		String tWeapons;
-		for( std::vector<WeaponDef*>::iterator i = weapon.begin() ; i != weapon.end() ; ++i )
+		for (std::vector<WeaponDef *>::iterator i = weapon.begin(); i != weapon.end(); ++i)
 			if (*i)
 				tWeapons << (*i)->name << ": " << (*i)->damage << "\n";
 		Gui::AREA::current()->caption("unit_info.tWeaponList", tWeapons);
@@ -668,15 +664,15 @@ namespace TA3D
 		Gui::AREA::current()->msg("unit_info.show");
 	}
 
-#define parseStringDef(x,y)  (unitParser.pullAsString(x, unitParser_ci.pullAsString(x, y)))
-#define parseIntDef(x, y)    (unitParser.pullAsInt(x, unitParser_ci.pullAsInt(x, y)))
-#define parseBoolDef(x, y)   (unitParser.pullAsBool(x, unitParser_ci.pullAsBool(x, y)))
-#define parseFloatDef(x, y)  (unitParser.pullAsFloat(x, unitParser_ci.pullAsFloat(x, y)))
+#define parseStringDef(x, y) (unitParser.pullAsString(x, unitParser_ci.pullAsString(x, y)))
+#define parseIntDef(x, y) (unitParser.pullAsInt(x, unitParser_ci.pullAsInt(x, y)))
+#define parseBoolDef(x, y) (unitParser.pullAsBool(x, unitParser_ci.pullAsBool(x, y)))
+#define parseFloatDef(x, y) (unitParser.pullAsFloat(x, unitParser_ci.pullAsFloat(x, y)))
 
-#define parseString(x)  (unitParser.pullAsString(x, unitParser_ci.pullAsString(x)))
-#define parseInt(x)     (unitParser.pullAsInt(x, unitParser_ci.pullAsInt(x)))
-#define parseBool(x)    (unitParser.pullAsBool(x, unitParser_ci.pullAsBool(x)))
-#define parseFloat(x)   (unitParser.pullAsFloat(x, unitParser_ci.pullAsFloat(x)))
+#define parseString(x) (unitParser.pullAsString(x, unitParser_ci.pullAsString(x)))
+#define parseInt(x) (unitParser.pullAsInt(x, unitParser_ci.pullAsInt(x)))
+#define parseBool(x) (unitParser.pullAsBool(x, unitParser_ci.pullAsBool(x)))
+#define parseFloat(x) (unitParser.pullAsFloat(x, unitParser_ci.pullAsFloat(x)))
 
 	int UnitType::load(const String &filename)
 	{
@@ -687,16 +683,16 @@ namespace TA3D
 		const String lang_name_alt = I18N::Translate("UNITTYPE_NAME_ALT", "UNITINFO.Name");
 		const String lang_desc_alt = I18N::Translate("UNITTYPE_DESCRIPTION_ALT", "UNITINFO.Description");
 
-		TDFParser unitParser( filename, true, true );         // FBI files are case sensitive (something related to variable priority)
-		TDFParser unitParser_ci( filename, false, true );     // Case insensitive parser
+		TDFParser unitParser(filename, true, true);		// FBI files are case sensitive (something related to variable priority)
+		TDFParser unitParser_ci(filename, false, true); // Case insensitive parser
 
 		Unitname = parseString("UNITINFO.UnitName");
 		version = byte(parseInt("UNITINFO.Version"));
 		side = parseString("UNITINFO.Side");
 		ObjectName = parseString("UNITINFO.Objectname");
 		Designation_Name = parseString("UNITINFO.Designation");
-		Description = parseStringDef( lang_desc, parseStringDef( lang_desc_alt, parseString("UNITINFO.Description") ) );
-		name = parseStringDef( lang_name, parseStringDef(lang_name_alt, parseString("UNITINFO.Name") ) );
+		Description = parseStringDef(lang_desc, parseStringDef(lang_desc_alt, parseString("UNITINFO.Description")));
+		name = parseStringDef(lang_name, parseStringDef(lang_name_alt, parseString("UNITINFO.Name")));
 
 		FootprintX = byte(parseInt("UNITINFO.FootprintX"));
 		FootprintZ = byte(parseInt("UNITINFO.FootprintZ"));
@@ -705,13 +701,14 @@ namespace TA3D
 		MaxDamage = parseInt("UNITINFO.MaxDamage");
 		MaxWaterDepth = short(parseIntDef("UNITINFO.MaxWaterDepth", 0));
 		MinWaterDepth = short(parseIntDef("UNITINFO.MinWaterDepth", -0xFFF));
-		if (MinWaterDepth != -0xFFF && MaxWaterDepth == 0) MaxWaterDepth = 255;
+		if (MinWaterDepth != -0xFFF && MaxWaterDepth == 0)
+			MaxWaterDepth = 255;
 		EnergyUse = parseInt("UNITINFO.EnergyUse");
 		BuildTime = parseInt("UNITINFO.BuildTime");
-		WorkerTime = parseIntDef("UNITINFO.WorkerTime",1);
-        Builder = parseBool("UNITINFO.Builder") | parseBool("UNITINFO.canbuild");
-		ThreeD = parseBoolDef("UNITINFO.ThreeD",true);
-		SightDistance = parseIntDef("UNITINFO.SightDistance",100) >> 1;
+		WorkerTime = parseIntDef("UNITINFO.WorkerTime", 1);
+		Builder = parseBool("UNITINFO.Builder") | parseBool("UNITINFO.canbuild");
+		ThreeD = parseBoolDef("UNITINFO.ThreeD", true);
+		SightDistance = parseIntDef("UNITINFO.SightDistance", 100) >> 1;
 		RadarDistance = parseInt("UNITINFO.RadarDistance") >> 1;
 		RadarDistanceJam = parseInt("UNITINFO.RadarDistanceJam") >> 1;
 		soundcategory = parseString("UNITINFO.SoundCategory");
@@ -733,16 +730,16 @@ namespace TA3D
 				w_badTargetCategory.resize(1);
 			w_badTargetCategory[0] = parseString("UNITINFO.wpri_badTargetCategory");
 		}
-		for (unsigned int i = 4 ; !parseString( String("UNITINFO.w") << i << "_badTargetCategory" ).empty() ; ++i)
+		for (unsigned int i = 4; !parseString(String("UNITINFO.w") << i << "_badTargetCategory").empty(); ++i)
 		{
 			if (w_badTargetCategory.size() < i)
 				w_badTargetCategory.resize(i);
-			w_badTargetCategory[i-1] = parseString(String("UNITINFO.w") << i << "_badTargetCategory");
+			w_badTargetCategory[i - 1] = parseString(String("UNITINFO.w") << i << "_badTargetCategory");
 		}
 		NoChaseCategory = parseString("UNITINFO.NoChaseCategory");
 		BadTargetCategory = parseString("UNITINFO.BadTargetCategory");
 
-		String category = ToLower( parseString("UNITINFO.Category") );
+		String category = ToLower(parseString("UNITINFO.Category"));
 		Category.clear();
 		categories.clear();
 		category.explode(categories, ' ');
@@ -750,13 +747,20 @@ namespace TA3D
 			if (!i->empty())
 				Category.insert(*i);
 		fastCategory = 0;
-		if (checkCategory( "kamikaze" ) )	fastCategory |= CATEGORY_KAMIKAZE;
-		if (checkCategory( "notair" ) )		fastCategory |= CATEGORY_NOTAIR;
-		if (checkCategory( "notsub" ) )		fastCategory |= CATEGORY_NOTSUB;
-		if (checkCategory( "jam" ) )		fastCategory |= CATEGORY_JAM;
-		if (checkCategory( "commander" ) )	fastCategory |= CATEGORY_COMMANDER;
-		if (checkCategory( "weapon" ) )		fastCategory |= CATEGORY_WEAPON;
-		if (checkCategory( "level3" ) )		fastCategory |= CATEGORY_LEVEL3;
+		if (checkCategory("kamikaze"))
+			fastCategory |= CATEGORY_KAMIKAZE;
+		if (checkCategory("notair"))
+			fastCategory |= CATEGORY_NOTAIR;
+		if (checkCategory("notsub"))
+			fastCategory |= CATEGORY_NOTSUB;
+		if (checkCategory("jam"))
+			fastCategory |= CATEGORY_JAM;
+		if (checkCategory("commander"))
+			fastCategory |= CATEGORY_COMMANDER;
+		if (checkCategory("weapon"))
+			fastCategory |= CATEGORY_WEAPON;
+		if (checkCategory("level3"))
+			fastCategory |= CATEGORY_LEVEL3;
 
 		UnitNumber = short(parseInt("UNITINFO.UnitNumber"));
 		canmove = parseBool("UNITINFO.canmove");
@@ -782,8 +786,8 @@ namespace TA3D
 		BuildDistance = parseFloat("UNITINFO.Builddistance");
 		ActivateWhenBuilt = parseBool("UNITINFO.ActivateWhenBuilt");
 		ImmuneToParalyzer = parseBool("UNITINFO.ImmuneToParalyzer");
-		SonarDistance = parseInt("UNITINFO.SonarDistance")>>1;
-		SonarDistanceJam = parseInt("UNITINFO.SonarDistanceJam")>>1;
+		SonarDistance = parseInt("UNITINFO.SonarDistance") >> 1;
+		SonarDistanceJam = parseInt("UNITINFO.SonarDistanceJam") >> 1;
 		// copyright = ... not needed here :P
 		MaxSlope = short(parseIntDef("UNITINFO.MaxSlope", 255));
 		SteeringMode = byte(parseInt("UNITINFO.SteeringMode"));
@@ -800,19 +804,31 @@ namespace TA3D
 		FireStandOrders = byte(parseIntDef("UNITINFO.firestandorders", 1));
 		WaterLine = parseFloat("UNITINFO.WaterLine");
 
-		String TEDclassString = ToLower( parseString("UNITINFO.TEDClass") );
-		if (TEDclassString.find("water") != String::npos)           TEDclass = CLASS_WATER;
-		else if (TEDclassString.find("ship") != String::npos)       TEDclass = CLASS_SHIP;
-		else if (TEDclassString.find("energy") != String::npos)     TEDclass = CLASS_ENERGY;
-		else if (TEDclassString.find("vtol") != String::npos)       TEDclass = CLASS_VTOL;
-		else if (TEDclassString.find("kbot") != String::npos)       TEDclass = CLASS_KBOT;
-		else if (TEDclassString.find("plant") != String::npos)      TEDclass = CLASS_PLANT;
-		else if (TEDclassString.find("tank") != String::npos)       TEDclass = CLASS_TANK;
-		else if (TEDclassString.find("special") != String::npos)    TEDclass = CLASS_SPECIAL;
-		else if (TEDclassString.find("fort") != String::npos)       TEDclass = CLASS_FORT;
-		else if (TEDclassString.find("metal") != String::npos)      TEDclass = CLASS_METAL;
-		else if (TEDclassString.find("cnstr") != String::npos)      TEDclass = CLASS_CNSTR;
-		else if (TEDclassString.find("commander") != String::npos)  TEDclass = CLASS_COMMANDER;
+		String TEDclassString = ToLower(parseString("UNITINFO.TEDClass"));
+		if (TEDclassString.find("water") != String::npos)
+			TEDclass = CLASS_WATER;
+		else if (TEDclassString.find("ship") != String::npos)
+			TEDclass = CLASS_SHIP;
+		else if (TEDclassString.find("energy") != String::npos)
+			TEDclass = CLASS_ENERGY;
+		else if (TEDclassString.find("vtol") != String::npos)
+			TEDclass = CLASS_VTOL;
+		else if (TEDclassString.find("kbot") != String::npos)
+			TEDclass = CLASS_KBOT;
+		else if (TEDclassString.find("plant") != String::npos)
+			TEDclass = CLASS_PLANT;
+		else if (TEDclassString.find("tank") != String::npos)
+			TEDclass = CLASS_TANK;
+		else if (TEDclassString.find("special") != String::npos)
+			TEDclass = CLASS_SPECIAL;
+		else if (TEDclassString.find("fort") != String::npos)
+			TEDclass = CLASS_FORT;
+		else if (TEDclassString.find("metal") != String::npos)
+			TEDclass = CLASS_METAL;
+		else if (TEDclassString.find("cnstr") != String::npos)
+			TEDclass = CLASS_CNSTR;
+		else if (TEDclassString.find("commander") != String::npos)
+			TEDclass = CLASS_COMMANDER;
 		else if (!TEDclassString.empty())
 		{
 			LOG_DEBUG("unknown tedclass ID : " << TEDclassString);
@@ -821,19 +837,19 @@ namespace TA3D
 
 		NoShadow = parseBool("UNITINFO.NoShadow");
 		antiweapons = parseBool("UNITINFO.antiweapons");
-		BuildAngle = parseIntDef("UNITINFO.buildangle",10);
+		BuildAngle = parseIntDef("UNITINFO.buildangle", 10);
 		canfly = parseBool("UNITINFO.Canfly");
 		canload = parseBool("UNITINFO.canload");
 		Floater = parseBool("UNITINFO.Floater");
 		canhover = parseBool("UNITINFO.canhover");
-		if (canhover)           // Can go over water so let's say MinWaterDepth is negative and MaxWaterDepth is null, that way it's a standard hovercraft :)
+		if (canhover) // Can go over water so let's say MinWaterDepth is negative and MaxWaterDepth is null, that way it's a standard hovercraft :)
 		{
 			MinWaterDepth = -0xFFF;
 			MaxWaterDepth = 0;
 		}
 		BankScale = byte(parseInt("UNITINFO.BankScale"));
 		TidalGenerator = parseBool("UNITINFO.TidalGenerator");
-		Scale = 1.0f;//parseFloat("UNITINFO.Scale",1.0f);
+		Scale = 1.0f; //parseFloat("UNITINFO.Scale",1.0f);
 		Corpse = parseString("UNITINFO.Corpse");
 		WindGenerator = short(parseInt("UNITINFO.WindGenerator"));
 		onoffable = parseBool("UNITINFO.onoffable");
@@ -841,25 +857,25 @@ namespace TA3D
 		kamikazedistance = uint16(parseIntDef("UNITINFO.kamikazedistance", SightDistance << 1) >> 1);
 
 		unsigned int i = 1;
-		while (i <= 3 || !parseString( String("UNITINFO.Weapon") << i ).empty())
+		while (i <= 3 || !parseString(String("UNITINFO.Weapon") << i).empty())
 		{
 			if (WeaponID.size() < i)
-				WeaponID.resize(i,-1);
-			WeaponID[i-1] = weapon_manager.get_weapon_index( parseString( String("UNITINFO.Weapon") << i ) );
+				WeaponID.resize(i, -1);
+			WeaponID[i - 1] = weapon_manager.get_weapon_index(parseString(String("UNITINFO.Weapon") << i));
 			++i;
 		}
 		yardmap = parseString("UNITINFO.YardMap");
 		if (!yardmap.empty())
 		{
 			i = 0;
-			for (unsigned int e = 0 ; e < yardmap.size() ; e++)
+			for (unsigned int e = 0; e < yardmap.size(); e++)
 				if (yardmap[e] == ' ')
 					i++;
 				else
 					yardmap[e - i] = yardmap[e];
 			yardmap = Substr(yardmap, 0, yardmap.size() - i);
 			if (!yardmap.empty())
-				while (yardmap.size() < FootprintX * FootprintZ)     // Complete the yardmap if needed
+				while (yardmap.size() < FootprintX * FootprintZ) // Complete the yardmap if needed
 					yardmap += yardmap.last();
 		}
 
@@ -868,11 +884,15 @@ namespace TA3D
 		SelfDestructAs = parseString("UNITINFO.SelfDestructAs");
 		ManeuverLeashLength = short(parseIntDef("UNITINFO.maneuverleashlength", 640));
 
-		String DefaultMissionTypeString = ToLower( parseString("UNITINFO.DefaultMissionType") );
-		if (DefaultMissionTypeString == "standby")				DefaultMissionType=MISSION_STANDBY;
-		else if (DefaultMissionTypeString == "vtol_standby")		DefaultMissionType=MISSION_VTOL_STANDBY;
-		else if (DefaultMissionTypeString == "guard_nomove")		DefaultMissionType=MISSION_GUARD_NOMOVE;
-		else if (DefaultMissionTypeString == "standby_mine")		DefaultMissionType=MISSION_STANDBY_MINE;
+		String DefaultMissionTypeString = ToLower(parseString("UNITINFO.DefaultMissionType"));
+		if (DefaultMissionTypeString == "standby")
+			DefaultMissionType = MISSION_STANDBY;
+		else if (DefaultMissionTypeString == "vtol_standby")
+			DefaultMissionType = MISSION_VTOL_STANDBY;
+		else if (DefaultMissionTypeString == "guard_nomove")
+			DefaultMissionType = MISSION_GUARD_NOMOVE;
+		else if (DefaultMissionTypeString == "standby_mine")
+			DefaultMissionType = MISSION_STANDBY_MINE;
 		else if (!DefaultMissionTypeString.empty())
 		{
 			LOG_ERROR("Unknown constant: `" << DefaultMissionTypeString << "`");
@@ -890,7 +910,7 @@ namespace TA3D
 
 		IsAirBase = parseBool("UNITINFO.IsAirBase");
 		commander = parseBool("UNITINFO.Commander");
-		DamageModifier = parseFloatDef("UNITINFO.DamageModifier",1.0f);
+		DamageModifier = parseFloatDef("UNITINFO.DamageModifier", 1.0f);
 		MakesMetal = parseFloat("UNITINFO.MakesMetal");
 		SortBias = byte(parseInt("UNITINFO.sortbias"));
 		ExtractsMetal = parseFloat("UNITINFO.ExtractsMetal");
@@ -902,12 +922,12 @@ namespace TA3D
 		canresurrect = parseBool("UNITINFO.canresurrect") || parseBool("UNITINFO.resurrect");
 
 		aim_data.resize(WeaponID.size());
-		for (unsigned int i = 0 ; i < WeaponID.size(); i++)
+		for (unsigned int i = 0; i < WeaponID.size(); i++)
 		{
 			aim_data[i].check = false;
 			if (WeaponID[i] > -1)
 			{
-				String aimdir = parseString( String("UNITINFO.WeaponMainDir") << i );
+				String aimdir = parseString(String("UNITINFO.WeaponMainDir") << i);
 				if (!aimdir.empty())
 				{
 					String::Vector vec;
@@ -919,18 +939,20 @@ namespace TA3D
 						aim_data[i].dir.y = vec[1].to<float>();
 						aim_data[i].dir.z = vec[2].to<float>();
 						// Should read almost every possible case
-						aim_data[i].Maxangledif = parseFloat( String("UNITINFO.Maxangledif") << i );
+						aim_data[i].Maxangledif = parseFloat(String("UNITINFO.Maxangledif") << i);
 					}
 					else
-					{	LOG_DEBUG("FBI parser error: '" << aimdir << "' could not be parsed correctly");	}
+					{
+						LOG_DEBUG("FBI parser error: '" << aimdir << "' could not be parsed correctly");
+					}
 				}
 			}
 		}
 
 		if (canresurrect && Yuni::Math::Zero(BuildDistance))
 			BuildDistance = float(SightDistance);
-		weapon.resize( WeaponID.size() );
-		w_badTargetCategory.resize( WeaponID.size() );
+		weapon.resize(WeaponID.size());
+		w_badTargetCategory.resize(WeaponID.size());
 		bomber = false;
 		for (unsigned int i = 0; i < WeaponID.size(); ++i)
 		{
@@ -956,21 +978,21 @@ namespace TA3D
 		const float sigz = (float)FootprintZ * 0.75f;
 		const float sigx2 = -0.5f / (sigx * sigx);
 		const float sigz2 = -0.5f / (sigz * sigz);
-		for(int z = 0 ; z < gRepulsion.getHeight() ; ++z)
+		for (int z = 0; z < gRepulsion.getHeight(); ++z)
 		{
 			float dz = (float)z - (float)gRepulsion.getHeight() * 0.5f;
 			// Distance to the unit, not its center of gravity if it's a building
 			if (!BMcode)
 				dz = (float)Math::Sgn(dz) * Math::Max(fabsf(dz) - (float)FootprintZ * 0.5f, 0.0f);
 			dz *= dz;
-			for(int x = 0 ; x < gRepulsion.getWidth() ; ++x)
+			for (int x = 0; x < gRepulsion.getWidth(); ++x)
 			{
 				float dx = (float)x - (float)gRepulsion.getWidth() * 0.5f;
 				// Distance to the unit, not its center of gravity if it's a building
 				if (!BMcode)
 					dx = (float)Math::Sgn(dx) * Math::Max(fabsf(dx) - (float)FootprintX * 0.5f, 0.0f);
 				dx *= dx;
-				gRepulsion(x,z) = 2550.0f * std::exp(sigx2 * dx + sigz2 * dz);
+				gRepulsion(x, z) = 2550.0f * std::exp(sigx2 * dx + sigz2 * dz);
 			}
 		}
 		load_dl();
@@ -986,30 +1008,29 @@ namespace TA3D
 			dl_data = unit_manager.h_dl_data[ToLower(side)];
 
 		if (dl_data)
-			return;			// Ok it's already loaded
+			return; // Ok it's already loaded
 
 		int side_id = -1;
-		for( int i = 0 ; i < ta3dSideData.nb_side && side_id == -1 ; i++ )
-			if (ToLower( ta3dSideData.side_name[ i ] ) == ToLower( side ) )
+		for (int i = 0; i < ta3dSideData.nb_side && side_id == -1; i++)
+			if (ToLower(ta3dSideData.side_name[i]) == ToLower(side))
 				side_id = i;
 		if (side_id == -1)
 			return;
-
 
 		TDFParser dl_parser;
 		if (dl_parser.loadFromFile(String(ta3dSideData.guis_dir) << ta3dSideData.side_pref[side_id] << "dl.gui", false, false, true))
 		{
 			dl_data = new DlData;
-			int NbObj = dl_parser.pullAsInt( "gadget0.totalgadgets" );
+			int NbObj = dl_parser.pullAsInt("gadget0.totalgadgets");
 
-			int x_offset = dl_parser.pullAsInt( "gadget0.common.xpos" );
-			int y_offset = dl_parser.pullAsInt( "gadget0.common.ypos" );
+			int x_offset = dl_parser.pullAsInt("gadget0.common.xpos");
+			int y_offset = dl_parser.pullAsInt("gadget0.common.ypos");
 
 			dl_data->clear();
 
 			for (int i = 1; i <= NbObj; ++i)
 			{
-				if (dl_parser.pullAsInt( String("gadget") << i << ".common.attribs" ) == 32 )
+				if (dl_parser.pullAsInt(String("gadget") << i << ".common.attribs") == 32)
 				{
 					DlDataPic p;
 					p.x = short(dl_parser.pullAsInt(String("gadget") << i << ".common.xpos") + x_offset);
@@ -1045,7 +1066,7 @@ namespace TA3D
 	{
 		unit_hashtable.clear();
 
-		for (HashMap< DlData* >::Dense::iterator i = h_dl_data.begin() ; i != h_dl_data.end() ; ++i)
+		for (HashMap<DlData *>::Dense::iterator i = h_dl_data.begin(); i != h_dl_data.end(); ++i)
 			delete *i;
 		h_dl_data.clear();
 
@@ -1058,7 +1079,7 @@ namespace TA3D
 		init();
 	}
 
-	void UnitManager::load_panel_texture( const String &intgaf )
+	void UnitManager::load_panel_texture(const String &intgaf)
 	{
 		panel.destroy();
 
@@ -1066,7 +1087,7 @@ namespace TA3D
 			gfx->set_texture_format(GL_COMPRESSED_RGB_ARB);
 		else
 			gfx->set_texture_format(gfx->defaultTextureFormat_RGB());
-		int w,h;
+		int w, h;
 		panel.set(Gaf::ToTexture(String("anims\\") << intgaf, "PANELSIDE2", &w, &h, true));
 		panel.width = w;
 		panel.height = h;
@@ -1079,48 +1100,46 @@ namespace TA3D
 		panelbottom.height = h;
 	}
 
-
-
-	int UnitManager::unit_build_menu(int index,int omb,float &dt, int scrolling, bool GUI)				// Affiche et gère le menu des unités
+	int UnitManager::unit_build_menu(int index, int omb, float &dt, int scrolling, bool GUI) // Affiche et gère le menu des unités
 	{
 		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 		gfx->ReInitTexSys();
 		glColor4ub(0xFF, 0xFF, 0xFF, byte(0xFF - int(lp_CONFIG->menuTransparency * 0xFF)));
 		if (GUI)
 		{
 			if (panel.tex)
-				gfx->drawtexture( panel.tex, 0.0f, 128.0f, 128.0f, 128.0f + float(panel.height) );
+				gfx->drawtexture(panel.tex, 0.0f, 128.0f, 128.0f, 128.0f + float(panel.height));
 
 			if (paneltop.tex)
 			{
-				gfx->drawtexture( paneltop.tex, 128.0f, 0.0f, 128.0f + float(paneltop.width), float(paneltop.height) );
-				for (int k = 0 ; 128 + paneltop.width + panelbottom.width * k < uint32(SCREEN_W); ++k)
+				gfx->drawtexture(paneltop.tex, 128.0f, 0.0f, 128.0f + float(paneltop.width), float(paneltop.height));
+				for (int k = 0; 128 + paneltop.width + panelbottom.width * k < uint32(SCREEN_W); ++k)
 				{
 					gfx->drawtexture(panelbottom.tex, 128.0f + float(paneltop.width + k * panelbottom.width), 0.0f,
-							128.0f + float(paneltop.width + panelbottom.width * (k + 1)), float(panelbottom.height) );
+									 128.0f + float(paneltop.width + panelbottom.width * (k + 1)), float(panelbottom.height));
 				}
 			}
 
 			if (panelbottom.tex)
 			{
-				for (int k = 0 ; 128 + panelbottom.width * k < uint32(SCREEN_W) ; ++k)
+				for (int k = 0; 128 + panelbottom.width * k < uint32(SCREEN_W); ++k)
 				{
-					gfx->drawtexture( panelbottom.tex, 128.0f + float(k * panelbottom.width),
-							float(SCREEN_H - panelbottom.height), 128.0f + float(panelbottom.width * (k + 1)), float(SCREEN_H) );
+					gfx->drawtexture(panelbottom.tex, 128.0f + float(k * panelbottom.width),
+									 float(SCREEN_H - panelbottom.height), 128.0f + float(panelbottom.width * (k + 1)), float(SCREEN_H));
 				}
 			}
 
 			glDisable(GL_TEXTURE_2D);
 			glColor4ub(0x0, 0x0, 0x0, byte(0xFF - int(lp_CONFIG->menuTransparency * 0xFF)));
 			glBegin(GL_QUADS);
-			glVertex2i(0, 0);			// Barre latérale gauche
+			glVertex2i(0, 0); // Barre latérale gauche
 			glVertex2i(128, 0);
 			glVertex2i(128, 128);
 			glVertex2i(0, 128);
 
-			glVertex2i(0, 128 + panel.height);			// Barre latérale gauche
+			glVertex2i(0, 128 + panel.height); // Barre latérale gauche
 			glVertex2i(128, 128 + panel.height);
 			glVertex2i(128, SCREEN_H);
 			glVertex2i(0, SCREEN_H);
@@ -1131,30 +1150,31 @@ namespace TA3D
 
 		glEnable(GL_TEXTURE_2D);
 
-		if (index<0 || index>=nb_unit) return -1;		// L'indice est incorrect
+		if (index < 0 || index >= nb_unit)
+			return -1; // L'indice est incorrect
 
-		int page=unit_type[index]->page;
+		int page = unit_type[index]->page;
 
-		int sel=-1;
+		int sel = -1;
 
 		gfx->set_2D_clip_rectangle(0, 128, 128, SCREEN_H - 128);
 
 		glDisable(GL_BLEND);
-		for( int i = 0 ; i < unit_type[index]->nb_unit ; ++i) // Affiche les différentes images d'unités constructibles
+		for (int i = 0; i < unit_type[index]->nb_unit; ++i) // Affiche les différentes images d'unités constructibles
 		{
 			if (unit_type[index]->Pic_p[i] != page)
 				continue;
-			const int px = unit_type[index]->Pic_x[ i ];
-			const int py = unit_type[index]->Pic_y[ i ] - scrolling;
-			const int pw = unit_type[index]->Pic_w[ i ];
-			const int ph = unit_type[index]->Pic_h[ i ];
+			const int px = unit_type[index]->Pic_x[i];
+			const int py = unit_type[index]->Pic_y[i] - scrolling;
+			const int pw = unit_type[index]->Pic_w[i];
+			const int ph = unit_type[index]->Pic_h[i];
 			const bool unused = unit_type[index]->BuildList[i] >= 0 && unit_type[unit_type[index]->BuildList[i]]->not_used;
 			if (unused)
-				glColor4ub(0x4C, 0x4C, 0x4C, 0xFF);		// Make it darker
+				glColor4ub(0x4C, 0x4C, 0x4C, 0xFF); // Make it darker
 			else
 				glColor4ub(0xFF, 0xFF, 0xFF, 0xFF);
 
-			if (unit_type[index]->PicList[i])							// If a texture is given use it
+			if (unit_type[index]->PicList[i]) // If a texture is given use it
 				gfx->drawtexture(unit_type[index]->PicList[i], float(px), float(py), float(px + pw), float(py + ph));
 			else if (unit_type[index]->BuildList[i] >= 0)
 				gfx->drawtexture(unit_type[unit_type[index]->BuildList[i]]->glpic, float(px), float(py), float(px + pw), float(py + ph));
@@ -1162,9 +1182,9 @@ namespace TA3D
 			if (mouse_x >= px && mouse_x < px + pw && mouse_y >= py && mouse_y < py + ph && !unused)
 			{
 				glEnable(GL_BLEND);
-				glBlendFunc(GL_SRC_ALPHA,GL_ONE);
+				glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 				glColor4ub(0xFF, 0xFF, 0xFF, 0xBF);
-				if (unit_type[index]->PicList[i])							// If a texture is given use it
+				if (unit_type[index]->PicList[i]) // If a texture is given use it
 					gfx->drawtexture(unit_type[index]->PicList[i], float(px), float(py), float(px + pw), float(py + ph));
 				else if (unit_type[index]->BuildList[i] >= 0)
 					gfx->drawtexture(unit_type[unit_type[index]->BuildList[i]]->glpic, float(px), float(py), float(px + pw), float(py + ph));
@@ -1174,9 +1194,7 @@ namespace TA3D
 					sel = -2;
 			}
 
-			if (( unit_type[index]->BuildList[i] == unit_type[index]->last_click
-				  || ( unit_type[index]->last_click == -2 && unit_type[index]->BuildList[i] == -1 ) )
-				&& unit_type[index]->click_time > 0.0f )
+			if ((unit_type[index]->BuildList[i] == unit_type[index]->last_click || (unit_type[index]->last_click == -2 && unit_type[index]->BuildList[i] == -1)) && unit_type[index]->click_time > 0.0f)
 			{
 				glEnable(GL_BLEND);
 				glDisable(GL_TEXTURE_2D);
@@ -1186,12 +1204,12 @@ namespace TA3D
 				const float my = float(py);
 				const float mw = float(pw);
 				const float mh = float(ph);
-				gfx->rectfill( mx, my, mx + mw, my + mh );
+				gfx->rectfill(mx, my, mx + mw, my + mh);
 				glColor4ub(0xFF, 0xFF, 0x00, 0xBF);
-				gfx->line( mx, my + mh * unit_type[index]->click_time, mx + mw, my + mh * unit_type[index]->click_time );
-				gfx->line( mx, my + mh * (1.0f - unit_type[index]->click_time), mx + mw, my + mh * (1.0f - unit_type[index]->click_time) );
-				gfx->line( mx + mw * unit_type[index]->click_time, my, mx + mw * unit_type[index]->click_time, my + mh );
-				gfx->line( mx + mw * (1.0f - unit_type[index]->click_time), my, mx + mw * (1.0f - unit_type[index]->click_time), my + mh );
+				gfx->line(mx, my + mh * unit_type[index]->click_time, mx + mw, my + mh * unit_type[index]->click_time);
+				gfx->line(mx, my + mh * (1.0f - unit_type[index]->click_time), mx + mw, my + mh * (1.0f - unit_type[index]->click_time));
+				gfx->line(mx + mw * unit_type[index]->click_time, my, mx + mw * unit_type[index]->click_time, my + mh);
+				gfx->line(mx + mw * (1.0f - unit_type[index]->click_time), my, mx + mw * (1.0f - unit_type[index]->click_time), my + mh);
 				glColor4ub(0xFF, 0xFF, 0xFF, 0xBF);
 				glEnable(GL_TEXTURE_2D);
 				glDisable(GL_BLEND);
@@ -1201,44 +1219,45 @@ namespace TA3D
 
 		glColor4ub(0xFF, 0xFF, 0xFF, 0xFF);
 
-		if (unit_type[index]->last_click != -1 )
+		if (unit_type[index]->last_click != -1)
 			unit_type[index]->click_time -= dt;
 
 		if (sel > -1)
 		{
 			if (lp_CONFIG->tooltips)
-			{	// Tooltip code
+			{ // Tooltip code
 				String message;
 				message << unit_type[sel]->name
 						<< " M:" << unit_type[sel]->BuildCostMetal
 						<< " E:" << unit_type[sel]->BuildCostEnergy
 						<< " HP:" << unit_type[sel]->MaxDamage;
 				if (!unit_type[sel]->Description.empty())
-					message << '\n' << unit_type[sel]->Description;
+					message << '\n'
+							<< unit_type[sel]->Description;
 				Gui::AREA::current()->getSkin()->PopupMenu((float)mouse_x + 20.0f, (float)mouse_y + 20.0f, message);
 			}
 			else
-			{	// Print info at the bottom of the screen
-				const InterfaceData &side_data = ta3dSideData.side_int_data[ players.side_view ];
+			{ // Print info at the bottom of the screen
+				const InterfaceData &side_data = ta3dSideData.side_int_data[players.side_view];
 				gfx->print(gfx->normal_font,
 						   (float)side_data.Name.x1,
 						   (float)side_data.Name.y1,
 						   0.0f, 0xFFFFFFFF,
-						   String(unit_type[sel]->name) << " M:" << unit_type[sel]->BuildCostMetal  << " E:" << unit_type[sel]->BuildCostEnergy << " HP:" << unit_type[sel]->MaxDamage );
+						   String(unit_type[sel]->name) << " M:" << unit_type[sel]->BuildCostMetal << " E:" << unit_type[sel]->BuildCostEnergy << " HP:" << unit_type[sel]->MaxDamage);
 
 				if (!unit_type[sel]->Description.empty())
 					gfx->print(gfx->normal_font,
 							   (float)side_data.Description.x1,
 							   (float)side_data.Description.y1,
-							   0.0f,0xFFFFFFFF,unit_type[sel]->Description );
+							   0.0f, 0xFFFFFFFF, unit_type[sel]->Description);
 			}
 			glDisable(GL_BLEND);
 		}
 
-		if (sel != -1 && mouse_b == 1 && omb != 1)		// Click !!
+		if (sel != -1 && mouse_b == 1 && omb != 1) // Click !!
 		{
 			unit_type[index]->last_click = sint16(sel);
-			unit_type[index]->click_time = 0.5f;		// One sec animation;
+			unit_type[index]->click_time = 0.5f; // One sec animation;
 		}
 
 		return sel;
@@ -1248,7 +1267,7 @@ namespace TA3D
 	{
 		init();
 		String::Vector file_list;
-		VFS::Instance()->getFilelist( String(ta3dSideData.unit_dir) << '*' << ta3dSideData.unit_ext, file_list);
+		VFS::Instance()->getFilelist(String(ta3dSideData.unit_dir) << '*' << ta3dSideData.unit_ext, file_list);
 
 		volatile int n = 0, m = 0;
 
@@ -1273,7 +1292,7 @@ namespace TA3D
 					(*progress)((300.0f + float(n) * 50.0f / float(end + 1)) / 7.0f, I18N::Translate("Loading units"));
 #endif
 				const size_t i = n;
-				const String nom = ToUpper(Paths::ExtractFileNameWithoutExtension(file_list[i]));			// Vérifie si l'unité n'est pas déjà chargée
+				const String nom = ToUpper(Paths::ExtractFileNameWithoutExtension(file_list[i])); // Vérifie si l'unité n'est pas déjà chargée
 				++n;
 
 				if (unit_manager.get_unit_index(nom) == -1)
@@ -1301,7 +1320,6 @@ namespace TA3D
 		return 0;
 	}
 
-
 	bool UnitType::canBuild(const int index) const
 	{
 		for (int i = 0; i < nb_unit; ++i)
@@ -1312,12 +1330,10 @@ namespace TA3D
 		return false;
 	}
 
-
 	UnitManager::UnitManager()
 	{
 		init();
 	}
-
 
 	void UnitManager::init()
 	{
@@ -1327,12 +1343,10 @@ namespace TA3D
 		panelbottom.init();
 	}
 
-
 	UnitType::UnitType()
 	{
 		init();
 	}
-
 
 	void UnitManager::waitUntilReady() const
 	{
@@ -1340,16 +1354,14 @@ namespace TA3D
 			rest(10);
 	}
 
-
 	UnitDataLoader::UnitDataLoader()
 	{
 		start();
 	}
 
-
 	void UnitDataLoader::proc(void *)
 	{
-		for (int i = 0;i < unit_manager.nb_unit; ++i)
+		for (int i = 0; i < unit_manager.nb_unit; ++i)
 			unit_manager.load_script_file(unit_manager.unit_type[i]->Unitname);
 
 		unit_manager.Identify();
@@ -1369,11 +1381,11 @@ namespace TA3D
 				{
 					if (parser.pullAsString(String("CLASS") << e << ".name") == movementclass)
 					{
-						unit_manager.unit_type[i]->FootprintX = byte(parser.pullAsInt(String("CLASS") << e << ".footprintx", unit_manager.unit_type[i]->FootprintX ));
-						unit_manager.unit_type[i]->FootprintZ = byte(parser.pullAsInt(String("CLASS") << e << ".footprintz", unit_manager.unit_type[i]->FootprintZ ));
-						unit_manager.unit_type[i]->MinWaterDepth = short(parser.pullAsInt(String("CLASS") << e << ".minwaterdepth", unit_manager.unit_type[i]->MinWaterDepth ));
-						unit_manager.unit_type[i]->MaxWaterDepth = short(parser.pullAsInt(String("CLASS") << e << ".maxwaterdepth", unit_manager.unit_type[i]->MaxWaterDepth ));
-						unit_manager.unit_type[i]->MaxSlope = short(parser.pullAsInt(String("CLASS") << e << ".maxslope", unit_manager.unit_type[i]->MaxSlope ));
+						unit_manager.unit_type[i]->FootprintX = byte(parser.pullAsInt(String("CLASS") << e << ".footprintx", unit_manager.unit_type[i]->FootprintX));
+						unit_manager.unit_type[i]->FootprintZ = byte(parser.pullAsInt(String("CLASS") << e << ".footprintz", unit_manager.unit_type[i]->FootprintZ));
+						unit_manager.unit_type[i]->MinWaterDepth = short(parser.pullAsInt(String("CLASS") << e << ".minwaterdepth", unit_manager.unit_type[i]->MinWaterDepth));
+						unit_manager.unit_type[i]->MaxWaterDepth = short(parser.pullAsInt(String("CLASS") << e << ".maxwaterdepth", unit_manager.unit_type[i]->MaxWaterDepth));
+						unit_manager.unit_type[i]->MaxSlope = short(parser.pullAsInt(String("CLASS") << e << ".maxslope", unit_manager.unit_type[i]->MaxSlope));
 						break;
 					}
 				}
@@ -1382,4 +1394,3 @@ namespace TA3D
 		unit_manager.ready = true;
 	}
 } // namespace TA3D
-

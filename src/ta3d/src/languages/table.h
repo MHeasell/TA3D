@@ -1,12 +1,10 @@
 #ifndef __TA3D_LANGUAGES_TABLE_H__
-# define __TA3D_LANGUAGES_TABLE_H__
+#define __TA3D_LANGUAGES_TABLE_H__
 
-# include <yuni/core/string.h>
-
+#include <yuni/core/string.h>
 
 namespace TA3D
 {
-
 
 	class TranslationTable
 	{
@@ -27,7 +25,6 @@ namespace TA3D
 		static ShortString units;
 		//! Translation of `speed`
 		static ShortString speed;
-
 	};
 
 } // namespace TA3D

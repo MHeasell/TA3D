@@ -1,12 +1,10 @@
 #ifndef __TA3D_XX__TDF_HXX__
-# define __TA3D_XX__TDF_HXX__
-
+#define __TA3D_XX__TDF_HXX__
 
 namespace TA3D
 {
 
-
-	template<class K>
+	template <class K>
 	sint32 TDFParser::pullAsInt(const K& key, const sint32 def)
 	{
 		if (pIgnoreCase)
@@ -20,8 +18,7 @@ namespace TA3D
 		return (entry == pTable.end() || entry->empty() ? def : entry->to<sint32>());
 	}
 
-
-	template<class K>
+	template <class K>
 	sint32 TDFParser::pullAsInt(const K& key)
 	{
 		if (pIgnoreCase)
@@ -35,8 +32,7 @@ namespace TA3D
 		return (entry == pTable.end() || entry->empty() ? 0 : entry->to<sint32>());
 	}
 
-
-	template<class K, class V>
+	template <class K, class V>
 	String TDFParser::pullAsString(const K& key, const V& def)
 	{
 		if (pIgnoreCase)
@@ -50,8 +46,7 @@ namespace TA3D
 		return (entry != pTable.end()) ? entry.value() : def;
 	}
 
-
-	template<class K>
+	template <class K>
 	String TDFParser::pullAsString(const K& key)
 	{
 		if (pIgnoreCase)
@@ -65,10 +60,6 @@ namespace TA3D
 		return (entry != pTable.end()) ? entry.value() : nullptr;
 	}
 
-
-
-
 } // namespace TA3D
-
 
 #endif // __TA3D_XX__TDF_HXX__

@@ -22,166 +22,169 @@
 namespace TA3D
 {
 	ScriptInterface::ScriptInterface() : running(false), sleep_time(0.0f), sleeping(false), waiting(false), signal_mask(0), caller(NULL)
-    {
-    }
+	{
+	}
 
-    void ScriptInterface::kill()
-    {
-        running = false;
-    }
+	void ScriptInterface::kill()
+	{
+		running = false;
+	}
 
-    void ScriptInterface::stop()
-    {
-        waiting = true;
-    }
+	void ScriptInterface::stop()
+	{
+		waiting = true;
+	}
 
-    void ScriptInterface::resume()
-    {
-        waiting = false;
-    }
+	void ScriptInterface::resume()
+	{
+		waiting = false;
+	}
 
-    void ScriptInterface::pause(float time)
-    {
-        sleeping = true;
-        sleep_time = time;
-    }
+	void ScriptInterface::pause(float time)
+	{
+		sleeping = true;
+		sleep_time = time;
+	}
 
-    void ScriptInterface::addThread(ScriptInterface *pChild)
-    {
-        if (caller == pChild) return;
-        if (caller)
-            caller->addThread(pChild);
-        else
-        {
-            if (pChild == this) return;
-            removeThread(pChild);
-            childs.push_back(pChild);
-        }
-    }
+	void ScriptInterface::addThread(ScriptInterface *pChild)
+	{
+		if (caller == pChild)
+			return;
+		if (caller)
+			caller->addThread(pChild);
+		else
+		{
+			if (pChild == this)
+				return;
+			removeThread(pChild);
+			childs.push_back(pChild);
+		}
+	}
 
-    void ScriptInterface::removeThread(ScriptInterface *pChild)
-    {
-        if (caller == pChild) return;
-        if (caller)
-            caller->removeThread(pChild);
-        else
-            for(std::vector<ScriptInterface*>::iterator i = childs.begin() ; i != childs.end() ; ++i)
-                if (*i == pChild)
-                {
-                    childs.erase(i);
-                    return;
-                }
-    }
+	void ScriptInterface::removeThread(ScriptInterface *pChild)
+	{
+		if (caller == pChild)
+			return;
+		if (caller)
+			caller->removeThread(pChild);
+		else
+			for (std::vector<ScriptInterface *>::iterator i = childs.begin(); i != childs.end(); ++i)
+				if (*i == pChild)
+				{
+					childs.erase(i);
+					return;
+				}
+	}
 
-    void ScriptInterface::processSignal(uint32 signal)
-    {
-        if (caller)
-            caller->processSignal(signal);
-        else
-        {
-            if (signal & getSignalMask())
-                kill();
-            for(std::vector<ScriptInterface*>::iterator i = childs.begin() ; i != childs.end() ; ++i)
-                if ((*i)->getSignalMask() & signal)
-                    (*i)->kill();
-        }
-    }
+	void ScriptInterface::processSignal(uint32 signal)
+	{
+		if (caller)
+			caller->processSignal(signal);
+		else
+		{
+			if (signal & getSignalMask())
+				kill();
+			for (std::vector<ScriptInterface *>::iterator i = childs.begin(); i != childs.end(); ++i)
+				if ((*i)->getSignalMask() & signal)
+					(*i)->kill();
+		}
+	}
 
-    void ScriptInterface::setSignalMask(uint32 signal)
-    {
-        signal_mask = signal;
-    }
+	void ScriptInterface::setSignalMask(uint32 signal)
+	{
+		signal_mask = signal;
+	}
 
-    uint32 ScriptInterface::getSignalMask()
-    {
-        return signal_mask;
-    }
+	uint32 ScriptInterface::getSignalMask()
+	{
+		return signal_mask;
+	}
 
-    void ScriptInterface::deleteThreads()
-    {
-		for(std::vector<ScriptInterface*>::iterator i = childs.begin() ; i != childs.end() ; ++i)
+	void ScriptInterface::deleteThreads()
+	{
+		for (std::vector<ScriptInterface *>::iterator i = childs.begin(); i != childs.end(); ++i)
 			delete *i;
-        childs.clear();
-		for(std::vector<ScriptInterface*>::iterator i = freeThreads.begin() ; i != freeThreads.end() ; ++i)
+		childs.clear();
+		for (std::vector<ScriptInterface *>::iterator i = freeThreads.begin(); i != freeThreads.end(); ++i)
 			delete *i;
-        freeThreads.clear();
-    }
+		freeThreads.clear();
+	}
 
-    ScriptInterface *ScriptInterface::getFreeThread()
-    {
-        if (caller)
-            return caller->getFreeThread();
+	ScriptInterface *ScriptInterface::getFreeThread()
+	{
+		if (caller)
+			return caller->getFreeThread();
 
-        if (freeThreads.empty())
-            return NULL;
+		if (freeThreads.empty())
+			return NULL;
 		ScriptInterface *newThread = freeThreads.back();
 		freeThreads.pop_back();
-        return newThread;
-    }
+		return newThread;
+	}
 
-    void ScriptInterface::clean()
-    {
-        if (caller)         // Don't go up to caller this would make complexity O(N²)!!
-            return;         // and it would not be safe at all!
-        else
-        {
+	void ScriptInterface::clean()
+	{
+		if (caller) // Don't go up to caller this would make complexity O(N²)!!
+			return; // and it would not be safe at all!
+		else
+		{
 			uint32 e = 0;
-			for(uint32 i = 0 ; i + e < childs.size() ; )
-            {
-                if (!childs[i + e]->is_self_running())
-                {
-                    freeThreads.push_back(childs[i + e]);      // Put it in the queue
-                    ++e;
-                }
-                else
-                {
+			for (uint32 i = 0; i + e < childs.size();)
+			{
+				if (!childs[i + e]->is_self_running())
+				{
+					freeThreads.push_back(childs[i + e]); // Put it in the queue
+					++e;
+				}
+				else
+				{
 					if (e)
 						childs[i] = childs[i + e];
-                    ++i;
-                }
-            }
-            if (e)
-                childs.resize(childs.size() - e);
-        }
-    }
+					++i;
+				}
+			}
+			if (e)
+				childs.resize(childs.size() - e);
+		}
+	}
 
-    void ScriptInterface::dumpDebugInfo()
-    {
-        LOG_DEBUG(LOG_PREFIX_SCRIPT << "sorry dumpDebugInfo not implemented for this type of script");
-    }
+	void ScriptInterface::dumpDebugInfo()
+	{
+		LOG_DEBUG(LOG_PREFIX_SCRIPT << "sorry dumpDebugInfo not implemented for this type of script");
+	}
 
-    void ScriptInterface::save_state(gzFile file)
-    {
-        gzwrite(file, &last, sizeof(last));
-        gzwrite(file, &running, sizeof(running));
-        gzwrite(file, &sleep_time, sizeof(sleep_time));
-        gzwrite(file, &sleeping, sizeof(sleeping));
-        gzwrite(file, &waiting, sizeof(waiting));
-        gzwrite(file, &signal_mask, sizeof(signal_mask));
-        save_thread_state(file);
-
-		int nb_childs = int(childs.size());
-        gzwrite(file, &nb_childs, sizeof(nb_childs));
-        for(int i = 0 ; i < nb_childs ; i++)
-            childs[i]->save_state(file);
-    }
-
-    void ScriptInterface::restore_state(gzFile file)
-    {
-        gzread(file, &last, sizeof(last));
-        gzread(file, &running, sizeof(running));
-        gzread(file, &sleep_time, sizeof(sleep_time));
-        gzread(file, &sleeping, sizeof(sleeping));
-        gzread(file, &waiting, sizeof(waiting));
-        gzread(file, &signal_mask, sizeof(signal_mask));
-        restore_thread_state(file);
+	void ScriptInterface::save_state(gzFile file)
+	{
+		gzwrite(file, &last, sizeof(last));
+		gzwrite(file, &running, sizeof(running));
+		gzwrite(file, &sleep_time, sizeof(sleep_time));
+		gzwrite(file, &sleeping, sizeof(sleeping));
+		gzwrite(file, &waiting, sizeof(waiting));
+		gzwrite(file, &signal_mask, sizeof(signal_mask));
+		save_thread_state(file);
 
 		int nb_childs = int(childs.size());
-        gzread(file, &nb_childs, sizeof(nb_childs));
-        for(int i = 0 ; i < nb_childs ; i++)
-        {
-            ScriptInterface *newThread = fork();
-            newThread->restore_state(file);
-        }
-    }
+		gzwrite(file, &nb_childs, sizeof(nb_childs));
+		for (int i = 0; i < nb_childs; i++)
+			childs[i]->save_state(file);
+	}
+
+	void ScriptInterface::restore_state(gzFile file)
+	{
+		gzread(file, &last, sizeof(last));
+		gzread(file, &running, sizeof(running));
+		gzread(file, &sleep_time, sizeof(sleep_time));
+		gzread(file, &sleeping, sizeof(sleeping));
+		gzread(file, &waiting, sizeof(waiting));
+		gzread(file, &signal_mask, sizeof(signal_mask));
+		restore_thread_state(file);
+
+		int nb_childs = int(childs.size());
+		gzread(file, &nb_childs, sizeof(nb_childs));
+		for (int i = 0; i < nb_childs; i++)
+		{
+			ScriptInterface *newThread = fork();
+			newThread->restore_state(file);
+		}
+	}
 }

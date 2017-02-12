@@ -22,20 +22,21 @@ namespace TA3D
 	 * TKit::Predicate - a TKit::Vec predicate type to be used with std::partition
 	 *                    and containing the direction of the projection and a position (the split point)
 	 */
-	template<typename T, typename TKit>
-			class KDTree
+	template <typename T, typename TKit>
+	class KDTree
 	{
 	public:
-		typedef typename TKit::Vec	Vec;
-	public:
-		inline KDTree() : lChild(NULL), rChild(NULL)	{}
+		typedef typename TKit::Vec Vec;
 
-		inline void build(MemoryPool< KDTree<T, TKit> > *pool, const typename std::vector<T>::iterator &begin, const typename std::vector<T>::iterator &end, const unsigned int l = 0U);
+	public:
+		inline KDTree() : lChild(NULL), rChild(NULL) {}
+
+		inline void build(MemoryPool<KDTree<T, TKit>> *pool, const typename std::vector<T>::iterator &begin, const typename std::vector<T>::iterator &end, const unsigned int l = 0U);
 		inline ~KDTree();
 
 		inline void maxDistanceQuery(std::deque<T> &result, const Vec &center, const float maxDist) const;
 
-		static inline KDTree *create(MemoryPool< KDTree<T, TKit> > *pool, const typename std::vector<T>::iterator &begin, const typename std::vector<T>::iterator &end)
+		static inline KDTree *create(MemoryPool<KDTree<T, TKit>> *pool, const typename std::vector<T>::iterator &begin, const typename std::vector<T>::iterator &end)
 		{
 			KDTree *tree = pool->alloc();
 			tree->build(pool, begin, end);
@@ -47,9 +48,9 @@ namespace TA3D
 		typename std::vector<T>::const_iterator elements_end;
 		float P;
 		unsigned int N;
-		KDTree<T, TKit>	*lChild;
-		KDTree<T, TKit>	*rChild;
-		MemoryPool< KDTree<T, TKit> > *pool;
+		KDTree<T, TKit> *lChild;
+		KDTree<T, TKit> *rChild;
+		MemoryPool<KDTree<T, TKit>> *pool;
 	};
 }
 

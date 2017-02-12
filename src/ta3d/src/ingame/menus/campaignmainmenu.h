@@ -23,40 +23,41 @@
 
 namespace TA3D
 {
-namespace Menus
-{
-
-	class CampaignMainMenu : public Abstract
+	namespace Menus
 	{
-	public:
-		/*!
+
+		class CampaignMainMenu : public Abstract
+		{
+		public:
+			/*!
 		** \brief Execute an instance of CampaignMainMenu
 		*/
-		static bool Execute();
-	public:
-		CampaignMainMenu();
-		//! Destructor
-		virtual ~CampaignMainMenu();
+			static bool Execute();
 
-	protected:
-		virtual bool doInitialize();
-		virtual void doFinalize();
-		virtual void waitForEvent();
-		virtual bool maySwitchToAnotherMenu();
+		public:
+			CampaignMainMenu();
+			//! Destructor
+			virtual ~CampaignMainMenu();
 
-	private:
-		String::List campaign_list;
-		TDFParser::Ptr campaign_parser;
-		Gaf::AnimationList side_logos;
+		protected:
+			virtual bool doInitialize();
+			virtual void doFinalize();
+			virtual void waitForEvent();
+			virtual bool maySwitchToAnotherMenu();
 
-		bool start_game;
-		uint32 last_campaign_id;
-		String  campaign_name;
-		int mission_id;
-		int nb_mission;
-	};
+		private:
+			String::List campaign_list;
+			TDFParser::Ptr campaign_parser;
+			Gaf::AnimationList side_logos;
 
-} // namespace Menus
+			bool start_game;
+			uint32 last_campaign_id;
+			String campaign_name;
+			int mission_id;
+			int nb_mission;
+		};
+
+	} // namespace Menus
 } // namespace TA3D
 
 #endif // CAMPAIGNMAINMENU_H

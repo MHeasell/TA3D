@@ -15,64 +15,57 @@
 	along with this program; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA*/
 #ifndef __TA3D_GFX_GUI_SKIN_MANAGER_H__
-# define __TA3D_GFX_GUI_SKIN_MANAGER_H__
+#define __TA3D_GFX_GUI_SKIN_MANAGER_H__
 
-# include <stdafx.h>
-# include <misc/string.h>
-# include "skin.h"
-# include <misc/hash_table.h>
+#include <stdafx.h>
+#include <misc/string.h>
+#include "skin.h"
+#include <misc/hash_table.h>
 
 namespace TA3D
 {
-namespace Gui
-{
+	namespace Gui
+	{
 
-
-	/*!
+		/*!
 	** \brief
 	*/
-	class SKIN_MANAGER
-	{
-	public:
-		//! \name Constructor & Destructor
-		//@{
-		//! Default constructor
-		SKIN_MANAGER();
-		//! Destructor
-		~SKIN_MANAGER();
-		//@}
+		class SKIN_MANAGER
+		{
+		public:
+			//! \name Constructor & Destructor
+			//@{
+			//! Default constructor
+			SKIN_MANAGER();
+			//! Destructor
+			~SKIN_MANAGER();
+			//@}
 
-		/*!
+			/*!
 		** \brief
 		*/
-		void init();
+			void init();
 
-		/*!
+			/*!
 		** \brief
 		*/
-		void destroy();
+			void destroy();
 
-		/*!
+			/*!
 		** \brief
 		**
 		** \param filename
 		*/
-		Skin *load(const String& filename, const float scale = 1.0f);
+			Skin* load(const String& filename, const float scale = 1.0f);
 
-	private:
-		std::vector<Skin*>  skins;
-		UTILS::HashMap<Skin*>::Dense  hash_skin;
-	}; // class SKIN_MANAGER
+		private:
+			std::vector<Skin*> skins;
+			UTILS::HashMap<Skin*>::Dense hash_skin;
+		}; // class SKIN_MANAGER
 
+		extern SKIN_MANAGER skin_manager;
 
-
-
-	extern SKIN_MANAGER skin_manager;
-
-
-
-
-} // namespace Gui
+	} // namespace Gui
 } // namespace TA3D
 
 #endif // __TA3D_GFX_GUI_SKIN_MANAGER_H__

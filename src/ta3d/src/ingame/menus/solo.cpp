@@ -28,166 +28,153 @@
 #include "campaignmainmenu.h"
 #include "setupgame.h"
 
-
-
 namespace TA3D
 {
-namespace Menus
-{
-
-
-	bool Solo::Execute()
+	namespace Menus
 	{
-		Solo m;
-		return m.execute();
-	}
 
-
-
-	Solo::Solo()
-		:Abstract()
-	{}
-
-	Solo::~Solo()
-	{}
-
-	bool Solo::doInitialize()
-	{
-		loadAreaFromTDF("solo", "gui/solo.area");
-		return true;
-	}
-
-	void Solo::doFinalize()
-	{
-		// Wait for user to release ESC
-		while (key[KEY_ESC])
+		bool Solo::Execute()
 		{
-			SuspendMilliSeconds(TA3D_MENUS_RECOMMENDED_TIME_MS_FOR_RESTING);
-			poll_inputs();
+			Solo m;
+			return m.execute();
 		}
-	}
 
-
-	void Solo::waitForEvent()
-	{
-		bool keyIsPressed(false);
-		do
+		Solo::Solo()
+			: Abstract()
 		{
-			// Grab user events
-			pArea->check();
-			// Get if a key was pressed
-			keyIsPressed = pArea->key_pressed;
-			// Wait to reduce CPU consumption
-			wait();
+		}
 
-		} while (pMouseX == mouse_x && pMouseY == mouse_y && pMouseZ == mouse_z && pMouseB == mouse_b
-			&& mouse_b == 0
-			&& !key[KEY_ENTER] && !key[KEY_ESC] && !key[KEY_SPACE] && !key[KEY_C]
-			&& !keyIsPressed && !pArea->scrolling);
-	}
+		Solo::~Solo()
+		{
+		}
 
-
-	bool Solo::maySwitchToAnotherMenu()
-	{
-		// Exit
-		if (key[KEY_ESC] || pArea->get_state("solo.b_back"))
+		bool Solo::doInitialize()
+		{
+			loadAreaFromTDF("solo", "gui/solo.area");
 			return true;
+		}
 
-		// All savegames
-		if (pArea->get_state("solo.b_load") && pArea->get_object("load_menu.l_file") )
-			return doDisplayAllSavegames();
-
-		// Load the selected savegame
-		if (pArea->get_state("load_menu.b_load"))
-			return doGoMenuLoadSingleGame();
-
-		// Campaign
-		if (pArea->get_state("solo.b_campaign") || key[KEY_C])
-			return doGoMenuCompaign();
-
-		// Skirmish
-		if (pArea->get_state("solo.b_skirmish") || key[KEY_ENTER])
-			return doGoMenuSkirmish();
-
-		return false;
-	}
-
-	bool Solo::doGoMenuSkirmish()
-	{
-		glPushMatrix();
-		SetupGame::Execute();
-		glPopMatrix();
-		return false;
-	}
-
-	bool Solo::doGoMenuCompaign()
-	{
-		glPushMatrix();
-		CampaignMainMenu::Execute();
-		glPopMatrix();
-		return false;
-	}
-
-	bool Solo::doDisplayAllSavegames()
-	{
-		Gui::GUIOBJ::Ptr obj = pArea->get_object("load_menu.l_file");
-		if (obj)
+		void Solo::doFinalize()
 		{
-			String::List fileList;
-			Paths::Glob(fileList, String(TA3D::Paths::Savegames) << "*.sav");
-			fileList.sort();
-			obj->Text.clear();
-			obj->Text.reserve(fileList.size());
-			for (String::List::const_iterator i = fileList.begin(); i != fileList.end(); ++i)
+			// Wait for user to release ESC
+			while (key[KEY_ESC])
 			{
-				// Remove the Savegames path, leaving just the bare file names
-				obj->Text.push_back(Paths::ExtractFileName(*i));
+				SuspendMilliSeconds(TA3D_MENUS_RECOMMENDED_TIME_MS_FOR_RESTING);
+				poll_inputs();
 			}
 		}
-		else
-		{
-			LOG_ERROR("Impossible to get an area object : `load_menu.l_file`");
-		}
-		return false;
-	}
 
-	bool Solo::doGoMenuLoadSingleGame()
-	{
-		pArea->set_state("load_menu.b_load", false);
-		Gui::GUIOBJ::Ptr guiObj = pArea->get_object("load_menu.l_file");
-		if (!guiObj)
+		void Solo::waitForEvent()
 		{
-			LOG_ERROR("Impossible to get an area object : `load_menu.l_file`");
-		}
-		else
-		{
-			if (guiObj->Pos < guiObj->Text.size())
+			bool keyIsPressed(false);
+			do
 			{
-				GameData game_data;
-				bool network = load_game_data(String(TA3D::Paths::Savegames) << guiObj->Text[guiObj->Pos], &game_data);
+				// Grab user events
+				pArea->check();
+				// Get if a key was pressed
+				keyIsPressed = pArea->key_pressed;
+				// Wait to reduce CPU consumption
+				wait();
 
-				if (!game_data.saved_file.empty() && !network)
+			} while (pMouseX == mouse_x && pMouseY == mouse_y && pMouseZ == mouse_z && pMouseB == mouse_b && mouse_b == 0 && !key[KEY_ENTER] && !key[KEY_ESC] && !key[KEY_SPACE] && !key[KEY_C] && !keyIsPressed && !pArea->scrolling);
+		}
+
+		bool Solo::maySwitchToAnotherMenu()
+		{
+			// Exit
+			if (key[KEY_ESC] || pArea->get_state("solo.b_back"))
+				return true;
+
+			// All savegames
+			if (pArea->get_state("solo.b_load") && pArea->get_object("load_menu.l_file"))
+				return doDisplayAllSavegames();
+
+			// Load the selected savegame
+			if (pArea->get_state("load_menu.b_load"))
+				return doGoMenuLoadSingleGame();
+
+			// Campaign
+			if (pArea->get_state("solo.b_campaign") || key[KEY_C])
+				return doGoMenuCompaign();
+
+			// Skirmish
+			if (pArea->get_state("solo.b_skirmish") || key[KEY_ENTER])
+				return doGoMenuSkirmish();
+
+			return false;
+		}
+
+		bool Solo::doGoMenuSkirmish()
+		{
+			glPushMatrix();
+			SetupGame::Execute();
+			glPopMatrix();
+			return false;
+		}
+
+		bool Solo::doGoMenuCompaign()
+		{
+			glPushMatrix();
+			CampaignMainMenu::Execute();
+			glPopMatrix();
+			return false;
+		}
+
+		bool Solo::doDisplayAllSavegames()
+		{
+			Gui::GUIOBJ::Ptr obj = pArea->get_object("load_menu.l_file");
+			if (obj)
+			{
+				String::List fileList;
+				Paths::Glob(fileList, String(TA3D::Paths::Savegames) << "*.sav");
+				fileList.sort();
+				obj->Text.clear();
+				obj->Text.reserve(fileList.size());
+				for (String::List::const_iterator i = fileList.begin(); i != fileList.end(); ++i)
 				{
-					gfx->unset_2D_mode();
-					Battle::Execute(&game_data);
-					gfx->set_2D_mode();
-					gfx->ReInitTexSys();
-				}
-				else if (network)
-				{
-					pArea->caption("popup.msg", I18N::Translate("MULTI_SOLO_MISMATCH_ERROR"));
-					pArea->title("popup", I18N::Translate("Error"));
-					pArea->msg("popup.show");
+					// Remove the Savegames path, leaving just the bare file names
+					obj->Text.push_back(Paths::ExtractFileName(*i));
 				}
 			}
+			else
+			{
+				LOG_ERROR("Impossible to get an area object : `load_menu.l_file`");
+			}
+			return false;
 		}
-		return false;
-	}
 
+		bool Solo::doGoMenuLoadSingleGame()
+		{
+			pArea->set_state("load_menu.b_load", false);
+			Gui::GUIOBJ::Ptr guiObj = pArea->get_object("load_menu.l_file");
+			if (!guiObj)
+			{
+				LOG_ERROR("Impossible to get an area object : `load_menu.l_file`");
+			}
+			else
+			{
+				if (guiObj->Pos < guiObj->Text.size())
+				{
+					GameData game_data;
+					bool network = load_game_data(String(TA3D::Paths::Savegames) << guiObj->Text[guiObj->Pos], &game_data);
 
+					if (!game_data.saved_file.empty() && !network)
+					{
+						gfx->unset_2D_mode();
+						Battle::Execute(&game_data);
+						gfx->set_2D_mode();
+						gfx->ReInitTexSys();
+					}
+					else if (network)
+					{
+						pArea->caption("popup.msg", I18N::Translate("MULTI_SOLO_MISMATCH_ERROR"));
+						pArea->title("popup", I18N::Translate("Error"));
+						pArea->msg("popup.show");
+					}
+				}
+			}
+			return false;
+		}
 
-
-
-} // namespace Menus
+	} // namespace Menus
 } // namespace TA3D
-

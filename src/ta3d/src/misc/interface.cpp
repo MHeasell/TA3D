@@ -20,72 +20,49 @@
 #include "interface.h"
 #include <logs/logs.h>
 
-
-
 namespace TA3D
 {
 
 	IInterfaceManager::Ptr TA3D::VARS::InterfaceManager;
 
+	void IInterface::InitInterface()
+	{
+		m_InterfaceID = 0;
+		InterfaceManager->AddInterface(this);
+	}
 
+	void IInterface::DeleteInterface()
+	{
+		InterfaceManager->RemoveInterface(this);
+	}
 
-    void IInterface::InitInterface()
-    {
-        m_InterfaceID = 0;
-        InterfaceManager->AddInterface(this);
-    }
+	IInterfaceManager::IInterfaceManager()
+		: pNextInterfaceID(1)
+	{
+	}
 
-    void IInterface::DeleteInterface()
-    {
-        InterfaceManager->RemoveInterface(this);
-    } 
+	IInterfaceManager::~IInterfaceManager()
+	{
+	}
 
+	void IInterfaceManager::AddInterface(IInterface* i)
+	{
+		pMutex.lock();
+		pInterfaces.push_back(i);
+		i->m_InterfaceID = pNextInterfaceID;
+		++pNextInterfaceID;
+		pMutex.unlock();
+	}
 
-
-
-    IInterfaceManager::IInterfaceManager()
-        :pNextInterfaceID(1)
-    {}
-
-    IInterfaceManager::~IInterfaceManager()
-    {}
-
-
-
-    void IInterfaceManager::AddInterface(IInterface* i)
-    {
-        pMutex.lock();
-        pInterfaces.push_back(i);
-        i->m_InterfaceID = pNextInterfaceID;
-        ++pNextInterfaceID;
-        pMutex.unlock();
-    }
-
-
-    void IInterfaceManager::RemoveInterface(IInterface* i)
-    {
-        LOG_ASSERT(i);
-        pMutex.lock();
-        for (InterfacesList::iterator cur = pInterfaces.begin(); cur != pInterfaces.end(); ++cur)
-        {
-            if( (*cur)->m_InterfaceID == i->m_InterfaceID)
-            {
-                pInterfaces.erase(cur);
-                pMutex.unlock();
-                return;
-            }
-        }
-        pMutex.unlock();
-    }
-
-
-	void IInterfaceManager::DispatchMsg(const uint32 mID, const String &msg)
-    {
+	void IInterfaceManager::RemoveInterface(IInterface* i)
+	{
+		LOG_ASSERT(i);
 		pMutex.lock();
 		for (InterfacesList::iterator cur = pInterfaces.begin(); cur != pInterfaces.end(); ++cur)
 		{
-			if ((*cur)->InterfaceMsg( mID, msg ) == INTERFACE_RESULT_HANDLED)
+			if ((*cur)->m_InterfaceID == i->m_InterfaceID)
 			{
+				pInterfaces.erase(cur);
 				pMutex.unlock();
 				return;
 			}
@@ -93,6 +70,17 @@ namespace TA3D
 		pMutex.unlock();
 	}
 
-
-
+	void IInterfaceManager::DispatchMsg(const uint32 mID, const String& msg)
+	{
+		pMutex.lock();
+		for (InterfacesList::iterator cur = pInterfaces.begin(); cur != pInterfaces.end(); ++cur)
+		{
+			if ((*cur)->InterfaceMsg(mID, msg) == INTERFACE_RESULT_HANDLED)
+			{
+				pMutex.unlock();
+				return;
+			}
+		}
+		pMutex.unlock();
+	}
 }

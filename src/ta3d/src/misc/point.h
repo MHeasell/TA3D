@@ -1,5 +1,5 @@
 #ifndef __TA3D_MISC_POINT_H__
-# define __TA3D_MISC_POINT_H__
+#define __TA3D_MISC_POINT_H__
 
 namespace TA3D
 {
@@ -8,7 +8,7 @@ namespace TA3D
 	**
 	** \brief Structure holding values for 2D-coordinates
 	*/
-	template<typename T>
+	template <typename T>
 	class Point
 	{
 	public:
@@ -23,11 +23,15 @@ namespace TA3D
 		/*!
 		** \brief Reset all Coordinates in the same time
 		*/
-		void reset() {x = y = 0;}
+		void reset() { x = y = 0; }
 		/*!
 		** \brief Reset all Coordinates in the same time
 		*/
-		void reset(const Point<T>& c) { x = c.x; y = x.y; }
+		void reset(const Point<T>& c)
+		{
+			x = c.x;
+			y = x.y;
+		}
 
 	public:
 		//! X Coordinate
@@ -37,10 +41,6 @@ namespace TA3D
 
 	}; // class Point
 
-
-
-
 } // namespace TA3D
-
 
 #endif // __TA3D_MISC_POINT_H__

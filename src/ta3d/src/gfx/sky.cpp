@@ -22,7 +22,7 @@ namespace TA3D
 	void Sky::init()
 	{
 		skyInfo = NULL;
-		for(int i = 0 ; i < 6 ; ++i)
+		for (int i = 0; i < 6; ++i)
 			tex[i] = 0;
 		dlist = 0;
 		s = 0;
@@ -33,7 +33,7 @@ namespace TA3D
 	{
 		if (skyInfo)
 			delete skyInfo;
-		for(int i = 0 ; i < 6 ; ++i)
+		for (int i = 0; i < 6; ++i)
 			gfx->destroy_texture(tex[i]);
 		if (dlist)
 			glDeleteLists(dlist, 1);
@@ -59,10 +59,22 @@ namespace TA3D
 		c2 = SurfaceInt(bmp, (x % bmp->w), ((y + 1) % bmp->h));
 		c3 = SurfaceInt(bmp, ((x + 1) % bmp->w), ((y + 1) % bmp->h));
 
-		r0 = getr(c0);	g0 = getg(c0);	b0 = getb(c0);	a0 = geta(c0);
-		r1 = getr(c1);	g1 = getg(c1);	b1 = getb(c1);	a1 = geta(c1);
-		r2 = getr(c2);	g2 = getg(c2);	b2 = getb(c2);	a2 = geta(c2);
-		r3 = getr(c3);	g3 = getg(c3);	b3 = getb(c3);	a3 = geta(c3);
+		r0 = getr(c0);
+		g0 = getg(c0);
+		b0 = getb(c0);
+		a0 = geta(c0);
+		r1 = getr(c1);
+		g1 = getg(c1);
+		b1 = getb(c1);
+		a1 = geta(c1);
+		r2 = getr(c2);
+		g2 = getg(c2);
+		b2 = getb(c2);
+		a2 = geta(c2);
+		r3 = getr(c3);
+		g3 = getg(c3);
+		b3 = getb(c3);
+		a3 = geta(c3);
 
 		r0 = r0 + ((r1 - r0) * dx >> 16);
 		r2 = r2 + ((r3 - r2) * dx >> 16);
@@ -80,7 +92,7 @@ namespace TA3D
 		a2 = a2 + ((a3 - a2) * dx >> 16);
 		a0 = a0 + ((a2 - a0) * dy >> 16);
 		if (r0 == 0 && g0 == 0 && b0 == 0)
-			return makeacol32(1,1,1,a0);
+			return makeacol32(1, 1, 1, a0);
 		return makeacol32(r0, g0, b0, a0);
 	}
 
@@ -94,25 +106,25 @@ namespace TA3D
 		if (stex)
 		{
 			stex = convert_format(stex);
-			const int skyRes  = std::min<int>(1024, lp_CONFIG->getMaxTextureSizeAllowed());
+			const int skyRes = std::min<int>(1024, lp_CONFIG->getMaxTextureSizeAllowed());
 			SDL_Surface *img[6];
-			for(int i = 0 ; i < 6 ; ++i)
+			for (int i = 0; i < 6; ++i)
 				img[i] = gfx->create_surface(skyRes, skyRes);
 			const uint32 fcol = makeacol32(int(skyInfo->FogColor[0] * 255.0f), int(skyInfo->FogColor[1] * 255.0f), int(skyInfo->FogColor[2] * 255.0f), int(skyInfo->FogColor[3] * 255.0f));
 			const float coef = 1.0f / float(skyRes - 1);
 			float atanfx[8192];
 			float invsqrtfx[8192];
-			for(int x = 0 ; x < skyRes ; ++x)
+			for (int x = 0; x < skyRes; ++x)
 			{
 				const float fx = 2.0f * (float(x) * coef - 0.5f);
 				atanfx[x] = std::atan(fx) / (2.0f * float(M_PI));
 				invsqrtfx[x] = 1.0f / sqrtf(1.0f + fx * fx);
 			}
 #pragma omp parallel for
-			for(int y = 0 ; y < skyRes ; ++y)
+			for (int y = 0; y < skyRes; ++y)
 			{
 				const float fy = 2.0f * (float(y) * coef - 0.5f);
-				for(int x = 0 ; x < skyRes ; ++x)
+				for (int x = 0; x < skyRes; ++x)
 				{
 					const float fx = 2.0f * (float(x) * coef - 0.5f);
 					float alpha = atanfx[x];
@@ -150,7 +162,7 @@ namespace TA3D
 			}
 
 			gfx->set_texture_format(gfx->defaultTextureFormat_RGB_compressed());
-			for(int i = 0 ; i < 6 ; ++i)
+			for (int i = 0; i < 6; ++i)
 			{
 				tex[i] = gfx->make_texture(img[i], FILTER_TRILINEAR, true);
 				SDL_FreeSurface(img[i]);
@@ -158,7 +170,6 @@ namespace TA3D
 			SDL_FreeSurface(stex);
 		}
 	}
-
 
 	void Sky::draw()
 	{
@@ -172,56 +183,80 @@ namespace TA3D
 
 		glBindTexture(GL_TEXTURE_2D, tex[3]);
 		glBegin(GL_QUADS);
-			glTexCoord2f(0.0f, 0.0f);	glVertex3f(-w, w, w);
-			glTexCoord2f(1.0f, 0.0f);	glVertex3f(w, w, w);
-			glTexCoord2f(1.0f, 1.0f);	glVertex3f(w, -w, w);
-			glTexCoord2f(0.0f, 1.0f);	glVertex3f(-w, -w, w);
+		glTexCoord2f(0.0f, 0.0f);
+		glVertex3f(-w, w, w);
+		glTexCoord2f(1.0f, 0.0f);
+		glVertex3f(w, w, w);
+		glTexCoord2f(1.0f, 1.0f);
+		glVertex3f(w, -w, w);
+		glTexCoord2f(0.0f, 1.0f);
+		glVertex3f(-w, -w, w);
 		glEnd();
 
 		glBindTexture(GL_TEXTURE_2D, tex[2]);
 		glBegin(GL_QUADS);
-			glTexCoord2f(0.0f, 0.0f);	glVertex3f(-w, w, -w);
-			glTexCoord2f(1.0f, 0.0f);	glVertex3f(-w, w, w);
-			glTexCoord2f(1.0f, 1.0f);	glVertex3f(-w, -w, w);
-			glTexCoord2f(0.0f, 1.0f);	glVertex3f(-w, -w, -w);
+		glTexCoord2f(0.0f, 0.0f);
+		glVertex3f(-w, w, -w);
+		glTexCoord2f(1.0f, 0.0f);
+		glVertex3f(-w, w, w);
+		glTexCoord2f(1.0f, 1.0f);
+		glVertex3f(-w, -w, w);
+		glTexCoord2f(0.0f, 1.0f);
+		glVertex3f(-w, -w, -w);
 		glEnd();
 
 		glBindTexture(GL_TEXTURE_2D, tex[1]);
 		glBegin(GL_QUADS);
-			glTexCoord2f(0.0f, 0.0f);	glVertex3f(w, w, -w);
-			glTexCoord2f(1.0f, 0.0f);	glVertex3f(-w, w, -w);
-			glTexCoord2f(1.0f, 1.0f);	glVertex3f(-w, -w, -w);
-			glTexCoord2f(0.0f, 1.0f);	glVertex3f(w, -w, -w);
+		glTexCoord2f(0.0f, 0.0f);
+		glVertex3f(w, w, -w);
+		glTexCoord2f(1.0f, 0.0f);
+		glVertex3f(-w, w, -w);
+		glTexCoord2f(1.0f, 1.0f);
+		glVertex3f(-w, -w, -w);
+		glTexCoord2f(0.0f, 1.0f);
+		glVertex3f(w, -w, -w);
 		glEnd();
 
 		glBindTexture(GL_TEXTURE_2D, tex[0]);
 		glBegin(GL_QUADS);
-			glTexCoord2f(0.0f, 0.0f);	glVertex3f(w, w, w);
-			glTexCoord2f(1.0f, 0.0f);	glVertex3f(w, w, -w);
-			glTexCoord2f(1.0f, 1.0f);	glVertex3f(w, -w, -w);
-			glTexCoord2f(0.0f, 1.0f);	glVertex3f(w, -w, w);
+		glTexCoord2f(0.0f, 0.0f);
+		glVertex3f(w, w, w);
+		glTexCoord2f(1.0f, 0.0f);
+		glVertex3f(w, w, -w);
+		glTexCoord2f(1.0f, 1.0f);
+		glVertex3f(w, -w, -w);
+		glTexCoord2f(0.0f, 1.0f);
+		glVertex3f(w, -w, w);
 		glEnd();
 
 		glBindTexture(GL_TEXTURE_2D, tex[4]);
 		glBegin(GL_QUADS);
-			glTexCoord2f(1.0f, 0.0f);	glVertex3f(-w, -w, w);
-			glTexCoord2f(1.0f, 1.0f);	glVertex3f(w, -w, w);
-			glTexCoord2f(0.0f, 1.0f);	glVertex3f(w, -w, -w);
-			glTexCoord2f(0.0f, 0.0f);	glVertex3f(-w, -w, -w);
+		glTexCoord2f(1.0f, 0.0f);
+		glVertex3f(-w, -w, w);
+		glTexCoord2f(1.0f, 1.0f);
+		glVertex3f(w, -w, w);
+		glTexCoord2f(0.0f, 1.0f);
+		glVertex3f(w, -w, -w);
+		glTexCoord2f(0.0f, 0.0f);
+		glVertex3f(-w, -w, -w);
 		glEnd();
 
 		glBindTexture(GL_TEXTURE_2D, tex[5]);
 		glBegin(GL_QUADS);
-			glTexCoord2f(0.0f, 0.0f);	glVertex3f(w, w, w);
-			glTexCoord2f(0.0f, 1.0f);	glVertex3f(-w, w, w);
-			glTexCoord2f(1.0f, 1.0f);	glVertex3f(-w, w, -w);
-			glTexCoord2f(1.0f, 0.0f);	glVertex3f(w, w, -w);
+		glTexCoord2f(0.0f, 0.0f);
+		glVertex3f(w, w, w);
+		glTexCoord2f(0.0f, 1.0f);
+		glVertex3f(-w, w, w);
+		glTexCoord2f(1.0f, 1.0f);
+		glVertex3f(-w, w, -w);
+		glTexCoord2f(1.0f, 0.0f);
+		glVertex3f(w, w, -w);
 		glEnd();
 
 		glEndList();
 	}
 
-	void Sky::SkyData::load_tdf(const String& filename)
+	void Sky::SkyData::load_tdf(const String &filename)
 	{
 		TDFParser parser;
 		if (!parser.loadFromFile(filename))
@@ -239,19 +274,18 @@ namespace TA3D
 		parser.pullAsString("sky.map").explode(MapName, ',');
 	}
 
-
-	void Sky::choose_a_sky(const String& mapname, const String& planet)
+	void Sky::choose_a_sky(const String &mapname, const String &planet)
 	{
 		if (skyInfo)
 			delete skyInfo;
 		skyInfo = NULL;
 
-		std::vector<SkyData*> sky_list;
+		std::vector<SkyData *> sky_list;
 		sky_list.clear();
 
 		String::Vector file_list;
 		VFS::Instance()->getFilelist("sky\\*.tdf", file_list);
-		uint32	nb_sky = 0;
+		uint32 nb_sky = 0;
 
 		for (String::Vector::const_iterator it = file_list.begin(); it != file_list.end(); ++it)
 		{
@@ -292,7 +326,7 @@ namespace TA3D
 				delete sky_data;
 		}
 
-		if (nb_sky == 0)    // Look for a default sky
+		if (nb_sky == 0) // Look for a default sky
 		{
 			LOG_DEBUG(LOG_PREFIX_GFX << "no sky associated with this map('" << mapname << "') or this planet('" << planet << "') found, looking for default skies");
 			for (String::Vector::const_iterator it = file_list.begin(); it != file_list.end(); ++it)
@@ -316,7 +350,7 @@ namespace TA3D
 		if (nb_sky > 0)
 		{
 			int select = TA3D_RAND() % nb_sky;
-			for (std::vector<SkyData*>::iterator it = sky_list.begin() ; it != sky_list.end(); ++it, --select)
+			for (std::vector<SkyData *>::iterator it = sky_list.begin(); it != sky_list.end(); ++it, --select)
 			{
 				if (select == 0)
 				{
@@ -327,9 +361,9 @@ namespace TA3D
 			}
 		}
 
-		for (std::vector<SkyData*>::iterator it = sky_list.begin() ; it != sky_list.end(); ++it)
+		for (std::vector<SkyData *>::iterator it = sky_list.begin(); it != sky_list.end(); ++it)
 		{
-			if (*it != NULL )
+			if (*it != NULL)
 				delete *it;
 		}
 		sky_list.clear();
@@ -338,8 +372,6 @@ namespace TA3D
 		// Temporary
 		build(10, 400);
 	}
-
-
 
 	Sky::SkyData::SkyData()
 	{

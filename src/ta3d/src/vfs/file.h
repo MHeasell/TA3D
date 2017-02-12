@@ -23,9 +23,9 @@
 */
 
 #ifndef __TA3D_UTILS_FILE_H__
-# define __TA3D_UTILS_FILE_H__
+#define __TA3D_UTILS_FILE_H__
 
-# include <misc/string.h>
+#include <misc/string.h>
 
 namespace TA3D
 {
@@ -35,7 +35,7 @@ namespace TA3D
 		{
 		public:
 			//! This is an abstract class, its destructor must be virtual
-			virtual ~File()	{}
+			virtual ~File() {}
 
 			//! Read s bytes and write them in memory pointed by p
 			virtual int read(void *p, int s) = 0;
@@ -68,7 +68,7 @@ namespace TA3D
 					return String();
 
 				String str;
-				for(int c = getc() ; c != 0 && c != -1 ; c = getc())
+				for (int c = getc(); c != 0 && c != -1; c = getc())
 					str << char(c);
 
 				return str;
@@ -84,16 +84,20 @@ namespace TA3D
 			}
 
 			//! Read binary data to fill a variable of arbitrary type
-			template<class T>
-					inline void read(T &a)	{	read((char*)&a, sizeof(a));	}
-			template<class T>
-					inline File &operator>>(T &a)	{	read(a);	return *this;	}
+			template <class T>
+			inline void read(T &a) { read((char *)&a, sizeof(a)); }
+			template <class T>
+			inline File &operator>>(T &a)
+			{
+				read(a);
+				return *this;
+			}
 
-			template<class T>
-					void load(T &out)
+			template <class T>
+			void load(T &out)
 			{
 				String line;
-				while(this->readLine(line))
+				while (this->readLine(line))
 					out.push_back(line);
 			}
 		};

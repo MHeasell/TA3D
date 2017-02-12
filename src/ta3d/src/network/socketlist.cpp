@@ -5,7 +5,6 @@
 
 #include "socketlist.h"
 
-
 namespace TA3D
 {
 
@@ -29,14 +28,14 @@ namespace TA3D
 	void SockList::Shutdown()
 	{
 		lock();
-		for(SockType::iterator i = sockets.begin() ; i != sockets.end() ; ++i)
+		for (SockType::iterator i = sockets.begin(); i != sockets.end(); ++i)
 			delete *i;
 		maxid = 0;
 		sockets.clear();
 		unlock();
 	}
 
-	int SockList::Add(TA3DSock* sock)
+	int SockList::Add(TA3DSock *sock)
 	{
 		MutexLocker mLock(*this);
 		if (maxid > 10000) //arbitrary limit
@@ -76,6 +75,5 @@ namespace TA3D
 			return NULL;
 		return (*i)->sock;
 	}
-
 
 } // namespace TA3D

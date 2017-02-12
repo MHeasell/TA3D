@@ -15,42 +15,43 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA*/
 #ifndef __TA3D_InGameWeapons_ING_H__
-# define __TA3D_InGameWeapons_ING_H__
+#define __TA3D_InGameWeapons_ING_H__
 
-# include <stdafx.h>
-# include <threads/thread.h>
-# include "weapons.h"
-# include "weapons.single.h"
-# include <misc/camera.h>
+#include <stdafx.h>
+#include <threads/thread.h>
+#include "weapons.h"
+#include "weapons.single.h"
+#include <misc/camera.h>
 
 namespace TA3D
 {
-	template<typename T, typename TKit>	class BVH;
+	template <typename T, typename TKit>
+	class BVH;
 	class Unit;
 
 	// Define the TKit structure required by the KDTree structure
 	class BVH_UnitTKit
 	{
 	public:
-		typedef Vector3D		Vec;
-		typedef std::pair<const Unit*, std::pair<Vec, float> >		T;
+		typedef Vector3D Vec;
+		typedef std::pair<const Unit *, std::pair<Vec, float>> T;
 
 		struct Predicate
 		{
 			const unsigned int D;
 			const float f;
 
-			inline Predicate(const Vec &v, const unsigned int N) : D(N), f(v[N])	{}
+			inline Predicate(const Vec &v, const unsigned int N) : D(N), f(v[N]) {}
 
-			inline bool operator() (const T &i) const
+			inline bool operator()(const T &i) const
 			{
 				return i.second.first[D] < f;
 			}
 		};
 
 	public:
-		static inline const Vec &pos(const T &elt)	{	return elt.second.first;	}
-		static inline float radius(const T &elt)	{	return elt.second.second;	}
+		static inline const Vec &pos(const T &elt) { return elt.second.first; }
+		static inline float radius(const T &elt) { return elt.second.second; }
 		static inline void getTopBottom(const std::vector<T>::const_iterator &begin, const std::vector<T>::const_iterator &end, Vec &top, Vec &bottom);
 		static inline unsigned int getPrincipalDirection(const Vec &v)
 		{
@@ -75,7 +76,7 @@ namespace TA3D
 			return;
 		}
 		top = bottom = begin->second.first;
-		for(std::vector<BVH_UnitTKit::T>::const_iterator i = begin ; i != end ; ++i)
+		for (std::vector<BVH_UnitTKit::T>::const_iterator i = begin; i != end; ++i)
 		{
 			const Vector3D L(i->second.second, i->second.second, i->second.second);
 			top = Math::Max(top, i->second.first + L);
@@ -88,84 +89,77 @@ namespace TA3D
     ** \brief
     */
 	class InGameWeapons : public ObjectSync, public Thread
-    {
-    public:
-        //! \name Constructor & Destructor
-        //@{
-        //! Default constructor
+	{
+	public:
+		//! \name Constructor & Destructor
+		//@{
+		//! Default constructor
 		InGameWeapons();
-        //! Destructor
+		//! Destructor
 		~InGameWeapons();
-        //@}
+		//@}
 
-
-        /*!
+		/*!
         ** \brief
         ** \param real
         */
-        void init(bool real = true);
+		void init(bool real = true);
 
-        /*!
+		/*!
         ** \brief
         */
-        void destroy();
+		void destroy();
 
-
-        /*!
+		/*!
         ** \brief
         ** \param weapon_id
         ** \param shooter
         */
-        int add_weapon(int weapon_id,int shooter);
+		int add_weapon(int weapon_id, int shooter);
 
-        /*!
+		/*!
         ** \brief
         */
 		void move(const float dt);
 
-        /*!
+		/*!
         ** \brief
         */
 		void draw(bool underwater = false);
 
-        /*!
+		/*!
         ** \brief
         */
-        void draw_mini(float map_w, float map_h, int mini_w, int mini_h); // Repère les unités sur la mini-carte
+		void draw_mini(float map_w, float map_h, int mini_w, int mini_h); // Repère les unités sur la mini-carte
 
+	public:
+		//! Weapons count
+		uint32 nb_weapon;			// Nombre d'armes
+									//!
+		std::vector<Weapon> weapon; // Tableau regroupant les armes
+		//!
+		Gaf::Animation nuclogo; // Logos des armes atomiques sur la minicarte / Logo of nuclear weapons on minimap
 
-    public:
-        //! Weapons count
-        uint32 nb_weapon;			// Nombre d'armes
-        //!
-		std::vector< Weapon > weapon;			// Tableau regroupant les armes
-        //!
-        Gaf::Animation nuclogo;			// Logos des armes atomiques sur la minicarte / Logo of nuclear weapons on minimap
-
-        //!
-        std::vector< uint32 > idx_list;
-        //!
-        std::vector< uint32 > free_idx;
+		//!
+		std::vector<uint32> idx_list;
+		//!
+		std::vector<uint32> free_idx;
 		//! A BVH structure to store units (for fast collision detection)
-		BVH< BVH_UnitTKit::T, BVH_UnitTKit > *bvhUnits;
+		BVH<BVH_UnitTKit::T, BVH_UnitTKit> *bvhUnits;
 
-    protected:
-        //!
+	protected:
+		//!
 		volatile bool thread_running;
-        //!
+		//!
 		volatile bool thread_ask_to_stop;
-        //!
-        void proc(void*);
-        //!
-        void signalExitThread();
+		//!
+		void proc(void *);
+		//!
+		void signalExitThread();
 
 	}; // class InGameWeapons
 
-
-
 	extern InGameWeapons weapons;
-
-
 }
 
 #endif // __TA3D_InGameWeapons_ING_H__

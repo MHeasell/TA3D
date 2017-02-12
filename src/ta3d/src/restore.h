@@ -14,23 +14,21 @@
     You should have received a copy of the GNU General Public License
     along with this program; if not, write to the Free Software
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA*/
-    
+
 #ifndef __TA3D_XX_RESTORE_H__
-# define __TA3D_XX_RESTORE_H__
+#define __TA3D_XX_RESTORE_H__
 
-
-# include "misc/string.h"
-# include "ingame/gamedata.h"
-
+#include "misc/string.h"
+#include "ingame/gamedata.h"
 
 namespace TA3D
 {
 
-	void save_game( const String filename, GameData *game_data );
+	void save_game(const String filename, GameData *game_data);
 
-	bool load_game_data( const String filename, GameData *game_data, bool loading = false );
+	bool load_game_data(const String filename, GameData *game_data, bool loading = false);
 
-	void load_game( GameData *game_data );
+	void load_game(GameData *game_data);
 
 } // namespace TA3D
 

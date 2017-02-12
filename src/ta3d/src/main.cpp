@@ -22,12 +22,12 @@
 
 #include <yuni/yuni.h>
 #include <yuni/core/system/main.h>
-#include "stdafx.h"					// standard pch inheritance.
-#include "TA3D_NameSpace.h"			// our namespace, a MUST have.
-#include "engine.h"		       		// The engine class.
+#include "stdafx.h"			// standard pch inheritance.
+#include "TA3D_NameSpace.h" // our namespace, a MUST have.
+#include "engine.h"			// The engine class.
 //#include "ta3dbase.h"				// Just for the LANG var
 #include "EngineClass.h"
-#include "backtrace.h"				// Some debugging tools
+#include "backtrace.h" // Some debugging tools
 #include "misc/paths.h"
 #include "misc/resources.h"
 #include "logs/logs.h"
@@ -42,8 +42,6 @@
 #include "sounds/manager.h"
 #include "cache.h"
 #include "ingame/menus/setupgame.h"
-
-
 
 namespace TA3D
 {
@@ -66,7 +64,7 @@ namespace TA3D
 		String current_mod = TA3D::VARS::TA3D_CURRENT_MOD;
 
 		VARS::TA3D_CURRENT_MOD = TA3D::VARS::lp_CONFIG->last_MOD = parser.pullAsString("TA3D.MOD", current_mod);
-		VARS::lp_CONFIG->serializedGameData = parser.pullAsString( "TA3D.Game Data", TA3D::VARS::lp_CONFIG->serializedGameData );
+		VARS::lp_CONFIG->serializedGameData = parser.pullAsString("TA3D.Game Data", TA3D::VARS::lp_CONFIG->serializedGameData);
 
 		if (current_mod != TA3D::VARS::TA3D_CURRENT_MOD) // Refresh file structure
 		{
@@ -84,26 +82,26 @@ namespace TA3D
 		{
 			if (parser.pullAsBool("TA3D.Server")) // Server code
 			{
-				const String& host_name = parser.pullAsString("TA3D.Server name", TA3D::VARS::lp_CONFIG->player_name);
-				Menus::SetupGame::Execute(false, host_name);		// Start the game in networking mode as server
+				const String &host_name = parser.pullAsString("TA3D.Server name", TA3D::VARS::lp_CONFIG->player_name);
+				Menus::SetupGame::Execute(false, host_name); // Start the game in networking mode as server
 			}
 			else // Client code
 			{
-				const String& host_name = parser.pullAsString("TA3D.Server name");
-				Menus::SetupGame::Execute(true, host_name);		// Start the game in networking mode as server
+				const String &host_name = parser.pullAsString("TA3D.Server name");
+				Menus::SetupGame::Execute(true, host_name); // Start the game in networking mode as server
 			}
 		}
 		else if (parser.pullAsBool("TA3D.Local game"))
-			Menus::SetupGame::Execute(false, String(), String(), false, parser.pullAsBool("TA3D.Instant start"));		// Start the game in local mode
+			Menus::SetupGame::Execute(false, String(), String(), false, parser.pullAsBool("TA3D.Instant start")); // Start the game in local mode
 
 		TA3D::VARS::TA3D_CURRENT_MOD = TA3D::VARS::lp_CONFIG->last_MOD = current_mod;
 
 		if (current_mod != TA3D::VARS::TA3D_CURRENT_MOD) // Refresh file structure
 		{
-			Cache::Clear();		// Clear the cache
+			Cache::Clear(); // Clear the cache
 
 			VFS::Instance()->reload();
-			ta3dSideData.loadData();				// Refresh side data so we load the correct values
+			ta3dSideData.loadData(); // Refresh side data so we load the correct values
 			sound_manager = new TA3D::Audio::Manager();
 			sound_manager->loadTDFSounds(true);
 			sound_manager->loadTDFSounds(false);
@@ -115,14 +113,11 @@ namespace TA3D
 
 } // namespace TA3D
 
-
-
-
 using namespace TA3D;
 
 namespace TA3D
 {
-	int hpiview(int argc,char *argv[]);
+	int hpiview(int argc, char *argv[]);
 }
 
 /*
@@ -146,7 +141,7 @@ static int ParseCommandLine(int argc, char *argv[])
 		// Argument converted to a String
 		String arg;
 
-		for (int i = 1 ; i < argc ; ++i)
+		for (int i = 1; i < argc; ++i)
 		{
 			arg = argv[i];
 			if ("--quick-start" == arg) // Quick restart mecanism (bypass the intro screen)
@@ -182,9 +177,7 @@ static int ParseCommandLine(int argc, char *argv[])
 	return 0;
 }
 
-
-
-static void InitializeTheEngine(TA3D::Engine& engine)
+static void InitializeTheEngine(TA3D::Engine &engine)
 {
 	// Engine: Start the loading of data in background (thread)
 	engine.start();
@@ -193,8 +186,6 @@ static void InitializeTheEngine(TA3D::Engine& engine)
 
 	LOG_INFO("The engine is ready.");
 }
-
-
 
 YUNI_MAIN()
 {
@@ -205,7 +196,7 @@ YUNI_MAIN()
 
 	// Special command line parameter: --working-directory
 	// it enables the working directory as a path to look for resources
-	for(int i = 1 ; i < argc ; ++i)
+	for (int i = 1; i < argc; ++i)
 		if (strcmp(argv[i], "--working-directory") == 0)
 			lp_CONFIG->bUseWorkingDirectory = true;
 
@@ -245,17 +236,17 @@ YUNI_MAIN()
 		//   need to try/catch this but no worries for now since its not doing anything.
 		TA3D::Settings::Save();
 	}
-	catch(const char *msg)
+	catch (const char *msg)
 	{
 		criticalMessage(msg);
 		return 1;
 	}
-	catch(const String &msg)
+	catch (const String &msg)
 	{
 		criticalMessage(msg);
 		return 1;
 	}
-	catch(const std::exception &e)
+	catch (const std::exception &e)
 	{
 		criticalMessage(String("Uncaught exception: ") << e.what());
 		return 1;
@@ -263,4 +254,3 @@ YUNI_MAIN()
 
 	return 0;
 }
-

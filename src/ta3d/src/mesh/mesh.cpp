@@ -53,9 +53,7 @@ namespace TA3D
 		MeshTypeManager::lMeshExtension->push_back(ext);
 	}
 
-	ModelManager	model_manager;
-
-
+	ModelManager model_manager;
 
 	void AnimationData::init()
 	{
@@ -72,13 +70,12 @@ namespace TA3D
 		init();
 	}
 
-
 	void AnimationData::load(const int nb)
 	{
-		destroy();		// Au cas oÃ¹
+		destroy(); // Au cas oÃ¹
 		nb_piece = nb;
 		data.resize(nb);
-		for (DataVector::iterator i = data.begin() ; i != data.end() ; ++i)
+		for (DataVector::iterator i = data.begin(); i != data.end(); ++i)
 		{
 			i->flag = 0;
 			i->explosion_flag = 0;
@@ -103,8 +100,6 @@ namespace TA3D
 		}
 	}
 
-
-
 	void AnimationData::move(const float dt, const float g)
 	{
 		if (!is_moving)
@@ -115,11 +110,11 @@ namespace TA3D
 			explode_time -= dt;
 		explode = explode_time > 0.0f;
 
-		for (DataVector::iterator e = data.begin() ; e != data.end() ; ++e)
+		for (DataVector::iterator e = data.begin(); e != data.end(); ++e)
 		{
-			if ((e->flag & FLAG_EXPLODE) && !(e->explosion_flag & EXPLODE_BITMAPONLY))		// This piece is exploding
+			if ((e->flag & FLAG_EXPLODE) && !(e->explosion_flag & EXPLODE_BITMAPONLY)) // This piece is exploding
 			{
-                for (int i = 0; i < 3; ++i)
+				for (int i = 0; i < 3; ++i)
 				{
 					Axe &axis = e->axe[i];
 					if (i == 1 && (e->explosion_flag & EXPLODE_FALL))
@@ -131,7 +126,7 @@ namespace TA3D
 			}
 			else
 			{
-                for (int i = 0; i < 3; ++i)
+				for (int i = 0; i < 3; ++i)
 				{
 					Axe &axis = e->axe[i];
 					if (!axis.is_moving)
@@ -145,8 +140,7 @@ namespace TA3D
 						const float c = axis.move_speed * dt;
 						axis.move_distance -= c;
 						axis.pos += c;
-						if ((a > 0.0f && axis.move_distance < 0.0f)
-							|| (a < 0.0f && axis.move_distance > 0.0f))
+						if ((a > 0.0f && axis.move_distance < 0.0f) || (a < 0.0f && axis.move_distance > 0.0f))
 						{
 							axis.pos += axis.move_distance;
 							axis.move_distance = 0.0f;
@@ -154,7 +148,7 @@ namespace TA3D
 					}
 
 					while (axis.angle > 180.0f)
-						axis.angle -= 360.0f;		// Maintient l'angle dans les limites
+						axis.angle -= 360.0f; // Maintient l'angle dans les limites
 					while (axis.angle < -180.0f)
 						axis.angle += 360.0f;
 
@@ -173,8 +167,7 @@ namespace TA3D
 						axis.rot_speed += axis.rot_accel * dt;
 						if (axis.rot_speed_limit)
 						{
-							if ((b <= axis.rot_target_speed && axis.rot_speed >= axis.rot_target_speed)
-								|| (b >= axis.rot_target_speed && axis.rot_speed <= axis.rot_target_speed))
+							if ((b <= axis.rot_target_speed && axis.rot_speed >= axis.rot_target_speed) || (b >= axis.rot_target_speed && axis.rot_speed <= axis.rot_target_speed))
 							{
 								axis.rot_accel = 0.0f;
 								axis.rot_speed = axis.rot_target_speed;
@@ -200,7 +193,7 @@ namespace TA3D
 		}
 	}
 
-	void Animation::animate(const float t, Vector3D &R, Vector3D& T) const
+	void Animation::animate(const float t, Vector3D &R, Vector3D &T) const
 	{
 		if (type & ROTATION)
 		{
@@ -212,9 +205,9 @@ namespace TA3D
 				else
 				{
 					coef = t * angle_w;
-					const int i = (int) coef;
+					const int i = (int)coef;
 					coef = coef - float(i);
-					coef = (i&1) ? (1.0f - coef) : coef;
+					coef = (i & 1) ? (1.0f - coef) : coef;
 				}
 				R = coef * angle_0 + (1.0f - coef) * angle_1;
 			}
@@ -227,13 +220,13 @@ namespace TA3D
 			{
 				float coef;
 				if (type & TRANSLATION_COSINE)
-					coef = 0.5f + 0.5f * cosf( t * translate_w );
+					coef = 0.5f + 0.5f * cosf(t * translate_w);
 				else
 				{
 					coef = t * translate_w;
-					const int i = (int) coef;
+					const int i = (int)coef;
 					coef = coef - float(i);
-					coef = (i&1) ? (1.0f - coef) : coef;
+					coef = (i & 1) ? (1.0f - coef) : coef;
 				}
 				T = coef * translate_0 + (1.0f - coef) * translate_1;
 			}
@@ -296,7 +289,7 @@ namespace TA3D
 		DELETE_ARRAY(line_v_idx[1]);
 		DELETE_ARRAY(shadow_index);
 		DELETE_ARRAY(tcoord);
-		for(unsigned int i = 0; i < gltex.size() ; ++i)
+		for (unsigned int i = 0; i < gltex.size(); ++i)
 			if (gltex.size() > i)
 				gfx->destroy_texture(gltex[i]);
 		gltex.clear();
@@ -335,14 +328,14 @@ namespace TA3D
 
 			String filename(TA3D::Paths::Caches);
 			filename << tex_cache_name[id];
-			SDL_Surface *bmp = LoadTex( filename );
+			SDL_Surface *bmp = LoadTex(filename);
 
 			if (bmp)
 			{
 				GLuint texid = gfx->make_texture(bmp, FILTER_TRILINEAR, true);
 				gltex[id] = texid;
-				gfx->save_texture_to_cache( TA3D::Paths::Files::ReplaceExtension(tex_cache_name[id],".bin"), texid, bmp->w, bmp->h, true);
-				SDL_FreeSurface( bmp );
+				gfx->save_texture_to_cache(TA3D::Paths::Files::ReplaceExtension(tex_cache_name[id], ".bin"), texid, bmp->w, bmp->h, true);
+				SDL_FreeSurface(bmp);
 			}
 			else
 			{
@@ -366,7 +359,7 @@ namespace TA3D
 	{
 		if (!tex_cache_name.empty())
 		{
-			for (unsigned int i = 0 ; i < tex_cache_name.size() ; ++i)
+			for (unsigned int i = 0; i < tex_cache_name.size(); ++i)
 				load_texture_id(i);
 			tex_cache_name.clear();
 		}
@@ -386,10 +379,9 @@ namespace TA3D
 		return emitter;
 	}
 
-
 	bool Mesh::compute_emitter_point(const int obj_idx)
 	{
-		emitter_point |= ( script_index == obj_idx);
+		emitter_point |= (script_index == obj_idx);
 		emitter |= emitter_point;
 		if (child)
 			emitter |= child->compute_emitter_point(obj_idx);
@@ -398,10 +390,9 @@ namespace TA3D
 		return emitter;
 	}
 
-
-	void Mesh::Identify(ScriptData *script)			// Identifie les pièces utilisées par le script
+	void Mesh::Identify(ScriptData *script) // Identifie les pièces utilisées par le script
 	{
-		script_index = -1;				// Pièce non utilisée / Unused piece
+		script_index = -1; // Pièce non utilisée / Unused piece
 		if (!name.empty())
 			script_index = script->identify(name);
 		if (next)
@@ -410,8 +401,7 @@ namespace TA3D
 			child->Identify(script);
 	}
 
-
-	void Mesh::compute_center(Vector3D *center, const Vector3D &dec, int *coef) const		// Calcule les coordonnÃ©es du centre de l'objet, objets liÃ©s compris
+	void Mesh::compute_center(Vector3D *center, const Vector3D &dec, int *coef) const // Calcule les coordonnÃ©es du centre de l'objet, objets liÃ©s compris
 	{
 		for (int i = 0; i < nb_vtx; ++i)
 		{
@@ -426,43 +416,40 @@ namespace TA3D
 			child->compute_center(center, dec + pos_from_parent, coef);
 	}
 
-
-	float Mesh::compute_size_sq(const Vector3D &center) const		// CarrÃ© de la taille(on fera une racine aprÃ¨s)
+	float Mesh::compute_size_sq(const Vector3D &center) const // CarrÃ© de la taille(on fera une racine aprÃ¨s)
 	{
 		float size = 0.0f;
 		for (int i = 0; i < nb_vtx; ++i)
 		{
 			const float dist = (points[i] - center).sq();
-			if(size < dist)
+			if (size < dist)
 				size = dist;
 		}
 		if (next)
 		{
 			const float size_next = next->compute_size_sq(center);
-			if(size < size_next)
+			if (size < size_next)
 				size = size_next;
 		}
 		if (child)
 		{
 			const float size_child = child->compute_size_sq(center);
-			if(size < size_child)
+			if (size < size_child)
 				size = size_child;
 		}
 		return size;
 	}
 
-
 	float Mesh::compute_top(float top, const Vector3D &dec) const
 	{
-		for(int i = 0;i < nb_vtx; ++i)
+		for (int i = 0; i < nb_vtx; ++i)
 			top = Math::Max(top, points[i].y + dec.y + pos_from_parent.y);
 		if (next)
 			top = next->compute_top(top, dec);
 		if (child)
-			top = child->compute_top(top, dec + pos_from_parent );
+			top = child->compute_top(top, dec + pos_from_parent);
 		return top;
 	}
-
 
 	float Mesh::compute_bottom(float bottom, const Vector3D &dec) const
 	{
@@ -498,20 +485,17 @@ namespace TA3D
 		return id;
 	}
 
-
-
-
-	int Mesh::random_pos(const AnimationData *data_s, const int id, Vector3D* vec) const
+	int Mesh::random_pos(const AnimationData *data_s, const int id, Vector3D *vec) const
 	{
 		if (id == obj_id)
 		{
-			if (nb_t_index > 2 && (data_s == NULL || script_index < 0 || !(data_s->data[script_index].flag & FLAG_HIDE)) )
+			if (nb_t_index > 2 && (data_s == NULL || script_index < 0 || !(data_s->data[script_index].flag & FLAG_HIDE)))
 			{
 				const int rnd_idx = (Math::RandomTable() % (nb_t_index / 3)) * 3;
 				const float a = float(Math::RandomTable() & 0xFF) / 255.0f;
 				const float b = (1.0f - a) * float(Math::RandomTable() & 0xFF) / 255.0f;
 				const float c = 1.0f - a - b;
-				*vec = a * points[ t_index[rnd_idx]] + b * points[t_index[rnd_idx + 1]] + c * points[t_index[rnd_idx + 2]];
+				*vec = a * points[t_index[rnd_idx]] + b * points[t_index[rnd_idx + 1]] + c * points[t_index[rnd_idx + 2]];
 				if (data_s && script_index >= 0)
 					*vec = data_s->data[script_index].pos + *vec * data_s->data[script_index].matrix;
 			}
@@ -523,7 +507,7 @@ namespace TA3D
 		{
 			if (child != NULL)
 			{
-				const int r = child->random_pos( data_s, id, vec );
+				const int r = child->random_pos(data_s, id, vec);
 				if (r)
 				{
 					if (r == 1)
@@ -539,10 +523,7 @@ namespace TA3D
 		return 0;
 	}
 
-
-
-
-	void Mesh::compute_coord(AnimationData* data_s, Vector3D *pos, const bool c_part, const int p_tex, const Vector3D *target,
+	void Mesh::compute_coord(AnimationData *data_s, Vector3D *pos, const bool c_part, const int p_tex, const Vector3D *target,
 							 Vector3D *upos, Matrix *M, const float size, const Vector3D *center, bool reverse,
 							 const Mesh *src, const AnimationData *src_data) const
 	{
@@ -558,10 +539,10 @@ namespace TA3D
 				ipos.y = data.axe[1].pos;
 				ipos.z = data.axe[2].pos;
 				*pos = *pos + (pos_from_parent + ipos) * (*M);
-				*M = RotateZYX( data.axe[2].angle * DEG2RAD,
-								data.axe[1].angle * DEG2RAD,
-								data.axe[0].angle * DEG2RAD)
-					* (*M);
+				*M = RotateZYX(data.axe[2].angle * DEG2RAD,
+							   data.axe[1].angle * DEG2RAD,
+							   data.axe[0].angle * DEG2RAD) *
+					 (*M);
 				data.matrix = *M;
 				if (nb_l_index == 2)
 				{
@@ -591,14 +572,14 @@ namespace TA3D
 			Vector3D t_mod;
 			const float life = 1.0f;
 			const int nb = (Math::RandomTable() % 60) + 1;
-			ParticlesSystem* system = NULL;
+			ParticlesSystem *system = NULL;
 			for (int i = 0; i < nb; ++i)
 			{
 				bool random_vector = true;
 				if (src != NULL)
 				{
 					for (uint32 base_n = Math::RandomTable(), n = 0; random_vector && n < src->nb_sub_obj; ++n)
-						random_vector = !src->random_pos( src_data, (base_n + n) % src->nb_sub_obj, &t_mod );
+						random_vector = !src->random_pos(src_data, (base_n + n) % src->nb_sub_obj, &t_mod);
 				}
 				if (random_vector)
 				{
@@ -610,14 +591,14 @@ namespace TA3D
 					if (center)
 						t_mod = t_mod + (*center);
 				}
-				const float speed = 1.718281828f;			// expf(1.0f) - 1.0f because of speed law: S(t) = So * expf( -t / tref ) and a lifetime of 1 sec
+				const float speed = 1.718281828f; // expf(1.0f) - 1.0f because of speed law: S(t) = So * expf( -t / tref ) and a lifetime of 1 sec
 				if (reverse)
 				{
 					Dir = *pos - (t_mod + *target);
 					Dir.x += upos->x;
 					Dir.y += upos->y;
 					Dir.z += upos->z;
-					system = particle_engine.emit_part_fast( system, t_mod + *target, Dir, p_tex, i == 0 ? -nb : 1, speed, life, 2.0f, true);
+					system = particle_engine.emit_part_fast(system, t_mod + *target, Dir, p_tex, i == 0 ? -nb : 1, speed, life, 2.0f, true);
 				}
 				else
 				{
@@ -625,7 +606,7 @@ namespace TA3D
 					Dir.x -= upos->x;
 					Dir.y -= upos->y;
 					Dir.z -= upos->z;
-					system = particle_engine.emit_part_fast( system, *upos + *pos, Dir, p_tex, i == 0 ? -nb : 1, speed, life, 2.0f, true);
+					system = particle_engine.emit_part_fast(system, *upos + *pos, Dir, p_tex, i == 0 ? -nb : 1, speed, life, 2.0f, true);
 				}
 			}
 		}
@@ -638,9 +619,6 @@ namespace TA3D
 			next->compute_coord(data_s, pos, c_part, p_tex, target, upos, M, size, center, reverse, src, src_data);
 	}
 
-
-
-
 	bool Mesh::draw_shadow(Vector3D Dir, float t, AnimationData *data_s, bool alset, bool exploding_parts)
 	{
 		const bool explodes = script_index >= 0 && data_s && (data_s->data[script_index].flag & FLAG_EXPLODE);
@@ -649,7 +627,7 @@ namespace TA3D
 		glPushMatrix();
 		if (!(explodes && !exploding_parts))
 		{
-			glTranslatef(pos_from_parent.x,pos_from_parent.y,pos_from_parent.z);
+			glTranslatef(pos_from_parent.x, pos_from_parent.y, pos_from_parent.z);
 
 			if (script_index >= 0 && data_s)
 			{
@@ -669,7 +647,7 @@ namespace TA3D
 			{
 				if (animation_data)
 				{
-					Vector3D R,T;
+					Vector3D R, T;
 					animation_data->animate(t, R, T);
 					glTranslatef(T.x, T.y, T.z);
 					glRotatef(R.x, 1.0f, 0.0f, 0.0f);
@@ -685,10 +663,10 @@ namespace TA3D
 				{
 					glDisable(GL_LIGHTING);
 					glDisable(GL_TEXTURE_2D);
-					glEnableClientState(GL_VERTEX_ARRAY);		// Les sommets
+					glEnableClientState(GL_VERTEX_ARRAY); // Les sommets
 					glDisableClientState(GL_NORMAL_ARRAY);
 					glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-					alset=true;
+					alset = true;
 				}
 				/*-----------------Code de calcul du cone d'ombre-------------------------*/
 				if (shadow_index == NULL)
@@ -700,11 +678,11 @@ namespace TA3D
 					t_line = new short[nb_t_index];
 					line_v_idx[0] = new short[nb_t_index];
 					line_v_idx[1] = new short[nb_t_index];
-					face_reverse = new byte[ nb_t_index ];
+					face_reverse = new byte[nb_t_index];
 					nb_line = 0;
-					for (int i = 0 ; i < nb_t_index ; i += 3)
+					for (int i = 0; i < nb_t_index; i += 3)
 					{
-						for (int a = 0 ; a < 3 ; ++a)
+						for (int a = 0; a < 3; ++a)
 						{
 							int idx = -1;
 							face_reverse[i + a] = 0;
@@ -718,7 +696,7 @@ namespace TA3D
 								else if (line_v_idx[0][e] == t_index[i + ((a + 1) % 3)] && line_v_idx[1][e] == t_index[i + a])
 								{
 									idx = e;
-									face_reverse[ i + a ] = 2;
+									face_reverse[i + a] = 2;
 									break;
 								}
 							}
@@ -737,23 +715,23 @@ namespace TA3D
 
 				if (Dir != last_dir) // Don't need to compute things twice
 				{
-					::memset((byte*)line_on, 0, nb_line);
+					::memset((byte *)line_on, 0, nb_line);
 					uint32 e = 0;
 					if (F_N == NULL)
 						F_N = new Vector3D[nb_t_index / 3];
 					for (int i = 0; i < nb_t_index; i += 3)
 					{
 						if ((F_N[e++] % Dir) >= 0.0f)
-							continue;	// Use face normal
-						line_on[t_line[i]]   = byte(((line_on[t_line[i]]   ^ 1) & 1) | face_reverse[i]);
-						line_on[t_line[i+1]] = byte(((line_on[t_line[i+1]] ^ 1) & 1) | face_reverse[i+1]);
-						line_on[t_line[i+2]] = byte(((line_on[t_line[i+2]] ^ 1) & 1) | face_reverse[i+2]);
+							continue; // Use face normal
+						line_on[t_line[i]] = byte(((line_on[t_line[i]] ^ 1) & 1) | face_reverse[i]);
+						line_on[t_line[i + 1]] = byte(((line_on[t_line[i + 1]] ^ 1) & 1) | face_reverse[i + 1]);
+						line_on[t_line[i + 2]] = byte(((line_on[t_line[i + 2]] ^ 1) & 1) | face_reverse[i + 2]);
 					}
-					for (int i = 0 ; i < nb_line ; ++i)
+					for (int i = 0; i < nb_line; ++i)
 					{
 						if (!(line_on[i] & 1))
 							continue;
-						points[line_v_idx[0][i] + nb_vtx] = points[line_v_idx[0][i]] + Dir;		// Projection
+						points[line_v_idx[0][i] + nb_vtx] = points[line_v_idx[0][i]] + Dir; // Projection
 						points[line_v_idx[1][i] + nb_vtx] = points[line_v_idx[1][i]] + Dir;
 
 						if (line_on[i] & 2)
@@ -779,13 +757,13 @@ namespace TA3D
 				if (nb_idx)
 				{
 					glVertexPointer(3, GL_FLOAT, 0, points);
-					glDrawRangeElements(GL_QUADS, 0, (nb_vtx<<1)-1, nb_idx,GL_UNSIGNED_SHORT,shadow_index);		// dessine le tout
+					glDrawRangeElements(GL_QUADS, 0, (nb_vtx << 1) - 1, nb_idx, GL_UNSIGNED_SHORT, shadow_index); // dessine le tout
 				}
 			}
 			if (child && !(explodes && !exploding_parts))
 			{
 				glPushMatrix();
-				alset = child->draw_shadow(Dir,t,data_s,alset,exploding_parts & !explodes);
+				alset = child->draw_shadow(Dir, t, data_s, alset, exploding_parts & !explodes);
 				glPopMatrix();
 			}
 		}
@@ -793,7 +771,7 @@ namespace TA3D
 		{
 			glPopMatrix();
 			glPushMatrix();
-			alset = next->draw_shadow(ODir,t,data_s,alset,exploding_parts);
+			alset = next->draw_shadow(ODir, t, data_s, alset, exploding_parts);
 			glPopMatrix();
 		}
 		else
@@ -801,12 +779,9 @@ namespace TA3D
 		return alset;
 	}
 
-
-
-
-	bool Mesh::draw_shadow_basic(Vector3D Dir,float t,AnimationData *data_s,bool alset,bool exploding_parts)
+	bool Mesh::draw_shadow_basic(Vector3D Dir, float t, AnimationData *data_s, bool alset, bool exploding_parts)
 	{
-		bool explodes = script_index>=0 && data_s && (data_s->data[script_index].flag & FLAG_EXPLODE);
+		bool explodes = script_index >= 0 && data_s && (data_s->data[script_index].flag & FLAG_EXPLODE);
 		bool hide = false;
 		const Vector3D ODir = Dir;
 		glPushMatrix();
@@ -824,32 +799,31 @@ namespace TA3D
 					glRotatef(data_s->data[script_index].axe[2].angle, 0.0f, 0.0f, 1.0f);
 				}
 				//            Dir=((Dir*RotateX(-data_s->data[script_index].axe[0].angle*DEG2RAD))*RotateY(-data_s->data[script_index].axe[1].angle*DEG2RAD))*RotateZ(-data_s->data[script_index].axe[2].angle*DEG2RAD);
-				Dir = Dir*RotateXYZ(-data_s->data[script_index].axe[0].angle*DEG2RAD, -data_s->data[script_index].axe[1].angle*DEG2RAD, -data_s->data[script_index].axe[2].angle*DEG2RAD);
-				hide=data_s->data[script_index].flag&FLAG_HIDE;
+				Dir = Dir * RotateXYZ(-data_s->data[script_index].axe[0].angle * DEG2RAD, -data_s->data[script_index].axe[1].angle * DEG2RAD, -data_s->data[script_index].axe[2].angle * DEG2RAD);
+				hide = data_s->data[script_index].flag & FLAG_HIDE;
 			}
-			else
-				if (animation_data )
-				{
-					Vector3D R,T;
-					animation_data->animate( t, R, T );
-					glTranslatef( T.x, T.y, T.z );
-					glRotatef( R.x, 1.0f, 0.0f, 0.0f );
-					glRotatef( R.y, 0.0f, 1.0f, 0.0f );
-					glRotatef( R.z, 0.0f, 0.0f, 1.0f );
-					//                Dir=((Dir*RotateX(-R.x*DEG2RAD))*RotateY(-R.y*DEG2RAD))*RotateZ(-R.z*DEG2RAD);
-					Dir = Dir*RotateXYZ(-R.x*DEG2RAD, -R.y*DEG2RAD, -R.z*DEG2RAD);
-				}
+			else if (animation_data)
+			{
+				Vector3D R, T;
+				animation_data->animate(t, R, T);
+				glTranslatef(T.x, T.y, T.z);
+				glRotatef(R.x, 1.0f, 0.0f, 0.0f);
+				glRotatef(R.y, 0.0f, 1.0f, 0.0f);
+				glRotatef(R.z, 0.0f, 0.0f, 1.0f);
+				//                Dir=((Dir*RotateX(-R.x*DEG2RAD))*RotateY(-R.y*DEG2RAD))*RotateZ(-R.z*DEG2RAD);
+				Dir = Dir * RotateXYZ(-R.x * DEG2RAD, -R.y * DEG2RAD, -R.z * DEG2RAD);
+			}
 			hide |= explodes ^ exploding_parts;
-			if (nb_t_index>0 && !hide)
+			if (nb_t_index > 0 && !hide)
 			{
 				if (!alset)
 				{
 					glDisable(GL_LIGHTING);
 					glDisable(GL_TEXTURE_2D);
-					glEnableClientState(GL_VERTEX_ARRAY);		// Les sommets
+					glEnableClientState(GL_VERTEX_ARRAY); // Les sommets
 					glDisableClientState(GL_NORMAL_ARRAY);
 					glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-					alset=true;
+					alset = true;
 				}
 				/*-----------------Code de calcul du cone d'ombre-------------------------*/
 				if (shadow_index == NULL)
@@ -868,18 +842,18 @@ namespace TA3D
 						for (int a = 0; a < 3; ++a)
 						{
 							int idx = -1;
-							face_reverse[ i + a ] = 0;
-							for (int e = 0 ; e < nb_line ; ++e)
+							face_reverse[i + a] = 0;
+							for (int e = 0; e < nb_line; ++e)
 							{
-								if (line_v_idx[0][e] == t_index[i+a] && line_v_idx[1][e] == t_index[i + ((a + 1) % 3)])
+								if (line_v_idx[0][e] == t_index[i + a] && line_v_idx[1][e] == t_index[i + ((a + 1) % 3)])
 								{
-									idx=e;
+									idx = e;
 									break;
 								}
-								else if (line_v_idx[0][e] == t_index[i + ((a + 1) % 3)] && line_v_idx[1][e] == t_index[i+a])
+								else if (line_v_idx[0][e] == t_index[i + ((a + 1) % 3)] && line_v_idx[1][e] == t_index[i + a])
 								{
-									idx=e;
-									face_reverse[ i + a ] = 2;
+									idx = e;
+									face_reverse[i + a] = 2;
 									break;
 								}
 							}
@@ -898,18 +872,18 @@ namespace TA3D
 
 				if (Dir != last_dir) // Don't need to compute things twice
 				{
-					::memset((byte*)line_on, 0, nb_line);
+					::memset((byte *)line_on, 0, nb_line);
 
 					uint16 e = 0;
 					for (int i = 0; i < nb_t_index; i += 3)
 					{
-						if ((F_N[e++] % Dir ) >= 0.0f)
-							continue;	// Use face normal
+						if ((F_N[e++] % Dir) >= 0.0f)
+							continue; // Use face normal
 						line_on[t_line[i]] = byte(((line_on[t_line[i]] ^ 1) & 1) | face_reverse[i]);
-						line_on[t_line[i+1]] = byte(((line_on[t_line[i+1]] ^ 1) & 1) | face_reverse[i+1]);
-						line_on[t_line[i+2]] = byte(((line_on[t_line[i+2]] ^ 1) & 1) | face_reverse[i+2]);
+						line_on[t_line[i + 1]] = byte(((line_on[t_line[i + 1]] ^ 1) & 1) | face_reverse[i + 1]);
+						line_on[t_line[i + 2]] = byte(((line_on[t_line[i + 2]] ^ 1) & 1) | face_reverse[i + 2]);
 					}
-					for (int i = 0 ; i < nb_line ; ++i)
+					for (int i = 0; i < nb_line; ++i)
 					{
 						if (!(line_on[i] & 1))
 							continue;
@@ -936,20 +910,20 @@ namespace TA3D
 				}
 				else
 					nb_idx = last_nb_idx;
-				glVertexPointer( 3, GL_FLOAT, 0, points);
-				glFrontFace(GL_CW);						// 1ère passe / first pass
-				glStencilOp(GL_KEEP,GL_KEEP,GL_INCR);
-				glDrawRangeElements(GL_QUADS, 0, (nb_vtx<<1)-1, nb_idx,GL_UNSIGNED_SHORT,shadow_index);		// dessine le tout
+				glVertexPointer(3, GL_FLOAT, 0, points);
+				glFrontFace(GL_CW); // 1ère passe / first pass
+				glStencilOp(GL_KEEP, GL_KEEP, GL_INCR);
+				glDrawRangeElements(GL_QUADS, 0, (nb_vtx << 1) - 1, nb_idx, GL_UNSIGNED_SHORT, shadow_index); // dessine le tout
 
-				glFrontFace(GL_CCW);  						// 2nd passe
-				glStencilOp(GL_KEEP,GL_KEEP,GL_DECR);
-				glDrawRangeElements(GL_QUADS, 0, (nb_vtx<<1)-1, nb_idx,GL_UNSIGNED_SHORT,shadow_index);		// dessine le tout
+				glFrontFace(GL_CCW); // 2nd passe
+				glStencilOp(GL_KEEP, GL_KEEP, GL_DECR);
+				glDrawRangeElements(GL_QUADS, 0, (nb_vtx << 1) - 1, nb_idx, GL_UNSIGNED_SHORT, shadow_index); // dessine le tout
 			}
 
 			if (child && !(explodes && !exploding_parts))
 			{
 				glPushMatrix();
-				alset=child->draw_shadow_basic(Dir,t,data_s,alset, exploding_parts & !explodes);
+				alset = child->draw_shadow_basic(Dir, t, data_s, alset, exploding_parts & !explodes);
 				glPopMatrix();
 			}
 		}
@@ -957,7 +931,7 @@ namespace TA3D
 		{
 			glPopMatrix();
 			glPushMatrix();
-			alset=next->draw_shadow_basic(ODir,t,data_s,alset, exploding_parts);
+			alset = next->draw_shadow_basic(ODir, t, data_s, alset, exploding_parts);
 			glPopMatrix();
 		}
 		else
@@ -965,7 +939,7 @@ namespace TA3D
 		return alset;
 	}
 
-	int Mesh::hit(Vector3D Pos,Vector3D Dir,AnimationData *data_s,Vector3D *I,Matrix M) const
+	int Mesh::hit(Vector3D Pos, Vector3D Dir, AnimationData *data_s, Vector3D *I, Matrix M) const
 	{
 		const Matrix OM = M;
 		Matrix AM = Scale(1.0f);
@@ -978,25 +952,25 @@ namespace TA3D
 
 		Vector3D T = pos_from_parent;
 		Vector3D MP;
-		if (!(script_index >= 0 && data_s && (data_s->data[script_index].flag & FLAG_EXPLODE)))	 // We can't select that
+		if (!(script_index >= 0 && data_s && (data_s->data[script_index].flag & FLAG_EXPLODE))) // We can't select that
 		{
-			if (script_index>=0 && data_s)
+			if (script_index >= 0 && data_s)
 			{
 				T.x += data_s->data[script_index].axe[0].pos;
 				T.y += data_s->data[script_index].axe[1].pos;
 				T.z += data_s->data[script_index].axe[2].pos;
-				Matrix l_M = RotateXYZ(-data_s->data[script_index].axe[0].angle*DEG2RAD, -data_s->data[script_index].axe[1].angle*DEG2RAD, -data_s->data[script_index].axe[2].angle*DEG2RAD);
+				Matrix l_M = RotateXYZ(-data_s->data[script_index].axe[0].angle * DEG2RAD, -data_s->data[script_index].axe[1].angle * DEG2RAD, -data_s->data[script_index].axe[2].angle * DEG2RAD);
 				M_Dir = M * l_M;
 				M = l_M;
 
-				AM = RotateZYX(data_s->data[script_index].axe[2].angle*DEG2RAD, data_s->data[script_index].axe[1].angle*DEG2RAD, data_s->data[script_index].axe[0].angle*DEG2RAD);
-				hide=data_s->data[script_index].flag&FLAG_HIDE;
+				AM = RotateZYX(data_s->data[script_index].axe[2].angle * DEG2RAD, data_s->data[script_index].axe[1].angle * DEG2RAD, data_s->data[script_index].axe[0].angle * DEG2RAD);
+				hide = data_s->data[script_index].flag & FLAG_HIDE;
 			}
 			else
 				M = Scale(1.0f);
 			Pos = (Pos - T) * M;
 
-			if ((nb_t_index>0 || selprim >= 0 ) && !hide)
+			if ((nb_t_index > 0 || selprim >= 0) && !hide)
 			{
 				Dir = Dir * M_Dir;
 				Dir.unit();
@@ -1008,7 +982,7 @@ namespace TA3D
 					const Vector3D &C = points[t_index[i + 2]];
 					const Vector3D AB = B - A;
 					const Vector3D AC = C - A;
-					const Vector3D N  = AB * AC;
+					const Vector3D N = AB * AC;
 					if (Yuni::Math::Zero(N % Dir))
 						continue;
 					const float dist = -((Pos - A) % N) / (N % Dir);
@@ -1021,7 +995,7 @@ namespace TA3D
 
 					float a;
 					float b;
-					float c;		// Coefficients pour que P soit le barycentre de A,B,C
+					float c; // Coefficients pour que P soit le barycentre de A,B,C
 					const Vector3D AP = P_p - A;
 					float pre_cal = AB.x * AC.y - AB.y * AC.x;
 					if (!Yuni::Math::Zero(AC.y) && !Yuni::Math::Zero(pre_cal))
@@ -1041,34 +1015,34 @@ namespace TA3D
 							pre_cal = AB.x * AC.z - AB.z * AC.x;
 							if (!Yuni::Math::Zero(AC.z) && !Yuni::Math::Zero(pre_cal))
 							{
-								b=(AP.x*AC.z-AP.z*AC.x)/pre_cal;
-								a=(AP.z-b*AB.z)/AC.z;
+								b = (AP.x * AC.z - AP.z * AC.x) / pre_cal;
+								a = (AP.z - b * AB.z) / AC.z;
 							}
 							else
 							{
-								pre_cal=-pre_cal;
+								pre_cal = -pre_cal;
 								if (!Yuni::Math::Zero(AB.z) && !Yuni::Math::Zero(pre_cal))
 								{
-									a =(AP.x*AB.z-AP.z*AB.x)/pre_cal;
-									b=(AP.z-a*AC.z)/AB.z;
+									a = (AP.x * AB.z - AP.z * AB.x) / pre_cal;
+									b = (AP.z - a * AC.z) / AB.z;
 								}
 								else
 								{
-									pre_cal = AB.y*AC.x-AB.x*AC.y;
+									pre_cal = AB.y * AC.x - AB.x * AC.y;
 									if (!Yuni::Math::Zero(AC.x) && !Yuni::Math::Zero(pre_cal))
 									{
-										b=(AP.y*AC.x-AP.x*AC.y)/pre_cal;
-										a=(AP.x-b*AB.x)/AC.x;
+										b = (AP.y * AC.x - AP.x * AC.y) / pre_cal;
+										a = (AP.x - b * AB.x) / AC.x;
 									}
 									else
 									{
 										if (!Yuni::Math::Zero(AB.y) && !Yuni::Math::Zero(pre_cal))
 										{
-											a=(AP.x*AB.y-AP.y*AB.x)/pre_cal;
-											b=(AP.y-a*AC.y)/AB.y;
+											a = (AP.x * AB.y - AP.y * AB.x) / pre_cal;
+											b = (AP.y - a * AC.y) / AB.y;
 										}
 										else
-											continue;		// Saute le point s'il n'est pas positionnable
+											continue; // Saute le point s'il n'est pas positionnable
 									}
 								}
 							}
@@ -1084,14 +1058,14 @@ namespace TA3D
 
 				if (selprim >= 0)
 				{
-					for (int i = 0 ; i < 2 ; ++i) // Selection primitive ( used to allow selecting naval factories easily )
+					for (int i = 0; i < 2; ++i) // Selection primitive ( used to allow selecting naval factories easily )
 					{
 						const Vector3D &A = points[sel[i]];
-						const Vector3D &B = points[sel[i+1]];
+						const Vector3D &B = points[sel[i + 1]];
 						const Vector3D &C = points[sel[3]];
 						const Vector3D AB = B - A;
 						const Vector3D AC = C - A;
-						const Vector3D N  = AB * AC;
+						const Vector3D N = AB * AC;
 						if (Yuni::Math::Zero(N % Dir))
 							continue;
 						const float dist = -((Pos - A) % N) / (N % Dir);
@@ -1102,7 +1076,7 @@ namespace TA3D
 						if (is_hit && (MP - P_p) % Dir < 0.0f)
 							continue;
 
-						float a,b,c;		// Coefficients pour que P soit le barycentre de A,B,C
+						float a, b, c; // Coefficients pour que P soit le barycentre de A,B,C
 						const Vector3D AP = P_p - A;
 						float pre_cal = AB.x * AC.y - AB.y * AC.x;
 						if (!Yuni::Math::Zero(AC.y) && !Yuni::Math::Zero(pre_cal))
@@ -1135,11 +1109,11 @@ namespace TA3D
 									}
 									else
 									{
-										pre_cal = AB.y*AC.x-AB.x*AC.y;
+										pre_cal = AB.y * AC.x - AB.x * AC.y;
 										if (!Yuni::Math::Zero(AC.x) && !Yuni::Math::Zero(pre_cal))
 										{
-											b=(AP.y*AC.x-AP.x*AC.y)/pre_cal;
-											a=(AP.x-b*AB.x)/AC.x;
+											b = (AP.y * AC.x - AP.x * AC.y) / pre_cal;
+											a = (AP.x - b * AB.x) / AC.x;
 										}
 										else
 										{
@@ -1149,15 +1123,15 @@ namespace TA3D
 												b = (AP.y - a * AC.y) / AB.y;
 											}
 											else
-												continue;		// Saute le point s'il n'est pas positionnable
+												continue; // Saute le point s'il n'est pas positionnable
 										}
 									}
 								}
 							}
 						}
 						c = 1.0f - a - b;
-						if (a<0.0f || b<0.0f || c<0.0f)
-							continue;		// Le point n'appartient pas au triangle
+						if (a < 0.0f || b < 0.0f || c < 0.0f)
+							continue; // Le point n'appartient pas au triangle
 						MP = P_p;
 						is_hit = true;
 						hit_idx = script_index;
@@ -1178,7 +1152,7 @@ namespace TA3D
 				{
 					if (nhit >= -1 && is_hit)
 					{
-						if ((MP2 -MP) % Dir < 0.0f)
+						if ((MP2 - MP) % Dir < 0.0f)
 						{
 							MP = MP2;
 							hit_idx = nhit;
@@ -1216,8 +1190,6 @@ namespace TA3D
 		return hit_idx;
 	}
 
-
-
 	// hit_fast is a faster version of hit but less precise, designed for use in weapon code
 	bool Mesh::hit_fast(Vector3D Pos, Vector3D Dir, AnimationData *data_s, Vector3D *I)
 	{
@@ -1226,7 +1198,6 @@ namespace TA3D
 		const Vector3D OPos = Pos;
 		Matrix AM;
 		bool is_hit = false;
-
 
 		Vector3D T = pos_from_parent;
 		Vector3D MP;
@@ -1241,19 +1212,19 @@ namespace TA3D
 				Dir = Dir * l_M;
 				Pos = (Pos - T) * l_M;
 				AM = RotateZYX(data_s->data[script_index].axe[2].angle * DEG2RAD, data_s->data[script_index].axe[1].angle * DEG2RAD, data_s->data[script_index].axe[0].angle * DEG2RAD);
-				hide = data_s->data[script_index].flag&FLAG_HIDE;
+				hide = data_s->data[script_index].flag & FLAG_HIDE;
 			}
 			else
 				AM = Scale(1.0f);
 			if (nb_t_index > 0 && nb_vtx > 0 && !hide)
 			{
-				if (compute_min_max ) // Required pre-calculations
+				if (compute_min_max) // Required pre-calculations
 				{
 					compute_min_max = false;
 					min_x = max_x = points[0].x;
 					min_y = max_y = points[0].y;
 					min_z = max_z = points[0].z;
-					for (int i = 1; i < nb_vtx ; ++i)
+					for (int i = 1; i < nb_vtx; ++i)
 					{
 						min_x = Math::Min(min_x, points[i].x);
 						max_x = Math::Max(max_x, points[i].x);
@@ -1271,9 +1242,7 @@ namespace TA3D
 				}
 
 				// Collision detector using boxes
-				if (Pos.x >= min_x && Pos.x <= max_x
-					&& Pos.y >= min_y && Pos.y <= max_y
-					&& Pos.z >= min_z && Pos.z <= max_z ) // The ray starts from inside
+				if (Pos.x >= min_x && Pos.x <= max_x && Pos.y >= min_y && Pos.y <= max_y && Pos.z >= min_z && Pos.z <= max_z) // The ray starts from inside
 				{
 					MP = Pos;
 					is_hit = true;
@@ -1300,7 +1269,7 @@ namespace TA3D
 							is_hit = true;
 						}
 					}
-					if ((min_y - Pos.y) * Dir.y > 0.0f)// 2 y planes
+					if ((min_y - Pos.y) * Dir.y > 0.0f) // 2 y planes
 					{
 						const Vector3D IP = Pos + ((min_y - Pos.y) / Dir.y) * Dir;
 						if (IP.x >= min_x && IP.x <= max_x && IP.z >= min_z && IP.z <= max_z)
@@ -1310,7 +1279,7 @@ namespace TA3D
 							is_hit = true;
 						}
 					}
-					if ((max_y - Pos.y) * Dir.y > 0.0f)// 2 y planes
+					if ((max_y - Pos.y) * Dir.y > 0.0f) // 2 y planes
 					{
 						const Vector3D IP = Pos + ((max_y - Pos.y) / Dir.y) * Dir;
 						if (IP.x >= min_x && IP.x <= max_x && IP.z >= min_z && IP.z <= max_z)
@@ -1320,7 +1289,7 @@ namespace TA3D
 							is_hit = true;
 						}
 					}
-					if ((min_z - Pos.z) * Dir.z > 0.0f)// 2 z planes
+					if ((min_z - Pos.z) * Dir.z > 0.0f) // 2 z planes
 					{
 						const Vector3D IP = Pos + ((min_z - Pos.z) / Dir.z) * Dir;
 						if (IP.y >= min_y && IP.y <= max_y && IP.x >= min_x && IP.x <= max_x)
@@ -1330,7 +1299,7 @@ namespace TA3D
 							is_hit = true;
 						}
 					}
-					if ((max_z - Pos.z) * Dir.z > 0.0f)// 2 z planes
+					if ((max_z - Pos.z) * Dir.z > 0.0f) // 2 z planes
 					{
 						const Vector3D IP = Pos + ((max_z - Pos.z) / Dir.z) * Dir;
 						if (IP.y >= min_y && IP.y <= max_y && IP.x >= min_x && IP.x <= max_x)
@@ -1345,7 +1314,7 @@ namespace TA3D
 			if (child)
 			{
 				Vector3D MP2;
-				const bool nhit = child->hit_fast(Pos,Dir,data_s,&MP2);
+				const bool nhit = child->hit_fast(Pos, Dir, data_s, &MP2);
 				if (nhit)
 				{
 					if (!is_hit || (MP2 - MP) % Dir < 0.0f)
@@ -1359,7 +1328,7 @@ namespace TA3D
 		if (next)
 		{
 			Vector3D MP2;
-			const bool nhit = next->hit_fast( OPos, ODir, data_s, &MP2);
+			const bool nhit = next->hit_fast(OPos, ODir, data_s, &MP2);
 			if (nhit)
 			{
 				if (!is_hit || (MP2 - MP) % ODir < 0.0f)
@@ -1372,14 +1341,9 @@ namespace TA3D
 		return is_hit;
 	}
 
-
-
-
-
-
 	float Mesh::print_struct(float Y, float X, TA3D::Font *fnt)
 	{
-		gfx->print(fnt, X, Y, 0.0f,      0xFFFFFFFF, String(name) << " [" << script_index << ']');
+		gfx->print(fnt, X, Y, 0.0f, 0xFFFFFFFF, String(name) << " [" << script_index << ']');
 		gfx->print(fnt, 320.0f, Y, 0.0f, 0xFFFFFFFF, String("(v:") << nb_vtx);
 		gfx->print(fnt, 368.0f, Y, 0.0f, 0xFFFFFFFF, String(",p:") << nb_prim);
 		gfx->print(fnt, 416.0f, Y, 0.0f, 0xFFFFFFFF, String(",t:") << nb_t_index);
@@ -1393,12 +1357,9 @@ namespace TA3D
 		return nwY;
 	}
 
-
 	void Mesh::hideFlares()
 	{
-		if ((ToLower(name).find("flare") != String::npos
-			|| ToLower(name).find("flash") != String::npos
-			|| ToLower(name).find("fire") != String::npos) && !child)
+		if ((ToLower(name).find("flare") != String::npos || ToLower(name).find("flash") != String::npos || ToLower(name).find("fire") != String::npos) && !child)
 			nb_t_index = 0;
 		if (child)
 			child->hideFlares();
@@ -1406,8 +1367,7 @@ namespace TA3D
 			next->hideFlares();
 	}
 
-
-	Model* ModelManager::get_model(const String& name)
+	Model *ModelManager::get_model(const String &name)
 	{
 		if (name.empty())
 			return NULL;
@@ -1419,7 +1379,7 @@ namespace TA3D
 			return model[*e];
 
 		if (MeshTypeManager::lMeshExtension)
-			for(String::Vector::iterator ext = MeshTypeManager::lMeshExtension->begin() ; ext != MeshTypeManager::lMeshExtension->end() ; ++ext)
+			for (String::Vector::iterator ext = MeshTypeManager::lMeshExtension->begin(); ext != MeshTypeManager::lMeshExtension->end(); ++ext)
 			{
 				e = model_hashtable.find(String("objects3d\\") << l << *ext);
 				if (e != model_hashtable.end())
@@ -1433,10 +1393,9 @@ namespace TA3D
 		return NULL;
 	}
 
-
 	ModelManager::~ModelManager()
 	{
-		for (unsigned int i = 0 ; i < model.size() ; ++i)
+		for (unsigned int i = 0; i < model.size(); ++i)
 			delete model[i];
 		model.clear();
 		model_hashtable.clear();
@@ -1448,10 +1407,9 @@ namespace TA3D
 		name.clear();
 	}
 
-
 	void ModelManager::destroy()
 	{
-		for (unsigned int i = 0 ; i < model.size(); ++i)
+		for (unsigned int i = 0; i < model.size(); ++i)
 			delete model[i];
 		model.clear();
 		name.clear();
@@ -1459,15 +1417,13 @@ namespace TA3D
 		init();
 	}
 
-
 	void ModelManager::compute_ids()
 	{
 		for (unsigned int i = 0; i < model.size(); ++i)
 			model[i]->id = i;
 	}
 
-
-	void ModelManager::create_from_2d(SDL_Surface *bmp,float w,float h,float max_h,const String& filename)
+	void ModelManager::create_from_2d(SDL_Surface *bmp, float w, float h, float max_h, const String &filename)
 	{
 		mInternals.lock();
 
@@ -1478,14 +1434,14 @@ namespace TA3D
 		model.push_back(pModel);
 		mInternals.unlock();
 
-		pModel->create_from_2d(bmp,w,h,max_h);
+		pModel->create_from_2d(bmp, w, h, max_h);
 	}
 
 	void MeshTypeManager::getMeshList(String::Vector &filelist)
 	{
 		if (lMeshExtension == NULL)
 			return;
-		for(String::Vector::iterator ext = lMeshExtension->begin() ; ext != lMeshExtension->end() ; ++ext)
+		for (String::Vector::iterator ext = lMeshExtension->begin(); ext != lMeshExtension->end(); ++ext)
 			VFS::Instance()->getFilelist(String(ta3dSideData.model_dir) << '*' << *ext, filelist);
 	}
 
@@ -1503,7 +1459,7 @@ namespace TA3D
 
 			String::Vector final_file_list;
 			HashSet<String>::Dense files;
-			for(String::Vector::const_iterator it = file_list.begin(), end = file_list.end() ; it != end ; ++it)
+			for (String::Vector::const_iterator it = file_list.begin(), end = file_list.end(); it != end; ++it)
 			{
 				const String filename = Substr(*it, 0, it->size() - 4).toLower();
 				const String ext = Substr(*it, it->size() - 3, 3).toLower();
@@ -1512,7 +1468,7 @@ namespace TA3D
 				files.insert(filename);
 				final_file_list.push_back(*it);
 			}
-			for(String::Vector::const_iterator it = file_list.begin(), end = file_list.end() ; it != end ; ++it)
+			for (String::Vector::const_iterator it = file_list.begin(), end = file_list.end(); it != end; ++it)
 			{
 				const String filename = Substr(*it, 0, it->size() - 4).toLower();
 				const String ext = Substr(*it, it->size() - 3, 3).toLower();
@@ -1556,7 +1512,7 @@ namespace TA3D
 					++n;
 					name.push_back(filename);
 
-					if (get_model(Substr(filename, 0, filename.size() - 4)) == NULL) 	// Check if it's not already loaded
+					if (get_model(Substr(filename, 0, filename.size() - 4)) == NULL) // Check if it's not already loaded
 					{
 						mLoad.unlock();
 						Model *pModel = MeshTypeManager::load(filename);
@@ -1581,7 +1537,6 @@ namespace TA3D
 		return 0;
 	}
 
-
 	void Model::init()
 	{
 		useDL = true;
@@ -1597,8 +1552,6 @@ namespace TA3D
 		from_2d = false;
 	}
 
-
-
 	void Model::destroy()
 	{
 		if (dlist)
@@ -1608,11 +1561,11 @@ namespace TA3D
 		init();
 	}
 
-
 	void Model::postLoadComputations()
 	{
-		if (!mesh)   return;
-		nb_obj = mesh->set_obj_id( 0 );
+		if (!mesh)
+			return;
+		nb_obj = mesh->set_obj_id(0);
 
 		animated = mesh->has_animation_data();
 
@@ -1621,21 +1574,22 @@ namespace TA3D
 		center.reset();
 		mesh->compute_center(&center, O, &coef);
 		center = (1.0f / float(coef)) * center;
-		size = 2.0f * mesh->compute_size_sq(center);			// On garde le carrÃ© pour les comparaisons et on prend une marge en multipliant par 2.0f
+		size = 2.0f * mesh->compute_size_sq(center); // On garde le carrÃ© pour les comparaisons et on prend une marge en multipliant par 2.0f
 		size2 = sqrtf(0.5f * size);
 		mesh->compute_emitter();
 		compute_topbottom();
 	}
 
-	void Model::draw(float t,AnimationData *data_s,bool sel,bool notex,
-					 bool c_part,int p_tex,const Vector3D *target,Vector3D *upos,
-					 Matrix *M,float Size,const Vector3D* Center,bool reverse,int side,
-					 bool chg_col,Mesh *src,AnimationData *src_data)
+	void Model::draw(float t, AnimationData *data_s, bool sel, bool notex,
+					 bool c_part, int p_tex, const Vector3D *target, Vector3D *upos,
+					 Matrix *M, float Size, const Vector3D *Center, bool reverse, int side,
+					 bool chg_col, Mesh *src, AnimationData *src_data)
 	{
-		if (!mesh)  return;
+		if (!mesh)
+			return;
 		gfx->enable_model_shading();
 
-		sel &= !gfx->getShadowMapMode();        // Don't render selection primitive while in shadow map mode !! otherwise it would cast a shadow :/
+		sel &= !gfx->getShadowMapMode(); // Don't render selection primitive while in shadow map mode !! otherwise it would cast a shadow :/
 
 		if (notex)
 			glDisable(GL_TEXTURE_2D);
@@ -1652,15 +1606,15 @@ namespace TA3D
 			if (data_s == NULL && dlist == 0 && !sel && !notex && !chg_col && useDL)
 			{
 				check_textures();
-				dlist = glGenLists (1);
-				glNewList (dlist, GL_COMPILE_AND_EXECUTE);
+				dlist = glGenLists(1);
+				glNewList(dlist, GL_COMPILE_AND_EXECUTE);
 				mesh->draw_nodl();
 				glEndList();
 			}
 			else
 			{
 				if (data_s == NULL && !sel && !notex && !chg_col && useDL)
-					glCallList( dlist );
+					glCallList(dlist);
 				else
 				{
 					mesh->draw(t, data_s, sel, false, notex, side, chg_col);
@@ -1672,42 +1626,42 @@ namespace TA3D
 
 		gfx->disable_model_shading();
 
-		if (c_part)                 // It is safe to do this even in shadow map mode because this is done only once in a while
+		if (c_part) // It is safe to do this even in shadow map mode because this is done only once in a while
 		{
 			Vector3D pos;
-			mesh->compute_coord(data_s,&pos,c_part,p_tex,target,upos,M,Size,Center,reverse,src,src_data);
+			mesh->compute_coord(data_s, &pos, c_part, p_tex, target, upos, M, Size, Center, reverse, src, src_data);
 		}
 		if (chg_col && notex)
-			glColor3ub(0xFF,0xFF,0xFF);
+			glColor3ub(0xFF, 0xFF, 0xFF);
 	}
 
-
-	void Model::draw_shadow(const Vector3D& Dir, float t, AnimationData* data_s)
+	void Model::draw_shadow(const Vector3D &Dir, float t, AnimationData *data_s)
 	{
-		if (!mesh)  return;
+		if (!mesh)
+			return;
 		glDisable(GL_TEXTURE_2D);
-		mesh->draw_shadow(Dir,t,data_s,false);
+		mesh->draw_shadow(Dir, t, data_s, false);
 		if (data_s && data_s->explode)
-			mesh->draw_shadow(Dir,t,data_s,false,true);
+			mesh->draw_shadow(Dir, t, data_s, false, true);
 	}
 
-	void Model::draw_shadow_basic(const Vector3D& Dir, float t, AnimationData *data_s)
+	void Model::draw_shadow_basic(const Vector3D &Dir, float t, AnimationData *data_s)
 	{
-		if (!mesh) return;
+		if (!mesh)
+			return;
 		glDisable(GL_TEXTURE_2D);
 		mesh->draw_shadow_basic(Dir, t, data_s, false);
 		if (data_s && data_s->explode)
-			mesh->draw_shadow_basic(Dir,t,data_s,false,true);
+			mesh->draw_shadow_basic(Dir, t, data_s, false, true);
 	}
 
-
-	void Model::compute_coord(AnimationData* data_s, Matrix* M) const
+	void Model::compute_coord(AnimationData *data_s, Matrix *M) const
 	{
-		if (!mesh)  return;
+		if (!mesh)
+			return;
 		Vector3D pos;
 		mesh->compute_coord(data_s, &pos, false, 0, NULL, NULL, M);
 	}
-
 
 	void Model::compute_topbottom()
 	{
@@ -1722,7 +1676,7 @@ namespace TA3D
 			return NULL;
 
 		const String ext = Paths::ExtractFileExt(filename).toLower();
-		for(uint32 i = 0 ; i < lMeshExtension->size() ; ++i)
+		for (uint32 i = 0; i < lMeshExtension->size(); ++i)
 		{
 			if (ext == lMeshExtension->at(i))
 				return lMeshLoader->at(i)(filename);

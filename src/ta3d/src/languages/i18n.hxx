@@ -15,8 +15,7 @@
 	along with this program; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA*/
 #ifndef __TA3D_XX_I18N_HXX__
-# define __TA3D_XX_I18N_HXX__
-
+#define __TA3D_XX_I18N_HXX__
 
 namespace TA3D
 {
@@ -26,70 +25,56 @@ namespace TA3D
 		return I18N::Instance()->currentLanguage();
 	}
 
-
 	inline const I18N::Language* I18N::currentLanguage()
 	{
 		ThreadingPolicy::MutexLocker locker(*this);
 		return pCurrentLanguage;
 	}
 
-
 	inline bool I18N::CurrentLanguage(const String& l)
 	{
 		return I18N::Instance()->currentLanguage(l);
 	}
-
 
 	inline bool I18N::AutoLanguage()
 	{
 		return I18N::Instance()->tryToDetermineTheLanguage();
 	}
 
-
 	inline bool I18N::LoadFromFile(const String& filename)
 	{
 		return I18N::Instance()->loadFromFile(filename);
 	}
-
 
 	inline bool I18N::LoadFromResources()
 	{
 		return I18N::Instance()->loadFromResources();
 	}
 
-
 	inline String I18N::Translate(const String& key, const String& defaultValue)
 	{
 		return I18N::Instance()->translate(key, defaultValue);
 	}
-
 
 	inline void I18N::Translate(String::Vector& out)
 	{
 		I18N::Instance()->translate(out);
 	}
 
-
 	inline void I18N::Translate(String::List& out)
 	{
 		I18N::Instance()->translate(out);
 	}
-
 
 	inline bool I18N::currentLanguage(const String& n)
 	{
 		return currentLanguage(language(n));
 	}
 
-
-	inline String I18N::operator [] (const String& key)
+	inline String I18N::operator[](const String& key)
 	{
 		return translate(key);
 	}
-
-
-
-
 
 } // namespace TA3D
 

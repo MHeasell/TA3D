@@ -23,32 +23,26 @@
   \-----------------------------------------------------------------*/
 
 #ifndef __TA3D_XX_TDF_H__
-# define __TA3D_XX_TDF_H__
+#define __TA3D_XX_TDF_H__
 
-# include <assert.h>
-# include "stdafx.h"
-# include "misc/string.h"
-# include "threads/thread.h"
-# include "gaf.h"
-# include "gfx/particles/particles.h"
-# include "mesh/mesh.h"
-# include "misc/camera.h"
-# include <list>
-# include "EngineClass.h"
-# include "misc/grid.h"
-# include "misc/progressnotifier.h"
-
+#include <assert.h>
+#include "stdafx.h"
+#include "misc/string.h"
+#include "threads/thread.h"
+#include "gaf.h"
+#include "gfx/particles/particles.h"
+#include "mesh/mesh.h"
+#include "misc/camera.h"
+#include <list>
+#include "EngineClass.h"
+#include "misc/grid.h"
+#include "misc/progressnotifier.h"
 
 namespace TA3D
 {
 
 	// Forward declaration
 	class MAP;
-
-
-
-
-
 
 	/*!
 	** \brief
@@ -81,91 +75,88 @@ namespace TA3D
 
 	public:
 		//!
-		String	name;		// Nom
+		String name; // Nom
 		//!
-		String	world;
+		String world;
 		//!
-		String	description;
+		String description;
 		//!
-		String	category;
+		String category;
 
 		//!
-		bool	animating;
+		bool animating;
 		//!
-		int		footprintx;
+		int footprintx;
 		//!
-		int		footprintz;
+		int footprintz;
 		//!
 		Grid<float> gRepulsion;
 		//!
-		int		height;
+		int height;
 		//!
-		String	filename;
+		String filename;
 		//!
-		String	seqname;
+		String seqname;
 		//!
-		String	feature_dead;
+		String feature_dead;
 		//!
-		String	feature_burnt;
+		String feature_burnt;
 		//!
-		String	feature_reclamate;
+		String feature_reclamate;
 		//!
-		bool	animtrans;
+		bool animtrans;
 		//!
-		bool	shadtrans;
+		bool shadtrans;
 		//!
-		int		hitdensity;
+		int hitdensity;
 		//!
-		int		metal;
+		int metal;
 		//!
-		int		energy;
+		int energy;
 		//!
-		int		damage;
+		int damage;
 		//!
-		bool	indestructible;
+		bool indestructible;
 		//!
 		Gaf::Animation anim;
 		//!
-		bool	vent;
+		bool vent;
 		//!
-		bool	m3d;
+		bool m3d;
 		//!
-		Model	*model;
+		Model* model;
 		//!
-		bool	converted;		// Indique si l'objet a été converti en 3d depuis un sprite
+		bool converted; // Indique si l'objet a été converti en 3d depuis un sprite
 		//!
-		bool	reclaimable;
+		bool reclaimable;
 		//!
-		bool	autoreclaimable;
+		bool autoreclaimable;
 		//!
-		bool	blocking;
+		bool blocking;
 		//!
-		bool	geothermal;
+		bool geothermal;
 
 		//! \name Forest fires
 		//@{
 		//!
-		bool	flamable;
+		bool flamable;
 		//!
-		short	burnmin;
+		short burnmin;
 		//!
-		short	burnmax;
+		short burnmax;
 		//!
-		short	sparktime;			// Seems to be in seconds
+		short sparktime; // Seems to be in seconds
 		//!
-		byte	spreadchance;
+		byte spreadchance;
 		//!
-		String	burnweapon;
+		String burnweapon;
 		//!
-		bool	need_convert;
+		bool need_convert;
 		//!
-		bool	not_loaded;
+		bool not_loaded;
 		//@}
 
 	}; // class Feature
-
-
-
 
 	/*!
 	** \brief
@@ -203,7 +194,6 @@ namespace TA3D
 		*/
 		int add_feature(const String& name);
 
-
 		/*!
 		** \brief Load a TDF file
 		*/
@@ -214,14 +204,14 @@ namespace TA3D
 		** \param name
 		** \return The index of the feature (-1 means `not found`)
 		*/
-		int get_feature_index(const String &name);
+		int get_feature_index(const String& name);
 
 		/*!
 		** \brief returns a pointer to the feature at given index, index = -1 corresponds to no feature type
 		** \param feature index
 		** \return a pointer to the feature at index 'index' or NULL if index == -1
 		*/
-		Feature *getFeaturePointer(int index) const
+		Feature* getFeaturePointer(int index) const
 		{
 			if (index == -1)
 				return NULL;
@@ -238,18 +228,16 @@ namespace TA3D
 		//! Features' count
 		int nb_features;
 		//! All features
-		std::vector<Feature*>   feature;
+		std::vector<Feature*> feature;
 
 		//! A mutex to protect internal structures when loading data
 		Mutex mInternals;
 
 	private:
 		//! hashtable used to speed up operations on Feature objects
-		HashMap<int>::Dense  feature_hashtable;
+		HashMap<int>::Dense feature_hashtable;
 
 	}; // class FeatureManager
-
-
 
 	//!
 	extern FeatureManager feature_manager;
@@ -257,8 +245,7 @@ namespace TA3D
 	/*!
 	** \brief
 	*/
-	void load_features(ProgressNotifier *progress = NULL);	// Charge tout les éléments
-
+	void load_features(ProgressNotifier* progress = NULL); // Charge tout les éléments
 
 	/*! \class FeatureData
 	**
@@ -267,21 +254,21 @@ namespace TA3D
 	struct FeatureData
 	{
 		//!
-		Vector3D Pos;		// Position spatiale de l'élément
+		Vector3D Pos; // Position spatiale de l'élément
 		//!
-		int	 type;		// Type d'élément
+		int type; // Type d'élément
 		//!
-		short frame;		// Pour l'animation
+		short frame; // Pour l'animation
 		//!
-		float dt;			// Pour la gestion du temps
+		float dt; // Pour la gestion du temps
 		//!
 		float hp;
 		//!
-		bool draw;		// Indique si l'objet est dessiné
+		bool draw; // Indique si l'objet est dessiné
 		//!
-		bool grey;		// Tell if it is in the fog of war
+		bool grey; // Tell if it is in the fog of war
 		//!
-		float angle;		// Rotation angle to set orientation
+		float angle; // Rotation angle to set orientation
 
 		//!
 		bool burning;
@@ -290,7 +277,7 @@ namespace TA3D
 		//!
 		short time_to_burn;
 		//!
-		uint32 px,py;
+		uint32 px, py;
 		//! Associated burning weapon
 		sint32 BW_idx;
 		//!
@@ -312,22 +299,17 @@ namespace TA3D
 		//!
 		bool delete_shadow_dlist;
 
-        //! Time reference to add some visual complexity to animations
-        uint32 timeRef;
+		//! Time reference to add some visual complexity to animations
+		uint32 timeRef;
 
 		//! Is this object referenced on map ?
 		bool drawnOnMap;
 	}; // class FeatureData
 
-
-
-
-
-
 	/*!
 	** \brief
 	*/
-	class Features : public ObjectSync	// Moteur de gestion des éléments graphiques
+	class Features : public ObjectSync // Moteur de gestion des éléments graphiques
 	{
 	public:
 		//! \name Constructor & Destructor
@@ -337,7 +319,6 @@ namespace TA3D
 		//! Destructor
 		virtual ~Features();
 		//@}
-
 
 		void init();
 		void destroy(bool bInit = true);
@@ -404,13 +385,13 @@ namespace TA3D
 		** \brief
 		** \param no_flat
 		*/
-        void draw(float t, bool no_flat = false);
+		void draw(float t, bool no_flat = false);
 
 		/*!
 		** \brief
 		** \param dir
 		*/
-        void draw_shadow(float t, const Vector3D& Dir);
+		void draw_shadow(float t, const Vector3D& Dir);
 
 		/*!
 		** \brief Draw icons for all features in symbolic_features
@@ -433,19 +414,19 @@ namespace TA3D
 
 	public:
 		//!
-		int nb_features;		// Nombre d'éléments �  gérer
+		int nb_features; // Nombre d'éléments �  gérer
 		//!
-		int max_features;		// Quantité maximale d'éléments que l'on peut charger dans la mémoire allouée
+		int max_features; // Quantité maximale d'éléments que l'on peut charger dans la mémoire allouée
 		//!
-		FeatureData* feature;			// Eléments
+		FeatureData* feature; // Eléments
 
 		//!
-		FeaturesList  burning_features;	// because it's faster that way
+		FeaturesList burning_features; // because it's faster that way
 		//!
-		FeaturesList  sinking_features;	// because it's faster that way
+		FeaturesList sinking_features; // because it's faster that way
 
 		//!
-		std::vector<int> list;				// Liste d'objets �  afficher
+		std::vector<int> list; // Liste d'objets �  afficher
 
 		//! features to render as icons in tactical mode
 		FeaturesSet symbolic_features;
@@ -459,16 +440,8 @@ namespace TA3D
 
 	}; // class Features
 
-
-
-
 	extern Features features;
 
-
-
-
-
 } // namespace TA3D
-
 
 #endif // __TA3D_XX_TDF_H__

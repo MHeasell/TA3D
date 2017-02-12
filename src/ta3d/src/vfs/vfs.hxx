@@ -15,25 +15,21 @@
 	along with this program; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA*/
 
-
 #ifndef __TA3D_UTILS_VFS_HXX__
-# define __TA3D_UTILS_VFS_HXX__
-
+#define __TA3D_UTILS_VFS_HXX__
 
 namespace TA3D
 {
-namespace UTILS
-{
-
-
-	inline VFS* VFS::Instance()
+	namespace UTILS
 	{
-		static VFS instance;
-		return &instance;
-	}
 
-} // namespace utils
+		inline VFS* VFS::Instance()
+		{
+			static VFS instance;
+			return &instance;
+		}
+
+	} // namespace utils
 } // namespace TA3D
-
 
 #endif // __TA3D_UTILS_VFS_HXX__

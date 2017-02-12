@@ -17,16 +17,10 @@
 
 #include "logs.h"
 
-
-
 namespace TA3D
 {
-
 
 	// The unique instance of the ta3d logger
 	Logger logs;
 
-
-
 } // namespace TA3D
-

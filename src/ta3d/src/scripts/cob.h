@@ -25,52 +25,50 @@
 \-----------------------------------------------------------------------------------*/
 
 #ifndef __COB_H__
-# define  __COB_H__
+#define __COB_H__
 
-# include <stdafx.h>
-# include <misc/string.h>
-# include "script.data.h"
-# include <engine/unit.defines.h>
-
+#include <stdafx.h>
+#include <misc/string.h>
+#include "script.data.h"
+#include <engine/unit.defines.h>
 
 namespace TA3D
 {
 
-    //! Class responsible for COB scripts data
-    class CobScript : public ScriptData
-    {
-    public:
-        CobScript();
-        virtual ~CobScript();
+	//! Class responsible for COB scripts data
+	class CobScript : public ScriptData
+	{
+	public:
+		CobScript();
+		virtual ~CobScript();
 
-        void init();
-        void destroy();
+		void init();
+		void destroy();
 
-        /*!
+		/*!
         ** \brief Get the index of a script according its name
         ** \param name name of the script
         ** \return Index of the script, -1 if not found
         */
-        int findFromName(const String& name);
+		int findFromName(const String &name);
 
-        /*virtual*/ void load(const String &filename);
+		/*virtual*/ void load(const String &filename);
 
-        /*virtual*/ int identify(const String &name);
+		/*virtual*/ int identify(const String &name);
 
-    public:
-        int             nb_script;      // Nombre de scripts / Number of scripts
-        byte            *Data;          // Données du fichier COB / COB data
-        int             **script_code;  // Code des scripts / script codes
-        String::Vector  names;          // Nom des scripts / script names
-        int             nb_piece;       // Nombre de pièces / Number of pieces
-        String::Vector  piece_name;     // Nom des pièces de l'objet 3d concerné / Name of pieces
-        int             *dec_offset;
-        int             nbStaticVar;    // Number of static variables
-        int             codeSize;       // Size of the code chunk
+	public:
+		int nb_script;			   // Nombre de scripts / Number of scripts
+		byte *Data;				   // Données du fichier COB / COB data
+		int **script_code;		   // Code des scripts / script codes
+		String::Vector names;	  // Nom des scripts / script names
+		int nb_piece;			   // Nombre de pièces / Number of pieces
+		String::Vector piece_name; // Nom des pièces de l'objet 3d concerné / Name of pieces
+		int *dec_offset;
+		int nbStaticVar; // Number of static variables
+		int codeSize;	// Size of the code chunk
 
-    }; // class SCRIPT
+	}; // class SCRIPT
 
 } // namespace TA3D
-
 
 #endif

@@ -15,11 +15,10 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA*/
 #ifndef __TA3D_GFX_Shader_H__
-# define __TA3D_GFX_Shader_H__
+#define __TA3D_GFX_Shader_H__
 
-# include <stdafx.h>
-# include <misc/string.h>
-
+#include <stdafx.h>
+#include <misc/string.h>
 
 namespace TA3D
 {
@@ -34,25 +33,24 @@ namespace TA3D
 		//@{
 		//! Default constructor
 		Shader()
-			:pLoaded(false)
-		{}
+			: pLoaded(false)
+		{
+		}
 		//! Destructor
-		~Shader() {destroy();}
+		~Shader() { destroy(); }
 		//@}
 
 		void destroy();
 
-
 		/*!
 		** \brief Load a shader from files
 		*/
-		void load(const String& pShaderFragmentFilename, const String& vertexFilename);
+		void load(const String &pShaderFragmentFilename, const String &vertexFilename);
 
 		/*!
 		** \brief Load a shader from a memory buffer
 		*/
-		void load_memory(const char* pShaderFragment_data, const int frag_len, const char *vertex_data, const int vert_len);
-
+		void load_memory(const char *pShaderFragment_data, const int frag_len, const char *vertex_data, const int vert_len);
 
 		/*!
 		** \brief Enable the shader
@@ -63,7 +61,6 @@ namespace TA3D
 		** \brief Disable the shader
 		*/
 		void off();
-
 
 		//! \name Variable for the ARB extension
 		//@{
@@ -85,23 +82,19 @@ namespace TA3D
 		** \see load()
 		** \see load_memory()
 		*/
-		bool isLoaded() const {return pLoaded;}
-
+		bool isLoaded() const { return pLoaded; }
 
 	private:
 		//! Is the shader loaded ?
 		bool pLoaded;
 		//!
-		GLhandleARB		pShaderProgram;
+		GLhandleARB pShaderProgram;
 		//!
-		GLhandleARB		pShaderFragment;
+		GLhandleARB pShaderFragment;
 		//!
-		GLhandleARB		pShaderVertex;
+		GLhandleARB pShaderVertex;
 
 	}; // class Shader
-
-
-
 
 } // namespace TA3D
 

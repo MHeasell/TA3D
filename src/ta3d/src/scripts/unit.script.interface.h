@@ -16,45 +16,46 @@
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA*/
 
 #ifndef __UnitScriptInterface_H__
-# define __UnitScriptInterface_H__
+#define __UnitScriptInterface_H__
 
-# include <misc/string.h>
-# include "script.interface.h"
-# include "script.data.h"
-# include <misc/hash_table.h>
-
+#include <misc/string.h>
+#include "script.interface.h"
+#include "script.data.h"
+#include <misc/hash_table.h>
 
 namespace TA3D
 {
-    /*!
+	/*!
     ** This class is an interface for all unit scripts types
     */
-    class UnitScriptInterface : public ScriptInterface
-    {
+	class UnitScriptInterface : public ScriptInterface
+	{
 	public:
-		typedef SmartPtr<UnitScriptInterface>	Ptr;
-    public:
-		static UnitScriptInterface *instanciate( ScriptData::Ptr data );
-        static const String get_script_name(int id);
-        static int get_script_id(const String &name);
+		typedef SmartPtr<UnitScriptInterface> Ptr;
 
-    protected:
-        uint32                  unitID;
-		UTILS::HashMap<int>::Dense  return_value;
-    public:
+	public:
+		static UnitScriptInterface *instanciate(ScriptData::Ptr data);
+		static const String get_script_name(int id);
+		static int get_script_id(const String &name);
+
+	protected:
+		uint32 unitID;
+		UTILS::HashMap<int>::Dense return_value;
+
+	public:
 		inline UnitScriptInterface() {}
-        virtual ~UnitScriptInterface()  {}
+		virtual ~UnitScriptInterface() {}
 
-        virtual void setUnitID(uint32 ID) = 0;
+		virtual void setUnitID(uint32 ID) = 0;
 
-        virtual int getNbPieces() = 0;
+		virtual int getNbPieces() = 0;
 
-        int getReturnValue(const String &name);
-        void setReturnValue(const String &name, int value);
+		int getReturnValue(const String &name);
+		void setReturnValue(const String &name, int value);
 
-    private:
-        static const char *script_name[];
-    };
+	private:
+		static const char *script_name[];
+	};
 }
 
 #endif

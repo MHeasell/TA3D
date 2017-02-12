@@ -15,81 +15,73 @@
 	along with this program; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA*/
 #ifndef __TA3D_INGAME_MENUS_SPLASH_H__
-# define __TA3D_INGAME_MENUS_SPLASH_H__
+#define __TA3D_INGAME_MENUS_SPLASH_H__
 
-# include <stdafx.h>
-# include <misc/string.h>
-# include "base.h"
-# include <engine.h>
+#include <stdafx.h>
+#include <misc/string.h>
+#include "base.h"
+#include <engine.h>
 
-
-# define TA3D_MENUS_SPLASH_DEFAULT_SPLASH_FILENAME  "intro.txt"
-
+#define TA3D_MENUS_SPLASH_DEFAULT_SPLASH_FILENAME "intro.txt"
 
 namespace TA3D
 {
-namespace Menus
-{
+	namespace Menus
+	{
 
-
-	/*!
+		/*!
 	** \brief A window to make the user wait for the engine's initializtion at startup
 	*/
-	class Splash : public Abstract
-	{
-	public:
-		/*!
+		class Splash : public Abstract
+		{
+		public:
+			/*!
 		** \brief Execute an instance of Menus::Splash
 		*/
-		static bool Execute(Engine& engine);
+			static bool Execute(Engine& engine);
 
-	public:
-		//! \name Constructor & Destructor
-		//@{
-		//! Default constructor
-		Splash(Engine& engine);
-		//! Destructor
-		virtual ~Splash();
-		//@}
+		public:
+			//! \name Constructor & Destructor
+			//@{
+			//! Default constructor
+			Splash(Engine& engine);
+			//! Destructor
+			virtual ~Splash();
+			//@}
 
-
-		/*!
+			/*!
 		** \brief reload the content of the scrolling text
 		*/
-		void reloadContent();
+			void reloadContent();
 
-	protected:
-		virtual bool doInitialize();
-		virtual void doFinalize();
-		virtual void waitForEvent();
-		virtual bool maySwitchToAnotherMenu();
-		virtual void redrawTheScreen();
+		protected:
+			virtual bool doInitialize();
+			virtual void doFinalize();
+			virtual void waitForEvent();
+			virtual bool maySwitchToAnotherMenu();
+			virtual void redrawTheScreen();
 
-	private:
-		/*!
+		private:
+			/*!
 		** \brief Reload the texture of the background
 		*/
-		void loadBackgroundTexture();
+			void loadBackgroundTexture();
 
-	private:
-		//! The Ta3D Engine
-		Engine& pEngine;
-		//! The texture of the background
-		GLuint pBackgroundTexture;
-		//
-		float pLeft;
-		float pTop;
-		//
-		float pHeight;
-		float pWidth;
+		private:
+			//! The Ta3D Engine
+			Engine& pEngine;
+			//! The texture of the background
+			GLuint pBackgroundTexture;
+			//
+			float pLeft;
+			float pTop;
+			//
+			float pHeight;
+			float pWidth;
 
-	}; // class Splash
+		}; // class Splash
 
-
-
-
-
-} // namespace Menus
+	} // namespace Menus
 } // namespace TA3D
 
 #endif // __TA3D_INGAME_MENUS_SPLASH_H__

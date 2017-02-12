@@ -26,89 +26,78 @@
 #include <languages/i18n.h>
 #include <TA3D_NameSpace.h>
 
-
 using namespace Yuni;
-
-
 
 namespace TA3D
 {
-namespace Menus
-{
-
-
-	bool Splash::Execute(Engine& engine)
+	namespace Menus
 	{
-		Menus::Splash m(engine);
-		return m.execute();
-	}
 
+		bool Splash::Execute(Engine& engine)
+		{
+			Menus::Splash m(engine);
+			return m.execute();
+		}
 
-	Splash::Splash(Engine& engine)
-		:Abstract(), pEngine(engine), pBackgroundTexture(0)
-	{}
+		Splash::Splash(Engine& engine)
+			: Abstract(), pEngine(engine), pBackgroundTexture(0)
+		{
+		}
 
-	Splash::~Splash()
-	{}
+		Splash::~Splash()
+		{
+		}
 
+		bool Splash::doInitialize()
+		{
+			LOG_ASSERT(NULL != gfx);
+			LOG_DEBUG(LOG_PREFIX_MENU_INTRO << "Entering...");
 
-	bool Splash::doInitialize()
-	{
-		LOG_ASSERT(NULL != gfx);
-		LOG_DEBUG(LOG_PREFIX_MENU_INTRO << "Entering...");
+			// Load the background
+			loadBackgroundTexture();
+			// 2D Mode
+			gfx->set_2D_mode();
+			return true;
+		}
 
-		// Load the background
-		loadBackgroundTexture();
-		// 2D Mode
-		gfx->set_2D_mode();
-		return true;
-	}
+		void Splash::doFinalize()
+		{
+			ResetTexture(pBackgroundTexture);
+			LOG_DEBUG(LOG_PREFIX_MENU_INTRO << "Done.");
+		}
 
-	void Splash::doFinalize()
-	{
-		ResetTexture(pBackgroundTexture);
-		LOG_DEBUG(LOG_PREFIX_MENU_INTRO << "Done.");
-	}
+		void Splash::waitForEvent()
+		{
+			// Do nothing
+			wait(TA3D_MENUS_RECOMMENDED_TIME_MS_FOR_RESTING * 3);
+		}
 
+		bool Splash::maySwitchToAnotherMenu()
+		{
+			// Waiting for the engine...
+			return (false == pEngine.started());
+		}
 
-	void Splash::waitForEvent()
-	{
-		// Do nothing
-		wait(TA3D_MENUS_RECOMMENDED_TIME_MS_FOR_RESTING * 3);
-	}
+		void Splash::loadBackgroundTexture()
+		{
+			LOG_ASSERT(NULL != gfx);
 
+			String filename;
+			// The background
+			filename << "gfx" << Paths::SeparatorAsString << "splash" << Paths::SeparatorAsString << "loading.jpg";
+			ResetTexture(pBackgroundTexture, gfx->load_texture(filename));
+		}
 
-	bool Splash::maySwitchToAnotherMenu()
-	{
-		// Waiting for the engine...
-		return (false == pEngine.started());
-	}
+		void Splash::redrawTheScreen()
+		{
+			// Clear the screen
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+			glLoadIdentity();
+			// Background
+			gfx->drawtexture(pBackgroundTexture, 0.0f, 0.0f, float(SCREEN_W), float(SCREEN_H));
+			// Flip
+			gfx->flip();
+		}
 
-
-	void Splash::loadBackgroundTexture()
-	{
-		LOG_ASSERT(NULL != gfx);
-
-		String filename;
-		// The background
-		filename << "gfx" << Paths::SeparatorAsString << "splash" << Paths::SeparatorAsString << "loading.jpg";
-		ResetTexture(pBackgroundTexture, gfx->load_texture(filename));
-	}
-
-
-	void Splash::redrawTheScreen()
-	{
-		// Clear the screen
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		glLoadIdentity();
-		// Background
-		gfx->drawtexture(pBackgroundTexture, 0.0f, 0.0f, float(SCREEN_W), float(SCREEN_H));
-		// Flip
-		gfx->flip();
-	}
-
-
-
-
-} // namespace Menus
+	} // namespace Menus
 } // namespace TA3D

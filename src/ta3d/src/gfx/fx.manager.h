@@ -15,66 +15,64 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA*/
 #ifndef __TA3D_GFX_FXMANAGER_H__
-# define __TA3D_GFX_FXMANAGER_H__
+#define __TA3D_GFX_FXMANAGER_H__
 
-# include <stdafx.h>
-# include <misc/string.h>
-# include <threads/thread.h>
-# include <gaf.h>
-# include <ta3dbase.h>
-# include "fx.base.h"
-# include "fx.particle.h"
-# include "fx.electric.h"
-# include <misc/camera.h>
-# include <mesh/mesh.h>
-# include "texture.h"
-
+#include <stdafx.h>
+#include <misc/string.h>
+#include <threads/thread.h>
+#include <gaf.h>
+#include <ta3dbase.h>
+#include "fx.base.h"
+#include "fx.particle.h"
+#include "fx.electric.h"
+#include <misc/camera.h>
+#include <mesh/mesh.h>
+#include "texture.h"
 
 namespace TA3D
 {
 
-
-    /*! \class FXManager
+	/*! \class FXManager
     **
     ** \brief
     **
     ** \warning This class mustn't be executed in its own thread in order to remain
     ** thread safe. It must run in main thread (the one that can call OpenGL functions)
     */
-    class FXManager : public ObjectSync
-    {
-    public:
-        //! \name Constructor & destructor
-        //@{
-        //! Default constructor
-        FXManager();
-        //! Destructor
-        ~FXManager();
-        //@}
+	class FXManager : public ObjectSync
+	{
+	public:
+		//! \name Constructor & destructor
+		//@{
+		//! Default constructor
+		FXManager();
+		//! Destructor
+		~FXManager();
+		//@}
 
-        /*!
+		/*!
         ** \brief
         */
-        void init();
+		void init();
 
-        /*!
+		/*!
         ** \brief
         */
-        void destroy();
+		void destroy();
 
-        /*!
+		/*!
         ** \brief Load needed textures if not already loaded
         */
-        void loadData();
+		void loadData();
 
-        /*!
+		/*!
         ** \brief
         **
         ** \param dt Delta time
         */
-        void move(const float dt);
+		void move(const float dt);
 
-        /*!
+		/*!
         ** \brief
         **
         ** \param cam
@@ -89,7 +87,7 @@ namespace TA3D
 		*/
 		void drawWaterDistortions();
 
-        /*!
+		/*!
         ** \brief
         **
         ** \param filename
@@ -98,97 +96,97 @@ namespace TA3D
         ** \param size
         ** \return
         */
-        int add(const String& filename, const String& entryName, const Vector3D& Pos, const float size);
+		int add(const String& filename, const String& entryName, const Vector3D& Pos, const float size);
 
-        /*!
+		/*!
         ** \brief
         ** \param pos
         ** \param size
         */
-        int addFlash(const Vector3D& pos, const float size);
+		int addFlash(const Vector3D& pos, const float size);
 
-        /*!
+		/*!
         ** \brief Add a wave
         ** \param pos
         ** \param size
         ** \return
         */
-        int addWave(const Vector3D& Pos,float size);
+		int addWave(const Vector3D& Pos, float size);
 
-        /*!
+		/*!
         ** \brief Add a ripple
         ** \param pos
         ** \param size
         ** \return
         */
-        int addRipple(const Vector3D& Pos,float size);
+		int addRipple(const Vector3D& Pos, float size);
 
-        /*!
+		/*!
         ** \brief Add a particle
         ** \param p
         ** \param s
         ** \param l
         */
-        void addParticle(const Vector3D& p, const Vector3D& s, const float l);
+		void addParticle(const Vector3D& p, const Vector3D& s, const float l);
 
-        /*!
+		/*!
         ** \brief Add an explosion effect
         ** \param p
         ** \param n
         ** \param power
         */
-        void addExplosion(const Vector3D& p, const int n, const float power);
+		void addExplosion(const Vector3D& p, const int n, const float power);
 
-        /*!
+		/*!
         ** \brief Add an explosion effect (with initial speed)
         ** \param p
         ** \param s
         ** \param n
         ** \param power
         */
-        void addExplosion(const Vector3D& p, const Vector3D& s, const int n, const float power);
+		void addExplosion(const Vector3D& p, const Vector3D& s, const int n, const float power);
 
-        /*!
+		/*!
         ** \brief Add an electrical effect
         ** \param p
         */
-        void addElectric(const Vector3D& p);
+		void addElectric(const Vector3D& p);
 
-    public:
-        //!
+	public:
+		//!
 		File* fx_data;
-        //!
+		//!
 		Interfaces::GfxTexture flash_tex;
-        //!
+		//!
 		Interfaces::GfxTexture wave_tex[3];
-        //!
+		//!
 		Interfaces::GfxTexture ripple_tex;
 
-    private:
-        /*!
+	private:
+		/*!
         ** \brief Find the index of a filename in the cache
         ** \param filename The filename to look for
         ** \return The index of the item, -1 if not found
         ** \warning This method is not thread-safe
         */
-        int findInCache(const String& filename) const;
+		int findInCache(const String& filename) const;
 
-        /*!
+		/*!
         ** \brief
         ** \param filename
         ** \param anm
         ** \return
         ** \warning This method is not thread-safe
         */
-        int putInCache(const String& filename, Gaf::Animation* anm);
+		int putInCache(const String& filename, Gaf::Animation* anm);
 
-        /*!
+		/*!
         ** \brief Delete all particles
         ** \see pParticles
         */
-        void doClearAllParticles();
+		void doClearAllParticles();
 
-        /*!
+		/*!
         ** \brief Move all particles
         **
         ** Each particles in `pParticles` will be moved via
@@ -197,22 +195,22 @@ namespace TA3D
         **
         ** \see FXParticle::move()
         */
-        void doMoveAllParticles(const float& dt);
+		void doMoveAllParticles(const float& dt);
 
-        /*!
+		/*!
         ** \brief Move all FX
         ** \param dt Delta time
         */
-        void doMoveAllFX(const float& dt);
+		void doMoveAllFX(const float& dt);
 
-    private:
-		typedef std::vector<FXParticle>  ListOfParticles;
-		typedef std::vector<FXElectric>  ListOfElectrics;
+	private:
+		typedef std::vector<FXParticle> ListOfParticles;
+		typedef std::vector<FXElectric> ListOfElectrics;
 
-    private:
-        int max_fx;
-        int nb_fx;
-        std::vector<FX> fx;
+	private:
+		int max_fx;
+		int nb_fx;
+		std::vector<FX> fx;
 
 		// Cache
 		String::Vector cacheName;
@@ -220,22 +218,19 @@ namespace TA3D
 		std::vector<Gaf::Animation*> cacheAnm;
 		std::vector<int> use;
 		std::deque<int> freeSlot;
-        bool pCacheIsDirty;
+		bool pCacheIsDirty;
 
-        //! List of particles bouncing around
-        ListOfParticles pParticles;
-        ListOfElectrics pElectrics;
+		//! List of particles bouncing around
+		ListOfParticles pParticles;
+		ListOfElectrics pElectrics;
 
-    public:
-        //!
+	public:
+		//!
 		static Model* currentParticleModel;
 
-    }; // class FXManager
+	}; // class FXManager
 
-
-
-    extern FXManager fx_manager;
-
+	extern FXManager fx_manager;
 
 } // namespace TA3D
 

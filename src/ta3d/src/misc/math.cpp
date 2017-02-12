@@ -20,43 +20,37 @@
 #include <ctime>
 #include "math.h"
 
-
-
 namespace TA3D
 {
-namespace Math
-{
-
-	// Our pre-cached random numbers table
-	PreCachedRandomNumbers  RandomTable;
-
-
-
-    uint32 Log2(uint32 n)
-    {
-        uint32 p(0);
-        n >>= 1;
-        while (n)
-        {
-            ++p;
-            n >>= 1;
-        }
-        return p;
-    }
-
-
-	PreCachedRandomNumbers::PreCachedRandomNumbers()
+	namespace Math
 	{
-		reset();
-	}
 
-	void PreCachedRandomNumbers::reset()
-	{
-		srand((unsigned int)time(NULL));
-		for(size_t i = 0U ; i < TA3D_MATH_RANDOM_TABLE_SIZE ; ++i)
-			pCache[i] = TA3D_RAND();
-	}
+		// Our pre-cached random numbers table
+		PreCachedRandomNumbers RandomTable;
 
+		uint32 Log2(uint32 n)
+		{
+			uint32 p(0);
+			n >>= 1;
+			while (n)
+			{
+				++p;
+				n >>= 1;
+			}
+			return p;
+		}
 
-} // namespace Math
+		PreCachedRandomNumbers::PreCachedRandomNumbers()
+		{
+			reset();
+		}
+
+		void PreCachedRandomNumbers::reset()
+		{
+			srand((unsigned int)time(NULL));
+			for (size_t i = 0U; i < TA3D_MATH_RANDOM_TABLE_SIZE; ++i)
+				pCache[i] = TA3D_RAND();
+		}
+
+	} // namespace Math
 } // namespace TA3D

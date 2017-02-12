@@ -1,10 +1,8 @@
 #ifndef __TA3D_NETWORK_NETCLIENT_HXX__
-# define __TA3D_NETWORK_NETCLIENT_HXX__
-
+#define __TA3D_NETWORK_NETCLIENT_HXX__
 
 namespace TA3D
 {
-
 
 	inline NetClient::NetState NetClient::getState() const
 	{
@@ -12,20 +10,17 @@ namespace TA3D
 		return state;
 	}
 
-
 	inline String::Vector NetClient::getPeerList() const
 	{
 		ThreadingPolicy::MutexLocker locker(*this);
 		return peerList;
 	}
 
-	
 	inline bool NetClient::messageWaiting() const
 	{
 		ThreadingPolicy::MutexLocker locker(*this);
 		return !messages.empty();
 	}
-
 
 	inline String NetClient::getLogin() const
 	{
@@ -33,13 +28,11 @@ namespace TA3D
 		return login;
 	}
 
-
 	inline String NetClient::getChan() const
 	{
 		ThreadingPolicy::MutexLocker locker(*this);
 		return currentChan;
 	}
-
 
 	inline String NetClient::getServerJoined() const
 	{
@@ -47,13 +40,11 @@ namespace TA3D
 		return serverJoined;
 	}
 
-
 	inline String::Vector NetClient::getChanList() const
 	{
 		ThreadingPolicy::MutexLocker locker(*this);
 		return chanList;
 	}
-
 
 	inline NetClient::Ptr NetClient::instance()
 	{
@@ -61,9 +52,6 @@ namespace TA3D
 			pInstance = new NetClient;
 		return pInstance;
 	}
-
-
-
 
 } // namespace TA3D
 

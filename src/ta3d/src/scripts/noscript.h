@@ -18,9 +18,9 @@
 #ifndef __NoScript_H__
 #define __NoScript_H__
 
-# include <stdafx.h>
-# include <misc/string.h>
-# include "unit.script.interface.h"
+#include <stdafx.h>
+#include <misc/string.h>
+#include "unit.script.interface.h"
 
 namespace TA3D
 {
@@ -31,12 +31,11 @@ namespace TA3D
 	class NoScript : public UnitScriptInterface
 	{
 	public:
-
 		NoScript();
 		virtual ~NoScript();
 
 		/*virtual*/ void load(ScriptData *data);
-		/*virtual*/ int run(float dt, bool alone = false);                  // Run the script
+		/*virtual*/ int run(float dt, bool alone = false); // Run the script
 
 		//! functions used to call/run functions
 		/*virtual*/ void call(const String &functionName, int *parameters = NULL, int nb_params = 0);
@@ -54,7 +53,6 @@ namespace TA3D
 		/*virtual*/ void setUnitID(uint32 ID);
 		/*virtual*/ int getNbPieces();
 	};
-
 }
 
 #endif

@@ -22,11 +22,9 @@
 namespace TA3D
 {
 
-    Camera* Camera::inGame = NULL;
+	Camera* Camera::inGame = NULL;
 
-
-
-	Camera::Camera()					// Initialise la caméra
+	Camera::Camera() // Initialise la caméra
 	{
 		reset();
 	}
@@ -45,24 +43,23 @@ namespace TA3D
 		shakeMagnitude = 0.0f;
 		shakeDuration = 0.0f;
 		shakeTotalDuration = 1.0f;
-		rpos  = pos;
-		dir   = up = pos;
+		rpos = pos;
+		dir = up = pos;
 		dir.z = -1.0f; // direction
-		up.y  = 1.0f; // Haut
-		zfar  = 140000.0f;
+		up.y = 1.0f;   // Haut
+		zfar = 140000.0f;
 		znear = 1.0f;
-		side  = dir * up;
-		zfar2  = zfar * zfar;
+		side = dir * up;
+		zfar2 = zfar * zfar;
 		mirror = false;
 		mirrorPos = 0.0f;
 		zoomFactor = 0.5f;
 	}
 
-
 	void Camera::setWidthFactor(const int w, const int h)
 	{
 		// 1280x1024 is a 4/3 mode
-		widthFactor = (w * 4 == h * 5)   ? (1.0f) : (float(w) * 0.75f / float(h));
+		widthFactor = (w * 4 == h * 5) ? (1.0f) : (float(w) * 0.75f / float(h));
 	}
 
 	void Camera::setMatrix(const Matrix& v)
@@ -76,8 +73,6 @@ namespace TA3D
 		side = dir * up;
 	}
 
-
-
 	void Camera::setShake(const float duration, float magnitude)
 	{
 		magnitude *= 0.1f;
@@ -89,27 +84,32 @@ namespace TA3D
 		}
 	}
 
-
 	void Camera::updateShake(const float dt)
 	{
 		if (shakeDuration > 0.0f)
 		{
 			shakeDuration -= dt;
 			float dt_step = 0.03f;
-			for (float c_dt = 0.0f ; c_dt < dt ; c_dt += dt_step)
+			for (float c_dt = 0.0f; c_dt < dt; c_dt += dt_step)
 			{
 				float rdt = Math::Min(dt_step, dt - c_dt);
-				Vector3D rand_vec( float((TA3D_RAND() % 2001) - 1000) * 0.001f * shakeMagnitude,
-								   float((TA3D_RAND() % 2001) - 1000) * 0.001f * shakeMagnitude,
-								   float((TA3D_RAND() % 2001) - 1000) * 0.001f * shakeMagnitude );
+				Vector3D rand_vec(float((TA3D_RAND() % 2001) - 1000) * 0.001f * shakeMagnitude,
+								  float((TA3D_RAND() % 2001) - 1000) * 0.001f * shakeMagnitude,
+								  float((TA3D_RAND() % 2001) - 1000) * 0.001f * shakeMagnitude);
 				shakeVector += -rdt * 10.0f * shakeVector;
 				shakeVector += rand_vec;
-				if (shakeVector.x < -20.0f)		shakeVector.x = -20.0f;
-				else if(shakeVector.x > 20.0f)	shakeVector.x = 20.0f;
-				if (shakeVector.y < -20.0f )	shakeVector.y = -20.0f;
-				else if(shakeVector.y > 20.0f)	shakeVector.y = 20.0f;
-				if (shakeVector.z < -20.0f)		shakeVector.z = -20.0f;
-				else if(shakeVector.z > 20.0f)	shakeVector.z = 20.0f;
+				if (shakeVector.x < -20.0f)
+					shakeVector.x = -20.0f;
+				else if (shakeVector.x > 20.0f)
+					shakeVector.x = 20.0f;
+				if (shakeVector.y < -20.0f)
+					shakeVector.y = -20.0f;
+				else if (shakeVector.y > 20.0f)
+					shakeVector.y = 20.0f;
+				if (shakeVector.z < -20.0f)
+					shakeVector.z = -20.0f;
+				else if (shakeVector.z > 20.0f)
+					shakeVector.z = 20.0f;
 			}
 		}
 		else
@@ -120,27 +120,28 @@ namespace TA3D
 				float rdt = Math::Min(dt_step, dt - c_dt);
 				shakeVector += -rdt * 10.0f * shakeVector;
 
-				if( shakeVector.x < -20.0f )    shakeVector.x = -20.0f;
-				else
-					if( shakeVector.x > 20.0f)	shakeVector.x = 20.0f;
-				if (shakeVector.y < -20.0f)     shakeVector.y = -20.0f;
-				else
-					if( shakeVector.y > 20.0f)	shakeVector.y = 20.0f;
-				if (shakeVector.z < -20.0f)     shakeVector.z = -20.0f;
-				else
-					if( shakeVector.z > 20.0f)	shakeVector.z = 20.0f;
+				if (shakeVector.x < -20.0f)
+					shakeVector.x = -20.0f;
+				else if (shakeVector.x > 20.0f)
+					shakeVector.x = 20.0f;
+				if (shakeVector.y < -20.0f)
+					shakeVector.y = -20.0f;
+				else if (shakeVector.y > 20.0f)
+					shakeVector.y = 20.0f;
+				if (shakeVector.z < -20.0f)
+					shakeVector.z = -20.0f;
+				else if (shakeVector.z > 20.0f)
+					shakeVector.z = 20.0f;
 			}
 		}
 	}
-
-
 
 	void Camera::setView(bool classic)
 	{
 		zfar2 = zfar * zfar;
 
-		glMatrixMode (GL_PROJECTION);
-		glLoadIdentity ();
+		glMatrixMode(GL_PROJECTION);
+		glLoadIdentity();
 		if (lp_CONFIG && lp_CONFIG->ortho_camera)
 			glOrtho(-0.5f * zoomFactor * float(SCREEN_W), 0.5f * zoomFactor * float(SCREEN_W), -0.5f * zoomFactor * float(SCREEN_H), 0.5f * zoomFactor * float(SCREEN_H), znear, zfar);
 		else
@@ -175,8 +176,8 @@ namespace TA3D
 
 	Matrix Camera::getMatrix() const
 	{
-		glMatrixMode (GL_PROJECTION);
-		glLoadIdentity ();
+		glMatrixMode(GL_PROJECTION);
+		glLoadIdentity();
 		if (lp_CONFIG && lp_CONFIG->ortho_camera)
 			glOrtho(-0.5f * zoomFactor * float(SCREEN_W), 0.5f * zoomFactor * float(SCREEN_W), -0.5f * zoomFactor * float(SCREEN_H), 0.5f * zoomFactor * float(SCREEN_H), -512.0f, zfar);
 		else
@@ -198,7 +199,7 @@ namespace TA3D
 		Matrix mProj;
 		GLfloat tmp[16];
 		glGetFloatv(GL_PROJECTION_MATRIX, tmp);
-		for(int i = 0 ; i < 16 ; ++i)
+		for (int i = 0; i < 16; ++i)
 			mProj.E[i % 4][i / 4] = tmp[i];
 		return mProj;
 	}
@@ -209,30 +210,28 @@ namespace TA3D
 		{
 			const Vector3D wside = static_cast<float>(SCREEN_W) * side;
 			const Vector3D hup = static_cast<float>(SCREEN_H) * up;
-			list.push_back( rpos + znear * dir + 0.5f * zoomFactor * (-wside + hup) );
-			list.push_back( rpos + znear * dir + 0.5f * zoomFactor * (wside + hup) );
-			list.push_back( rpos + znear * dir + 0.5f * zoomFactor * (-wside - hup) );
-			list.push_back( rpos + znear * dir + 0.5f * zoomFactor * (wside - hup) );
+			list.push_back(rpos + znear * dir + 0.5f * zoomFactor * (-wside + hup));
+			list.push_back(rpos + znear * dir + 0.5f * zoomFactor * (wside + hup));
+			list.push_back(rpos + znear * dir + 0.5f * zoomFactor * (-wside - hup));
+			list.push_back(rpos + znear * dir + 0.5f * zoomFactor * (wside - hup));
 
-			list.push_back( rpos + zfar * dir + 0.5f * zoomFactor * (-wside + hup) );
-			list.push_back( rpos + zfar * dir + 0.5f * zoomFactor * (wside + hup) );
-			list.push_back( rpos + zfar * dir + 0.5f * zoomFactor * (-wside - hup) );
-			list.push_back( rpos + zfar * dir + 0.5f * zoomFactor * (wside - hup) );
+			list.push_back(rpos + zfar * dir + 0.5f * zoomFactor * (-wside + hup));
+			list.push_back(rpos + zfar * dir + 0.5f * zoomFactor * (wside + hup));
+			list.push_back(rpos + zfar * dir + 0.5f * zoomFactor * (-wside - hup));
+			list.push_back(rpos + zfar * dir + 0.5f * zoomFactor * (wside - hup));
 		}
 		else
 		{
-			list.push_back( rpos + znear * (-widthFactor * side + 0.75 * up + dir) );
-			list.push_back( rpos + znear * (widthFactor * side + 0.75 * up + dir) );
-			list.push_back( rpos + znear * (-widthFactor * side - 0.75 * up + dir) );
-			list.push_back( rpos + znear * (widthFactor * side - 0.75 * up + dir) );
+			list.push_back(rpos + znear * (-widthFactor * side + 0.75 * up + dir));
+			list.push_back(rpos + znear * (widthFactor * side + 0.75 * up + dir));
+			list.push_back(rpos + znear * (-widthFactor * side - 0.75 * up + dir));
+			list.push_back(rpos + znear * (widthFactor * side - 0.75 * up + dir));
 
-			list.push_back( rpos + zfar * (-widthFactor * side + 0.75 * up + dir) );
-			list.push_back( rpos + zfar * (widthFactor * side + 0.75 * up + dir) );
-			list.push_back( rpos + zfar * (-widthFactor * side - 0.75 * up + dir) );
-			list.push_back( rpos + zfar * (widthFactor * side - 0.75 * up + dir) );
+			list.push_back(rpos + zfar * (-widthFactor * side + 0.75 * up + dir));
+			list.push_back(rpos + zfar * (widthFactor * side + 0.75 * up + dir));
+			list.push_back(rpos + zfar * (-widthFactor * side - 0.75 * up + dir));
+			list.push_back(rpos + zfar * (widthFactor * side - 0.75 * up + dir));
 		}
 	}
-
-
 
 } // namespace TA3D

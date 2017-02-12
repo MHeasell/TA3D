@@ -25,9 +25,9 @@
 #include <misc/matrix.h>
 #include <TA3D_NameSpace.h>
 #include <ta3dbase.h>
-#include <scripts/cob.h>					// For unit scripts / Pour la lecture et l'éxecution des scripts
-#include <tdf.h>					// For map features / Pour la gestion des éléments du jeu
-#include <EngineClass.h>			// The engine, also includes pathfinding.h / Inclus le moteur(dont le fichier pathfinding.h)
+#include <scripts/cob.h> // For unit scripts / Pour la lecture et l'éxecution des scripts
+#include <tdf.h>		 // For map features / Pour la gestion des éléments du jeu
+#include <EngineClass.h> // The engine, also includes pathfinding.h / Inclus le moteur(dont le fichier pathfinding.h)
 #include <misc/math.h>
 #include <UnitEngine.h>
 #include <misc/usectimer.h>
@@ -35,7 +35,7 @@
 #include <algorithm>
 #include <thread>
 
-#define PATHFINDER_MAX_LENGTH			500000
+#define PATHFINDER_MAX_LENGTH 500000
 
 //#define DEBUG_PATH
 
@@ -82,17 +82,17 @@ namespace TA3D
 			pos.y = 0.0f;
 		}
 
-#define SAVE( i )	gzwrite( file, (void*)&(i), sizeof( i ) )
-#define LOAD( i )	gzread( file, (void*)&(i), sizeof( i ) )
+#define SAVE(i) gzwrite(file, (void *)&(i), sizeof(i))
+#define LOAD(i) gzread(file, (void *)&(i), sizeof(i))
 
 		void Path::save(gzFile file)
 		{
 			int n = int(nodes.size());
-			SAVE( n );
-			for(iterator i = begin() ; i != end() ; ++i)
+			SAVE(n);
+			for (iterator i = begin(); i != end(); ++i)
 			{
-				SAVE( i->x() );
-				SAVE( i->z() );
+				SAVE(i->x());
+				SAVE(i->z());
 			}
 		}
 
@@ -100,12 +100,12 @@ namespace TA3D
 		{
 			clear();
 			int n(0);
-			LOAD( n );
-			for(int i = 0 ; i < n ; ++i)
+			LOAD(n);
+			for (int i = 0; i < n; ++i)
 			{
-				Node node(0,0);
-				LOAD( node.x() );
-				LOAD( node.z() );
+				Node node(0, 0);
+				LOAD(node.x());
+				LOAD(node.z());
 				nodes.push_back(node);
 			}
 		}
@@ -132,14 +132,14 @@ namespace TA3D
 
 	void Pathfinder::addTask(int idx, int dist, const Vector3D &start, const Vector3D &end)
 	{
-		Task t = { dist, idx, units.unit[idx].ID, start, end };
+		Task t = {dist, idx, units.unit[idx].ID, start, end};
 
 		lock();
 
 		TaskSet::iterator pos = stasks.find(t.UID);
 		const bool found = (pos != stasks.end());
 
-		if (found)		// If it's in the queue, then change the request
+		if (found) // If it's in the queue, then change the request
 			tasks[*pos - taskOffset] = t;
 		// Otherwise add a new request to the task list
 		else
@@ -180,12 +180,12 @@ namespace TA3D
 	{
 		destroyThread();
 
-		for(HashMap<BitMap*>::Dense::iterator it = hBitMap.begin() ; it != hBitMap.end() ; ++it)
+		for (HashMap<BitMap *>::Dense::iterator it = hBitMap.begin(); it != hBitMap.end(); ++it)
 			if (*it)
 				delete *it;
 	}
 
-	void Pathfinder::proc(void*)
+	void Pathfinder::proc(void *)
 	{
 		bRunning = true;
 		while (!pDead)
@@ -205,9 +205,7 @@ namespace TA3D
 
 			// Here we are free to compute this path
 			const uint32 start_timer = msec_timer;
-			if (cur.idx >= 0
-				&& units.unit[cur.idx].ID == cur.UID
-				&& (units.unit[cur.idx].flags & 1))
+			if (cur.idx >= 0 && units.unit[cur.idx].ID == cur.UID && (units.unit[cur.idx].flags & 1))
 			{
 				AI::Path path;
 #ifdef DEBUG_PATH
@@ -222,20 +220,16 @@ namespace TA3D
 
 				Unit *pUnit = &(units.unit[cur.idx]);
 				pUnit->lock();
-				if (pUnit->ID == cur.UID
-					&& (pUnit->flags & 1)
-					&& !pUnit->mission.empty()
-					&& pUnit->requesting_pathfinder
-					&& (pUnit->mission->getFlags() & MISSION_FLAG_MOVE))
+				if (pUnit->ID == cur.UID && (pUnit->flags & 1) && !pUnit->mission.empty() && pUnit->requesting_pathfinder && (pUnit->mission->getFlags() & MISSION_FLAG_MOVE))
 				{
 					pUnit->mission->Path().replaceWith(path);
 					pUnit->requesting_pathfinder = false;
-					if (pUnit->mission->Path().empty())					// Can't find a path to get where it has been ordered to go
+					if (pUnit->mission->Path().empty()) // Can't find a path to get where it has been ordered to go
 						pUnit->playSound("cant1");
 				}
 				pUnit->unlock();
 			}
-	
+
 			// We don't want to use more than 25% of the CPU here
 			if (suspend((nbCores == 1) ? ((msec_timer - start_timer) << 2) : 0))
 			{
@@ -247,7 +241,7 @@ namespace TA3D
 		bRunning = false;
 	}
 
-	void Pathfinder::findPath( AI::Path &path, const Task &task )
+	void Pathfinder::findPath(AI::Path &path, const Task &task)
 	{
 		if (task.idx >= 0)
 		{
@@ -259,8 +253,8 @@ namespace TA3D
 			}
 		}
 		const UnitType *pType = task.idx >= 0
-						  ? unit_manager.unit_type[units.unit[task.idx].type_id]
-						  : unit_manager.unit_type[-task.idx];
+									? unit_manager.unit_type[units.unit[task.idx].type_id]
+									: unit_manager.unit_type[-task.idx];
 		if (task.idx >= 0)
 			units.unit[task.idx].unlock();
 
@@ -283,13 +277,13 @@ namespace TA3D
 		nodes.clear();
 		nodes.push_back(AI::Path::Node(start_x, start_z));
 
-		static const int order_p1[] = { 1, 2, 3, 4, 5, 6, 7, 0 };
-		static const int order_p2[] = { 2, 3, 4, 5, 6, 7, 0, 1 };
-		static const int order_m1[] = { 7, 0, 1, 2, 3, 4, 5, 6 };
-		static const int order_m2[] = { 6, 7, 0, 1, 2, 3, 4, 5 };
-		static const int order_dx[] = { -1, 0, 1, 1, 1, 0, -1, -1 };
-		static const int order_dz[] = { -1, -1, -1, 0, 1, 1, 1, 0 };
-		static const int order_d[] = { 10, 7, 10, 7, 10, 7, 10, 7 };
+		static const int order_p1[] = {1, 2, 3, 4, 5, 6, 7, 0};
+		static const int order_p2[] = {2, 3, 4, 5, 6, 7, 0, 1};
+		static const int order_m1[] = {7, 0, 1, 2, 3, 4, 5, 6};
+		static const int order_m2[] = {6, 7, 0, 1, 2, 3, 4, 5};
+		static const int order_dx[] = {-1, 0, 1, 1, 1, 0, -1, -1};
+		static const int order_dz[] = {-1, -1, -1, 0, 1, 1, 1, 0};
+		static const int order_d[] = {10, 7, 10, 7, 10, 7, 10, 7};
 
 		const int m_dist = task.dist * task.dist;
 
@@ -299,13 +293,10 @@ namespace TA3D
 		const int mw_h = smw >> 1;
 		const int mh_h = smh >> 1;
 
-		if (nodes.back().x() < 0
-			|| nodes.back().z() < 0
-			|| nodes.back().x() >= the_map->bloc_w_db
-			|| nodes.back().z() >= the_map->bloc_h_db)		// Hum we are out !!
+		if (nodes.back().x() < 0 || nodes.back().z() < 0 || nodes.back().x() >= the_map->bloc_w_db || nodes.back().z() >= the_map->bloc_h_db) // Hum we are out !!
 		{
 			path.clear();
-			return;			// So we can't find a path
+			return; // So we can't find a path
 		}
 
 		Grid<int> &zone = the_map->path;
@@ -314,7 +305,7 @@ namespace TA3D
 		std::deque<int> qDistFromStart;
 
 		bool pathFound = true;
-		if ((m_dist == 0 && (nodes.back().x() != end_x || nodes.back().z() != end_z)) || (m_dist > 0 && sq( nodes.back().x() - end_x ) + sq( nodes.back().z() - end_z) > m_dist))
+		if ((m_dist == 0 && (nodes.back().x() != end_x || nodes.back().z() != end_z)) || (m_dist > 0 && sq(nodes.back().x() - end_x) + sq(nodes.back().z() - end_z) > m_dist))
 		{
 			nodes.reserve(PATHFINDER_MAX_LENGTH);
 			pathFound = false;
@@ -325,99 +316,91 @@ namespace TA3D
 			uint32 n = 0;
 			while (n < depthLimit)
 			{
-				++zone( nodes.back().x(), nodes.back().z() );
+				++zone(nodes.back().x(), nodes.back().z());
 
 				int m = -1;
 
-				int nx = nodes.back().x() + Math::Sgn( end_x - nodes.back().x() );
-				int nz = nodes.back().z() + Math::Sgn( end_z - nodes.back().z() );
+				int nx = nodes.back().x() + Math::Sgn(end_x - nodes.back().x());
+				int nz = nodes.back().z() + Math::Sgn(end_z - nodes.back().z());
 
 				if (nx < 0 || nz < 0 || nx >= the_map->bloc_w_db || nz >= the_map->bloc_h_db)
-					break;		// If we have to go out there is a problem ...
+					break; // If we have to go out there is a problem ...
 
 				if (zone(nx, nz) >= 2 || curDistFromStart > minPathLength)
 				{
-					if (qNode.empty())		// We're done
+					if (qNode.empty()) // We're done
 						break;
 					nodes.push_back(qNode.back());
 					qNode.pop_back();
 					curDistFromStart = qDistFromStart.back();
 					qDistFromStart.pop_back();
 					++n;
-					continue;		// Instead of looping we restart from a Node in the qNode
+					continue; // Instead of looping we restart from a Node in the qNode
 				}
 
-				if (zone( nx, nz ) || !(*bmap)(nx, nz) || !checkRectFast( nx - mw_h, nz - mh_h, pType ))
+				if (zone(nx, nz) || !(*bmap)(nx, nz) || !checkRectFast(nx - mw_h, nz - mh_h, pType))
 				{
-					float dist[ 8 ];
-					float rdist[ 8 ];
-					bool zoned[ 8 ];
-					for( int e = 0 ; e < 8 ; ++e )			// Gather required data
+					float dist[8];
+					float rdist[8];
+					bool zoned[8];
+					for (int e = 0; e < 8; ++e) // Gather required data
 					{
-						rdist[ e ] = dist[ e ] = -1.0f;
-						nx = nodes.back().x() + order_dx[ e ];
-						nz = nodes.back().z() + order_dz[ e ];
-						zoned[ e ] = false;
+						rdist[e] = dist[e] = -1.0f;
+						nx = nodes.back().x() + order_dx[e];
+						nz = nodes.back().z() + order_dz[e];
+						zoned[e] = false;
 						if (nx < 0 || nz < 0 || nx >= the_map->bloc_w_db || nz >= the_map->bloc_h_db)
 							continue;
-						zoned[ e ] = zone(nx, nz);
+						zoned[e] = zone(nx, nz);
 						if (!zoned[e] && !(*bmap)(nx, nz))
-								continue;
+							continue;
 						if (!zoned[e] && !checkRectFast(nx - mw_h, nz - mh_h, pType))
 							continue;
-						rdist[ e ] = dist[ e ] = distanceCoef * sqrtf(float(sq( end_x - nx ) + sq( end_z - nz ))) + energy(nx, nz);
+						rdist[e] = dist[e] = distanceCoef * sqrtf(float(sq(end_x - nx) + sq(end_z - nz))) + energy(nx, nz);
 
-						if (zoned[ e ])
-							dist[ e ] = -1.0f;
+						if (zoned[e])
+							dist[e] = -1.0f;
 					}
-					for (int e = 0 ; e < 8 ; ++e)		// Look for a way to go
+					for (int e = 0; e < 8; ++e) // Look for a way to go
 					{
-						if (((dist[ order_m1[ e ] ] < 0.0f && !zoned[ order_m1[ e ] ])
-							  || (dist[ order_p1[ e ] ] < 0.0f && !zoned[ order_p1[ e ] ])
-							  || (dist[ order_m2[ e ] ] < 0.0f && !zoned[ order_m2[ e ] ])
-							  || (dist[ order_p2[ e ] ] < 0.0f && !zoned[ order_p2[ e ] ]))
-							&& dist[ e ] >= 0.0f)
+						if (((dist[order_m1[e]] < 0.0f && !zoned[order_m1[e]]) || (dist[order_p1[e]] < 0.0f && !zoned[order_p1[e]]) || (dist[order_m2[e]] < 0.0f && !zoned[order_m2[e]]) || (dist[order_p2[e]] < 0.0f && !zoned[order_p2[e]])) && dist[e] >= 0.0f)
 						{
-							if (m == -1)	m = e;
-							else if (dist[ e ] < dist[ m ])
+							if (m == -1)
+								m = e;
+							else if (dist[e] < dist[m])
 								m = e;
 						}
 					}
-					if (m == -1)							// Second try
+					if (m == -1) // Second try
 					{
-						for (int e = 0 ; e < 8 ; ++e)
+						for (int e = 0; e < 8; ++e)
 						{
-							if (dist[ e ] >= 0.0f
-								&& ((!zoned[ order_m1[e] ]
-									 && !zoned[ order_p1[e] ])
-									|| pathFound))
+							if (dist[e] >= 0.0f && ((!zoned[order_m1[e]] && !zoned[order_p1[e]]) || pathFound))
 							{
-								if (m == -1)	m = e;
-								else if (dist[ e ] < dist[ m ])
+								if (m == -1)
+									m = e;
+								else if (dist[e] < dist[m])
 									m = e;
 							}
 						}
 					}
-					if (m >= 0)			// We found something
+					if (m >= 0) // We found something
 					{
-						nx = nodes.back().x() + order_dx[ m ];
-						nz = nodes.back().z() + order_dz[ m ];
+						nx = nodes.back().x() + order_dx[m];
+						nz = nodes.back().z() + order_dz[m];
 						// add unexplored nodes to the queue
-						for(int i = 0 ; i < 8 ; ++i)
+						for (int i = 0; i < 8; ++i)
 						{
 							if (i != m && dist[i] >= 0.0f)
 							{
-								if ((dist[ order_m1[ i ] ] < 0.0f && !zoned[ order_m1[ i ] ])
-									 || (dist[ order_p1[ i ] ] < 0.0f && !zoned[ order_p1[ i ] ])
-									 || (dist[ order_m2[ i ] ] < 0.0f && !zoned[ order_m2[ i ] ])
-									 || (dist[ order_p2[ i ] ] < 0.0f && !zoned[ order_p2[ i ] ]))
+								if ((dist[order_m1[i]] < 0.0f && !zoned[order_m1[i]]) || (dist[order_p1[i]] < 0.0f && !zoned[order_p1[i]]) || (dist[order_m2[i]] < 0.0f && !zoned[order_m2[i]]) || (dist[order_p2[i]] < 0.0f && !zoned[order_p2[i]]))
 								{
 									qNode.push_back(AI::Path::Node(nodes.back().x() + order_dx[i], nodes.back().z() + order_dz[i]));
-									qDistFromStart.push_back(curDistFromStart + order_d[ i ]);
+									qDistFromStart.push_back(curDistFromStart + order_d[i]);
 								}
 							}
 						}
-						curDistFromStart += order_d[ m ];
+						curDistFromStart += order_d[m];
 					}
 				}
 				else
@@ -425,26 +408,26 @@ namespace TA3D
 
 				if (m == -1)
 				{
-					if (qNode.empty())		// We're done
+					if (qNode.empty()) // We're done
 						break;
 					nodes.push_back(qNode.back());
 					qNode.pop_back();
 					curDistFromStart = qDistFromStart.back();
 					qDistFromStart.pop_back();
 					++n;
-					continue;		// Instead of looping we restart from a Node in the qNode
+					continue; // Instead of looping we restart from a Node in the qNode
 				}
 
-				nodes.push_back( AI::Path::Node(nx, nz) );
+				nodes.push_back(AI::Path::Node(nx, nz));
 
 				++n;
-				if ((m_dist == 0 && nodes.back().x() == end_x && nodes.back().z() == end_z) || (m_dist > 0 && sq( nodes.back().x() - end_x ) + sq( nodes.back().z() - end_z) <= m_dist))
+				if ((m_dist == 0 && nodes.back().x() == end_x && nodes.back().z() == end_z) || (m_dist > 0 && sq(nodes.back().x() - end_x) + sq(nodes.back().z() - end_z) <= m_dist))
 				{
 					minPathLength = Math::Min(minPathLength, curDistFromStart);
 					if (!pathFound)
-						depthLimit = n << 1;			// Limit search complexity
+						depthLimit = n << 1; // Limit search complexity
 					pathFound = true;
-					if (qNode.empty())		// We're done
+					if (qNode.empty()) // We're done
 						break;
 					nodes.push_back(qNode.back());
 					qNode.pop_back();
@@ -458,12 +441,12 @@ namespace TA3D
 #ifdef DEBUG_AI_PATHFINDER
 		SDL_Surface *bmp = gfx->create_surface_ex(32, zone.getWidth(), zone.getHeight());
 		memset(bmp->pixels, 0, bmp->w * bmp->h * sizeof(int));
-		for (int z = 0 ; z < the_map->bloc_h_db ; ++z)
-			for (int x = 0 ; x < the_map->bloc_w_db ; ++x)
-				if (!(*qmap)(x,z))
+		for (int z = 0; z < the_map->bloc_h_db; ++z)
+			for (int x = 0; x < the_map->bloc_w_db; ++x)
+				if (!(*qmap)(x, z))
 					SurfaceInt(bmp, x, z) = 0xFFFFFFFF;
 
-		for (std::vector<AI::Path::Node>::iterator cur = nodes.begin() ; cur != nodes.end() ; ++cur)		// Mark the path with a special pattern
+		for (std::vector<AI::Path::Node>::iterator cur = nodes.begin(); cur != nodes.end(); ++cur) // Mark the path with a special pattern
 			SurfaceInt(bmp, cur->x(), cur->z()) = 0xFF0000FF;
 
 		SDL_SaveBMP(bmp, "pathmap.bmp");
@@ -477,10 +460,10 @@ namespace TA3D
 			static std::vector<AI::Path::Node> nextPass;
 			cleanList.clear();
 			nextPass.clear();
-#define SEARCH_AREA_WIDTH	16
+#define SEARCH_AREA_WIDTH 16
 			cleanList.reserve(nodes.size() * (2 * SEARCH_AREA_WIDTH + 1));
 			nextPass.reserve(nodes.size() * 4);
-			for (std::vector<AI::Path::Node>::const_iterator cur = nodes.begin(), end = nodes.end() ; cur != end ; ++cur)		// Mark the path with a special pattern
+			for (std::vector<AI::Path::Node>::const_iterator cur = nodes.begin(), end = nodes.end(); cur != end; ++cur) // Mark the path with a special pattern
 			{
 				const int x = cur->x();
 				const int z = cur->z();
@@ -496,18 +479,20 @@ namespace TA3D
 			}
 			static std::vector<AI::Path::Node> curPass;
 			curPass.clear();
-			for(int i = 0 ; i < SEARCH_AREA_WIDTH ; ++i)
+			for (int i = 0; i < SEARCH_AREA_WIDTH; ++i)
 			{
 				const bool last = (i + 1) == SEARCH_AREA_WIDTH;
 				curPass.swap(nextPass);
 				nextPass.reserve(curPass.size() * 4);
 				nextPass.clear();
-				for(std::vector<AI::Path::Node>::const_iterator it = curPass.begin(), end = curPass.end() ; it != end ; ++it)
+				for (std::vector<AI::Path::Node>::const_iterator it = curPass.begin(), end = curPass.end(); it != end; ++it)
 				{
 					const int x = it->x();
 					const int z = it->z();
-					if (zone(x, z))	continue;
-					if (!(*bmap)(x, z) || !checkRectFast(x - mw_h, z - mh_h, pType))	continue;
+					if (zone(x, z))
+						continue;
+					if (!(*bmap)(x, z) || !checkRectFast(x - mw_h, z - mh_h, pType))
+						continue;
 					zone(x, z) = 1;
 					cleanList.push_back(*it);
 
@@ -537,12 +522,12 @@ namespace TA3D
 			}
 			else
 			{
-				for(int z = -task.dist ; z <= task.dist ; ++z)
+				for (int z = -task.dist; z <= task.dist; ++z)
 				{
 					if (end_z + z < 0 || end_z + z >= the_map->bloc_h_db)
 						continue;
 					const int dx = int(sqrtf(float(m_dist - z * z)) + 0.5f);
-					for(int x = -dx ; x <= dx && end_x + x < the_map->bloc_w_db ; ++x)
+					for (int x = -dx; x <= dx && end_x + x < the_map->bloc_w_db; ++x)
 						if (end_x + x >= 0 && zone(end_x + x, end_z + z) == 1)
 						{
 							qNode.push_back(AI::Path::Node(end_x + x, end_z + z));
@@ -551,16 +536,15 @@ namespace TA3D
 				}
 			}
 
-			while(!qNode.empty())			// Fill the discovered region with the distance to end
+			while (!qNode.empty()) // Fill the discovered region with the distance to end
 			{
 				AI::Path::Node cur = qNode.front();
 				qNode.pop_front();
 
 				const int ref = zone(cur.x(), cur.z());
-				for(int i = 0 ; i < 8 ; ++i)
+				for (int i = 0; i < 8; ++i)
 				{
-					if (cur.x() + order_dx[i] < 0 || cur.x() + order_dx[i] >= the_map->bloc_w_db
-						|| cur.z() + order_dz[i] < 0 || cur.z() + order_dz[i] >= the_map->bloc_h_db)
+					if (cur.x() + order_dx[i] < 0 || cur.x() + order_dx[i] >= the_map->bloc_w_db || cur.z() + order_dz[i] < 0 || cur.z() + order_dz[i] >= the_map->bloc_h_db)
 						continue;
 					const int t = zone(cur.x() + order_dx[i], cur.z() + order_dz[i]);
 					const int r = ref + order_d[i];
@@ -575,9 +559,9 @@ namespace TA3D
 #ifdef DEBUG_AI_PATHFINDER
 			SDL_Surface *bmp = gfx->create_surface_ex(32, zone.getWidth(), zone.getHeight());
 			memset(bmp->pixels, 0, bmp->w * bmp->h * sizeof(int));
-			for (int z = 0 ; z < the_map->bloc_h_db ; ++z)
-				for (int x = 0 ; x < the_map->bloc_w_db ; ++x)
-					SurfaceInt(bmp, x, z) = zone(x,z) | makeacol32(0, 0, 0, 0xFF);
+			for (int z = 0; z < the_map->bloc_h_db; ++z)
+				for (int x = 0; x < the_map->bloc_w_db; ++x)
+					SurfaceInt(bmp, x, z) = zone(x, z) | makeacol32(0, 0, 0, 0xFF);
 #endif
 
 			static std::vector<AI::Path::Node> tmp;
@@ -586,19 +570,18 @@ namespace TA3D
 			nodes.reserve(tmp.size());
 			nodes.push_back(AI::Path::Node(start_x, start_z));
 			const float coef = 0.05f / float(pType->MaxSlope);
-			while ((m_dist == 0 && (nodes.back().x() != end_x || nodes.back().z() != end_z)) || (m_dist > 0 && sq( nodes.back().x() - end_x ) + sq( nodes.back().z() - end_z) > m_dist))	// Reconstruct the path
+			while ((m_dist == 0 && (nodes.back().x() != end_x || nodes.back().z() != end_z)) || (m_dist > 0 && sq(nodes.back().x() - end_x) + sq(nodes.back().z() - end_z) > m_dist)) // Reconstruct the path
 			{
 				zone(nodes.back().x(), nodes.back().z()) = 0;
 				AI::Path::Node next = nodes.back();
 
 				int b = -1;
 				float m(0.0f);
-				for(int i = 0 ; i < 8 ; ++i)
+				for (int i = 0; i < 8; ++i)
 				{
 					const int nx = next.x() + order_dx[i];
 					const int nz = next.z() + order_dz[i];
-					if (nx < 0 || nx >= the_map->bloc_w_db
-						|| nz < 0 || nz >= the_map->bloc_h_db)
+					if (nx < 0 || nx >= the_map->bloc_w_db || nz < 0 || nz >= the_map->bloc_h_db)
 						continue;
 					const int t = zone(nx, nz);
 					const float f = (float)t + coef * energy(nx, nz);
@@ -609,7 +592,7 @@ namespace TA3D
 					}
 				}
 
-				if (b == -1)		// This should not be possible unless there is no path from start to end
+				if (b == -1) // This should not be possible unless there is no path from start to end
 				{
 					nodes.clear();
 					break;
@@ -620,19 +603,19 @@ namespace TA3D
 				nodes.push_back(next);
 			}
 #ifdef DEBUG_AI_PATHFINDER
-			for (std::vector<AI::Path::Node>::iterator cur = nodes.begin() ; cur != nodes.end() ; ++cur)		// Do some cleaning
+			for (std::vector<AI::Path::Node>::iterator cur = nodes.begin(); cur != nodes.end(); ++cur) // Do some cleaning
 				SurfaceInt(bmp, cur->x(), cur->z()) = 0xFFFFFFFF;
 			SDL_SaveBMP(bmp, "pathmap.bmp");
 
 			SDL_FreeSurface(bmp);
 #endif
-			for (std::vector<AI::Path::Node>::const_iterator cur = tmp.begin(), end = tmp.end() ; cur != end ; ++cur)		// Do some cleaning
+			for (std::vector<AI::Path::Node>::const_iterator cur = tmp.begin(), end = tmp.end(); cur != end; ++cur) // Do some cleaning
 				zone(cur->x(), cur->z()) = 0;
-			for (std::vector<AI::Path::Node>::const_iterator cur = cleanList.begin(), end = cleanList.end() ; cur != end ; ++cur)		// Do some cleaning
+			for (std::vector<AI::Path::Node>::const_iterator cur = cleanList.begin(), end = cleanList.end(); cur != end; ++cur) // Do some cleaning
 				zone(cur->x(), cur->z()) = 0;
 
 			path.clear();
-			for (std::vector<AI::Path::Node>::const_iterator cur = nodes.begin(), end = nodes.end() ; cur != end ; ++cur)
+			for (std::vector<AI::Path::Node>::const_iterator cur = nodes.begin(), end = nodes.end(); cur != end; ++cur)
 			{
 				if (path.empty())
 				{
@@ -642,15 +625,15 @@ namespace TA3D
 				std::vector<AI::Path::Node>::const_iterator next = cur;
 				++next;
 				if (next == nodes.end() ||
-					(next->x() - path.back().x()) * (cur->z() - path.back().z()) != (cur->x() - path.back().x()) * (next->z() - path.back().z()))	// Remove useless points
+					(next->x() - path.back().x()) * (cur->z() - path.back().z()) != (cur->x() - path.back().x()) * (next->z() - path.back().z())) // Remove useless points
 					path.push_back(*cur);
 			}
 
-			path.next();   // The unit is already at Start!! So remove it
+			path.next(); // The unit is already at Start!! So remove it
 		}
 		else
 		{
-			for (std::vector<AI::Path::Node>::const_iterator cur = nodes.begin(), end = nodes.end() ; cur != end ; ++cur)		// Clean the map data
+			for (std::vector<AI::Path::Node>::const_iterator cur = nodes.begin(), end = nodes.end(); cur != end; ++cur) // Clean the map data
 				zone(cur->x(), cur->z()) = 0;
 			path.clear();
 		}
@@ -663,9 +646,9 @@ namespace TA3D
 		const Grid<bool> &obstacles = the_map->obstacles;
 		const int x0 = Math::Max(x1, 0);
 		bool result = true;
-		for(int y = Math::Max(y1, 0) ; y < fy && result ; ++y)
-			for(int x = x0 ; x < fx && result ; ++x)
-				result = !obstacles(x,y);
+		for (int y = Math::Max(y1, 0); y < fy && result; ++y)
+			for (int x = x0; x < fx && result; ++x)
+				result = !obstacles(x, y);
 		return result;
 	}
 
@@ -681,17 +664,12 @@ namespace TA3D
 		y1 = Math::Max(y1, 0);
 		x1 = Math::Max(x1, 0);
 		bool result = true;
-		for(int y = y1 ; y < fy && result ; ++y)
+		for (int y = y1; y < fy && result; ++y)
 		{
-			for(int x = x1 ; x < fx && result ; ++x)
+			for (int x = x1; x < fx && result; ++x)
 			{
 				const float h = the_map->h_map(x, y);
-				result = !((the_map->slope(x,y) > dh_max
-							&& h > hover_h)
-						   || the_map->map_data(x, y).isLava()
-						   || (h < the_map->sealvl && bfog)
-						   || h < h_min
-						   || h > h_max);
+				result = !((the_map->slope(x, y) > dh_max && h > hover_h) || the_map->map_data(x, y).isLava() || (h < the_map->sealvl && bfog) || h < h_min || h > h_max);
 			}
 		}
 		return result;
@@ -700,7 +678,7 @@ namespace TA3D
 	void Pathfinder::signalExitThread()
 	{
 		pDead = 1;
-		while(bRunning)
+		while (bRunning)
 		{
 			pSync.release();
 			rest(1);
@@ -709,7 +687,7 @@ namespace TA3D
 
 	void Pathfinder::computeWalkableAreas()
 	{
-		for(HashMap<BitMap*>::Dense::iterator it = hBitMap.begin() ; it != hBitMap.end() ; ++it)
+		for (HashMap<BitMap *>::Dense::iterator it = hBitMap.begin(); it != hBitMap.end(); ++it)
 			if (*it)
 				delete *it;
 		hBitMap.clear();
@@ -720,11 +698,11 @@ namespace TA3D
 #pragma omp parallel
 		{
 			mLoad.lock();
-			while(i < end)
+			while (i < end)
 			{
 				const size_t e = i++;
 				mLoad.unlock();
-				const UnitType* const pType = unit_manager.unit_type[e];
+				const UnitType *const pType = unit_manager.unit_type[e];
 				if (!pType || pType->canfly || !pType->BMcode || !pType->canmove)
 				{
 					mLoad.lock();
@@ -732,7 +710,7 @@ namespace TA3D
 				}
 				const String key = pType->getMoveStringID();
 				mLoad.lock();
-				if (hBitMap.count(key))		// Already done ?
+				if (hBitMap.count(key)) // Already done ?
 					continue;
 				BitMap *bmap = new BitMap(the_map->bloc_w_db, the_map->bloc_h_db);
 				hBitMap[key] = bmap;
@@ -742,9 +720,9 @@ namespace TA3D
 				const int mwh = pType->FootprintX >> 1;
 				const int mhh = pType->FootprintZ >> 1;
 
-				for(int y = 0 ; y < the_map->bloc_h_db ; ++y)
+				for (int y = 0; y < the_map->bloc_h_db; ++y)
 				{
-					for(int x = 0 ; x < the_map->bloc_w_db ; ++x)
+					for (int x = 0; x < the_map->bloc_w_db; ++x)
 					{
 						bmap->set(x, y, checkRectFull(x - mwh, y - mhh, pType));
 					}
@@ -759,4 +737,3 @@ namespace TA3D
 		LOG_INFO(LOG_PREFIX_PATHS << "walkable areas : " << memoryUsed / 1024U << "kb");
 	}
 } // namespace TA3D
-

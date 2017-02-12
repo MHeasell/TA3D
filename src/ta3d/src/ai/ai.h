@@ -22,79 +22,71 @@
 \-----------------------------------------------------------------------------*/
 
 #ifndef TA3D_XX_AI_H__
-# define TA3D_XX_AI_H__
+#define TA3D_XX_AI_H__
 
-# include <misc/string.h>
-# include "ai.controller.h"
-# include <scripts/ai.script.h>
+#include <misc/string.h>
+#include "ai.controller.h"
+#include <scripts/ai.script.h>
 
-# define TA3D_AI_FILE_EXTENSION  ".ai"
+#define TA3D_AI_FILE_EXTENSION ".ai"
 
-# define AI_TYPE_EASY			0x0
-# define AI_TYPE_MEDIUM			0x1
-# define AI_TYPE_HARD			0x2
-# define AI_TYPE_BLOODY			0x3
-# define AI_TYPE_LUA			0x4
-
-
+#define AI_TYPE_EASY 0x0
+#define AI_TYPE_MEDIUM 0x1
+#define AI_TYPE_HARD 0x2
+#define AI_TYPE_BLOODY 0x3
+#define AI_TYPE_LUA 0x4
 
 namespace TA3D
 {
 
-    class AI_PLAYER			// Class to manage players controled by AI
-    {
+	class AI_PLAYER // Class to manage players controled by AI
+	{
 	public:
-        static String::Vector getAvailableAIs();
+		static String::Vector getAvailableAIs();
 
-    public:
+	public:
 		//! \name Constructor & Destructor
 		//@{
 		/*!
 		** \brief Default constructor
 		*/
-        AI_PLAYER();
+		AI_PLAYER();
 		//! Destructor
-        ~AI_PLAYER();
+		~AI_PLAYER();
 		//@}
 
-        void monitor();
+		void monitor();
 
-        void stop();
-        void destroy();
+		void stop();
+		void destroy();
 
-        void setType(int type);
-        int getType() const;
+		void setType(int type);
+		int getType() const;
 
 		AiScript::Ptr getAiScript() const;
 
-        void setAI(const String &AI);
+		void setAI(const String& AI);
 
-        void setPlayerID(int id);
-        int getPlayerID();
+		void setPlayerID(int id);
+		int getPlayerID();
 
-        void changeName(const String& newName);		// Change AI's name (-> creates a new file)
+		void changeName(const String& newName); // Change AI's name (-> creates a new file)
 
-        void save();
-        void load(const String& filename, const int id = 0);
-
-
+		void save();
+		void load(const String& filename, const int id = 0);
 
 	private:
-        String name;			// Attention faudrait pas qu'il se prenne pour quelqu'un!! -> indique aussi le fichier correspondant à l'IA (faut sauvegarder les cervelles)
+		String name; // Attention faudrait pas qu'il se prenne pour quelqu'un!! -> indique aussi le fichier correspondant à l'IA (faut sauvegarder les cervelles)
 		AiController::Ptr ai_controller;
-		AiScript::Ptr  ai_script;
-        int type;
-        int ID;
-        String AI;
+		AiScript::Ptr ai_script;
+		int type;
+		int ID;
+		String AI;
 
-    }; // class AI_PLAYER
-
-
-
-
+	}; // class AI_PLAYER
 
 } // namespace TA3D
 
-# include "ai.hxx"
+#include "ai.hxx"
 
 #endif // TA3D_XX_AI_H__

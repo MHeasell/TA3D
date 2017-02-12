@@ -69,7 +69,7 @@ namespace TA3D
 		{
 			if (!sFile.opened())
 				return 0;
-			return int(sFile.read((char*)p, s));
+			return int(sFile.read((char *)p, s));
 		}
 
 		bool RealFile::readLine(String &line)
@@ -78,7 +78,7 @@ namespace TA3D
 				return false;
 
 			line.clear();
-			for(int c = getc() ; c != 0 && c != 13 && c != 10 && c != -1 ; c = getc())
+			for (int c = getc(); c != 0 && c != 13 && c != 10 && c != -1; c = getc())
 				line << char(c);
 
 			return true;

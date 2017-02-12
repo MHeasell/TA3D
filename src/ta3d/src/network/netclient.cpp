@@ -4,32 +4,26 @@
 #include <TA3D_NameSpace.h>
 #include "netclient.h"
 #include <mods/mods.h>
-#include <algorithm>        // We need std::sort
+#include <algorithm> // We need std::sort
 
-#define BUFFER_SIZE     2048
-
+#define BUFFER_SIZE 2048
 
 using namespace Yuni;
-
 
 namespace TA3D
 {
 
-
 	NetClient::Ptr NetClient::pInstance;
-
-
 
 	void NetClient::destroyInstance()
 	{
 		pInstance = nullptr;
 	}
 
-
 	NetClient::NetClient()
-		:port(0), state(NetClient::DISCONNECTED), buffer_pos(0), currentChan("*"),
-		modListChanged(false), serverListChanged(false),
-		hostAck(false)
+		: port(0), state(NetClient::DISCONNECTED), buffer_pos(0), currentChan("*"),
+		  modListChanged(false), serverListChanged(false),
+		  hostAck(false)
 	{
 		buffer = new char[BUFFER_SIZE];
 	}
@@ -55,7 +49,6 @@ namespace TA3D
 		hostAck = false;
 	}
 
-
 	String NetClient::getNextMessage()
 	{
 		ThreadingPolicy::MutexLocker locker(*this);
@@ -63,7 +56,6 @@ namespace TA3D
 		messages.pop_front();
 		return msg;
 	}
-
 
 	void NetClient::sendMessage(const String &msg)
 	{
@@ -78,19 +70,16 @@ namespace TA3D
 		}
 	}
 
-
 	void NetClient::clearMessageQueue()
 	{
 		ThreadingPolicy::MutexLocker locker(*this);
 		messages.clear();
 	}
 
-
 	void NetClient::reconnect()
 	{
 		connect(server, port, login, password);
 	}
-
 
 	void NetClient::connect(const String &server, const uint16 port, const String &login, const String &password, bool bRegister)
 	{
@@ -124,7 +113,7 @@ namespace TA3D
 				sendMessage(String("LOGIN ") << login << ' ' << password);
 			uint32 timer = msec_timer;
 			bool done = false;
-			while (msec_timer - timer < 10000 && !done)   // 10s timeout
+			while (msec_timer - timer < 10000 && !done) // 10s timeout
 			{
 				rest(1);
 				receive();
@@ -136,9 +125,10 @@ namespace TA3D
 					String msg = getNextMessage();
 					msg.explode(args, ' ');
 
-					if (args.empty())   continue;
+					if (args.empty())
+						continue;
 
-					if (args[0] == "CONNECTED")     // Success !
+					if (args[0] == "CONNECTED") // Success !
 					{
 						state = CONNECTED;
 						done = true;
@@ -151,7 +141,7 @@ namespace TA3D
 						break;
 					}
 					else
-						messages.push_back(msg);     // Don't remove other messages
+						messages.push_back(msg); // Don't remove other messages
 				}
 			}
 
@@ -163,17 +153,16 @@ namespace TA3D
 				serverList.clear();
 				sendMessage("GET USER LIST");   // We want to know who is there
 				sendMessage("GET CHAN LIST");   // and the chan list
-                sendMessage("GET MOD LIST");    // and the mod list
-				sendMessage("GET SERVER LIST");	// and the server list
-            }
+				sendMessage("GET MOD LIST");	// and the mod list
+				sendMessage("GET SERVER LIST"); // and the server list
+			}
 		}
 	}
-
 
 	void NetClient::receive()
 	{
 		ThreadingPolicy::MutexLocker locker(*this);
-		if (!sock.isOpen())     // Socket is closed, we can't get anything
+		if (!sock.isOpen()) // Socket is closed, we can't get anything
 		{
 			state = DISCONNECTED;
 			peerList.clear();
@@ -187,7 +176,7 @@ namespace TA3D
 			buffer_pos += n;
 			int e = 0;
 			modListChanged = false;
-			for(int i = 0 ; i < buffer_pos ; i++)
+			for (int i = 0; i < buffer_pos; i++)
 			{
 				if (buffer[i] == '\n')
 				{
@@ -208,8 +197,7 @@ namespace TA3D
 		}
 	}
 
-
-	void NetClient::processMessage(const String& msg)
+	void NetClient::processMessage(const String &msg)
 	{
 		if (msg.empty())
 			return;
@@ -223,7 +211,7 @@ namespace TA3D
 		if (args[0] == "USER" && args.size() == 2)
 		{
 			bool found = false;
-			for(uint32 i = 0 ; i < peerList.size() && !found ; ++i)
+			for (uint32 i = 0; i < peerList.size() && !found; ++i)
 				if (peerList[i] == args[1])
 					found = true;
 			if (!found)
@@ -236,7 +224,7 @@ namespace TA3D
 		else if (args[0] == "LEAVE" && args.size() == 2)
 		{
 			bool found = false;
-			for(uint32 i = 0 ; i < peerList.size() && !found ; ++i)
+			for (uint32 i = 0; i < peerList.size() && !found; ++i)
 				if (peerList[i] == args[1])
 				{
 					found = true;
@@ -248,7 +236,7 @@ namespace TA3D
 		else if (args[0] == "CHAN" && args.size() == 2)
 		{
 			bool found = false;
-			for(uint32 i = 0 ; i < chanList.size() && !found ; ++i)
+			for (uint32 i = 0; i < chanList.size() && !found; ++i)
 				if (chanList[i] == args[1])
 					found = true;
 			if (!found)
@@ -261,7 +249,7 @@ namespace TA3D
 		else if (args[0] == "DECHAN" && args.size() == 2)
 		{
 			bool found = false;
-			for(uint32 i = 0 ; i < chanList.size() && !found ; ++i)
+			for (uint32 i = 0; i < chanList.size() && !found; ++i)
 				if (chanList[i] == args[1])
 				{
 					found = true;
@@ -274,32 +262,32 @@ namespace TA3D
 		{
 			disconnect();
 		}
-        else if (args[0] == "CLEAR" && args.size() == 3 && args[1] == "MOD" && args[2] == "LIST")
+		else if (args[0] == "CLEAR" && args.size() == 3 && args[1] == "MOD" && args[2] == "LIST")
 		{
-            modList.clear();
+			modList.clear();
 			modListChanged = true;
 		}
 		else if (args[0] == "MOD")
-        {
-            ModInfo mod(msg);
-            if (mod.getID() >= 0)
-            {
-                bool found = false;
-                for(ModInfo::List::iterator i = modList.begin() ; i != modList.end() && !found ; ++i)
-                {
-                    found = i->getID() == mod.getID();
-                    if (found)
-                        *i = mod;
-                }
-                if (!found)
-                    modList.push_back(mod);
+		{
+			ModInfo mod(msg);
+			if (mod.getID() >= 0)
+			{
+				bool found = false;
+				for (ModInfo::List::iterator i = modList.begin(); i != modList.end() && !found; ++i)
+				{
+					found = i->getID() == mod.getID();
+					if (found)
+						*i = mod;
+				}
+				if (!found)
+					modList.push_back(mod);
 				modListChanged = true;
-            }
-        }
+			}
+		}
 		else if (args[0] == "SERVER")
 		{
 			GameServer gameServer;
-			for(uint32 i = 1 ; i < args.size() - 1 ; ++i)
+			for (uint32 i = 1; i < args.size() - 1; ++i)
 			{
 				if (args[i] == "NAME")
 					gameServer.name = args[i + 1];
@@ -324,7 +312,7 @@ namespace TA3D
 				serverList.erase(args[1]);
 				serverListChanged = true;
 			}
-			else	// We've a problem, server list lost sync OO!
+			else // We've a problem, server list lost sync OO!
 				sendMessage("GET SERVER LIST");
 		}
 		else if (args[0] == "CLEAR" && args.size() == 3 && args[1] == "SERVER" && args[2] == "LIST")
@@ -336,18 +324,16 @@ namespace TA3D
 			serverJoined = args[1];
 		else if (args[0] == "UNJOIN" && args.size() == 2 && serverJoined == args[1])
 			serverJoined.clear();
-		else if (args[0] == "HOST")		// Server acknowledged, no errors we're free to go
+		else if (args[0] == "HOST") // Server acknowledged, no errors we're free to go
 			hostAck = true;
 	}
 
-
-    ModInfo::List NetClient::getModList()
-    {
-        ThreadingPolicy::MutexLocker locker(*this);
+	ModInfo::List NetClient::getModList()
+	{
+		ThreadingPolicy::MutexLocker locker(*this);
 		modListChanged = false;
-        return modList;
-    }
-
+		return modList;
+	}
 
 	NetClient::GameServer::List NetClient::getServerList()
 	{
@@ -355,7 +341,6 @@ namespace TA3D
 		serverListChanged = false;
 		return serverList;
 	}
-
 
 	void NetClient::changeChan(const String &chan)
 	{
@@ -366,20 +351,17 @@ namespace TA3D
 		peerList.clear();
 	}
 
-
 	void NetClient::sendChan(const String &msg)
 	{
 		ThreadingPolicy::MutexLocker locker(*this);
 		sendMessage(String("SENDALL ") << msg);
 	}
 
-
 	void NetClient::clearServerJoined()
 	{
 		ThreadingPolicy::MutexLocker locker(*this);
 		serverJoined.clear();
 	}
-
 
 	bool NetClient::getHostAck()
 	{
@@ -391,7 +373,5 @@ namespace TA3D
 		}
 		return false;
 	}
-
-
 
 } // namespace TA3D

@@ -24,89 +24,79 @@
 
 using namespace TA3D::VARS;
 
-
-
 namespace TA3D
 {
-namespace Menus
-{
-
-	bool MultiMenu::Execute()
+	namespace Menus
 	{
-		MultiMenu m;
-		return m.execute();
-	}
 
-	MultiMenu::MultiMenu()
-		:Abstract()
-	{}
-
-
-	MultiMenu::~MultiMenu()
-	{
-	}
-
-
-	void MultiMenu::doFinalize()
-	{
-		// Wait for user to release ESC
-		while (key[KEY_ESC])
+		bool MultiMenu::Execute()
 		{
-			SuspendMilliSeconds(TA3D_MENUS_RECOMMENDED_TIME_MS_FOR_RESTING);
-			poll_inputs();
+			MultiMenu m;
+			return m.execute();
 		}
-		clear_keybuf();
-	}
 
-
-	bool MultiMenu::doInitialize()
-	{
-		LOG_DEBUG(LOG_PREFIX_MENU_MULTIMENU << "Entering...");
-
-		// Loading the area
-		loadAreaFromTDF("MultiMenu", "gui/multimenu.area");
-
-		return true;
-	}
-
-
-
-	void MultiMenu::waitForEvent()
-	{
-		do
+		MultiMenu::MultiMenu()
+			: Abstract()
 		{
-			// Grab user events
-			pArea->check();
+		}
 
-			// Wait to reduce CPU consumption
-			wait();
-
-		} while (pMouseX == mouse_x && pMouseY == mouse_y && pMouseZ == mouse_z && pMouseB == mouse_b
-				 && mouse_b == 0
-				 && !key[KEY_ENTER] && !key[KEY_ESC] && !key[KEY_SPACE] && !key[KEY_C]
-				 && !pArea->key_pressed && !pArea->scrolling);
-	}
-
-
-	bool MultiMenu::maySwitchToAnotherMenu()
-	{
-		if (pArea->get_state("multimenu.b_netserver"))
+		MultiMenu::~MultiMenu()
 		{
-			Menus::NetMenu::Execute();
+		}
+
+		void MultiMenu::doFinalize()
+		{
+			// Wait for user to release ESC
+			while (key[KEY_ESC])
+			{
+				SuspendMilliSeconds(TA3D_MENUS_RECOMMENDED_TIME_MS_FOR_RESTING);
+				poll_inputs();
+			}
+			clear_keybuf();
+		}
+
+		bool MultiMenu::doInitialize()
+		{
+			LOG_DEBUG(LOG_PREFIX_MENU_MULTIMENU << "Entering...");
+
+			// Loading the area
+			loadAreaFromTDF("MultiMenu", "gui/multimenu.area");
+
 			return true;
 		}
 
-		if (pArea->get_state("multimenu.b_lan"))
+		void MultiMenu::waitForEvent()
 		{
-			Menus::NetworkRoom::Execute();
-			return true;
+			do
+			{
+				// Grab user events
+				pArea->check();
+
+				// Wait to reduce CPU consumption
+				wait();
+
+			} while (pMouseX == mouse_x && pMouseY == mouse_y && pMouseZ == mouse_z && pMouseB == mouse_b && mouse_b == 0 && !key[KEY_ENTER] && !key[KEY_ESC] && !key[KEY_SPACE] && !key[KEY_C] && !pArea->key_pressed && !pArea->scrolling);
 		}
 
-		// Exit
-		if (key[KEY_ESC] || pArea->get_state("multimenu.b_back"))
-			return true;
+		bool MultiMenu::maySwitchToAnotherMenu()
+		{
+			if (pArea->get_state("multimenu.b_netserver"))
+			{
+				Menus::NetMenu::Execute();
+				return true;
+			}
 
-		return false;
+			if (pArea->get_state("multimenu.b_lan"))
+			{
+				Menus::NetworkRoom::Execute();
+				return true;
+			}
+
+			// Exit
+			if (key[KEY_ESC] || pArea->get_state("multimenu.b_back"))
+				return true;
+
+			return false;
+		}
 	}
-}
 }

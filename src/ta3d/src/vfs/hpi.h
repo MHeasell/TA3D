@@ -22,203 +22,201 @@
 */
 
 #ifndef __TA3D_UTILS_VFS_HPI_H__
-# define __TA3D_UTILS_VFS_HPI_H__
+#define __TA3D_UTILS_VFS_HPI_H__
 
-# include "archive.h"
-# include <misc/hash_table.h>
-# include <yuni/core/io/file/stream.h>
+#include "archive.h"
+#include <misc/hash_table.h>
+#include <yuni/core/io/file/stream.h>
 
-# define HEX_HAPI 0x49504148
-# define HPI_V1 0x00010000
+#define HEX_HAPI 0x49504148
+#define HPI_V1 0x00010000
 
 namespace TA3D
 {
-    namespace UTILS
-    {
-        /*! \class Hpi
+	namespace UTILS
+	{
+		/*! \class Hpi
         **
         ** \brief abstract class defining the interface required to manipulate archives
         */
-        class Hpi : public Archive
-        {
-        private:
-# pragma pack(1) // Byte alignment.
+		class Hpi : public Archive
+		{
+		private:
+#pragma pack(1) // Byte alignment.
 
-            /*! \class HPIVERSION
+			/*! \class HPIVERSION
         **
         ** \brief
         */
-            struct HPIVERSION
-            {
-                //!
-                sint32 HPIMarker; /* Must be HEX_HAPI */
-                //!
-                sint32 Version;   /* Must be HPI_V1 */
-            };
+			struct HPIVERSION
+			{
+				//!
+				sint32 HPIMarker; /* Must be HEX_HAPI */
+				//!
+				sint32 Version; /* Must be HPI_V1 */
+			};
 
-            /*! \class HPIHEADER
+			/*! \class HPIHEADER
         **
         ** \brief
         */
-            struct HPIHEADER
-            {
-                //!
-                HPIHEADER() :DirectorySize(0), Key(0), Start(0) {}
+			struct HPIHEADER
+			{
+				//!
+				HPIHEADER() : DirectorySize(0), Key(0), Start(0) {}
 
-                //!
-                sint32 DirectorySize; /* Directory size */
-                //!
-                sint32 Key;           /* Decode key */
-                //!
-                sint32 Start;         /* Directory offset */
+				//!
+				sint32 DirectorySize; /* Directory size */
+				//!
+				sint32 Key; /* Decode key */
+				//!
+				sint32 Start; /* Directory offset */
 
-            }; // class HPIHEADER
+			}; // class HPIHEADER
 
-
-            /*! \class HPIENTRY
+			/*! \class HPIENTRY
         **
         ** \brief
         */
-            struct HPIENTRY
-            {
-                //!
-                sint32 NameOffset;
-                //!
-                sint32 CountOffset;
-                //!
-                sint8 Flag;
+			struct HPIENTRY
+			{
+				//!
+				sint32 NameOffset;
+				//!
+				sint32 CountOffset;
+				//!
+				sint8 Flag;
 
-            }; // class HPIENTRY
+			}; // class HPIENTRY
 
-
-            /*! \class HPICHUNK
+			/*! \class HPICHUNK
         **
         ** \brief
         */
-            struct HPICHUNK
-            {
-                //! always 0x48535153 (SQSH)
-                sint32 Marker;
-                //! I have no idea what these mean
-                sint8  Unknown1;
-                //! 1 = lz77, 2 = zlib
-                sint8  CompMethod;
-                //! Is the chunk encrypted ?
-                sint8  Encrypt;
-                //! The length of the compressed data
-                sint32 CompressedSize;
-                //! The length of the decompressed data
-                sint32 DecompressedSize;
-                //! Checksum
-                sint32 Checksum;
+			struct HPICHUNK
+			{
+				//! always 0x48535153 (SQSH)
+				sint32 Marker;
+				//! I have no idea what these mean
+				sint8 Unknown1;
+				//! 1 = lz77, 2 = zlib
+				sint8 CompMethod;
+				//! Is the chunk encrypted ?
+				sint8 Encrypt;
+				//! The length of the compressed data
+				sint32 CompressedSize;
+				//! The length of the decompressed data
+				sint32 DecompressedSize;
+				//! Checksum
+				sint32 Checksum;
 
-            }; // class HPICHUNK
+			}; // class HPICHUNK
 
-
-            /*!
+			/*!
         ** \brief Used for strict-aliasing safety
         */
-            union HPICHUNK_U
-            {
-                //!
-                HPICHUNK chunk;
-                //!
-                byte bytes[sizeof(HPICHUNK)];
-            };
+			union HPICHUNK_U {
+				//!
+				HPICHUNK chunk;
+				//!
+				byte bytes[sizeof(HPICHUNK)];
+			};
 
-
-# pragma pack()
-        public:
+#pragma pack()
+		public:
 			class HpiFile : public Archive::FileInfo
-            {
-            public:
-                //!
-                HPIENTRY  entry;
-                //!
-                uint64  size;
-            public:
-                virtual ~HpiFile() {}
-				inline void setName(const String &name)   {  Archive::FileInfo::name = name; }
-				inline void setParent(Archive *parent)   {  Archive::FileInfo::parent = parent; }
-            };
-        public:
-            //! Constructor
-            Hpi(const String &filename);
-            //! Destructor
-            virtual ~Hpi();
+			{
+			public:
+				//!
+				HPIENTRY entry;
+				//!
+				uint64 size;
 
-            /*!
+			public:
+				virtual ~HpiFile() {}
+				inline void setName(const String &name) { Archive::FileInfo::name = name; }
+				inline void setParent(Archive *parent) { Archive::FileInfo::parent = parent; }
+			};
+
+		public:
+			//! Constructor
+			Hpi(const String &filename);
+			//! Destructor
+			virtual ~Hpi();
+
+			/*!
             ** \brief Loads an archive
             */
-            virtual void open(const String& filename);
+			virtual void open(const String &filename);
 
-            /*!
+			/*!
             ** \brief Just close the opened archive
             */
-            virtual void close();
+			virtual void close();
 
-            /*!
+			/*!
             ** \brief Return the list of all files in the archive
             */
-			virtual void getFileList(std::deque<FileInfo*> &lFiles);
+			virtual void getFileList(std::deque<FileInfo *> &lFiles);
 
-            /*!
+			/*!
             ** \brief
             */
-			virtual File* readFile(const String& filename);
-			virtual File* readFile(const FileInfo *file);
+			virtual File *readFile(const String &filename);
+			virtual File *readFile(const FileInfo *file);
 
-            /*!
+			/*!
             ** \brief
             ** \param filename
             ** \param start
             ** \param length
             ** \return
             */
-			virtual File* readFileRange(const String& filename, const uint32 start, const uint32 length);
-			virtual File* readFileRange(const FileInfo *file, const uint32 start, const uint32 length);
+			virtual File *readFileRange(const String &filename, const uint32 start, const uint32 length);
+			virtual File *readFileRange(const FileInfo *file, const uint32 start, const uint32 length);
 
-            /*!
+			/*!
             ** \brief returns true if using the cache is a good idea (real FS will return false)
             ** \return
             */
-            virtual bool needsCaching();
+			virtual bool needsCaching();
 
-        public:
-            static void finder(String::List &fileList, const String &path);
-            static Archive* loader(const String &filename);
+		public:
+			static void finder(String::List &fileList, const String &path);
+			static Archive *loader(const String &filename);
 
-        private:
-            //!
-            String m_cDir;
-            //!
-            HPIHEADER header;
-            //!
-            sint8 key;
-            //!
-            sint8* directory;
-            //!
+		private:
+			//!
+			String m_cDir;
+			//!
+			HPIHEADER header;
+			//!
+			sint8 key;
+			//!
+			sint8 *directory;
+			//!
 			Yuni::Core::IO::File::Stream HPIFile;
-            //!
-			HashMap<HpiFile*>::Sparse files;
-            //!
-            int priority;
-        private:
-            /*!
+			//!
+			HashMap<HpiFile *>::Sparse files;
+			//!
+			int priority;
+
+		private:
+			/*!
         ** \brief
         **
         ** \param hfd
         ** \param startPath
         ** \param offset
         */
-            void processRoot(const String& startPath, const sint32 offset);
+			void processRoot(const String &startPath, const sint32 offset);
 
-            /*!
+			/*!
         ** \brief
         */
-            void processSubDir(HPIENTRY *base);
+			void processSubDir(HPIENTRY *base);
 
-            /*!
+			/*!
         ** \brief
         **
         ** \param fpos
@@ -226,9 +224,9 @@ namespace TA3D
         ** \param buffsize
         ** \return
         */
-            sint32 readAndDecrypt(sint32 fpos, byte *buff, sint32 buffsize);
+			sint32 readAndDecrypt(sint32 fpos, byte *buff, sint32 buffsize);
 
-            /*!
+			/*!
         ** \brief
         **
         ** \param[out] out
@@ -236,18 +234,18 @@ namespace TA3D
         ** \param Chunk
         ** \return
         */
-            sint32 ZLibDecompress(byte *out, byte *in, HPICHUNK *Chunk);
+			sint32 ZLibDecompress(byte *out, byte *in, HPICHUNK *Chunk);
 
-            /*!
+			/*!
         ** \brief
         **
         ** \param out
         ** \param in
         ** \return
         */
-            sint32 LZ77Decompress(byte *out, byte *in);
+			sint32 LZ77Decompress(byte *out, byte *in);
 
-            /*!
+			/*!
         ** \brief
         **
         ** \param out
@@ -255,10 +253,9 @@ namespace TA3D
         ** \param Chunk
         ** \return
         */
-            sint32 decompress(byte *out, byte *in, HPICHUNK *Chunk);
-        }; // class Hpi
-    } // namespace utils
+			sint32 decompress(byte *out, byte *in, HPICHUNK *Chunk);
+		}; // class Hpi
+	}	  // namespace utils
 } // namespace TA3D
-
 
 #endif // __TA3D_UTILS_VFS_HPI_H__

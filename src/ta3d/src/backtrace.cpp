@@ -15,7 +15,6 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA*/
 
-
 #include "stdafx.h"
 #include <iostream>
 #include "misc/string.h"
@@ -24,31 +23,29 @@
 #include "misc/paths.h"
 #include <exception>
 
-
 // Signals should be disabled under OS X, since the system already produces a crash report
 // More information are available here :
 // http://developer.apple.com/technotes/tn2004/tn2123.html
 #ifndef TA3D_PLATFORM_DARWIN
 
+#include "gfx/gui/area.h"
+#include "backtrace.h"
+#include "network/socket.tcp.h"
 
-# include "gfx/gui/area.h"
-# include "backtrace.h"
-# include "network/socket.tcp.h"
+#ifdef TA3D_PLATFORM_LINUX
+#define TA3D_BUILTIN_BACKTRACE_SUPPORT
+#endif
 
-# ifdef TA3D_PLATFORM_LINUX
-#	define TA3D_BUILTIN_BACKTRACE_SUPPORT
-# endif
+#ifdef TA3D_BUILTIN_BACKTRACE_SUPPORT
+#include <execinfo.h>
+#endif
 
-# ifdef TA3D_BUILTIN_BACKTRACE_SUPPORT
-#	include <execinfo.h>
-# endif
-
-# include <csignal>
-# include <cstdio>
-# include <cstdlib>
-# include <yuni/core/io/file/stream.h>
-# include "sdl.h"
-# include "misc/osinfo.h"
+#include <csignal>
+#include <cstdio>
+#include <cstdlib>
+#include <yuni/core/io/file/stream.h>
+#include "sdl.h"
+#include "misc/osinfo.h"
 
 /*! \brief a small function implementing an automatic bug reporter
  * Declaration of the bug reporter. It's here because it should be visible only
@@ -67,7 +64,7 @@ void bug_reporter(const String &trace);
  *
  * \param signum Which signal was received
  */
-void backtrace_handler (int signum)
+void backtrace_handler(int signum)
 {
 	// Some functions called at exit may crash, so we must disable signals in order
 	// to prevent overwriting a useful log
@@ -84,12 +81,10 @@ void backtrace_handler (int signum)
 		cmd << "gdb --pid="
 			<< mypid
 			<< " -ex \"info threads\"";
-		for(size_t i = 0 ; i < threads.size() ; ++i)
+		for (size_t i = 0; i < threads.size(); ++i)
 		{
 			String &line = threads[i];
-			if (line.startsWith('[')
-				|| line.startsWith("0x")
-				|| line.startsWith('#'))
+			if (line.startsWith('[') || line.startsWith("0x") || line.startsWith('#'))
 				continue;
 			if (line.startsWith('*'))
 			{
@@ -99,9 +94,9 @@ void backtrace_handler (int signum)
 			const int id = line.to<int>();
 			if (id <= 0)
 				continue;
-			cmd	<< " -ex \"thread " << id << "\" -ex bt";
+			cmd << " -ex \"thread " << id << "\" -ex bt";
 		}
-		cmd	<< " --batch";
+		cmd << " --batch";
 		const String trace = TA3D::System::run_command(cmd);
 		if (!trace.empty())
 		{
@@ -110,29 +105,29 @@ void backtrace_handler (int signum)
 		}
 	}
 
-	// If GDB is not available or returned an error we must find another way ... this is now platform dependent
+// If GDB is not available or returned an error we must find another way ... this is now platform dependent
 
-# ifdef TA3D_BUILTIN_BACKTRACE_SUPPORT
+#ifdef TA3D_BUILTIN_BACKTRACE_SUPPORT
 	// Retrieving a backtrace
 	void *array[400];
-	int size = backtrace (array, 400);
-	char** strings = backtrace_symbols(array, size);
+	int size = backtrace(array, 400);
+	char **strings = backtrace_symbols(array, size);
 
-    // Try to log it
+	// Try to log it
 	Yuni::Core::IO::File::Stream m_File(String(TA3D::Paths::Logs) << "backtrace.txt", Yuni::Core::IO::OpenMode::write);
-	if(m_File.opened())
-    {
-		m_File << "received signal " << strsignal( signum ) << "\n";
+	if (m_File.opened())
+	{
+		m_File << "received signal " << strsignal(signum) << "\n";
 		m_File << "Obtained " << size << " stack frames.\n";
 		for (int i = 0; i < size; ++i)
 			m_File << strings[i] << "\n";
 		m_File.flush();
 		m_File.close();
 
-		printf("received signal %s\n", strsignal( signum ));
-		printf ("Obtained %d stack frames.\n", static_cast<int>(size));
+		printf("received signal %s\n", strsignal(signum));
+		printf("Obtained %d stack frames.\n", static_cast<int>(size));
 		for (int i = 0; i < size; ++i)
-			printf ("%s\n", strings[i]);
+			printf("%s\n", strings[i]);
 
 		String szErrReport;
 		szErrReport << "An error has occured.\nDebugging information have been logged to:\n"
@@ -142,24 +137,24 @@ void backtrace_handler (int signum)
 		criticalMessage(szErrReport);
 	}
 	else
-    {
-        // The file is not opened
-        // The backtrace will be directly to stdout instead.
+	{
+		// The file is not opened
+		// The backtrace will be directly to stdout instead.
 		printf("received signal %s\n", strsignal(signum));
 		printf("couldn't open file for writing!!\n");
-		printf ("Obtained %d stack frames.\n", static_cast<int>(size));
+		printf("Obtained %d stack frames.\n", static_cast<int>(size));
 		for (int i = 0; i < size; ++i)
-			printf ("%s\n", strings[i]);
+			printf("%s\n", strings[i]);
 	}
 	free(strings);
 
-	# else // ifdef TA3D_BUILTIN_BACKTRACE_SUPPORT
+#else // ifdef TA3D_BUILTIN_BACKTRACE_SUPPORT
 
-        // The backtrace support is disabled: warns the user
-		String szErrReport = "An error has occured.\nDebugging information could not be logged.\nPlease report to our forums (http://www.ta3d.org/) so we can fix it.";
-		criticalMessage(szErrReport);
+	// The backtrace support is disabled: warns the user
+	String szErrReport = "An error has occured.\nDebugging information could not be logged.\nPlease report to our forums (http://www.ta3d.org/) so we can fix it.";
+	criticalMessage(szErrReport);
 
-	# endif // ifdef TA3D_BUILTIN_BACKTRACE_SUPPORT
+#endif // ifdef TA3D_BUILTIN_BACKTRACE_SUPPORT
 	exit(-1);
 }
 
@@ -168,32 +163,31 @@ void backtrace_handler (int signum)
 class sigpipe_exception : public std::exception
 {
 public:
-	virtual ~sigpipe_exception() throw()	{}
-	virtual const char* sigpipe_what() const throw()
+	virtual ~sigpipe_exception() throw() {}
+	virtual const char *sigpipe_what() const throw()
 	{
 		return "broken pipe";
 	}
 };
 
-void sigpipe_handler (int /*signum*/)
+void sigpipe_handler(int /*signum*/)
 {
 	throw sigpipe_exception();
 }
 
-
-void init_signals (void)
+void init_signals(void)
 {
-	// On all platforms that supports it, SIGPIPE must
-	// not end the program since it's likely to happen
-	// when sockets are disconnected, so let's convert
-	// it to an exception
+// On all platforms that supports it, SIGPIPE must
+// not end the program since it's likely to happen
+// when sockets are disconnected, so let's convert
+// it to an exception
 #if defined TA3D_PLATFORM_LINUX || defined TA3D_PLATFORM_DARWIN
-	signal (SIGPIPE, sigpipe_handler);
+	signal(SIGPIPE, sigpipe_handler);
 #endif
 
-	// On Linux, get the command of the parent process.
-	// If we're running in GDB, then don't override it!!
-	#ifdef TA3D_PLATFORM_LINUX
+// On Linux, get the command of the parent process.
+// If we're running in GDB, then don't override it!!
+#ifdef TA3D_PLATFORM_LINUX
 	// Get TA3D's PID
 	pid_t mypid = getpid();
 	const String ppid = TA3D::System::run_command(String("ps -o ppid -p ") << mypid << " | tail -n 1");
@@ -203,55 +197,54 @@ void init_signals (void)
 		std::cerr << "Running under GDB, not overriding signals handlers" << std::endl;
 		return;
 	}
-	#endif
+#endif
 
-	// Signals should be disabled under OS X, since the system already produces a crash report
-	// More information are available here :
-	// http://developer.apple.com/technotes/tn2004/tn2123.html
-	#ifndef TA3D_PLATFORM_DARWIN
+// Signals should be disabled under OS X, since the system already produces a crash report
+// More information are available here :
+// http://developer.apple.com/technotes/tn2004/tn2123.html
+#ifndef TA3D_PLATFORM_DARWIN
 
-	# ifdef TA3D_PLATFORM_WINDOWS
-		int signum[] = { SIGFPE, SIGILL, SIGSEGV, SIGABRT };
-		int nb_signals = 4;
-	# else
-		int signum[] = { SIGFPE, SIGILL, SIGSEGV, SIGBUS, SIGABRT, SIGIOT, SIGTRAP, SIGSYS };
-		int nb_signals = 8;
-	# endif // ifdef TA3D_PLATFORM_WINDOWS
+#ifdef TA3D_PLATFORM_WINDOWS
+	int signum[] = {SIGFPE, SIGILL, SIGSEGV, SIGABRT};
+	int nb_signals = 4;
+#else
+	int signum[] = {SIGFPE, SIGILL, SIGSEGV, SIGBUS, SIGABRT, SIGIOT, SIGTRAP, SIGSYS};
+	int nb_signals = 8;
+#endif // ifdef TA3D_PLATFORM_WINDOWS
 	for (int i = 0; i < nb_signals; ++i)
 	{
-		if (signal (signum[i], backtrace_handler) == SIG_IGN)
-			signal (signum[i], SIG_IGN);
+		if (signal(signum[i], backtrace_handler) == SIG_IGN)
+			signal(signum[i], SIG_IGN);
 	}
 
-	#endif // ifdef TA3D_PLATFORM_DARWIN
+#endif // ifdef TA3D_PLATFORM_DARWIN
 }
 
-void clear_signals (void)
+void clear_signals(void)
 {
-	// Signals should be disabled under OS X, since the system already produces a crash report
-	// More information are available here :
-	// http://developer.apple.com/technotes/tn2004/tn2123.html
-	#ifndef TA3D_PLATFORM_DARWIN
+// Signals should be disabled under OS X, since the system already produces a crash report
+// More information are available here :
+// http://developer.apple.com/technotes/tn2004/tn2123.html
+#ifndef TA3D_PLATFORM_DARWIN
 
-	# ifdef TA3D_PLATFORM_WINDOWS
-		int signum[] = { SIGFPE, SIGILL, SIGSEGV, SIGABRT };
-		int nb_signals = 4;
-	# else
-		int signum[] = { SIGFPE, SIGILL, SIGSEGV, SIGBUS, SIGABRT, SIGIOT, SIGTRAP, SIGSYS };
-		int nb_signals = 8;
-	# endif // ifdef TA3D_PLATFORM_WINDOWS
+#ifdef TA3D_PLATFORM_WINDOWS
+	int signum[] = {SIGFPE, SIGILL, SIGSEGV, SIGABRT};
+	int nb_signals = 4;
+#else
+	int signum[] = {SIGFPE, SIGILL, SIGSEGV, SIGBUS, SIGABRT, SIGIOT, SIGTRAP, SIGSYS};
+	int nb_signals = 8;
+#endif // ifdef TA3D_PLATFORM_WINDOWS
 	for (int i = 0; i < nb_signals; ++i)
-		signal (signum[i], SIG_IGN);
+		signal(signum[i], SIG_IGN);
 
-	#endif // ifdef TA3D_PLATFORM_DARWIN
+#endif // ifdef TA3D_PLATFORM_DARWIN
 }
-
 
 void criticalMessage(const String &msg)
 {
-	std::cerr << msg << std::endl;      // Output error message to stderr
+	std::cerr << msg << std::endl; // Output error message to stderr
 
-	SDL_SetVideoMode(0,0,0,0);
+	SDL_SetVideoMode(0, 0, 0, 0);
 	Gui::Utils::message("TA3D - Critical Error", msg.c_str());
 }
 
@@ -296,12 +289,12 @@ void bug_reporter(const String &trace)
 
 	// OpenGL info
 	report += "OpenGL Informations :\n";
-	(report += "Vendor: ") += (const char*) glGetString(GL_VENDOR);
-	(report += "\nRenderer: ") += (const char*) glGetString(GL_RENDERER);
-	(report += "\nVersion: ") += (const char*) glGetString(GL_VERSION);
+	(report += "Vendor: ") += (const char *)glGetString(GL_VENDOR);
+	(report += "\nRenderer: ") += (const char *)glGetString(GL_RENDERER);
+	(report += "\nVersion: ") += (const char *)glGetString(GL_VERSION);
 	report += "\nExtensions:\n";
-	const char *ext = (const char*) glGetString(GL_EXTENSIONS);
-	for(; *ext ; ++ext)
+	const char *ext = (const char *)glGetString(GL_EXTENSIONS);
+	for (; *ext; ++ext)
 		report += *ext == ' ' ? '\n' : *ext;
 	report += '\n';
 	report += '\n';
@@ -310,12 +303,9 @@ void bug_reporter(const String &trace)
 	report += trace.c_str();
 
 	Gui::Window wnd("Bug report", 640, 240, Gui::Window::MOVEABLE);
-	wnd.addChild(Gui::TabWidget_("tabs")
-				/ (Gui::Spacer_(false) | Gui::Button_("ok", " send report ") | Gui::Spacer_(false) | Gui::Button_("cancel", " don't send ") | Gui::Spacer_(false)));
+	wnd.addChild(Gui::TabWidget_("tabs") / (Gui::Spacer_(false) | Gui::Button_("ok", " send report ") | Gui::Spacer_(false) | Gui::Button_("cancel", " don't send ") | Gui::Spacer_(false)));
 
-	TABWIDGET(tabs)->addTab("info", Gui::Label_("info")
-									/ Gui::Spacer_(true)
-									/ Gui::Label_("size"));
+	TABWIDGET(tabs)->addTab("info", Gui::Label_("info") / Gui::Spacer_(true) / Gui::Label_("size"));
 	TABWIDGET(tabs)->addTab("report", Gui::ScrollArea_("scroll"));
 
 	SCROLLAREA(scroll)->setCentralWidget(Gui::Label_("text", report));

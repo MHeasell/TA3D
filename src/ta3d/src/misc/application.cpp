@@ -26,12 +26,8 @@
 #include <TA3D_NameSpace.h>
 #include "settings.h"
 
-
-
-
 namespace TA3D
 {
-
 
 	void Finalize()
 	{
@@ -47,12 +43,9 @@ namespace TA3D
 		logs.info() << "Exiting now.";
 	}
 
-
-
-
 	void Initialize(int argc, char* argv[])
 	{
-		for (int i = 1 ; i < argc; i++)
+		for (int i = 1; i < argc; i++)
 		{
 			if (!strcmp(argv[i], "--quiet") || !strcmp(argv[i], "/quiet"))
 				logs.verbosityLevel = -1;
@@ -75,18 +68,15 @@ namespace TA3D
 		// Load settings early only to get current mod name
 		TA3D::Settings::Load();
 
-        // Load additionnal resource paths
-        String::Vector cfgPaths;
-        lp_CONFIG->resourcePaths.explode(cfgPaths, ',', true, true, true);
-        for(String::Vector::iterator i = cfgPaths.begin() ; i != cfgPaths.end() ; ++i)
-            TA3D::Resources::AddSearchPath(*i);
+		// Load additionnal resource paths
+		String::Vector cfgPaths;
+		lp_CONFIG->resourcePaths.explode(cfgPaths, ',', true, true, true);
+		for (String::Vector::iterator i = cfgPaths.begin(); i != cfgPaths.end(); ++i)
+			TA3D::Resources::AddSearchPath(*i);
 
 		// Display usefull infos for debugging
 		System::DisplayInformations();
 		System::DisplayInformationsAboutSDL();
 	}
-
-
-
 
 } // namespace TA3D

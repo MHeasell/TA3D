@@ -2,8 +2,6 @@
 #include "string.h"
 #include <logs/logs.h>
 
-
-
 namespace TA3D
 {
 
@@ -11,7 +9,7 @@ namespace TA3D
 	{
 		String sz1, sz2;
 
-		if(ignoreCase)
+		if (ignoreCase)
 		{
 			sz1 = ToUpper(s);
 			sz2 = ToUpper(stringToSearch);
@@ -25,8 +23,6 @@ namespace TA3D
 
 		return ((String::npos == iFind) ? -1 : (sint32)iFind);
 	}
-
-
 
 	String InttoUTF8(const uint16 c)
 	{
@@ -59,16 +55,14 @@ namespace TA3D
 		return str;
 	}
 
-
-
-	int ASCIItoUTF8(const byte c, byte *out)
+	int ASCIItoUTF8(const byte c, byte* out)
 	{
 		if (c < 0x80)
 		{
 			*out = c;
 			return 1;
 		}
-		else if(c < 0xC0)
+		else if (c < 0xC0)
 		{
 			out[0] = 0xC2;
 			out[1] = c;
@@ -78,8 +72,6 @@ namespace TA3D
 		out[1] = static_cast<byte>(c - 0x40);
 		return 2;
 	}
-
-
 
 	char* ConvertToUTF8(const char* s)
 	{
@@ -109,20 +101,19 @@ namespace TA3D
 		byte tmp[4];
 		newSize = 1;
 		size_t n = size;
-		for(byte *p = (byte*)s ; *p && n ; ++p, --n)
+		for (byte *p = (byte *)s; *p && n; ++p, --n)
 			newSize += ASCIItoUTF8(*p, tmp);
 
 		char* ret = new char[newSize];
 		LOG_ASSERT(NULL != ret);
 
-		byte *q = (byte*)ret;
+		byte* q = (byte*)ret;
 		n = size;
-		for(byte *p = (byte*)s ; *p && n ; ++p, --n)
+		for (byte *p = (byte *)s; *p && n; ++p, --n)
 			q += ASCIItoUTF8(*p, q);
 		*q = '\0'; // A bit paranoid
 		return ret;
 	}
-
 
 	String ConvertToUTF8(const String& s)
 	{
@@ -138,41 +129,41 @@ namespace TA3D
 		return nullptr;
 	}
 
-    WString::WString(const char* s)
-    {
-        if (s)
-            fromUtf8(s, strlen(s));
-        else
-            pBuffer[0] = 0;
-    }
+	WString::WString(const char* s)
+	{
+		if (s)
+			fromUtf8(s, strlen(s));
+		else
+			pBuffer[0] = 0;
+	}
 
-    WString::WString(const String& s)
-    {
+	WString::WString(const String& s)
+	{
 		fromUtf8(s.data(), s.size());
-    }
+	}
 
-    void WString::fromUtf8(const char* str, size_t length)
-    {
+	void WString::fromUtf8(const char* str, size_t length)
+	{
 		size_t len = 0;
-        for (size_t i = 0 ; i < length; i++)
-        {
-            if (((byte)str[i]) < 0x80)
-            {
-                pBuffer[len++] = ((byte)str[i]);
-                continue;
-            }
-            if (((byte)str[i]) >= 0xC0)
-            {
-                wchar_t c = ((byte)str[i++]) - 0xC0;
-                while(((byte)str[i]) >= 0x80)
-                    c = (c << 6) | (((byte)str[i++]) - 0x80);
-                --i;
-                pBuffer[len++] = c;
-                continue;
-            }
-        }
-        pBuffer[len] = 0;
-    }
+		for (size_t i = 0; i < length; i++)
+		{
+			if (((byte)str[i]) < 0x80)
+			{
+				pBuffer[len++] = ((byte)str[i]);
+				continue;
+			}
+			if (((byte)str[i]) >= 0xC0)
+			{
+				wchar_t c = ((byte)str[i++]) - 0xC0;
+				while (((byte)str[i]) >= 0x80)
+					c = (c << 6) | (((byte)str[i++]) - 0x80);
+				--i;
+				pBuffer[len++] = c;
+				continue;
+			}
+		}
+		pBuffer[len] = 0;
+	}
 
 	String::Vector SplitCommand(const String& s)
 	{
@@ -180,7 +171,7 @@ namespace TA3D
 
 		String current;
 		bool stringMode = false;
-		for (unsigned int i = 0 ; i < s.size(); ++i)
+		for (unsigned int i = 0; i < s.size(); ++i)
 		{
 			if (!stringMode)
 			{
@@ -198,7 +189,7 @@ namespace TA3D
 			}
 			else
 			{
-				if (s[i] == '\\' && i + 1 < s.size() && (s[i+1] == '"' || s[i+1] == '\\'))
+				if (s[i] == '\\' && i + 1 < s.size() && (s[i + 1] == '"' || s[i + 1] == '\\'))
 					++i;
 				else if (s[i] == '"')
 				{

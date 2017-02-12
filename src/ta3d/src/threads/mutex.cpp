@@ -3,9 +3,9 @@
 namespace TA3D
 {
 	Synchronizer::Synchronizer(int nbThreadsToSync)
-			: nbThreadsToSync(nbThreadsToSync),
-			nbThreadsWaiting(0),
-			pSignalled(0)
+		: nbThreadsToSync(nbThreadsToSync),
+		  nbThreadsWaiting(0),
+		  pSignalled(0)
 	{
 		// Note: The linux implementation currently does not support
 		// any condition attr

@@ -15,41 +15,39 @@
 	along with this program; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA*/
 #ifndef __TA3D_INGAME_MENUS_XX_LOADING_H__
-# define __TA3D_INGAME_MENUS_XX_LOADING_H__
+#define __TA3D_INGAME_MENUS_XX_LOADING_H__
 
-# include <stdafx.h>
-# include <threads/mutex.h>
-# include <misc/string.h>
-# include <sdl.h>
-# include <misc/progressnotifier.h>
-
+#include <stdafx.h>
+#include <threads/mutex.h>
+#include <misc/string.h>
+#include <sdl.h>
+#include <misc/progressnotifier.h>
 
 namespace TA3D
 {
-namespace Menus
-{
+	namespace Menus
+	{
 
-
-	/*! \class Loading
+		/*! \class Loading
 	**
 	** \brief The window loading for TA3D
 	**
 	** This class is thread-safe
 	*/
-	class Loading : public ProgressNotifier
-	{
-	public:
-		//! \name Constructors & Destructor
-		//@{
-		//! Default constructor
-		Loading();
-		//! Destructor
-		virtual ~Loading();
-		//@}
+		class Loading : public ProgressNotifier
+		{
+		public:
+			//! \name Constructors & Destructor
+			//@{
+			//! Default constructor
+			Loading();
+			//! Destructor
+			virtual ~Loading();
+			//@}
 
-		//! \name SDL interaction
-		//@{
-		/*!
+			//! \name SDL interaction
+			//@{
+			/*!
 		** \brief Update percent and caption, redraw the entire screen if required
 		**
 		** Nothing will be done if there was no changes since the last call
@@ -57,51 +55,49 @@ namespace Menus
 		**
 		** This method must be called from the main thread.
 		*/
-		virtual void operator()(const float percent, const String &message);
-		//@}
+			virtual void operator()(const float percent, const String &message);
+			//@}
 
-	private:
-		/*!
+		private:
+			/*!
 		** \brief Notice other connected players about the progress
 		** \param percent the progress value to broadcast
 		**
 		** This method must be called from the main thread and is not thread-safe
 		*/
-		void doNoticeOtherPlayers(const float percent);
+			void doNoticeOtherPlayers(const float percent);
 
-		/*!
+			/*!
 		** \brief Load the background texture
 		*/
-		void loadTheBackgroundTexture();
+			void loadTheBackgroundTexture();
 
-		void initializeDrawing();
+			void initializeDrawing();
 
-		void finalizeDrawing();
+			void finalizeDrawing();
 
-	private:
-		//! The last percent value
-		float pLastPercent;
-		//! The last caption
-		String pLastCaption;
-		//! All messages
-		String::List pMessages;
+		private:
+			//! The last percent value
+			float pLastPercent;
+			//! The last caption
+			String pLastCaption;
+			//! All messages
+			String::List pMessages;
 
-		//! The background texture
-		GLuint pBackgroundTexture;
-		//! The height of the font
-		float pCurrentFontHeight;
+			//! The background texture
+			GLuint pBackgroundTexture;
+			//! The height of the font
+			float pCurrentFontHeight;
 
-		//! Start time
-		int pStartTime;
+			//! Start time
+			int pStartTime;
 
-		float pCacheScreenRatioWidth;
-		float pCacheScreenRatioHeight;
+			float pCacheScreenRatioWidth;
+			float pCacheScreenRatioHeight;
 
-	}; // class Loading
+		}; // class Loading
 
-
-
-} // namespace Menus
+	} // namespace Menus
 } // namespace TA3D
 
 #endif // __TA3D_INGAME_MENUS_XX_LOADING_H__

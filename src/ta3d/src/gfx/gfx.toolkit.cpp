@@ -30,7 +30,6 @@ namespace TA3D
 {
 	static bool use_TA_palette = true;
 
-
 	void disable_TA_palette()
 	{
 		use_TA_palette = false;
@@ -41,15 +40,9 @@ namespace TA3D
 		use_TA_palette = true;
 	}
 
-
-
 	SDL_Surface *convert_format(SDL_Surface *bmp)
 	{
-		if (bmp->format->BitsPerPixel != 32
-			|| bmp->format->Rmask != 0x000000FF
-			|| bmp->format->Gmask != 0x0000FF00
-			|| bmp->format->Bmask != 0x00FF0000
-			|| bmp->format->Amask != 0xFF000000)
+		if (bmp->format->BitsPerPixel != 32 || bmp->format->Rmask != 0x000000FF || bmp->format->Gmask != 0x0000FF00 || bmp->format->Bmask != 0x00FF0000 || bmp->format->Amask != 0xFF000000)
 		{
 			SDL_PixelFormat target_format;
 			target_format.palette = NULL;
@@ -68,7 +61,7 @@ namespace TA3D
 			target_format.Ashift = 24;
 
 			if (bmp->format->BitsPerPixel == 8 && use_TA_palette)
-				SDL_SetPalette(bmp, SDL_LOGPAL|SDL_PHYSPAL, TA3D::VARS::pal, 0, 256);
+				SDL_SetPalette(bmp, SDL_LOGPAL | SDL_PHYSPAL, TA3D::VARS::pal, 0, 256);
 
 			SDL_Surface *tmp = SDL_ConvertSurface(bmp, &target_format, SDL_SWSURFACE);
 			SDL_FreeSurface(bmp);
@@ -96,7 +89,7 @@ namespace TA3D
 		target_format.Ashift = 24;
 
 		if (bmp->format->BitsPerPixel == 8 && use_TA_palette)
-			SDL_SetPalette(bmp, SDL_LOGPAL|SDL_PHYSPAL, TA3D::VARS::pal, 0, 256);
+			SDL_SetPalette(bmp, SDL_LOGPAL | SDL_PHYSPAL, TA3D::VARS::pal, 0, 256);
 
 		SDL_Surface *tmp = SDL_ConvertSurface(bmp, &target_format, SDL_SWSURFACE);
 
@@ -105,10 +98,7 @@ namespace TA3D
 
 	SDL_Surface *convert_format_24(SDL_Surface *bmp)
 	{
-		if (bmp->format->BitsPerPixel != 24
-			|| bmp->format->Rmask != 0x000000FF
-			|| bmp->format->Gmask != 0x0000FF00
-			|| bmp->format->Bmask != 0x00FF0000)
+		if (bmp->format->BitsPerPixel != 24 || bmp->format->Rmask != 0x000000FF || bmp->format->Gmask != 0x0000FF00 || bmp->format->Bmask != 0x00FF0000)
 		{
 			SDL_PixelFormat target_format;
 			target_format.palette = NULL;
@@ -128,7 +118,7 @@ namespace TA3D
 			target_format.Ashift = 24;
 
 			if (bmp->format->BitsPerPixel == 8 && use_TA_palette)
-				SDL_SetPalette(bmp, SDL_LOGPAL|SDL_PHYSPAL, TA3D::VARS::pal, 0, 256);
+				SDL_SetPalette(bmp, SDL_LOGPAL | SDL_PHYSPAL, TA3D::VARS::pal, 0, 256);
 
 			SDL_Surface *tmp = SDL_ConvertSurface(bmp, &target_format, SDL_SWSURFACE);
 			SDL_FreeSurface(bmp);
@@ -157,7 +147,7 @@ namespace TA3D
 		target_format.Ashift = 24;
 
 		if (bmp->format->BitsPerPixel == 8 && use_TA_palette)
-			SDL_SetPalette(bmp, SDL_LOGPAL|SDL_PHYSPAL, TA3D::VARS::pal, 0, 256);
+			SDL_SetPalette(bmp, SDL_LOGPAL | SDL_PHYSPAL, TA3D::VARS::pal, 0, 256);
 
 		return SDL_ConvertSurface(bmp, &target_format, SDL_SWSURFACE);
 	}
@@ -186,7 +176,7 @@ namespace TA3D
 			target_format.Ashift = 16;
 
 			if (bmp->format->BitsPerPixel == 8 && use_TA_palette)
-				SDL_SetPalette(bmp, SDL_LOGPAL|SDL_PHYSPAL, TA3D::VARS::pal, 0, 256);
+				SDL_SetPalette(bmp, SDL_LOGPAL | SDL_PHYSPAL, TA3D::VARS::pal, 0, 256);
 
 			SDL_Surface *tmp = SDL_ConvertSurface(bmp, &target_format, SDL_SWSURFACE);
 			SDL_FreeSurface(bmp);
@@ -217,7 +207,7 @@ namespace TA3D
 		target_format.Ashift = 16;
 
 		if (bmp->format->BitsPerPixel == 8 && use_TA_palette)
-			SDL_SetPalette(bmp, SDL_LOGPAL|SDL_PHYSPAL, TA3D::VARS::pal, 0, 256);
+			SDL_SetPalette(bmp, SDL_LOGPAL | SDL_PHYSPAL, TA3D::VARS::pal, 0, 256);
 
 		return SDL_ConvertSurface(bmp, &target_format, SDL_SWSURFACE);
 	}
@@ -228,7 +218,7 @@ namespace TA3D
 		if (in->format->BitsPerPixel != out->format->BitsPerPixel)
 		{
 			if (in->format->BitsPerPixel == 8 && use_TA_palette)
-				SDL_SetPalette(in, SDL_LOGPAL|SDL_PHYSPAL, TA3D::VARS::pal, 0, 256);
+				SDL_SetPalette(in, SDL_LOGPAL | SDL_PHYSPAL, TA3D::VARS::pal, 0, 256);
 
 			tmp = SDL_ConvertSurface(in, out->format, SDL_SWSURFACE);
 		}
@@ -257,15 +247,16 @@ namespace TA3D
 			sx *= tmp->format->BytesPerPixel;
 			dx *= tmp->format->BytesPerPixel;
 			cw *= tmp->format->BytesPerPixel;
-			for(int y = 0 ; y < h ; y++)
+			for (int y = 0; y < h; y++)
 			{
 				int dy = y1 + y;
 				int sy = y + y0;
-				if (dy < 0 || dy >= out->h || sy < 0 || sy >= tmp->h)    continue;
+				if (dy < 0 || dy >= out->h || sy < 0 || sy >= tmp->h)
+					continue;
 				dy *= out->pitch;
 				sy *= tmp->pitch;
 
-				memcpy( ((byte*)out->pixels) + dy + dx, ((byte*)tmp->pixels) + sy + sx, cw);
+				memcpy(((byte *)out->pixels) + dy + dx, ((byte *)tmp->pixels) + sy + sx, cw);
 			}
 		}
 
@@ -280,39 +271,39 @@ namespace TA3D
 	{
 		SDL_LockSurface(in);
 		SDL_LockSurface(out);
-		for(int y = 0 ; y < h ; ++y)
+		for (int y = 0; y < h; ++y)
 		{
 			const int dy = (y1 + y) * out->pitch;
 			const int sy = (y + y0) * in->pitch;
-			for(int x = 0 ; x < w ; ++x)
+			for (int x = 0; x < w; ++x)
 			{
 				const int sx = x + x0;
 				const int dx = x1 + x;
-				byte b = ((byte*)in->pixels)[sy + sx];
+				byte b = ((byte *)in->pixels)[sy + sx];
 				if (b)
-					((byte*)out->pixels)[dy + dx] = b;
+					((byte *)out->pixels)[dy + dx] = b;
 			}
 		}
 		SDL_UnlockSurface(in);
 		SDL_UnlockSurface(out);
 	}
 
-	void stretch_blit( SDL_Surface *in, SDL_Surface *out, int x0, int y0, int w0, int h0, int x1, int y1, int w1, int h1 )
+	void stretch_blit(SDL_Surface *in, SDL_Surface *out, int x0, int y0, int w0, int h0, int x1, int y1, int w1, int h1)
 	{
 		sint32 dw = (w0 << 16) / w1;
 		sint32 dh = (h0 << 16) / h1;
 		int dy = y1 * out->pitch;
-		switch(in->format->BitsPerPixel)
+		switch (in->format->BitsPerPixel)
 		{
 			case 8:
-				for(int y = 0 ; y < h1 ; y++)
+				for (int y = 0; y < h1; y++)
 				{
 					const int sy = (y0 + (y * dh >> 16)) * in->pitch;
-					byte *d = ((byte*)out->pixels) + x1 + dy;
+					byte *d = ((byte *)out->pixels) + x1 + dy;
 					int sx = (sy + x0) << 16;
-					for(int x = 0 ; x < w1 ; x++)
+					for (int x = 0; x < w1; x++)
 					{
-						*d = ((byte*)in->pixels)[sx >> 16];
+						*d = ((byte *)in->pixels)[sx >> 16];
 						d++;
 						sx += dw;
 					}
@@ -322,14 +313,14 @@ namespace TA3D
 			case 16:
 				dy >>= 1;
 				x1 >>= 1;
-				for(int y = 0 ; y < h1 ; y++)
+				for (int y = 0; y < h1; y++)
 				{
 					const int sy = (y0 + (y * dh >> 16)) * in->pitch >> 1;
-					uint16 *d = ((uint16*)out->pixels) + dy + x1;
+					uint16 *d = ((uint16 *)out->pixels) + dy + x1;
 					int sx = (sy + x0) << 16;
-					for(int x = 0 ; x < w1 ; x++)
+					for (int x = 0; x < w1; x++)
 					{
-						*d = ((uint16*)in->pixels)[sx >> 16];
+						*d = ((uint16 *)in->pixels)[sx >> 16];
 						d++;
 						sx += dw;
 					}
@@ -338,14 +329,14 @@ namespace TA3D
 				break;
 			case 24:
 				x1 *= 3;
-				for(int y = 0 ; y < h1 ; y++)
+				for (int y = 0; y < h1; y++)
 				{
 					const int sy = (y0 + (y * dh >> 16)) * in->pitch;
-					byte *d = ((byte*)out->pixels) + dy + x1;
+					byte *d = ((byte *)out->pixels) + dy + x1;
 					int sx = x0 << 16;
-					for(int x = 0 ; x < w1 ; x++)
+					for (int x = 0; x < w1; x++)
 					{
-						byte *ref = ((byte*)in->pixels) + sy + (sx >> 16) * 3;
+						byte *ref = ((byte *)in->pixels) + sy + (sx >> 16) * 3;
 						*(d++) = *(ref++);
 						*(d++) = *(ref++);
 						*(d++) = *(ref++);
@@ -356,14 +347,14 @@ namespace TA3D
 				break;
 			case 32:
 				x1 <<= 2;
-				for(int y = 0 ; y < h1 ; y++)
+				for (int y = 0; y < h1; y++)
 				{
 					const int sy = (y0 + (y * dh >> 16)) * in->pitch;
-					uint32 *d = (uint32*) (((byte*)out->pixels) + dy + x1);
+					uint32 *d = (uint32 *)(((byte *)out->pixels) + dy + x1);
 					int sx = x0 << 16;
-					for(int x = 0 ; x < w1 ; x++)
+					for (int x = 0; x < w1; x++)
 					{
-						*d++ = *(uint32*)(((byte*)in->pixels) + sy + ((sx >> 16) << 2));
+						*d++ = *(uint32 *)(((byte *)in->pixels) + sy + ((sx >> 16) << 2));
 						sx += dw;
 					}
 					dy += out->pitch;
@@ -372,25 +363,25 @@ namespace TA3D
 		};
 	}
 
-	void stretch_blit_smooth( SDL_Surface *in, SDL_Surface *out, int x0, int y0, int w0, int h0, int x1, int y1, int w1, int h1 )
+	void stretch_blit_smooth(SDL_Surface *in, SDL_Surface *out, int x0, int y0, int w0, int h0, int x1, int y1, int w1, int h1)
 	{
 		w0--;
 		h0--;
 		sint32 dw = (w0 << 16) / w1;
 		sint32 dh = (h0 << 16) / h1;
 		int dy = y1 * out->pitch;
-		switch(in->format->BitsPerPixel)
+		switch (in->format->BitsPerPixel)
 		{
 			case 8:
-				for(int y = 0 ; y < h1 ; y++)
+				for (int y = 0; y < h1; y++)
 				{
 					const int gy = y * dh;
 					const int sy = (y0 + (gy >> 16)) * in->pitch;
-					byte *d = ((byte*)out->pixels) + x1 + dy;
+					byte *d = ((byte *)out->pixels) + x1 + dy;
 					int sx = (sy + x0) << 16;
-					for(int x = 0 ; x < w1 ; x++)
+					for (int x = 0; x < w1; x++)
 					{
-						byte *ref = ((byte*)in->pixels) + (sx >> 16);
+						byte *ref = ((byte *)in->pixels) + (sx >> 16);
 						int c0 = *ref++, c1, c2, c3;
 						c1 = *ref;
 						ref += in->pitch - 1;
@@ -410,15 +401,15 @@ namespace TA3D
 				break;
 			case 24:
 				x1 *= 3;
-				for(int y = 0 ; y < h1 ; y++)
+				for (int y = 0; y < h1; y++)
 				{
 					const int gy = y * dh;
 					const int sy = (y0 + (gy >> 16)) * in->pitch;
-					byte *d = ((byte*)out->pixels) + dy + x1;
+					byte *d = ((byte *)out->pixels) + dy + x1;
 					int sx = x0 << 16;
-					for(int x = 0 ; x < w1 ; x++)
+					for (int x = 0; x < w1; x++)
 					{
-						byte *ref = ((byte*)in->pixels) + sy + (sx >> 16) * 3;
+						byte *ref = ((byte *)in->pixels) + sy + (sx >> 16) * 3;
 						int r0 = *ref++, r1, r2, r3;
 						int g0 = *ref++, g1, g2, g3;
 						int b0 = *ref++, b1, b2, b3;
@@ -451,15 +442,15 @@ namespace TA3D
 				break;
 			case 32:
 				x1 <<= 2;
-				for(int y = 0 ; y < h1 ; y++)
+				for (int y = 0; y < h1; y++)
 				{
 					const int gy = y * dh;
 					const int sy = (y0 + (gy >> 16)) * in->pitch;
-					byte *d = ((byte*)out->pixels) + dy + x1;
+					byte *d = ((byte *)out->pixels) + dy + x1;
 					int sx = x0 << 16;
-					for(int x = 0 ; x < w1 ; x++)
+					for (int x = 0; x < w1; x++)
 					{
-						byte *ref = ((byte*)in->pixels) + sy + ((sx >> 16) << 2);
+						byte *ref = ((byte *)in->pixels) + sy + ((sx >> 16) << 2);
 
 						int r0 = *ref++, r1, r2, r3;
 						int g0 = *ref++, g1, g2, g3;
@@ -519,32 +510,34 @@ namespace TA3D
 		if (sigx > 0.0f)
 		{
 			uint32 sum = 0U;
-			for(int i = 0 ; i < sx ; ++i)
+			for (int i = 0; i < sx; ++i)
 			{
 				kerX[i] = uint32(std::exp(-double(i * i) / (2.0 * sigx * sigx)) * 65536.0);
 				sum += kerX[i];
-				if (i)	sum += kerX[i];
+				if (i)
+					sum += kerX[i];
 			}
-			for(int i = 0 ; i < sx ; ++i)
+			for (int i = 0; i < sx; ++i)
 				kerX[i] = uint32(double(kerX[i]) * 65536.0 / sum);
 		}
 		else
-			for(int i = 0 ; i < sx ; ++i)
+			for (int i = 0; i < sx; ++i)
 				kerX[i] = i == 0 ? 0x10000U : 0U;
 		if (sigy > 0.0f)
 		{
 			uint32 sum = 0U;
-			for(int i = 0 ; i < sy ; ++i)
+			for (int i = 0; i < sy; ++i)
 			{
 				kerY[i] = uint32(std::exp(-double(i * i) / (2.0 * sigy * sigy)) * 65536.0);
 				sum += kerY[i];
-				if (i)	sum += kerY[i];
+				if (i)
+					sum += kerY[i];
 			}
-			for(int i = 0 ; i < sy ; ++i)
+			for (int i = 0; i < sy; ++i)
 				kerY[i] = uint32(double(kerY[i]) * 65536.0 / sum);
 		}
 		else
-			for(int i = 0 ; i < sy ; ++i)
+			for (int i = 0; i < sy; ++i)
 				kerY[i] = i == 0 ? 0x10000U : 0U;
 
 		const int twm1 = tmp->w - 1;
@@ -554,186 +547,186 @@ namespace TA3D
 		const uint32 mx = 0x10000U * twm1 / owm1;
 		const uint32 my = 0x10000U * thm1 / ohm1;
 
-		switch(in->format->BitsPerPixel)
+		switch (in->format->BitsPerPixel)
 		{
-		case 24:
+			case 24:
 #pragma omp parallel for
-			for(int	y = 0 ; y < in->h ; ++y)
-			{
-				for(int	x = 0 ; x < out->w ; ++x)
+				for (int y = 0; y < in->h; ++y)
+				{
+					for (int x = 0; x < out->w; ++x)
+					{
+						const int X = x * mx >> 16;
+						byte *p = (byte *)tmp->pixels + y * tmp->pitch + X * 3;
+						uint32 col[3] = {0U, 0U, 0U};
+						const int start = std::max(-sx + 1, -X);
+						const int end = std::min(sx, in->w - X);
+						byte *c = (byte *)in->pixels + y * in->pitch + (X + start) * 3;
+						if (end - start == sx2)
+						{
+							for (int i = -sx + 1; i < sx; ++i, c += 3)
+							{
+								const uint32 f = kerX[abs(i)];
+								col[0] += f * c[0];
+								col[1] += f * c[1];
+								col[2] += f * c[2];
+							}
+							p[0] = byte(col[0] >> 16);
+							p[1] = byte(col[1] >> 16);
+							p[2] = byte(col[2] >> 16);
+						}
+						else
+						{
+							uint32 sum = 0U;
+							for (int i = start; i < end; ++i, c += 3)
+							{
+								const uint32 f = kerX[abs(i)];
+								col[0] += f * c[0];
+								col[1] += f * c[1];
+								col[2] += f * c[2];
+								sum += f;
+							}
+							p[0] = byte(col[0] / sum);
+							p[1] = byte(col[1] / sum);
+							p[2] = byte(col[2] / sum);
+						}
+					}
+				}
+#pragma omp parallel for
+				for (int x = 0; x < out->w; ++x)
 				{
 					const int X = x * mx >> 16;
-					byte *p = (byte*)tmp->pixels + y * tmp->pitch + X * 3;
-					uint32 col[3] = { 0U, 0U, 0U };
-					const int start = std::max(-sx + 1, -X);
-					const int end = std::min(sx, in->w - X);
-					byte *c = (byte*)in->pixels + y * in->pitch + (X + start) * 3;
-					if (end - start == sx2)
+					byte *p = (byte *)out->pixels + x * 3;
+					for (int y = 0; y < out->h; ++y, p += out->pitch)
 					{
-						for(int i = -sx + 1 ; i < sx ; ++i, c += 3)
+						const int Y = y * my >> 16;
+						uint32 col[3] = {0U, 0U, 0U};
+						const int start = std::max(-sy + 1, -Y);
+						const int end = std::min(sy, in->h - Y);
+						byte *c = (byte *)tmp->pixels + (Y + start) * tmp->pitch + X * 3;
+						if (end - start == sy2)
 						{
-							const uint32 f = kerX[abs(i)];
-							col[0] += f * c[0];
-							col[1] += f * c[1];
-							col[2] += f * c[2];
+							for (int i = -sy + 1; i < sy; ++i, c += tmp->pitch)
+							{
+								const uint32 f = kerY[abs(i)];
+								col[0] += f * c[0];
+								col[1] += f * c[1];
+								col[2] += f * c[2];
+							}
+							p[0] = byte(col[0] >> 16);
+							p[1] = byte(col[1] >> 16);
+							p[2] = byte(col[2] >> 16);
 						}
-						p[0] = byte(col[0] >> 16);
-						p[1] = byte(col[1] >> 16);
-						p[2] = byte(col[2] >> 16);
-					}
-					else
-					{
-						uint32 sum = 0U;
-						for(int i = start ; i < end ; ++i, c += 3)
+						else
 						{
-							const uint32 f = kerX[abs(i)];
-							col[0] += f * c[0];
-							col[1] += f * c[1];
-							col[2] += f * c[2];
-							sum += f;
+							uint32 sum = 0U;
+							for (int i = start; i < end; ++i, c += tmp->pitch)
+							{
+								const uint32 f = kerY[abs(i)];
+								col[0] += f * c[0];
+								col[1] += f * c[1];
+								col[2] += f * c[2];
+								sum += f;
+							}
+							p[0] = byte(col[0] / sum);
+							p[1] = byte(col[1] / sum);
+							p[2] = byte(col[2] / sum);
 						}
-						p[0] = byte(col[0] / sum);
-						p[1] = byte(col[1] / sum);
-						p[2] = byte(col[2] / sum);
 					}
 				}
-			}
+				break;
+			case 32:
 #pragma omp parallel for
-			for(int	x = 0 ; x < out->w ; ++x)
-			{
-				const int X = x * mx >> 16;
-				byte *p = (byte*)out->pixels + x * 3;
-				for(int	y = 0 ; y < out->h ; ++y, p += out->pitch)
+				for (int y = 0; y < in->h; ++y)
 				{
-					const int Y = y * my >> 16;
-					uint32 col[3] = { 0U, 0U, 0U };
-					const int start = std::max(-sy + 1, -Y);
-					const int end = std::min(sy, in->h - Y);
-					byte *c = (byte*)tmp->pixels + (Y + start) * tmp->pitch + X * 3;
-					if (end - start == sy2)
+					for (int x = 0; x < out->w; ++x)
 					{
-						for(int i = -sy + 1 ; i < sy ; ++i, c += tmp->pitch)
+						const int X = x * mx >> 16;
+						byte *p = (byte *)tmp->pixels + y * tmp->pitch + (X << 2);
+						uint32 col[4] = {0U, 0U, 0U, 0U};
+						const int start = std::max(-sx + 1, -X);
+						const int end = std::min(sx, in->w - X);
+						byte *c = (byte *)in->pixels + y * in->pitch + ((X + start) << 2);
+						if (end - start == sx2)
 						{
-							const uint32 f = kerY[abs(i)];
-							col[0] += f * c[0];
-							col[1] += f * c[1];
-							col[2] += f * c[2];
+							for (int i = -sx + 1; i < sx; ++i, c += 4)
+							{
+								const uint32 f = kerX[abs(i)];
+								col[0] += f * c[0];
+								col[1] += f * c[1];
+								col[2] += f * c[2];
+								col[3] += f * c[3];
+							}
+							p[0] = byte(col[0] >> 16);
+							p[1] = byte(col[1] >> 16);
+							p[2] = byte(col[2] >> 16);
+							p[3] = byte(col[3] >> 16);
 						}
-						p[0] = byte(col[0] >> 16);
-						p[1] = byte(col[1] >> 16);
-						p[2] = byte(col[2] >> 16);
-					}
-					else
-					{
-						uint32 sum = 0U;
-						for(int i = start ; i < end ; ++i, c += tmp->pitch)
+						else
 						{
-							const uint32 f = kerY[abs(i)];
-							col[0] += f * c[0];
-							col[1] += f * c[1];
-							col[2] += f * c[2];
-							sum += f;
+							uint32 sum = 0U;
+							for (int i = start; i < end; ++i, c += 4)
+							{
+								const uint32 f = kerX[abs(i)];
+								col[0] += f * c[0];
+								col[1] += f * c[1];
+								col[2] += f * c[2];
+								col[3] += f * c[3];
+								sum += f;
+							}
+							p[0] = byte(col[0] / sum);
+							p[1] = byte(col[1] / sum);
+							p[2] = byte(col[2] / sum);
+							p[3] = byte(col[3] / sum);
 						}
-						p[0] = byte(col[0] / sum);
-						p[1] = byte(col[1] / sum);
-						p[2] = byte(col[2] / sum);
 					}
 				}
-			}
-			break;
-		case 32:
 #pragma omp parallel for
-			for(int	y = 0 ; y < in->h ; ++y)
-			{
-				for(int	x = 0 ; x < out->w ; ++x)
+				for (int x = 0; x < out->w; ++x)
 				{
 					const int X = x * mx >> 16;
-					byte *p = (byte*)tmp->pixels + y * tmp->pitch + (X << 2);
-					uint32 col[4] = { 0U, 0U, 0U, 0U };
-					const int start = std::max(-sx + 1, -X);
-					const int end = std::min(sx, in->w - X);
-					byte *c = (byte*)in->pixels + y * in->pitch + ((X + start) << 2);
-					if (end - start == sx2)
+					byte *p = (byte *)out->pixels + (x << 2);
+					for (int y = 0; y < out->h; ++y, p += out->pitch)
 					{
-						for(int i = -sx + 1 ; i < sx ; ++i, c += 4)
+						const int Y = y * my >> 16;
+						uint32 col[4] = {0U, 0U, 0U, 0U};
+						const int start = std::max(-sy + 1, -Y);
+						const int end = std::min(sy, in->h - Y);
+						byte *c = (byte *)tmp->pixels + (Y + start) * tmp->pitch + (X << 2);
+						if (end - start == sy2)
 						{
-							const uint32 f = kerX[abs(i)];
-							col[0] += f * c[0];
-							col[1] += f * c[1];
-							col[2] += f * c[2];
-							col[3] += f * c[3];
+							for (int i = -sy + 1; i < sy; ++i, c += tmp->pitch)
+							{
+								const uint32 f = kerY[abs(i)];
+								col[0] += f * c[0];
+								col[1] += f * c[1];
+								col[2] += f * c[2];
+								col[3] += f * c[3];
+							}
+							p[0] = byte(col[0] >> 16);
+							p[1] = byte(col[1] >> 16);
+							p[2] = byte(col[2] >> 16);
+							p[3] = byte(col[3] >> 16);
 						}
-						p[0] = byte(col[0] >> 16);
-						p[1] = byte(col[1] >> 16);
-						p[2] = byte(col[2] >> 16);
-						p[3] = byte(col[3] >> 16);
-					}
-					else
-					{
-						uint32 sum = 0U;
-						for(int i = start ; i < end ; ++i, c += 4)
+						else
 						{
-							const uint32 f = kerX[abs(i)];
-							col[0] += f * c[0];
-							col[1] += f * c[1];
-							col[2] += f * c[2];
-							col[3] += f * c[3];
-							sum += f;
+							uint32 sum = 0U;
+							for (int i = start; i < end; ++i, c += tmp->pitch)
+							{
+								const uint32 f = kerY[abs(i)];
+								col[0] += f * c[0];
+								col[1] += f * c[1];
+								col[2] += f * c[2];
+								col[3] += f * c[3];
+								sum += f;
+							}
+							p[0] = byte(col[0] / sum);
+							p[1] = byte(col[1] / sum);
+							p[2] = byte(col[2] / sum);
+							p[3] = byte(col[3] / sum);
 						}
-						p[0] = byte(col[0] / sum);
-						p[1] = byte(col[1] / sum);
-						p[2] = byte(col[2] / sum);
-						p[3] = byte(col[3] / sum);
-					}
-				}
-			}
-#pragma omp parallel for
-			for(int	x = 0 ; x < out->w ; ++x)
-			{
-				const int X = x * mx >> 16;
-				byte *p = (byte*)out->pixels + (x << 2);
-				for(int	y = 0 ; y < out->h ; ++y, p += out->pitch)
-				{
-					const int Y = y * my >> 16;
-					uint32 col[4] = { 0U, 0U, 0U, 0U };
-					const int start = std::max(-sy + 1, -Y);
-					const int end = std::min(sy, in->h - Y);
-					byte *c = (byte*)tmp->pixels + (Y + start) * tmp->pitch + (X << 2);
-					if (end - start == sy2)
-					{
-						for(int i = -sy + 1 ; i < sy ; ++i, c += tmp->pitch)
-						{
-							const uint32 f = kerY[abs(i)];
-							col[0] += f * c[0];
-							col[1] += f * c[1];
-							col[2] += f * c[2];
-							col[3] += f * c[3];
-						}
-						p[0] = byte(col[0] >> 16);
-						p[1] = byte(col[1] >> 16);
-						p[2] = byte(col[2] >> 16);
-						p[3] = byte(col[3] >> 16);
-					}
-					else
-					{
-						uint32 sum = 0U;
-						for(int i = start ; i < end ; ++i, c += tmp->pitch)
-						{
-							const uint32 f = kerY[abs(i)];
-							col[0] += f * c[0];
-							col[1] += f * c[1];
-							col[2] += f * c[2];
-							col[3] += f * c[3];
-							sum += f;
-						}
-						p[0] = byte(col[0] / sum);
-						p[1] = byte(col[1] / sum);
-						p[2] = byte(col[2] / sum);
-						p[3] = byte(col[3] / sum);
 					}
 				}
-			}
-			break;
+				break;
 		}
 		SDL_FreeSurface(tmp);
 		delete[] kerX;
@@ -743,14 +736,15 @@ namespace TA3D
 
 	inline void putpixel(SDL_Surface *bmp, int x, int y, uint32 col)
 	{
-		if (x < 0 || y < 0 || x >= bmp->w || y >= bmp->h)   return;
-		switch(bmp->format->BitsPerPixel)
+		if (x < 0 || y < 0 || x >= bmp->w || y >= bmp->h)
+			return;
+		switch (bmp->format->BitsPerPixel)
 		{
 			case 8:
 				SurfaceByte(bmp, x, y) = byte(col);
 				break;
 			case 16:
-				(((uint16*)((bmp)->pixels))[(y) * ((bmp)->pitch >> 1) + (x)]) = uint16(col);
+				(((uint16 *)((bmp)->pixels))[(y) * ((bmp)->pitch >> 1) + (x)]) = uint16(col);
 				break;
 			case 24:
 				SurfaceByte(bmp, x * 3, y) = getb32(col);
@@ -765,20 +759,21 @@ namespace TA3D
 
 	uint32 getpixel(SDL_Surface *bmp, int x, int y)
 	{
-		if (x < 0 || y < 0 || x >= bmp->w || y >= bmp->h)   return 0;
-		switch(bmp->format->BitsPerPixel)
+		if (x < 0 || y < 0 || x >= bmp->w || y >= bmp->h)
+			return 0;
+		switch (bmp->format->BitsPerPixel)
 		{
 			case 8:
 				return SurfaceByte(bmp, x, y);
 			case 16:
-				return (((uint16*)((bmp)->pixels))[(y) * ((bmp)->pitch >> 1) + (x)]);
+				return (((uint16 *)((bmp)->pixels))[(y) * ((bmp)->pitch >> 1) + (x)]);
 			case 24:
-				{
-					const int b = SurfaceByte(bmp, x * 3, y);
-					const int g = SurfaceByte(bmp, x * 3 + 1, y);
-					const int r = SurfaceByte(bmp, x * 3 + 2, y);
-					return makecol24(r,g,b);
-				}
+			{
+				const int b = SurfaceByte(bmp, x * 3, y);
+				const int g = SurfaceByte(bmp, x * 3 + 1, y);
+				const int r = SurfaceByte(bmp, x * 3 + 2, y);
+				return makecol24(r, g, b);
+			}
 			case 32:
 				return SurfaceInt(bmp, x, y);
 		};
@@ -790,59 +785,59 @@ namespace TA3D
 		const int r2 = r * r;
 		const int my = Math::Max(-r, -y);
 		const int My = Math::Min(r, bmp->h - 1 - y);
-		switch(bmp->format->BitsPerPixel)
+		switch (bmp->format->BitsPerPixel)
 		{
 			case 8:
-				for (int sy = my ; sy <= My ; ++sy)
+				for (int sy = my; sy <= My; ++sy)
 				{
 					const int dx = int(sqrtf(float(r2 - sy * sy)));
 					const int ax = Math::Max(x - dx, 0);
 					const int bx = Math::Min(x + dx, bmp->w - 1);
-					memset((byte*)bmp->pixels + ax + (y + sy) * bmp->pitch, col, bx - ax + 1);
+					memset((byte *)bmp->pixels + ax + (y + sy) * bmp->pitch, col, bx - ax + 1);
 				}
 				break;
 			case 16:
-				{
-					const uint16 col16 = uint16(col);
-					for (int sy = my ; sy <= My ; ++sy)
-					{
-						const int dx = int(sqrtf(float(r - sy * sy)));
-						const int ax = Math::Max(x - dx, 0);
-						const int bx = Math::Min(x + dx, bmp->w - 1);
-						uint16 *p = (uint16*)bmp->pixels + ax + (y + sy) * (bmp->pitch >> 1);
-						for (uint16 *end = p + bx - ax + 1; p != end ; ++p)
-							*p = col16;
-					}
-				}
-				break;
-			case 24:
-				{
-					const byte colb = getb32(col);
-					const byte colg = getg32(col);
-					const byte colr = getr32(col);
-					for (int sy = my ; sy <= My ; ++sy)
-					{
-						const int dx = int(sqrtf(float(r - sy * sy)));
-						const int ax = Math::Max(x - dx, 0);
-						const int bx = Math::Min(x + dx, bmp->w - 1);
-						byte *p = (byte*)bmp->pixels + ax * 3 + (y + sy) * bmp->pitch;
-						for (byte *end = p + (bx - ax + 1) * 3 ; p != end ; ++p)
-						{
-							*p++ = colb;
-							*p++ = colg;
-							*p = colr;
-						}
-					}
-				}
-				break;
-			case 32:
-				for (int sy = my ; sy <= My ; ++sy)
+			{
+				const uint16 col16 = uint16(col);
+				for (int sy = my; sy <= My; ++sy)
 				{
 					const int dx = int(sqrtf(float(r - sy * sy)));
 					const int ax = Math::Max(x - dx, 0);
 					const int bx = Math::Min(x + dx, bmp->w - 1);
-					uint32 *p = (uint32*)bmp->pixels + ax + (y + sy) * (bmp->pitch >> 2);
-					for (uint32 *end = p + bx - ax + 1; p != end ; ++p)
+					uint16 *p = (uint16 *)bmp->pixels + ax + (y + sy) * (bmp->pitch >> 1);
+					for (uint16 *end = p + bx - ax + 1; p != end; ++p)
+						*p = col16;
+				}
+			}
+			break;
+			case 24:
+			{
+				const byte colb = getb32(col);
+				const byte colg = getg32(col);
+				const byte colr = getr32(col);
+				for (int sy = my; sy <= My; ++sy)
+				{
+					const int dx = int(sqrtf(float(r - sy * sy)));
+					const int ax = Math::Max(x - dx, 0);
+					const int bx = Math::Min(x + dx, bmp->w - 1);
+					byte *p = (byte *)bmp->pixels + ax * 3 + (y + sy) * bmp->pitch;
+					for (byte *end = p + (bx - ax + 1) * 3; p != end; ++p)
+					{
+						*p++ = colb;
+						*p++ = colg;
+						*p = colr;
+					}
+				}
+			}
+			break;
+			case 32:
+				for (int sy = my; sy <= My; ++sy)
+				{
+					const int dx = int(sqrtf(float(r - sy * sy)));
+					const int ax = Math::Max(x - dx, 0);
+					const int bx = Math::Min(x + dx, bmp->w - 1);
+					uint32 *p = (uint32 *)bmp->pixels + ax + (y + sy) * (bmp->pitch >> 2);
+					for (uint32 *end = p + bx - ax + 1; p != end; ++p)
 						*p = col;
 				}
 				break;
@@ -855,27 +850,27 @@ namespace TA3D
 		SDL_FillRect(bmp, &rect, col);
 	}
 
-    void vflip_bitmap(SDL_Surface* bmp)
-    {
-		for(int y = 0 ; y < ((bmp->h + 1) >> 1) ; ++y)
-            for(int x = 0 ; x < bmp->w ; ++x)
-            {
+	void vflip_bitmap(SDL_Surface *bmp)
+	{
+		for (int y = 0; y < ((bmp->h + 1) >> 1); ++y)
+			for (int x = 0; x < bmp->w; ++x)
+			{
 				const uint32 c = getpixel(bmp, x, y);
-                putpixel(bmp, x, y, getpixel(bmp, x, bmp->h - 1 - y));
-                putpixel(bmp, x, bmp->h - 1 - y, c);
-            }
-    }
+				putpixel(bmp, x, y, getpixel(bmp, x, bmp->h - 1 - y));
+				putpixel(bmp, x, bmp->h - 1 - y, c);
+			}
+	}
 
-    void hflip_bitmap(SDL_Surface* bmp)
-    {
-        for(int y = 0 ; y < bmp->h ; ++y)
-			for(int x = 0 ; x < ((bmp->w + 1) >> 1) ; ++x)
-            {
+	void hflip_bitmap(SDL_Surface *bmp)
+	{
+		for (int y = 0; y < bmp->h; ++y)
+			for (int x = 0; x < ((bmp->w + 1) >> 1); ++x)
+			{
 				const uint32 c = getpixel(bmp, x, y);
-                putpixel(bmp, x, y, getpixel(bmp, bmp->w - 1 - x, y));
-                putpixel(bmp, bmp->w - 1 - x, y, c);
-            }
-    }
+				putpixel(bmp, x, y, getpixel(bmp, bmp->w - 1 - x, y));
+				putpixel(bmp, bmp->w - 1 - x, y, c);
+			}
+	}
 
 	void SaveTex(SDL_Surface *bmp, const String &filename)
 	{
@@ -894,14 +889,14 @@ namespace TA3D
 			int w = bmp->w;
 			int h = bmp->h;
 			int bpp = bmp->format->BitsPerPixel;
-			gzwrite( file, &w, sizeof(w));
-			gzwrite( file, &h, sizeof(h));
-			gzwrite( file, &bpp, sizeof(bpp));
-			for(int y = 0 ; y < bmp->h ; y++)
-				gzwrite( file, ((char*)(bmp->pixels)) + y * bmp->pitch, bmp->w * bmp->format->BytesPerPixel);
+			gzwrite(file, &w, sizeof(w));
+			gzwrite(file, &h, sizeof(h));
+			gzwrite(file, &bpp, sizeof(bpp));
+			for (int y = 0; y < bmp->h; y++)
+				gzwrite(file, ((char *)(bmp->pixels)) + y * bmp->pitch, bmp->w * bmp->format->BytesPerPixel);
 			SDL_UnlockSurface(bmp);
 
-			gzclose( file );
+			gzclose(file);
 		}
 		else
 			LOG_ERROR("could not save file : " << filename);
@@ -913,16 +908,16 @@ namespace TA3D
 		if (file)
 		{
 			int w, h, bpp;
-			gzread( file, &w, sizeof(w));
-			gzread( file, &h, sizeof(h));
-			gzread( file, &bpp, sizeof(bpp));
+			gzread(file, &w, sizeof(w));
+			gzread(file, &h, sizeof(h));
+			gzread(file, &bpp, sizeof(bpp));
 			SDL_Surface *bmp = gfx->create_surface_ex(bpp, w, h);
 			SDL_LockSurface(bmp);
-			for(int y = 0 ; y < bmp->h ; y++)
-				gzread( file, ((char*)(bmp->pixels)) + y * bmp->pitch, bmp->w * bmp->format->BytesPerPixel);
+			for (int y = 0; y < bmp->h; y++)
+				gzread(file, ((char *)(bmp->pixels)) + y * bmp->pitch, bmp->w * bmp->format->BytesPerPixel);
 			SDL_UnlockSurface(bmp);
 
-			gzclose( file );
+			gzclose(file);
 
 			return bmp;
 		}
@@ -931,12 +926,12 @@ namespace TA3D
 		return NULL;
 	}
 
-	void save_bitmap(const String &filename, SDL_Surface* bmp)
+	void save_bitmap(const String &filename, SDL_Surface *bmp)
 	{
-		String ext = ToLower( Paths::ExtractFileExt(filename) );
+		String ext = ToLower(Paths::ExtractFileExt(filename));
 		if (ext == ".bmp")
 			SDL_SaveBMP(bmp, filename.c_str());
-		else if (ext == ".tex")                      // This is for cached texture data
+		else if (ext == ".tex") // This is for cached texture data
 			SaveTex(bmp, filename);
 		else if (ext == ".tga")
 			save_TGA(filename, bmp);
@@ -949,7 +944,7 @@ namespace TA3D
 		// imagetype 2==truecolour uncompressed,
 		// 3==b+w uncompressed (theres no implementational difference between the two)
 
-		byte id;        // image ID size (between header and image data), here 0, we don't need it
+		byte id; // image ID size (between header and image data), here 0, we don't need it
 		byte colormap;
 		byte type;
 		byte colormapSpec[5];
@@ -958,19 +953,19 @@ namespace TA3D
 		uint16 y;
 		uint16 w;
 		uint16 h;
-		uint8  bpp;
+		uint8 bpp;
 
 		byte description;
 	};
 
-	void save_TGA(const String &filename, SDL_Surface* bmp, bool compress)
+	void save_TGA(const String &filename, SDL_Surface *bmp, bool compress)
 	{
 		TGAHeader header;
 
 		header.id = 0;
 		header.colormap = 0;
 		header.type = compress ? 10 : 2; // 24/32 bits uncompressed image
-		memset( header.colormapSpec, 0, 5 );
+		memset(header.colormapSpec, 0, 5);
 
 		header.x = 0;
 		header.y = 0;
@@ -979,52 +974,52 @@ namespace TA3D
 		header.bpp = bmp->format->BitsPerPixel;
 		header.description = (header.bpp == 32) ? 0x28 : 0x20;
 
-		Stream file( filename, OpenMode::write );
+		Stream file(filename, OpenMode::write);
 
 		if (file.opened())
 		{
-			file.write( (const char*)&header, sizeof(header) );
-			if (!compress)			// Uncompressed
+			file.write((const char *)&header, sizeof(header));
+			if (!compress) // Uncompressed
 			{
-				for(int y = 0 ; y < bmp->h ; ++y)
+				for (int y = 0; y < bmp->h; ++y)
 				{
-					for(int x = 0 ; x < bmp->w ; ++x)
+					for (int x = 0; x < bmp->w; ++x)
 					{
-						switch(bmp->format->BitsPerPixel)
+						switch (bmp->format->BitsPerPixel)
 						{
-						case 8:
-							file.put( static_cast<char>(getpixel(bmp, x, y)) );
-							break;
-						case 16:
-							file.write( (const char*)bmp->pixels + ((bmp->w * y + x) << 1), 2 );
-							break;
-						case 24:
+							case 8:
+								file.put(static_cast<char>(getpixel(bmp, x, y)));
+								break;
+							case 16:
+								file.write((const char *)bmp->pixels + ((bmp->w * y + x) << 1), 2);
+								break;
+							case 24:
 							{
 								const uint32 c = getpixel(bmp, x, y);
-								file.put( static_cast<char>((bmp->format->Bmask & c) >> bmp->format->Bshift) );
-								file.put( static_cast<char>((bmp->format->Gmask & c) >> bmp->format->Gshift) );
-								file.put( static_cast<char>((bmp->format->Rmask & c) >> bmp->format->Rshift) );
+								file.put(static_cast<char>((bmp->format->Bmask & c) >> bmp->format->Bshift));
+								file.put(static_cast<char>((bmp->format->Gmask & c) >> bmp->format->Gshift));
+								file.put(static_cast<char>((bmp->format->Rmask & c) >> bmp->format->Rshift));
 							}
 							break;
-						case 32:
+							case 32:
 							{
 								const uint32 c = getpixel(bmp, x, y);
-								file.put( static_cast<char>((bmp->format->Bmask & c) >> bmp->format->Bshift) );
-								file.put( static_cast<char>((bmp->format->Gmask & c) >> bmp->format->Gshift) );
-								file.put( static_cast<char>((bmp->format->Rmask & c) >> bmp->format->Rshift) );
-								file.put( static_cast<char>((bmp->format->Amask & c) >> bmp->format->Ashift) );
+								file.put(static_cast<char>((bmp->format->Bmask & c) >> bmp->format->Bshift));
+								file.put(static_cast<char>((bmp->format->Gmask & c) >> bmp->format->Gshift));
+								file.put(static_cast<char>((bmp->format->Rmask & c) >> bmp->format->Rshift));
+								file.put(static_cast<char>((bmp->format->Amask & c) >> bmp->format->Ashift));
 							}
 							break;
 						};
 					}
 				}
 			}
-			else					// Compressed
+			else // Compressed
 			{
 				int type = 0;
 				uint32 c = 0;
 				int len = 0;
-				for(int i = 0 ; i < bmp->w * bmp->h ; ++i)
+				for (int i = 0; i < bmp->w * bmp->h; ++i)
 				{
 					int x = i % bmp->w;
 					int y = i / bmp->w;
@@ -1043,40 +1038,38 @@ namespace TA3D
 							type = 0;
 						continue;
 					}
-					if (len == 128
-						|| (type == 1 && c != getpixel(bmp, x, y))
-						|| (type == 0 && c == getpixel(bmp, x, y)))
+					if (len == 128 || (type == 1 && c != getpixel(bmp, x, y)) || (type == 0 && c == getpixel(bmp, x, y)))
 					{
-						file.put( static_cast<char>((type << 7) | (len - 1)) );
+						file.put(static_cast<char>((type << 7) | (len - 1)));
 						const int s = (type == 1) ? i - 1 : i - len;
 
-						for(int j = s ; j < i ; ++j)
+						for (int j = s; j < i; ++j)
 						{
 							x = j % bmp->w;
 							y = j / bmp->w;
-							switch(bmp->format->BitsPerPixel)
+							switch (bmp->format->BitsPerPixel)
 							{
-							case 8:
-								file.put( static_cast<char>(getpixel(bmp, x, y)) );
-								break;
-							case 16:
-								file.write( (const char*)bmp->pixels + ((bmp->w * y + x) << 1), 2 );
-								break;
-							case 24:
+								case 8:
+									file.put(static_cast<char>(getpixel(bmp, x, y)));
+									break;
+								case 16:
+									file.write((const char *)bmp->pixels + ((bmp->w * y + x) << 1), 2);
+									break;
+								case 24:
 								{
 									const uint32 c = getpixel(bmp, x, y);
-									file.put( static_cast<char>((bmp->format->Bmask & c) >> bmp->format->Bshift) );
-									file.put( static_cast<char>((bmp->format->Gmask & c) >> bmp->format->Gshift) );
-									file.put( static_cast<char>((bmp->format->Rmask & c) >> bmp->format->Rshift) );
+									file.put(static_cast<char>((bmp->format->Bmask & c) >> bmp->format->Bshift));
+									file.put(static_cast<char>((bmp->format->Gmask & c) >> bmp->format->Gshift));
+									file.put(static_cast<char>((bmp->format->Rmask & c) >> bmp->format->Rshift));
 								}
 								break;
-							case 32:
+								case 32:
 								{
 									const uint32 c = getpixel(bmp, x, y);
-									file.put( static_cast<char>((bmp->format->Bmask & c) >> bmp->format->Bshift) );
-									file.put( static_cast<char>((bmp->format->Gmask & c) >> bmp->format->Gshift) );
-									file.put( static_cast<char>((bmp->format->Rmask & c) >> bmp->format->Rshift) );
-									file.put( static_cast<char>((bmp->format->Amask & c) >> bmp->format->Ashift) );
+									file.put(static_cast<char>((bmp->format->Bmask & c) >> bmp->format->Bshift));
+									file.put(static_cast<char>((bmp->format->Gmask & c) >> bmp->format->Gshift));
+									file.put(static_cast<char>((bmp->format->Rmask & c) >> bmp->format->Rshift));
+									file.put(static_cast<char>((bmp->format->Amask & c) >> bmp->format->Ashift));
 								}
 								break;
 							};
@@ -1092,37 +1085,37 @@ namespace TA3D
 				}
 				if (len > 0)
 				{
-					file.put( static_cast<char>((type << 7) | (len - 1)) );
+					file.put(static_cast<char>((type << 7) | (len - 1)));
 					const int i = bmp->w * bmp->h;
 					int s = (type == 1) ? i - 1 : i - len;
 
-					for(int j = s ; j < i ; ++j)
+					for (int j = s; j < i; ++j)
 					{
 						int x = j % bmp->w;
 						int y = j / bmp->w;
-						switch(bmp->format->BitsPerPixel)
+						switch (bmp->format->BitsPerPixel)
 						{
-						case 8:
-							file.put( static_cast<char>(getpixel(bmp, x, y)) );
-							break;
-						case 16:
-							file.write( (const char*)bmp->pixels + ((bmp->w * y + x) << 1), 2 );
-							break;
-						case 24:
+							case 8:
+								file.put(static_cast<char>(getpixel(bmp, x, y)));
+								break;
+							case 16:
+								file.write((const char *)bmp->pixels + ((bmp->w * y + x) << 1), 2);
+								break;
+							case 24:
 							{
 								uint32 c = getpixel(bmp, x, y);
-								file.put( static_cast<char>((bmp->format->Bmask & c) >> bmp->format->Bshift) );
-								file.put( static_cast<char>((bmp->format->Gmask & c) >> bmp->format->Gshift) );
-								file.put( static_cast<char>((bmp->format->Rmask & c) >> bmp->format->Rshift) );
+								file.put(static_cast<char>((bmp->format->Bmask & c) >> bmp->format->Bshift));
+								file.put(static_cast<char>((bmp->format->Gmask & c) >> bmp->format->Gshift));
+								file.put(static_cast<char>((bmp->format->Rmask & c) >> bmp->format->Rshift));
 							}
 							break;
-						case 32:
+							case 32:
 							{
 								uint32 c = getpixel(bmp, x, y);
-								file.put( static_cast<char>((bmp->format->Bmask & c) >> bmp->format->Bshift) );
-								file.put( static_cast<char>((bmp->format->Gmask & c) >> bmp->format->Gshift) );
-								file.put( static_cast<char>((bmp->format->Rmask & c) >> bmp->format->Rshift) );
-								file.put( static_cast<char>((bmp->format->Amask & c) >> bmp->format->Ashift) );
+								file.put(static_cast<char>((bmp->format->Bmask & c) >> bmp->format->Bshift));
+								file.put(static_cast<char>((bmp->format->Gmask & c) >> bmp->format->Gshift));
+								file.put(static_cast<char>((bmp->format->Rmask & c) >> bmp->format->Rshift));
+								file.put(static_cast<char>((bmp->format->Amask & c) >> bmp->format->Ashift));
 							}
 							break;
 						};

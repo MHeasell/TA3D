@@ -9,17 +9,24 @@ namespace TA3D
 	class Mods : public ObjectSync
 	{
 	public:
-		enum ModType { MOD_ALL, MOD_INSTALLED, MOD_INSTALLABLE };
+		enum ModType
+		{
+			MOD_ALL,
+			MOD_INSTALLED,
+			MOD_INSTALLABLE
+		};
 
 		Mods();
 		~Mods();
 		void update();
 		void save();
-		ModInfo::List getModList( const ModType type = MOD_ALL );
-		String::List getModNameList( const ModType type = MOD_ALL );
+		ModInfo::List getModList(const ModType type = MOD_ALL);
+		String::List getModNameList(const ModType type = MOD_ALL);
 		ModInfo *getMod(int ID);
+
 	private:
 		ModInfo::List mods;
+
 	public:
 		static Mods *instance();
 	};

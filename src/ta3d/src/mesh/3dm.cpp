@@ -39,12 +39,10 @@
 #include <gfx/gl.extensions.h>
 #include <zlib.h>
 
-
 namespace TA3D
 {
 
 	REGISTER_MESH_TYPE(Mesh3DM);
-
 
 	void Mesh3DM::init3DM()
 	{
@@ -58,8 +56,6 @@ namespace TA3D
 		glColorTexture = 0;
 		root = NULL;
 	}
-
-
 
 	void Mesh3DM::destroy3DM()
 	{
@@ -79,10 +75,10 @@ namespace TA3D
 		bool explodes = script_index >= 0 && data_s && (data_s->data[script_index].flag & FLAG_EXPLODE);
 		bool hide = false;
 		bool set = false;
-		float color_factor[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
+		float color_factor[4] = {1.0f, 1.0f, 1.0f, 1.0f};
 		if (!tex_cache_name.empty())
 		{
-			for (unsigned int i = 0 ; i < tex_cache_name.size(); ++i)
+			for (unsigned int i = 0; i < tex_cache_name.size(); ++i)
 				load_texture_id(i);
 			tex_cache_name.clear();
 		}
@@ -124,8 +120,7 @@ namespace TA3D
 			int texID = player_color_map[side];
 			bool disableDL = ((pTex->size() > 1 && (Flag & SURFACE_TEXTURED)) || Flag & SURFACE_GLSL) && !notex;
 			bool animatedTex = false;
-			if (script_index >= 0 && data_s && (data_s->data[script_index].flag & FLAG_ANIMATED_TEXTURE)
-				&& !fixed_textures && !pTex->empty())
+			if (script_index >= 0 && data_s && (data_s->data[script_index].flag & FLAG_ANIMATED_TEXTURE) && !fixed_textures && !pTex->empty())
 			{
 				texID = ((int)(t * 10.0f)) % (int)pTex->size();
 				disableDL = false;
@@ -133,7 +128,7 @@ namespace TA3D
 			}
 			if ((int)gl_dlist.size() > texID && gl_dlist[texID] && !hide && !chg_col && !notex && !disableDL)
 			{
-				glCallList( gl_dlist[ texID ] );
+				glCallList(gl_dlist[texID]);
 				alset = false;
 				set = false;
 			}
@@ -153,16 +148,16 @@ namespace TA3D
 				if (nb_t_index > 0 && nb_vtx > 0 && t_index != NULL)
 				{
 					bool activated_tex = false;
-					glEnableClientState(GL_VERTEX_ARRAY);		// Les sommets
+					glEnableClientState(GL_VERTEX_ARRAY); // Les sommets
 					glEnableClientState(GL_NORMAL_ARRAY);
 					alset = false;
 					set = false;
 					if (!chg_col || !notex)
 					{
 						if (Flag & SURFACE_PLAYER_COLOR)
-							glColor4f(player_color[side * 3], player_color[side * 3 + 1], player_color[side * 3 + 2], float(Color & 0xFF) / 255.0f);		// Couleur de matière
+							glColor4f(player_color[side * 3], player_color[side * 3 + 1], player_color[side * 3 + 2], float(Color & 0xFF) / 255.0f); // Couleur de matière
 						else
-							glColor4ubv((GLubyte*)&Color);		// Couleur de matière
+							glColor4ubv((GLubyte *)&Color); // Couleur de matière
 					}
 					else if (chg_col && notex)
 					{
@@ -171,30 +166,30 @@ namespace TA3D
 							glColor4f(player_color[player_color_map[side] * 3] * color_factor[0],
 									  player_color[player_color_map[side] * 3 + 1] * color_factor[1],
 									  player_color[player_color_map[side] * 3 + 2] * color_factor[2],
-									  (float)geta32(Color) / 255.0f * color_factor[3]);		// Couleur de matière
+									  (float)geta32(Color) / 255.0f * color_factor[3]); // Couleur de matière
 						}
 						else
 						{
 							glColor4f((float)getr32(Color) / 255.0f * color_factor[0],
 									  (float)getg32(Color) / 255.0f * color_factor[1],
 									  (float)getb32(Color) / 255.0f * color_factor[2],
-									  (float)geta32(Color) / 255.0f * color_factor[3]);		// Couleur de matière
+									  (float)geta32(Color) / 255.0f * color_factor[3]); // Couleur de matière
 						}
 					}
 
-					if (Flag & SURFACE_GLSL)			// Using vertex and fragment programs
+					if (Flag & SURFACE_GLSL) // Using vertex and fragment programs
 					{
 						s_shader.on();
-						for (unsigned int j = 0; j < pTex->size() ; ++j)
-							s_shader.setvar1i( String("tex") << j, j );
+						for (unsigned int j = 0; j < pTex->size(); ++j)
+							s_shader.setvar1i(String("tex") << j, j);
 					}
 
-					if (Flag & SURFACE_GOURAUD)			// Type d'éclairage
-						glShadeModel (GL_SMOOTH);
+					if (Flag & SURFACE_GOURAUD) // Type d'éclairage
+						glShadeModel(GL_SMOOTH);
 					else
-						glShadeModel (GL_FLAT);
+						glShadeModel(GL_FLAT);
 
-					if (Flag & SURFACE_LIGHTED)			// Eclairage
+					if (Flag & SURFACE_LIGHTED) // Eclairage
 						glEnable(GL_LIGHTING);
 					else
 						glDisable(GL_LIGHTING);
@@ -203,7 +198,7 @@ namespace TA3D
 					{
 						if ((Flag & SURFACE_BLENDED) || (chg_col && color_factor[3] < 1.0f)) // La transparence
 						{
-							glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
+							glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 							glEnable(GL_BLEND);
 							glAlphaFunc(GL_GREATER, 0.1f);
 							glEnable(GL_ALPHA_TEST);
@@ -218,7 +213,7 @@ namespace TA3D
 					if ((Flag & SURFACE_TEXTURED) && !notex) // Les textures et effets de texture
 					{
 						activated_tex = true;
-						for (unsigned int j = 0; j < pTex->size() ; ++j)
+						for (unsigned int j = 0; j < pTex->size(); ++j)
 						{
 							glActiveTextureARB(GL_TEXTURE0_ARB + j);
 							glEnable(GL_TEXTURE_2D);
@@ -232,24 +227,24 @@ namespace TA3D
 								glTexGeni(GL_T, GL_TEXTURE_GEN_MODE, GL_SPHERE_MAP);
 								glEnable(GL_TEXTURE_GEN_S);
 								glEnable(GL_TEXTURE_GEN_T);
-								glTexEnvi(GL_TEXTURE_ENV,GL_TEXTURE_ENV_MODE, TA3D_GL_COMBINE_EXT);
-								glTexEnvi(GL_TEXTURE_ENV,TA3D_GL_COMBINE_RGB_EXT,GL_INTERPOLATE);
+								glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, TA3D_GL_COMBINE_EXT);
+								glTexEnvi(GL_TEXTURE_ENV, TA3D_GL_COMBINE_RGB_EXT, GL_INTERPOLATE);
 
-								glTexEnvi(GL_TEXTURE_ENV,TA3D_GL_SOURCE0_RGB_EXT,GL_TEXTURE);
-								glTexEnvi(GL_TEXTURE_ENV,TA3D_GL_OPERAND0_RGB_EXT,GL_SRC_COLOR);
-								glTexEnvi(GL_TEXTURE_ENV,TA3D_GL_SOURCE1_RGB_EXT,TA3D_GL_PREVIOUS_EXT);
-								glTexEnvi(GL_TEXTURE_ENV,TA3D_GL_OPERAND1_RGB_EXT,GL_SRC_COLOR);
-								glTexEnvi(GL_TEXTURE_ENV,TA3D_GL_SOURCE2_RGB_EXT,TA3D_GL_CONSTANT_EXT);
-								glTexEnvi(GL_TEXTURE_ENV,TA3D_GL_OPERAND2_RGB_EXT, GL_SRC_COLOR);
-								float RColorf[4] = { (float)getr32(RColor) / 255.0f,
-													 (float)getg32(RColor) / 255.0f,
-													 (float)getb32(RColor) / 255.0f,
-													 (float)geta32(RColor) / 255.0f};
-								glTexEnvfv(GL_TEXTURE_ENV,GL_TEXTURE_ENV_COLOR, RColorf);
+								glTexEnvi(GL_TEXTURE_ENV, TA3D_GL_SOURCE0_RGB_EXT, GL_TEXTURE);
+								glTexEnvi(GL_TEXTURE_ENV, TA3D_GL_OPERAND0_RGB_EXT, GL_SRC_COLOR);
+								glTexEnvi(GL_TEXTURE_ENV, TA3D_GL_SOURCE1_RGB_EXT, TA3D_GL_PREVIOUS_EXT);
+								glTexEnvi(GL_TEXTURE_ENV, TA3D_GL_OPERAND1_RGB_EXT, GL_SRC_COLOR);
+								glTexEnvi(GL_TEXTURE_ENV, TA3D_GL_SOURCE2_RGB_EXT, TA3D_GL_CONSTANT_EXT);
+								glTexEnvi(GL_TEXTURE_ENV, TA3D_GL_OPERAND2_RGB_EXT, GL_SRC_COLOR);
+								float RColorf[4] = {(float)getr32(RColor) / 255.0f,
+													(float)getg32(RColor) / 255.0f,
+													(float)getb32(RColor) / 255.0f,
+													(float)geta32(RColor) / 255.0f};
+								glTexEnvfv(GL_TEXTURE_ENV, GL_TEXTURE_ENV_COLOR, RColorf);
 							}
 							else
 							{
-								glTexEnvi(GL_TEXTURE_ENV,GL_TEXTURE_ENV_MODE,GL_MODULATE);
+								glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 								glDisable(GL_TEXTURE_GEN_S);
 								glDisable(GL_TEXTURE_GEN_T);
 								glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -258,7 +253,7 @@ namespace TA3D
 							if (animatedTex)
 								break;
 						}
-						for (unsigned int j = 0; j < pTex->size() ; ++j)
+						for (unsigned int j = 0; j < pTex->size(); ++j)
 						{
 							glClientActiveTextureARB(GL_TEXTURE0_ARB + j);
 							glEnableClientState(GL_TEXTURE_COORD_ARRAY);
@@ -282,34 +277,34 @@ namespace TA3D
 					}
 					glVertexPointer(3, GL_FLOAT, 0, points);
 					glNormalPointer(GL_FLOAT, 0, N);
-					switch(type)
+					switch (type)
 					{
 						case MESH_TYPE_TRIANGLES:
-							glDrawRangeElements(GL_TRIANGLES, 0, nb_vtx - 1, nb_t_index, GL_UNSIGNED_SHORT, t_index);				// draw everything
+							glDrawRangeElements(GL_TRIANGLES, 0, nb_vtx - 1, nb_t_index, GL_UNSIGNED_SHORT, t_index); // draw everything
 							break;
 						case MESH_TYPE_TRIANGLE_STRIP:
-							glDisable( GL_CULL_FACE );
-							glDrawRangeElements(GL_TRIANGLE_STRIP, 0, nb_vtx - 1, nb_t_index, GL_UNSIGNED_SHORT, t_index);		// draw everything
-							glEnable( GL_CULL_FACE );
+							glDisable(GL_CULL_FACE);
+							glDrawRangeElements(GL_TRIANGLE_STRIP, 0, nb_vtx - 1, nb_t_index, GL_UNSIGNED_SHORT, t_index); // draw everything
+							glEnable(GL_CULL_FACE);
 							break;
 					};
 
-					if ((Flag&(SURFACE_ADVANCED | SURFACE_GOURAUD)) == SURFACE_ADVANCED)
-						glShadeModel (GL_SMOOTH);
-					if ((Flag&SURFACE_GLSL) && (Flag&SURFACE_ADVANCED))			// Using vertex and fragment programs
+					if ((Flag & (SURFACE_ADVANCED | SURFACE_GOURAUD)) == SURFACE_ADVANCED)
+						glShadeModel(GL_SMOOTH);
+					if ((Flag & SURFACE_GLSL) && (Flag & SURFACE_ADVANCED)) // Using vertex and fragment programs
 						s_shader.off();
 					glDisable(GL_ALPHA_TEST);
 
 					if (activated_tex)
 					{
-						for (unsigned int j = 0; j < pTex->size() ; ++j)
+						for (unsigned int j = 0; j < pTex->size(); ++j)
 						{
 							glClientActiveTextureARB(GL_TEXTURE0_ARB + j);
 							glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 
 							glActiveTextureARB(GL_TEXTURE0_ARB + j);
 							glDisable(GL_TEXTURE_2D);
-							glTexEnvi(GL_TEXTURE_ENV,GL_TEXTURE_ENV_MODE,GL_MODULATE);
+							glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 							glDisable(GL_TEXTURE_GEN_S);
 							glDisable(GL_TEXTURE_GEN_T);
 							glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -332,11 +327,11 @@ namespace TA3D
 				glDisable(GL_TEXTURE_2D);
 				glDisable(GL_FOG);
 				if (!set)
-					glVertexPointer( 3, GL_FLOAT, 0, points);
-				glColor3ub(0,0xFF,0);
-				glTranslatef( 0.0f, 2.0f, 0.0f );
-				glDrawRangeElements(GL_LINE_LOOP, 0, nb_vtx-1, 4,GL_UNSIGNED_SHORT,sel);		// dessine la primitive de sélection
-				glTranslatef( 0.0f, -2.0f, 0.0f );
+					glVertexPointer(3, GL_FLOAT, 0, points);
+				glColor3ub(0, 0xFF, 0);
+				glTranslatef(0.0f, 2.0f, 0.0f);
+				glDrawRangeElements(GL_LINE_LOOP, 0, nb_vtx - 1, 4, GL_UNSIGNED_SHORT, sel); // dessine la primitive de sélection
+				glTranslatef(0.0f, -2.0f, 0.0f);
 				if (notex)
 				{
 					const byte var = (byte)abs(0xFF - (msec_timer % 1000) * 0x200 / 1000);
@@ -351,7 +346,7 @@ namespace TA3D
 			if (chg_col)
 				glColor4fv(color_factor);
 			if (child && !(explodes && !exploding_parts))
-				alset = child->draw(t, data_s, sel_primitive, alset, notex, side, chg_col, exploding_parts && !explodes );
+				alset = child->draw(t, data_s, sel_primitive, alset, notex, side, chg_col, exploding_parts && !explodes);
 			glPopMatrix();
 		}
 		if (next)
@@ -371,35 +366,35 @@ namespace TA3D
 
 		if (nb_t_index > 0 && nb_vtx > 0 && t_index != NULL)
 		{
-			glEnableClientState(GL_VERTEX_ARRAY);		// Les sommets
+			glEnableClientState(GL_VERTEX_ARRAY); // Les sommets
 			glEnableClientState(GL_NORMAL_ARRAY);
 			alset = false;
 
 			std::vector<GLuint> *pTex = (Flag & SURFACE_ROOT_TEXTURE) ? &(root->gltex) : &gltex;
 
-			if (Flag & SURFACE_GLSL)			// Using vertex and fragment programs
+			if (Flag & SURFACE_GLSL) // Using vertex and fragment programs
 			{
 				s_shader.on();
-				for (unsigned int j = 0; j < pTex->size() ; ++j)
-					s_shader.setvar1i( String("tex") << j, j + 1 );
+				for (unsigned int j = 0; j < pTex->size(); ++j)
+					s_shader.setvar1i(String("tex") << j, j + 1);
 			}
 
-			if (Flag & SURFACE_GOURAUD)			// Type d'éclairage
-				glShadeModel (GL_SMOOTH);
+			if (Flag & SURFACE_GOURAUD) // Type d'éclairage
+				glShadeModel(GL_SMOOTH);
 			else
-				glShadeModel (GL_FLAT);
+				glShadeModel(GL_FLAT);
 
-			if (Flag & SURFACE_LIGHTED)			// Eclairage
+			if (Flag & SURFACE_LIGHTED) // Eclairage
 				glEnable(GL_LIGHTING);
 			else
 				glDisable(GL_LIGHTING);
 
 			if (Flag & SURFACE_BLENDED) // La transparence
 			{
-				glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
+				glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 				glEnable(GL_BLEND);
-				glAlphaFunc( GL_GREATER, 0.1f );
-				glEnable( GL_ALPHA_TEST );
+				glAlphaFunc(GL_GREATER, 0.1f);
+				glEnable(GL_ALPHA_TEST);
 			}
 			else
 			{
@@ -414,7 +409,7 @@ namespace TA3D
 			glBindTexture(GL_TEXTURE_2D, glColorTexture);
 			glTexCoordPointer(2, GL_FLOAT, 0, tcoord);
 
-			for (unsigned int j = 0; j < pTex->size() ; ++j)
+			for (unsigned int j = 0; j < pTex->size(); ++j)
 			{
 				glClientActiveTextureARB(GL_TEXTURE0_ARB + j);
 				glEnableClientState(GL_TEXTURE_COORD_ARRAY);
@@ -429,49 +424,49 @@ namespace TA3D
 					glTexGeni(GL_T, GL_TEXTURE_GEN_MODE, GL_SPHERE_MAP);
 					glEnable(GL_TEXTURE_GEN_S);
 					glEnable(GL_TEXTURE_GEN_T);
-					glTexEnvi(GL_TEXTURE_ENV,GL_TEXTURE_ENV_MODE, TA3D_GL_COMBINE_EXT);
-					glTexEnvi(GL_TEXTURE_ENV,TA3D_GL_COMBINE_RGB_EXT,GL_INTERPOLATE);
+					glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, TA3D_GL_COMBINE_EXT);
+					glTexEnvi(GL_TEXTURE_ENV, TA3D_GL_COMBINE_RGB_EXT, GL_INTERPOLATE);
 
-					glTexEnvi(GL_TEXTURE_ENV,TA3D_GL_SOURCE0_RGB_EXT,GL_TEXTURE);
-					glTexEnvi(GL_TEXTURE_ENV,TA3D_GL_OPERAND0_RGB_EXT,GL_SRC_COLOR);
-					glTexEnvi(GL_TEXTURE_ENV,TA3D_GL_SOURCE1_RGB_EXT,TA3D_GL_PREVIOUS_EXT);
-					glTexEnvi(GL_TEXTURE_ENV,TA3D_GL_OPERAND1_RGB_EXT,GL_SRC_COLOR);
-					glTexEnvi(GL_TEXTURE_ENV,TA3D_GL_SOURCE2_RGB_EXT,TA3D_GL_CONSTANT_EXT);
-					glTexEnvi(GL_TEXTURE_ENV,TA3D_GL_OPERAND2_RGB_EXT, GL_SRC_COLOR);
-					float RColorf[4] = { (float)getr32(RColor) / 255.0f,
-										 (float)getg32(RColor) / 255.0f,
-										 (float)getb32(RColor) / 255.0f,
-										 (float)geta32(RColor) / 255.0f};
-					glTexEnvfv(GL_TEXTURE_ENV,GL_TEXTURE_ENV_COLOR, RColorf);
+					glTexEnvi(GL_TEXTURE_ENV, TA3D_GL_SOURCE0_RGB_EXT, GL_TEXTURE);
+					glTexEnvi(GL_TEXTURE_ENV, TA3D_GL_OPERAND0_RGB_EXT, GL_SRC_COLOR);
+					glTexEnvi(GL_TEXTURE_ENV, TA3D_GL_SOURCE1_RGB_EXT, TA3D_GL_PREVIOUS_EXT);
+					glTexEnvi(GL_TEXTURE_ENV, TA3D_GL_OPERAND1_RGB_EXT, GL_SRC_COLOR);
+					glTexEnvi(GL_TEXTURE_ENV, TA3D_GL_SOURCE2_RGB_EXT, TA3D_GL_CONSTANT_EXT);
+					glTexEnvi(GL_TEXTURE_ENV, TA3D_GL_OPERAND2_RGB_EXT, GL_SRC_COLOR);
+					float RColorf[4] = {(float)getr32(RColor) / 255.0f,
+										(float)getg32(RColor) / 255.0f,
+										(float)getb32(RColor) / 255.0f,
+										(float)geta32(RColor) / 255.0f};
+					glTexEnvfv(GL_TEXTURE_ENV, GL_TEXTURE_ENV_COLOR, RColorf);
 				}
 			}
 			glVertexPointer(3, GL_FLOAT, 0, points);
 			glNormalPointer(GL_FLOAT, 0, N);
-			switch(type)
+			switch (type)
 			{
 				case MESH_TYPE_TRIANGLES:
-					glDrawRangeElements(GL_TRIANGLES, 0, nb_vtx - 1, nb_t_index, GL_UNSIGNED_SHORT, t_index);				// draw everything
+					glDrawRangeElements(GL_TRIANGLES, 0, nb_vtx - 1, nb_t_index, GL_UNSIGNED_SHORT, t_index); // draw everything
 					break;
 				case MESH_TYPE_TRIANGLE_STRIP:
-					glDisable( GL_CULL_FACE );
-					glDrawRangeElements(GL_TRIANGLE_STRIP, 0, nb_vtx - 1, nb_t_index, GL_UNSIGNED_SHORT, t_index);		// draw everything
-					glEnable( GL_CULL_FACE );
+					glDisable(GL_CULL_FACE);
+					glDrawRangeElements(GL_TRIANGLE_STRIP, 0, nb_vtx - 1, nb_t_index, GL_UNSIGNED_SHORT, t_index); // draw everything
+					glEnable(GL_CULL_FACE);
 					break;
 			};
 
-			if ((Flag&(SURFACE_ADVANCED | SURFACE_GOURAUD)) == SURFACE_ADVANCED)
-				glShadeModel (GL_SMOOTH);
-			if ((Flag&SURFACE_GLSL) && (Flag&SURFACE_ADVANCED))			// Using vertex and fragment programs
+			if ((Flag & (SURFACE_ADVANCED | SURFACE_GOURAUD)) == SURFACE_ADVANCED)
+				glShadeModel(GL_SMOOTH);
+			if ((Flag & SURFACE_GLSL) && (Flag & SURFACE_ADVANCED)) // Using vertex and fragment programs
 				s_shader.off();
 
-			for (unsigned int j = 0; j < pTex->size() + 1 ; ++j)
+			for (unsigned int j = 0; j < pTex->size() + 1; ++j)
 			{
 				glClientActiveTextureARB(GL_TEXTURE0_ARB + j);
 				glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 
 				glActiveTextureARB(GL_TEXTURE0_ARB + j);
 				glDisable(GL_TEXTURE_2D);
-				glTexEnvi(GL_TEXTURE_ENV,GL_TEXTURE_ENV_MODE,GL_MODULATE);
+				glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 				glDisable(GL_TEXTURE_GEN_S);
 				glDisable(GL_TEXTURE_GEN_T);
 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -507,7 +502,7 @@ namespace TA3D
 		name = String(tmp, len);
 
 		file->read(pos_from_parent.x);
-		if (isNaN(pos_from_parent.x))           // Some error checks
+		if (isNaN(pos_from_parent.x)) // Some error checks
 		{
 			name.clear();
 			file->close();
@@ -515,7 +510,7 @@ namespace TA3D
 		}
 
 		file->read(pos_from_parent.y);
-		if (isNaN(pos_from_parent.y))           // Some error checks
+		if (isNaN(pos_from_parent.y)) // Some error checks
 		{
 			name.clear();
 			file->close();
@@ -539,7 +534,7 @@ namespace TA3D
 		}
 		if (nb_vtx > 0)
 		{
-			points = new Vector3D[nb_vtx<<1];
+			points = new Vector3D[nb_vtx << 1];
 			file->read(points, (int)sizeof(Vector3D) * nb_vtx);
 		}
 		else
@@ -564,7 +559,7 @@ namespace TA3D
 		else
 			p_index = NULL;
 
-		file->read(nb_l_index);	// Read line data
+		file->read(nb_l_index); // Read line data
 		if (nb_l_index < 0)
 		{
 			DELETE_ARRAY(points);
@@ -606,12 +601,12 @@ namespace TA3D
 
 		float Colorf[4];
 		float RColorf[4];
-		file->read(Colorf, (int)sizeof(float) * 4);	// Read surface data
+		file->read(Colorf, (int)sizeof(float) * 4); // Read surface data
 		file->read(RColorf, (int)sizeof(float) * 4);
 		Color = makeacol32((int)(Colorf[0] * 255), (int)(Colorf[1] * 255), (int)(Colorf[2] * 255), (int)(Colorf[3] * 255));
 		RColor = makeacol32((int)(RColorf[0] * 255), (int)(RColorf[1] * 255), (int)(RColorf[2] * 255), (int)(RColorf[3] * 255));
 		file->read(Flag);
-		Flag |= SURFACE_ADVANCED;           // This is default flag ... not very useful now that 3DM and 3DO codes have been separated
+		Flag |= SURFACE_ADVANCED; // This is default flag ... not very useful now that 3DM and 3DO codes have been separated
 
 		if (Flag >= 0x200)
 		{
@@ -628,7 +623,7 @@ namespace TA3D
 		sint8 NbTex = 0;
 		file->read(NbTex);
 		bool compressed = NbTex < 0;
-		NbTex = (sint8)abs( NbTex );
+		NbTex = (sint8)abs(NbTex);
 		gltex.resize(NbTex);
 		for (int i = 0; i < NbTex; ++i)
 		{
@@ -653,7 +648,7 @@ namespace TA3D
 						for (int x = 0; x < tex->w; ++x)
 							file->read(SurfaceInt(tex, x, y));
 				}
-				catch(...)
+				catch (...)
 				{
 					destroy();
 					file->close();
@@ -668,18 +663,18 @@ namespace TA3D
 				file->read(w);
 				file->read(h);
 				file->read(bpp);
-				file->read(img_size);	// Read RGBA data
-				byte *buffer = new byte[ img_size ];
+				file->read(img_size); // Read RGBA data
+				byte *buffer = new byte[img_size];
 
 				try
 				{
 					file->read(buffer, img_size);
 
-					tex = gfx->create_surface_ex( bpp, w, h );
+					tex = gfx->create_surface_ex(bpp, w, h);
 					uLongf len = tex->w * tex->h * tex->format->BytesPerPixel;
-					uncompress ( (Bytef*) tex->pixels, &len, (Bytef*) buffer, img_size);
+					uncompress((Bytef *)tex->pixels, &len, (Bytef *)buffer, img_size);
 				}
-				catch( ... )
+				catch (...)
 				{
 					DELETE_ARRAY(buffer);
 					destroy();
@@ -697,11 +692,11 @@ namespace TA3D
 			gltex[i] = 0;
 			if (!gfx->is_texture_in_cache(cache_filename))
 			{
-				cache_filename = TA3D::Paths::Files::ReplaceExtension( cache_filename, ".tex" );
-				if (!TA3D::Paths::Exists( String(TA3D::Paths::Caches) << cache_filename ))
-					SaveTex( tex, String(TA3D::Paths::Caches) << cache_filename );
+				cache_filename = TA3D::Paths::Files::ReplaceExtension(cache_filename, ".tex");
+				if (!TA3D::Paths::Exists(String(TA3D::Paths::Caches) << cache_filename))
+					SaveTex(tex, String(TA3D::Paths::Caches) << cache_filename);
 			}
-			tex_cache_name.push_back( cache_filename );
+			tex_cache_name.push_back(cache_filename);
 
 			SDL_FreeSurface(tex);
 		}
@@ -719,24 +714,24 @@ namespace TA3D
 			file->read(shader_size);
 			buf = new char[shader_size + 1];
 			buf[shader_size] = 0;
-			file->read(buf,shader_size);
+			file->read(buf, shader_size);
 			frag_shader_src = buf;
 			DELETE_ARRAY(buf);
-			s_shader.load_memory(frag_shader_src.data(),frag_shader_src.size(),vert_shader_src.data(),vert_shader_src.size());
+			s_shader.load_memory(frag_shader_src.data(), frag_shader_src.size(), vert_shader_src.data(), vert_shader_src.size());
 		}
 
 		N = new Vector3D[nb_vtx << 1]; // Calculate normals
-		if (nb_t_index>0 && t_index != NULL)
+		if (nb_t_index > 0 && t_index != NULL)
 		{
 			F_N = new Vector3D[nb_t_index / 3];
 			for (int i = 0; i < nb_vtx; ++i)
 				N[i].reset();
 			int e = 0;
-			for (int i = 0 ; i < nb_t_index ; i += 3)
+			for (int i = 0; i < nb_t_index; i += 3)
 			{
-				Vector3D AB,AC,Normal;
-				AB = points[t_index[i+1]] - points[t_index[i]];
-				AC = points[t_index[i+2]] - points[t_index[i]];
+				Vector3D AB, AC, Normal;
+				AB = points[t_index[i + 1]] - points[t_index[i]];
+				AC = points[t_index[i + 2]] - points[t_index[i]];
 				Normal = AB * AC;
 				Normal.unit();
 				F_N[e++] = Normal;
@@ -752,13 +747,13 @@ namespace TA3D
 		if (link == 2) // Load animation data if present
 		{
 			animation_data = new Animation;
-			file->read( animation_data->type );
-			file->read( animation_data->angle_0 );
-			file->read( animation_data->angle_1 );
-			file->read( animation_data->angle_w );
-			file->read( animation_data->translate_0 );
-			file->read( animation_data->translate_1 );
-			file->read( animation_data->translate_w );
+			file->read(animation_data->type);
+			file->read(animation_data->angle_0);
+			file->read(animation_data->angle_1);
+			file->read(animation_data->angle_w);
+			file->read(animation_data->translate_0);
+			file->read(animation_data->translate_1);
+			file->read(animation_data->translate_w);
 
 			link = (byte)file->getc();
 		}
@@ -802,7 +797,7 @@ namespace TA3D
 			return NULL;
 		}
 
-		if (file->getc() == 0)       // This is a pointer file
+		if (file->getc() == 0) // This is a pointer file
 		{
 			String realFilename = file->data() + 1;
 			delete file;
@@ -825,16 +820,16 @@ namespace TA3D
 		model->mesh = mesh;
 		model->postLoadComputations();
 		Joins::computeSelection(model);
-		std::deque<Mesh3DM*> qmesh;
+		std::deque<Mesh3DM *> qmesh;
 		qmesh.push_back(mesh);
-		while(!qmesh.empty())
+		while (!qmesh.empty())
 		{
 			Mesh3DM *cur = qmesh.front();
 			qmesh.pop_front();
 			if (cur->child)
-				qmesh.push_back((Mesh3DM*)(cur->child));
+				qmesh.push_back((Mesh3DM *)(cur->child));
 			if (cur->next)
-				qmesh.push_back((Mesh3DM*)(cur->next));
+				qmesh.push_back((Mesh3DM *)(cur->next));
 			const std::vector<GLuint> *pTex = (cur->Flag & SURFACE_ROOT_TEXTURE) ? &(cur->root->gltex) : &(cur->gltex);
 			if (pTex->size() > 1)
 			{
@@ -844,7 +839,6 @@ namespace TA3D
 		}
 		return model;
 	}
-
 
 	bool Mesh3DM::has_animation_data() const
 	{
@@ -864,4 +858,3 @@ namespace TA3D
 		return ".3dm";
 	}
 } // namespace TA3D
-

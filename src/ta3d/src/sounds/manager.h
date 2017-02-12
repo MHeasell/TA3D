@@ -16,24 +16,22 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA*/
 
 #ifndef __TA3D_SOUNDS_MANAGER_H__
-# define __TA3D_SOUNDS_MANAGER_H__
+#define __TA3D_SOUNDS_MANAGER_H__
 
-# include <misc/string.h>
-# include <misc/vector.h>
-# include <misc/tdf.h>
-# include <misc/interface.h>
-# include <threads/thread.h>
-# include <list>
-# include <vector>
+#include <misc/string.h>
+#include <misc/vector.h>
+#include <misc/tdf.h>
+#include <misc/interface.h>
+#include <threads/thread.h>
+#include <list>
+#include <vector>
 
-# include <SDL/SDL_mixer.h>
-
+#include <SDL/SDL_mixer.h>
 
 namespace TA3D
 {
 	namespace Audio
 	{
-
 
 		/*! \class Manager
 		**
@@ -42,7 +40,8 @@ namespace TA3D
 		class Manager : protected TA3D::IInterface
 		{
 		public:
-			typedef SmartPtr<Manager>	Ptr;
+			typedef SmartPtr<Manager> Ptr;
+
 		public:
 			//! \name Constructor & Destructor
 			//@{
@@ -51,22 +50,22 @@ namespace TA3D
 			*/
 			Manager();
 			//! Destructor
-            virtual ~Manager();
+			virtual ~Manager();
 			//@}
 
-            /*!
+			/*!
             ** \brief Set sound volume
             ** \param The volume (0 - 128)
             */
-            void setVolume(int volume);
+			void setVolume(int volume);
 
-            /*!
+			/*!
             ** \brief Set music volume
             ** \param The volume (0 - 128)
             */
-            void setMusicVolume(int volume);
+			void setMusicVolume(int volume);
 
-            /*!
+			/*!
 			** \brief Get a copy of the playlist
 			** \param[out] The playlist
 			** \return True if the playlist is not empty, false otherwise
@@ -103,7 +102,6 @@ namespace TA3D
 			bool loadSound(const String& filename, const bool LoadAs3D, const float MinDistance = 1.0f, const float MaxDistance = 100.0f);
 
 			//@}
-
 
 			/*!
 			** \brief Switch the current mode for the music
@@ -180,8 +178,11 @@ namespace TA3D
 			/*!
 			** \brief Get if the system is running
 			*/
-            bool isRunning() {MutexLocker locker(pMutex); return m_SDLMixerRunning;}
-
+			bool isRunning()
+			{
+				MutexLocker locker(pMutex);
+				return m_SDLMixerRunning;
+			}
 
 		private:
 			/*! \class PlaylistItem
@@ -191,26 +192,26 @@ namespace TA3D
 			struct PlaylistItem
 			{
 				//! Default constructor
-                PlaylistItem() :battleTune(false), disabled(false), checked(false), cdromID(-1), trackID(0), cd(NULL) {}
+				PlaylistItem() : battleTune(false), disabled(false), checked(false), cdromID(-1), trackID(0), cd(NULL) {}
 				//! Filename
 				String filename;
 				//!
 				bool battleTune;
-                //! Only to tell the file is there
+				//! Only to tell the file is there
 				bool disabled;
 				//! Used by the playlist generator
 				bool checked;
-                //! Does it come from an audio CD ?
-                int cdromID;
-                //! What track is it ? (audio cd only)
-                int trackID;
-                //! The SDL CD handler
-                SDL_CD *cd;
+				//! Does it come from an audio CD ?
+				int cdromID;
+				//! What track is it ? (audio cd only)
+				int trackID;
+				//! The SDL CD handler
+				SDL_CD* cd;
 
 			}; // class PlaylistItem
 
 			//! Definition of a playlist
-			typedef std::vector<PlaylistItem*>  Playlist;
+			typedef std::vector<PlaylistItem*> Playlist;
 
 			/*! \class SoundItemList
 			**
@@ -218,8 +219,8 @@ namespace TA3D
 			*/
 			struct SoundItemList
 			{
-				SoundItemList() :is3DSound(false), sampleHandle(NULL), lastTimePlayed(0) {}
-				SoundItemList(const bool a3DSound) :is3DSound(a3DSound), sampleHandle(NULL), lastTimePlayed(0) {}
+				SoundItemList() : is3DSound(false), sampleHandle(NULL), lastTimePlayed(0) {}
+				SoundItemList(const bool a3DSound) : is3DSound(a3DSound), sampleHandle(NULL), lastTimePlayed(0) {}
 				~SoundItemList();
 
 				bool is3DSound;
@@ -228,14 +229,13 @@ namespace TA3D
 
 			}; // class SoundItemList
 
-
 			/*!
 			** \brief A single sound file which is currently playing
 			*/
 			struct WorkListItem
 			{
 				//! Default constructor
-				WorkListItem() :sound(NULL), vec(NULL) {}
+				WorkListItem() : sound(NULL), vec(NULL) {}
 				//! Constructor by copy
 				WorkListItem(const WorkListItem& c) : sound(c.sound), vec(c.vec) {}
 				WorkListItem(SoundItemList* s, const Vector3D* v) : sound(s), vec(v) {}
@@ -248,7 +248,7 @@ namespace TA3D
 			}; // class WorkListItem
 
 			//! The list of all currently played sounds
-			typedef std::list<WorkListItem>  WorkList;
+			typedef std::list<WorkListItem> WorkList;
 
 			/*!
 			** \brief Predicate to load all single files from a hash table
@@ -257,16 +257,16 @@ namespace TA3D
 			{
 			public:
 				LoadAllTDFSound(Manager& a) : pAudio(a) {}
-				bool operator () (const String&, const String& value)
+				bool operator()(const String&, const String& value)
 				{
 					pAudio.doLoadSound(value, false);
 					return true; // True to not stop the process
 				}
+
 			private:
 				//! Self reference
 				Manager& pAudio;
 			}; // class LoadAllTDFSound
-
 
 		private:
 			//! \name Non thread-safe methods
@@ -309,7 +309,7 @@ namespace TA3D
 
 			//@}
 
-			virtual uint32 InterfaceMsg(const uint32 MsgID, const String &msg);
+			virtual uint32 InterfaceMsg(const uint32 MsgID, const String& msg);
 
 		private:
 			//! Mutex
@@ -322,45 +322,41 @@ namespace TA3D
 			//! Are we in battle ?
 			bool m_InBattle;
 			//! Number of battle tunes
-			sint32  pBattleTunesCount;
+			sint32 pBattleTunesCount;
 			//! The complete playlist
-			Playlist  pPlaylist;
+			Playlist pPlaylist;
 
-			Mix_Music   *pMusic;
-            bool bPlayMusic;
+			Mix_Music* pMusic;
+			bool bPlayMusic;
 
-			Mix_Chunk   *pBasicSound;
+			Mix_Chunk* pBasicSound;
 
 			//! Current index to play (-1 means `none`)
-			sint32  pCurrentItemToPlay;
-            //! Current index to play (-1 means `none`)
-			sint32  pCurrentItemPlaying;
-            //!
-			uint32  pMinTicks;
+			sint32 pCurrentItemToPlay;
+			//! Current index to play (-1 means `none`)
+			sint32 pCurrentItemPlaying;
+			//!
+			uint32 pMinTicks;
 
 			//!
 			TA3D::UTILS::HashMap<SoundItemList*>::Dense pSoundList;
 			//!
-			WorkList pWorkList;	// List to store work to do when entering main thread
+			WorkList pWorkList; // List to store work to do when entering main thread
 			//!
 			sint32 fCounter;
 		}; // class Manager
-
-
-
 
 	} // namespace AUDIO
 
 	namespace VARS
 	{
 
-# ifndef TA3D_NO_SOUND // Only for the hpiview program
+#ifndef TA3D_NO_SOUND // Only for the hpiview program
 		//! The sound manager
 		extern TA3D::Audio::Manager::Ptr sound_manager;
-# endif
+#endif
 
 	} // namespace VARS
-
 
 } // namespace TA3D
 

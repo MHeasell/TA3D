@@ -23,20 +23,18 @@
 namespace TA3D
 {
 
-
-    template< typename T, typename Container = std::vector<T> >
+	template <typename T, typename Container = std::vector<T>>
 	class Stack
 	{
 	private:
-        Container container;
+		Container container;
 
 	public:
-
 		Stack() {}
 
-		~Stack()    {   container.clear();  }
+		~Stack() { container.clear(); }
 
-		void clear() {   container.clear();  }
+		void clear() { container.clear(); }
 
 		T& top()
 		{
@@ -82,17 +80,12 @@ namespace TA3D
 			return t;
 		}
 
-		bool empty() const {   return container.empty();   }
+		bool empty() const { return container.empty(); }
 
-		void push(const T &t)
+		void push(const T& t)
 		{
 			container.push_back(t);
 		}
 	};
-
-
-
-
-
 }
 #endif

@@ -15,72 +15,66 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA*/
 #ifndef __TA3D_INGAME_WEAPONS_MANAGER_H__
-# define __TA3D_INGAME_WEAPONS_MANAGER_H__
+#define __TA3D_INGAME_WEAPONS_MANAGER_H__
 
-# include <stdafx.h>
-# include <misc/string.h>
-# include "weapons.def.h"
-
+#include <stdafx.h>
+#include <misc/string.h>
+#include "weapons.def.h"
 
 namespace TA3D
 {
-
 
 	/*! \class WeaponManager
     **
     ** \brief Manager for all king of weapons
     */
 	class WeaponManager
-    {
-    public:
-        //! \name Constructor & Destructor
-        //@{
-        //! Default constructor
+	{
+	public:
+		//! \name Constructor & Destructor
+		//@{
+		//! Default constructor
 		WeaponManager();
-        //! Destructor
+		//! Destructor
 		~WeaponManager();
-        //@}
+		//@}
 
-        void init();
-        void destroy();
+		void init();
+		void destroy();
 
-        /*!
+		/*!
         ** \brief Add a weapon in the list
         ** \param name
         ** \return
         */
-        int add_weapon(const String &name);
+		int add_weapon(const String &name);
 
-        /*!
+		/*!
         ** \brief Load a TDF file
         */
 		void load_tdf(File *file);
 
-        /*!
+		/*!
         ** \brief
         ** \param name
         */
-        int get_weapon_index(const String &name)
-        {
+		int get_weapon_index(const String &name)
+		{
 			return (name.empty() || nb_weapons <= 0) ? -1 : (weapon_hashtable[ToLower(name)] - 1);
-        }
+		}
 
-
-    public:
-        //! Count of registered weapons
-        int	nb_weapons;
-		std::vector< WeaponDef > weapon;
-        //! Animation for firing
-        Gaf::Animation cannonshell;
+	public:
+		//! Count of registered weapons
+		int nb_weapons;
+		std::vector<WeaponDef> weapon;
+		//! Animation for firing
+		Gaf::Animation cannonshell;
 		//! hashtable used to speed up operations on WeaponDef objects
-		HashMap<int>::Dense  weapon_hashtable;
+		HashMap<int>::Dense weapon_hashtable;
 
 	}; // class WeaponManager
 
-
-
 	extern WeaponManager weapon_manager;
-
 }
 
 #endif // __TA3D_INGAME_WEAPONS_MANAGER_H__

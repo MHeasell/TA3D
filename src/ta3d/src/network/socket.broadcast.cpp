@@ -4,13 +4,13 @@
 namespace TA3D
 {
 
-    void SocketBroadCast::open(const String& /*hostname*/, uint16 port)
-    {
-        open(port);
-    }
+	void SocketBroadCast::open(const String& /*hostname*/, uint16 port)
+	{
+		open(port);
+	}
 
-    void SocketBroadCast::open(uint16 port)
-    {
-        SocketUDP::open( "255.255.255.255", port );
-    }
+	void SocketBroadCast::open(uint16 port)
+	{
+		SocketUDP::open("255.255.255.255", port);
+	}
 }

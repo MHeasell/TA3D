@@ -21,43 +21,40 @@
 namespace TA3D
 {
 
-
-    FXElectric::FXElectric(const Vector3D& P)
-        : Pos(P), life(1.0f)
-    {
+	FXElectric::FXElectric(const Vector3D& P)
+		: Pos(P), life(1.0f)
+	{
 		U.x = static_cast<float>(Math::RandomTable() % 201) * 0.01f - 1.0f;
 		U.y = static_cast<float>(Math::RandomTable() % 201) * 0.01f - 1.0f;
 		U.z = static_cast<float>(Math::RandomTable() % 201) * 0.01f - 1.0f;
 
-        V.x = 1.0f; V.y = 0.0f; V.z = 0.0f;
-        V = V * U;
-        V.unit();
+		V.x = 1.0f;
+		V.y = 0.0f;
+		V.z = 0.0f;
+		V = V * U;
+		V.unit();
 
-        U = V * U;
-        U.unit();
-    }
+		U = V * U;
+		U.unit();
+	}
 
+	bool FXElectric::move(const float dt)
+	{
+		life -= dt;
+		// When it shoud die, return true
+		return (life <= 0.0f);
+	}
 
-
-    bool FXElectric::move(const float dt)
-    {
-        life -= dt;
-        // When it shoud die, return true
-        return (life <= 0.0f);
-    }
-
-
-
-    void FXElectric::draw()
-    {
-        float start = 2.0f * life * PI;
-        float end   = start + 1.0f;
-        static const float step = 0.1f;
+	void FXElectric::draw()
+	{
+		float start = 2.0f * life * PI;
+		float end = start + 1.0f;
+		static const float step = 0.1f;
 		Vector3D p;
 
-        glBegin(GL_LINE_STRIP);
-        for (float i = start; i <= end; i += step)
-        {
+		glBegin(GL_LINE_STRIP);
+		for (float i = start; i <= end; i += step)
+		{
 			glColor4ub(static_cast<GLubyte>(0x70 + (Math::RandomTable() & 0x1F)),
 					   static_cast<GLubyte>(0x70 + (Math::RandomTable() & 0x1F)),
 					   static_cast<GLubyte>(0xFF - ((int)Math::RandomTable() & 0xF)),
@@ -69,12 +66,9 @@ namespace TA3D
 			p.x += static_cast<float>(Math::RandomTable() % 61) * 0.01f - 0.3f;
 			p.y += static_cast<float>(Math::RandomTable() % 61) * 0.01f - 0.3f;
 			p.z += static_cast<float>(Math::RandomTable() % 61) * 0.01f - 0.3f;
-			glVertex3fv((const GLfloat*) &p);
-        }
-        glEnd();
-    }
-
-
+			glVertex3fv((const GLfloat*)&p);
+		}
+		glEnd();
+	}
 
 } // namespace TA3D
-

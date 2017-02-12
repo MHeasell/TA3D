@@ -26,21 +26,21 @@
 #ifndef __CLASSE_3DO
 #define __CLASSE_3DO
 
-# include <stdafx.h>
-# include <misc/string.h>
-# include <misc/hash_table.h>
-# include <ta3dbase.h>
-# include <gaf.h>
-# include <vector>
-# include <misc/matrix.h>
-# include <gfx/glfunc.h>
-# include <gfx/shader.h>
-# include <scripts/script.data.h>
-# include "mesh.h"
+#include <stdafx.h>
+#include <misc/string.h>
+#include <misc/hash_table.h>
+#include <ta3dbase.h>
+#include <gaf.h>
+#include <vector>
+#include <misc/matrix.h>
+#include <gfx/glfunc.h>
+#include <gfx/shader.h>
+#include <scripts/script.data.h>
+#include "mesh.h"
 
 namespace TA3D
 {
-	struct tagObject				// Structure pour l'en-tête du fichier
+	struct tagObject // Structure pour l'en-tête du fichier
 	{
 		tagObject()
 		{
@@ -49,19 +49,19 @@ namespace TA3D
 		}
 		~tagObject() {}
 
-		int		VersionSignature;
-		int		NumberOfVertexes;
-		int		NumberOfPrimitives;
-		int		OffsetToselectionPrimitive;
-		int		XFromParent;
-		int		YFromParent;
-		int		ZFromParent;
-		int		OffsetToObjectName;
-		int		Always_0;
-		int		OffsetToVertexArray;
-		int		OffsetToPrimitiveArray;
-		int		OffsetToSiblingObject;
-		int		OffsetToChildObject;
+		int VersionSignature;
+		int NumberOfVertexes;
+		int NumberOfPrimitives;
+		int OffsetToselectionPrimitive;
+		int XFromParent;
+		int YFromParent;
+		int ZFromParent;
+		int OffsetToObjectName;
+		int Always_0;
+		int OffsetToVertexArray;
+		int OffsetToPrimitiveArray;
+		int OffsetToSiblingObject;
+		int OffsetToChildObject;
 	};
 
 	struct tagPrimitive
@@ -72,46 +72,46 @@ namespace TA3D
 		}
 		~tagPrimitive() {}
 
-		int		ColorIndex;
-		int		NumberOfVertexIndexes;
-		int		Always_0;
-		int		OffsetToVertexIndexArray;
-		int		OffsetToTextureName;
-		int		Unknown_1;
-		int		Unknown_2;
-		int		IsColored;
+		int ColorIndex;
+		int NumberOfVertexIndexes;
+		int Always_0;
+		int OffsetToVertexIndexArray;
+		int OffsetToTextureName;
+		int Unknown_1;
+		int Unknown_2;
+		int IsColored;
 	};
 
-	struct tagVertex		// Structure pour lire les coordonnées des points
+	struct tagVertex // Structure pour lire les coordonnées des points
 	{
 		tagVertex()
-			:x(0), y(0), z(0)
-		{}
+			: x(0), y(0), z(0)
+		{
+		}
 		~tagVertex() {}
-		int	x;
-		int	y;
-		int	z;
+		int x;
+		int y;
+		int z;
 	};
 
-	class Mesh3DO : public Mesh        // Classe pour la gestion des (sous-)objets des modèles 3do
-    {
-    public:
-
+	class Mesh3DO : public Mesh // Classe pour la gestion des (sous-)objets des modèles 3do
+	{
+	public:
 		int load(File *file, int dec = 0, const String &filename = String());
-        void create_from_2d(SDL_Surface *bmp,float w,float h,float max_h);
+		void create_from_2d(SDL_Surface *bmp, float w, float h, float max_h);
 
 		virtual bool draw(float t, AnimationData *data_s = NULL, bool sel_primitive = false, bool alset = false, bool notex = false, int side = 0, bool chg_col = true, bool exploding_parts = false);
-        virtual bool draw_nodl(bool alset = false);
+		virtual bool draw_nodl(bool alset = false);
 
-        void init3DO();
+		void init3DO();
 
-		inline Mesh3DO() {init3DO();}
+		inline Mesh3DO() { init3DO(); }
 
-        void destroy3DO();
+		void destroy3DO();
 
-		virtual ~Mesh3DO() {destroy3DO();}
+		virtual ~Mesh3DO() { destroy3DO(); }
 
-    public:
+	public:
 		static Model *load(const String &filename);
 		static const char *getExt();
 	};

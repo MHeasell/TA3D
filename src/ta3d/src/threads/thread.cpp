@@ -19,7 +19,6 @@
 #include <logs/logs.h>
 #include <typeinfo>
 
-
 namespace TA3D
 {
 	Thread::Thread() : pDead(1), threadObj()

@@ -24,85 +24,82 @@
 
 namespace TA3D
 {
-	UnitScriptInterface *UnitScriptInterface::instanciate( ScriptData::Ptr data )
-    {
-        UnitScriptInterface *usi = NULL;
+	UnitScriptInterface *UnitScriptInterface::instanciate(ScriptData::Ptr data)
+	{
+		UnitScriptInterface *usi = NULL;
 
-		if ( dynamic_cast<CobScript*>(data) )          // Try CobScript (OTA COB/BOS)
-            usi = new CobVm();
-		else if ( dynamic_cast<LuaData*>(data) )       // Try LuaData (Lua)
-            usi = new UnitScript();
+		if (dynamic_cast<CobScript *>(data)) // Try CobScript (OTA COB/BOS)
+			usi = new CobVm();
+		else if (dynamic_cast<LuaData *>(data)) // Try LuaData (Lua)
+			usi = new UnitScript();
 
 		if (usi)
-			usi->load( data );
+			usi->load(data);
 		else
 			usi = new NoScript();
 		return usi;
-    }
+	}
 
-    int UnitScriptInterface::getReturnValue(const String &name)
-    {
-        if (caller)
-            return (static_cast<UnitScriptInterface*>(caller))->getReturnValue( name );
+	int UnitScriptInterface::getReturnValue(const String &name)
+	{
+		if (caller)
+			return (static_cast<UnitScriptInterface *>(caller))->getReturnValue(name);
 		return return_value[ToUpper(name)];
-    }
+	}
 
-    void UnitScriptInterface::setReturnValue(const String &name, int value)
-    {
-        if (caller)
-            (static_cast<UnitScriptInterface*>(caller))->setReturnValue( name, value );
-        else
+	void UnitScriptInterface::setReturnValue(const String &name, int value)
+	{
+		if (caller)
+			(static_cast<UnitScriptInterface *>(caller))->setReturnValue(name, value);
+		else
 			return_value[ToUpper(name)] = value;
-    }
+	}
 
-    const char *UnitScriptInterface::script_name[] =
-        {
-            "QueryPrimary","AimPrimary","FirePrimary",
-            "QuerySecondary","AimSecondary","FireSecondary",
-            "QueryTertiary","AimTertiary","FireTertiary",
-            "TargetCleared","StopBuilding","Stop",
-            "StartBuilding","Go","Killed",
-            "StopMoving","Deactivate","Activate",
-			"Create","MotionControl","StartMoving",
-            "MoveRate1","MoveRate2","MoveRate3",
-            "RequestState","TransportPickup","TransportDrop",
-            "QueryTransport","BeginTransport","EndTransport",
-            "SetSpeed","SetDirection","SetMaxReloadTime",
-            "QueryBuildInfo","SweetSpot","RockUnit",
-            "QueryLandingPad","SetSFXoccupy", "HitByWeapon",
-            "QueryNanoPiece", "AimFromPrimary", "AimFromSecondary",
-            "AimFromTertiary"
-        };
-
+	const char *UnitScriptInterface::script_name[] =
+		{
+			"QueryPrimary", "AimPrimary", "FirePrimary",
+			"QuerySecondary", "AimSecondary", "FireSecondary",
+			"QueryTertiary", "AimTertiary", "FireTertiary",
+			"TargetCleared", "StopBuilding", "Stop",
+			"StartBuilding", "Go", "Killed",
+			"StopMoving", "Deactivate", "Activate",
+			"Create", "MotionControl", "StartMoving",
+			"MoveRate1", "MoveRate2", "MoveRate3",
+			"RequestState", "TransportPickup", "TransportDrop",
+			"QueryTransport", "BeginTransport", "EndTransport",
+			"SetSpeed", "SetDirection", "SetMaxReloadTime",
+			"QueryBuildInfo", "SweetSpot", "RockUnit",
+			"QueryLandingPad", "SetSFXoccupy", "HitByWeapon",
+			"QueryNanoPiece", "AimFromPrimary", "AimFromSecondary",
+			"AimFromTertiary"};
 
 	const String UnitScriptInterface::get_script_name(int id)
 	{
 		if (id < 0)
 			return String();
-		if (id >= NB_SCRIPT)            // Special case for weapons
+		if (id >= NB_SCRIPT) // Special case for weapons
 		{
 			const int weaponID = (id - NB_SCRIPT) / 4 + 4;
-			switch((id - NB_SCRIPT) % 4)
+			switch ((id - NB_SCRIPT) % 4)
 			{
-				case 0:         // QueryWeapon
+				case 0: // QueryWeapon
 					return String("QueryWeapon") << weaponID;
-				case 1:         // AimWeapon
+				case 1: // AimWeapon
 					return String("AimWeapon") << weaponID;
-				case 2:         // AimFromWeapon
+				case 2: // AimFromWeapon
 					return String("AimFromWeapon") << weaponID;
-				case 3:         // FireWeapon
+				case 3: // FireWeapon
 					return String("FireWeapon") << weaponID;
 			}
 		}
 		return script_name[id];
 	}
 
-
-    int UnitScriptInterface::get_script_id(const String &name)
-    {
-        for(int id = 0 ; id < NB_SCRIPT ; id++)
+	int UnitScriptInterface::get_script_id(const String &name)
+	{
+		for (int id = 0; id < NB_SCRIPT; id++)
 			if (strcasecmp(script_name[id], name.c_str()) == 0)
-                return id;
-        return -1;
-    }
+				return id;
+		return -1;
+	}
 }

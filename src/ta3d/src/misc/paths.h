@@ -16,117 +16,109 @@
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA*/
 
 #ifndef _TA3D_TOOLS_PATHS_H__
-# define _TA3D_TOOLS_PATHS_H__
+#define _TA3D_TOOLS_PATHS_H__
 
-# include <stdafx.h>
-# include "string.h"
-# include <vector>
-# include <list>
-
-
+#include <stdafx.h>
+#include "string.h"
+#include <vector>
+#include <list>
 
 namespace TA3D
 {
 
-
-/*
+	/*
 ** \brief Path manipulation functions
 */
-namespace Paths
-{
+	namespace Paths
+	{
 
-	//! \name Relevant paths used by TA3D
-	//@{
+		//! \name Relevant paths used by TA3D
+		//@{
 
-	//! Absolute path where the application is located (extracted from argv)
-	extern String ApplicationRoot;
+		//! Absolute path where the application is located (extracted from argv)
+		extern String ApplicationRoot;
 
-	//! Folder for Caches
-	extern String Caches;
+		//! Folder for Caches
+		extern String Caches;
 
-	//! Folder for Savegames
-	extern String Savegames;
+		//! Folder for Savegames
+		extern String Savegames;
 
-	//! Folder for logs
-	extern String Logs;
-	//! Current log file
-	//! \see Logs::writeToFile()
-	extern String LogFile;
+		//! Folder for logs
+		extern String Logs;
+		//! Current log file
+		//! \see Logs::writeToFile()
+		extern String LogFile;
 
-	//! Folder for preferences
-	extern String Preferences;
+		//! Folder for preferences
+		extern String Preferences;
 
-	//! Configuration file
-	extern String ConfigFile;
+		//! Configuration file
+		extern String ConfigFile;
 
-	//! Folder for screenshots
-	extern String Screenshots;
+		//! Folder for screenshots
+		extern String Screenshots;
 
-	//! Folder for game resources
-	extern String Resources;
+		//! Folder for game resources
+		extern String Resources;
 
-	//@}
+//@}
 
+//! \name System-dependant variables
+//@{
 
-	//! \name System-dependant variables
-	//@{
+//! The path-separator character according to the platform
+#ifdef TA3D_PLATFORM_WINDOWS
+		const char Separator = '\\';
+#else
+		const char Separator = '/';
+#endif
 
-	//! The path-separator character according to the platform
-# ifdef TA3D_PLATFORM_WINDOWS
-	const char Separator = '\\';
-# else
-	const char Separator = '/';
-# endif
+//! The path-separator character according to the platform (stored in a string instead of a char)
+#ifdef TA3D_PLATFORM_WINDOWS
+		const String SeparatorAsString = "\\";
+#else
+		const String SeparatorAsString = "/";
+#endif
 
-	//! The path-separator character according to the platform (stored in a string instead of a char)
-# ifdef TA3D_PLATFORM_WINDOWS
-	const String SeparatorAsString = "\\";
-# else
-	const String SeparatorAsString = "/";
-# endif
+#ifdef TA3D_PLATFORM_WINDOWS
+		//! The folder for local data (Windows only)
+		extern String LocalData;
+#endif
 
-# ifdef TA3D_PLATFORM_WINDOWS
-	//! The folder for local data (Windows only)
-	extern String LocalData;
-# endif
+		//@}
 
-	//@}
+		//! \name Folders handling
+		//@{
 
-
-
-
-
-	//! \name Folders handling
-	//@{
-
-	/*!
+		/*!
 	** \brief Test if a file/folder exists
 	** \param p The folder/filename to test
 	** \return True if it exists, false otherwise
 	*/
-	bool Exists(const String& p);
+		bool Exists(const String& p);
 
-	/*!
+		/*!
 	** \brief Create Path Recursively
 	**
 	** \param p The path to create if it does not exist
 	** return True if the operation succeeded, false otherwise
 	*/
-	bool MakeDir(const String& p);
+		bool MakeDir(const String& p);
 
-    /*!
+		/*!
     ** \brief Remove Folder Recursively
     **
     ** \param p The folder to remove
     */
-    void RemoveDir(const String& p);
+		void RemoveDir(const String& p);
 
-	/*!
+		/*!
 	** \brief Retrieve the current directory
 	*/
-	String CurrentDirectory();
+		String CurrentDirectory();
 
-	/*!
+		/*!
 	** \brief Extract the path part of a filename
 	**
 	** The path part will be extracted according the system-dependant path-separator
@@ -141,9 +133,9 @@ namespace Paths
 	**
 	** \see Paths::Separator
 	*/
-	String ExtractFilePath(const String& p, const bool systemDependant = false);
+		String ExtractFilePath(const String& p, const bool systemDependant = false);
 
-	/*!
+		/*!
 	** \brief Extract the bare file name
 	**
 	** The file name will be extracted according the last occurence
@@ -153,11 +145,11 @@ namespace Paths
 	**
 	** \see Paths::Separator
 	*/
-	String ExtractFileName(const String& p, const bool systemDependant = false);
-	void ExtractFileName(String::List& p, const bool systemDependant = false);
-	void ExtractFileName(String::Vector& p, const bool systemDependant = false);
+		String ExtractFileName(const String& p, const bool systemDependant = false);
+		void ExtractFileName(String::List& p, const bool systemDependant = false);
+		void ExtractFileName(String::Vector& p, const bool systemDependant = false);
 
-	/*!
+		/*!
 	** \brief Extract the bare file name without its extension
 	**
 	** The file name will be extracted according the last occurence
@@ -165,9 +157,9 @@ namespace Paths
 	**
 	** \see Paths::Separator
 	*/
-    String ExtractFileNameWithoutExtension(const String& p, const bool systemDependant = false);
+		String ExtractFileNameWithoutExtension(const String& p, const bool systemDependant = false);
 
-	/*!
+		/*!
 	** \brief Extract the extention of a file name
 	** \param s Filename
 	** \return The extenion of the filename (with the leading '.') in lowercase, empty if no extension is present
@@ -177,25 +169,22 @@ namespace Paths
 	**     std::cout << Paths::Files::ExtractFileExt("/usr/folder.foo/file") << std::endl; // ''
 	** \endcode
 	*/
-	String ExtractFileExt(const String& s);
+		String ExtractFileExt(const String& s);
 
-
-	/*!
+		/*!
 	** \brief Get if a path is absolute
 	**
 	** \param p The path or the filename to test
 	** \return True if the path is an absolute path or empty, false otherwise
 	*/
-	bool IsAbsolute(const String& p);
+		bool IsAbsolute(const String& p);
 
-	//@}
+		//@}
 
+		//! \name Globbing
+		//@{
 
-
-	//! \name Globbing
-	//@{
-
-	/*!
+		/*!
 	** \brief Find pathnames matching a pattern
 	**
 	** \param[out] out The list of file that has been found
@@ -217,10 +206,10 @@ namespace Paths
 	** }
 	** \endcode
 	*/
-	bool Glob(String::Vector& out, const String& pattern, const bool emptyListBefore = true, const bool relative = false);
-	bool Glob(String::List& out, const String& pattern, const bool emptyListBefore = true, const bool relative = false);
+		bool Glob(String::Vector& out, const String& pattern, const bool emptyListBefore = true, const bool relative = false);
+		bool Glob(String::List& out, const String& pattern, const bool emptyListBefore = true, const bool relative = false);
 
-	/*!
+		/*!
 	** \brief Find files matching a pattern
 	**
 	** \param[out] out The list of file that has been found
@@ -242,10 +231,10 @@ namespace Paths
 	** }
 	** \endcode
 	*/
-	bool GlobFiles(String::Vector& out, const String& pattern, const bool emptyListBefore = true, const bool relative = false);
-	bool GlobFiles(String::List& out, const String& pattern, const bool emptyListBefore = true, const bool relative = false);
+		bool GlobFiles(String::Vector& out, const String& pattern, const bool emptyListBefore = true, const bool relative = false);
+		bool GlobFiles(String::List& out, const String& pattern, const bool emptyListBefore = true, const bool relative = false);
 
-	/*!
+		/*!
 	** \brief Find directories matching a pattern
 	**
 	** \param[out] out The list of directory that has been found
@@ -267,14 +256,12 @@ namespace Paths
 	** }
 	** \endcode
 	*/
-	bool GlobDirs(String::Vector& out, const String& pattern, const bool emptyListBefore = true, const bool relative = false);
-	bool GlobDirs(String::List& out, const String& pattern, const bool emptyListBefore = true, const bool relative = false);
+		bool GlobDirs(String::Vector& out, const String& pattern, const bool emptyListBefore = true, const bool relative = false);
+		bool GlobDirs(String::List& out, const String& pattern, const bool emptyListBefore = true, const bool relative = false);
 
-	//@} // Globbing
+		//@} // Globbing
 
-
-
-	/*!
+		/*!
 	** \brief Load all informations about paths
 	**
 	** \param programName Arbitrary name for the program. It will be used
@@ -282,12 +269,9 @@ namespace Paths
 	**
 	** return False if any error has occured
 	*/
-	bool Initialize(int argc, char* argv[], const String& programName);
+		bool Initialize(int argc, char* argv[], const String& programName);
 
-
-} // namespace Paths
+	} // namespace Paths
 } // namespace TA3D
-
-
 
 #endif // _TA3D_TOOLS_PATHS_H__

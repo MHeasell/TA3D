@@ -31,8 +31,7 @@
 namespace TA3D
 {
 
-
-	void load_weapons(ProgressNotifier *progress)				// Charge toutes les armes
+	void load_weapons(ProgressNotifier *progress) // Charge toutes les armes
 	{
 		String::Vector file_list;
 		VFS::Instance()->getFilelist(String(ta3dSideData.weapon_dir) << "*.tdf", file_list);
@@ -54,17 +53,14 @@ namespace TA3D
 			}
 		}
 
-		fx_manager.fx_data = VFS::Instance()->readFile("anims\\fx.gaf");			// Load weapon animation data and stores it into a cache since it's often used
+		fx_manager.fx_data = VFS::Instance()->readFile("anims\\fx.gaf"); // Load weapon animation data and stores it into a cache since it's often used
 		if (fx_manager.fx_data)
 		{
 			weapon_manager.cannonshell.loadGAFFromRawData(fx_manager.fx_data, Gaf::RawDataGetEntryIndex(fx_manager.fx_data, "cannonshell"));
-			weapon_manager.cannonshell.convert(false,true);
+			weapon_manager.cannonshell.convert(false, true);
 			weapon_manager.cannonshell.clean();
 			// fx_data is deleted later in FXManager::destroy()
 		}
 	}
 
-
-
 } // namesapce TA3D
-

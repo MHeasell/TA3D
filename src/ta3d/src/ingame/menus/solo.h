@@ -15,68 +15,65 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA*/
 #ifndef __TA3D_INGAME_MENUS_SOLO_H__
-# define __TA3D_INGAME_MENUS_SOLO_H__
+#define __TA3D_INGAME_MENUS_SOLO_H__
 
-# include "base.h"
-
+#include "base.h"
 
 namespace TA3D
 {
-namespace Menus
-{
+	namespace Menus
+	{
 
-
-    /*! \class Solo
+		/*! \class Solo
     **
     ** \brief The Solo menu, to launch a solo campaign, a skirmish, or load a savegame
     */
-    class Solo : public Abstract
-    {
-    public:
-        /*!
+		class Solo : public Abstract
+		{
+		public:
+			/*!
         ** \brief Execute an instance of MainMenu
         */
-        static bool Execute();
+			static bool Execute();
 
-    public:
-        //! \name Constructor & Destructor
-        //@{
-        //! Default constructor
-        Solo();
-        //! Destructor
-        virtual ~Solo();
-        //@}
+		public:
+			//! \name Constructor & Destructor
+			//@{
+			//! Default constructor
+			Solo();
+			//! Destructor
+			virtual ~Solo();
+			//@}
 
-    protected:
-        virtual bool doInitialize();
-        virtual void doFinalize();
-        virtual void waitForEvent();
-        virtual bool maySwitchToAnotherMenu();
+		protected:
+			virtual bool doInitialize();
+			virtual void doFinalize();
+			virtual void waitForEvent();
+			virtual bool maySwitchToAnotherMenu();
 
-    private:
-        bool doDisplayAllSavegames();
-        /*!
+		private:
+			bool doDisplayAllSavegames();
+			/*!
         ** \brief Go to the loading room
         ** \return Always equals to false
         */
-        bool doGoMenuLoadSingleGame();
+			bool doGoMenuLoadSingleGame();
 
-        /*!
+			/*!
         ** \brief Go to Campaign menu
         ** \return Always equals to false
         */
-        bool doGoMenuCompaign();
+			bool doGoMenuCompaign();
 
-        /*!
+			/*!
         ** \brief Go to the Skirmish menu
         ** \return Always equals to false
         */
-        bool doGoMenuSkirmish();
+			bool doGoMenuSkirmish();
 
-    }; // class Solo
+		}; // class Solo
 
-
-} // namespace Menus
+	} // namespace Menus
 } // namespace TA3D
 
 #endif // __TA3D_INGAME_MENUS_SOLO_H__

@@ -15,51 +15,46 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA*/
 #ifndef __TA3D_GfxTexture_H__
-# define __TA3D_GfxTexture_H__
+#define __TA3D_GfxTexture_H__
 
-# include <sdl.h>
-# include <misc/string.h>
-
+#include <sdl.h>
+#include <misc/string.h>
 
 namespace TA3D
 {
-namespace Interfaces
-{
-
-
-	class GfxTexture
+	namespace Interfaces
 	{
-	public:
-		GfxTexture();
-		GfxTexture(const GLuint gltex, const uint32 w, const uint32 h);
-		~GfxTexture();
 
-		void init();
-		void destroy();
+		class GfxTexture
+		{
+		public:
+			GfxTexture();
+			GfxTexture(const GLuint gltex, const uint32 w, const uint32 h);
+			~GfxTexture();
 
-		void load(const String &filename);
-		void set(const GLuint gltex);
-		void draw(const float x1, const float y1, const uint32 col = 0xFFFFFFFFU, const float scale = 1.0f);
-		void drawRotated(const float x1, const float y1, const float angle, const uint32 col = 0xFFFFFFFFU, const float scale = 1.0f);
-		void drawCentered(const float x1, const float y1, const uint32 col = 0xFFFFFFFFU, const float scale = 1.0f);
-		void drawFlipped(const float x1, const float y1, const uint32 col = 0xFFFFFFFFU, const float scale = 1.0f);
-		void drawFlippedCentered(const float x1, const float y1, const uint32 col = 0xFFFFFFFFU, const float scale = 1.0f);
+			void init();
+			void destroy();
 
-		void bind();
-		GLuint get() const	{	return tex;	}
-		uint32 getWidth() const	{	return width;	}
-		uint32 getHeight() const	{	return height;	}
+			void load(const String &filename);
+			void set(const GLuint gltex);
+			void draw(const float x1, const float y1, const uint32 col = 0xFFFFFFFFU, const float scale = 1.0f);
+			void drawRotated(const float x1, const float y1, const float angle, const uint32 col = 0xFFFFFFFFU, const float scale = 1.0f);
+			void drawCentered(const float x1, const float y1, const uint32 col = 0xFFFFFFFFU, const float scale = 1.0f);
+			void drawFlipped(const float x1, const float y1, const uint32 col = 0xFFFFFFFFU, const float scale = 1.0f);
+			void drawFlippedCentered(const float x1, const float y1, const uint32 col = 0xFFFFFFFFU, const float scale = 1.0f);
 
-	public:
-		uint32		width;
-		uint32		height;
-		GLuint		tex;
-		bool		destroy_tex;
-	}; // class GfxTexture
+			void bind();
+			GLuint get() const { return tex; }
+			uint32 getWidth() const { return width; }
+			uint32 getHeight() const { return height; }
 
-
-
-}
+		public:
+			uint32 width;
+			uint32 height;
+			GLuint tex;
+			bool destroy_tex;
+		}; // class GfxTexture
+	}
 }
 
 #endif // __TA3D_GfxTexture_H__

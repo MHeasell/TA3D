@@ -23,14 +23,12 @@
 \-----------------------------------------------------------------------------------*/
 
 #ifndef __TA3D_GFX_FX_H__
-# define __TA3D_GFX_FX_H__
+#define __TA3D_GFX_FX_H__
 
+#include <stdafx.h>
 
-# include <stdafx.h>
-
-# include "fx.base.h"
-# include "fx.particle.h"
-# include "fx.manager.h"
-
+#include "fx.base.h"
+#include "fx.particle.h"
+#include "fx.manager.h"
 
 #endif // __TA3D_GFX_FX_H__

@@ -7,13 +7,13 @@
 #include "math.h"
 #include <algorithm>
 
-#define BVH_MAX_SET_SIZE		8
-#define BVH_MAX_DEPTH			48
+#define BVH_MAX_SET_SIZE 8
+#define BVH_MAX_DEPTH 48
 
 namespace TA3D
 {
-	template<typename T, class TKit>
-		inline void BVH<T, TKit>::build(MemoryPool<BVH<T, TKit> > *pool, const typename std::vector<T>::iterator &begin, const typename std::vector<T>::iterator &end, const unsigned int l)
+	template <typename T, class TKit>
+	inline void BVH<T, TKit>::build(MemoryPool<BVH<T, TKit>> *pool, const typename std::vector<T>::iterator &begin, const typename std::vector<T>::iterator &end, const unsigned int l)
 	{
 		this->pool = pool;
 		TKit::getTopBottom(begin, end, top, bottom);
@@ -33,8 +33,8 @@ namespace TA3D
 		rChild->build(pool, begin, mid, l + 1U);
 	}
 
-	template<typename T, class TKit>
-		inline BVH<T, TKit>::~BVH()
+	template <typename T, class TKit>
+	inline BVH<T, TKit>::~BVH()
 	{
 		if (lChild)
 			pool->release(lChild);
@@ -42,8 +42,8 @@ namespace TA3D
 			pool->release(rChild);
 	}
 
-	template<typename T, class TKit>
-		inline void BVH<T, TKit>::boxCollisionQuery(std::deque<T> &result, const Vec &center, const float maxDist) const
+	template <typename T, class TKit>
+	inline void BVH<T, TKit>::boxCollisionQuery(std::deque<T> &result, const Vec &center, const float maxDist) const
 	{
 		const Vector3D L(maxDist, maxDist, maxDist);
 		if ((Math::Max(top, center + L) - Math::Min(bottom, center - L) - (top - bottom + L + L)).max() > 0.0f)
@@ -51,7 +51,7 @@ namespace TA3D
 
 		if (rChild == NULL && lChild == NULL)
 		{
-			for(typename std::vector<T>::const_iterator i = elements_begin ; i != elements_end ; ++i)
+			for (typename std::vector<T>::const_iterator i = elements_begin; i != elements_end; ++i)
 				if ((TKit::pos(*i) - center).norm() <= maxDist + TKit::radius(*i))
 					result.push_back(*i);
 			return;

@@ -18,7 +18,7 @@ namespace TA3D
 	String Socket::getIPstr() const
 	{
 		return String() << (IP.host & 0xFF) << "." << ((IP.host >> 8) & 0xFF) << "." << ((IP.host >> 16) & 0xFF) << "."
-			<< (IP.host >> 24);
+						<< (IP.host >> 24);
 	}
 
 	uint32 Socket::getIP() const

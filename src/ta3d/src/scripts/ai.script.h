@@ -18,12 +18,10 @@
 #ifndef __AiScript_H__
 #define __AiScript_H__
 
-# include <yuni/yuni.h>
-# include <misc/string.h>
-# include "lua.thread.h"
-# include <yuni/core/smartptr/smartptr.h>
-
-
+#include <yuni/yuni.h>
+#include <misc/string.h>
+#include "lua.thread.h"
+#include <yuni/core/smartptr/smartptr.h>
 
 namespace TA3D
 {
@@ -40,7 +38,6 @@ namespace TA3D
 		typedef SmartPtr<AiScript> Ptr;
 
 	public:
-
 		AiScript();
 		virtual ~AiScript();
 		void setPlayerID(int id);
@@ -48,28 +45,24 @@ namespace TA3D
 		void setType(int type);
 		int getType();
 
-		void changeName(const String& newName);		// Change AI name
+		void changeName(const String& newName); // Change AI name
 		void save();
-		void loadAI(const String& filename, const int id);    // Load a saved AI (NB: this is not the same symbol used to load Lua scripts!! so this works :) )
+		void loadAI(const String& filename, const int id); // Load a saved AI (NB: this is not the same symbol used to load Lua scripts!! so this works :) )
 
 		void monitor();
 
 	protected:
-		virtual void proc(void *);
+		virtual void proc(void*);
 
 	public:
 		/*virtual*/ void register_functions();
 		/*virtual*/ void register_info();
 
 	private:
-		int         playerID;
-		String      name;
+		int playerID;
+		String name;
 
 	}; // class AiScript
-
-
-
-
 
 } // namespace TA3D
 

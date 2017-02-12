@@ -23,38 +23,39 @@
 
 namespace TA3D
 {
-namespace Menus
-{
-
-	class NetworkRoom : public Abstract
+	namespace Menus
 	{
-	public:
-		/*!
+
+		class NetworkRoom : public Abstract
+		{
+		public:
+			/*!
 		** \brief Execute an instance of NetworkRoom
 		*/
-		static bool Execute();
-	public:
-		NetworkRoom();
-		//! Destructor
-		virtual ~NetworkRoom();
+			static bool Execute();
 
-	protected:
-		virtual bool doInitialize();
-		virtual void doFinalize();
-		virtual void waitForEvent();
-		virtual bool maySwitchToAnotherMenu();
+		public:
+			NetworkRoom();
+			//! Destructor
+			virtual ~NetworkRoom();
 
-	private:
-		int server_list_timer;
+		protected:
+			virtual bool doInitialize();
+			virtual void doFinalize();
+			virtual void waitForEvent();
+			virtual bool maySwitchToAnotherMenu();
 
-		std::list< SERVER_DATA >    servers;                    // the server list
+		private:
+			int server_list_timer;
 
-		String sel_index;
-		String o_sel;
-		String join_host;
-	};
+			std::list<SERVER_DATA> servers; // the server list
 
-} // namespace Menus
+			String sel_index;
+			String o_sel;
+			String join_host;
+		};
+
+	} // namespace Menus
 } // namespace TA3D
 
 #endif // NETWORKROOM_H

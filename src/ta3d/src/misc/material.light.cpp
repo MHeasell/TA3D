@@ -20,15 +20,10 @@
 #include "math.h"
 #include "vector.h"
 
-
-
 namespace TA3D
 {
 
-
 	HWLight* HWLight::inGame = NULL;
-
-
 
 	void HWLight::init()
 	{
@@ -59,8 +54,6 @@ namespace TA3D
 		Directionnal = true;
 	}
 
-
-
 	void HWLight::Set(Camera& c)
 	{
 		GLfloat LightPosition[4];
@@ -83,12 +76,11 @@ namespace TA3D
 		glLightfv(HWNb, GL_AMBIENT, LightAmbient);   // Setup The Ambient Light
 		glLightfv(HWNb, GL_DIFFUSE, LightDiffuse);   // Setup The Diffuse Light
 		glLightfv(HWNb, GL_SPECULAR, LightSpecular); // Setup The Diffuse Light
-		glLightfv(HWNb, GL_POSITION,LightPosition);  // Position The Light
-		glLightf(HWNb,  GL_LINEAR_ATTENUATION, Att); // Attenuation
+		glLightfv(HWNb, GL_POSITION, LightPosition); // Position The Light
+		glLightf(HWNb, GL_LINEAR_ATTENUATION, Att);  // Attenuation
 	}
 
-
-	void HWLight::SetView(const std::vector<Vector3D> &frustum)
+	void HWLight::SetView(const std::vector<Vector3D>& frustum)
 	{
 		if (Directionnal)
 		{
@@ -129,8 +121,8 @@ namespace TA3D
 			const float widthFactor = (Mx - mx) / (My - my);
 			const float f = 0.5f * (My - my);
 
-			glMatrixMode (GL_PROJECTION);
-			glLoadIdentity ();
+			glMatrixMode(GL_PROJECTION);
+			glLoadIdentity();
 			glOrtho(-widthFactor * f, widthFactor * f, -f, f, znear, zfar);
 
 			Vector3D c_at(c_pos - Dir);
@@ -146,8 +138,8 @@ namespace TA3D
 			float widthFactor = 1.0f;
 			//float f = 10.0f;
 
-			glMatrixMode (GL_PROJECTION);
-			glLoadIdentity ();
+			glMatrixMode(GL_PROJECTION);
+			glLoadIdentity();
 			glFrustum(-widthFactor * znear, widthFactor * znear, -0.75f * znear, 0.75f * znear, znear, zfar);
 
 			Vector3D Up(Pos * Dir);
@@ -158,6 +150,5 @@ namespace TA3D
 			glLoadIdentity();
 		}
 	}
-
 
 } // namespace TA3D

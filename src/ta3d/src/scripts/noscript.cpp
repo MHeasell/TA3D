@@ -41,7 +41,7 @@ namespace TA3D
 	{
 	}
 
-	int NoScript::run(float, bool)                  // Run the script
+	int NoScript::run(float, bool) // Run the script
 	{
 		return -1;
 	}

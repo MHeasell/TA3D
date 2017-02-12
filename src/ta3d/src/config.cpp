@@ -14,24 +14,11 @@ void configWindow()
 	Window wnd("config");
 	wnd.setTitle("TA3D failsafe config tool");
 
-	wnd.addChild(TabWidget_("tabs")
-				 / (Spacer_(false) | Button_("ok", "   ok   ") | Spacer_(false) | Button_("cancel", " cancel ") | Spacer_(false)));
+	wnd.addChild(TabWidget_("tabs") / (Spacer_(false) | Button_("ok", "   ok   ") | Spacer_(false) | Button_("cancel", " cancel ") | Spacer_(false)));
 
 	// The video tab
 	TABWIDGET(tabs)->addTab("video",
-							  (Label_("", "width              ") | Spacer_(false) | SpinBox_("width"))
-							/ (Label_("", "height             ") | Spacer_(false) | SpinBox_("height"))
-							/ (Label_("", "color depth        ") | Spacer_(false) | SpinBox_("bpp"))
-							/ (Label_("", "FSAA               ") | Spacer_(false) | SpinBox_("fsaa"))
-							/ (Label_("", "Fullscreen         ") | Spacer_(false) | CheckBox_("fullscreen", ""))
-							/ (Label_("", "Anisotropy         ") | Spacer_(false) | SpinBox_("anisotropy"))
-							/ (Label_("", "Shadows quality    ") | Spacer_(false) | SpinBox_("shadows"))
-							/ (Label_("", "Water quality      ") | Spacer_(false) | SpinBox_("water"))
-							/ (Label_("", "Shadowmap size     ") | Spacer_(false) | SpinBox_("shadowmap"))
-							/ (Label_("", "texture cache      ") | Spacer_(false) | CheckBox_("texturecache", ""))
-							/ (Label_("", "texture compression") | Spacer_(false) | CheckBox_("texturecompression", ""))
-							/ (Label_("", "far sight          ") | Spacer_(false) | CheckBox_("farsight", ""))
-							/ Spacer_(true));
+							(Label_("", "width              ") | Spacer_(false) | SpinBox_("width")) / (Label_("", "height             ") | Spacer_(false) | SpinBox_("height")) / (Label_("", "color depth        ") | Spacer_(false) | SpinBox_("bpp")) / (Label_("", "FSAA               ") | Spacer_(false) | SpinBox_("fsaa")) / (Label_("", "Fullscreen         ") | Spacer_(false) | CheckBox_("fullscreen", "")) / (Label_("", "Anisotropy         ") | Spacer_(false) | SpinBox_("anisotropy")) / (Label_("", "Shadows quality    ") | Spacer_(false) | SpinBox_("shadows")) / (Label_("", "Water quality      ") | Spacer_(false) | SpinBox_("water")) / (Label_("", "Shadowmap size     ") | Spacer_(false) | SpinBox_("shadowmap")) / (Label_("", "texture cache      ") | Spacer_(false) | CheckBox_("texturecache", "")) / (Label_("", "texture compression") | Spacer_(false) | CheckBox_("texturecompression", "")) / (Label_("", "far sight          ") | Spacer_(false) | CheckBox_("farsight", "")) / Spacer_(true));
 
 	SPINBOX(width)->setMinimum(640);
 	SPINBOX(width)->setMaximum(3200);
@@ -71,9 +58,7 @@ void configWindow()
 	CHECKBOX(farsight)->setState(lp_CONFIG->far_sight);
 
 	// The audio tab
-	TABWIDGET(tabs)->addTab("audio", (Label_("", "sound volume       ") | Spacer_(false) | SpinBox_("soundvolume"))
-								   / (Label_("", "music volume       ") | Spacer_(false) | SpinBox_("musicvolume"))
-								   / Spacer_(true));
+	TABWIDGET(tabs)->addTab("audio", (Label_("", "sound volume       ") | Spacer_(false) | SpinBox_("soundvolume")) / (Label_("", "music volume       ") | Spacer_(false) | SpinBox_("musicvolume")) / Spacer_(true));
 	SPINBOX(soundvolume)->setMinimum(0);
 	SPINBOX(soundvolume)->setMaximum(128);
 	SPINBOX(soundvolume)->setValue(lp_CONFIG->sound_volume);
@@ -83,20 +68,14 @@ void configWindow()
 	SPINBOX(musicvolume)->setValue(lp_CONFIG->music_volume);
 
 	// The game tab
-	TABWIDGET(tabs)->addTab("game", (Label_("", "player name        ") | Spacer_(false) | LineInput_("playername"))
-								  / (Label_("", "language           ") | Spacer_(false) | LineInput_("language"))
-								  / (Label_("", "mod                ") | Spacer_(false) | LineInput_("mod"))
-								  / Spacer_(true));
+	TABWIDGET(tabs)->addTab("game", (Label_("", "player name        ") | Spacer_(false) | LineInput_("playername")) / (Label_("", "language           ") | Spacer_(false) | LineInput_("language")) / (Label_("", "mod                ") | Spacer_(false) | LineInput_("mod")) / Spacer_(true));
 
 	LINEINPUT(playername)->setText(lp_CONFIG->player_name.c_str());
 	LINEINPUT(language)->setText(lp_CONFIG->Lang.c_str());
 	LINEINPUT(mod)->setText(lp_CONFIG->last_MOD.c_str());
 
 	// The advanced tab
-	TABWIDGET(tabs)->addTab("advanced", (Label_("", "developer mode        ") | Spacer_(false) | CheckBox_("devmode", ""))
-									  / (Label_("", "7z command            ") | Spacer_(false) | LineInput_("system7zCommand"))
-									  / (Label_("", "NetServer             ") | Spacer_(false) | LineInput_("netserver"))
-									  / Spacer_(true));
+	TABWIDGET(tabs)->addTab("advanced", (Label_("", "developer mode        ") | Spacer_(false) | CheckBox_("devmode", "")) / (Label_("", "7z command            ") | Spacer_(false) | LineInput_("system7zCommand")) / (Label_("", "NetServer             ") | Spacer_(false) | LineInput_("netserver")) / Spacer_(true));
 	CHECKBOX(devmode)->setState(lp_CONFIG->developerMode);
 	LINEINPUT(system7zCommand)->setText(lp_CONFIG->system7zCommand.c_str());
 	LINEINPUT(netserver)->setText(lp_CONFIG->net_server.c_str());

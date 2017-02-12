@@ -11,10 +11,8 @@ using namespace Yuni::Core::IO::File;
 namespace TA3D
 {
 
-
-
 	Http::Http()
-		:bStop(false), pos(0), size(0)
+		: bStop(false), pos(0), size(0)
 	{
 	}
 
@@ -33,31 +31,31 @@ namespace TA3D
 		return (!size) ? 0.f : (float)(pos * 100.0 / size);
 	}
 
-	void Http::proc(void* /*param*/)
+	void Http::proc(void * /*param*/)
 	{
 		bStop = false;
 
 		if (!Paths::Exists(Paths::ExtractFilePath(filename)))
 			Paths::MakeDir(Paths::ExtractFilePath(filename));
 
-		SocketTCP   sock;
-		char		buffer[4096];
-		String      realFilename = filename;
-		String      tmpFile = String(filename) << ".part";
-		Stream		f(tmpFile, Yuni::Core::IO::OpenMode::write);
-		int         count;
-		int         crfound = 0;
-		int         lffound = 0;
+		SocketTCP sock;
+		char buffer[4096];
+		String realFilename = filename;
+		String tmpFile = String(filename) << ".part";
+		Stream f(tmpFile, Yuni::Core::IO::OpenMode::write);
+		int count;
+		int crfound = 0;
+		int lffound = 0;
 
 		if (!f.opened())
 		{
 			LOG_ERROR(LOG_PREFIX_NET << "httpGetFile: Could not open file " << tmpFile << " for writing !");
-			return;        // Error can't open file
+			return; // Error can't open file
 		}
 
 		/* open the socket and connect to the server */
 		sock.open(servername, 80);
-		if(!sock.isOpen())
+		if (!sock.isOpen())
 		{
 			LOG_ERROR(LOG_PREFIX_NET << "httpGetFile: Could not open socket !");
 			f.close();
@@ -65,7 +63,7 @@ namespace TA3D
 			return;
 		}
 
-		sock.setNonBlockingMode(true);      // We want it to be able to detect end of file ;)
+		sock.setNonBlockingMode(true); // We want it to be able to detect end of file ;)
 
 		String tmpBuf;
 		tmpBuf << "GET " << _request << " HTTP/1.0\r\nHost:" << servername << "\nAccept: */*\r\nUser-Agent: TA3D\r\nConnection: close\r\n\r\n";
@@ -100,11 +98,10 @@ namespace TA3D
 						return;
 					}
 				}
-			}
-			while(count == 0 && msec_timer - timer < 60000 && !bStop);
+			} while (count == 0 && msec_timer - timer < 60000 && !bStop);
 			if (msec_timer - timer >= 60000 || bStop)
 				sock.close();
-			if(count < 0)
+			if (count < 0)
 			{
 				sock.close();
 				f.close();
@@ -114,21 +111,23 @@ namespace TA3D
 					LOG_DEBUG(LOG_PREFIX_NET << "File successfully downloaded : " << realFilename);
 				}
 				else
-				{	LOG_DEBUG(LOG_PREFIX_NET << "Download failed : " << realFilename);	}
+				{
+					LOG_DEBUG(LOG_PREFIX_NET << "Download failed : " << realFilename);
+				}
 				remove(tmpFile.c_str());
 				return;
 			}
-			if(count > 0)
+			if (count > 0)
 			{
 				/* parse out the HTTP header */
-				if(lffound < 2)
+				if (lffound < 2)
 				{
 					int i;
 
 					for (i = 0; i < count; ++i)
 					{
 						header << buffer[i];
-						if(buffer[i] == 0x0D)
+						if (buffer[i] == 0x0D)
 							++crfound;
 						else
 						{
@@ -142,8 +141,8 @@ namespace TA3D
 						{
 							/* i points to the second LF */
 							/* output the buffer to the file */
-							f.write( (char*)(buffer+i+1), count-i-1 );
-							pos += count-i-1;
+							f.write((char *)(buffer + i + 1), count - i - 1);
+							pos += count - i - 1;
 							size = Math::Max(size, pos);
 							break;
 						}
@@ -164,7 +163,7 @@ namespace TA3D
 				}
 				else
 				{
-					f.write( (const char*)buffer, count );
+					f.write((const char *)buffer, count);
 					pos += count;
 					size = Math::Max(size, pos);
 				}
@@ -178,7 +177,7 @@ namespace TA3D
 
 	void Http::signalExitThread()
 	{
-		while(pDead == 0)
+		while (pDead == 0)
 		{
 			bStop = true;
 			rest(1);
@@ -212,24 +211,24 @@ namespace TA3D
 		destroyThread();
 	}
 
-	String Http::request( const String &servername, const String &_request )
+	String Http::request(const String &servername, const String &_request)
 	{
-		SocketTCP   sock;
-		char        buffer[4096];
-		String      f;
-		int         count;
-		int         crfound = 0;
-		int         lffound = 0;
+		SocketTCP sock;
+		char buffer[4096];
+		String f;
+		int count;
+		int crfound = 0;
+		int lffound = 0;
 
 		/* open the socket and connect to the server */
 		sock.open(servername, 80);
-		if(!sock.isOpen())
+		if (!sock.isOpen())
 		{
 			LOG_ERROR(LOG_PREFIX_NET << "httpRequest: Could not open socket !");
 			return nullptr;
 		}
 
-		sock.setNonBlockingMode(true);      // We want to be able to detect end of transmission :p
+		sock.setNonBlockingMode(true); // We want to be able to detect end of transmission :p
 
 		f.clear();
 
@@ -237,7 +236,7 @@ namespace TA3D
 		tmpBuf << "GET " << _request << " HTTP/1.0\r\nHost:" << servername << "\nAccept: */*\r\nUser-Agent: TA3D\r\n\r\n";
 
 		uint32 timer(msec_timer);
-		sock.send( tmpBuf.data(), tmpBuf.size());
+		sock.send(tmpBuf.data(), tmpBuf.size());
 		if (!sock.isOpen())
 		{
 			LOG_ERROR(LOG_PREFIX_NET << "httpRequest: Could not send request to server !");
@@ -251,25 +250,24 @@ namespace TA3D
 			{
 				count = sock.recv(buffer, sizeof(buffer) - 1);
 				rest(1);
-			}
-			while(count == 0 && msec_timer - timer < 1000);
+			} while (count == 0 && msec_timer - timer < 1000);
 			if (msec_timer - timer >= 1000)
 				sock.close();
-			if(count < 0)
+			if (count < 0)
 			{
 				sock.close();
 				return f;
 			}
-			if(count > 0)
+			if (count > 0)
 			{
 				/* parse out the HTTP header */
-				if(lffound < 2)
+				if (lffound < 2)
 				{
 					int i;
 
 					for (i = 0; i < count; ++i)
 					{
-						if(buffer[i] == 0x0D)
+						if (buffer[i] == 0x0D)
 							++crfound;
 						else
 						{
@@ -284,7 +282,7 @@ namespace TA3D
 							/* i points to the second LF */
 							/* NUL terminate the string and put it in the buffer string */
 							buffer[count] = 0x0;
-							f += buffer+i+1;
+							f += buffer + i + 1;
 							break;
 						}
 					}
@@ -300,31 +298,31 @@ namespace TA3D
 		return f;
 	}
 
-	bool Http::getFile( const String &filename, const String &servername, const String &_request )
+	bool Http::getFile(const String &filename, const String &servername, const String &_request)
 	{
-		SocketTCP   sock;
-		char        buffer[4096];
-		Stream		f(filename, Yuni::Core::IO::OpenMode::write);
-		int         count;
-		int         crfound = 0;
-		int         lffound = 0;
+		SocketTCP sock;
+		char buffer[4096];
+		Stream f(filename, Yuni::Core::IO::OpenMode::write);
+		int count;
+		int crfound = 0;
+		int lffound = 0;
 
 		if (!f.opened())
 		{
 			LOG_ERROR(LOG_PREFIX_NET << "httpGetFile: Could not open file " << filename << " for writing !");
-			return true;        // Error can't open file
+			return true; // Error can't open file
 		}
 
 		/* open the socket and connect to the server */
 		sock.open(servername, 80);
-		if(!sock.isOpen())
+		if (!sock.isOpen())
 		{
 			LOG_ERROR(LOG_PREFIX_NET << "httpGetFile: Could not open socket !");
 			f.close();
 			return true;
 		}
 
-		sock.setNonBlockingMode(true);      // We want it to be able to detect end of file ;)
+		sock.setNonBlockingMode(true); // We want it to be able to detect end of file ;)
 
 		String tmpBuf;
 		tmpBuf << "GET " << _request << " HTTP/1.0\r\nHost:" << servername << "\nAccept: */*\r\nUser-Agent: TA3D\r\nConnection: close\r\n\r\n";
@@ -345,26 +343,25 @@ namespace TA3D
 			{
 				count = sock.recv(buffer, sizeof(buffer) - 1);
 				rest(1);
-			}
-			while(count == 0 && msec_timer - timer < 1000);
+			} while (count == 0 && msec_timer - timer < 1000);
 			if (msec_timer - timer >= 1000)
 				sock.close();
-			if(count < 0)
+			if (count < 0)
 			{
 				sock.close();
 				f.close();
 				return false;
 			}
-			if(count > 0)
+			if (count > 0)
 			{
 				/* parse out the HTTP header */
-				if(lffound < 2)
+				if (lffound < 2)
 				{
 					int i;
 
 					for (i = 0; i < count; ++i)
 					{
-						if(buffer[i] == 0x0D)
+						if (buffer[i] == 0x0D)
 							++crfound;
 						else
 						{
@@ -378,13 +375,13 @@ namespace TA3D
 						{
 							/* i points to the second LF */
 							/* output the buffer to the file */
-							f.write( (const char*)(buffer+i+1), count-i-1 );
+							f.write((const char *)(buffer + i + 1), count - i - 1);
 							break;
 						}
 					}
 				}
 				else
-					f.write( (const char*)buffer, count );
+					f.write((const char *)buffer, count);
 			}
 		}
 		sock.close();

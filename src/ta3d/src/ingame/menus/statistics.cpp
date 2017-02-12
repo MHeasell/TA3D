@@ -22,101 +22,86 @@
 #include <input/mouse.h>
 #include <input/keyboard.h>
 
-
-
 namespace TA3D
 {
-namespace Menus
-{
-
-
-	bool Statistics::Execute()
+	namespace Menus
 	{
-		Statistics m;
-		return m.execute();
-	}
 
-
-
-	Statistics::Statistics()
-		:Abstract()
-	{}
-
-	Statistics::~Statistics()
-	{}
-
-
-	void Statistics::doUpdateObject(const String& id, const short indx, const uint32 color, const String& value)
-	{
-		String nameID("statistics.");
-		nameID << id << indx;
-		pArea->caption(nameID, value);
-		Gui::GUIOBJ::Ptr o = pArea->get_object(nameID);
-		if (o)
-			o->Data = color;
-	}
-
-	bool Statistics::doInitialize()
-	{
-		LOG_DEBUG(LOG_PREFIX_MENU_STATS << "Entering...");
-		gfx->set_2D_mode();
-		gfx->ReInitTexSys();
-		loadAreaFromTDF("statistics", "gui/statistics.area");
-
-		// Statistics for All players
-		for (short i = 0; i < short(players.count()); ++i)
+		bool Statistics::Execute()
 		{
-			uint32 color = gfx->makeintcol(player_color[3 * player_color_map[i]],
-										   player_color[3 * player_color_map[i] + 1],
-										   player_color[3 * player_color_map[i] + 2]);
-
-			doUpdateObject("player", i, color, players.nom[i]);
-			doUpdateObject("side",   i, color, players.side[i]);
-            doUpdateObject("losses", i, color, String(players.losses[i]));
-            doUpdateObject("kills",  i, color, String(players.kills[i]));
-            doUpdateObject("energy", i, color, String((int)players.energy_total[i]));
-            doUpdateObject("metal",  i, color, String((int)players.metal_total[i]));
+			Statistics m;
+			return m.execute();
 		}
-		return true;
-	}
 
-
-	void Statistics::doFinalize()
-	{
-		// Do nothing
-		LOG_DEBUG(LOG_PREFIX_MENU_STATS << "Done.");
-	}
-
-
-	void Statistics::waitForEvent()
-	{
-		bool keyIsPressed(false);
-		do
+		Statistics::Statistics()
+			: Abstract()
 		{
-			// Grab user events
-			pArea->check();
-			// Get if a key was pressed
-			keyIsPressed = pArea->key_pressed;
-			// Wait to reduce CPU consumption
-			wait();
+		}
 
-		} while (pMouseX == mouse_x && pMouseY == mouse_y && pMouseZ == mouse_z && pMouseB == mouse_b
-				 && mouse_b == 0
-				 && !key[KEY_ENTER] && !key[KEY_ESC] && !key[KEY_SPACE]
-				 && !keyIsPressed && !pArea->scrolling);
-	}
+		Statistics::~Statistics()
+		{
+		}
 
+		void Statistics::doUpdateObject(const String& id, const short indx, const uint32 color, const String& value)
+		{
+			String nameID("statistics.");
+			nameID << id << indx;
+			pArea->caption(nameID, value);
+			Gui::GUIOBJ::Ptr o = pArea->get_object(nameID);
+			if (o)
+				o->Data = color;
+		}
 
-	bool Statistics::maySwitchToAnotherMenu()
-	{
-		// Exit
-		return (key[KEY_SPACE] || key[KEY_ENTER] || key[KEY_ESC] || pArea->get_state("statistics.b_ok"));
-	}
+		bool Statistics::doInitialize()
+		{
+			LOG_DEBUG(LOG_PREFIX_MENU_STATS << "Entering...");
+			gfx->set_2D_mode();
+			gfx->ReInitTexSys();
+			loadAreaFromTDF("statistics", "gui/statistics.area");
 
+			// Statistics for All players
+			for (short i = 0; i < short(players.count()); ++i)
+			{
+				uint32 color = gfx->makeintcol(player_color[3 * player_color_map[i]],
+											   player_color[3 * player_color_map[i] + 1],
+											   player_color[3 * player_color_map[i] + 2]);
 
+				doUpdateObject("player", i, color, players.nom[i]);
+				doUpdateObject("side", i, color, players.side[i]);
+				doUpdateObject("losses", i, color, String(players.losses[i]));
+				doUpdateObject("kills", i, color, String(players.kills[i]));
+				doUpdateObject("energy", i, color, String((int)players.energy_total[i]));
+				doUpdateObject("metal", i, color, String((int)players.metal_total[i]));
+			}
+			return true;
+		}
 
+		void Statistics::doFinalize()
+		{
+			// Do nothing
+			LOG_DEBUG(LOG_PREFIX_MENU_STATS << "Done.");
+		}
 
-} // namespace Menus
+		void Statistics::waitForEvent()
+		{
+			bool keyIsPressed(false);
+			do
+			{
+				// Grab user events
+				pArea->check();
+				// Get if a key was pressed
+				keyIsPressed = pArea->key_pressed;
+				// Wait to reduce CPU consumption
+				wait();
+
+			} while (pMouseX == mouse_x && pMouseY == mouse_y && pMouseZ == mouse_z && pMouseB == mouse_b && mouse_b == 0 && !key[KEY_ENTER] && !key[KEY_ESC] && !key[KEY_SPACE] && !keyIsPressed && !pArea->scrolling);
+		}
+
+		bool Statistics::maySwitchToAnotherMenu()
+		{
+			// Exit
+			return (key[KEY_SPACE] || key[KEY_ENTER] || key[KEY_ESC] || pArea->get_state("statistics.b_ok"));
+		}
+
+	} // namespace Menus
 } // namespace TA3D
-
-

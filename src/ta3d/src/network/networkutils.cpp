@@ -27,11 +27,8 @@
 
 using namespace Yuni::Core::IO::File;
 
-
-
 namespace TA3D
 {
-
 
 	//need testing
 	void ListenThread::proc(void* param)
@@ -41,19 +38,21 @@ namespace TA3D
 
 		Network* network;
 		network = ((struct net_thread_params*)param)->network;
-		delete((struct net_thread_params*)param);
+		delete ((struct net_thread_params*)param);
 		param = NULL;
 
 		struct event event;
 		event.type = 45; //arbitrary number for "new player connected" event
 		//fill in other info for new player connected event
 
-		while (!pDead && network->listen_socket.isOpen() )
+		while (!pDead && network->listen_socket.isOpen())
 		{
-			v = network->listen_socket.accept(&newsock,100);
-			if(v < 0)
+			v = network->listen_socket.accept(&newsock, 100);
+			if (v < 0)
 			{
-				if(v==-1){}
+				if (v == -1)
+				{
+				}
 			}
 			else
 			{
@@ -64,13 +63,11 @@ namespace TA3D
 		}
 	}
 
-
-
 	void SocketThread::proc(void* param)
 	{
 		TA3DSock* sock;
 		Network* network;
-		int sockid,packtype;
+		int sockid, packtype;
 
 		struct chat chat;
 		struct sync sync;
@@ -78,15 +75,16 @@ namespace TA3D
 
 		network = ((struct net_thread_params*)param)->network;
 		sockid = ((struct net_thread_params*)param)->sockid;
-		delete((struct net_thread_params*)param);
+		delete ((struct net_thread_params*)param);
 		param = NULL;
 		sock = network->players.getSock(sockid);
 
-		while(!pDead && sock->isOpen())
+		while (!pDead && sock->isOpen())
 		{
 			//sleep until data is coming
 			sock->check(10);
-			if (pDead) break;
+			if (pDead)
+				break;
 
 			//ready for reading, absorb some bytes
 			sock->pumpIn();
@@ -94,110 +92,111 @@ namespace TA3D
 			//see if there is a packet ready to process
 			packtype = sock->getPacket();
 
-			switch(packtype)
+			switch (packtype)
 			{
-			case 'P':		// ping
-				if (sockid != -1)
-					network->sendPong(sockid);
-				sock->makePing();
-				break;
-			case 'p':		// pong
-				network->processPong(sockid);
-				sock->makePong();
-				break;
-			case 'T':       // Tick synchronization
-				sock->makeTick(sockid);
-				break;
-			case 'A'://special (resend to all!!)
-			case 'X'://special
-				network->xqmutex.lock();
-				if (pDead || sock->makeSpecial(&chat) == -1)
-				{
+				case 'P': // ping
+					if (sockid != -1)
+						network->sendPong(sockid);
+					sock->makePing();
+					break;
+				case 'p': // pong
+					network->processPong(sockid);
+					sock->makePong();
+					break;
+				case 'T': // Tick synchronization
+					sock->makeTick(sockid);
+					break;
+				case 'A': //special (resend to all!!)
+				case 'X': //special
+					network->xqmutex.lock();
+					if (pDead || sock->makeSpecial(&chat) == -1)
+					{
+						network->xqmutex.unlock();
+						break;
+					}
+					if (packtype != 'A' && network->isServer())
+						chat.from = (uint16)sockid;
+					network->specialq.push_back(chat);
 					network->xqmutex.unlock();
+					if (packtype == 'A' && network->isServer())
+						network->sendSpecial(&chat, sockid, -1, true);
 					break;
-				}
-				if (packtype != 'A' && network->isServer())
-					chat.from = (uint16)sockid;
-				network->specialq.push_back(chat);
-				network->xqmutex.unlock();
-				if (packtype == 'A' && network->isServer())
-					network->sendSpecial( &chat, sockid, -1, true );
-				break;
-			case 'C'://chat
-				network->cqmutex.lock();
-				if (pDead || sock->makeChat(&chat) == -1)
-				{
+				case 'C': //chat
+					network->cqmutex.lock();
+					if (pDead || sock->makeChat(&chat) == -1)
+					{
+						network->cqmutex.unlock();
+						break;
+					}
+					network->chatq.push_back(chat);
 					network->cqmutex.unlock();
+					if (network->isServer())
+						network->sendChat(&chat, sockid);
 					break;
-				}
-				network->chatq.push_back(chat);
-				network->cqmutex.unlock();
-				if( network->isServer() )
-					network->sendChat(&chat, sockid);
-				break;
-			case 'S'://sync
-				network->sqmutex.lock();
-				if (pDead || sock->makeSync(&sync) == -1)
-				{
+				case 'S': //sync
+					network->sqmutex.lock();
+					if (pDead || sock->makeSync(&sync) == -1)
+					{
+						network->sqmutex.unlock();
+						break;
+					}
+					network->syncq.push_back(sync);
 					network->sqmutex.unlock();
+					if (network->isServer())
+						network->sendSync(&sync, sockid);
 					break;
-				}
-				network->syncq.push_back(sync);
-				network->sqmutex.unlock();
-				if( network->isServer() )
-					network->sendSync(&sync, sockid);
-				break;
-			case 'E'://event
-				network->eqmutex.lock();
-				if (pDead || sock->makeEvent(&event) == -1)
-				{
+				case 'E': //event
+					network->eqmutex.lock();
+					if (pDead || sock->makeEvent(&event) == -1)
+					{
+						network->eqmutex.unlock();
+						break;
+					}
+					network->eventq.push_back(event);
 					network->eqmutex.unlock();
+					if (network->isServer())
+						network->sendEvent(&event, sockid);
+				case 0:
 					break;
-				}
-				network->eventq.push_back(event);
-				network->eqmutex.unlock();
-				if( network->isServer() )
-					network->sendEvent(&event, sockid);
-			case 0:
-				break;
 
 				// For file transfert
-			case 'F':						// File data
+				case 'F': // File data
 				{
 					int port = sock->getFilePort();
-					for(std::list< GetFileThread* >::iterator i = network->getfile_thread.begin() ; i != network->getfile_thread.end() ; i++ )
+					for (std::list<GetFileThread*>::iterator i = network->getfile_thread.begin(); i != network->getfile_thread.end(); i++)
 						if ((*i)->port == port)
 						{
-						port = -1;
-						while( !(*i)->ready && !(*i)->isDead() )	suspend(1);
-						if (!(*i)->isDead())
-						{
-							(*i)->buffer_size = sock->getFileData( (*i)->buffer );
-							(*i)->ready = false;
+							port = -1;
+							while (!(*i)->ready && !(*i)->isDead())
+								suspend(1);
+							if (!(*i)->isDead())
+							{
+								(*i)->buffer_size = sock->getFileData((*i)->buffer);
+								(*i)->ready = false;
+							}
+							break;
 						}
-						break;
-					}
 					if (port != -1)
-						sock->getFileData( NULL );
+						sock->getFileData(NULL);
 				}
 				break;
-			case 'R':						// File response (send back the amount of data that has been received)
+				case 'R': // File response (send back the amount of data that has been received)
 				{
 					int port = sock->getFilePort();
-					for(std::list< SendFileThread* >::iterator i = network->sendfile_thread.begin() ; i != network->sendfile_thread.end() ; i++ )
+					for (std::list<SendFileThread*>::iterator i = network->sendfile_thread.begin(); i != network->sendfile_thread.end(); i++)
 						if ((*i)->port == port && (*i)->player_id == sockid)
 						{
-						port = -1;
-						sock->getFileData( (byte*)&((*i)->progress) );
-						break;
-					}
+							port = -1;
+							sock->getFileData((byte*)&((*i)->progress));
+							break;
+						}
 					if (port != -1)
-						sock->getFileData( NULL );
+						sock->getFileData(NULL);
 				}
 				break;
 
-			default:
-				sock->cleanPacket();
+				default:
+					sock->cleanPacket();
 			}
 		}
 
@@ -208,7 +207,6 @@ namespace TA3D
 		return;
 	}
 
-
 	void BroadCastThread::proc(void* param)
 	{
 		SocketBroadCast* sock;
@@ -217,18 +215,19 @@ namespace TA3D
 		network = ((struct net_thread_params*)param)->network;
 		sock = &(network->broadcast_socket);
 
-		delete((struct net_thread_params*)param);
+		delete ((struct net_thread_params*)param);
 		param = NULL;
 
 		String msg;
 
 		pDead = 0;
 
-		while(!pDead && sock->isOpen() )
+		while (!pDead && sock->isOpen())
 		{
 			//sleep until data is coming
 			sock->check(100);
-			if(pDead) break;
+			if (pDead)
+				break;
 
 			msg = sock->getString();
 			if (!msg.empty())
@@ -239,8 +238,8 @@ namespace TA3D
 					network->mqmutex.unlock();
 					break;
 				}
-				network->broadcastq.push_back( msg );
-				network->broadcastaddressq.push_back( sock->getRemoteIPstr() );
+				network->broadcastq.push_back(msg);
+				network->broadcastaddressq.push_back(sock->getRemoteIPstr());
 				network->mqmutex.unlock();
 			}
 		}
@@ -250,7 +249,7 @@ namespace TA3D
 		return;
 	}
 
-#define FILE_TRANSFER_BUFFER_SIZE		16384
+#define FILE_TRANSFER_BUFFER_SIZE 16384
 
 	//NEED TESTING
 	void SendFileThread::proc(void* param)
@@ -259,22 +258,22 @@ namespace TA3D
 		int sockid;
 
 		File* file;
-		int length,n;
-		byte *buffer = new byte[ FILE_TRANSFER_BUFFER_SIZE ];
+		int length, n;
+		byte* buffer = new byte[FILE_TRANSFER_BUFFER_SIZE];
 		String filename;
 
 		network = ((struct net_thread_params*)param)->network;
 		sockid = ((struct net_thread_params*)param)->sockid;
 		filename = ((struct net_thread_params*)param)->filename;
-		file = VFS::Instance()->readFile( filename );
+		file = VFS::Instance()->readFile(filename);
 
-		delete((struct net_thread_params*)param);
+		delete ((struct net_thread_params*)param);
 		param = NULL;
 
 		if (NULL == file)
 		{
 			DELETE_ARRAY(buffer);
-			LOG_DEBUG( LOG_PREFIX_NET_FILE << "cannot open file '" << filename << "'" );
+			LOG_DEBUG(LOG_PREFIX_NET_FILE << "cannot open file '" << filename << "'");
 			pDead = 1;
 			network->setFileDirty();
 			return;
@@ -294,20 +293,20 @@ namespace TA3D
 		LOG_INFO(LOG_PREFIX_NET_FILE << "Starting...");
 		while (!pDead)
 		{
-			n = file->read(buffer, FILE_TRANSFER_BUFFER_SIZE);            // Read data into the buffer
+			n = file->read(buffer, FILE_TRANSFER_BUFFER_SIZE); // Read data into the buffer
 			network->sendFileData(sockid, (uint16)port, buffer, n);
 			if (n > 0)
 			{
 				pos += n;
-				network->updateFileTransferInformation( String(filename) << sockid, real_length, pos );
+				network->updateFileTransferInformation(String(filename) << sockid, real_length, pos);
 
 				const uint32 timer = msec_timer;
-				while( progress < pos - 10 * FILE_TRANSFER_BUFFER_SIZE && !pDead && msec_timer - timer < 60000 )
+				while (progress < pos - 10 * FILE_TRANSFER_BUFFER_SIZE && !pDead && msec_timer - timer < 60000)
 					suspend(0);
 				if (msec_timer - timer >= 60000)
 				{
 					DELETE_ARRAY(buffer);
-					LOG_DEBUG( LOG_PREFIX_NET_FILE << "file transfert timed out");
+					LOG_DEBUG(LOG_PREFIX_NET_FILE << "file transfert timed out");
 					pDead = 1;
 					network->updateFileTransferInformation(String(filename) << sockid, 0, 0);
 					network->setFileDirty();
@@ -324,18 +323,17 @@ namespace TA3D
 
 		timer = msec_timer;
 		while (progress < pos - FILE_TRANSFER_BUFFER_SIZE && !pDead && msec_timer - timer < 60000)
-			suspend(1);		// Wait for client to say ok
+			suspend(1); // Wait for client to say ok
 
 		LOG_INFO(LOG_PREFIX_NET_FILE << "Done.");
 
-		network->updateFileTransferInformation( String(filename) << sockid, 0, 0 );
+		network->updateFileTransferInformation(String(filename) << sockid, 0, 0);
 		pDead = 1;
 		delete file;
 		network->setFileDirty();
 		DELETE_ARRAY(buffer);
 		return;
 	}
-
 
 	GetFileThread::GetFileThread() : Thread()
 	{
@@ -349,9 +347,9 @@ namespace TA3D
 		Network* network;
 		int sockid;
 		String filename;
-		int length,n,sofar;
+		int length, n, sofar;
 
-		buffer = new byte[ FILE_TRANSFER_BUFFER_SIZE + 12 ];
+		buffer = new byte[FILE_TRANSFER_BUFFER_SIZE + 12];
 		network = ((struct net_thread_params*)param)->network;
 
 		//supposed sender
@@ -362,14 +360,14 @@ namespace TA3D
 		const String path = Paths::ExtractFilePath(filename);
 		if (!path.empty())
 			Paths::MakeDir(path);
-		Stream file( String(filename) << ".part", Yuni::Core::IO::OpenMode::write );
+		Stream file(String(filename) << ".part", Yuni::Core::IO::OpenMode::write);
 
-		delete((struct net_thread_params*)param);
+		delete ((struct net_thread_params*)param);
 		param = NULL;
 
 		if (!file.opened())
 		{
-			LOG_DEBUG( LOG_PREFIX_NET_FILE << "cannot open file '" << filename << ".part'");
+			LOG_DEBUG(LOG_PREFIX_NET_FILE << "cannot open file '" << filename << ".part'");
 			pDead = 1;
 			network->setFileDirty();
 			DELETE_ARRAY(buffer);
@@ -381,29 +379,31 @@ namespace TA3D
 		int timer = msec_timer;
 
 		ready = true;
-		while (!pDead && ready && msec_timer - timer < 60000 )
+		while (!pDead && ready && msec_timer - timer < 60000)
 			suspend(0);
-		memcpy(&length,buffer,4);
+		memcpy(&length, buffer, 4);
 
 		if (ready) // Time out
 		{
 			LOG_DEBUG(LOG_PREFIX_NET_FILE << "file transfert timed out (0)");
 			pDead = 1;
 			file.close();
-			remove( (String(filename) << ".part").c_str() );
+			remove((String(filename) << ".part").c_str());
 			network->setFileDirty();
 			DELETE_ARRAY(buffer);
-			network->updateFileTransferInformation( String(filename) << sockid, 0, 0 );
+			network->updateFileTransferInformation(String(filename) << sockid, 0, 0);
 			return;
 		}
 
 		sofar = 0;
-		if (pDead) length = 1;			// In order to delete the file
+		if (pDead)
+			length = 1; // In order to delete the file
 		while (!pDead)
 		{
 			ready = true;
 			timer = msec_timer;
-			while( !pDead && ready && msec_timer - timer < 60000 ) suspend( 0 );			// Get paquet data
+			while (!pDead && ready && msec_timer - timer < 60000)
+				suspend(0); // Get paquet data
 			n = buffer_size;
 
 			if (ready) // Time out
@@ -411,10 +411,10 @@ namespace TA3D
 				LOG_DEBUG(LOG_PREFIX_NET_FILE << "file transfert timed out (1)");
 				pDead = 1;
 				file.close();
-				remove( (String(filename) << ".part").c_str() );
+				remove((String(filename) << ".part").c_str());
 				network->setFileDirty();
 				DELETE_ARRAY(buffer);
-				network->updateFileTransferInformation( String(filename) << sockid, 0, 0 );
+				network->updateFileTransferInformation(String(filename) << sockid, 0, 0);
 				return;
 			}
 
@@ -423,28 +423,28 @@ namespace TA3D
 				// First we must decompress the data
 
 				sofar += buffer_size;
-				network->updateFileTransferInformation( String(filename) << sockid, length, sofar );
+				network->updateFileTransferInformation(String(filename) << sockid, length, sofar);
 
-				file.write((const char*)buffer, buffer_size);       // Write data
+				file.write((const char*)buffer, buffer_size); // Write data
 
 				const int pos = sofar;
 				network->sendFileResponse(sockid, (uint16)port, (const byte*)&pos, 4);
 			}
-			if(sofar >= length)
+			if (sofar >= length)
 				break;
 			suspend(0);
 		}
 
 		LOG_INFO(LOG_PREFIX_NET_FILE << "Done.");
 
-		network->updateFileTransferInformation( String(filename) << sockid, 0, 0 );
+		network->updateFileTransferInformation(String(filename) << sockid, 0, 0);
 
 		file.close();
-		if( pDead && sofar < length )				// Delete the file if transfer has been aborted
-			remove( (String(filename) << ".part").c_str() );
+		if (pDead && sofar < length) // Delete the file if transfer has been aborted
+			remove((String(filename) << ".part").c_str());
 		else
 		{
-			rename( (String(filename) << ".part").c_str(), filename.c_str() );
+			rename((String(filename) << ".part").c_str(), filename.c_str());
 			VFS::Instance()->reload();
 		}
 
@@ -454,20 +454,18 @@ namespace TA3D
 		return;
 	}
 
-
-
 	//not finished
 	void AdminThread::proc(void* param)
 	{
 		Network* network;
 		network = ((struct net_thread_params*)param)->network;
-		delete((struct net_thread_params*)param);
+		delete ((struct net_thread_params*)param);
 		param = NULL;
-		while(!pDead)
+		while (!pDead)
 		{
 			network->cleanPlayer();
 			network->cleanFileThread();
-			if(network->myMode == 1)
+			if (network->myMode == 1)
 			{
 				//if you are the game 'server' then this thread
 				//handles requests and delegations on the administrative
@@ -482,11 +480,9 @@ namespace TA3D
 					//and other things
 				}
 			}
-			suspend(1);//testing
+			suspend(1); //testing
 		}
 		return;
 	}
 
-
 } // namespace TA3D
-

@@ -34,7 +34,6 @@
 #include <vfs/file.h>
 #include <misc/paths.h>
 
-
 namespace TA3D
 {
 
@@ -52,7 +51,6 @@ namespace TA3D
 			dt[32] = '\0';
 			out.assign(dt, (uint32)strlen(dt));
 		}
-
 	}
 
 	Gaf::Header::Header(File* file)
@@ -64,9 +62,10 @@ namespace TA3D
 	}
 
 	Gaf::Frame::Data::Data()
-		:Width(0), Height(0), XPos(0), YPos(0), Transparency(0), Compressed(0),
-		FramePointers(0), Unknown2(0), PtrFrameData(0), Unknown3(0)
-	{}
+		: Width(0), Height(0), XPos(0), YPos(0), Transparency(0), Compressed(0),
+		  FramePointers(0), Unknown2(0), PtrFrameData(0), Unknown3(0)
+	{
+	}
 
 	Gaf::Frame::Data::Data(File* file)
 	{
@@ -83,13 +82,12 @@ namespace TA3D
 		*file >> Unknown3;
 	}
 
-
 	void Gaf::ToTexturesList(std::vector<GLuint>& out, const String& filename, const String& imgname,
 							 int* w, int* h, const bool truecolor, const int filter)
 	{
 		out.clear();
 
-		File* file = VFS::Instance()->readFile(filename);		// Try to open it as a file
+		File* file = VFS::Instance()->readFile(filename); // Try to open it as a file
 		if (file)
 		{
 			sint32 idx = RawDataGetEntryIndex(file, imgname);
@@ -126,13 +124,15 @@ namespace TA3D
 						return;
 					}
 
-					if (w) w[indx] = img->w;
-					if (h) h[indx] = img->h;
+					if (w)
+						w[indx] = img->w;
+					if (h)
+						h[indx] = img->h;
 
 					bool with_alpha = false;
 					for (int y = 0; y < img->h && !with_alpha; ++y)
 						for (int x = 0; x < img->w && !with_alpha; ++x)
-							with_alpha |= geta( SurfaceInt(img, x, y) ) != 255;
+							with_alpha |= geta(SurfaceInt(img, x, y)) != 255;
 					if (g_useTextureCompression && lp_CONFIG->use_texture_compression)
 						gfx->set_texture_format(with_alpha ? GL_COMPRESSED_RGBA_ARB : GL_COMPRESSED_RGB_ARB);
 					else
@@ -144,8 +144,10 @@ namespace TA3D
 				}
 				else
 				{
-					if (w) w[indx] = fw;
-					if (h) h[indx] = fh;
+					if (w)
+						w[indx] = fw;
+					if (h)
+						h[indx] = fh;
 				}
 			}
 			delete file;
@@ -154,11 +156,11 @@ namespace TA3D
 		// Now try to open it as a GAF-like directory
 		String::Vector folderList;
 		VFS::Instance()->getFilelist(String(filename) << '\\' << imgname << "\\*", folderList);
-		if (!folderList.empty())			// So this is a directory with a GAF-like tree structure
+		if (!folderList.empty()) // So this is a directory with a GAF-like tree structure
 		{
 			sort(folderList.begin(), folderList.end());
 			int k = 0;
-			for(String::Vector::iterator i = folderList.begin() ; i != folderList.end() ; ++i, ++k)
+			for (String::Vector::iterator i = folderList.begin(); i != folderList.end(); ++i, ++k)
 			{
 				uint32 width, height;
 				out.push_back(gfx->load_texture(*i, filter, &width, &height));
@@ -169,8 +171,6 @@ namespace TA3D
 			}
 		}
 	}
-
-
 
 	GLuint Gaf::ToTexture(String filename, const String& imgname, int* w, int* h, const bool truecolor, const int filter)
 	{
@@ -186,15 +186,17 @@ namespace TA3D
 
 		if (first_try)
 		{
-			if (w)  *w = fw;
-			if (h)  *h = fh;
+			if (w)
+				*w = fw;
+			if (h)
+				*h = fh;
 			return first_try;
 		}
 
 		// Now try to open it as a GAF-like directory
 		String::Vector folderList;
 		VFS::Instance()->getFilelist(String(filename) << '\\' << imgname << "\\*", folderList);
-		if (!folderList.empty())			// So this is a directory with a GAF-like tree structure
+		if (!folderList.empty()) // So this is a directory with a GAF-like tree structure
 		{
 			sort(folderList.begin(), folderList.end());
 			return gfx->load_texture(folderList.front(), filter, (uint32*)w, (uint32*)h);
@@ -203,17 +205,19 @@ namespace TA3D
 		// Add GAF extension
 		filename << ".gaf";
 
-		File *file = VFS::Instance()->readFile(filename);			// Try to open it as file
+		File* file = VFS::Instance()->readFile(filename); // Try to open it as file
 		if (file)
 		{
 			sint32 idx = file->size() > 0 ? RawDataGetEntryIndex(file, imgname) : -1;
 			if (idx != -1)
 			{
-				SDL_Surface *img = Gaf::RawDataToBitmap(file, idx, 0, NULL, NULL, truecolor);
+				SDL_Surface* img = Gaf::RawDataToBitmap(file, idx, 0, NULL, NULL, truecolor);
 				if (img)
 				{
-					if (w) *w = img->w;
-					if (h) *h = img->h;
+					if (w)
+						*w = img->w;
+					if (h)
+						*h = img->h;
 					bool with_alpha = false;
 
 					for (int y = 0; y < img->h && !with_alpha; ++y)
@@ -226,7 +230,7 @@ namespace TA3D
 					else
 						gfx->set_texture_format(with_alpha ? gfx->defaultTextureFormat_RGBA() : gfx->defaultTextureFormat_RGB());
 
-					GLuint gl_img = gfx->make_texture(img,filter);
+					GLuint gl_img = gfx->make_texture(img, filter);
 					gfx->save_texture_to_cache(cache_filename, gl_img, img->w, img->h, with_alpha);
 
 					SDL_FreeSurface(img);
@@ -240,9 +244,7 @@ namespace TA3D
 		return 0;
 	}
 
-
-
-	String Gaf::RawDataGetEntryName(File *file, int entry_idx)
+	String Gaf::RawDataGetEntryName(File* file, int entry_idx)
 	{
 		LOG_ASSERT(file != NULL);
 		if (entry_idx < 0)
@@ -251,7 +253,7 @@ namespace TA3D
 		if (entry_idx >= header.Entries)
 			return nullptr;
 
-		sint32 *pointers = new sint32[header.Entries];
+		sint32* pointers = new sint32[header.Entries];
 
 		file->read(pointers, header.Entries * (int)sizeof(sint32));
 
@@ -265,7 +267,6 @@ namespace TA3D
 		DELETE_ARRAY(pointers);
 		return entry.name;
 	}
-
 
 	sint32 Gaf::RawDataGetEntryIndex(File* file, const String& name)
 	{
@@ -281,15 +282,13 @@ namespace TA3D
 		return -1;
 	}
 
-
-
 	sint32 Gaf::RawDataImageCount(File* file, const int entry_idx)
 	{
 		LOG_ASSERT(file != NULL);
 		if (entry_idx < 0)
 			return 0;
 		Gaf::Header header(file);
-		if (entry_idx >= header.Entries)		// Si le fichier contient moins d'images que img_idx, il y a erreur
+		if (entry_idx >= header.Entries) // Si le fichier contient moins d'images que img_idx, il y a erreur
 			return 0;
 
 		sint32* pointers = new sint32[header.Entries];
@@ -306,8 +305,6 @@ namespace TA3D
 		return entry.Frames;
 	}
 
-
-
 	SDL_Surface* Gaf::RawDataToBitmap(File* file, const sint32 entry_idx, const sint32 img_idx, short* ofs_x, short* ofs_y, const bool truecolor)
 	{
 		LOG_ASSERT(file != NULL);
@@ -317,7 +314,7 @@ namespace TA3D
 		if (entry_idx >= header.Entries) // Si le fichier contient moins d'images que img_idx, il y a erreur
 			return NULL;
 
-		sint32 *pointers = new sint32[header.Entries];
+		sint32* pointers = new sint32[header.Entries];
 		file->read(pointers, header.Entries * (int)sizeof(sint32));
 
 		Gaf::Entry entry;
@@ -341,7 +338,7 @@ namespace TA3D
 			*file >> frame[i].Unknown1;
 		}
 
-		SDL_Surface *frame_img = NULL;
+		SDL_Surface* frame_img = NULL;
 
 		try
 		{
@@ -371,17 +368,17 @@ namespace TA3D
 				file->seek(framedata.PtrFrameData);
 				sint32 img_size = 0;
 				*file >> img_size;
-				char *buf = new char[img_size];
+				char* buf = new char[img_size];
 				file->read(buf, img_size);
 
-				frame_img = gfx->create_surface_ex( framedata.Transparency ? 32 : 24, framedata.Width, framedata.Height );
+				frame_img = gfx->create_surface_ex(framedata.Transparency ? 32 : 24, framedata.Width, framedata.Height);
 				uLongf len = frame_img->w * frame_img->h * frame_img->format->BytesPerPixel;
-				uncompress ( (Bytef*) frame_img->pixels, &len, (Bytef*) buf, img_size);
+				uncompress((Bytef*)frame_img->pixels, &len, (Bytef*)buf, img_size);
 				delete[] buf;
 			}
 			else
 			{
-				for (int subframe = 0; subframe < nb_subframe || subframe < 1 ; ++subframe)
+				for (int subframe = 0; subframe < nb_subframe || subframe < 1; ++subframe)
 				{
 					if (nb_subframe)
 					{
@@ -403,11 +400,11 @@ namespace TA3D
 						*file >> framedata.Unknown3;
 					}
 
-					SDL_Surface *img = NULL;
+					SDL_Surface* img = NULL;
 
 					if (framedata.Compressed) // Si l'image est comprimée
 					{
-						LOG_ASSERT(framedata.Width  >= 0 && framedata.Width  < 4096);
+						LOG_ASSERT(framedata.Width >= 0 && framedata.Width < 4096);
 						LOG_ASSERT(framedata.Height >= 0 && framedata.Height < 4096);
 						if (!truecolor)
 						{
@@ -451,7 +448,7 @@ namespace TA3D
 									{
 										int l = (mask >> 2) + 1;
 										const byte c = (byte)file->getc();
-										const uint32 c32 = makeacol32(pal[c].r, pal[c].g, pal[c].b,0xFF);
+										const uint32 c32 = makeacol32(pal[c].r, pal[c].g, pal[c].b, 0xFF);
 										while (l > 0 && x < img->w)
 										{
 											if (!truecolor)
@@ -503,15 +500,15 @@ namespace TA3D
 
 						if (truecolor)
 						{
-							SDL_Surface *tmp = convert_format_copy(img);
-							for (int y = 0 ; y < tmp->h; ++y)
+							SDL_Surface* tmp = convert_format_copy(img);
+							for (int y = 0; y < tmp->h; ++y)
 							{
 								for (int x = 0; x < tmp->w; ++x)
 								{
 									if (SurfaceByte(img, x, y) == framedata.Transparency)
 										SurfaceInt(tmp, x, y) = 0x00000000;
 									else
-										SurfaceInt(tmp, x, y) |= makeacol(0,0,0, 0xFF);
+										SurfaceInt(tmp, x, y) |= makeacol(0, 0, 0, 0xFF);
 								}
 							}
 							SDL_FreeSurface(img);
@@ -527,12 +524,12 @@ namespace TA3D
 						{
 							if (!truecolor)
 							{
-								frame_img = gfx->create_surface_ex(8,frame_w,frame_h);
+								frame_img = gfx->create_surface_ex(8, frame_w, frame_h);
 								SDL_FillRect(frame_img, NULL, 0);
 							}
 							else
 							{
-								frame_img = gfx->create_surface_ex(32,frame_w,frame_h);
+								frame_img = gfx->create_surface_ex(32, frame_w, frame_h);
 								SDL_FillRect(frame_img, NULL, 0);
 							}
 							blit(img, frame_img, 0, 0, frame_x - framedata.XPos, frame_y - framedata.YPos, img->w, img->h);
@@ -574,14 +571,14 @@ namespace TA3D
 								}
 							}
 							else
-								masked_blit(img, frame_img, 0, 0, frame_x - framedata.XPos, frame_y - framedata.YPos, img->w, img->h );
+								masked_blit(img, frame_img, 0, 0, frame_x - framedata.XPos, frame_y - framedata.YPos, img->w, img->h);
 						}
 						SDL_FreeSurface(img);
 					}
 				}
 			}
 		}
-		catch(...)
+		catch (...)
 		{
 			LOG_ERROR("GAF data corrupt!");
 			DELETE_ARRAY(pointers);
@@ -594,16 +591,14 @@ namespace TA3D
 		return frame_img;
 	}
 
-
-
-	void Gaf::Animation::loadGAFFromRawData(File *file, const int entry_idx, const bool truecolor, const String& fname)
+	void Gaf::Animation::loadGAFFromRawData(File* file, const int entry_idx, const bool truecolor, const String& fname)
 	{
 		LOG_ASSERT(file != NULL);
 		if (entry_idx < 0 || !file)
 			return;
 		filename = fname;
 
-		nb_bmp = Gaf::RawDataImageCount(file,entry_idx);
+		nb_bmp = Gaf::RawDataImageCount(file, entry_idx);
 
 		bmp.resize(nb_bmp, NULL);
 		glbmp.resize(nb_bmp, 0);
@@ -611,19 +606,19 @@ namespace TA3D
 		ofs_y.resize(nb_bmp, 0);
 		w.resize(nb_bmp, 0);
 		h.resize(nb_bmp, 0);
-		name  = Gaf::RawDataGetEntryName(file, entry_idx);
+		name = Gaf::RawDataGetEntryName(file, entry_idx);
 		pAnimationConverted = false;
 
 		int i(0);
 		int f(0);
 		for (; i < nb_bmp; ++i)
 		{
-			if ((bmp[i-f] = Gaf::RawDataToBitmap(file, entry_idx, i, &(ofs_x[i-f]), &(ofs_y[i-f]), truecolor)) != NULL)
+			if ((bmp[i - f] = Gaf::RawDataToBitmap(file, entry_idx, i, &(ofs_x[i - f]), &(ofs_y[i - f]), truecolor)) != NULL)
 			{
-				w[i-f] = (short)bmp[i-f]->w;
-				h[i-f] = (short)bmp[i-f]->h;
+				w[i - f] = (short)bmp[i - f]->w;
+				h[i - f] = (short)bmp[i - f]->h;
 				if (!truecolor)
-					bmp[i-f] = convert_format(bmp[i-f]);
+					bmp[i - f] = convert_format(bmp[i - f]);
 			}
 			else
 				++f;
@@ -637,7 +632,7 @@ namespace TA3D
 		h.resize(nb_bmp);
 	}
 
-	void Gaf::Animation::loadGAFFromDirectory(const String &folderName, const String &entryName)
+	void Gaf::Animation::loadGAFFromDirectory(const String& folderName, const String& entryName)
 	{
 		filename = folderName;
 
@@ -660,12 +655,12 @@ namespace TA3D
 		int f(0);
 		for (; i < nb_bmp; ++i)
 		{
-			if ((bmp[i-f] = gfx->load_image(files[i])) != NULL)
+			if ((bmp[i - f] = gfx->load_image(files[i])) != NULL)
 			{
-				w[i-f] = (short)bmp[i-f]->w;
-				h[i-f] = (short)bmp[i-f]->h;
-				ofs_x[i-f] = 0;
-				ofs_y[i-f] = 0;
+				w[i - f] = (short)bmp[i - f]->w;
+				h[i - f] = (short)bmp[i - f]->h;
+				ofs_x[i - f] = 0;
+				ofs_y[i - f] = 0;
 			}
 			else
 				++f;
@@ -678,7 +673,6 @@ namespace TA3D
 		w.resize(nb_bmp);
 		h.resize(nb_bmp);
 	}
-
 
 	void Gaf::Animation::init()
 	{
@@ -695,15 +689,14 @@ namespace TA3D
 		name.clear();
 	}
 
-
 	void Gaf::Animation::destroy()
 	{
 		filename.clear();
 		name.clear();
-		for (std::vector<SDL_Surface*>::iterator i = bmp.begin() ; i != bmp.end() ; ++i)
+		for (std::vector<SDL_Surface*>::iterator i = bmp.begin(); i != bmp.end(); ++i)
 			if (*i)
 				SDL_FreeSurface(*i);
-		for (std::vector<GLuint>::iterator i = glbmp.begin() ; i != glbmp.end() ; ++i)
+		for (std::vector<GLuint>::iterator i = glbmp.begin(); i != glbmp.end(); ++i)
 			gfx->destroy_texture(*i);
 		w.clear();
 		h.clear();
@@ -716,7 +709,7 @@ namespace TA3D
 
 	void Gaf::Animation::clean()
 	{
-		for (std::vector<SDL_Surface*>::iterator i = bmp.begin() ; i != bmp.end() ; ++i)
+		for (std::vector<SDL_Surface*>::iterator i = bmp.begin(); i != bmp.end(); ++i)
 			if (*i)
 			{
 				SDL_FreeSurface(*i);
@@ -724,7 +717,6 @@ namespace TA3D
 			}
 		name.clear();
 	}
-
 
 	void Gaf::Animation::convert(bool NO_FILTER, bool COMPRESSED)
 	{
@@ -737,7 +729,7 @@ namespace TA3D
 			cache_filename << filename << '-' << (name.empty() ? "none" : name) << '-' << i << ".bin";
 
 			if (!filename.empty())
-				glbmp[i] = gfx->load_texture_from_cache(cache_filename, NO_FILTER ? FILTER_NONE : FILTER_TRILINEAR );
+				glbmp[i] = gfx->load_texture_from_cache(cache_filename, NO_FILTER ? FILTER_NONE : FILTER_TRILINEAR);
 			else
 				glbmp[i] = 0;
 
@@ -748,7 +740,7 @@ namespace TA3D
 					gfx->set_texture_format(GL_COMPRESSED_RGBA_ARB);
 				else
 					gfx->set_texture_format(gfx->defaultTextureFormat_RGBA());
-				glbmp[i] = gfx->make_texture(bmp[i], NO_FILTER ? FILTER_NONE : FILTER_TRILINEAR );
+				glbmp[i] = gfx->make_texture(bmp[i], NO_FILTER ? FILTER_NONE : FILTER_TRILINEAR);
 				if (!filename.empty())
 					gfx->save_texture_to_cache(cache_filename, glbmp[i], bmp[i]->w, bmp[i]->h, true);
 			}
@@ -765,14 +757,13 @@ namespace TA3D
 		pList.clear();
 	}
 
-
 	sint32 Gaf::AnimationList::loadGAFFromRawData(File* file, const bool doConvert, const String& fname)
 	{
 		if (file)
 		{
 			pList.clear();
 			pList.resize(Gaf::RawDataEntriesCount(file));
-			for (uint32 i = 0 ; i < pList.size() ; ++i)
+			for (uint32 i = 0; i < pList.size(); ++i)
 				pList[i].loadGAFFromRawData(file, i, true, fname);
 			if (doConvert)
 				convert();
@@ -781,13 +772,13 @@ namespace TA3D
 		return 0;
 	}
 
-	sint32 Gaf::AnimationList::loadGAFFromDirectory(const String &folderName, const bool doConvert)
+	sint32 Gaf::AnimationList::loadGAFFromDirectory(const String& folderName, const bool doConvert)
 	{
 		String::Vector entries;
 		VFS::Instance()->getDirlist(String(folderName) << "\\*", entries);
 		pList.clear();
 		pList.resize(entries.size());
-		for (uint32 i = 0 ; i < pList.size() ; ++i)
+		for (uint32 i = 0; i < pList.size(); ++i)
 			pList[i].loadGAFFromDirectory(folderName, Paths::ExtractFileName(entries[i]));
 		if (doConvert)
 			convert();
@@ -796,7 +787,7 @@ namespace TA3D
 
 	sint32 Gaf::AnimationList::findByName(const String& name) const
 	{
-		for (uint32 i = 0 ; i < pList.size() ; ++i)
+		for (uint32 i = 0; i < pList.size(); ++i)
 		{
 			if (name == pList[i].name)
 				return i;
@@ -804,20 +795,17 @@ namespace TA3D
 		return -1;
 	}
 
-
 	void Gaf::AnimationList::clean()
 	{
-		for (AnimationVector::iterator i = pList.begin() ; i != pList.end() ; ++i)
+		for (AnimationVector::iterator i = pList.begin(); i != pList.end(); ++i)
 			i->clean();
 	}
 
-
 	void Gaf::AnimationList::convert(const bool no_filter, const bool compressed)
 	{
-		for (AnimationVector::iterator i = pList.begin() ; i != pList.end() ; ++i)
+		for (AnimationVector::iterator i = pList.begin(); i != pList.end(); ++i)
 			i->convert(no_filter, compressed);
 	}
-
 
 	sint32 Gaf::RawDataEntriesCount(File* file)
 	{
@@ -827,6 +815,4 @@ namespace TA3D
 		return v;
 	}
 
-
 } // namespace TA3D
-

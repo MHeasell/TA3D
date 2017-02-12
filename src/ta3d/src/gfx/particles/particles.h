@@ -26,26 +26,21 @@
 #ifndef __CLASSE_PARTICLES
 #define __CLASSE_PARTICLES
 
-
-
 // class ParticlesSystem
-# include "particlessystem.h"
+#include "particlessystem.h"
 //
-# include "particlesengine.h"
+#include "particlesengine.h"
 // Single particle
-# include "particle.h"
-
-
+#include "particle.h"
 
 namespace TA3D
 {
 
-    /*!
+	/*!
     ** \brief
     */
-    extern PARTICLE_ENGINE particle_engine;
+	extern PARTICLE_ENGINE particle_engine;
 
 } // namespace TA3D
-
 
 #endif

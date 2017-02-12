@@ -26,61 +26,55 @@
 namespace TA3D
 {
 
+	FXParticle::FXParticle(const Vector3D& P, const Vector3D& S, const float L)
+		: Pos(P), Speed(S), life(L), timer(0.0f)
+	{
+	}
 
-    FXParticle::FXParticle(const Vector3D& P, const Vector3D& S, const float L)
-        :Pos(P), Speed(S), life(L), timer(0.0f)
-    {}
+	bool FXParticle::move(const float dt)
+	{
+		life -= dt;
+		timer += dt;
 
-
-
-    bool FXParticle::move(const float dt)
-    {
-        life -= dt;
-        timer += dt;
-
-        Speed.y -= dt * the_map->ota_data.gravity;		// React to gravity
+		Speed.y -= dt * the_map->ota_data.gravity; // React to gravity
 		Pos += dt * Speed;
 
 		const float min_h = the_map->get_unit_h(Pos.x, Pos.z);
-        if (Pos.y < min_h) // Bouncing on the map :)
-        {
-            Pos.y = 2.0f * min_h - Pos.y;
-            float dx = the_map->get_unit_h(Pos.x + 16.0f, Pos.z) - min_h;
-            float dz = the_map->get_unit_h(Pos.x, Pos.z + 16.0f) - min_h;
-            Vector3D Normal(-dx, 16.0f, -dz);
-            Normal.unit();
+		if (Pos.y < min_h) // Bouncing on the map :)
+		{
+			Pos.y = 2.0f * min_h - Pos.y;
+			float dx = the_map->get_unit_h(Pos.x + 16.0f, Pos.z) - min_h;
+			float dz = the_map->get_unit_h(Pos.x, Pos.z + 16.0f) - min_h;
+			Vector3D Normal(-dx, 16.0f, -dz);
+			Normal.unit();
 
-            float cross = Speed % Normal;
-            if (cross < 0.0f)
-                Speed -= (1.5f * cross) * Normal;
-        }
+			float cross = Speed % Normal;
+			if (cross < 0.0f)
+				Speed -= (1.5f * cross) * Normal;
+		}
 
-        while (timer >= 0.2f) // Emit smoke
-        {
-            timer -= 0.2f;
-            particle_engine.make_dark_smoke( Pos, 0, 1, 0.0f, -1.0f, -1.0f, 1.0f );
-        }
-        // When it shoud die, return true
-        return (life <= 0.0f);
-    }
+		while (timer >= 0.2f) // Emit smoke
+		{
+			timer -= 0.2f;
+			particle_engine.make_dark_smoke(Pos, 0, 1, 0.0f, -1.0f, -1.0f, 1.0f);
+		}
+		// When it shoud die, return true
+		return (life <= 0.0f);
+	}
 
-
-
-    void FXParticle::draw(RenderQueue &renderQueue)
-    {
-        if (the_map)            // Visibility test
-        {
-			const int px = ((int)(Pos.x+0.5f) + the_map->map_w_d)>>4;
-			const int py = ((int)(Pos.z+0.5f) + the_map->map_h_d)>>4;
-			if (px < 0 || py < 0 || px >= the_map->bloc_w || py >= the_map->bloc_h)	return;
+	void FXParticle::draw(RenderQueue& renderQueue)
+	{
+		if (the_map) // Visibility test
+		{
+			const int px = ((int)(Pos.x + 0.5f) + the_map->map_w_d) >> 4;
+			const int py = ((int)(Pos.z + 0.5f) + the_map->map_h_d) >> 4;
+			if (px < 0 || py < 0 || px >= the_map->bloc_w || py >= the_map->bloc_h)
+				return;
 			const byte player_mask = byte(1 << players.local_human_id);
-			if (the_map->view(px, py) != 1
-			   || !(the_map->sight_map(px, py) & player_mask))	return;
-        }
-        renderQueue.queue.push_back( Instance( Pos, 0xFFFFFFFF, 0.0f ) );
-    }
-
-
+			if (the_map->view(px, py) != 1 || !(the_map->sight_map(px, py) & player_mask))
+				return;
+		}
+		renderQueue.queue.push_back(Instance(Pos, 0xFFFFFFFF, 0.0f));
+	}
 
 } // namespace TA3D
-

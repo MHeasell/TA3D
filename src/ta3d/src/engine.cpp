@@ -23,17 +23,14 @@
 #include "engine.h"
 #include "ta3dbase.h"
 
-#include "UnitEngine.h"            // The Unit Engine
+#include "UnitEngine.h" // The Unit Engine
 
-#include "gfx/fx.h"	               // Special FX engine
+#include "gfx/fx.h" // Special FX engine
 #include "languages/i18n.h"
 #include "sounds/manager.h"
 #include "input/mouse.h"
 #include "input/keyboard.h"
 #include "backtrace.h"
-
-
-
 
 namespace TA3D
 {
@@ -56,8 +53,6 @@ namespace TA3D
 		}
 	}
 
-
-
 	Engine::Engine()
 		: pSDLRunning(false), pGFXModeActive(false)
 	{
@@ -73,19 +68,18 @@ namespace TA3D
 
 		// Initalizing SDL video
 		if (::SDL_Init(SDL_INIT_VIDEO))
-			throw ("SDL_Init(SDL_INIT_VIDEO) yielded unexpected result.");
+			throw("SDL_Init(SDL_INIT_VIDEO) yielded unexpected result.");
 		// Installing SDL timer
 		if (::SDL_InitSubSystem(SDL_INIT_TIMER) != 0)
-			throw ("SDL_InitSubSystem(SDL_INIT_TIMER) yielded unexpected result.");
+			throw("SDL_InitSubSystem(SDL_INIT_TIMER) yielded unexpected result.");
 		// Initializing SDL Net
 		if (::SDLNet_Init() == -1)
-			throw ("SDLNet_Init() failed.");
+			throw("SDLNet_Init() failed.");
 
 		// Load the VFS
 		VFS::Instance()->reload();
 
-		if (!VFS::Instance()->fileExists("gamedata\\sidedata.tdf") || !VFS::Instance()->fileExists("gamedata\\allsound.tdf")
-			|| !VFS::Instance()->fileExists("gamedata\\sound.tdf"))
+		if (!VFS::Instance()->fileExists("gamedata\\sidedata.tdf") || !VFS::Instance()->fileExists("gamedata\\allsound.tdf") || !VFS::Instance()->fileExists("gamedata\\sound.tdf"))
 		{
 			showError("RESOURCES ERROR");
 			exit(1);
@@ -94,21 +88,18 @@ namespace TA3D
 		// set SDL running status;
 		pSDLRunning = true;
 
-
 		// Outputs SDL_net version numbers
 		SDL_version compiled_version;
-		const SDL_version *linked_version;
+		const SDL_version* linked_version;
 		SDL_NET_VERSION(&compiled_version);
 		LOG_DEBUG(LOG_PREFIX_NET << "Compiled with SDL_net version: " << (int)compiled_version.major << "." << (int)compiled_version.minor << "." << (int)compiled_version.patch);
 		linked_version = SDLNet_Linked_Version();
 		LOG_DEBUG(LOG_PREFIX_NET << "Running with SDL_net version: " << (int)linked_version->major << "." << (int)linked_version->minor << "." << (int)linked_version->patch);
 
-
 		// Creating GFX Interface
 		// Don't try to start sound before gfx, if we have to display the warning message while in fullscreen
-		gfx = new GFX();		// TA3D's main window might lose focus and message may not be shown ...
+		gfx = new GFX(); // TA3D's main window might lose focus and message may not be shown ...
 		pGFXModeActive = true;
-
 
 		// Title of the Window / Application
 		SDL_WM_SetCaption("Total Annihilation 3D", "TA3D");
@@ -116,7 +107,6 @@ namespace TA3D
 		// Display informations about OpenGL
 		displayInfosAboutOpenGL();
 	}
-
 
 	Engine::~Engine(void)
 	{
@@ -139,7 +129,6 @@ namespace TA3D
 		}
 	}
 
-
 	void Engine::initializationFromTheMainThread()
 	{
 		// Load the default textures
@@ -158,7 +147,6 @@ namespace TA3D
 		if (!sound_manager->isRunning() && !lp_CONFIG->quickstart)
 			showWarning("FMOD WARNING");
 	}
-
 
 	bool Engine::onExecute()
 	{
@@ -202,19 +190,17 @@ namespace TA3D
 		return false;
 	}
 
-
 	void rest(uint32 msec)
 	{
 		::SDL_Delay(msec);
 	}
 
-
 	void Engine::displayInfosAboutOpenGL() const
 	{
 		logs.checkpoint() << "OpenGL Informations :";
-		logs.info() << "Vendor: "   << (const char*) glGetString(GL_VENDOR);
-		logs.info() << "Renderer: " << (const char*) glGetString(GL_RENDERER);
-		logs.info() << "Version: "  << (const char*) glGetString(GL_VERSION);
+		logs.info() << "Vendor: " << (const char*)glGetString(GL_VENDOR);
+		logs.info() << "Renderer: " << (const char*)glGetString(GL_RENDERER);
+		logs.info() << "Version: " << (const char*)glGetString(GL_VERSION);
 		if (gfx->atiWorkaround())
 			LOG_WARNING("ATI or SIS card detected ! Using workarounds for ATI/SIS cards");
 		LOG_INFO(LOG_PREFIX_OPENGL << "Texture compression: " << (g_useTextureCompression ? "Yes" : "No"));

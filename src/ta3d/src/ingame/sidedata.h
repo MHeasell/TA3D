@@ -15,24 +15,22 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA*/
 #ifndef __TA3D_INGAME_SideData_H__
-# define __TA3D_INGAME_SideData_H__
+#define __TA3D_INGAME_SideData_H__
 
-# include <stdafx.h>
-# include <ta3dbase.h>
-# include <misc/string.h>
-# include <tdf.h>
-
+#include <stdafx.h>
+#include <ta3dbase.h>
+#include <misc/string.h>
+#include <tdf.h>
 
 namespace TA3D
 {
 
 	struct IntrElementCoords // INT_ELEMENT
 	{
-		int	x1, y1;
-		int	x2, y2;
+		int x1, y1;
+		int x2, y2;
 
 	}; // IntrElementCoords
-
 
 	struct InterfaceData
 	{
@@ -93,11 +91,6 @@ namespace TA3D
 
 	}; // InterfaceData
 
-
-
-
-
-
 	/*!
 	** \brief
 	*/
@@ -120,7 +113,7 @@ namespace TA3D
 		/*!
 		** \brief
 		*/
-		int	getSideId(const String& side) const;
+		int getSideId(const String& side) const;
 
 		/*!
 		** \brief
@@ -157,22 +150,15 @@ namespace TA3D
 
 	}; // class SideData
 
-
-
-
-
 	/*!
 	** \brief
 	*/
 	IntrElementCoords read_gui_element(TDFParser* parser, const String& element, bool bottom = false);
 
-
 	/*!
 	**
 	*/
 	extern SideData ta3dSideData;
-
-
 
 } // namespace TA3D
 

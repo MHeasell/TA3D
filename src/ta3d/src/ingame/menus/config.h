@@ -24,42 +24,43 @@
 namespace TA3D
 {
 	class TA3DCONFIG;
-namespace Menus
-{
-
-	class Config : public Abstract
+	namespace Menus
 	{
-	public:
-		/*!
+
+		class Config : public Abstract
+		{
+		public:
+			/*!
 		** \brief Execute an instance of Config
 		*/
-		static bool Execute();
-	public:
-		Config();
-		//! Destructor
-		virtual ~Config();
+			static bool Execute();
 
-	protected:
-		virtual bool doInitialize();
-		virtual void doFinalize();
-		virtual void waitForEvent();
-		virtual bool maySwitchToAnotherMenu();
+		public:
+			Config();
+			//! Destructor
+			virtual ~Config();
 
-	private:
-		TA3DCONFIG *saved_config;
-		std::vector< String > fps_limits;
-		int nb_res;
-		int res_width[100];
-		int res_height[100];
-		int res_bpp[100];
-		std::vector<I18N::Language> languageList;
+		protected:
+			virtual bool doInitialize();
+			virtual void doFinalize();
+			virtual void waitForEvent();
+			virtual bool maySwitchToAnotherMenu();
 
-		bool save;
-		uint32 timer;
-		bool time_out;
-	};
+		private:
+			TA3DCONFIG *saved_config;
+			std::vector<String> fps_limits;
+			int nb_res;
+			int res_width[100];
+			int res_height[100];
+			int res_bpp[100];
+			std::vector<I18N::Language> languageList;
 
-} // namespace Menus
+			bool save;
+			uint32 timer;
+			bool time_out;
+		};
+
+	} // namespace Menus
 } // namespace TA3D
 
 #endif // CONFIG_H

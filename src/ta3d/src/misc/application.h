@@ -15,13 +15,12 @@
 	along with this program; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA*/
 #ifndef __TA3D_XX__MISC_APPLICATION_H__
-# define __TA3D_XX__MISC_APPLICATION_H__
+#define __TA3D_XX__MISC_APPLICATION_H__
 
-# include "string.h"
+#include "string.h"
 
 namespace TA3D
 {
-
 
 	/*!
 	** \brief Initialize all modules
@@ -30,9 +29,6 @@ namespace TA3D
 	*/
 	void Initialize(int argc, char* argv[]);
 
-
-
 } // namespace TA3D
-
 
 #endif // __TA3D_XX__MISC_APPLICATION_H__

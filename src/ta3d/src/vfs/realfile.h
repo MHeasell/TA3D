@@ -22,10 +22,10 @@
 */
 
 #ifndef __TA3D_UTILS_REALFILE_H__
-# define __TA3D_UTILS_REALFILE_H__
+#define __TA3D_UTILS_REALFILE_H__
 
-# include "file.h"
-# include <yuni/core/io/file/stream.h>
+#include "file.h"
+#include <yuni/core/io/file/stream.h>
 
 namespace TA3D
 {
@@ -66,10 +66,10 @@ namespace TA3D
 			void open(const String &filename);
 
 		private:
-			virtual File &operator=(const File &) {return *this;}
+			virtual File &operator=(const File &) { return *this; }
 
 		private:
-			Yuni::Core::IO::File::Stream	sFile;
+			Yuni::Core::IO::File::Stream sFile;
 			char *buffer;
 			String realFilename;
 		};

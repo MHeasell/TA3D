@@ -12,7 +12,7 @@ namespace TA3D
 		Ftp();
 		virtual ~Ftp();
 
-		virtual void proc(void* param);
+		virtual void proc(void *param);
 		virtual void signalExitThread();
 
 		/*!
@@ -29,7 +29,7 @@ namespace TA3D
 		/*!
 		 * \brief download a file (as a String or a real file), does the work in current thread so this is blocking
 		 */
-		static bool getFile( const String &filename, const String &servername, const String &_request );
+		static bool getFile(const String &filename, const String &servername, const String &_request);
 
 	private:
 		bool bStop;

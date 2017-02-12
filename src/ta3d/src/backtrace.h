@@ -18,11 +18,10 @@
 // Obtain a backtrace and print it to stdout.
 
 #ifndef __TA3D_BACKTRACE_H__
-# define __TA3D_BACKTRACE_H__
+#define __TA3D_BACKTRACE_H__
 
-
-void init_signals (void);
-void clear_signals (void);
+void init_signals(void);
+void clear_signals(void);
 void criticalMessage(const String &msg);
 
 #endif // __TA3D_BACKTRACE_H__

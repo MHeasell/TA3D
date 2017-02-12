@@ -20,14 +20,11 @@
 #include <UnitEngine.h>
 #include <engine.h>
 
-
-
 namespace TA3D
 {
 
-	PLAYERS	players;		// Objet contenant les données sur les joueurs
+	PLAYERS players; // Objet contenant les données sur les joueurs
 	int NB_PLAYERS;
-
 
 	static inline bool NeedSynchronization(struct sync &a, const struct sync &b)
 	{
@@ -42,61 +39,64 @@ namespace TA3D
 		mask |= (a.build_percent_left != b.build_percent_left) ? SYNC_MASK_BPL : 0;
 		a.mask = (uint8)mask;
 		// Make sure we don't add errors
-		if (!(mask & SYNC_MASK_X))	a.x = b.x;
-		if (!(mask & SYNC_MASK_Y))	a.y = b.y;
-		if (!(mask & SYNC_MASK_Z))	a.z = b.z;
-		if (!(mask & SYNC_MASK_VX))	a.vx = b.vx;
-		if (!(mask & SYNC_MASK_VZ))	a.vz = b.vz;
+		if (!(mask & SYNC_MASK_X))
+			a.x = b.x;
+		if (!(mask & SYNC_MASK_Y))
+			a.y = b.y;
+		if (!(mask & SYNC_MASK_Z))
+			a.z = b.z;
+		if (!(mask & SYNC_MASK_VX))
+			a.vx = b.vx;
+		if (!(mask & SYNC_MASK_VZ))
+			a.vz = b.vz;
 		return mask != 0;
 	}
 
-
-
-	int PLAYERS::add(const String& name, const String &SIDE, byte _control, unsigned int E, unsigned int M, const String &AI_level, uint16 teamMask)
+	int PLAYERS::add(const String &name, const String &SIDE, byte _control, unsigned int E, unsigned int M, const String &AI_level, uint16 teamMask)
 	{
 		if (pPlayerCount >= TA3D_PLAYERS_HARD_LIMIT)
 		{
 			LOG_ERROR("Impossible to add a player : The maximumum limit has been reached");
-			return -1;		// Trop de joueurs déjà
+			return -1; // Trop de joueurs déjà
 		}
 
 		// Noticing logs of a new player
 		LOG_INFO("Adding a new player: `" << name << "` (" << pPlayerCount << ") of `" << SIDE
-			<< "` with E=" << E << ", M=" << M << " AI=" << AI_level);
+										  << "` with E=" << E << ", M=" << M << " AI=" << AI_level);
 
 		// Initializing the player
-		r_metal[pPlayerCount]          = 0.f;
-		r_energy[pPlayerCount]         = 0.f;
-		requested_metal[pPlayerCount]  = 0.f;
+		r_metal[pPlayerCount] = 0.f;
+		r_energy[pPlayerCount] = 0.f;
+		requested_metal[pPlayerCount] = 0.f;
 		requested_energy[pPlayerCount] = 0.f;
 
-		metal_u[pPlayerCount]      = 0.f;
-		energy_u[pPlayerCount]     = 0.f;
-		metal_t[pPlayerCount]      = 0.f;
-		energy_t[pPlayerCount]     = 0.f;
-		kills[pPlayerCount]        = 0;
-		losses[pPlayerCount]       = 0;
-		nom[pPlayerCount]          = name;
-		control[pPlayerCount]      = _control;
-		nb_unit[pPlayerCount]      = 0;
+		metal_u[pPlayerCount] = 0.f;
+		energy_u[pPlayerCount] = 0.f;
+		metal_t[pPlayerCount] = 0.f;
+		energy_t[pPlayerCount] = 0.f;
+		kills[pPlayerCount] = 0;
+		losses[pPlayerCount] = 0;
+		nom[pPlayerCount] = name;
+		control[pPlayerCount] = _control;
+		nb_unit[pPlayerCount] = 0;
 		energy_total[pPlayerCount] = 0.0f;
-		metal_total[pPlayerCount]  = 0.0f;
-		com_metal[pPlayerCount]    = M;
-		com_energy[pPlayerCount]   = E;
-		energy[pPlayerCount]       = float(E);
-		metal[pPlayerCount]        = float(M);
-		energy_s[pPlayerCount]     = E;
-		metal_s[pPlayerCount]      = M;
+		metal_total[pPlayerCount] = 0.0f;
+		com_metal[pPlayerCount] = M;
+		com_energy[pPlayerCount] = E;
+		energy[pPlayerCount] = float(E);
+		metal[pPlayerCount] = float(M);
+		energy_s[pPlayerCount] = E;
+		metal_s[pPlayerCount] = M;
 		if (teamMask == 0)
-			team[pPlayerCount]     = uint16(1 << pPlayerCount);       // Try to be your own enemy :P
+			team[pPlayerCount] = uint16(1 << pPlayerCount); // Try to be your own enemy :P
 		else
-			team[pPlayerCount]     = teamMask;
+			team[pPlayerCount] = teamMask;
 		side[pPlayerCount++] = SIDE;
 
 		if (_control == PLAYER_CONTROL_LOCAL_HUMAN)
 		{
 			local_human_id = NB_PLAYERS;
-			for (int i = 0; i < ta3dSideData.nb_side ; ++i)
+			for (int i = 0; i < ta3dSideData.nb_side; ++i)
 			{
 				if (ToLower(ta3dSideData.side_name[i]) == ToLower(SIDE))
 				{
@@ -111,7 +111,7 @@ namespace TA3D
 			filename << "ai/" << name << ".ai";
 			if (Paths::Exists(filename)) // Load saved data for AI player
 				ai_command[NB_PLAYERS].load(filename, NB_PLAYERS);
-			else													// Sinon crée un nouveau joueur
+			else // Sinon crée un nouveau joueur
 				ai_command[NB_PLAYERS].changeName(name);
 			ai_command[NB_PLAYERS].setAI(AI_level);
 			ai_command[NB_PLAYERS].setPlayerID(NB_PLAYERS);
@@ -119,19 +119,18 @@ namespace TA3D
 		return ++NB_PLAYERS;
 	}
 
-
 	void PLAYERS::show_resources()
 	{
 		glEnable(GL_TEXTURE_2D);
 		glEnable(GL_BLEND);
-		glTexEnvi(GL_TEXTURE_ENV,GL_TEXTURE_ENV_MODE,GL_MODULATE);
-		glBlendFunc(GL_ONE,GL_ONE_MINUS_SRC_COLOR);
+		glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+		glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_COLOR);
 
 		units.lock();
 
 		const int _id = (local_human_id != -1) ? local_human_id : 0;
 
-		const InterfaceData &side_data = ta3dSideData.side_int_data[ players.side_view ];
+		const InterfaceData &side_data = ta3dSideData.side_int_data[players.side_view];
 
 		gfx->print(gfx->small_font,
 				   (float)side_data.MetalNum.x1,
@@ -145,19 +144,19 @@ namespace TA3D
 		gfx->print(gfx->small_font,
 				   (float)side_data.MetalConsumed.x1,
 				   (float)side_data.MetalConsumed.y1,
-				   0.0f,side_data.metal_color, String().format("%.2f", metal_u[_id]));
+				   0.0f, side_data.metal_color, String().format("%.2f", metal_u[_id]));
 		gfx->print(gfx->small_font,
 				   (float)side_data.Metal0.x1,
 				   (float)side_data.Metal0.y1,
-				   0.0f,side_data.metal_color,"0");
+				   0.0f, side_data.metal_color, "0");
 		gfx->print_right(gfx->small_font,
 						 (float)side_data.MetalMax.x1,
 						 (float)side_data.MetalMax.y1,
-						 0.0f,side_data.metal_color, String() << metal_s[_id] );
+						 0.0f, side_data.metal_color, String() << metal_s[_id]);
 		gfx->print(gfx->small_font,
 				   (float)side_data.EnergyNum.x1,
 				   (float)side_data.EnergyNum.y1,
-				   0.0f,side_data.energy_color, String() << (int)energy[_id]);
+				   0.0f, side_data.energy_color, String() << (int)energy[_id]);
 
 		gfx->print(gfx->small_font,
 				   (float)side_data.EnergyProduced.x1,
@@ -168,56 +167,54 @@ namespace TA3D
 		gfx->print(gfx->small_font,
 				   (float)side_data.EnergyConsumed.x1,
 				   (float)side_data.EnergyConsumed.y1,
-				   0.0f,side_data.energy_color, String().format("%.2f", energy_u[_id]));
+				   0.0f, side_data.energy_color, String().format("%.2f", energy_u[_id]));
 		gfx->print(gfx->small_font,
 				   (float)side_data.Energy0.x1,
 				   (float)side_data.Energy0.y1,
-				   0.0f,side_data.energy_color,"0");
+				   0.0f, side_data.energy_color, "0");
 		gfx->print_right(gfx->small_font,
 						 (float)side_data.EnergyMax.x1,
 						 (float)side_data.EnergyMax.y1,
-						 0.0f,side_data.energy_color, String() << energy_s[_id] );
+						 0.0f, side_data.energy_color, String() << energy_s[_id]);
 
 		glDisable(GL_TEXTURE_2D);
 
 		glDisable(GL_BLEND);
-		glBegin(GL_QUADS);			// Dessine les barres de metal et d'énergie
-		gfx->set_color( side_data.metal_color );
+		glBegin(GL_QUADS); // Dessine les barres de metal et d'énergie
+		gfx->set_color(side_data.metal_color);
 
 		if (metal_s[_id])
 		{
 			const float metal_percent = metal_s[_id] ? metal[_id] / float(metal_s[_id]) : 0.0f;
-			glVertex2f( (float)side_data.MetalBar.x1,
-						(float)side_data.MetalBar.y1 );
-			glVertex2f( (float)side_data.MetalBar.x1 + metal_percent * float(side_data.MetalBar.x2 - side_data.MetalBar.x1),
-						(float)side_data.MetalBar.y1 );
-			glVertex2f( (float)side_data.MetalBar.x1 + metal_percent * float(side_data.MetalBar.x2 - side_data.MetalBar.x1),
-						(float)side_data.MetalBar.y2 );
-			glVertex2f( (float)side_data.MetalBar.x1,
-						(float)side_data.MetalBar.y2 );
+			glVertex2f((float)side_data.MetalBar.x1,
+					   (float)side_data.MetalBar.y1);
+			glVertex2f((float)side_data.MetalBar.x1 + metal_percent * float(side_data.MetalBar.x2 - side_data.MetalBar.x1),
+					   (float)side_data.MetalBar.y1);
+			glVertex2f((float)side_data.MetalBar.x1 + metal_percent * float(side_data.MetalBar.x2 - side_data.MetalBar.x1),
+					   (float)side_data.MetalBar.y2);
+			glVertex2f((float)side_data.MetalBar.x1,
+					   (float)side_data.MetalBar.y2);
 		}
 
-		gfx->set_color( side_data.energy_color );
+		gfx->set_color(side_data.energy_color);
 		if (energy_s[_id])
 		{
 			const float energy_percent = energy_s[_id] ? energy[_id] / float(energy_s[_id]) : 0.0f;
 			glVertex2f((float)side_data.EnergyBar.x1,
-					   (float)side_data.EnergyBar.y1 );
+					   (float)side_data.EnergyBar.y1);
 			glVertex2f((float)side_data.EnergyBar.x1 + energy_percent * float(side_data.EnergyBar.x2 - side_data.EnergyBar.x1),
-					   (float)side_data.EnergyBar.y1 );
+					   (float)side_data.EnergyBar.y1);
 			glVertex2f((float)side_data.EnergyBar.x1 + energy_percent * float(side_data.EnergyBar.x2 - side_data.EnergyBar.x1),
-					   (float)side_data.EnergyBar.y2 );
+					   (float)side_data.EnergyBar.y2);
 			glVertex2f((float)side_data.EnergyBar.x1,
-					   (float)side_data.EnergyBar.y2 );
+					   (float)side_data.EnergyBar.y2);
 		}
 
 		units.unlock();
 
 		glEnd();
-		glColor4ub(0xFF,0xFF,0xFF,0xFF);
+		glColor4ub(0xFF, 0xFF, 0xFF, 0xFF);
 	}
-
-
 
 	void PLAYERS::player_control()
 	{
@@ -227,7 +224,7 @@ namespace TA3D
 				ai_command[i].monitor();
 		}
 
-		if( (units.current_tick % 3) == 0 && last_ticksynced != units.current_tick && network_manager.isConnected())
+		if ((units.current_tick % 3) == 0 && last_ticksynced != units.current_tick && network_manager.isConnected())
 		{
 			last_ticksynced = units.current_tick;
 
@@ -237,7 +234,7 @@ namespace TA3D
 			{
 				const size_t i = units.idx_list[e];
 				if (i >= units.max_unit)
-					continue;		// Error !!
+					continue; // Error !!
 				units.unlock();
 
 				units.unit[i].lock();
@@ -255,7 +252,7 @@ namespace TA3D
 					sync.flags = 0;
 					if (units.unit[i].flying)
 						sync.flags |= SYNC_FLAG_FLYING;
-					if( units.unit[i].cloaking)
+					if (units.unit[i].cloaking)
 						sync.flags |= SYNC_FLAG_CLOAKING;
 					sync.x = units.unit[i].Pos.x;
 					sync.y = units.unit[i].Pos.y;
@@ -266,8 +263,8 @@ namespace TA3D
 					while (angle < 0.0f)
 						angle += 360.0f;
 					sync.orientation = (uint16)(angle * 65535.0f / 360.0f);
-					sync.hp = (uint16)units.unit[ i ].hp;
-					sync.build_percent_left = (uint8)(units.unit[ i ].build_percent_left * 2.55f);
+					sync.hp = (uint16)units.unit[i].hp;
+					sync.build_percent_left = (uint8)(units.unit[i].build_percent_left * 2.55f);
 
 					uint32 latest_sync = units.current_tick;
 					for (int f = 0; f < NB_PLAYERS; ++f)
@@ -291,9 +288,7 @@ namespace TA3D
 		}
 	}
 
-
-
-	void PLAYERS::proc(void*)
+	void PLAYERS::proc(void *)
 	{
 		if (thread_is_running)
 			return;
@@ -327,8 +322,6 @@ namespace TA3D
 		thread_ask_to_stop = false;
 	}
 
-
-
 	void PLAYERS::stop_threads()
 	{
 		for (unsigned int i = 0; i < pPlayerCount; ++i)
@@ -338,23 +331,22 @@ namespace TA3D
 		}
 	}
 
-
-	void PLAYERS::clear()		// Remet à 0 la taille des stocks
+	void PLAYERS::clear() // Remet à 0 la taille des stocks
 	{
 		for (unsigned int i = 0; i < pPlayerCount; ++i)
 		{
-			r_energy[i]         = requested_energy[i];     // Used to modulate the use of resources and distribute them amoung builders
-			r_metal[i]          = requested_metal[i];
-			requested_energy[i] = 0;     // Used to modulate the use of resources and distribute them amoung builders
-			requested_metal[i]  = 0;
-			c_energy[i]         = energy[i];
-			c_metal[i]          = metal[i];
-			c_energy_s[i]       = c_metal_s[i]=0;         // Stocks
-			c_metal_t[i]        = c_energy_t[i] = 0.0f;   // Production
-			c_metal_u[i]        = c_energy_u[i] = 0.0f;   // Consommation
-			c_commander[i]      = false;
-			c_annihilated[i]    = true;
-			c_nb_unit[i]        = 0;
+			r_energy[i] = requested_energy[i]; // Used to modulate the use of resources and distribute them amoung builders
+			r_metal[i] = requested_metal[i];
+			requested_energy[i] = 0; // Used to modulate the use of resources and distribute them amoung builders
+			requested_metal[i] = 0;
+			c_energy[i] = energy[i];
+			c_metal[i] = metal[i];
+			c_energy_s[i] = c_metal_s[i] = 0;	// Stocks
+			c_metal_t[i] = c_energy_t[i] = 0.0f; // Production
+			c_metal_u[i] = c_energy_u[i] = 0.0f; // Consommation
+			c_commander[i] = false;
+			c_annihilated[i] = true;
+			c_nb_unit[i] = 0;
 
 			if (r_energy[i] <= energy[i] || Yuni::Math::Zero(r_energy[i]))
 				energy_factor[i] = 1.0f;
@@ -368,27 +360,25 @@ namespace TA3D
 		}
 	}
 
-
-	void PLAYERS::refresh()		// Copy the newly computed values over old ones
+	void PLAYERS::refresh() // Copy the newly computed values over old ones
 	{
 		for (unsigned int i = 0; i < pPlayerCount; ++i)
 		{
-			energy[i]      = c_energy[i];
-			metal[i]       = c_metal[i];
-			energy_s[i]    = c_energy_s[i];
-			metal_s[i]     = c_metal_s[i];				// Stocks
-			commander[i]   = c_commander[i];
+			energy[i] = c_energy[i];
+			metal[i] = c_metal[i];
+			energy_s[i] = c_energy_s[i];
+			metal_s[i] = c_metal_s[i]; // Stocks
+			commander[i] = c_commander[i];
 			annihilated[i] = c_annihilated[i];
-			nb_unit[i]     = c_nb_unit[i];
-			metal_t[i]     = c_metal_t[i];
-			energy_t[i]    = c_energy_t[i];
-			metal_u[i]     = c_metal_u[i];
-			energy_u[i]    = c_energy_u[i];
+			nb_unit[i] = c_nb_unit[i];
+			metal_t[i] = c_metal_t[i];
+			energy_t[i] = c_energy_t[i];
+			metal_u[i] = c_metal_u[i];
+			energy_u[i] = c_energy_u[i];
 		}
 	}
 
-
-	void PLAYERS::init(int E,int M) 	// Initialise les données des joueurs
+	void PLAYERS::init(int E, int M) // Initialise les données des joueurs
 	{
 		ta3d_network = NULL;
 		side_view = 0;
@@ -407,7 +397,7 @@ namespace TA3D
 			if (ai_command)
 			{
 				ai_command[i].destroy();
-				ai_command[i].setPlayerID( i );
+				ai_command[i].setPlayerID(i);
 			}
 			energy[i] = float(E);
 			metal[i] = float(M);
@@ -423,18 +413,16 @@ namespace TA3D
 			energy_total[i] = 0.0f;
 			metal_total[i] = 0.0f;
 
-			c_energy[i]      = energy[i];
-			c_metal[i]       = metal[i];
-			c_energy_s[i]    = c_metal_s[i] = 0;     // Stocks
-			c_metal_t[i]     = c_energy_t[i] = 0.0f; // Production
-			c_metal_u[i]     = c_energy_u[i] = 0.0f; // Consommation
-			c_commander[i]   = false;
+			c_energy[i] = energy[i];
+			c_metal[i] = metal[i];
+			c_energy_s[i] = c_metal_s[i] = 0;	// Stocks
+			c_metal_t[i] = c_energy_t[i] = 0.0f; // Production
+			c_metal_u[i] = c_energy_u[i] = 0.0f; // Consommation
+			c_commander[i] = false;
 			c_annihilated[i] = true;
-			c_nb_unit[i]     = 0;
+			c_nb_unit[i] = 0;
 		}
 	}
-
-
 
 	PLAYERS::PLAYERS()
 	{
@@ -444,7 +432,6 @@ namespace TA3D
 		ai_command = new AI_PLAYER[TA3D_PLAYERS_HARD_LIMIT];
 		init();
 	}
-
 
 	void PLAYERS::destroy()
 	{
@@ -460,7 +447,6 @@ namespace TA3D
 		init();
 	}
 
-
 	PLAYERS::~PLAYERS()
 	{
 		destroy();
@@ -469,7 +455,4 @@ namespace TA3D
 		DELETE_ARRAY(ai_command);
 		destroyThread();
 	}
-
-
-
 }

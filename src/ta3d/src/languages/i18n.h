@@ -15,22 +15,18 @@
 	along with this program; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA*/
 #ifndef __TA3D_XX_I18N_H__
-# define __TA3D_XX_I18N_H__
+#define __TA3D_XX_I18N_H__
 
-# include <yuni/yuni.h>
-# include <yuni/core/smartptr/smartptr.h>
-# include <stdafx.h>
-# include <misc/string.h>
-# include <threads/mutex.h>
-# include <misc/tdf.h>
-# include <vector>
-
-
+#include <yuni/yuni.h>
+#include <yuni/core/smartptr/smartptr.h>
+#include <stdafx.h>
+#include <misc/string.h>
+#include <threads/mutex.h>
+#include <misc/tdf.h>
+#include <vector>
 
 namespace TA3D
 {
-
-
 
 	/*!
 	** \brief Thread-safe singleton to handle internationalization, provides
@@ -94,9 +90,9 @@ namespace TA3D
 	{
 	public:
 		//! Threading policy
-		typedef Yuni::Policy::ClassLevelLockable<I18N>  ThreadingPolicy;
+		typedef Yuni::Policy::ClassLevelLockable<I18N> ThreadingPolicy;
 		//! The most suitable smart pointer for the class
-		typedef I18N*	Ptr;
+		typedef I18N* Ptr;
 
 	public:
 		/*!
@@ -124,7 +120,7 @@ namespace TA3D
 			//@}
 
 			//! Index of this language
-			int index() const { return pIndx;}
+			int index() const { return pIndx; }
 
 			//! Name of this language in english
 			const String& englishCaption() const { return pEnglishID; }
@@ -141,8 +137,6 @@ namespace TA3D
 			String pCaption;
 
 		}; // class Language
-
-
 
 	public:
 		/*!
@@ -224,7 +218,6 @@ namespace TA3D
 		*/
 		static void Translate(String::List& out);
 
-
 	public:
 		//! Destructor
 		~I18N();
@@ -294,7 +287,6 @@ namespace TA3D
 		*/
 		void retrieveAllLanguages(std::vector<I18N::Language>& out);
 
-
 		/*!
 		** \brief Translate a keyword according the current language
 		**
@@ -315,7 +307,6 @@ namespace TA3D
 		*/
 		void translate(String::List& out);
 
-
 		/*!
 		** \brief Load translations from a file
 		**
@@ -326,7 +317,6 @@ namespace TA3D
 		*/
 		bool loadFromFile(const String& filename, const bool emptyBefore = false, const bool inASCII = false);
 
-
 		/*!
 		** \brief Load translations from files within the resources folders (*.po)
 		**
@@ -335,9 +325,8 @@ namespace TA3D
 		*/
 		bool loadFromResources();
 
-
 		//! \see translate()
-		String operator [] (const String& key);
+		String operator[](const String& key);
 
 	private:
 		/*!
@@ -355,10 +344,9 @@ namespace TA3D
 		*/
 		Language* addNewLanguageWL(const String& englishID, const String& translatedName);
 
-
 	private:
 		//! All availables languages
-		typedef std::vector<I18N::Language*>  Languages;
+		typedef std::vector<I18N::Language*> Languages;
 
 	private:
 		//! Singleton instance
@@ -381,11 +369,8 @@ namespace TA3D
 
 	}; // class I18N
 
-
-
-
 } // namespace TA3D
 
-# include "i18n.hxx"
+#include "i18n.hxx"
 
 #endif // __TA3D_XX_I18N_H__

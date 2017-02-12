@@ -24,38 +24,39 @@
 namespace TA3D
 {
 	class GameData;
-namespace Menus
-{
-
-	class WaitRoom : public Abstract
+	namespace Menus
 	{
-	public:
-		/*!
+
+		class WaitRoom : public Abstract
+		{
+		public:
+			/*!
 		** \brief Execute an instance of WaitRoom
 		*/
-		static bool Execute(GameData *game_data);
-	public:
-		WaitRoom(GameData *game_data);
-		//! Destructor
-		virtual ~WaitRoom();
+			static bool Execute(GameData *game_data);
 
-	protected:
-		virtual bool doInitialize();
-		virtual void doFinalize();
-		virtual void waitForEvent();
-		virtual bool maySwitchToAnotherMenu();
+		public:
+			WaitRoom(GameData *game_data);
+			//! Destructor
+			virtual ~WaitRoom();
 
-	private:
-		GameData *game_data;
-		bool dead_player[TA3D_PLAYERS_HARD_LIMIT];
-		uint32 ping_timer;
+		protected:
+			virtual bool doInitialize();
+			virtual void doFinalize();
+			virtual void waitForEvent();
+			virtual bool maySwitchToAnotherMenu();
 
-		String special_msg;
-		struct chat received_special_msg;
-		bool playerDropped;
-	};
+		private:
+			GameData *game_data;
+			bool dead_player[TA3D_PLAYERS_HARD_LIMIT];
+			uint32 ping_timer;
 
-} // namespace Menus
+			String special_msg;
+			struct chat received_special_msg;
+			bool playerDropped;
+		};
+
+	} // namespace Menus
 } // namespace TA3D
 
 #endif // WAITROOM_H

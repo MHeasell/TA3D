@@ -15,56 +15,52 @@
 	along with this program; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA*/
 #ifndef __TA3D_GFX_FONT_H__
-# define __TA3D_GFX_FONT_H__
+#define __TA3D_GFX_FONT_H__
 
-# include <stdafx.h>
-# include "gfx.h"
-# include <misc/hash_table.h>
-# include <threads/thread.h>
-# include <misc/string.h>
-# include <deque>
+#include <stdafx.h>
+#include "gfx.h"
+#include <misc/hash_table.h>
+#include <threads/thread.h>
+#include <misc/string.h>
+#include <deque>
 
-# ifdef __FTGL__lower__
-#	include <FTGL/ftgl.h>
-# else
-#	include <FTGL/ftgl.h>
-#	include <FTGL/FTBBox.h>
-#	include <FTGL/FTGlyph.h>
-#	include <FTGL/FTBitmapGlyph.h>
-#	include <FTGL/FTExtrdGlyph.h>
-#	include <FTGL/FTOutlineGlyph.h>
-#	include <FTGL/FTPixmapGlyph.h>
-#	include <FTGL/FTPolyGlyph.h>
-#	include <FTGL/FTTextureGlyph.h>
-#	include <FTGL/FTFont.h>
-#	include <FTGL/FTGLBitmapFont.h>
-#	include <FTGL/FTGLExtrdFont.h>
-#	include <FTGL/FTGLOutlineFont.h>
-#	include <FTGL/FTGLPixmapFont.h>
-#	include <FTGL/FTGLPolygonFont.h>
-#	include <FTGL/FTGLTextureFont.h>
+#ifdef __FTGL__lower__
+#include <FTGL/ftgl.h>
+#else
+#include <FTGL/ftgl.h>
+#include <FTGL/FTBBox.h>
+#include <FTGL/FTGlyph.h>
+#include <FTGL/FTBitmapGlyph.h>
+#include <FTGL/FTExtrdGlyph.h>
+#include <FTGL/FTOutlineGlyph.h>
+#include <FTGL/FTPixmapGlyph.h>
+#include <FTGL/FTPolyGlyph.h>
+#include <FTGL/FTTextureGlyph.h>
+#include <FTGL/FTFont.h>
+#include <FTGL/FTGLBitmapFont.h>
+#include <FTGL/FTGLExtrdFont.h>
+#include <FTGL/FTGLOutlineFont.h>
+#include <FTGL/FTGLPixmapFont.h>
+#include <FTGL/FTGLPolygonFont.h>
+#include <FTGL/FTGLTextureFont.h>
 
 typedef FTGLTextureFont FTTextureFont;
 typedef FTGLPolygonFont FTPolygonFont;
-typedef FTGLBitmapFont  FTBitmapFont;
-typedef FTGLPixmapFont  FTPixmapFont;
+typedef FTGLBitmapFont FTBitmapFont;
+typedef FTGLPixmapFont FTPixmapFont;
 
-# endif
+#endif
 
+#define FONT_TYPE_POLYGON 0x0
+#define FONT_TYPE_TEXTURE 0x1
+#define FONT_TYPE_BITMAP 0x2
+#define FONT_TYPE_PIXMAP 0x3
 
-# define FONT_TYPE_POLYGON 			0x0
-# define FONT_TYPE_TEXTURE 			0x1
-# define FONT_TYPE_BITMAP 			0x2
-# define FONT_TYPE_PIXMAP     		0x3
-
-# define TA3D_FONT_PATH  			"fonts"
-
-
+#define TA3D_FONT_PATH "fonts"
 
 namespace TA3D
 {
 	class GFX;
-
 
 	class Font : ObjectSync
 	{
@@ -74,8 +70,8 @@ namespace TA3D
 		{
 			typePolygon = 0x0,
 			typeTexture = 0x1,
-			typeBitmap  = 0x2,
-			typePixmap  = 0x3,
+			typeBitmap = 0x2,
+			typePixmap = 0x3,
 			typeTextures = 0x4
 		};
 
@@ -96,7 +92,7 @@ namespace TA3D
 		/*!
 		** \brief Get the width of a text
 		*/
-		float length(const String &txt);
+		float length(const String& txt);
 
 		/*!
 		** \brief Get the height the font
@@ -111,17 +107,17 @@ namespace TA3D
 		** \param type Type of the Font (Texture, Pixmap, Bitmap, Polygon)
 		** \return True if the operator succeeded, False otherwise
 		*/
-		bool load( const String &filename, const int size, const Type type);
+		bool load(const String& filename, const int size, const Type type);
 
 		int get_size();
-		void print(float x, float y, float z, const String &text);
+		void print(float x, float y, float z, const String& text);
 
-		void setBold(bool bBold)	{	this->bBold = bBold;	}
+		void setBold(bool bBold) { this->bBold = bBold; }
 
 		//! \name Operators
 		//@{
 		//! Operator =
-		Font& operator = (const Font& rhs);
+		Font& operator=(const Font& rhs);
 		//@}
 
 	private:
@@ -133,7 +129,7 @@ namespace TA3D
 		** \param type Type of the Font (Texture, Pixmap, Bitmap, Polygon)
 		** \return True if the operator succeeded, False otherwise
 		*/
-		bool loadWL(const String &filename, const int size, const Type type);
+		bool loadWL(const String& filename, const int size, const Type type);
 
 	private:
 		//! The FT Font
@@ -149,9 +145,6 @@ namespace TA3D
 
 	}; // class GfxFont
 
-
-
-
 	class FontManager
 	{
 	public:
@@ -160,26 +153,21 @@ namespace TA3D
 
 		void destroy();
 
-		Font *find(const String& filename, const int size, const Font::Type type);
+		Font* find(const String& filename, const int size, const Font::Type type);
 
 	private:
 		Font* internalRegisterFont(const String& key, const String& filename, const int size, const Font::Type type);
 
 	private:
 		//! Font list
-		typedef std::deque<Font*>  FontList;
+		typedef std::deque<Font*> FontList;
 
-		FontList  pFontList;
-		UTILS::HashMap<Font*>::Dense    font_table;
+		FontList pFontList;
+		UTILS::HashMap<Font*>::Dense font_table;
 	}; // class FontManager
-
-
 
 	//! Font manager
 	extern FontManager font_manager;
-
-
-
 
 } // namespace TA3D
 

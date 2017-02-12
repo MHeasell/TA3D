@@ -21,203 +21,192 @@
 #include <threads/mutex.h>
 #include <TA3D_NameSpace.h>
 
-
-
 namespace TA3D
 {
-namespace Resources
-{
-
-
-	namespace
+	namespace Resources
 	{
 
-		//! Definition list of resources folders
-		typedef String::Vector ResourcesFoldersList;
-
-		//! Mutex for resources
-		Mutex gResourcesMutex;
-
-		//! List of resources folders
-		ResourcesFoldersList pResourcesFolders;
-
-
-
-
-# ifdef TA3D_PLATFORM_WINDOWS
-
-		void initForWindows()
+		namespace
 		{
-			AddSearchPath(String(Paths::ApplicationRoot) << "resources\\");
-			AddSearchPath(Paths::ApplicationRoot);
-		}
 
-# else // ifdef TA3D_PLATFORM_WINDOWS
+			//! Definition list of resources folders
+			typedef String::Vector ResourcesFoldersList;
 
-# ifndef TA3D_PLATFORM_DARWIN
-		void initForDefaultUnixes()
-		{
-			String home = getenv("HOME");
-			home << "/.ta3d/";
+			//! Mutex for resources
+			Mutex gResourcesMutex;
 
-			AddSearchPath(String(home) << "resources/");
-			AddSearchPath("/usr/local/games/ta3d/");
-            AddSearchPath("/usr/local/games/ta3d/resources/");
-            AddSearchPath("/usr/local/share/ta3d/");
-            AddSearchPath("/usr/local/share/ta3d/resources/");
-            AddSearchPath("/opt/local/share/ta3d/");
-            AddSearchPath("/opt/local/share/ta3d/resources/");
-			AddSearchPath("/usr/local/share/games/ta3d/");
-			AddSearchPath("/usr/local/share/games/ta3d/resources/");
-			AddSearchPath("/opt/local/share/games/ta3d/");
-			AddSearchPath("/opt/local/share/games/ta3d/resources/");
-			AddSearchPath("/usr/games/ta3d/");
-            AddSearchPath("/usr/games/ta3d/resources/");
-            AddSearchPath("/usr/share/ta3d/");
-            AddSearchPath("/usr/share/ta3d/resources/");
-            AddSearchPath("/opt/share/ta3d/");
-            AddSearchPath("/opt/share/ta3d/resources/");
-			AddSearchPath("/usr/share/games/ta3d/");
-			AddSearchPath("/usr/share/games/ta3d/resources/");
-			AddSearchPath("/opt/share/games/ta3d/");
-			AddSearchPath("/opt/share/games/ta3d/resources/");
-			if (VARS::lp_CONFIG->bUseWorkingDirectory)
+			//! List of resources folders
+			ResourcesFoldersList pResourcesFolders;
+
+#ifdef TA3D_PLATFORM_WINDOWS
+
+			void initForWindows()
 			{
-				AddSearchPath(Paths::ApplicationRoot);
-				AddSearchPath(String(Paths::ApplicationRoot) << "resources/");
-			}
-		}
-
-# else // ifndef TA3D_PLATFORM_DARWIN
-
-		void initForDarwin()
-		{
-			String home = getenv("HOME");
-
-			Paths::MakeDir(String(home) << "/Library/Application Support/ta3d/");
-			// Relative folder for the Application bundle
-			AddSearchPath(String(Paths::ApplicationRoot) << "/../Resources/");
-			AddSearchPath(String(home) << "/Library/Application Support/ta3d/");
-			// Unix compatibility
-			AddSearchPath(String(home) << "/.ta3d/resources/");
-			// If using MacPorts
-			AddSearchPath("/opt/local/share/ta3d/");
-			if (VARS::lp_CONFIG->bUseWorkingDirectory)
-			{
-				AddSearchPath(String(Paths::ApplicationRoot) << "/resources/");
+				AddSearchPath(String(Paths::ApplicationRoot) << "resources\\");
 				AddSearchPath(Paths::ApplicationRoot);
 			}
+
+#else // ifdef TA3D_PLATFORM_WINDOWS
+
+#ifndef TA3D_PLATFORM_DARWIN
+			void initForDefaultUnixes()
+			{
+				String home = getenv("HOME");
+				home << "/.ta3d/";
+
+				AddSearchPath(String(home) << "resources/");
+				AddSearchPath("/usr/local/games/ta3d/");
+				AddSearchPath("/usr/local/games/ta3d/resources/");
+				AddSearchPath("/usr/local/share/ta3d/");
+				AddSearchPath("/usr/local/share/ta3d/resources/");
+				AddSearchPath("/opt/local/share/ta3d/");
+				AddSearchPath("/opt/local/share/ta3d/resources/");
+				AddSearchPath("/usr/local/share/games/ta3d/");
+				AddSearchPath("/usr/local/share/games/ta3d/resources/");
+				AddSearchPath("/opt/local/share/games/ta3d/");
+				AddSearchPath("/opt/local/share/games/ta3d/resources/");
+				AddSearchPath("/usr/games/ta3d/");
+				AddSearchPath("/usr/games/ta3d/resources/");
+				AddSearchPath("/usr/share/ta3d/");
+				AddSearchPath("/usr/share/ta3d/resources/");
+				AddSearchPath("/opt/share/ta3d/");
+				AddSearchPath("/opt/share/ta3d/resources/");
+				AddSearchPath("/usr/share/games/ta3d/");
+				AddSearchPath("/usr/share/games/ta3d/resources/");
+				AddSearchPath("/opt/share/games/ta3d/");
+				AddSearchPath("/opt/share/games/ta3d/resources/");
+				if (VARS::lp_CONFIG->bUseWorkingDirectory)
+				{
+					AddSearchPath(Paths::ApplicationRoot);
+					AddSearchPath(String(Paths::ApplicationRoot) << "resources/");
+				}
+			}
+
+#else // ifndef TA3D_PLATFORM_DARWIN
+
+			void initForDarwin()
+			{
+				String home = getenv("HOME");
+
+				Paths::MakeDir(String(home) << "/Library/Application Support/ta3d/");
+				// Relative folder for the Application bundle
+				AddSearchPath(String(Paths::ApplicationRoot) << "/../Resources/");
+				AddSearchPath(String(home) << "/Library/Application Support/ta3d/");
+				// Unix compatibility
+				AddSearchPath(String(home) << "/.ta3d/resources/");
+				// If using MacPorts
+				AddSearchPath("/opt/local/share/ta3d/");
+				if (VARS::lp_CONFIG->bUseWorkingDirectory)
+				{
+					AddSearchPath(String(Paths::ApplicationRoot) << "/resources/");
+					AddSearchPath(Paths::ApplicationRoot);
+				}
+			}
+
+#endif // ifndef TA3D_PLATFORM_DARWIN
+
+#endif // ifdef TA3D_PLATFORM_WINDOWS
+
+		} // namespace
+
+		void Initialize()
+		{
+#ifdef TA3D_PLATFORM_WINDOWS
+			initForWindows();
+#else
+#ifndef TA3D_PLATFORM_DARWIN
+			initForDefaultUnixes();
+#else
+			initForDarwin();
+#endif
+#endif
 		}
 
-# endif // ifndef TA3D_PLATFORM_DARWIN
-
-# endif // ifdef TA3D_PLATFORM_WINDOWS
-
-	} // namespace
-
-	void Initialize()
-	{
-# ifdef TA3D_PLATFORM_WINDOWS
-		initForWindows();
-# else
-#   ifndef TA3D_PLATFORM_DARWIN
-		initForDefaultUnixes();
-#   else
-		initForDarwin();
-#   endif
-# endif
-	}
-
-
-	bool Find(const String& relFilename, String& out)
-	{
-		MutexLocker locker(gResourcesMutex);
-		for (ResourcesFoldersList::const_iterator i = pResourcesFolders.begin(); i != pResourcesFolders.end(); ++i)
+		bool Find(const String& relFilename, String& out)
 		{
-			out = *i;
-			out << relFilename;
-			if (Paths::Exists(out))
+			MutexLocker locker(gResourcesMutex);
+			for (ResourcesFoldersList::const_iterator i = pResourcesFolders.begin(); i != pResourcesFolders.end(); ++i)
+			{
+				out = *i;
+				out << relFilename;
+				if (Paths::Exists(out))
+					return true;
+			}
+			return false;
+		}
+
+		bool AddSearchPath(String folder)
+		{
+			if (folder.empty())
+				return false;
+
+			if (folder.last() == '/' || folder.last() == '\\')
+				folder.removeLast();
+
+			if (Paths::Exists(folder))
+			{
+				MutexLocker locker(gResourcesMutex);
+				for (ResourcesFoldersList::const_iterator i = pResourcesFolders.begin(); i != pResourcesFolders.end(); ++i)
+				{
+					if (folder == *i)
+						return false;
+				}
+				pResourcesFolders.push_back(String(folder) << TA3D::Paths::Separator);
+				LOG_INFO(LOG_PREFIX_RESOURCES << "Added `" << folder << TA3D::Paths::Separator << "`");
 				return true;
-		}
-		return false;
-	}
-
-    bool AddSearchPath(String folder)
-	{
-        if (folder.empty())
-            return false;
-
-        if (folder.last() == '/' || folder.last() == '\\')
-            folder.removeLast();
-
-        if (Paths::Exists(folder))
-		{
-            MutexLocker locker(gResourcesMutex);
-            for (ResourcesFoldersList::const_iterator i = pResourcesFolders.begin(); i != pResourcesFolders.end(); ++i)
-			{
-				if (folder == *i)
-					return false;
 			}
-			pResourcesFolders.push_back(String(folder) << TA3D::Paths::Separator);
-            LOG_INFO(LOG_PREFIX_RESOURCES << "Added `" << folder << TA3D::Paths::Separator << "`");
-			return true;
+			return false;
 		}
-		return false;
-	}
 
+		String::Vector GetPaths()
+		{
+			MutexLocker locker(gResourcesMutex);
+			return pResourcesFolders;
+		}
 
-	String::Vector GetPaths()
-	{
-		MutexLocker locker(gResourcesMutex);
-		return pResourcesFolders;
-	}
+		bool Glob(String::Vector& out, const String& pattern, const bool emptyListBefore)
+		{
+			if (emptyListBefore)
+				out.clear();
+			gResourcesMutex.lock();
+			for (ResourcesFoldersList::const_iterator i = pResourcesFolders.begin(); i != pResourcesFolders.end(); ++i)
+				Paths::Glob(out, String(*i) << pattern, false);
+			gResourcesMutex.unlock();
+			return !out.empty();
+		}
 
+		bool Glob(String::List& out, const String& pattern, const bool emptyListBefore)
+		{
+			if (emptyListBefore)
+				out.clear();
+			gResourcesMutex.lock();
+			for (ResourcesFoldersList::const_iterator i = pResourcesFolders.begin(); i != pResourcesFolders.end(); ++i)
+				Paths::Glob(out, String(*i) << pattern, false);
+			gResourcesMutex.unlock();
+			return !out.empty();
+		}
 
-	bool Glob(String::Vector& out, const String& pattern, const bool emptyListBefore)
-	{
-		if (emptyListBefore)
-			out.clear();
-		gResourcesMutex.lock();
-		for (ResourcesFoldersList::const_iterator i = pResourcesFolders.begin(); i != pResourcesFolders.end(); ++i)
-			Paths::Glob(out, String(*i) << pattern, false);
-		gResourcesMutex.unlock();
-		return !out.empty();
-	}
+		bool GlobDirs(String::Vector& out, const String& pattern, const bool emptyListBefore)
+		{
+			if (emptyListBefore)
+				out.clear();
+			gResourcesMutex.lock();
+			for (ResourcesFoldersList::const_iterator i = pResourcesFolders.begin(); i != pResourcesFolders.end(); ++i)
+				Paths::GlobDirs(out, String(*i) << pattern, false);
+			gResourcesMutex.unlock();
+			return !out.empty();
+		}
 
-	bool Glob(String::List& out, const String& pattern, const bool emptyListBefore)
-	{
-		if (emptyListBefore)
-			out.clear();
-		gResourcesMutex.lock();
-		for (ResourcesFoldersList::const_iterator i = pResourcesFolders.begin(); i != pResourcesFolders.end(); ++i)
-			Paths::Glob(out, String(*i) << pattern, false);
-		gResourcesMutex.unlock();
-		return !out.empty();
-	}
+		bool GlobDirs(String::List& out, const String& pattern, const bool emptyListBefore)
+		{
+			if (emptyListBefore)
+				out.clear();
+			gResourcesMutex.lock();
+			for (ResourcesFoldersList::const_iterator i = pResourcesFolders.begin(); i != pResourcesFolders.end(); ++i)
+				Paths::GlobDirs(out, String(*i) << pattern, false);
+			gResourcesMutex.unlock();
+			return !out.empty();
+		}
 
-
-	bool GlobDirs(String::Vector& out, const String& pattern, const bool emptyListBefore)
-	{
-		if (emptyListBefore)
-			out.clear();
-		gResourcesMutex.lock();
-		for (ResourcesFoldersList::const_iterator i = pResourcesFolders.begin(); i != pResourcesFolders.end(); ++i)
-			Paths::GlobDirs(out, String(*i) << pattern, false);
-		gResourcesMutex.unlock();
-		return !out.empty();
-	}
-
-	bool GlobDirs(String::List& out, const String& pattern, const bool emptyListBefore)
-	{
-		if (emptyListBefore)
-			out.clear();
-		gResourcesMutex.lock();
-		for (ResourcesFoldersList::const_iterator i = pResourcesFolders.begin(); i != pResourcesFolders.end(); ++i)
-			Paths::GlobDirs(out, String(*i) << pattern, false);
-		gResourcesMutex.unlock();
-		return !out.empty();
-	}
-
-
-} // namespace Resources
+	} // namespace Resources
 } // namespace TA3D

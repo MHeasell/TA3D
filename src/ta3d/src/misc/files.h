@@ -15,42 +15,36 @@
 	along with this program; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA*/
 #ifndef _TA3D_TOOLS_FILES_H__
-# define _TA3D_TOOLS_FILES_H__
+#define _TA3D_TOOLS_FILES_H__
 
-# include <stdafx.h>
-# include "string.h"
-# include <vfs/file.h>
-
+#include <stdafx.h>
+#include "string.h"
+#include <vfs/file.h>
 
 /*!
 ** \brief The maximum allowed size for a file
 */
-# define TA3D_FILES_HARD_LIMIT_FOR_SIZE  83886080  // 80Mo = 10 * 1024 * 1024
-
-
-
+#define TA3D_FILES_HARD_LIMIT_FOR_SIZE 83886080 // 80Mo = 10 * 1024 * 1024
 
 namespace TA3D
 {
-namespace Paths
-{
-/*!
+	namespace Paths
+	{
+		/*!
 ** \brief Tools to handle files
 */
-namespace Files
-{
+		namespace Files
+		{
 
-
-	/*!
+			/*!
 	** \brief Get the size of a file
 	** \param filename The file
 	** \param[out] size The size of the file. 0 if any errors has occured
 	** \return True if the operation succeeded, False otherwise
 	*/
-	bool Size(const String& filename, uint64& size);
+			bool Size(const String& filename, uint64& size);
 
-
-	/*!
+			/*!
 	** \brief Replace the extension
 	**
 	** if the extension can not be found, the new extension will be
@@ -62,14 +56,12 @@ namespace Files
 	** \param newExt The new extension (ex: `.ota`)
 	** \return The filename with the new extension
 	*/
-	String ReplaceExtension(const String& filename, const String& newExt);
+			String ReplaceExtension(const String& filename, const String& newExt);
 
+			//! \name Load the content of a file
+			//@{
 
-
-	//! \name Load the content of a file
-	//@{
-
-	/*!
+			/*!
 	** \brief Open and Read the content of a file and write it into a 1D array
 	**
 	** \param[out] out The content of the file
@@ -78,11 +70,10 @@ namespace Files
 	** \param emptyListBefore Empty the list before any operation
 	** \return True if the operation succeeded, False otherwise
 	*/
-	bool Load(String::Vector& out, const String& filename, const uint32 sizeLimit = 0, const bool emptyListBefore = true);
-	bool Load(String::List& out, const String& filename, const uint32 sizeLimit = 0, const bool emptyListBefore = true);
+			bool Load(String::Vector& out, const String& filename, const uint32 sizeLimit = 0, const bool emptyListBefore = true);
+			bool Load(String::List& out, const String& filename, const uint32 sizeLimit = 0, const bool emptyListBefore = true);
 
-
-	/*!
+			/*!
 	** \brief Load the entierly content of a file into memory
 	**
 	** \param filename The filename to open
@@ -90,21 +81,20 @@ namespace Files
 	** \return The content of the file, null terminated , NULL if size > hardlimit or if any errors has occured.
 	** If not NULL, this value must be deleted with the keyword `delete[]`
 	*/
-	UTILS::File* LoadContentInMemory(const String& filename, const uint64 hardlimit = TA3D_FILES_HARD_LIMIT_FOR_SIZE);
+			UTILS::File* LoadContentInMemory(const String& filename, const uint64 hardlimit = TA3D_FILES_HARD_LIMIT_FOR_SIZE);
 
-	/*!
+			/*!
 	** \brief Save the content of a string iinto a file
 	**
 	** \param filename The filename to create/overwrite
 	** \param content The new content of the file
 	** \return True if the operation succeeded, false otherwise
 	*/
-	bool SaveToFile(const String& filename, const String& content);
+			bool SaveToFile(const String& filename, const String& content);
 
-	//@}
+			//@}
 
-
-	/*!
+			/*!
 	** \brief Copy a single file
 	**
 	** \param from The source file
@@ -112,12 +102,10 @@ namespace Files
 	** \param overwrite Overwrite the target file if already exists
 	** \return True if the operation succeeded (or if the target file already exists and `overwrite` = false), false otherwise
 	*/
-	bool Copy(const String& from, const String& to, const bool overwrite = true);
+			bool Copy(const String& from, const String& to, const bool overwrite = true);
 
-
-
-} // namespace Files
-} // namespace Paths
+		} // namespace Files
+	}	 // namespace Paths
 } // namespace TA3D
 
 #endif // _TA3D_TOOLS_FILES_H__

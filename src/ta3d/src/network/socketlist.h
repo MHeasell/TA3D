@@ -4,14 +4,14 @@
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA*/
 
 #ifndef __TA3D_NET_SOCKET_LIST_H__
-# define __TA3D_NET_SOCKET_LIST_H__
+#define __TA3D_NET_SOCKET_LIST_H__
 
-# include <stdafx.h>
-# include <threads/thread.h>
-# include "ta3dsock.h"
-# include "networkutils.h"
-# include <misc/hash_table.h>
-# include <threads/mutex.h>
+#include <stdafx.h>
+#include <threads/thread.h>
+#include "ta3dsock.h"
+#include "networkutils.h"
+#include <misc/hash_table.h>
+#include <threads/mutex.h>
 
 namespace TA3D
 {
@@ -30,6 +30,7 @@ namespace TA3D
 			TA3DSock* sock;
 			SocketThread thread;
 		};
+
 	private:
 		typedef UTILS::HashMap<SocketNode*, int>::Dense SockType;
 		SockType sockets;
@@ -39,7 +40,7 @@ namespace TA3D
 		SockList();
 		virtual ~SockList();
 
-		int getMaxId() const {	return maxid;	}
+		int getMaxId() const { return maxid; }
 		int Add(TA3DSock* sock);
 		int Remove(const int id);
 
@@ -52,8 +53,6 @@ namespace TA3D
 		SocketThread* getThread(const int id);
 
 	}; // class SockList
-
-
 
 } // namespace TA3D
 
