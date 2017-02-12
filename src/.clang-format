@@ -1,0 +1,10 @@
+BreakBeforeBraces: Allman  # always break
+IndentWidth: 4
+TabWidth: 4
+UseTab: Always
+NamespaceIndentation: All
+ColumnLimit: 0
+IndentCaseLabels: true
+SortIncludes: false
+AccessModifierOffset: -4
+DerivePointerAlignment: true
