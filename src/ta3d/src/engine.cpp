@@ -15,8 +15,8 @@
 	along with this program; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA*/
 
-#include <yuni/yuni.h>
-#include <yuni/core/system/cpu.h>
+#include <thread>
+
 #include "stdafx.h"
 #include "TA3D_NameSpace.h"
 #include "threads/thread.h"
@@ -62,7 +62,7 @@ namespace TA3D
 		: pSDLRunning(false), pGFXModeActive(false)
 	{
 		// How many CPU we've got ?
-		LOG_INFO("CPU: " << Yuni::System::CPU::Count());
+		LOG_INFO("CPU: " << std::thread::hardware_concurrency());
 
 		if (gfx)
 			delete gfx;
