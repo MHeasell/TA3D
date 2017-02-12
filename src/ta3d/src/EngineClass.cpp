@@ -1962,15 +1962,15 @@ namespace TA3D
 		glPopMatrix();
 	}
 
-	Vector3D MAP::hit(Vector3D Pos, Vector3D Dir, bool water, float length, bool allow_out) const			// Calcule l'intersection d'un rayon avec la carte(le rayon partant du dessus de la carte)
+	Vector3D MAP::hit(Vector3D Pos, Vector3D Dir, bool water, float length, bool allow_out) const			// Calculates the intersection of a ray with the map (the ray starts from the top of the map)
 	{
-		if (Yuni::Math::Zero(Dir.x) && Yuni::Math::Zero(Dir.z)) // Solution triviale
+		if (Yuni::Math::Zero(Dir.x) && Yuni::Math::Zero(Dir.z)) // Trivial solution
 		{
 			Pos.y = get_unit_h(Pos.x, Pos.z);
 			return Pos;
 		}
 
-		if (get_unit_h(Pos.x,Pos.z) > Pos.y)		// Cas non traité
+		if (get_unit_h(Pos.x,Pos.z) > Pos.y)		// Unhandled case
 			return Pos;
 
 		float step = 1.0f;
@@ -1994,7 +1994,7 @@ namespace TA3D
 			length -= len_step;
 			nb++;
 			Pos += Dir;
-			if (!allow_out && (fabsf(Pos.x) > dwm || fabsf(Pos.z) > dhm)) // Pas de résultat
+			if (!allow_out && (fabsf(Pos.x) > dwm || fabsf(Pos.z) > dhm)) // No result
 				return Pos;
 		}
 		length += len_step;
@@ -2007,14 +2007,14 @@ namespace TA3D
 			length -= len_step;
 			++nb;
 			Pos += Dir;
-			if (!allow_out && (fabsf(Pos.x) > dwm || fabsf(Pos.z) > dhm)) // Pas de résultat
+			if (!allow_out && (fabsf(Pos.x) > dwm || fabsf(Pos.z) > dhm)) // No result
 				return Pos;
 		}
 
 		for (int i = 0; i < 7; ++i)
 		{
 			length += len_step;
-			Pos -= Dir; 	// On recommence la dernière opération mais avec plus de précision
+			Pos -= Dir; 	// Repeat the last operation but with more precision
 			Dir *= 0.5f;
 			len_step *= 0.5f;
 			nb = 0;
@@ -2027,7 +2027,7 @@ namespace TA3D
 				Pos += Dir;
 			}
 		}
-		return Pos;		// Meilleure solution approximative trouvée
+		return Pos;		// Best approximate solution found
 	}
 
 
