@@ -50,7 +50,7 @@ message(STATUS " System : ${CMAKE_SYSTEM} (${CMAKE_SYSTEM_PROCESSOR})")
 #
 configure_file(
 	"${CMAKE_CURRENT_SOURCE_DIR}/YuniProfileBuildTemplate.cmake"
-	"${CMAKE_CURRENT_SOURCE_DIR}/libs/yuni/src/ProfileBuild.cmake" COPYONLY)
+	"${CMAKE_CURRENT_BINARY_DIR}/libs/yuni/src/ProfileBuild.cmake" COPYONLY)
 # The sources
 add_subdirectory(libs/yuni/src)
 # At this point, the program 'yuni-config' should be available, as requested
