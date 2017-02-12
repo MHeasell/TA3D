@@ -184,7 +184,7 @@ namespace TA3D
 		const float length = ((Vector3D)(OPos - Pos)).norm();
 		if (!dying)
 		{
-			if (weapon_def->waterweapon && Pos.y > the_map->sealvl && OPos.y <= the_map->sealvl) // Une arme aquatique ne sort pas de l'eau
+			if (weapon_def->waterweapon && Pos.y > the_map->sealvl && OPos.y <= the_map->sealvl) // An aquatic weapon does not come out of the water
 			{
 				Pos.y = the_map->sealvl;
 				V.y = 0.0f;
