@@ -4,7 +4,7 @@ TA3D's developer documentation
 this document explain how TA3D's source code is subdivided and a few other things needed to build/modify it.
 
 here are the files in the src subdir:
-3do.cpp			// module to manage 3do files (TA's 3D models) and 3dm models
+3do.cpp			// module to manage 3do files (TA's 3D models)
 3do.h
 
 cob.cpp			// module to load units's scripts
