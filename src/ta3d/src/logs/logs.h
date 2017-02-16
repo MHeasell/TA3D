@@ -57,7 +57,6 @@
 // Even those defines, they shall be removed as soon as Yuni::Logs::Logger has an efficient way
 // for dealing with components of an application
 #define LOG_PREFIX_3DO "[3do] "
-#define LOG_PREFIX_S3O "[s3o] "
 #define LOG_PREFIX_MODEL "[model] "
 
 #define LOG_PREFIX_AI "[AI] "

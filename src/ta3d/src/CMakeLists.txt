@@ -31,7 +31,6 @@ set(SRC_MESHES
 		mesh/3do.cpp mesh/3do.h
 		mesh/textures.cpp mesh/textures.h
 		mesh/instancing.cpp mesh/instancing.h
-		mesh/s3o.cpp mesh/s3o.h
 		mesh/joins.cpp mesh/joins.h)
 
 #
