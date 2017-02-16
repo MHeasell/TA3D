@@ -63,7 +63,7 @@ namespace TA3D
     ** false othewise
     **
     ** String::Vector list;
-    ** if (Paths::ResourcesGlob(list, "objects/rocks*.3dm"))
+    ** if (Paths::ResourcesGlob(list, "objects/rocks*.3do"))
     ** {
     **      for (String::Vector::const_iterator i = list.begin(); i != list.end(); ++i)
     **          std::cout << "3D object found: `" << *i << std::endl;

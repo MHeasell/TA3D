@@ -597,7 +597,7 @@ namespace TA3D
 			args.erase(args.begin());
 		}
 		else
-			std::cerr << "SYNTAX: " << appName << " create_buildpic model.3do/3dm/3so background_image_file" << std::endl;
+			std::cerr << "SYNTAX: " << appName << " create_buildpic model.3do/3so background_image_file" << std::endl;
 		return true;
 	}
 
