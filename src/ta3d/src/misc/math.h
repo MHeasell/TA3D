@@ -19,7 +19,6 @@
 #define __TA3D_XX__MATH_H__
 
 #include <cmath>
-#include <math.h>
 
 #define TA3D_MATH_RANDOM_TABLE_SIZE 0x100000U
 #define TA3D_MATH_RANDOM_TABLE_MASK 0x0FFFFFU
