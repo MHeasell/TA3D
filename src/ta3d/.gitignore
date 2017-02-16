@@ -7,7 +7,6 @@
 /.*.swo
 /.*.swp
 /*.dmg
-/3dmeditor
 /CMakeCache.txt
 /CMakeFiles
 /CPackConfig.cmake

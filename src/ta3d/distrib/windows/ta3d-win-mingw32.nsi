@@ -225,9 +225,7 @@ ${MementoSection} "TA3D Core Files [mingw] (required)" SecCore
   ${SetOutPath} $INSTDIR
 
   SetOverwrite on
-  ${File} "" "3dmeditor.ico"
   ${File} "" "ta3d.ico"
-  ${File} "..\..\" "3dmeditor.exe"
   ${File} "..\..\" "${TA3D_BIN}"
   ${File} "..\..\" "install.bat"
   ${File} "..\..\" "AUTHORS"
@@ -250,7 +248,6 @@ ${MementoSection} "Resources (required)" SecResources
   
   ${SetOutPath} "$INSTDIR\Resources\"
   ${File} "..\..\resources\" "ta3d.res"
-  ${File} "..\..\resources\" "3dmeditor.res"
   ${SetOutPath} "$INSTDIR\Resources\Languages"
   ${SetOutPath} "$INSTDIR\Resources\Intro"
   ${File} "..\..\resources\intro\" "*.txt"
@@ -340,7 +337,6 @@ ${MementoSection} "Menu Shortcuts" SecMenuShortcuts
   CreateDirectory "$SMPROGRAMS\TA3D\Documentation"
   ${SetOutPath} "$INSTDIR\"
   CreateShortCut "$SMPROGRAMS\TA3D\TA3D.lnk" "$INSTDIR\ta3d.exe" "" "$INSTDIR\ta3d.ico"
-  CreateShortCut "$SMPROGRAMS\TA3D\3DMEditor.lnk" "$INSTDIR\3dmeditor.exe" "" "$INSTDIR\3dmeditor.ico"
   CreateShortCut "$SMPROGRAMS\TA3D\Documentation\User Guide.lnk" "$INSTDIR\readme.html"
   CreateShortCut "$SMPROGRAMS\TA3D\Documentation\User Guide (Francais).lnk" "$INSTDIR\readme-fr.html"
 
