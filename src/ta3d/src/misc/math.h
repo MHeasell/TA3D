@@ -28,8 +28,8 @@ namespace TA3D
 {
 
 	/*!
-** \brief Convenient routines for Mathematics calculations
-*/
+	 * \brief Convenient routines for Mathematics calculations
+	 */
 	namespace Math
 	{
 
@@ -75,8 +75,8 @@ namespace TA3D
 		}
 
 		/*!
-    ** \brief Get log2(n)
-    */
+		 * \brief Get log2(n)
+		 */
 		uint32 Log2(uint32 n);
 
 		//! \name Random table
@@ -100,8 +100,8 @@ namespace TA3D
 		};
 
 		/*!
-	** \brief A pre-cached table for random numbers 
-	*/
+		 * \brief A pre-cached table for random numbers
+		 */
 		extern PreCachedRandomNumbers RandomTable;
 		//@}
 
@@ -118,8 +118,8 @@ namespace TA3D
 #define isNaN(x) std::isnan(x)
 
 /*
-** The below functions don't exists within windows math routines.
-*/
+ * The below functions don't exists within windows math routines.
+ */
 #if defined TA3D_PLATFORM_WINDOWS && defined TA3D_PLATFORM_MSVC
 
 inline const float asinh(const float f)
