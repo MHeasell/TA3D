@@ -350,11 +350,8 @@ namespace TA3D
 
 	namespace VARS
 	{
-
-#ifndef TA3D_NO_SOUND // Only for the hpiview program
 		//! The sound manager
 		extern TA3D::Audio::Manager::Ptr sound_manager;
-#endif
 
 	} // namespace VARS
 

@@ -115,11 +115,6 @@ namespace TA3D
 
 using namespace TA3D;
 
-namespace TA3D
-{
-	int hpiview(int argc, char *argv[]);
-}
-
 /*
 ** Function: ParseCommandLine
 **    Notes: this will eventually break down any command line arguments passed to
@@ -133,9 +128,6 @@ namespace TA3D
 */
 static int ParseCommandLine(int argc, char *argv[])
 {
-	if (hpiview(argc, argv))
-		return 1;
-
 	if (argc > 1)
 	{
 		// Argument converted to a String

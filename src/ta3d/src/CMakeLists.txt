@@ -287,7 +287,6 @@ set(TA3D_SOURCES
 		fbi.cpp fbi.h
 		tdf.cpp tdf.h tnt.cpp tnt.h
 		TA3D_NameSpace.cpp TA3D_NameSpace.h ta3dbase.h
-		hpiview.cpp
 		cache.h cache.cpp
 		main.cpp sdl.h
 		)

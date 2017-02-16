@@ -42,8 +42,6 @@ cThread.h
 cCriticalSection.cpp	// module to use safe threads
 cCriticalSection.h
 
-hpiview.cpp		// program to view/extract data from HPI files
-
 ia.cpp			// A.I. module
 ia.h
 
