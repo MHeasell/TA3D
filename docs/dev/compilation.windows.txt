@@ -41,7 +41,7 @@ Compile Lua :
 > cd trunk/src/lua
 > mingw32-make mingw
 
-Compila 3dmeditor and ta3d :
+Compile ta3d :
 > cmake -G "MinGW Makefiles" .
 > mingw32-make
 

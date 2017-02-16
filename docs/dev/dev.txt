@@ -44,9 +44,6 @@ cCriticalSection.h
 
 hpiview.cpp		// program to view/extract data from HPI files
 
-3dmeditor.cpp		// 3DM Editor, import 3D Models to 3DM format, allows texturings, selecting materials, ...
-3dmeditor_sub.cpp
-
 ia.cpp			// A.I. module
 ia.h
 
