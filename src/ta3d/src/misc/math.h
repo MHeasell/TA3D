@@ -18,10 +18,14 @@
 #ifndef __TA3D_XX__MATH_H__
 #define __TA3D_XX__MATH_H__
 
+#include <cstdlib>
 #include <cmath>
 
 #define TA3D_MATH_RANDOM_TABLE_SIZE 0x100000U
 #define TA3D_MATH_RANDOM_TABLE_MASK 0x0FFFFFU
+
+#define TA3D_DEFAULT_DOUBLE_EPSILON (1.e-6)
+#define TA3D_DEFAULT_FLOAT_EPSILON (1.e-6f)
 
 namespace TA3D
 {
@@ -71,6 +75,46 @@ namespace TA3D
 		inline int Sgn(const T a)
 		{
 			return (a < 0) ? -1 : ((a > 0) ? 1 : 0);
+		}
+
+		inline bool AlmostEquals(float a, float b, float epsilon)
+		{
+			return std::abs(a - b) < epsilon;
+		}
+
+		inline bool AlmostEquals(float a, float b)
+		{
+			return AlmostEquals(a, b, TA3D_DEFAULT_FLOAT_EPSILON);
+		}
+
+		inline bool AlmostEquals(double a, double b, double epsilon)
+		{
+			return std::abs(a - b) < epsilon;
+		}
+
+		inline bool AlmostEquals(double a, double b)
+		{
+			return AlmostEquals(a, b, TA3D_DEFAULT_DOUBLE_EPSILON);
+		}
+
+		inline bool AlmostZero(float n, float epsilon)
+		{
+			return std::abs(n) < epsilon;
+		}
+
+		inline bool AlmostZero(float n)
+		{
+			return AlmostZero(n, TA3D_DEFAULT_FLOAT_EPSILON);
+		}
+
+		inline bool AlmostZero(double n, double epsilon)
+		{
+			return std::abs(n) < epsilon;
+		}
+
+		inline bool AlmostZero(double n)
+		{
+			return AlmostZero(n, TA3D_DEFAULT_DOUBLE_EPSILON);
 		}
 
 		/*!
