@@ -191,7 +191,7 @@ namespace TA3D
 				if (!weapon_def->waterweapon && Pos.y <= the_map->sealvl && h < the_map->sealvl)
 				{
 					hit_vec = the_map->hit(Pos, V, !weapon_def->waterweapon, length);
-					if (!Yuni::Math::Zero(V.y))
+					if (!Math::AlmostZero(V.y))
 						hit_vec = Pos - (the_map->sealvl - hit_vec.y) / V.y * V;
 					else
 						hit_vec = Pos;

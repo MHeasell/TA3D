@@ -71,7 +71,7 @@ namespace TA3D
 		{
 			E = I - B * A;
 			B = (I + E) * B;
-			if (Yuni::Math::Zero(Norme_Ligne(E)))
+			if (Math::AlmostZero(Norme_Ligne(E)))
 				i = P;
 		}
 		return B;

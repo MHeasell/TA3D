@@ -1160,7 +1160,7 @@ namespace TA3D
 
 				// Set camera to current part of the scene
 				cam.rpos = camBak.rpos + camBak.zoomFactor * (float(x - w / 2 - SCREEN_W / 4) * camBak.side + float(z - h / 2 - SCREEN_H / 4) * camBak.up);
-				if (!Yuni::Math::Zero(camBak.dir.y))
+				if (!Math::AlmostZero(camBak.dir.y))
 					cam.rpos = cam.rpos + ((camBak.rpos - cam.rpos).y / camBak.dir.y) * camBak.dir;
 
 				// Render this part of the scene

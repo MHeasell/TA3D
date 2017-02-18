@@ -1019,7 +1019,7 @@ namespace TA3D
 			glTranslatef(model->center.x, model->center.y, model->center.z);
 			const Vector3D side = Camera::inGame->side;
 			const Vector3D up = Camera::inGame->up;
-			if (!Yuni::Math::Zero(player_color[player_color_map[owner_id] * 3]) || !Yuni::Math::Zero(player_color[player_color_map[owner_id] * 3 + 1]) || !Yuni::Math::Zero(player_color[player_color_map[owner_id] * 3 + 2]))
+			if (!Math::AlmostZero(player_color[player_color_map[owner_id] * 3]) || !Math::AlmostZero(player_color[player_color_map[owner_id] * 3 + 1]) || !Math::AlmostZero(player_color[player_color_map[owner_id] * 3 + 2]))
 			{
 				glColor4f(player_color[player_color_map[owner_id] * 3],
 						  player_color[player_color_map[owner_id] * 3 + 1],
@@ -1130,7 +1130,7 @@ namespace TA3D
 				} while (first != current && i < 1000);
 			}
 
-			if (Yuni::Math::Zero(build_percent_left) && !mission.empty() && port[INBUILDSTANCE] != 0 && local)
+			if (Math::AlmostZero(build_percent_left) && !mission.empty() && port[INBUILDSTANCE] != 0 && local)
 			{
 				if (c_time >= 0.125f)
 				{
@@ -1254,7 +1254,7 @@ namespace TA3D
 			const bool old_mode = gfx->getShadowMapMode();
 			glColor4ub(0xFF, 0xFF, 0xFF, 0xFF);
 
-			if (Yuni::Math::Zero(build_percent_left))
+			if (Math::AlmostZero(build_percent_left))
 			{
 				if (pType->onoffable && !port[ACTIVATION])
 					t = 0.0f;
@@ -1586,7 +1586,7 @@ namespace TA3D
 				pMutex.lock();
 		}
 		pMutex.unlock();
-		const int w_id = weapons.add_weapon(weapon_manager.get_weapon_index(Yuni::Math::Zero(self_destruct) ? pType->SelfDestructAs : pType->ExplodeAs), idx);
+		const int w_id = weapons.add_weapon(weapon_manager.get_weapon_index(Math::AlmostZero(self_destruct) ? pType->SelfDestructAs : pType->ExplodeAs), idx);
 		pMutex.lock();
 		if (w_id >= 0)
 		{
@@ -1940,7 +1940,7 @@ namespace TA3D
 			}
 
 			NPos = Pos + dt * V;			   // Check if the unit can go where V brings it
-			if (!Yuni::Math::Zero(was_locked)) // Random move to solve the unit lock problem
+			if (!Math::AlmostZero(was_locked)) // Random move to solve the unit lock problem
 			{
 				if (V.x > 0.0f)
 					NPos.x += float(Math::RandomTable() % 101) * 0.01f;
@@ -1975,7 +1975,7 @@ namespace TA3D
 							// Check some basic solutions first
 							if (cur_px != n_px && can_be_there(cur_px, n_py, type_id, owner_id, idx))
 							{
-								V.z = !Yuni::Math::Zero(V.z)
+								V.z = !Math::AlmostZero(V.z)
 										  ? (V.z < 0.0f
 												 ? -sqrtf(SQUARE(V.z) + SQUARE(V.x))
 												 : sqrtf(SQUARE(V.z) + SQUARE(V.x)))
@@ -1986,7 +1986,7 @@ namespace TA3D
 							}
 							else if (cur_py != n_py && can_be_there(n_px, cur_py, type_id, owner_id, idx))
 							{
-								V.x = !Yuni::Math::Zero(V.x)
+								V.x = !Math::AlmostZero(V.x)
 										  ? ((V.x < 0.0f)
 												 ? -sqrtf(SQUARE(V.z) + SQUARE(V.x))
 												 : sqrtf(SQUARE(V.z) + SQUARE(V.x)))
@@ -2129,7 +2129,7 @@ namespace TA3D
 
 		const float resource_min_factor = TA3D::Math::Min(TA3D::players.energy_factor[owner_id], TA3D::players.metal_factor[owner_id]);
 
-		if (Yuni::Math::Zero(build_percent_left) && pType->isfeature) // Turn this unit into a feature
+		if (Math::AlmostZero(build_percent_left) && pType->isfeature) // Turn this unit into a feature
 		{
 			if (cur_px > 0 && cur_py > 0 && cur_px < (the_map->bloc_w << 1) && cur_py < (the_map->bloc_h << 1))
 			{
@@ -2164,7 +2164,7 @@ namespace TA3D
 
 		const bool jump_commands = (((idx + key_frame) & 0xF) == 0); // Saute certaines commandes / Jump some commands so it runs faster with lots of units
 
-		if (Yuni::Math::Zero(build_percent_left) && self_destruct >= 0.0f) // Self-destruction code
+		if (Math::AlmostZero(build_percent_left) && self_destruct >= 0.0f) // Self-destruction code
 		{
 			const int old = (int)self_destruct;
 			self_destruct -= dt;
@@ -2201,7 +2201,7 @@ namespace TA3D
 			{
 				case 1:		   // Début de la mort de l'unité	(Lance le script)
 					flags = 4; // Don't remove the data on the position map because they will be replaced
-					if (Yuni::Math::Zero(build_percent_left) && local)
+					if (Math::AlmostZero(build_percent_left) && local)
 						explode();
 					else
 						flags = 1;
@@ -2235,7 +2235,7 @@ namespace TA3D
 					clear_from_map();
 					return -1;
 			}
-			if (data.nb_piece > 0 && Yuni::Math::Zero(build_percent_left))
+			if (data.nb_piece > 0 && Math::AlmostZero(build_percent_left))
 			{
 				data.move(dt, the_map->ota_data.gravity);
 				if (c_time >= 0.1f)
@@ -2391,7 +2391,7 @@ namespace TA3D
 					break;
 				}
 			}
-			if (idx != -1 && !Yuni::Math::Zero(pType->weapon[idx]->reloadtime))
+			if (idx != -1 && !Math::AlmostZero(pType->weapon[idx]->reloadtime))
 			{
 				const float dn = dt / pType->weapon[idx]->reloadtime;
 				const float conso_metal = ((float)pType->weapon[idx]->metalpershot) / pType->weapon[idx]->reloadtime;
@@ -2406,7 +2406,7 @@ namespace TA3D
 					energy_cons += conso_energy * resource_min_factor;
 					planned_weapons -= dn * resource_min_factor;
 					const float last = planned_weapons - float(int(planned_weapons));
-					if ((Yuni::Math::Zero(last) && !Math::AlmostEquals(last, old)) || (last > old && old > 0.0f) || planned_weapons <= 0.0f) // On en a fini une / one is finished
+					if ((Math::AlmostZero(last) && !Math::AlmostEquals(last, old)) || (last > old && old > 0.0f) || planned_weapons <= 0.0f) // On en a fini une / one is finished
 						weapon[idx].stock++;
 					if (planned_weapons < 0.0f)
 						planned_weapons = 0.0f;
@@ -2626,7 +2626,7 @@ namespace TA3D
 													 : (Pos + data.data[start_piece].tpos - pos_of_target_unit - target_pos_on_unit);
 									D.y = 0.0f;
 									float v;
-									if (Yuni::Math::Zero(pType->weapon[i]->startvelocity))
+									if (Math::AlmostZero(pType->weapon[i]->startvelocity))
 										v = pType->weapon[i]->weaponvelocity;
 									else
 										v = pType->weapon[i]->startvelocity;
@@ -3522,7 +3522,7 @@ namespace TA3D
 								for (std::deque<UnitTKit::T>::const_iterator i = repair_pads.begin(); i != repair_pads.end() && !going_to_repair_pad; ++i)
 								{
 									const Unit *const pUnit = i->first;
-									if ((pUnit->pad1 == 0xFFFF || pUnit->pad2 == 0xFFFF) && Yuni::Math::Zero(pUnit->build_percent_left)) // He can repair us :)
+									if ((pUnit->pad1 == 0xFFFF || pUnit->pad2 == 0xFFFF) && Math::AlmostZero(pUnit->build_percent_left)) // He can repair us :)
 									{
 										add_mission(MISSION_GET_REPAIRED | MISSION_FLAG_AUTO, &(pUnit->Pos), true, 0, (void *)pUnit);
 										going_to_repair_pad = true;
@@ -3780,7 +3780,7 @@ namespace TA3D
 					}
 					{
 						Unit *target_unit = mission->getUnit();
-						if (target_unit != NULL && (target_unit->flags & 1) && Yuni::Math::Zero(target_unit->build_percent_left))
+						if (target_unit != NULL && (target_unit->flags & 1) && Math::AlmostZero(target_unit->build_percent_left))
 						{
 							if (target_unit->hp >= unit_manager.unit_type[target_unit->type_id]->MaxDamage || !pType->BMcode)
 							{
@@ -4268,7 +4268,7 @@ namespace TA3D
 					{
 						D.unit();
 						const float dist_sq = sqrtf(D.y * D.y + D.z * D.z);
-						float angle_1 = !Yuni::Math::Zero(dist_sq) ? acosf(D.y / dist_sq) * RAD2DEG : 0.0f;
+						float angle_1 = !Math::AlmostZero(dist_sq) ? acosf(D.y / dist_sq) * RAD2DEG : 0.0f;
 						if (D.z < 0.0f)
 							angle_1 = -angle_1;
 						D = D * RotateX(-angle_1 * DEG2RAD);
@@ -4441,16 +4441,16 @@ namespace TA3D
 			virtual_G.x = virtual_G.z = 0.0f; // Standard gravity vector
 			virtual_G.y = -4.0f * units.g_dt;
 			float d = J.sq();
-			if (!Yuni::Math::Zero(d))
+			if (!Math::AlmostZero(d))
 				virtual_G = virtual_G + (((old_V - V) % J) / d) * J; // Add the opposite of the speed derivative projected on the side of the unit
 
 			d = virtual_G.norm();
-			if (!Yuni::Math::Zero(d))
+			if (!Math::AlmostZero(d))
 			{
 				virtual_G = -1.0f / d * virtual_G;
 
 				d = sqrtf(virtual_G.y * virtual_G.y + virtual_G.z * virtual_G.z);
-				float angle_1 = !Yuni::Math::Zero(d) ? acosf(virtual_G.y / d) * RAD2DEG : 0.0f;
+				float angle_1 = !Math::AlmostZero(d) ? acosf(virtual_G.y / d) * RAD2DEG : 0.0f;
 				if (virtual_G.z < 0.0f)
 					angle_1 = -angle_1;
 				virtual_G = virtual_G * RotateX(-angle_1 * DEG2RAD);
@@ -4470,7 +4470,7 @@ namespace TA3D
 			}
 		}
 
-		if (Yuni::Math::Zero(build_percent_left))
+		if (Math::AlmostZero(build_percent_left))
 		{
 
 			// Change the unit's angle the way we need it to be changed
@@ -4538,7 +4538,7 @@ namespace TA3D
 			bool hover_on_water = false;
 			float min_h = the_map->get_unit_h(Pos.x, Pos.z);
 			h = Pos.y - min_h;
-			if (!pType->Floater && !pType->canfly && !pType->canhover && h > 0.0f && Yuni::Math::Zero(pType->WaterLine))
+			if (!pType->Floater && !pType->canfly && !pType->canhover && h > 0.0f && Math::AlmostZero(pType->WaterLine))
 				Pos.y = min_h;
 			else if (pType->canhover && Pos.y <= the_map->sealvl)
 			{
@@ -4552,7 +4552,7 @@ namespace TA3D
 				Pos.y = the_map->sealvl + (float)pType->AltFromSeaLevel * H_DIV;
 				V.y = 0.0f;
 			}
-			else if (!Yuni::Math::Zero(pType->WaterLine))
+			else if (!Math::AlmostZero(pType->WaterLine))
 			{
 				Pos.y = the_map->sealvl - pType->WaterLine * H_DIV;
 				V.y = 0.0f;
@@ -4574,7 +4574,7 @@ namespace TA3D
 				if (V.y < 0.0f)
 					V.y = 0.0f;
 			}
-			if (pType->canfly && Yuni::Math::Zero(build_percent_left) && local)
+			if (pType->canfly && Math::AlmostZero(build_percent_left) && local)
 			{
 				if (!mission.empty() && ((mission->getFlags() & MISSION_FLAG_MOVE) || mission->mission() == MISSION_BUILD || mission->mission() == MISSION_BUILD_2 || mission->mission() == MISSION_REPAIR || mission->mission() == MISSION_ATTACK || mission->mission() == MISSION_MOVE || mission->mission() == MISSION_GUARD || mission->mission() == MISSION_GET_REPAIRED || mission->mission() == MISSION_PATROL || mission->mission() == MISSION_RECLAIM || nb_attached > 0 || Pos.x < -the_map->map_w_d || Pos.x > the_map->map_w_d || Pos.z < -the_map->map_h_d || Pos.z > the_map->map_h_d))
 				{
@@ -4633,7 +4633,7 @@ namespace TA3D
 			script->run(dt);
 		yardmap_timer--;
 		if (hp > 0.0f &&
-			(((o_px != cur_px || o_py != cur_py || first_move || (was_flying ^ flying) || (!Yuni::Math::Zero(port[YARD_OPEN]) ^ was_open) || yardmap_timer == 0) && build_percent_left <= 0.0f) || !drawn || (drawn && drawn_obstacle != is_obstacle())))
+			(((o_px != cur_px || o_py != cur_py || first_move || (was_flying ^ flying) || ((port[YARD_OPEN] != 0) ^ was_open) || yardmap_timer == 0) && build_percent_left <= 0.0f) || !drawn || (drawn && drawn_obstacle != is_obstacle())))
 		{
 			first_move = build_percent_left > 0.0f;
 			pMutex.unlock();
@@ -5089,7 +5089,7 @@ namespace TA3D
 		weapons.weapon[w_idx].damage = (float)pW->damage;
 		weapons.weapon[w_idx].Pos = startpos;
 		weapons.weapon[w_idx].local = local;
-		if (Yuni::Math::Zero(pW->startvelocity) && !pW->selfprop)
+		if (Math::AlmostZero(pW->startvelocity) && !pW->selfprop)
 			weapons.weapon[w_idx].V = pW->weaponvelocity * Dir;
 		else
 			weapons.weapon[w_idx].V = pW->startvelocity * Dir;
@@ -5193,15 +5193,15 @@ namespace TA3D
 				the_map->obstaclesRect(cur_px - (pType->FootprintX >> 1),
 									   cur_py - (pType->FootprintZ >> 1),
 									   pType->FootprintX, pType->FootprintZ, true,
-									   pType->yardmap, !Yuni::Math::Zero(port[YARD_OPEN]));
+									   pType->yardmap, port[YARD_OPEN] != 0);
 			the_map->rect(cur_px - (pType->FootprintX >> 1),
 						  cur_py - (pType->FootprintZ >> 1),
 						  pType->FootprintX, pType->FootprintZ,
-						  idx, pType->yardmap, !Yuni::Math::Zero(port[YARD_OPEN]));
+						  idx, pType->yardmap, port[YARD_OPEN] != 0);
 			the_map->energy.add(pType->gRepulsion,
 								cur_px - (pType->gRepulsion.getWidth() >> 1),
 								cur_py - (pType->gRepulsion.getHeight() >> 1));
-			drawn_open = !Yuni::Math::Zero(port[YARD_OPEN]);
+			drawn_open = port[YARD_OPEN] != 0;
 		}
 		drawn_x = cur_px;
 		drawn_y = cur_py;
@@ -5239,7 +5239,7 @@ namespace TA3D
 
 	void Unit::draw_on_FOW(bool jamming)
 	{
-		if (hidden || !Yuni::Math::Zero(build_percent_left))
+		if (hidden || !Math::AlmostZero(build_percent_left))
 			return;
 
 		const int unit_type = type_id;

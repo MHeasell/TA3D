@@ -176,7 +176,7 @@ namespace TA3D
 
 		void MapSelector::scaleAndRePosTheMiniMap(const float coef /* = 504.0f */)
 		{
-			LOG_ASSERT(!Yuni::Math::Zero(coef)); // Division by zero
+			LOG_ASSERT(!Math::AlmostZero(coef)); // Division by zero
 
 			if (pMiniMapObj)
 			{

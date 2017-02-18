@@ -157,7 +157,7 @@ namespace TA3D
 		inline void unit()
 		{
 			float n = norm(); // Inverse de la norme du vecteur
-			if (!Yuni::Math::Zero(n))
+			if (!TA3D::Math::AlmostZero(n))
 			{
 				n = 1.0f / n;
 				x *= n;
@@ -357,7 +357,7 @@ inline float operator%(const TA3D::Vector3D& lhs, const TA3D::Vector3D& rhs)
 inline float VAngle(const TA3D::Vector3D& A, const TA3D::Vector3D& B)
 {
 	float a = sqrtf(A.sq() * B.sq());
-	a = (Yuni::Math::Zero(a)) ? 0.0f : acosf((A % B) / a);
+	a = (TA3D::Math::AlmostZero(a)) ? 0.0f : acosf((A % B) / a);
 	return isNaN(a) ? 0.0f : a;
 }
 

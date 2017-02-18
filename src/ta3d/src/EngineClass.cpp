@@ -2077,7 +2077,7 @@ namespace TA3D
 
 	Vector3D MAP::hit(Vector3D Pos, Vector3D Dir, bool water, float length, bool allow_out) const // Calculates the intersection of a ray with the map (the ray starts from the top of the map)
 	{
-		if (Yuni::Math::Zero(Dir.x) && Yuni::Math::Zero(Dir.z)) // Trivial solution
+		if (Math::AlmostZero(Dir.x) && Math::AlmostZero(Dir.z)) // Trivial solution
 		{
 			Pos.y = get_unit_h(Pos.x, Pos.z);
 			return Pos;
@@ -2087,7 +2087,7 @@ namespace TA3D
 			return Pos;
 
 		float step = 1.0f;
-		if (!Yuni::Math::Zero(Dir.x) && !Yuni::Math::Zero(Dir.z))
+		if (!Math::AlmostZero(Dir.x) && !Math::AlmostZero(Dir.z))
 		{
 			if (fabsf(Dir.x) < fabsf(Dir.z))
 				step = 1.0f / fabsf(Dir.x);

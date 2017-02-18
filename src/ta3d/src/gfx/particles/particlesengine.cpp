@@ -383,7 +383,7 @@ namespace TA3D
 			new_part.angle = 0.0f;
 			new_part.v_rot = float(Math::RandomTable() % 200) * 0.01f - 0.1f;
 			new_part.size = 1.0f;
-			new_part.use_wind = ((!Yuni::Math::Zero(mass)) ? true : false);
+			new_part.use_wind = ((!Math::AlmostZero(mass)) ? true : false);
 			new_part.dsize = 10.0f;
 			new_part.ddsize = ddsize;
 			new_part.light_emitter = false;
@@ -430,7 +430,7 @@ namespace TA3D
 			new_part.angle = 0.0f;
 			new_part.v_rot = float(Math::RandomTable() % 200) * 0.01f - 0.1f;
 			new_part.size = 1.0f;
-			new_part.use_wind = (!Yuni::Math::Zero(mass) ? true : false);
+			new_part.use_wind = (!Math::AlmostZero(mass) ? true : false);
 			new_part.dsize = 3.0f;
 			new_part.ddsize = ddsize;
 			new_part.light_emitter = false;
@@ -490,7 +490,7 @@ namespace TA3D
 	void PARTICLE_ENGINE::move(float dt, const Vector3D &wind_dir, float g)
 	{
 		pMutex.lock();
-		if (((part.empty() || nb_part == 0) && particle_systems.empty()) || Yuni::Math::Zero(dt))
+		if (((part.empty() || nb_part == 0) && particle_systems.empty()) || Math::AlmostZero(dt))
 		{
 			pMutex.unlock();
 			return;

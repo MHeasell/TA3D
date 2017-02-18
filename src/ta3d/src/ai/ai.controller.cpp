@@ -500,7 +500,7 @@ namespace TA3D
 			}
 
 			float time_factor = units.apparent_timefactor;
-			while ((Yuni::Math::Zero(time_factor) || lp_CONFIG->pause) && !thread_ask_to_stop)
+			while ((Math::AlmostZero(time_factor) || lp_CONFIG->pause) && !thread_ask_to_stop)
 			{
 				time_factor = units.apparent_timefactor;
 				suspend(10);

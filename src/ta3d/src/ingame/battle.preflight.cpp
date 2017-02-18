@@ -131,7 +131,7 @@ namespace TA3D
 				camera_zscroll = 20.0f;
 		}
 
-		if (msec_timer - cam_def_timer >= 1000 && !Yuni::Math::Zero(delta) && ((camera_zscroll > 0.0f && old_zscroll <= 0.0f) || (camera_zscroll < 0.0f && old_zscroll >= 0.0f))) // Just to make it lock near def position
+		if (msec_timer - cam_def_timer >= 1000 && !Math::AlmostZero(delta) && ((camera_zscroll > 0.0f && old_zscroll <= 0.0f) || (camera_zscroll < 0.0f && old_zscroll >= 0.0f))) // Just to make it lock near def position
 		{
 			cam_def_timer = msec_timer;
 			old_zscroll = 0.0f;

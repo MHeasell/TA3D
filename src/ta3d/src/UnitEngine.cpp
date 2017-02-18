@@ -96,7 +96,7 @@ namespace TA3D
 		for (uint32 e = 0U; e < index_list_size; ++e)
 		{
 			uint32 i = idx_list[e];
-			if ((unit[i].flags & 1) && unit[i].owner_id == player_id && unit[i].sel && Yuni::Math::Zero(unit[i].build_percent_left) && unit_manager.unit_type[unit[i].type_id]->canmove)
+			if ((unit[i].flags & 1) && unit[i].owner_id == player_id && unit[i].sel && Math::AlmostZero(unit[i].build_percent_left) && unit_manager.unit_type[unit[i].type_id]->canmove)
 			{
 				if (set)
 					unit[i].set_mission(MISSION_MOVE, &target, false, 0, true, NULL, flags);
@@ -115,7 +115,7 @@ namespace TA3D
 		for (uint16 e = 0; e < index_list_size; ++e)
 		{
 			uint16 i = idx_list[e];
-			if ((unit[i].flags & 1) && unit[i].owner_id == player_id && unit[i].sel && Yuni::Math::Zero(unit[i].build_percent_left) && unit_manager.unit_type[unit[i].type_id]->canpatrol)
+			if ((unit[i].flags & 1) && unit[i].owner_id == player_id && unit[i].sel && Math::AlmostZero(unit[i].build_percent_left) && unit_manager.unit_type[unit[i].type_id]->canpatrol)
 			{
 				if (set)
 					unit[i].set_mission(MISSION_PATROL, &target, false, 0, true, NULL);
@@ -134,7 +134,7 @@ namespace TA3D
 		for (uint16 e = 0; e < index_list_size; ++e)
 		{
 			uint16 i = idx_list[e];
-			if ((unit[i].flags & 1) && unit[i].owner_id == player_id && unit[i].sel && Yuni::Math::Zero(unit[i].build_percent_left) && unit_manager.unit_type[unit[i].type_id]->canguard)
+			if ((unit[i].flags & 1) && unit[i].owner_id == player_id && unit[i].sel && Math::AlmostZero(unit[i].build_percent_left) && unit_manager.unit_type[unit[i].type_id]->canguard)
 			{
 				if (set)
 					unit[i].set_mission(MISSION_GUARD, &unit[target].Pos, false, 0, true, &(unit[target]));
@@ -153,7 +153,7 @@ namespace TA3D
 		for (uint32 e = 0; e < index_list_size; ++e)
 		{
 			const uint32 i = idx_list[e];
-			if ((unit[i].flags & 1) && unit[i].owner_id == player_id && unit[i].sel && Yuni::Math::Zero(unit[i].build_percent_left) && unit_manager.unit_type[unit[i].type_id]->canload && unit_manager.unit_type[unit[i].type_id]->BMcode && unit[i].nb_attached > 0)
+			if ((unit[i].flags & 1) && unit[i].owner_id == player_id && unit[i].sel && Math::AlmostZero(unit[i].build_percent_left) && unit_manager.unit_type[unit[i].type_id]->canload && unit_manager.unit_type[unit[i].type_id]->BMcode && unit[i].nb_attached > 0)
 			{
 				if (set)
 				{
@@ -190,7 +190,7 @@ namespace TA3D
 		for (uint32 e = 0; e < index_list_size; ++e)
 		{
 			const uint32 i = idx_list[e];
-			if ((unit[i].flags & 1) && unit[i].owner_id == player_id && unit[i].sel && Yuni::Math::Zero(unit[i].build_percent_left) && unit_manager.unit_type[unit[i].type_id]->canload && unit_manager.unit_type[unit[i].type_id]->BMcode)
+			if ((unit[i].flags & 1) && unit[i].owner_id == player_id && unit[i].sel && Math::AlmostZero(unit[i].build_percent_left) && unit_manager.unit_type[unit[i].type_id]->canload && unit_manager.unit_type[unit[i].type_id]->BMcode)
 			{
 				if (set)
 				{
@@ -223,7 +223,7 @@ namespace TA3D
 		for (uint32 e = 0; e < index_list_size; ++e)
 		{
 			const uint32 i = idx_list[e];
-			if ((unit[i].flags & 1) && unit[i].owner_id == player_id && unit[i].sel && Yuni::Math::Zero(unit[i].build_percent_left) && unit_manager.unit_type[unit[i].type_id]->Builder)
+			if ((unit[i].flags & 1) && unit[i].owner_id == player_id && unit[i].sel && Math::AlmostZero(unit[i].build_percent_left) && unit_manager.unit_type[unit[i].type_id]->Builder)
 			{
 				if (set)
 					unit[i].set_mission(MISSION_BUILD, &t, false, unit_type_id);
@@ -304,7 +304,7 @@ namespace TA3D
 			unit[*e].lock();
 
 			// Select only units completely built and visible
-			if (unit[*e].owner_id == players.local_human_id && (unit[*e].flags & 1) && Yuni::Math::Zero(unit[*e].build_percent_left) && unit[*e].visible)
+			if (unit[*e].owner_id == players.local_human_id && (unit[*e].flags & 1) && Math::AlmostZero(unit[*e].build_percent_left) && unit[*e].visible)
 			{
 				if (TA3D_SHIFT_PRESSED && unit[*e].sel)
 				{
@@ -535,7 +535,7 @@ namespace TA3D
 		const int h = unit_manager.unit_type[unit_type_id]->FootprintZ;
 		const int x = px - (w >> 1);
 		const int y = py - (h >> 1);
-		const int side = Yuni::Math::Zero(unit_manager.unit_type[unit_type_id]->ExtractsMetal) ? 12 : leave_space ? 12 : 0;
+		const int side = Math::AlmostZero(unit_manager.unit_type[unit_type_id]->ExtractsMetal) ? 12 : leave_space ? 12 : 0;
 		if (x < 0 || y < std::max(0, (((int)the_map->get_zdec(x, 0) + 7) >> 3)) || x + w >= the_map->bloc_w_db - 1 || y + h >= the_map->bloc_h_db - 5 - std::max(0, (((int)the_map->get_zdec(x, the_map->bloc_h_db - 2) + 7) >> 3)))
 			return false; // check if it is inside the map
 
@@ -988,7 +988,7 @@ namespace TA3D
 				continue;
 			}
 
-			if (unit[i].just_created && !Yuni::Math::Zero(unit_manager.unit_type[unit[i].type_id]->ExtractsMetal)) // Compute amount of metal extracted by sec
+			if (unit[i].just_created && !Math::AlmostZero(unit_manager.unit_type[unit[i].type_id]->ExtractsMetal)) // Compute amount of metal extracted by sec
 			{
 				int metal_base = 0;
 				const int px = unit[i].cur_px;
@@ -1025,7 +1025,7 @@ namespace TA3D
 				unit[i].just_created = false;
 			}
 
-			if (Yuni::Math::Zero(unit[i].build_percent_left))
+			if (Math::AlmostZero(unit[i].build_percent_left))
 			{
 				unit[i].metal_prod = 0.0f;
 				unit[i].metal_cons = 0.0f;
@@ -1038,7 +1038,7 @@ namespace TA3D
 				if ((unit[i].port[ACTIVATION] || !unit_manager.unit_type[unit[i].type_id]->onoffable) && unit_manager.unit_type[unit[i].type_id]->EnergyUse <= players.energy[unit[i].owner_id])
 				{
 					unit[i].metal_prod += unit_manager.unit_type[unit[i].type_id]->MakesMetal + unit_manager.unit_type[unit[i].type_id]->MetalMake;
-					if (!Yuni::Math::Zero(unit_manager.unit_type[unit[i].type_id]->ExtractsMetal)) // Extracteur de métal
+					if (!Math::AlmostZero(unit_manager.unit_type[unit[i].type_id]->ExtractsMetal)) // Extracteur de métal
 						unit[i].metal_prod += unit[i].metal_extracted;
 					if (unit_manager.unit_type[unit[i].type_id]->WindGenerator) // Wind Generator
 					{
@@ -1671,7 +1671,7 @@ namespace TA3D
 			uint16 i = idx_list[e];
 			pMutex.unlock();
 			unit[i].lock();
-			if ((unit[i].flags & 1) && !unit[i].command_locked && unit[i].owner_id == player_id && unit[i].sel && Yuni::Math::Zero(unit[i].build_percent_left))
+			if ((unit[i].flags & 1) && !unit[i].command_locked && unit[i].owner_id == player_id && unit[i].sel && Math::AlmostZero(unit[i].build_percent_left))
 			{
 				MissionStack& mission = unit_manager.unit_type[unit[i].type_id]->BMcode ? unit[i].mission : unit[i].def_mission;
 				MissionStack::iterator cur = mission.begin();

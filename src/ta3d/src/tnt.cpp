@@ -531,14 +531,14 @@ namespace TA3D
 				if (y > 0)
 				{
 					float dz = fabsf(map->get_zdec(x, y) - map->get_zdec(x, y - 1) + 8.0f);
-					dz = (Yuni::Math::Zero(dz)) ? 100000000.f : (8.0f / dz);
+					dz = (Math::AlmostZero(dz)) ? 100000000.f : (8.0f / dz);
 					dh = Math::Max(dh, Yuni::Math::Abs<float>(map->h_map(x, y) - map->h_map(x, y - 1)) * dz);
 				}
 
 				if (y + 1 < (map->bloc_h << 1))
 				{
 					float dz = fabsf(map->get_zdec(x, y + 1) - map->get_zdec(x, y) + 8.0f);
-					dz = (Yuni::Math::Zero(dz)) ? 100000000.f : (8.0f / dz);
+					dz = (Math::AlmostZero(dz)) ? 100000000.f : (8.0f / dz);
 					dh = Math::Max(dh, Yuni::Math::Abs<float>(map->h_map(x, y) - map->h_map(x, y + 1)) * dz);
 				}
 

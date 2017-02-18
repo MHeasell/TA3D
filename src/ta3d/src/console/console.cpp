@@ -107,13 +107,13 @@ namespace TA3D
 			else
 			{
 				// slide out
-				if (!Yuni::Math::Zero(pVisible))
+				if (!Math::AlmostZero(pVisible))
 				{
 					pVisible -= dt;
 					if (pVisible < 0.0f)
 						pVisible = 0.0f;
 				}
-				if (Yuni::Math::Zero(pVisible))
+				if (Math::AlmostZero(pVisible))
 					return;
 			}
 		}
