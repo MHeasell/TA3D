@@ -639,7 +639,7 @@ namespace TA3D
 				else
 					continue; // Particule en dehors de la carte donc hors champ
 				++j;
-				if (!j || !Yuni::Math::Equals(oangle, e->angle))
+				if (!j || !Math::AlmostEquals(oangle, e->angle))
 				{
 					oangle = e->angle;
 					const float cosinus = cosf(e->angle);

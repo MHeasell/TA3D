@@ -495,7 +495,7 @@ namespace TA3D
 			return true;
 		else
 		{
-			if (!Yuni::Math::Equals(data.data[obj].axe[axis].rot_speed, data.data[obj].axe[axis].rot_target_speed) && data.data[obj].axe[axis].rot_speed_limit)
+			if (!Math::AlmostEquals(data.data[obj].axe[axis].rot_speed, data.data[obj].axe[axis].rot_target_speed) && data.data[obj].axe[axis].rot_speed_limit)
 				return true;
 		}
 		data.data[obj].axe[axis].rot_speed = 0.0f;

@@ -95,7 +95,7 @@ namespace TA3D
 
 		inline bool operator==(const Vector2D& rhs) const
 		{
-			return (Yuni::Math::Equals(x, rhs.x) && Yuni::Math::Equals(y, rhs.y));
+			return (TA3D::Math::AlmostEquals(x, rhs.x) && TA3D::Math::AlmostEquals(y, rhs.y));
 		}
 
 		inline bool operator!=(const Vector2D& rhs) const

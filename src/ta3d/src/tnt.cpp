@@ -486,14 +486,14 @@ namespace TA3D
 		{
 			for (x = 0; x < (map->bloc_w << 1); ++x) // Lisse la carte du relief projeté
 			{
-				if (!y && Yuni::Math::Equals<float>(map->ph_map(x, y), -1.f))
+				if (!y && Math::AlmostEquals(map->ph_map(x, y), -1.f))
 				{
 					int cy = 0;
-					while (Yuni::Math::Equals(map->ph_map(x, cy), -1.f))
+					while (Math::AlmostEquals(map->ph_map(x, cy), -1.f))
 						++cy;
 					const float h = map->ph_map(x, cy);
 					cy = 0;
-					while (Yuni::Math::Equals(map->ph_map(x, cy), -1.f))
+					while (Math::AlmostEquals(map->ph_map(x, cy), -1.f))
 					{
 						map->ph_map(x, cy) = h;
 						++cy;
@@ -501,18 +501,18 @@ namespace TA3D
 				}
 				else
 				{
-					if (Yuni::Math::Equals(map->ph_map(x, y), -1.f))
+					if (Math::AlmostEquals(map->ph_map(x, y), -1.f))
 					{
 						float h1 = map->ph_map(x, y - 1);
 						int cy = y;
-						while (cy < (map->bloc_h << 1) && Yuni::Math::Equals(map->ph_map(x, cy), -1.f))
+						while (cy < (map->bloc_h << 1) && Math::AlmostEquals(map->ph_map(x, cy), -1.f))
 							++cy;
 
 						if (cy >= (map->bloc_h << 1))
 							cy = (map->bloc_h << 1) - 1;
 
 						float h2 = map->ph_map(x, cy);
-						if (Yuni::Math::Equals(h2, -1.f))
+						if (Math::AlmostEquals(h2, -1.f))
 							h2 = h1;
 						for (int ry = y; ry < cy; ++ry)
 							map->ph_map(x, ry) = h1 + (h2 - h1) * float(ry - y + 1) / float(cy - y + 1);

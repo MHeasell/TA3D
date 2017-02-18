@@ -86,7 +86,7 @@ namespace TA3D
 		void Loading::doNoticeOtherPlayers(const float percent)
 		{
 			// Broadcast informations
-			if (network_manager.isConnected() && !Yuni::Math::Equals(pLastPercent, percent))
+			if (network_manager.isConnected() && !Math::AlmostEquals(pLastPercent, percent))
 				network_manager.sendAll(String("LOADING ") << percent);
 		}
 
@@ -94,7 +94,7 @@ namespace TA3D
 		{
 			LOG_ASSERT(NULL != gfx);
 
-			if (Yuni::Math::Equals(pLastPercent, percent) && message == pLastCaption)
+			if (Math::AlmostEquals(pLastPercent, percent) && message == pLastCaption)
 				return;
 
 			// Notice other players about the progression

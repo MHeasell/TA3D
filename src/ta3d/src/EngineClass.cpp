@@ -1782,7 +1782,7 @@ namespace TA3D
 						map_data(X, Y).setFlat();
 						for (int f = 1; f < 9; ++f) // Check if it's flat
 						{
-							if (!Yuni::Math::Equals(bloc[i].point[0].y, bloc[i].point[f].y))
+							if (!Math::AlmostEquals(bloc[i].point[0].y, bloc[i].point[f].y))
 							{
 								map_data(X, Y).unsetFlat();
 								break;

@@ -500,7 +500,7 @@ namespace TA3D
 				// Wait to reduce CPU consumption
 				wait();
 
-				if (msec_timer - progress_timer >= 500 && Yuni::Math::Equals(network_manager.getFileTransferProgress(), 100.0f))
+				if (msec_timer - progress_timer >= 500 && Math::AlmostEquals(network_manager.getFileTransferProgress(), 100.0f))
 					break;
 
 			} while (pMouseX == mouse_x && pMouseY == mouse_y && pMouseZ == mouse_z && pMouseB == mouse_b && mouse_b == 0 && !key[KEY_ENTER] && !key[KEY_ESC] && !key[KEY_SPACE] && !key[KEY_C] && !pArea->key_pressed && !pArea->scrolling && broadcast_msg.empty() && chat_msg.empty() && special_msg.empty() && !playerDropped && (msec_timer - ping_timer < 2000 || host.empty() || client));
