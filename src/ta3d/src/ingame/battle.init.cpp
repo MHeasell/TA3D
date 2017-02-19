@@ -185,7 +185,7 @@ namespace TA3D
 			return true;
 
 		loading = new Menus::Loading;
-		SmartPtr<Menus::Loading> spLoading = loading;
+		auto spLoading = std::unique_ptr<Menus::Loading>(loading);
 
 		freecam_on.destroy();
 		freecam_off.destroy();
