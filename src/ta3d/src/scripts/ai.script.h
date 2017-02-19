@@ -22,6 +22,7 @@
 #include <misc/string.h>
 #include "lua.thread.h"
 #include <yuni/core/smartptr/smartptr.h>
+#include <memory>
 
 namespace TA3D
 {
@@ -35,7 +36,7 @@ namespace TA3D
 	{
 	public:
 		//! The most suitable smartptr for this class
-		typedef SmartPtr<AiScript> Ptr;
+		typedef std::shared_ptr<AiScript> Ptr;
 
 	public:
 		AiScript();

@@ -89,7 +89,7 @@ namespace TA3D
 			case AI_TYPE_LUA:
 				ai_controller = NULL;
 				if (!ai_script)
-					ai_script = new AiScript();
+					ai_script = AiScript::Ptr(new AiScript());
 				ai_script->setPlayerID(ID);
 				break;
 		};
