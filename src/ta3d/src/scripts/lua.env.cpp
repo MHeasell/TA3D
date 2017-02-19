@@ -114,18 +114,18 @@ namespace TA3D
 		return result;
 	}
 
-	LuaEnv::Ptr LuaEnv::global = (LuaEnv *)NULL;
+	LuaEnv::Ptr LuaEnv::global = NULL;
 
 	LuaEnv::Ptr LuaEnv::instance()
 	{
 		if (!global)
-			global = new LuaEnv();
+			global = std::shared_ptr<LuaEnv>(new LuaEnv());
 		return global;
 	}
 
 	void LuaEnv::destroy()
 	{
-		global = (LuaEnv *)NULL;
+		global = NULL;
 	}
 
 	void LuaEnv::register_global_functions(lua_State *L)
