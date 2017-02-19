@@ -35,6 +35,7 @@
 #include <gfx/shader.h>
 #include <scripts/script.data.h>
 #include <misc/progressnotifier.h>
+#include <memory>
 
 namespace TA3D
 {
@@ -158,9 +159,6 @@ namespace TA3D
 	class Animation // Class used to set default animation to a model, this animation will play if no AnimationData is provided (ie for map features)
 	{
 	public:
-		typedef SmartPtr<Animation> Ptr;
-
-	public:
 		byte type;
 		Vector3D angle_0;
 		Vector3D angle_1;
@@ -210,7 +208,7 @@ namespace TA3D
 		bool emitter_point;			   // This object directly emits particles
 		std::vector<GLuint> gl_dlist;  // Display lists to speed up the drawing process
 
-		Animation::Ptr animation_data;
+		std::unique_ptr<Animation> animation_data;
 
 		sint16 selprim; // Polygone de selection
 
