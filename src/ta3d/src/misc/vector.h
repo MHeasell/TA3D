@@ -19,8 +19,8 @@
 #define __TA3D_XX_MISC_VECTOR_H__
 
 #include <stdafx.h>
+#include <algorithm>
 #include "math.h"
-#include <yuni/core/math.h>
 
 namespace TA3D
 {

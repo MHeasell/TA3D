@@ -19,7 +19,6 @@
 #include <TA3D_NameSpace.h>
 #include "mouse.h"
 #include "keyboard.h"
-#include <yuni/core/math.h>
 #include "../misc/math.h"
 
 float TA3D::VARS::fmouse_x = 0.0f;
