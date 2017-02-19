@@ -32,6 +32,7 @@
 #include <misc/math.h>
 #include <logs/logs.h>
 #include <ingame/players.h>
+#include <memory>
 
 namespace TA3D
 {
@@ -81,7 +82,8 @@ namespace TA3D
 			case AI_TYPE_BLOODY:
 				ai_script = NULL;
 				if (!ai_controller)
-					ai_controller = new AiController();
+					// TODO: replace with make_unique (upgrade to c++14 first)
+					ai_controller = std::unique_ptr<AiController>(new AiController());
 				ai_controller->setPlayerID(ID);
 				break;
 			case AI_TYPE_LUA:

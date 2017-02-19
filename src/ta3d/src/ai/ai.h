@@ -27,6 +27,7 @@
 #include <misc/string.h>
 #include "ai.controller.h"
 #include <scripts/ai.script.h>
+#include <memory>
 
 #define TA3D_AI_FILE_EXTENSION ".ai"
 
@@ -77,7 +78,7 @@ namespace TA3D
 
 	private:
 		String name; // Attention faudrait pas qu'il se prenne pour quelqu'un!! -> indique aussi le fichier correspondant à l'IA (faut sauvegarder les cervelles)
-		AiController::Ptr ai_controller;
+		std::unique_ptr<AiController> ai_controller;
 		AiScript::Ptr ai_script;
 		int type;
 		int ID;

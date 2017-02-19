@@ -62,9 +62,6 @@ namespace TA3D
 	class AiController : public ObjectSync, // Class to manage players controled by AI
 						 public Thread
 	{
-	public:
-		typedef SmartPtr<AiController> Ptr;
-
 	private:
 		String name;	// Attention faudrait pas qu'il se prenne pour quelqu'un!! -> indique aussi le fichier correspondant Ã  l'IA (faut sauvegarder les cervelles)
 		int playerID;   // Identifiant du joueur / all is in the name :)
