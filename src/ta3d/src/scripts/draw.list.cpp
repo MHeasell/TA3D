@@ -19,6 +19,7 @@
 #include <TA3D_NameSpace.h>
 #include "draw.list.h"
 #include "script.h"
+#include <memory>
 
 namespace TA3D
 {
@@ -43,7 +44,7 @@ namespace TA3D
 		LuaProgram::inGame->lock();
 		if (!next)
 		{
-			next = new DrawList;
+			next = std::unique_ptr<DrawList>(new DrawList);
 			next->prim = obj;
 		}
 		else

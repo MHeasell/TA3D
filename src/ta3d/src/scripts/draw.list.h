@@ -25,6 +25,7 @@
 #define __DrawList_H__
 
 #include <misc/string.h>
+#include <memory>
 
 #define DRAW_TYPE_NONE 0x0
 #define DRAW_TYPE_POINT 0x1
@@ -52,11 +53,8 @@ namespace TA3D
 	class DrawList
 	{
 	public:
-		typedef SmartPtr<DrawList> Ptr;
-
-	public:
 		DrawObject prim;
-		DrawList::Ptr next;
+		std::unique_ptr<DrawList> next;
 
 		void init();
 
