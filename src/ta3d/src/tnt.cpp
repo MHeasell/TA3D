@@ -32,6 +32,7 @@
 #include "tnt.h"
 #include "misc/math.h"
 #include "logs/logs.h"
+#include <cmath>
 
 namespace TA3D
 {
@@ -532,20 +533,20 @@ namespace TA3D
 				{
 					float dz = fabsf(map->get_zdec(x, y) - map->get_zdec(x, y - 1) + 8.0f);
 					dz = (Math::AlmostZero(dz)) ? 100000000.f : (8.0f / dz);
-					dh = Math::Max(dh, Yuni::Math::Abs<float>(map->h_map(x, y) - map->h_map(x, y - 1)) * dz);
+					dh = Math::Max(dh, std::abs(map->h_map(x, y) - map->h_map(x, y - 1)) * dz);
 				}
 
 				if (y + 1 < (map->bloc_h << 1))
 				{
 					float dz = fabsf(map->get_zdec(x, y + 1) - map->get_zdec(x, y) + 8.0f);
 					dz = (Math::AlmostZero(dz)) ? 100000000.f : (8.0f / dz);
-					dh = Math::Max(dh, Yuni::Math::Abs<float>(map->h_map(x, y) - map->h_map(x, y + 1)) * dz);
+					dh = Math::Max(dh, std::abs(map->h_map(x, y) - map->h_map(x, y + 1)) * dz);
 				}
 
 				if (x > 0)
-					dh = Math::Max(dh, Yuni::Math::Abs<float>(map->h_map(x, y) - map->h_map(x - 1, y)));
+					dh = Math::Max(dh, std::abs(map->h_map(x, y) - map->h_map(x - 1, y)));
 				if (x + 1 < (map->bloc_w << 1))
-					dh = Math::Max(dh, Yuni::Math::Abs<float>(map->h_map(x, y) - map->h_map(x + 1, y)));
+					dh = Math::Max(dh, std::abs(map->h_map(x, y) - map->h_map(x + 1, y)));
 
 				map->slope(x, y) = dh;
 				map->energy(x, y) = dh;

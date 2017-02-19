@@ -20,6 +20,7 @@
 #include <UnitEngine.h>
 #include <input/mouse.h>
 #include <input/keyboard.h>
+#include <cmath>
 
 namespace TA3D
 {
@@ -39,11 +40,11 @@ namespace TA3D
 
 		if (IsOnMinimap) // Check if we can project the cursor position on the map
 		{
-			if (Yuni::Math::Abs(float(mouse_x - 64) * 252.0f / 128.0f) > (float)map->mini_w * 0.5f)
+			if (std::abs(float(mouse_x - 64) * 252.0f / 128.0f) > (float)map->mini_w * 0.5f)
 				IsOnMinimap = false;
 			else
 			{
-				if (Yuni::Math::Abs(float(mouse_y - 64) * 252.0f / 128.0f) > (float)map->mini_h * 0.5f)
+				if (std::abs(float(mouse_y - 64) * 252.0f / 128.0f) > (float)map->mini_h * 0.5f)
 					IsOnMinimap = false;
 			}
 		}
