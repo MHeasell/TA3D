@@ -16,6 +16,7 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA*/
 
 #include "base.h"
+#include <memory>
 #include <typeinfo>
 #include <ta3dbase.h>
 #include <input/mouse.h>
@@ -72,7 +73,7 @@ namespace TA3D
 
 		void Abstract::loadAreaFromTDF(const String& caption, const String& relFilename)
 		{
-			pArea = new Gui::AREA(caption);
+			pArea = std::unique_ptr<Gui::AREA>(new Gui::AREA(caption));
 			pArea->load_tdf(relFilename);
 			if (!pArea->background)
 				pArea->background = gfx->glfond;

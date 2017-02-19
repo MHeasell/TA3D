@@ -38,8 +38,6 @@ namespace TA3D
 		public:
 			//! The threading policy
 			typedef Yuni::Policy::ObjectLevelLockable<AREA> ThreadingPolicy;
-			//! The best suitable smart pointer for an area
-			typedef Yuni::SmartPtr<AREA> Ptr;
 
 		public:
 			//! \name Constructor && Destructor

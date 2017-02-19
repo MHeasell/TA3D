@@ -16,6 +16,7 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA*/
 
 #include <thread>
+#include <memory>
 
 #include "stdafx.h"
 #include "TA3D_NameSpace.h"
@@ -47,7 +48,7 @@ namespace TA3D
 		void showWarning(const String& s, const String& additional = String())
 		{
 			LOG_WARNING(I18N::Translate(s));
-			Gui::AREA::Ptr pArea = new Gui::AREA();
+			auto pArea = std::unique_ptr<Gui::AREA>(new Gui::AREA());
 			pArea->load_tdf("gui/empty.area");
 			pArea->popup(I18N::Translate("Warning"), I18N::Translate(s) << additional);
 		}

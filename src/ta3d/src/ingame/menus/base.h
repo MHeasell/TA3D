@@ -132,7 +132,7 @@ namespace TA3D
 
 		protected:
 			//! Our Window handle
-			Gui::AREA::Ptr pArea;
+			std::unique_ptr<Gui::AREA> pArea;
 
 			//! Last value of `mouse_x`
 			int pMouseX;
