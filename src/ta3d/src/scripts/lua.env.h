@@ -21,59 +21,58 @@
 #ifndef __LUA_INCLUDES__
 #define __LUA_INCLUDES__
 #ifdef LUA_NOJIT
-# include "../lua/lua.hpp"
+#include "../lua/lua.hpp"
 #else
-# include "../luajit/src/lua.hpp"
+#include "../luajit/src/lua.hpp"
 #endif
 #endif
-# include <threads/thread.h>
-# include <yuni/core/smartptr/smartptr.h>
+#include <threads/thread.h>
+#include <yuni/core/smartptr/smartptr.h>
 
 namespace TA3D
 {
-    /*!
+	/*!
     ** This class manages the Lua global environment and ensures Lua threads
     ** can access it safely
     */
-    class LuaEnv : public ObjectSync
-    {
+	class LuaEnv : public ObjectSync
+	{
 	public:
-		typedef Yuni::SmartPtr<LuaEnv>	Ptr;
-    protected:
-        lua_State   *L;             // The global Lua state
-    public:
+		typedef Yuni::SmartPtr<LuaEnv> Ptr;
 
-        LuaEnv();
-        ~LuaEnv();
+	protected:
+		lua_State *L; // The global Lua state
+	public:
+		LuaEnv();
+		~LuaEnv();
 
-        void set_global_string( const char *name, const char *value );
-        void set_global_number( const char *name, const double value );
-        void set_global_boolean( const char *name, const bool value );
-        const char *get_global_string( const char *name );
-        double get_global_number( const char *name );
-        bool get_global_boolean( const char *name );
-        bool is_global_string( const char *name );
-        bool is_global_number( const char *name );
-        bool is_global_boolean( const char *name );
+		void set_global_string(const char *name, const char *value);
+		void set_global_number(const char *name, const double value);
+		void set_global_boolean(const char *name, const bool value);
+		const char *get_global_string(const char *name);
+		double get_global_number(const char *name);
+		bool get_global_boolean(const char *name);
+		bool is_global_string(const char *name);
+		bool is_global_number(const char *name);
+		bool is_global_boolean(const char *name);
 
-    public:
+	public:
 		static LuaEnv::Ptr global;
 		static LuaEnv::Ptr instance();
-        static void destroy();
+		static void destroy();
 
-        static void register_global_functions( lua_State *L );
+		static void register_global_functions(lua_State *L);
 
-        static int global_set_global_string( lua_State *L );
-        static int global_set_global_number( lua_State *L );
-        static int global_set_global_boolean( lua_State *L );
-        static int global_get_global_string( lua_State *L );
-        static int global_get_global_number( lua_State *L );
-        static int global_get_global_boolean( lua_State *L );
-        static int global_is_global_string( lua_State *L );
-        static int global_is_global_number( lua_State *L );
-        static int global_is_global_boolean( lua_State *L );
-    };
-
+		static int global_set_global_string(lua_State *L);
+		static int global_set_global_number(lua_State *L);
+		static int global_set_global_boolean(lua_State *L);
+		static int global_get_global_string(lua_State *L);
+		static int global_get_global_number(lua_State *L);
+		static int global_get_global_boolean(lua_State *L);
+		static int global_is_global_string(lua_State *L);
+		static int global_is_global_number(lua_State *L);
+		static int global_is_global_boolean(lua_State *L);
+	};
 }
 
 #endif
