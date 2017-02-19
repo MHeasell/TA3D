@@ -300,7 +300,7 @@ namespace TA3D
 			GUIOBJ::Ptr objectPtr = pObjects[i];
 			// For performance reason, we will directly working on the pointer
 			// It is safe due to the reference is guaranted to be valid until the end of the scope
-			GUIOBJ* object = GUIOBJ::Ptr::WeakPointer(objectPtr);
+			GUIOBJ* object = objectPtr.get();
 
 			if (object->MouseOn && !object->help_msg.empty())
 				helpMsg = object->help_msg;
@@ -1492,7 +1492,7 @@ namespace TA3D
 			String obj_key;
 			for (unsigned int i = 0; i < NbObj; ++i)
 			{
-				GUIOBJ::Ptr object = new GUIOBJ();
+				GUIOBJ::Ptr object = GUIOBJ::Ptr(new GUIOBJ());
 				pObjects.push_back(object);
 
 				obj_key.clear();
@@ -1732,7 +1732,7 @@ namespace TA3D
 				obj_type.toUpper();
 
 				// Creating a new instance
-				GUIOBJ::Ptr object = new GUIOBJ();
+				GUIOBJ::Ptr object = GUIOBJ::Ptr(new GUIOBJ());
 				pObjects.push_back(object);
 
 				object->Name = wndFile.pullAsString(String(obj_key) << "name", String("widget") << i);

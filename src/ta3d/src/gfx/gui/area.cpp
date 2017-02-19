@@ -601,7 +601,7 @@ namespace TA3D
 						return the_wnd->get_object(obj_name);
 				}
 			}
-			return (GUIOBJ*)NULL;
+			return NULL;
 		}
 
 		GUIOBJ::Ptr AREA::get_object(const String& message)

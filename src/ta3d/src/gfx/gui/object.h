@@ -24,6 +24,7 @@
 #include "base.h"
 #include <gfx/texture.h>
 #include "skin.h"
+#include <memory>
 
 namespace TA3D
 {
@@ -40,7 +41,7 @@ namespace TA3D
 		{
 		public:
 			//! The most suitable smart pointer
-			typedef Yuni::SmartPtr<GUIOBJ> Ptr;
+			typedef std::shared_ptr<GUIOBJ> Ptr;
 
 		public:
 			//! \name Constructor & Destructor
