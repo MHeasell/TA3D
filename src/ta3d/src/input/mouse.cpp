@@ -20,6 +20,7 @@
 #include "mouse.h"
 #include "keyboard.h"
 #include <yuni/core/math.h>
+#include "../misc/math.h"
 
 float TA3D::VARS::fmouse_x = 0.0f;
 float TA3D::VARS::fmouse_y = 0.0f;
@@ -113,8 +114,8 @@ namespace TA3D
 			mouse_b |= 2;
 		if (m_b & SDL_BUTTON(2))
 			mouse_b |= 4;
-		fmouse_x = Yuni::Math::MinMax(fmouse_x, 0.f, (float)(SCREEN_W));
-		fmouse_y = Yuni::Math::MinMax(fmouse_y, 0.f, (float)SCREEN_H);
+		fmouse_x = Math::Clamp(fmouse_x, 0.f, (float)(SCREEN_W));
+		fmouse_y = Math::Clamp(fmouse_y, 0.f, (float)SCREEN_H);
 		mouse_x = (int)(fmouse_x + 0.5f);
 		mouse_y = (int)(fmouse_y + 0.5f);
 		if (rmx != mouse_x || rmy != mouse_y)
@@ -135,8 +136,8 @@ namespace TA3D
 		mouse_ly += y - mouse_y;
 		mouse_x = x;
 		mouse_y = y;
-		mouse_x = Yuni::Math::MinMax<int>(mouse_x, 0, SCREEN_W);
-		mouse_y = Yuni::Math::MinMax<int>(mouse_y, 0, SCREEN_H);
+		mouse_x = Math::Clamp(mouse_x, 0, SCREEN_W);
+		mouse_y = Math::Clamp(mouse_y, 0, SCREEN_H);
 		fmouse_x = float(mouse_x);
 		fmouse_y = float(mouse_y);
 		old_mx = mouse_x;
