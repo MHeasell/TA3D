@@ -301,9 +301,6 @@ namespace TA3D
 	class WATER
 	{
 	public:
-		typedef SmartPtr<WATER> Ptr;
-
-	public:
 		float map_w;
 		float map_h;
 		float w;

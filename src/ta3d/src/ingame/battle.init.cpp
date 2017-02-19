@@ -39,6 +39,7 @@
 #include <yuni/core/io/file/stream.h>
 #include "menus/loading.h"
 #include <cache.h>
+#include <memory>
 
 using namespace Yuni;
 using namespace Yuni::Core::IO::File;
@@ -687,7 +688,8 @@ namespace TA3D
 
 	bool Battle::initTheWater()
 	{
-		water_obj = new WATER();
+		// TODO: replace with make_unique (upgrade to c++14 first)
+		water_obj = std::unique_ptr<WATER>(new WATER());
 		water_obj->build((float)map->map_w, (float)map->map_h, 1000.0f);
 		water_sim0 = water_sim1 = water_sim2 = 0;
 

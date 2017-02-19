@@ -475,7 +475,7 @@ namespace TA3D
 		//! \name Water
 		//@{
 		//!
-		WATER::Ptr water_obj;
+		std::unique_ptr<WATER> water_obj;
 		//!
 		Shader water_shader;
 		//!
