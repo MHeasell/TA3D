@@ -955,7 +955,7 @@ namespace TA3D
 
 	void Battle::waitForNetworkPlayers()
 	{
-		g_ta3d_network = new TA3DNetwork(&pArea, pGameData);
+		g_ta3d_network = TA3DNetwork::Ptr(new TA3DNetwork(&pArea, pGameData));
 		if (pNetworkEnabled)
 		{
 			players.set_network(g_ta3d_network);

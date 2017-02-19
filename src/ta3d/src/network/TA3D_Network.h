@@ -24,6 +24,7 @@
 #include <deque>
 #include <gfx/gui/area.h>
 #include <misc/string.h>
+#include <memory>
 
 namespace TA3D
 {
@@ -31,7 +32,7 @@ namespace TA3D
 	class TA3DNetwork : public ObjectSync
 	{
 	public:
-		typedef SmartPtr<TA3DNetwork> Ptr;
+		typedef std::shared_ptr<TA3DNetwork> Ptr;
 
 	private:
 		class NetworkMessage
