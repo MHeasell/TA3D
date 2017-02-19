@@ -43,10 +43,6 @@ namespace TA3D
 	class LuaChunk : public ScriptData
 	{
 	public:
-		//! The most suitable smart pointer for the class
-		typedef SmartPtr<LuaChunk>	Ptr;
-
-	public:
 		//! \name Constructors & Destructor
 		//@{
 		/*!

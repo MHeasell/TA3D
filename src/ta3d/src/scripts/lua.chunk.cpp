@@ -20,6 +20,7 @@
 #include <yuni/core/io/file/stream.h>
 #include "lua.chunk.h"
 #include "lua.thread.h"
+#include <memory>
 
 using namespace std;
 
@@ -64,9 +65,9 @@ namespace TA3D
         destroy();
 
 		LuaThread::Ptr thread = new LuaThread;
-        thread->load(filename);
+		thread->load(filename);
 
-		LuaChunk::Ptr chunk = thread->dump();
+		auto chunk = std::unique_ptr<LuaChunk>(thread->dump());
 
         buffer = chunk->buffer;
         size = chunk->size;
