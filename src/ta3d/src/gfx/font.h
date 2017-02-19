@@ -23,6 +23,7 @@
 #include <threads/thread.h>
 #include <misc/string.h>
 #include <deque>
+#include <memory>
 
 #ifdef __FTGL__lower__
 #include <FTGL/ftgl.h>
@@ -133,7 +134,7 @@ namespace TA3D
 
 	private:
 		//! The FT Font
-		SmartPtr<FTFont> font;
+		std::unique_ptr<FTFont> font;
 		//! The filename of the font
 		String pFontFilename;
 		//! Type of the font

@@ -24,6 +24,7 @@
 #include <logs/logs.h>
 #include <yuni/core/io/file.h>
 #include <yuni/core/io/file/stream.h>
+#include <memory>
 
 using namespace Yuni::Core::IO::File;
 
@@ -251,23 +252,23 @@ namespace TA3D
 			switch (type)
 			{
 				case typeBitmap:
-					font = new FTBitmapFont(filename.c_str());
+					font = std::unique_ptr<FTFont>(new FTBitmapFont(filename.c_str()));
 					break;
 				case typePixmap:
-					font = new FTPixmapFont(filename.c_str());
+					font = std::unique_ptr<FTFont>(new FTPixmapFont(filename.c_str()));
 					break;
 				case typePolygon:
-					font = new FTPolygonFont(filename.c_str());
+					font = std::unique_ptr<FTFont>(new FTPolygonFont(filename.c_str()));
 					break;
 				case typeTextures:
-					font = new FTTextureFont(filename.c_str());
+					font = std::unique_ptr<FTFont>(new FTTextureFont(filename.c_str()));
 					break;
 				case typeTexture:
 				default:
 #ifdef __FTGL__lower__
-					font = new FTBufferFont(filename.c_str());
+					font = std::unique_ptr<FTFont>(new FTBufferFont(filename.c_str()));
 #else
-					font = new FTTextureFont(filename.c_str());
+					font = std::unique_ptr<FTFont>(new FTTextureFont(filename.c_str()));
 #endif
 			}
 		}
