@@ -1,7 +1,5 @@
 #ifndef __TA3D_SCRIPTS_LUA_CHUNK_HXX__
-# define __TA3D_SCRIPTS_LUA_CHUNK_HXX__
-	
-
+#define __TA3D_SCRIPTS_LUA_CHUNK_HXX__
 
 namespace TA3D
 {
@@ -11,24 +9,21 @@ namespace TA3D
 		return name;
 	}
 
-
-	inline LuaChunk::LuaChunk(lua_State *L, const String& name)
-		:buffer(NULL), size(0)
+	inline LuaChunk::LuaChunk(lua_State* L, const String& name)
+		: buffer(NULL), size(0)
 	{
 		dump(L, name);
 	}
 
-
 	inline LuaChunk::LuaChunk()
-		:buffer(NULL), size(0)
-	{}
+		: buffer(NULL), size(0)
+	{
+	}
 
 	inline LuaChunk::~LuaChunk()
 	{
 		DELETE_ARRAY(buffer);
 	}
-
-
 
 } // namespace TA3D
 

@@ -27,115 +27,108 @@ using namespace std;
 namespace TA3D
 {
 
-
-    int LuaChunk::WriterFunc(lua_State*, const void* p, size_t size, void* u)
-    {
-        LuaChunk *chunk = (LuaChunk*) u;
-        if (u == NULL)
+	int LuaChunk::WriterFunc(lua_State *, const void *p, size_t size, void *u)
+	{
+		LuaChunk *chunk = (LuaChunk *)u;
+		if (u == NULL)
 			return 1;
 
-        byte *nBuf = new byte[chunk->size + size];
-        if (chunk->buffer)
-        {
-            memcpy(nBuf, chunk->buffer, chunk->size);
+		byte *nBuf = new byte[chunk->size + size];
+		if (chunk->buffer)
+		{
+			memcpy(nBuf, chunk->buffer, chunk->size);
 			DELETE_ARRAY(chunk->buffer);
-        }
-        memcpy(nBuf + chunk->size, p, size);
+		}
+		memcpy(nBuf + chunk->size, p, size);
 		chunk->size += (uint32)size;
-        chunk->buffer = nBuf;
-        return 0;
-    }
+		chunk->buffer = nBuf;
+		return 0;
+	}
 
+	int LuaChunk::load(lua_State *L)
+	{
+		return luaL_loadbuffer(L, (char *)buffer, size, name.c_str());
+	}
 
-    int LuaChunk::load(lua_State *L)
-    {
-        return luaL_loadbuffer(L, (char*)buffer, size, name.c_str());
-    }
+	void LuaChunk::dump(lua_State *L, const String &name)
+	{
+		destroy();
+		lua_dump(L, WriterFunc, (void *)this);
+		this->name = name;
+	}
 
-    void LuaChunk::dump(lua_State *L, const String &name)
-    {
-        destroy();
-        lua_dump(L, WriterFunc, (void*)this);
-        this->name = name;
-    }
-
-
-    void LuaChunk::load(const String &filename)                    // Load a lua chunk
-    {
-        destroy();
+	void LuaChunk::load(const String &filename) // Load a lua chunk
+	{
+		destroy();
 
 		LuaThread::Ptr thread = new LuaThread;
 		thread->load(filename);
 
 		auto chunk = std::unique_ptr<LuaChunk>(thread->dump());
 
-        buffer = chunk->buffer;
-        size = chunk->size;
-        name = chunk->name;
-        chunk->buffer = NULL;
-    }
+		buffer = chunk->buffer;
+		size = chunk->size;
+		name = chunk->name;
+		chunk->buffer = NULL;
+	}
 
-    void LuaChunk::save(const String &filename)                    // Save the lua chunk
-    {
-        if (buffer == NULL || size == 0)    return;
+	void LuaChunk::save(const String &filename) // Save the lua chunk
+	{
+		if (buffer == NULL || size == 0)
+			return;
 
 		Yuni::Core::IO::File::Stream file(filename, Yuni::Core::IO::OpenMode::write);
 		if (file.opened())
-        {
-            file.write((char*)buffer, size);
-            file.close();
-        }
-    }
+		{
+			file.write((char *)buffer, size);
+			file.close();
+		}
+	}
 
+	void LuaChunk::init()
+	{
+		buffer = NULL;
+		size = 0;
+		piece_name.clear();
+	}
 
-    void LuaChunk::init()
-    {
-        buffer = NULL;
-        size = 0;
-        piece_name.clear();
-    }
-
-
-    void LuaChunk::destroy()
-    {
+	void LuaChunk::destroy()
+	{
 		DELETE_ARRAY(buffer);
-        size = 0;
-    }
+		size = 0;
+	}
 
-
-    int LuaChunk::identify(const String &name)
-    {
-        if (piece_name.empty())
-        {
+	int LuaChunk::identify(const String &name)
+	{
+		if (piece_name.empty())
+		{
 			LuaThread::Ptr thread = new LuaThread();
-            thread->load(this);
-            thread->run();      // Initialize the thread (read functions, pieces, ...)
-            if (thread->L)
-            {
-                lua_getglobal(thread->L, "__piece_list");
-                if (lua_istable(thread->L, -1))
-                {
-                    piece_name.resize(lua_objlen(thread->L, -1));
-					for(uint32 i = 1 ; i <= piece_name.size() ; i++)
-                    {
-                        lua_rawgeti(thread->L, -1, i);
-                        piece_name[i-1] = lua_tostring(thread->L, -1);
-                        lua_pop(thread->L, 1);
-                    }
-                }
-            }
-        }
+			thread->load(this);
+			thread->run(); // Initialize the thread (read functions, pieces, ...)
+			if (thread->L)
+			{
+				lua_getglobal(thread->L, "__piece_list");
+				if (lua_istable(thread->L, -1))
+				{
+					piece_name.resize(lua_objlen(thread->L, -1));
+					for (uint32 i = 1; i <= piece_name.size(); i++)
+					{
+						lua_rawgeti(thread->L, -1, i);
+						piece_name[i - 1] = lua_tostring(thread->L, -1);
+						lua_pop(thread->L, 1);
+					}
+				}
+			}
+		}
 
 		String query(name);
 		query.toLower();
 		for (uint32 i = 0; i < piece_name.size(); ++i)
 		{
-            if (piece_name[i] == query)
-                return i;
+			if (piece_name[i] == query)
+				return i;
 		}
-        return -1;
-    }
-
-
+		return -1;
+	}
 
 } // namespace TA3D

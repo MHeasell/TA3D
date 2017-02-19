@@ -18,39 +18,39 @@
 #ifndef __LuaThread_H__
 #define __LuaThread_H__
 
-# include <stdafx.h>
-# include <misc/string.h>
-# include <misc/vector.h>
+#include <stdafx.h>
+#include <misc/string.h>
+#include <misc/vector.h>
 #ifndef __LUA_INCLUDES__
 #define __LUA_INCLUDES__
 #ifdef LUA_NOJIT
-# include "../lua/lua.hpp"
+#include "../lua/lua.hpp"
 #else
-# include "../luajit/src/lua.hpp"
+#include "../luajit/src/lua.hpp"
 #endif
 #endif
-# include <threads/thread.h>
-# include "lua.chunk.h"
-# include "script.interface.h"
+#include <threads/thread.h>
+#include "lua.chunk.h"
+#include "script.interface.h"
 
 namespace TA3D
 {
 	/*!
 		** \brief a small panic function to throw an exception instead of exiting and cleaning stuffs while running which explicitly crashes the game :/
 		*/
-	int lua_panic( lua_State *L  );
+	int lua_panic(lua_State *L);
 
 	/*!
 		** \brief functions for vector interface with Lua
 		*/
-	void lua_pushvector( lua_State *L, const Vector3D &vec );
-	Vector3D lua_tovector( lua_State *L, int idx );
+	void lua_pushvector(lua_State *L, const Vector3D &vec);
+	Vector3D lua_tovector(lua_State *L, int idx);
 
 	/*!
 		** \brief functions for color interface with Lua
 		*/
-	void lua_pushcolor( lua_State *L, const uint32 color );
-	uint32 lua_tocolor( lua_State *L, int idx );
+	void lua_pushcolor(lua_State *L, const uint32 color);
+	uint32 lua_tocolor(lua_State *L, int idx);
 
 	/*!
 		** \brief loads a Lua script, preprocessing to allow including other files and use defines
@@ -65,21 +65,22 @@ namespace TA3D
 	{
 		friend class LuaChunk;
 		friend class UnitScript;
+
 	public:
-		typedef SmartPtr<LuaThread>	Ptr;
+		typedef SmartPtr<LuaThread> Ptr;
+
 	protected:
-		byte        *buffer;
-		lua_State   *L;             // The Lua state
-		int         n_args;         // Number of arguments given to lua_resume
+		byte *buffer;
+		lua_State *L;				// The Lua state
+		int n_args;					// Number of arguments given to lua_resume
 
-		String      name;
+		String name;
 
-		bool        crashed;
+		bool crashed;
 
-		int         nextID;
+		int nextID;
 
 	public:
-
 		LuaThread();
 		virtual ~LuaThread();
 
@@ -88,7 +89,7 @@ namespace TA3D
 		inline int getNextID()
 		{
 			if (caller)
-				return static_cast<LuaThread*>(caller)->getNextID();
+				return static_cast<LuaThread *>(caller)->getNextID();
 			MutexLocker mLocker(pMutex);
 			return nextID++;
 		}
@@ -96,12 +97,12 @@ namespace TA3D
 		void init();
 		void destroy();
 
-		void load(const String &filename);                    // Load a lua script
+		void load(const String &filename); // Load a lua script
 		virtual void load(ScriptData *data);
 		LuaChunk *dump();
 
-		virtual int run(float dt, bool alone = false);      // Run the script
-		int run();                          // Run the script with default delay
+		virtual int run(float dt, bool alone = false); // Run the script
+		int run();									   // Run the script with default delay
 
 		//! functions used to call/run Lua functions
 		void call(const String &functionName, int *parameters = NULL, int nb_params = 0);
@@ -117,9 +118,9 @@ namespace TA3D
 		virtual void restore_thread_state(gzFile file);
 
 		//! functions used for debugging
-		inline bool is_crashed()    {   return crashed;  }
-		inline void crash()         {   crashed = true;  }
-		inline void uncrash()       {   crashed = false; }
+		inline bool is_crashed() { return crashed; }
+		inline void crash() { crashed = true; }
+		inline void uncrash() { crashed = false; }
 		bool runCommand(const String &cmd);
 
 	private:
@@ -129,23 +130,23 @@ namespace TA3D
 	private:
 		//! functions that register new Lua functions
 		void register_basic_functions();
-		virtual void register_functions()   {}
-		virtual void register_info()        {}
+		virtual void register_functions() {}
+		virtual void register_info() {}
 	};
 
-	int thread_logmsg( lua_State *L );
-	int thread_mouse_x( lua_State *L );
-	int thread_mouse_y( lua_State *L );
-	int thread_mouse_z( lua_State *L );
-	int thread_mouse_b( lua_State *L );
-	int thread_time( lua_State *L );
-	int thread_signal( lua_State *L );
-	int thread_start_script( lua_State *L );
+	int thread_logmsg(lua_State *L);
+	int thread_mouse_x(lua_State *L);
+	int thread_mouse_y(lua_State *L);
+	int thread_mouse_z(lua_State *L);
+	int thread_mouse_b(lua_State *L);
+	int thread_time(lua_State *L);
+	int thread_signal(lua_State *L);
+	int thread_start_script(lua_State *L);
 
 	/*!
 		** \brief returns a pointer to the current thread, or NULL on error
 		*/
-	LuaThread *lua_threadID( lua_State *L );
+	LuaThread *lua_threadID(lua_State *L);
 }
 
 #endif

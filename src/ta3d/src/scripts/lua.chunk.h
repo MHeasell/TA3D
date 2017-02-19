@@ -16,27 +16,24 @@
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA*/
 
 #ifndef __TA3D_SCRIPTS_LUA_CHUNK_H__
-# define __TA3D_SCRIPTS_LUA_CHUNK_H__
+#define __TA3D_SCRIPTS_LUA_CHUNK_H__
 
-# include <stdafx.h>
-# include <misc/string.h>
+#include <stdafx.h>
+#include <misc/string.h>
 #ifndef __LUA_INCLUDES__
 #define __LUA_INCLUDES__
 #ifdef LUA_NOJIT
-# include "../lua/lua.hpp"
+#include "../lua/lua.hpp"
 #else
-# include "../luajit/src/lua.hpp"
+#include "../luajit/src/lua.hpp"
 #endif
 #endif
-# include "script.data.h"
-
+#include "script.data.h"
 
 namespace TA3D
 {
 
-
-
-    /*!
+	/*!
     ** This class represents a basic Lua thread without specialization
 	** To use it, create a new class that inherits LUA_THREAD
 	*/
@@ -52,26 +49,26 @@ namespace TA3D
 		/*!
 		** \brief Constructor with default values
 		*/
-		LuaChunk(lua_State *L, const String& name);
+		LuaChunk(lua_State* L, const String& name);
 		//! Destructor
 		virtual ~LuaChunk();
 		//@}
 
-		/*virtual*/ void load(const String &filename);                    // Load a lua chunk
-		void save(const String &filename);                    // Save the lua chunk
+		/*virtual*/ void load(const String& filename);		  // Load a lua chunk
+		void save(const String& filename);					  // Save the lua chunk
 
-		int load(lua_State *L);
+		int load(lua_State* L);
 
-		void dump(lua_State *L, const String& name);
+		void dump(lua_State* L, const String& name);
 		const String& getName() const;
 
-		virtual int identify(const String &name);
+		virtual int identify(const String& name);
 
 	protected:
 		byte* buffer;
 		uint32 size;
 		String name;
-		String::Vector  piece_name;     // Nom des pièces de l'objet 3d concerné / Name of pieces
+		String::Vector piece_name; // Nom des pièces de l'objet 3d concerné / Name of pieces
 
 	private:
 		void init();
@@ -80,13 +77,8 @@ namespace TA3D
 		static int WriterFunc(lua_State* L, const void* p, size_t size, void* u);
 	};
 
-
-
-
-
-
 } // namespace TA3D
 
-# include "lua.chunk.hxx"
+#include "lua.chunk.hxx"
 
 #endif // __TA3D_SCRIPTS_LUA_CHUNK_H__

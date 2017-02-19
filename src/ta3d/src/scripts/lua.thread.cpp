@@ -24,11 +24,9 @@
 #include "lua.env.h"
 #include <input/mouse.h>
 
-
-
 namespace TA3D
 {
-	int lua_panic( lua_State *L  )
+	int lua_panic(lua_State *L)
 	{
 		if (lua_gettop(L) > 0 && lua_isstring(L, -1))
 		{
@@ -37,20 +35,20 @@ namespace TA3D
 		}
 		else
 			LOG_ERROR(LOG_PREFIX_LUA << "lua_panic /o\\ with no error message");
-		throw 0;	// Wow we don't want Lua to kill TA3D huh
+		throw 0; // Wow we don't want Lua to kill TA3D huh
 		return 0;
 	}
 
-    LuaThread *lua_threadID( lua_State *L )
+	LuaThread *lua_threadID(lua_State *L)
 	{
 		try
 		{
 			lua_getfield(L, LUA_REGISTRYINDEX, "threadID");
-			LuaThread *p = (LuaThread*) lua_touserdata( L, -1 );
+			LuaThread *p = (LuaThread *)lua_touserdata(L, -1);
 			lua_pop(L, 1);
 			return p;
 		}
-		catch(...)
+		catch (...)
 		{
 			LOG_ERROR(__FILE__ << " l." << __LINE__ << " : Lua exception caught");
 			throw 0;
@@ -59,7 +57,7 @@ namespace TA3D
 		return NULL;
 	}
 
-	void lua_pushvector( lua_State *L, const Vector3D &vec )
+	void lua_pushvector(lua_State *L, const Vector3D &vec)
 	{
 		lua_newtable(L);
 		lua_pushnumber(L, vec.x);
@@ -73,27 +71,27 @@ namespace TA3D
 		lua_setmetatable(L, -2);
 	}
 
-	Vector3D lua_tovector( lua_State *L, int idx )
+	Vector3D lua_tovector(lua_State *L, int idx)
 	{
 		Vector3D vec;
 
 		lua_pushstring(L, "x");
 		lua_rawget(L, idx - 1);
-		vec.x = (float) lua_tonumber(L, -1);
+		vec.x = (float)lua_tonumber(L, -1);
 
 		lua_pushstring(L, "y");
 		lua_rawget(L, idx - 2);
-		vec.y = (float) lua_tonumber(L, -1);
+		vec.y = (float)lua_tonumber(L, -1);
 
 		lua_pushstring(L, "z");
 		lua_rawget(L, idx - 3);
-		vec.z = (float) lua_tonumber(L, -1);
+		vec.z = (float)lua_tonumber(L, -1);
 		lua_pop(L, 3);
 
 		return vec;
 	}
 
-	void lua_pushcolor( lua_State *L, const uint32 color )
+	void lua_pushcolor(lua_State *L, const uint32 color)
 	{
 		lua_newtable(L);
 		lua_pushinteger(L, getr(color));
@@ -106,29 +104,29 @@ namespace TA3D
 		lua_setfield(L, -2, "a");
 	}
 
-	uint32 lua_tocolor( lua_State *L, int idx )
+	uint32 lua_tocolor(lua_State *L, int idx)
 	{
-		uint32 r,g,b,a;
+		uint32 r, g, b, a;
 		lua_getfield(L, idx, "r");
-		r = (uint32) lua_tointeger(L, -1);
+		r = (uint32)lua_tointeger(L, -1);
 		lua_pop(L, 1);
 
 		lua_getfield(L, idx, "g");
-		g = (uint32) lua_tointeger(L, -1);
+		g = (uint32)lua_tointeger(L, -1);
 		lua_pop(L, 1);
 
 		lua_getfield(L, idx, "b");
-		b = (uint32) lua_tointeger(L, -1);
+		b = (uint32)lua_tointeger(L, -1);
 		lua_pop(L, 1);
 
 		lua_getfield(L, idx, "a");
 		if (lua_isnil(L, -1))
 			a = 0xFF;
 		else
-			a = (uint32) lua_tointeger(L, -1);
+			a = (uint32)lua_tointeger(L, -1);
 		lua_pop(L, 1);
 
-		return makeacol(r,g,b,a);
+		return makeacol(r, g, b, a);
 	}
 
 	void LuaThread::init()
@@ -147,22 +145,22 @@ namespace TA3D
 
 		n_args = 0;
 
-        crashed = false;
+		crashed = false;
 
-        last = msec_timer;
+		last = msec_timer;
 	}
 
 	void LuaThread::destroy()
 	{
-        deleteThreads();
+		deleteThreads();
 
-        if (L)
+		if (L)
 			lua_settop(L, 0);
-		if ( L && caller == NULL )
-			lua_close( L );
+		if (L && caller == NULL)
+			lua_close(L);
 		DELETE_ARRAY(buffer);
 		running = false;
-        crashed = false;
+		crashed = false;
 
 		init();
 	}
@@ -194,12 +192,12 @@ namespace TA3D
 			String name;
 			int n = 0;
 			char *f = NULL;
-			while ((f = strstr( (char*)buffer, "#include" ) ) != NULL && n < 20)
+			while ((f = strstr((char *)buffer, "#include")) != NULL && n < 20)
 			{
 				int i;
 				name.clear();
-				for (i = 0 ; i < 100 && f[ i + 10 ] != '"' ; ++i)
-					name << f[ i + 10 ];
+				for (i = 0; i < 100 && f[i + 10] != '"'; ++i)
+					name << f[i + 10];
 				if (!VFS::Instance()->fileExists(String(path) << name))
 					name = String("scripts/") << name;
 				else
@@ -213,11 +211,11 @@ namespace TA3D
 					delete file;
 					if (buffer2)
 					{
-						byte *buffer3 = new byte[ filesize + filesize2 + 1 ];
-						memset( buffer3, 0, filesize + filesize2 + 1 );
-						memcpy( buffer3, buffer, f - (char*)buffer );
-						memcpy( buffer3 + (f - (char*)buffer), buffer2, filesize2 );
-						memcpy( buffer3 + (f - (char*)buffer) + filesize2, f + i + 11, filesize - ( f + i + 11 - (char*)buffer ) );
+						byte *buffer3 = new byte[filesize + filesize2 + 1];
+						memset(buffer3, 0, filesize + filesize2 + 1);
+						memcpy(buffer3, buffer, f - (char *)buffer);
+						memcpy(buffer3 + (f - (char *)buffer), buffer2, filesize2);
+						memcpy(buffer3 + (f - (char *)buffer) + filesize2, f + i + 11, filesize - (f + i + 11 - (char *)buffer));
 						filesize += filesize2 - i - 11;
 						DELETE_ARRAY(buffer);
 						DELETE_ARRAY(buffer2);
@@ -232,16 +230,16 @@ namespace TA3D
 		return buffer;
 	}
 
-	void LuaThread::load(const String &filename)					// Load a lua script
+	void LuaThread::load(const String &filename) // Load a lua script
 	{
-		destroy();			// Maybe we're reusing an old object
+		destroy(); // Maybe we're reusing an old object
 
 		uint32 filesize = 0;
-		buffer = loadLuaFile(filename , filesize);
+		buffer = loadLuaFile(filename, filesize);
 		if (buffer)
 		{
 			L = lua_open();				// Create a lua state object
-			lua_atpanic(L, lua_panic);	// Just to avoid having Lua exiting TA3D
+			lua_atpanic(L, lua_panic);  // Just to avoid having Lua exiting TA3D
 
 			if (L == NULL)
 			{
@@ -254,41 +252,41 @@ namespace TA3D
 			register_functions();
 
 			uint32 filesize2 = 0;
-			byte *header_buffer = loadLuaFile("scripts/ta3d.lh" , filesize2);
+			byte *header_buffer = loadLuaFile("scripts/ta3d.lh", filesize2);
 			if (header_buffer == NULL)
 			{
-				if (lua_tostring( L, -1 ) != NULL && strlen(lua_tostring( L, -1 )) > 0)
-					LOG_ERROR(LOG_PREFIX_LUA << lua_tostring( L, -1));
+				if (lua_tostring(L, -1) != NULL && strlen(lua_tostring(L, -1)) > 0)
+					LOG_ERROR(LOG_PREFIX_LUA << lua_tostring(L, -1));
 
 				running = false;
-				lua_close( L );
+				lua_close(L);
 				DELETE_ARRAY(buffer);
 				L = NULL;
 				return;
 			}
 			byte *tmp = buffer;
-            buffer = new byte[filesize + filesize2 + 2];
+			buffer = new byte[filesize + filesize2 + 2];
 			memcpy(buffer, header_buffer, filesize2);
-            memcpy(buffer + filesize2 + 1, tmp, filesize);
-            buffer[filesize2] = '\n';
-            filesize += filesize2;
-            buffer[filesize] = 0;
+			memcpy(buffer + filesize2 + 1, tmp, filesize);
+			buffer[filesize2] = '\n';
+			filesize += filesize2;
+			buffer[filesize] = 0;
 			DELETE_ARRAY(header_buffer);
 			DELETE_ARRAY(tmp);
 
 			name = filename;
-			if (luaL_loadbuffer(L, (const char*)buffer, filesize, name.c_str() ))
+			if (luaL_loadbuffer(L, (const char *)buffer, filesize, name.c_str()))
 			{
-                if (lua_gettop(L) > 0 && lua_tostring( L, -1 ) != NULL && strlen(lua_tostring( L, -1 )) > 0)
+				if (lua_gettop(L) > 0 && lua_tostring(L, -1) != NULL && strlen(lua_tostring(L, -1)) > 0)
 				{
-                    LOG_ERROR(LOG_PREFIX_LUA << __FILE__ << " l." << __LINE__);
-                    LOG_ERROR(LOG_PREFIX_LUA << lua_tostring( L, -1));
-					LOG_ERROR(LOG_PREFIX_LUA << filesize << " -> " << (int)buffer[filesize-1]);
-					LOG_ERROR((const char*) buffer);
+					LOG_ERROR(LOG_PREFIX_LUA << __FILE__ << " l." << __LINE__);
+					LOG_ERROR(LOG_PREFIX_LUA << lua_tostring(L, -1));
+					LOG_ERROR(LOG_PREFIX_LUA << filesize << " -> " << (int)buffer[filesize - 1]);
+					LOG_ERROR((const char *)buffer);
 				}
 
 				running = false;
-				lua_close( L );
+				lua_close(L);
 				DELETE_ARRAY(buffer);
 				L = NULL;
 			}
@@ -299,7 +297,7 @@ namespace TA3D
 
 				running = true;
 				setThreadID();
-                last = msec_timer;
+				last = msec_timer;
 			}
 		}
 		else
@@ -312,11 +310,11 @@ namespace TA3D
 	void LuaThread::load(ScriptData *data)
 	{
 		destroy();
-		LuaChunk *chunk = dynamic_cast<LuaChunk*>(data);
+		LuaChunk *chunk = dynamic_cast<LuaChunk *>(data);
 		if (chunk)
 		{
 			L = lua_open();				// Create a lua state object
-			lua_atpanic(L, lua_panic);	// Just to avoid having Lua exiting TA3D
+			lua_atpanic(L, lua_panic);  // Just to avoid having Lua exiting TA3D
 
 			if (L == NULL)
 			{
@@ -331,14 +329,14 @@ namespace TA3D
 			name = chunk->getName();
 			if (chunk->load(L))
 			{
-                if (lua_gettop(L) > 0 && lua_tostring( L, -1 ) != NULL && strlen(lua_tostring( L, -1 )) > 0)
-                {
-                    LOG_ERROR(LOG_PREFIX_LUA << __FILE__ << " l." << __LINE__);
-					LOG_ERROR(LOG_PREFIX_LUA << lua_tostring( L, -1));
-                }
+				if (lua_gettop(L) > 0 && lua_tostring(L, -1) != NULL && strlen(lua_tostring(L, -1)) > 0)
+				{
+					LOG_ERROR(LOG_PREFIX_LUA << __FILE__ << " l." << __LINE__);
+					LOG_ERROR(LOG_PREFIX_LUA << lua_tostring(L, -1));
+				}
 
 				running = false;
-				lua_close( L );
+				lua_close(L);
 				L = NULL;
 			}
 			else
@@ -354,55 +352,55 @@ namespace TA3D
 		return new LuaChunk(L, name);
 	}
 
-	int thread_logmsg( lua_State *L )		// logmsg( str )
+	int thread_logmsg(lua_State *L) // logmsg( str )
 	{
-		const char *str = lua_tostring( L, -1 );		// Read the result
+		const char *str = lua_tostring(L, -1); // Read the result
 		if (str)
 			LOG_INFO(LOG_PREFIX_LUA << str);
 		lua_pop(L, 1);
 		return 0;
 	}
 
-	int thread_mouse_x( lua_State *L )		// mouse_x()
+	int thread_mouse_x(lua_State *L) // mouse_x()
 	{
-		lua_pushinteger( L, mouse_x );
+		lua_pushinteger(L, mouse_x);
 		return 1;
 	}
 
-	int thread_mouse_y( lua_State *L )		// mouse_y()
+	int thread_mouse_y(lua_State *L) // mouse_y()
 	{
-		lua_pushinteger( L, mouse_y );
+		lua_pushinteger(L, mouse_y);
 		return 1;
 	}
 
-	int thread_mouse_z( lua_State *L )		// mouse_z()
+	int thread_mouse_z(lua_State *L) // mouse_z()
 	{
-		lua_pushinteger( L, mouse_z );
+		lua_pushinteger(L, mouse_z);
 		return 1;
 	}
 
-	int thread_mouse_b( lua_State *L )		// mouse_b()
+	int thread_mouse_b(lua_State *L) // mouse_b()
 	{
-		lua_pushinteger( L, mouse_b );
+		lua_pushinteger(L, mouse_b);
 		return 1;
 	}
 
-	int thread_time( lua_State *L )		// time()
+	int thread_time(lua_State *L) // time()
 	{
-		lua_pushnumber( L, msec_timer * 0.001 );
+		lua_pushnumber(L, msec_timer * 0.001);
 		return 1;
 	}
 
-	int thread_signal( lua_State *L )       // signal( sig )
+	int thread_signal(lua_State *L) // signal( sig )
 	{
 		LuaThread *lua_thread = lua_threadID(L);
 		if (lua_thread)
-			lua_thread->processSignal( (uint32)lua_tointeger(L, 1) );
+			lua_thread->processSignal((uint32)lua_tointeger(L, 1));
 		lua_settop(L, 0);
 		return 0;
 	}
 
-	int thread_start_script( lua_State *L )         // start_script( function, params )
+	int thread_start_script(lua_State *L) // start_script( function, params )
 	{
 		int n = lua_gettop(L);
 
@@ -412,7 +410,7 @@ namespace TA3D
 			if (lua_thread)
 			{
 				LuaThread *newThread = lua_thread->fork(L, n);
-				newThread->setSignalMask( lua_thread->getSignalMask() );
+				newThread->setSignalMask(lua_thread->getSignalMask());
 			}
 		}
 
@@ -421,27 +419,27 @@ namespace TA3D
 
 	void LuaThread::register_basic_functions()
 	{
-		lua_register( L, "logmsg", thread_logmsg );
-		lua_register( L, "mouse_x", thread_mouse_x );
-		lua_register( L, "mouse_y", thread_mouse_y );
-		lua_register( L, "mouse_z", thread_mouse_z );
-		lua_register( L, "mouse_b", thread_mouse_b );
-		lua_register( L, "time", thread_time );
-		lua_register( L, "signal", thread_signal );
-		lua_register( L, "start_script", thread_start_script );
-		LuaEnv::register_global_functions( L );
+		lua_register(L, "logmsg", thread_logmsg);
+		lua_register(L, "mouse_x", thread_mouse_x);
+		lua_register(L, "mouse_y", thread_mouse_y);
+		lua_register(L, "mouse_z", thread_mouse_z);
+		lua_register(L, "mouse_b", thread_mouse_b);
+		lua_register(L, "time", thread_time);
+		lua_register(L, "signal", thread_signal);
+		lua_register(L, "start_script", thread_start_script);
+		LuaEnv::register_global_functions(L);
 	}
 
-	int LuaThread::run(float dt, bool alone)               // Run the script
+	int LuaThread::run(float dt, bool alone) // Run the script
 	{
-		MutexLocker mLocker( pMutex );
-        if (!L)
-            return -1;
+		MutexLocker mLocker(pMutex);
+		if (!L)
+			return -1;
 
 		if (caller == NULL && !alone)
 		{
 			clean();
-			for (int i = (int)childs.size() - 1 ; i >= 0 ; --i)
+			for (int i = (int)childs.size() - 1; i >= 0; --i)
 			{
 				const int sig = childs[i]->run(dt);
 				if (sig > 0 || sig < -3)
@@ -449,9 +447,12 @@ namespace TA3D
 			}
 		}
 
-		if (!is_running())   return -1;
-		if (!running)   return 0;
-		if (waiting)    return -3;
+		if (!is_running())
+			return -1;
+		if (!running)
+			return 0;
+		if (waiting)
+			return -3;
 
 		if (sleeping)
 		{
@@ -459,48 +460,48 @@ namespace TA3D
 			if (sleep_time <= 0.0f)
 				sleeping = false;
 			if (sleeping)
-				return -2; 			// Keep sleeping
+				return -2; // Keep sleeping
 		}
 
 		try
 		{
 			int result = lua_resume(L, n_args);
 			n_args = 0;
-            if (result != LUA_YIELD && result != 0)
+			if (result != LUA_YIELD && result != 0)
 			{
-                if (lua_gettop(L) > 0 && !lua_isnoneornil(L, -1) && lua_tostring(L, -1) != NULL && strlen(lua_tostring(L, -1)) > 0)
-                {
-                    LOG_ERROR(LOG_PREFIX_LUA << __FILE__ << " l." << __LINE__);
-                    LOG_ERROR(LOG_PREFIX_LUA << lua_tostring(L, -1));
-                }
-				running = false;
-                crashed = true;
-                return -0xFFFF;         // Crashed
-			}
-            else if (lua_gettop(L) > 0)
-			{
-                running = result == LUA_YIELD;
-				result = 0;
-                while(lua_gettop(L) > 0 && !lua_isnone(L, -1) && !lua_isfunction(L, -1))
+				if (lua_gettop(L) > 0 && !lua_isnoneornil(L, -1) && lua_tostring(L, -1) != NULL && strlen(lua_tostring(L, -1)) > 0)
 				{
-					switch(result)
+					LOG_ERROR(LOG_PREFIX_LUA << __FILE__ << " l." << __LINE__);
+					LOG_ERROR(LOG_PREFIX_LUA << lua_tostring(L, -1));
+				}
+				running = false;
+				crashed = true;
+				return -0xFFFF; // Crashed
+			}
+			else if (lua_gettop(L) > 0)
+			{
+				running = result == LUA_YIELD;
+				result = 0;
+				while (lua_gettop(L) > 0 && !lua_isnone(L, -1) && !lua_isfunction(L, -1))
+				{
+					switch (result)
 					{
 						case 0:
 							result = (int)lua_tointeger(L, -1);
 							break;
-						case 1:             // sleep
-							pause( (float)lua_tonumber(L, -1) );
+						case 1: // sleep
+							pause((float)lua_tonumber(L, -1));
 							result = 0;
 							break;
-						case 2:             // wait
+						case 2: // wait
 							stop();
 							result = 0;
 							break;
-						case 3:             // set_signal_mask
-							setSignalMask( (uint32)lua_tointeger(L, -1) );
+						case 3: // set_signal_mask
+							setSignalMask((uint32)lua_tointeger(L, -1));
 							result = 0;
 							break;
-						case 4:             // end_thread
+						case 4: // end_thread
 							kill();
 							result = 0;
 							break;
@@ -509,25 +510,25 @@ namespace TA3D
 				}
 				return result;
 			}
-            running = result == LUA_YIELD;
-            return 0;
-        }
-		catch(...)
+			running = result == LUA_YIELD;
+			return 0;
+		}
+		catch (...)
 		{
 			LOG_ERROR(__FILE__ << " l." << __LINE__ << " : Lua exception caught");
-			if (lua_gettop(L) > 0 && !lua_isnoneornil(L, -1) && lua_tostring( L, -1 ) != NULL && strlen(lua_tostring( L, -1 )) > 0)
-            {
-                LOG_ERROR(LOG_PREFIX_LUA << __FILE__ << " l." << __LINE__);
-                LOG_ERROR(LOG_PREFIX_LUA << lua_tostring(L, -1));
-            }
+			if (lua_gettop(L) > 0 && !lua_isnoneornil(L, -1) && lua_tostring(L, -1) != NULL && strlen(lua_tostring(L, -1)) > 0)
+			{
+				LOG_ERROR(LOG_PREFIX_LUA << __FILE__ << " l." << __LINE__);
+				LOG_ERROR(LOG_PREFIX_LUA << lua_tostring(L, -1));
+			}
 			running = false;
-            crashed = true;
-            return -0xFFFF;         // Crashed
+			crashed = true;
+			return -0xFFFF; // Crashed
 		}
 		return 0;
 	}
 
-	int LuaThread::run()                          // Run the script, using default delay
+	int LuaThread::run() // Run the script, using default delay
 	{
 		const uint32 timer = msec_timer;
 		const float dt = (float)(timer - last);
@@ -550,22 +551,22 @@ namespace TA3D
 			return this;
 		}
 
-        LuaThread *newThread = static_cast<LuaThread*>(getFreeThread());
-        if (newThread)
-        {
-            newThread->running = false;
-            newThread->waiting = false;
-            newThread->sleeping = false;
-            newThread->sleep_time = 0.0f;
-            newThread->signal_mask = 0;
-            lua_settop(newThread->L, 0);
-            addThread(newThread);
+		LuaThread *newThread = static_cast<LuaThread *>(getFreeThread());
+		if (newThread)
+		{
+			newThread->running = false;
+			newThread->waiting = false;
+			newThread->sleeping = false;
+			newThread->sleep_time = 0.0f;
+			newThread->signal_mask = 0;
+			lua_settop(newThread->L, 0);
+			addThread(newThread);
 
-            pMutex.unlock();
-            return newThread;
-        }
+			pMutex.unlock();
+			return newThread;
+		}
 
-        newThread = new LuaThread();
+		newThread = new LuaThread();
 
 		newThread->running = false;
 		newThread->buffer = NULL;
@@ -575,8 +576,8 @@ namespace TA3D
 		newThread->caller = (caller != NULL) ? caller : this;
 
 		newThread->L = lua_newthread(L);
-		String globalName( String("__thread") << getNextID() );
-        lua_setglobal(L, globalName.c_str());  // We don't want to keep this thread value on top of the stack
+		String globalName(String("__thread") << getNextID());
+		lua_setglobal(L, globalName.c_str()); // We don't want to keep this thread value on top of the stack
 		addThread(newThread);
 
 		pMutex.unlock();
@@ -597,17 +598,18 @@ namespace TA3D
 
 	void LuaThread::call(const String &functionName, int *parameters, int nb_params)
 	{
-		MutexLocker mLocker( pMutex );
+		MutexLocker mLocker(pMutex);
 
-		if (running)    return;     // We cannot run several functions at the same time on the same stack
+		if (running)
+			return; // We cannot run several functions at the same time on the same stack
 
-        crashed = false;
+		crashed = false;
 
 		try
 		{
 			lua_settop(L, 0);
-			lua_getglobal( L, functionName.c_str() );
-			if (lua_isnil( L, -1 ))     // Function not found
+			lua_getglobal(L, functionName.c_str());
+			if (lua_isnil(L, -1)) // Function not found
 			{
 				lua_pop(L, 1);
 				LOG_DEBUG(LOG_PREFIX_LUA << "call: function not found `" << functionName << "`");
@@ -616,12 +618,12 @@ namespace TA3D
 
 			if (parameters == NULL)
 				nb_params = 0;
-			for(int i = 0 ; i < nb_params ; i++)
+			for (int i = 0; i < nb_params; i++)
 				lua_pushinteger(L, parameters[i]);
 			n_args = nb_params;
 			running = true;
 		}
-		catch(...)
+		catch (...)
 		{
 			LOG_ERROR(__FILE__ << " l." << __LINE__ << " : Lua exception caught");
 			running = false;
@@ -630,15 +632,15 @@ namespace TA3D
 
 	int LuaThread::execute(const String &functionName, int *parameters, int nb_params)
 	{
-		MutexLocker mLocker( pMutex );
+		MutexLocker mLocker(pMutex);
 
-        crashed = false;
+		crashed = false;
 
 		try
 		{
 			lua_settop(L, 0);
-			lua_getglobal( L, functionName.c_str() );
-			if (lua_isnil( L, -1 ))     // Function not found
+			lua_getglobal(L, functionName.c_str());
+			if (lua_isnil(L, -1)) // Function not found
 			{
 				lua_pop(L, 1);
 				LOG_DEBUG(LOG_PREFIX_LUA << "execute: function not found `" << functionName << "`");
@@ -647,38 +649,38 @@ namespace TA3D
 
 			if (parameters == NULL)
 				nb_params = 0;
-			for(int i = 0 ; i < nb_params ; i++)
+			for (int i = 0; i < nb_params; i++)
 				lua_pushinteger(L, parameters[i]);
-			if (lua_pcall( L, nb_params, 1, 0))
+			if (lua_pcall(L, nb_params, 1, 0))
 			{
-                if (lua_gettop(L) > 0 && lua_tostring(L, -1) != NULL && strlen(lua_tostring(L, -1)) > 0)
-                {
-                    LOG_ERROR(LOG_PREFIX_LUA << __FILE__ << " l." << __LINE__);
-                    LOG_ERROR(LOG_PREFIX_LUA << lua_tostring(L, -1));
-                }
+				if (lua_gettop(L) > 0 && lua_tostring(L, -1) != NULL && strlen(lua_tostring(L, -1)) > 0)
+				{
+					LOG_ERROR(LOG_PREFIX_LUA << __FILE__ << " l." << __LINE__);
+					LOG_ERROR(LOG_PREFIX_LUA << lua_tostring(L, -1));
+				}
 				running = false;
 				return -1;
 			}
 		}
-		catch(...)
+		catch (...)
 		{
 			LOG_ERROR(__FILE__ << " l." << __LINE__ << " : Lua exception caught");
-			if (lua_gettop(L) > 0 && lua_tostring( L, -1 ) != NULL && strlen(lua_tostring( L, -1 )) > 0)
-            {
-                LOG_ERROR(LOG_PREFIX_LUA << __FILE__ << " l." << __LINE__);
-                LOG_ERROR(LOG_PREFIX_LUA << lua_tostring(L, -1));
-            }
+			if (lua_gettop(L) > 0 && lua_tostring(L, -1) != NULL && strlen(lua_tostring(L, -1)) > 0)
+			{
+				LOG_ERROR(LOG_PREFIX_LUA << __FILE__ << " l." << __LINE__);
+				LOG_ERROR(LOG_PREFIX_LUA << lua_tostring(L, -1));
+			}
 			running = false;
 			return -1;
 		}
 
-        if (lua_gettop(L) > 0)
-        {
-			const int result = lua_isboolean(L,-1) ? lua_toboolean(L,-1) : (int)lua_tointeger( L, -1 );    // Read the result
-            lua_pop( L, 1 );
-            return result;
-        }
-        return 0;
+		if (lua_gettop(L) > 0)
+		{
+			const int result = lua_isboolean(L, -1) ? lua_toboolean(L, -1) : (int)lua_tointeger(L, -1); // Read the result
+			lua_pop(L, 1);
+			return result;
+		}
+		return 0;
 	}
 
 	LuaThread *LuaThread::fork(lua_State *cL, int n)
@@ -687,14 +689,14 @@ namespace TA3D
 
 		LuaThread *newThread = fork();
 
-        if (lua_isfunction(cL, -n))
-        {
-            lua_xmove(cL, newThread->L, n);
-            newThread->n_args = n - 1;
-            newThread->running = true;
-        }
-        else
-            newThread->running = false;
+		if (lua_isfunction(cL, -n))
+		{
+			lua_xmove(cL, newThread->L, n);
+			newThread->n_args = n - 1;
+			newThread->running = true;
+		}
+		else
+			newThread->running = false;
 
 		pMutex.unlock();
 		return newThread;
@@ -704,13 +706,13 @@ namespace TA3D
 	{
 		try
 		{
-			lua_pushlightuserdata( L, (void*)this );            // The pointer itself
-			lua_setfield(L, LUA_REGISTRYINDEX, "threadID");     // Save this at the first position on the stack :), this identifies the
+			lua_pushlightuserdata(L, (void *)this);				// The pointer itself
+			lua_setfield(L, LUA_REGISTRYINDEX, "threadID");		// Save this at the first position on the stack :), this identifies the
 			// LuaThread associated with this Lua_State object
 			if (lua_threadID(L) == NULL)
 				LOG_ERROR(LOG_PREFIX_LUA << "impossible to write LuaThread pointer into Lua_State stack !!");
 		}
-		catch(...)
+		catch (...)
 		{
 			LOG_ERROR(__FILE__ << " l." << __LINE__ << " : Lua exception caught");
 			throw 0;
@@ -725,54 +727,54 @@ namespace TA3D
 	{
 	}
 
-    bool LuaThread::runCommand(const String &cmd)
-    {
-        MutexLocker mLocker( pMutex );
-        if (L == NULL)
-            return false;
+	bool LuaThread::runCommand(const String &cmd)
+	{
+		MutexLocker mLocker(pMutex);
+		if (L == NULL)
+			return false;
 
-        if (luaL_loadbuffer(L, (const char*)cmd.c_str(), cmd.size(), "user command" ))
-        {
-            if (lua_gettop(L) > 0 && lua_tostring( L, -1 ) != NULL && strlen(lua_tostring( L, -1 )) > 0)
-            {
-                LOG_ERROR(LOG_PREFIX_LUA << lua_tostring( L, -1));
-                LOG_ERROR(cmd);
-            }
-            return false;
-        }
-        else
-        {
-            try
-            {
-                if (lua_pcall(L, 0, 0, 0))
-                {
-                    if (lua_gettop(L) > 0 && lua_tostring(L, -1) != NULL && strlen(lua_tostring(L, -1)) > 0)
-                    {
-                        LOG_ERROR(LOG_PREFIX_LUA << __FILE__ << " l." << __LINE__);
-                        LOG_ERROR(LOG_PREFIX_LUA << lua_tostring(L, -1));
-                    }
-                    return false;
-                }
-            }
-            catch(...)
-            {
-                if (lua_gettop(L) > 0 && lua_tostring( L, -1 ) != NULL && strlen(lua_tostring( L, -1 )) > 0)
-                {
-                    LOG_ERROR(LOG_PREFIX_LUA << __FILE__ << " l." << __LINE__);
-                    LOG_ERROR(LOG_PREFIX_LUA << lua_tostring(L, -1));
-                }
-                return false;
-            }
-        }
-        return true;
-    }
+		if (luaL_loadbuffer(L, (const char *)cmd.c_str(), cmd.size(), "user command"))
+		{
+			if (lua_gettop(L) > 0 && lua_tostring(L, -1) != NULL && strlen(lua_tostring(L, -1)) > 0)
+			{
+				LOG_ERROR(LOG_PREFIX_LUA << lua_tostring(L, -1));
+				LOG_ERROR(cmd);
+			}
+			return false;
+		}
+		else
+		{
+			try
+			{
+				if (lua_pcall(L, 0, 0, 0))
+				{
+					if (lua_gettop(L) > 0 && lua_tostring(L, -1) != NULL && strlen(lua_tostring(L, -1)) > 0)
+					{
+						LOG_ERROR(LOG_PREFIX_LUA << __FILE__ << " l." << __LINE__);
+						LOG_ERROR(LOG_PREFIX_LUA << lua_tostring(L, -1));
+					}
+					return false;
+				}
+			}
+			catch (...)
+			{
+				if (lua_gettop(L) > 0 && lua_tostring(L, -1) != NULL && strlen(lua_tostring(L, -1)) > 0)
+				{
+					LOG_ERROR(LOG_PREFIX_LUA << __FILE__ << " l." << __LINE__);
+					LOG_ERROR(LOG_PREFIX_LUA << lua_tostring(L, -1));
+				}
+				return false;
+			}
+		}
+		return true;
+	}
 
-    int LuaThread::getMem()
-    {
-        lock();
-        int mem = L != NULL ? lua_gc(L, LUA_GCCOUNT, 0) * 1024 + lua_gc(L, LUA_GCCOUNTB, 0) : 0;
-        unlock();
-        return mem;
-    }
+	int LuaThread::getMem()
+	{
+		lock();
+		int mem = L != NULL ? lua_gc(L, LUA_GCCOUNT, 0) * 1024 + lua_gc(L, LUA_GCCOUNTB, 0) : 0;
+		unlock();
+		return mem;
+	}
 
 } // namespace TA3D
