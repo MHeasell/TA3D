@@ -2353,7 +2353,7 @@ namespace TA3D
 
 	void GFX::runTests()
 	{
-		InterfaceManager = new IInterfaceManager();
+		InterfaceManager = IInterfaceManager::Ptr(new IInterfaceManager());
 
 		// Initalizing SDL video
 		if (SDL_Init(SDL_INIT_VIDEO) < 0)

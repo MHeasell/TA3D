@@ -20,6 +20,7 @@
 
 #include <threads/thread.h>
 #include <stdafx.h>
+#include <memory>
 
 #define I_Msg(x, xx) InterfaceManager->DispatchMsg(x, xx)
 
@@ -70,7 +71,7 @@ namespace TA3D
 	class IInterfaceManager : public ObjectSync
 	{
 	public:
-		typedef Yuni::SmartPtr<IInterfaceManager> Ptr;
+		typedef std::shared_ptr<IInterfaceManager> Ptr;
 
 	public:
 		//! \name Constructor & destructor

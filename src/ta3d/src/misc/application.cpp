@@ -63,7 +63,7 @@ namespace TA3D
 		atexit(Finalize);
 
 		// Interface Manager
-		InterfaceManager = new IInterfaceManager();
+		InterfaceManager = IInterfaceManager::Ptr(new IInterfaceManager());
 
 		// Load settings early only to get current mod name
 		TA3D::Settings::Load();
