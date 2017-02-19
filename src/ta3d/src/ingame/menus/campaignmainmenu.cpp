@@ -22,6 +22,7 @@
 #include <ingame/battle.h>
 #include <ingame/sidedata.h>
 #include "briefscreen.h"
+#include <memory>
 
 namespace TA3D
 {
@@ -152,7 +153,7 @@ namespace TA3D
 					last_campaign_id = guiobj->Pos;
 					mission_id = -1;
 					campaign_name = String("camps\\") << guiobj->Text[guiobj->Pos] << ".tdf";
-					campaign_parser = new TDFParser(campaign_name);
+					campaign_parser = std::unique_ptr<TDFParser>(new TDFParser(campaign_name));
 
 					guiobj = pArea->get_object("campaign.mission_list");
 					nb_mission = 0;

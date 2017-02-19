@@ -20,6 +20,7 @@
 
 #include "base.h"
 #include <gaf.h>
+#include <memory>
 
 namespace TA3D
 {
@@ -47,7 +48,7 @@ namespace TA3D
 
 		private:
 			String::List campaign_list;
-			TDFParser::Ptr campaign_parser;
+			std::unique_ptr<TDFParser> campaign_parser;
 			Gaf::AnimationList side_logos;
 
 			bool start_game;
