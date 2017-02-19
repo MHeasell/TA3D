@@ -5,6 +5,7 @@
 #include <misc/string.h>
 #include <mods/modinfo.h>
 #include "socket.tcp.h"
+#include <memory>
 
 namespace TA3D
 {
@@ -13,7 +14,7 @@ namespace TA3D
 	{
 	public:
 		//! The most suitable smartptr for the class
-		typedef SmartPtr<NetClient> Ptr;
+		typedef std::shared_ptr<NetClient> Ptr;
 		//! The threading policy
 		typedef Yuni::Policy::SingleThreaded<NetClient> ThreadingPolicy;
 

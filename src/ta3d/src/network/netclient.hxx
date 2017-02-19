@@ -49,7 +49,7 @@ namespace TA3D
 	inline NetClient::Ptr NetClient::instance()
 	{
 		if (!pInstance)
-			pInstance = new NetClient;
+			pInstance = NetClient::Ptr(new NetClient);
 		return pInstance;
 	}
 
