@@ -26,6 +26,7 @@
 #include <misc/interface.h>
 #include <gfx/texture.h>
 #include <yuni/core/smartptr/smartptr.h>
+#include <memory>
 
 namespace TA3D
 {
@@ -42,7 +43,7 @@ namespace TA3D
 		{
 		public:
 			//! The most suitable smart pointer for a class `WND`
-			typedef Yuni::SmartPtr<WND> Ptr;
+			typedef std::shared_ptr<WND> Ptr;
 
 		public:
 			//! \name Constructors & Destructor

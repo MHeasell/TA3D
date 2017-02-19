@@ -214,7 +214,7 @@ namespace TA3D
 		{
 			ThreadingPolicy::MutexLocker locker(*this);
 
-			WND::Ptr newWindow = new WND();
+			WND::Ptr newWindow = WND::Ptr(new WND());
 			uint16 wnd_idx = (uint16)pWindowList.size();
 
 			pWindowList.push_back(newWindow); // Adds a window to the vector
