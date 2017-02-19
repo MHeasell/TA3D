@@ -20,6 +20,7 @@
 #include "misc/math.h"
 #include "misc/paths.h"
 #include <yuni/core/io/file/stream.h>
+#include <memory>
 
 using namespace Yuni::Core::IO::File;
 
@@ -28,7 +29,7 @@ namespace TA3D
 
 	void install_TA_files(String HPI_file, String filename)
 	{
-		SmartPtr<Archive> archive = Archive::load(HPI_file);
+		auto archive = std::unique_ptr<Archive>(Archive::load(HPI_file));
 		if (!archive)
 		{
 			LOG_ERROR("archive not found : '" << HPI_file << "'");
