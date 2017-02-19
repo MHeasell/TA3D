@@ -22,6 +22,7 @@
 #include "script.interface.h"
 #include "script.data.h"
 #include <misc/hash_table.h>
+#include <memory>
 
 namespace TA3D
 {
@@ -31,7 +32,7 @@ namespace TA3D
 	class UnitScriptInterface : public ScriptInterface
 	{
 	public:
-		typedef SmartPtr<UnitScriptInterface> Ptr;
+		typedef std::shared_ptr<UnitScriptInterface> Ptr;
 
 	public:
 		static UnitScriptInterface *instanciate(ScriptData::Ptr data);

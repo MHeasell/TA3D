@@ -422,7 +422,7 @@ namespace TA3D
 			model = pType->model;
 			weapon.resize(pType->weapon.size());
 			hp = (float)pType->MaxDamage;
-			script = UnitScriptInterface::instanciate(pType->script);
+			script = UnitScriptInterface::Ptr(UnitScriptInterface::instanciate(pType->script));
 			port[STANDINGMOVEORDERS] = pType->StandingMoveOrder;
 			port[STANDINGFIREORDERS] = pType->StandingFireOrder;
 			if (!basic)
