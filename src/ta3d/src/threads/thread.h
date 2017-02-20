@@ -69,9 +69,6 @@ namespace TA3D
 	class ObjectSync
 	{
 	public:
-		typedef Yuni::SmartPtr<ObjectSync> Ptr;
-
-	public:
 		//! \name Constructor & Destructor
 		//@{
 		ObjectSync() {}
