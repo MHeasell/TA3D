@@ -82,7 +82,7 @@ namespace TA3D
 			return;
 		}
 
-		const bool audioRunning = sound_manager;
+		const bool audioRunning = !!sound_manager;
 		if (audioRunning)
 			sound_manager = NULL;
 
@@ -99,7 +99,7 @@ namespace TA3D
 			LOG_ERROR(LOG_PREFIX_VIDEO << "could not read file '" << filename << "'");
 			if (audioRunning)
 			{
-				sound_manager = new Audio::Manager;
+				sound_manager = Audio::Manager::Ptr(new Audio::Manager);
 				sound_manager->loadTDFSounds(true);
 				sound_manager->loadTDFSounds(false);
 			}
@@ -190,7 +190,7 @@ namespace TA3D
 		SDL_AudioQuit();
 		if (audioRunning)
 		{
-			sound_manager = new Audio::Manager;
+			sound_manager = Audio::Manager::Ptr(new Audio::Manager);
 			sound_manager->loadTDFSounds(true);
 			sound_manager->loadTDFSounds(false);
 		}

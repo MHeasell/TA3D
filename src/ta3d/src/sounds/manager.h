@@ -25,6 +25,7 @@
 #include <threads/thread.h>
 #include <list>
 #include <vector>
+#include <memory>
 
 #include <SDL/SDL_mixer.h>
 
@@ -40,7 +41,7 @@ namespace TA3D
 		class Manager : protected TA3D::IInterface
 		{
 		public:
-			typedef SmartPtr<Manager> Ptr;
+			typedef std::shared_ptr<Manager> Ptr;
 
 		public:
 			//! \name Constructor & Destructor

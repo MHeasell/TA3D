@@ -172,7 +172,7 @@ namespace TA3D
 		}
 
 		// Creating Sound & Music Interface
-		sound_manager = new TA3D::Audio::Manager();
+		sound_manager = TA3D::Audio::Manager::Ptr(new TA3D::Audio::Manager());
 		sound_manager->loadTDFSounds(true);
 		sound_manager->loadTDFSounds(false);
 
