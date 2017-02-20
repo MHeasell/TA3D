@@ -84,7 +84,9 @@ set(SRC_MISC
 		misc/usectimer.h misc/usectimer.cpp
 		misc/grid.h misc/grid.hxx misc/grid.cpp
 		misc/math.h misc/math.cpp
-		misc/tdf.h misc/tdf.hxx misc/tdf.cpp)
+		misc/tdf.h misc/tdf.hxx misc/tdf.cpp
+
+		misc/suspend.h misc/suspend.cpp)
 		
 
 #

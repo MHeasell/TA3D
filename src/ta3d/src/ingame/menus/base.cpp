@@ -21,6 +21,7 @@
 #include <ta3dbase.h>
 #include <input/mouse.h>
 #include <input/keyboard.h>
+#include <misc/suspend.h>
 
 namespace TA3D
 {

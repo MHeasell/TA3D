@@ -30,6 +30,7 @@
 #include <ingame/sidedata.h>
 #include <tnt.h>
 #include <restore.h>
+#include <misc/suspend.h>
 
 namespace TA3D
 {

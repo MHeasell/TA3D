@@ -24,6 +24,7 @@
 #include <restore.h>
 #include "setupgame.h"
 #include <TA3D_NameSpace.h>
+#include <misc/suspend.h>
 
 using namespace TA3D::VARS;
 

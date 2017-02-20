@@ -21,6 +21,7 @@
 #include <languages/i18n.h>
 #include <input/keyboard.h>
 #include <input/mouse.h>
+#include <misc/suspend.h>
 
 using namespace TA3D::VARS;
 

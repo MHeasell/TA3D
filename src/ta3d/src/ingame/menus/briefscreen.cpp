@@ -24,6 +24,7 @@
 #include <misc/paths.h>
 #include <sounds/manager.h>
 #include <ingame/players.h>
+#include <misc/suspend.h>
 
 namespace TA3D
 {

@@ -25,6 +25,7 @@
 #include <sounds/manager.h>
 #include <ingame/sidedata.h>
 #include <misc/settings.h>
+#include <misc/suspend.h>
 
 namespace TA3D
 {

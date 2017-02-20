@@ -20,6 +20,7 @@
 #include <input/mouse.h>
 #include <ingame/players.h>
 #include <fbi.h>
+#include <misc/suspend.h>
 
 namespace TA3D
 {

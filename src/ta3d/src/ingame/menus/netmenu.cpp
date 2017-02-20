@@ -27,6 +27,7 @@
 #include <cache.h>
 #include <ingame/sidedata.h>
 #include "setupgame.h"
+#include <misc/suspend.h>
 
 namespace TA3D
 {

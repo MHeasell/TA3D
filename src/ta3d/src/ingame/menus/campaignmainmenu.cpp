@@ -23,6 +23,7 @@
 #include <ingame/sidedata.h>
 #include "briefscreen.h"
 #include <memory>
+#include <misc/suspend.h>
 
 namespace TA3D
 {
