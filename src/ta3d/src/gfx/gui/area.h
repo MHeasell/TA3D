@@ -22,7 +22,6 @@
 #include "wnd.h"
 #include <vector>
 #include <misc/interface.h>
-#include <yuni/core/smartptr/smartptr.h>
 
 namespace TA3D
 {

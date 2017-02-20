@@ -19,7 +19,6 @@
 #define __TA3D_THREAD_H__
 
 #include "mutex.h"
-#include <yuni/core/smartptr/smartptr.h>
 #include <yuni/thread/thread.h>
 
 namespace TA3D

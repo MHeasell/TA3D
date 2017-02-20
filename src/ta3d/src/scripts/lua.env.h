@@ -27,7 +27,6 @@
 #endif
 #endif
 #include <threads/thread.h>
-#include <yuni/core/smartptr/smartptr.h>
 #include <memory>
 
 namespace TA3D

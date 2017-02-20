@@ -21,7 +21,6 @@
 #include <yuni/yuni.h>
 #include <misc/string.h>
 #include "lua.thread.h"
-#include <yuni/core/smartptr/smartptr.h>
 #include <memory>
 
 namespace TA3D

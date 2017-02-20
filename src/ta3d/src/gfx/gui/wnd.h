@@ -25,7 +25,6 @@
 #include <misc/hash_table.h>
 #include <misc/interface.h>
 #include <gfx/texture.h>
-#include <yuni/core/smartptr/smartptr.h>
 #include <memory>
 
 namespace TA3D

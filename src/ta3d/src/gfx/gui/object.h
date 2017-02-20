@@ -19,7 +19,6 @@
 
 #include <stdafx.h>
 #include <vector>
-#include <yuni/core/smartptr/smartptr.h>
 #include <misc/string.h>
 #include "base.h"
 #include <gfx/texture.h>
