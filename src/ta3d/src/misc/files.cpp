@@ -17,10 +17,10 @@
 
 #include "files.h"
 #include <logs/logs.h>
-#include <yuni/core/io/file/stream.h>
 #include <yuni/core/io/file/file.hxx>
 #include "paths.h"
 #include <vfs/realfile.h>
+#include <fstream>
 
 using namespace Yuni::Core::IO::File;
 
@@ -42,7 +42,8 @@ namespace TA3D
 					return false;
 				while (!file.eof())
 				{
-					char c = file.get();
+					char c;
+					file.get(c);
 					if (c == '\n')
 						break;
 					s << c;
@@ -55,23 +56,23 @@ namespace TA3D
 			{
 				if (emptyListBefore)
 					out.clear();
-				Stream file(filename, Core::IO::OpenMode::read);
-				if (!file.opened())
+				std::ifstream file(filename.c_str());
+				if (!file.is_open())
 				{
 					LOG_WARNING("Impossible to open the file `" << filename << "`");
 					return false;
 				}
 				if (sizeLimit)
 				{
-					file.seekFromBeginning(0);
-					ssize_t begin_pos = file.tell();
-					file.seekFromEndOfFile(0);
-					if (static_cast<uint32>((file.tell() - begin_pos)) > sizeLimit)
+					file.seekg(0);
+					ssize_t begin_pos = file.tellg();
+					file.seekg(0, file.end);
+					if (static_cast<uint32>((file.tellg() - begin_pos)) > sizeLimit)
 					{
 						LOG_WARNING("Impossible to read the file `" << filename << "` (size > " << sizeLimit << ")");
 						return false;
 					}
-					file.seekFromBeginning(0);
+					file.seekg(0);
 				}
 				String line;
 				while (getline(file, line))
