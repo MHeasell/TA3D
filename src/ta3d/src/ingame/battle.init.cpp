@@ -36,10 +36,10 @@
 #include <misc/paths.h>
 #include <misc/files.h>
 #include <input/mouse.h>
-#include <yuni/core/io/file/stream.h>
 #include "menus/loading.h"
 #include <cache.h>
 #include <memory>
+#include <fstream>
 
 using namespace Yuni;
 using namespace Yuni::Core::IO::File;
@@ -798,8 +798,8 @@ namespace TA3D
 					for (int y = 0; y < simulation_h; ++y)
 						for (int x = 0; x < simulation_w; ++x)
 							data[(y * simulation_w + x) * 4 + 3] = data[(y * simulation_w + x) * 4 + 1];
-					Stream file(water_cache, Yuni::Core::IO::OpenMode::write);
-					if (file.opened())
+					std::ofstream file(water_cache.c_str());
+					if (file.is_open())
 					{
 						file.write((const char*)data, sizeof(float) * water_map_size4);
 						file.close();
@@ -807,8 +807,8 @@ namespace TA3D
 				}
 				else
 				{
-					Stream file(water_cache, Yuni::Core::IO::OpenMode::read);
-					if (file.opened())
+					std::ifstream file(water_cache.c_str());
+					if (file.is_open())
 					{
 						file.read((char*)data, sizeof(float) * water_map_size4);
 						file.close();
