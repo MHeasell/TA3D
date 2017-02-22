@@ -20,8 +20,8 @@
 #include <TA3D_NameSpace.h>
 #include "gfx.h"
 #include <zlib.h>
-#include <yuni/core/io/file/stream.h>
 #include <misc/grid.h>
+#include <fstream>
 
 using namespace Yuni::Core::IO::File;
 using namespace Yuni::Core::IO;
@@ -974,9 +974,9 @@ namespace TA3D
 		header.bpp = bmp->format->BitsPerPixel;
 		header.description = (header.bpp == 32) ? 0x28 : 0x20;
 
-		Stream file(filename, OpenMode::write);
+		std::ofstream file(filename.c_str());
 
-		if (file.opened())
+		if (file.is_open())
 		{
 			file.write((const char *)&header, sizeof(header));
 			if (!compress) // Uncompressed
