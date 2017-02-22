@@ -19,8 +19,8 @@
 #include "ta3dbase.h"
 #include "misc/math.h"
 #include "misc/paths.h"
-#include <yuni/core/io/file/stream.h>
 #include <memory>
+#include <fstream>
 
 using namespace Yuni::Core::IO::File;
 
@@ -40,9 +40,10 @@ namespace TA3D
 		File *file = archive->readFile(filename); // Extract the file
 		if (file)
 		{
-			Stream dst(String(Paths::Resources) << Paths::ExtractFileName(filename), Yuni::Core::IO::OpenMode::write);
+			String output_filename = String(Paths::Resources) << Paths::ExtractFileName(filename);
+			std::ofstream dst(output_filename.c_str());
 
-			if (dst.opened())
+			if (dst.is_open())
 			{
 				dst.write(file->data(), file->size());
 
