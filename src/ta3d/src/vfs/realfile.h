@@ -25,7 +25,7 @@
 #define __TA3D_UTILS_REALFILE_H__
 
 #include "file.h"
-#include <yuni/core/io/file/stream.h>
+#include <fstream>
 
 namespace TA3D
 {
@@ -69,7 +69,7 @@ namespace TA3D
 			virtual File &operator=(const File &) { return *this; }
 
 		private:
-			Yuni::Core::IO::File::Stream sFile;
+			std::ifstream sFile;
 			char *buffer;
 			String realFilename;
 		};

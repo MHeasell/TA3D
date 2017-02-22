@@ -26,50 +26,51 @@ namespace TA3D
 			if (buffer)
 				delete[] buffer;
 			buffer = NULL;
-			sFile.open(filename, Yuni::Core::IO::OpenMode::read);
+			sFile.open(filename.c_str());
 			realFilename = filename;
 		}
 
 		bool RealFile::isOpen()
 		{
-			return sFile.opened();
+			return sFile.is_open();
 		}
 
 		bool RealFile::eof()
 		{
-			if (!sFile.opened())
+			if (!sFile.is_open())
 				return true;
 			return sFile.eof();
 		}
 
 		int RealFile::size()
 		{
-			if (!sFile.opened())
+			if (!sFile.is_open())
 				return 0;
-			ssize_t pos = sFile.tell();
-			sFile.seekFromEndOfFile(0);
-			ssize_t s = sFile.tell();
-			sFile.seekFromBeginning(pos);
+			ssize_t pos = sFile.tellg();
+			sFile.seekg(0, sFile.end);
+			ssize_t s = sFile.tellg();
+			sFile.seekg(pos);
 			return int(s);
 		}
 
 		int RealFile::tell()
 		{
-			if (!sFile.opened())
+			if (!sFile.is_open())
 				return 0;
-			return int(sFile.tell());
+			return int(sFile.tellg());
 		}
 
 		void RealFile::seek(int pos)
 		{
-			sFile.seekFromBeginning(pos);
+			sFile.seekg(pos);
 		}
 
 		int RealFile::read(void *p, int s)
 		{
-			if (!sFile.opened())
+			if (!sFile.is_open())
 				return 0;
-			return int(sFile.read((char *)p, s));
+			sFile.read((char *)p, s);
+			return sFile.gcount();
 		}
 
 		bool RealFile::readLine(String &line)
