@@ -23,7 +23,7 @@
 #include "TA3D_Network.h"
 #include <logs/logs.h>
 #include <misc/paths.h>
-#include <yuni/core/io/file/stream.h>
+#include <fstream>
 
 using namespace Yuni::Core::IO::File;
 
@@ -360,12 +360,12 @@ namespace TA3D
 		const String path = Paths::ExtractFilePath(filename);
 		if (!path.empty())
 			Paths::MakeDir(path);
-		Stream file(String(filename) << ".part", Yuni::Core::IO::OpenMode::write);
+		std::ofstream file((String(filename) << ".part").c_str());
 
 		delete ((struct net_thread_params*)param);
 		param = NULL;
 
-		if (!file.opened())
+		if (!file.is_open())
 		{
 			LOG_DEBUG(LOG_PREFIX_NET_FILE << "cannot open file '" << filename << ".part'");
 			pDead = 1;
