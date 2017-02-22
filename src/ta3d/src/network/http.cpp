@@ -4,7 +4,7 @@
 #include "http.h"
 #include <logs/logs.h>
 #include "socket.tcp.h"
-#include <yuni/core/io/file/stream.h>
+#include <fstream>
 
 using namespace Yuni::Core::IO::File;
 
@@ -42,12 +42,12 @@ namespace TA3D
 		char buffer[4096];
 		String realFilename = filename;
 		String tmpFile = String(filename) << ".part";
-		Stream f(tmpFile, Yuni::Core::IO::OpenMode::write);
+		std::ofstream f(tmpFile.c_str());
 		int count;
 		int crfound = 0;
 		int lffound = 0;
 
-		if (!f.opened())
+		if (!f.is_open())
 		{
 			LOG_ERROR(LOG_PREFIX_NET << "httpGetFile: Could not open file " << tmpFile << " for writing !");
 			return; // Error can't open file
@@ -302,12 +302,12 @@ namespace TA3D
 	{
 		SocketTCP sock;
 		char buffer[4096];
-		Stream f(filename, Yuni::Core::IO::OpenMode::write);
+		std::ofstream f(filename.c_str());
 		int count;
 		int crfound = 0;
 		int lffound = 0;
 
-		if (!f.opened())
+		if (!f.is_open())
 		{
 			LOG_ERROR(LOG_PREFIX_NET << "httpGetFile: Could not open file " << filename << " for writing !");
 			return true; // Error can't open file
