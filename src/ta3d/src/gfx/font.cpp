@@ -23,8 +23,8 @@
 #include <misc/paths.h>
 #include <logs/logs.h>
 #include <yuni/core/io/file.h>
-#include <yuni/core/io/file/stream.h>
 #include <memory>
+#include <fstream>
 
 using namespace Yuni::Core::IO::File;
 
@@ -200,11 +200,11 @@ namespace TA3D
 					tmp = file->getRealFilename();
 				else if (!Yuni::Core::IO::File::Exists(tmp) || Yuni::Core::IO::File::Size(tmp) != (uint32)file->size())
 				{
-					Stream tmp_file;
+					std::ofstream tmp_file;
 					LOG_DEBUG(LOG_PREFIX_FONT << "Creating temporary file for " << name << " (" << tmp << ")");
 
-					tmp_file.open(tmp, Yuni::Core::IO::OpenMode::write);
-					if (tmp_file.opened())
+					tmp_file.open(tmp.c_str());
+					if (tmp_file.is_open())
 					{
 						char* buf = new char[10240];
 						for (int i = 0; i < file->size(); i += 10240)
