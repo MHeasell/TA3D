@@ -22,6 +22,7 @@
 #include "TA3D_NameSpace.h"
 #include "misc/paths.h"
 #include <exception>
+#include <fstream>
 
 // Signals should be disabled under OS X, since the system already produces a crash report
 // More information are available here :
@@ -114,8 +115,9 @@ void backtrace_handler(int signum)
 	char **strings = backtrace_symbols(array, size);
 
 	// Try to log it
-	Yuni::Core::IO::File::Stream m_File(String(TA3D::Paths::Logs) << "backtrace.txt", Yuni::Core::IO::OpenMode::write);
-	if (m_File.opened())
+	String backtrace_filename = String(TA3D::Paths::Logs) << "backtrace.txt";
+	std::ofstream m_File(backtrace_filename.c_str());
+	if (m_File.is_open())
 	{
 		m_File << "received signal " << strsignal(signum) << "\n";
 		m_File << "Obtained " << size << " stack frames.\n";
