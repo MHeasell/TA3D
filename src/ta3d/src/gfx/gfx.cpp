@@ -35,8 +35,8 @@
 #include <input/mouse.h>
 #include "gui/base.h"
 #include <backtrace.h>
-#include <yuni/core/io/file/stream.h>
 #include <SDL_getenv.h>
+#include <fstream>
 
 using namespace Yuni::Core::IO::File;
 
@@ -1839,7 +1839,7 @@ namespace TA3D
 		realFile += file;
 		if (TA3D::Paths::Exists(realFile))
 		{
-			Stream cache_file(realFile, Yuni::Core::IO::OpenMode::read);
+			std::ifstream cache_file(realFile.c_str());
 			uint32 mod_hash;
 			cache_file.read((char *)&mod_hash, sizeof(mod_hash));
 			cache_file.close();
@@ -1858,7 +1858,7 @@ namespace TA3D
 		realFile += file;
 		if (TA3D::Paths::Exists(realFile))
 		{
-			Stream cache_file(realFile, Yuni::Core::IO::OpenMode::read);
+			std::ifstream cache_file(realFile.c_str());
 			uint32 mod_hash;
 			cache_file.read((char *)&mod_hash, sizeof(mod_hash));
 
@@ -1985,9 +1985,9 @@ namespace TA3D
 		if (!compressed)
 			return;
 
-		Stream cache_file(file, Yuni::Core::IO::OpenMode::write);
+		std::ofstream cache_file(file.c_str());
 
-		if (!cache_file.opened())
+		if (!cache_file.is_open())
 			return;
 
 		uint32 mod_hash = static_cast<uint32>(hash<String>()(TA3D_CURRENT_MOD)); // Save a hash of current mod
