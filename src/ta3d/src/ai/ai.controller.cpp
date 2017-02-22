@@ -591,7 +591,7 @@ namespace TA3D
 		Stream file(filename, Yuni::Core::IO::OpenMode::write);
 
 		byte l = (byte)name.size();
-		file.write((const char*)&l, 1); // Nom de l'IA
+		file.write((const char*)&l, 1); // Name of the AI
 		file.write(name.c_str(), l);
 		file.close();
 	}
