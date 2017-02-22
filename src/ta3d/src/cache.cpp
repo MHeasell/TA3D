@@ -3,7 +3,7 @@
 #include "misc/string.h"
 #include "misc/paths.h"
 #include "TA3D_NameSpace.h"
-#include <yuni/core/io/file/stream.h>
+#include <fstream>
 
 using namespace Yuni::Core::IO::File;
 
@@ -21,10 +21,12 @@ namespace TA3D
 												: String("build info : ") << __DATE__ << " , " << __TIME__ << "\ncurrent mod : \n")
 										   << "Texture Quality : " << lp_CONFIG->unitTextureQuality;
 
-			if (Paths::Exists(String(Paths::Caches) << "cache_info.txt") && !force)
+			String cache_info_filename = String(Paths::Caches) << "cache_info.txt";
+
+			if (Paths::Exists(cache_info_filename) && !force)
 			{
-				Stream cache_info(String(Paths::Caches) << "cache_info.txt", Yuni::Core::IO::OpenMode::read);
-				if (cache_info.opened())
+				std::ifstream cache_info(cache_info_filename.c_str());
+				if (cache_info.is_open())
 				{
 					char *buf = new char[cache_info_data.size() + 1];
 					if (buf)
@@ -53,8 +55,8 @@ namespace TA3D
 				for (String::Vector::iterator i = file_list.begin(); i != file_list.end(); ++i)
 					remove(i->c_str());
 				// Update cache date
-				Stream cache_info(String(Paths::Caches) << "cache_info.txt", Yuni::Core::IO::OpenMode::write);
-				if (cache_info.opened())
+				std::ofstream cache_info(cache_info_filename.c_str());
+				if (cache_info.is_open())
 				{
 					cache_info.write(cache_info_data.c_str(), cache_info_data.size());
 					cache_info.put(0);
