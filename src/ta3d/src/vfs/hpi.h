@@ -26,7 +26,7 @@
 
 #include "archive.h"
 #include <misc/hash_table.h>
-#include <yuni/core/io/file/stream.h>
+#include <fstream>
 
 #define HEX_HAPI 0x49504148
 #define HPI_V1 0x00010000
@@ -195,7 +195,7 @@ namespace TA3D
 			//!
 			sint8 *directory;
 			//!
-			Yuni::Core::IO::File::Stream HPIFile;
+			std::ifstream HPIFile;
 			//!
 			HashMap<HpiFile *>::Sparse files;
 			//!

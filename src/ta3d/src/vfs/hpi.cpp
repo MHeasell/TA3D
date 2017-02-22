@@ -59,8 +59,8 @@ namespace TA3D
 			if (Paths::ExtractFileName(filename).toLower() == "ta3d.hpi")
 				priority = 3;
 
-			HPIFile.open(filename, Yuni::Core::IO::OpenMode::read);
-			if (!HPIFile.opened())
+			HPIFile.open(filename.c_str());
+			if (!HPIFile.is_open())
 			{
 				close();
 				LOG_DEBUG(LOG_PREFIX_VFS << "failed to open hpi file for reading : '" << filename << "'");
@@ -96,7 +96,7 @@ namespace TA3D
 			Archive::name.clear();
 			DELETE_ARRAY(directory);
 
-			if (HPIFile.opened())
+			if (HPIFile.is_open())
 				HPIFile.close();
 
 			for (HashMap<HpiFile *>::Sparse::iterator i = files.begin(); i != files.end(); ++i)
@@ -267,8 +267,9 @@ namespace TA3D
 		sint32 Hpi::readAndDecrypt(sint32 fpos, byte *buff, const sint32 buffsize)
 		{
 			sint32 result;
-			HPIFile.seekFromBeginning(fpos);
-			result = (sint32)HPIFile.read((char *)buff, buffsize);
+			HPIFile.seekg(fpos);
+			HPIFile.read((char *)buff, buffsize);
+			result = HPIFile.gcount();
 			if (key)
 			{
 				for (byte *end = buff + buffsize; buff != end; ++buff, ++fpos)
