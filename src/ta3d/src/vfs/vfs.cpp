@@ -30,8 +30,7 @@
 #include "file.h"
 #include "virtualfile.h"
 #include "realfile.h"
-
-#include <yuni/core/io/file/stream.h>
+#include <fstream>
 
 using namespace Yuni::Core::IO::File;
 
@@ -185,8 +184,8 @@ namespace TA3D
 			{
 				String cache_filename;
 				cache_filename << TA3D::Paths::Caches << cacheable_filename << ".dat"; // Save file in disk cache
-				Stream cache_file(cache_filename, Yuni::Core::IO::OpenMode::write);
-				if (cache_file.opened())
+				std::ofstream cache_file(cache_filename.c_str());
+				if (cache_file.is_open())
 				{
 					file->seek(0);
 					char* buf = new char[10240];
@@ -452,8 +451,8 @@ namespace TA3D
 		{
 			ThreadingPolicy::MutexLocker locker(*this);
 			String targetName = String(Paths::Caches) << Paths::ExtractFileName(filename);
-			Stream file(targetName, Yuni::Core::IO::OpenMode::write);
-			if (!file.opened())
+			std::ofstream file(targetName.c_str());
+			if (!file.is_open())
 			{
 				LOG_ERROR(LOG_PREFIX_VFS << "impossible to create file '" << targetName << "'");
 				return targetName;
