@@ -41,6 +41,7 @@
 #include <input/mouse.h>
 #include <input/keyboard.h>
 #include <ingame/battle.h>
+#include <fstream>
 
 namespace TA3D
 {
@@ -1513,9 +1514,9 @@ namespace TA3D
 	// Create the script that will do what the mission description .ota file tells us to do
 	void generate_script_from_mission(String Filename, TDFParser &ota_parser, int schema)
 	{
-		Yuni::Core::IO::File::Stream m_File(Filename, Yuni::Core::IO::OpenMode::write);
+		std::ofstream m_File(Filename.c_str());
 
-		if (!m_File.opened())
+		if (!m_File.is_open())
 		{
 			LOG_ERROR(LOG_PREFIX_SCRIPT << "Could not open file `" << Filename << "` (" << __FILE__ << ", " << __LINE__);
 			return;
