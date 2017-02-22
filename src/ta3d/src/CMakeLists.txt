@@ -219,7 +219,6 @@ set(SRC_NETWORK
 
 set(SRC_AI
 		ai/ai.h ai/ai.hxx ai/ai.cpp
-		ai/brain.h ai/brain.cpp
 		ai/weight.h ai/weight.cpp
 		ai/ai.controller.h ai/ai.controller.cpp
 		ai/pathfinding.h ai/pathfinding.cpp	)

@@ -31,26 +31,6 @@
 
 namespace TA3D
 {
-
-	//#define AI_DEBUG
-
-	/*	static byte int2brain_value(int a)	// Convert an integer into a value a neural network can understand
-	{
-		if (a == 0)  return BRAIN_VALUE_NULL;
-		if (a <= 5)  return BRAIN_VALUE_LOW;
-		if (a <= 15) return BRAIN_VALUE_MEDIUM;
-		if (a <= 50) return BRAIN_VALUE_HIGH;
-		return BRAIN_VALUE_MAX;
-	}
-
-
-	static int get_bits(float bits[], byte v, int pos)	// Fill the array (neural network input)
-	{
-		for (int i = 0; i < BRAIN_VALUE_BITS; ++i)
-			bits[pos++] = ((v >> i) & 1) ? 1.0f : 0.0f;
-		return pos;
-	}*/
-
 	void AiController::scan_unit() // Scan the units the AI player currently has
 	{
 		if (weights.empty())

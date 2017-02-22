@@ -27,9 +27,9 @@
 #include <misc/string.h>
 #include <misc/vector.h>
 #include <threads/thread.h>
-#include "brain.h"
 #include "weight.h"
 #include <misc/hash_table.h>
+#include <deque>
 
 namespace TA3D
 {
@@ -44,14 +44,6 @@ namespace TA3D
 #define ORDER_ENERGY_S 0x07 // Order to store energy
 
 #define NB_ORDERS 0x8
-
-#define BRAIN_VALUE_NULL 0x0
-#define BRAIN_VALUE_LOW 0x1
-#define BRAIN_VALUE_MEDIUM 0x2
-#define BRAIN_VALUE_HIGH 0x4
-#define BRAIN_VALUE_MAX 0x8
-
-#define BRAIN_VALUE_BITS 0x4 // How many bits are needed to store a value in a neural network ?
 
 #define AI_TYPE_EASY 0x0
 #define AI_TYPE_MEDIUM 0x1
