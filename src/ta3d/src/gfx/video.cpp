@@ -7,9 +7,9 @@
 #include <smpeg/smpeg.h>
 #include <input/keyboard.h>
 #include <input/mouse.h>
-#include <yuni/core/io/file/stream.h>
 #include <sounds/manager.h>
 #include <threads/mutex.h>
+#include <fstream>
 
 #define LOG_PREFIX_VIDEO "[video] "
 
@@ -48,11 +48,11 @@ namespace TA3D
 				tmp = file->getRealFilename(); // if it is we don't need to copy it
 			else if (!Yuni::Core::IO::File::Exists(tmp) || Yuni::Core::IO::File::Size(tmp) != (uint32)file->size())
 			{
-				Stream tmp_file;
+				std::ofstream tmp_file;
 				LOG_DEBUG(LOG_PREFIX_VIDEO << "Creating temporary file for " << filename << " (" << tmp << ")");
 
-				tmp_file.open(tmp, Yuni::Core::IO::OpenMode::write);
-				if (tmp_file.opened())
+				tmp_file.open(tmp.c_str());
+				if (tmp_file.is_open())
 				{
 					char *buf = new char[10240];
 					for (int i = 0; i < file->size(); i += 10240)
