@@ -27,9 +27,7 @@
 #include <ingame/players.h>
 #include "ai.controller.h"
 #include "ai.h"
-#include <yuni/core/io/file/stream.h>
-
-using namespace Yuni::Core::IO::File;
+#include <fstream>
 
 namespace TA3D
 {
@@ -588,7 +586,7 @@ namespace TA3D
 		String filename;
 		Paths::MakeDir(String(Paths::Resources) << "ai");
 		filename << Paths::Resources << "ai" << Paths::Separator << name << TA3D_AI_FILE_EXTENSION;
-		Stream file(filename, Yuni::Core::IO::OpenMode::write);
+		std::ofstream file(filename.c_str());
 
 		byte l = (byte)name.size();
 		file.write((const char*)&l, 1); // Name of the AI
