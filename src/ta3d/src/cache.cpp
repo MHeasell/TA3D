@@ -5,8 +5,6 @@
 #include "TA3D_NameSpace.h"
 #include <fstream>
 
-using namespace Yuni::Core::IO::File;
-
 namespace TA3D
 {
 	namespace Cache

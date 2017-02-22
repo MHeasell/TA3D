@@ -13,8 +13,6 @@
 
 #define LOG_PREFIX_VIDEO "[video] "
 
-using namespace Yuni::Core::IO::File;
-
 namespace TA3D
 {
 	using namespace TA3D::UTILS;

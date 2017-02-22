@@ -38,8 +38,6 @@
 #include <SDL_getenv.h>
 #include <fstream>
 
-using namespace Yuni::Core::IO::File;
-
 namespace TA3D
 {
 

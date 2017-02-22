@@ -6,8 +6,6 @@
 #include "realfs.h"
 #include "realfile.h"
 
-using namespace Yuni::Core::IO::File;
-
 namespace TA3D
 {
 	namespace UTILS

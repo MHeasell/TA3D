@@ -23,9 +23,6 @@
 #include <misc/grid.h>
 #include <fstream>
 
-using namespace Yuni::Core::IO::File;
-using namespace Yuni::Core::IO;
-
 namespace TA3D
 {
 	static bool use_TA_palette = true;

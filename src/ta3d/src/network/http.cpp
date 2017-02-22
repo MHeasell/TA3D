@@ -6,8 +6,6 @@
 #include "socket.tcp.h"
 #include <fstream>
 
-using namespace Yuni::Core::IO::File;
-
 namespace TA3D
 {
 

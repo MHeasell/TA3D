@@ -22,8 +22,6 @@
 #include <memory>
 #include <fstream>
 
-using namespace Yuni::Core::IO::File;
-
 namespace TA3D
 {
 

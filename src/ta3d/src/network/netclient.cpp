@@ -8,8 +8,6 @@
 
 #define BUFFER_SIZE 2048
 
-using namespace Yuni;
-
 namespace TA3D
 {
 

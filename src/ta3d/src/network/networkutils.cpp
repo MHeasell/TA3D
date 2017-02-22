@@ -25,8 +25,6 @@
 #include <misc/paths.h>
 #include <fstream>
 
-using namespace Yuni::Core::IO::File;
-
 namespace TA3D
 {
 

@@ -22,8 +22,6 @@
 #include <logs/logs.h>
 #include <fstream>
 
-using namespace Yuni::Core::IO::File;
-
 namespace TA3D
 {
 

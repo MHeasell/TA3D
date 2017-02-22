@@ -34,8 +34,6 @@
 #define TA3D_PCLOSE _pclose
 #endif
 
-using namespace Yuni;
-
 namespace TA3D
 {
 	namespace System

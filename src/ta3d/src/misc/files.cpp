@@ -22,8 +22,6 @@
 #include <vfs/realfile.h>
 #include <fstream>
 
-using namespace Yuni::Core::IO::File;
-
 using namespace TA3D::UTILS;
 
 namespace TA3D
