@@ -5,7 +5,6 @@
 #include <logs/logs.h>
 #include "realfs.h"
 #include "realfile.h"
-#include <yuni/core/io/file/stream.h>
 
 using namespace Yuni::Core::IO::File;
 

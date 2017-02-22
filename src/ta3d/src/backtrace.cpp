@@ -44,7 +44,6 @@
 #include <csignal>
 #include <cstdio>
 #include <cstdlib>
-#include <yuni/core/io/file/stream.h>
 #include "sdl.h"
 #include "misc/osinfo.h"
 
