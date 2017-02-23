@@ -45,6 +45,13 @@ namespace TA3D
 			bool Size(const String& filename, uint64& size);
 
 			/*!
+			 * \brief Get the size of a file
+			 * \param filename The file
+			 * \return The size of the file, or 0 if the operation failed.
+			 */
+			uint64 Size(const String& filename);
+
+			/*!
 	** \brief Replace the extension
 	**
 	** if the extension can not be found, the new extension will be

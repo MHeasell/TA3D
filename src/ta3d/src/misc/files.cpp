@@ -90,7 +90,26 @@ namespace TA3D
 
 			bool Size(const String& filename, uint64& size)
 			{
-				return Yuni::Core::IO::File::Size(filename, size);
+				// This is a hack as tellg technically isn't guaranteed
+				// to return the position in the file in bytes,
+				// but in practice it does behave this way
+				// on the platforms we care about.
+				std::ifstream file(filename.c_str(), std::ios::binary);
+				if (file.is_open()) {
+					uint64 start = file.tellg();
+					file.seekg(0, file.end);
+					uint64 end = file.tellg();
+					size = end - start;
+					return true;
+				}
+
+				return false;
+			}
+
+			uint64 Size(const String& filename)
+			{
+				uint64 size;
+				return Size(filename, size) ? size : 0;
 			}
 
 			File* LoadContentInMemory(const String& filename, const uint64 hardlimit)

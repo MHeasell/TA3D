@@ -3,6 +3,7 @@
 #include <TA3D_NameSpace.h>
 #include <vfs/vfs.h>
 #include <misc/paths.h>
+#include <misc/files.h>
 #include <misc/math.h>
 #include <smpeg/smpeg.h>
 #include <input/keyboard.h>
@@ -44,7 +45,7 @@ namespace TA3D
 		{
 			if (file->isReal())				   // Check if the file is real
 				tmp = file->getRealFilename(); // if it is we don't need to copy it
-			else if (!Yuni::Core::IO::File::Exists(tmp) || Yuni::Core::IO::File::Size(tmp) != (uint32)file->size())
+			else if (!Yuni::Core::IO::File::Exists(tmp) || Paths::Files::Size(tmp) != (uint32)file->size())
 			{
 				std::ofstream tmp_file;
 				LOG_DEBUG(LOG_PREFIX_VIDEO << "Creating temporary file for " << filename << " (" << tmp << ")");
