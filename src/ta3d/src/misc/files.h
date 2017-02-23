@@ -37,11 +37,11 @@ namespace TA3D
 		{
 
 			/*!
-	** \brief Get the size of a file
-	** \param filename The file
-	** \param[out] size The size of the file. 0 if any errors has occured
-	** \return True if the operation succeeded, False otherwise
-	*/
+			 * \brief Get the size of a file
+			 * \param filename The file
+			 * \param[out] size The size of the file. 0 if any errors has occured
+			 * \return True if the operation succeeded, False otherwise
+			 */
 			bool Size(const String& filename, uint64& size);
 
 			/*!
