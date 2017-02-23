@@ -45,7 +45,7 @@ namespace TA3D
 		{
 			if (file->isReal())				   // Check if the file is real
 				tmp = file->getRealFilename(); // if it is we don't need to copy it
-			else if (!Yuni::Core::IO::File::Exists(tmp) || Paths::Files::Size(tmp) != (uint32)file->size())
+			else if (!Paths::Files::Exists(tmp) || Paths::Files::Size(tmp) != (uint32)file->size())
 			{
 				std::ofstream tmp_file;
 				LOG_DEBUG(LOG_PREFIX_VIDEO << "Creating temporary file for " << filename << " (" << tmp << ")");

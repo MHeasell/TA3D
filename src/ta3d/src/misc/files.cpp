@@ -112,6 +112,12 @@ namespace TA3D
 				return Size(filename, size) ? size : 0;
 			}
 
+			bool Exists(const String& filename)
+			{
+				std::ifstream file(filename.c_str());
+				return file.good();
+			}
+
 			File* LoadContentInMemory(const String& filename, const uint64 hardlimit)
 			{
 				uint64 size;

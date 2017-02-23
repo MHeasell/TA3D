@@ -51,6 +51,8 @@ namespace TA3D
 			 */
 			uint64 Size(const String& filename);
 
+			bool Exists(const String& filename);
+
 			/*!
 	** \brief Replace the extension
 	**
