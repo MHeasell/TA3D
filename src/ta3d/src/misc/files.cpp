@@ -163,7 +163,27 @@ namespace TA3D
 
 			bool Copy(const String& from, const String& to, const bool overwrite)
 			{
-				return Yuni::Core::IO::File::Copy(from, to, overwrite) == Yuni::Core::IO::ioErrNone;
+				if  (overwrite && Exists(to)) {
+					return false;
+				}
+
+				std::ifstream in(from.c_str(), std::ios::binary);
+				if (!in.is_open())
+				{
+					return false;
+				}
+
+				std::ofstream out(to.c_str(), std::ios::binary);
+				if (!out.is_open()) {
+					return false;
+				}
+
+				out << in.rdbuf();
+
+				in.close();
+				out.close();
+
+				return true;
 			}
 
 		} // namespace Files
