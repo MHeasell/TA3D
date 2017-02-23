@@ -138,7 +138,14 @@ namespace TA3D
 
 			bool SaveToFile(const String& filename, const String& content)
 			{
-				return Yuni::Core::IO::File::SaveToFile(filename, content);
+				std::ofstream file(filename.c_str(), std::ios::trunc);
+				if (!file.is_open()) {
+					return false;
+				}
+
+				file << content;
+				file.close();
+				return true;
 			}
 
 			String ReplaceExtension(const String& filename, const String& newExt)
