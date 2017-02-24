@@ -411,7 +411,7 @@ namespace TA3D
 #endif
 
 			// Initialize the logging mecanism
-			ResetTheLoggingMecanism(Yuni::String(Paths::Logs) << programName << ".log");
+			ResetTheLoggingMecanism(String(Paths::Logs) << programName << ".log");
 
 			// Welcome Commander !
 			logs.checkpoint() << "Welcome to TA3D";
