@@ -213,10 +213,44 @@ namespace TA3D
 				out.assign(p, pos);
 		}
 
+		void ExtractFileNameIndependent(const String& p, String& out)
+		{
+			if (p.notEmpty())
+				out.clear();
+			String::size_type pos = p.find_last_of(AllSeparators);
+			if (String::npos == pos)
+				out.clear();
+			else
+				out.assign(p.c_str() +  pos + 1);
+		}
+
+		void ExtractFileNameDependent(const String& p, String& out)
+		{
+			if (p.notEmpty())
+				out.clear();
+			String::size_type pos = p.find_last_of(Separator);
+			if (String::npos == pos)
+				out.clear();
+			else
+				out.assign(p.c_str() +  pos + 1);
+		}
+
+		void ExtractFileName(const String& p, String& out, const bool systemDependant)
+		{
+			if (systemDependant)
+			{
+				ExtractFileNameDependent(p, out);
+			}
+			else
+			{
+				ExtractFileNameIndependent(p, out);
+			}
+		}
+
 		String ExtractFileName(const String& p, const bool systemDependant)
 		{
 			String out;
-			Yuni::Core::IO::ExtractFileName(out, p, systemDependant);
+			ExtractFileName(p, out, systemDependant);
 			return out;
 		}
 
@@ -225,7 +259,7 @@ namespace TA3D
 			for (String::List::iterator i = p.begin(); i != p.end(); ++i)
 			{
 				String out;
-				Yuni::Core::IO::ExtractFileName(out, *i, systemDependant);
+				ExtractFileName(out, *i, systemDependant);
 				*i = out;
 			}
 		}
@@ -235,7 +269,7 @@ namespace TA3D
 			for (String::Vector::iterator i = p.begin(); i != p.end(); ++i)
 			{
 				String out;
-				Yuni::Core::IO::ExtractFileName(out, *i, systemDependant);
+				ExtractFileName(out, *i, systemDependant);
 				*i = out;
 			}
 		}
