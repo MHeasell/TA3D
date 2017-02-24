@@ -388,8 +388,6 @@ namespace TA3D
 
 		String ExtractFileExt(const String& s)
 		{
-			// FIXME This method should be completely removed
-			// The prototype in Yuni::Core::IO has been changed to improve performances
 			String t;
 			ExtractExtension(s, t);
 			return t;
