@@ -274,10 +274,88 @@ namespace TA3D
 			}
 		}
 
+		void ExtractFileNameWithoutExtensionIndependent(const String& p, String& out)
+		{
+			String::size_type pos = p.find_last_of(AllSeparators);
+			String::size_type n = p.find_last_of('.');
+
+			if (String::npos == n && String::npos == pos)
+			{
+				out = p;
+				return;
+			}
+			if (n == pos)
+			{
+				out.clear();
+				return;
+			}
+			if (n == String::npos && n > pos + 1)
+			{
+				if (String::npos == pos)
+				{
+					out = p;
+					return;
+				}
+				out.assign(p.c_str() + pos + 1);
+				return;
+			}
+			if (pos == String::npos)
+			{
+				out.assign(p, n);
+				return;
+			}
+			out.assign(p.c_str() + pos + 1, n - pos - 1);
+		}
+
+		void ExtractFileNameWithoutExtensionDependent(const String& p, String& out)
+		{
+			String::size_type pos = p.find_last_of(Separator);
+			String::size_type n = p.find_last_of('.');
+
+			if (String::npos == n && String::npos == pos)
+			{
+				out = p;
+				return;
+			}
+			if (n == pos)
+			{
+				out.clear();
+				return;
+			}
+			if (n == String::npos && n > pos + 1)
+			{
+				if (String::npos == pos)
+				{
+					out = p;
+					return;
+				}
+				out.assign(p.c_str() + pos + 1);
+				return;
+			}
+			if (pos == String::npos)
+			{
+				out.assign(p, n);
+				return;
+			}
+			out.assign(p.c_str() + pos + 1, n - pos - 1);
+		}
+
+		void ExtractFileNameWithoutExtension(const String& p, String& out, const bool systemDependant)
+		{
+			if (systemDependant)
+			{
+				ExtractFileNameWithoutExtensionDependent(p, out);
+			}
+			else
+			{
+				ExtractFileNameWithoutExtensionIndependent(p, out);
+			}
+		}
+
 		String ExtractFileNameWithoutExtension(const String& p, const bool systemDependant)
 		{
 			String out;
-			Yuni::Core::IO::ExtractFileNameWithoutExtension(out, p, systemDependant);
+			ExtractFileNameWithoutExtension(p, out, systemDependant);
 			return out;
 		}
 
