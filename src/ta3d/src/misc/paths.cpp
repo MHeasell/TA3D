@@ -180,8 +180,37 @@ namespace TA3D
 		String ExtractFilePath(const String& p, const bool systemDependant)
 		{
 			String out;
-			Yuni::Core::IO::ExtractFilePath(out, p, systemDependant);
+			if (systemDependant)
+			{
+				ExtractFilePathDependent(p, out);
+			}
+			else
+			{
+				ExtractFilePathIndependent(p, out);
+			}
 			return out;
+		}
+
+		void ExtractFilePathIndependent(const String& p, String& out)
+		{
+			if (p.empty())
+				out.clear();
+			String::size_type pos = p.find_last_of(AllSeparators);
+			if (String::npos == pos)
+				out.clear();
+			else
+				out.assign(p, pos);
+		}
+
+		void ExtractFilePathDependent(const String& p, String& out)
+		{
+			if (p.empty())
+				out.clear();
+			String::size_type pos = p.find_last_of(Separator);
+			if (String::npos == pos)
+				out.clear();
+			else
+				out.assign(p, pos);
 		}
 
 		String ExtractFileName(const String& p, const bool systemDependant)

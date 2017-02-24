@@ -74,6 +74,8 @@ namespace TA3D
 		const char Separator = '/';
 #endif
 
+		const char AllSeparators[] = {'/', '\\'};
+
 //! The path-separator character according to the platform (stored in a string instead of a char)
 #ifdef TA3D_PLATFORM_WINDOWS
 		const String SeparatorAsString = "\\";
@@ -148,6 +150,9 @@ namespace TA3D
 		String ExtractFileName(const String& p, const bool systemDependant = false);
 		void ExtractFileName(String::List& p, const bool systemDependant = false);
 		void ExtractFileName(String::Vector& p, const bool systemDependant = false);
+
+		void ExtractFilePathIndependent(const String& p, String& out);
+		void ExtractFilePathDependent(const String& p, String& out);
 
 		/*!
 	** \brief Extract the bare file name without its extension
