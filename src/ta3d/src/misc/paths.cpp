@@ -359,12 +359,39 @@ namespace TA3D
 			return out;
 		}
 
+		bool ExtractExtension(const String& filename, String& out)
+		{
+			out.clear();
+
+			// If the string is empty, the buffer may be invalid (NULL)
+			if (filename.size())
+			{
+				unsigned int i = filename.size();
+				do
+				{
+					--i;
+					switch (filename[i])
+					{
+						case '.':
+						{
+							out.append(filename.c_str() + i, filename.size() - i);
+							return true;
+						}
+						case '/':
+						case '\\':
+							return false;
+					}
+				} while (i != 0);
+			}
+			return false;
+		}
+
 		String ExtractFileExt(const String& s)
 		{
 			// FIXME This method should be completely removed
 			// The prototype in Yuni::Core::IO has been changed to improve performances
 			String t;
-			Yuni::Core::IO::ExtractExtension(t, s);
+			ExtractExtension(s, t);
 			return t;
 		}
 
