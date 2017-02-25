@@ -20,6 +20,24 @@ namespace TA3D
 	private:
 		mutable std::recursive_mutex mutex;
 	};
+
+	template <class T>
+	class ClassLevelLockable
+	{
+	public:
+		class MutexLocker
+		{
+		public:
+			MutexLocker() : lock(ClassLevelLockable<T>::mutex) {}
+		private:
+			std::unique_lock<std::recursive_mutex> lock;
+		};
+
+	private:
+		static std::recursive_mutex mutex;
+	};
+
+	template<class T> std::recursive_mutex ClassLevelLockable<T>::mutex;
 }
 
 #endif

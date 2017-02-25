@@ -23,6 +23,7 @@
 #include <threads/mutex.h>
 #include <misc/tdf.h>
 #include <vector>
+#include <threads/policy.h>
 
 namespace TA3D
 {
@@ -89,7 +90,7 @@ namespace TA3D
 	{
 	public:
 		//! Threading policy
-		typedef Yuni::Policy::ClassLevelLockable<I18N> ThreadingPolicy;
+		typedef ClassLevelLockable<I18N> ThreadingPolicy;
 		//! The most suitable smart pointer for the class
 		typedef I18N* Ptr;
 

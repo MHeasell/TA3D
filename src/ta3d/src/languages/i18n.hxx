@@ -27,7 +27,7 @@ namespace TA3D
 
 	inline const I18N::Language* I18N::currentLanguage()
 	{
-		ThreadingPolicy::MutexLocker locker(*this);
+		ThreadingPolicy::MutexLocker locker;
 		return pCurrentLanguage;
 	}
 

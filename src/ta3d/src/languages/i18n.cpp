@@ -95,7 +95,7 @@ namespace TA3D
 	{
 		if (name.empty())
 			return NULL;
-		ThreadingPolicy::MutexLocker locker(*this);
+		ThreadingPolicy::MutexLocker locker;
 		for (Languages::const_iterator i = pLanguages.begin(); i != pLanguages.end(); ++i)
 		{
 			if (name == (*i)->caption() || name == (*i)->englishCaption())
@@ -139,7 +139,7 @@ namespace TA3D
 
 	const I18N::Language* I18N::defaultLanguage()
 	{
-		ThreadingPolicy::MutexLocker locker(*this);
+		ThreadingPolicy::MutexLocker locker;
 		return pDefaultLanguage;
 	}
 
@@ -147,7 +147,7 @@ namespace TA3D
 	{
 		if (lng)
 		{
-			ThreadingPolicy::MutexLocker locker(*this);
+			ThreadingPolicy::MutexLocker locker;
 			if (lng->englishCaption() != pCurrentLanguage->englishCaption())
 			{
 				pCurrentLanguage = language(lng->caption());
@@ -180,7 +180,7 @@ namespace TA3D
 	void I18N::retrieveAllLanguages(std::vector<I18N::Language>& out)
 	{
 		out.clear();
-		ThreadingPolicy::MutexLocker locker(*this);
+		ThreadingPolicy::MutexLocker locker;
 		for (Languages::const_iterator i = pLanguages.begin(); i != pLanguages.end(); ++i)
 			out.push_back(*(*i));
 	}
@@ -192,7 +192,7 @@ namespace TA3D
 
 		String k(key);
 		k.toLower();
-		ThreadingPolicy::MutexLocker locker(*this);
+		ThreadingPolicy::MutexLocker locker;
 		k += pLanguageSuffix;
 		return (defaultValue.empty())
 				   ? pTranslations.pullAsString(k, key)
@@ -201,14 +201,14 @@ namespace TA3D
 
 	void I18N::translate(String::Vector& out)
 	{
-		ThreadingPolicy::MutexLocker locker(*this);
+		ThreadingPolicy::MutexLocker locker;
 		for (String::Vector::iterator i = out.begin(); i != out.end(); ++i)
 			*i = translate(*i);
 	}
 
 	void I18N::translate(String::List& out)
 	{
-		ThreadingPolicy::MutexLocker locker(*this);
+		ThreadingPolicy::MutexLocker locker;
 		for (String::List::iterator i = out.begin(); i != out.end(); ++i)
 			*i = translate(*i);
 	}
@@ -222,7 +222,7 @@ namespace TA3D
 			return false;
 		}
 
-		ThreadingPolicy::MutexLocker locker(*this);
+		ThreadingPolicy::MutexLocker locker;
 		// Load the file
 		bool r = pTranslations.loadFromFile(filename, emptyBefore, inASCII);
 		const String& languageEnglishID = pTranslations.pullAsString("info.name");
