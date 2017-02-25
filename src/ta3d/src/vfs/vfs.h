@@ -36,6 +36,7 @@
 #include <sdl.h>
 #include <threads/mutex.h>
 #include "file.h"
+#include <threads/policy.h>
 
 #ifndef MAX_PATH
 #define MAX_PATH 260
@@ -49,11 +50,11 @@ namespace TA3D
 		/*!
 	** \brief
 	*/
-		class VFS : public Yuni::Policy::ObjectLevelLockable<VFS>
+		class VFS : public ObjectLevelLockable
 		{
 		private:
 			//! The threading policy
-			typedef Yuni::Policy::ObjectLevelLockable<VFS> ThreadingPolicy;
+			typedef VFS ThreadingPolicy;
 
 			/*! \class CacheFileData
 		**

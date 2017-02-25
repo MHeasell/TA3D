@@ -22,6 +22,7 @@
 #include "wnd.h"
 #include <vector>
 #include <misc/interface.h>
+#include <threads/policy.h>
 
 namespace TA3D
 {
@@ -32,11 +33,10 @@ namespace TA3D
 	** \brief This class is a window handler, so it will manage windows
 	** and signals given to them
 	*/
-		class AREA : public Yuni::Policy::ObjectLevelLockable<AREA>, protected IInterface
+		class AREA : public ObjectLevelLockable, protected IInterface
 		{
 		public:
-			//! The threading policy
-			typedef Yuni::Policy::ObjectLevelLockable<AREA> ThreadingPolicy;
+			typedef ObjectLevelLockable ThreadingPolicy;
 
 		public:
 			//! \name Constructor && Destructor
