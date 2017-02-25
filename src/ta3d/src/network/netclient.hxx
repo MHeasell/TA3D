@@ -6,43 +6,36 @@ namespace TA3D
 
 	inline NetClient::NetState NetClient::getState() const
 	{
-		ThreadingPolicy::MutexLocker locker(*this);
 		return state;
 	}
 
 	inline String::Vector NetClient::getPeerList() const
 	{
-		ThreadingPolicy::MutexLocker locker(*this);
 		return peerList;
 	}
 
 	inline bool NetClient::messageWaiting() const
 	{
-		ThreadingPolicy::MutexLocker locker(*this);
 		return !messages.empty();
 	}
 
 	inline String NetClient::getLogin() const
 	{
-		ThreadingPolicy::MutexLocker locker(*this);
 		return login;
 	}
 
 	inline String NetClient::getChan() const
 	{
-		ThreadingPolicy::MutexLocker locker(*this);
 		return currentChan;
 	}
 
 	inline String NetClient::getServerJoined() const
 	{
-		ThreadingPolicy::MutexLocker locker(*this);
 		return serverJoined;
 	}
 
 	inline String::Vector NetClient::getChanList() const
 	{
-		ThreadingPolicy::MutexLocker locker(*this);
 		return chanList;
 	}
 

@@ -10,13 +10,11 @@
 namespace TA3D
 {
 
-	class NetClient : public Yuni::Policy::SingleThreaded<NetClient>
+	class NetClient
 	{
 	public:
 		//! The most suitable smartptr for the class
 		typedef std::shared_ptr<NetClient> Ptr;
-		//! The threading policy
-		typedef Yuni::Policy::SingleThreaded<NetClient> ThreadingPolicy;
 
 	public:
 		enum NetState

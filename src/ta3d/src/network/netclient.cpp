@@ -33,7 +33,6 @@ namespace TA3D
 
 	void NetClient::disconnect()
 	{
-		ThreadingPolicy::MutexLocker locker(*this);
 		sendMessage("DISCONNECT");
 		sock.close();
 		state = DISCONNECTED;
@@ -49,7 +48,6 @@ namespace TA3D
 
 	String NetClient::getNextMessage()
 	{
-		ThreadingPolicy::MutexLocker locker(*this);
 		String msg = messages.front();
 		messages.pop_front();
 		return msg;
@@ -57,7 +55,6 @@ namespace TA3D
 
 	void NetClient::sendMessage(const String &msg)
 	{
-		ThreadingPolicy::MutexLocker locker(*this);
 		if (sock.isOpen())
 			sock.send((String(msg) << "\n").data(), msg.size() + 1);
 		else
@@ -70,7 +67,6 @@ namespace TA3D
 
 	void NetClient::clearMessageQueue()
 	{
-		ThreadingPolicy::MutexLocker locker(*this);
 		messages.clear();
 	}
 
@@ -81,7 +77,6 @@ namespace TA3D
 
 	void NetClient::connect(const String &server, const uint16 port, const String &login, const String &password, bool bRegister)
 	{
-		ThreadingPolicy::MutexLocker locker(*this);
 		if (sock.isOpen())
 			disconnect();
 
@@ -159,7 +154,6 @@ namespace TA3D
 
 	void NetClient::receive()
 	{
-		ThreadingPolicy::MutexLocker locker(*this);
 		if (!sock.isOpen()) // Socket is closed, we can't get anything
 		{
 			state = DISCONNECTED;
@@ -328,21 +322,18 @@ namespace TA3D
 
 	ModInfo::List NetClient::getModList()
 	{
-		ThreadingPolicy::MutexLocker locker(*this);
 		modListChanged = false;
 		return modList;
 	}
 
 	NetClient::GameServer::List NetClient::getServerList()
 	{
-		ThreadingPolicy::MutexLocker locker(*this);
 		serverListChanged = false;
 		return serverList;
 	}
 
 	void NetClient::changeChan(const String &chan)
 	{
-		ThreadingPolicy::MutexLocker locker(*this);
 		currentChan = chan.empty() ? "*" : chan;
 		sendMessage(String("CHAN ") << chan);
 		sendMessage("GET USER LIST");
@@ -351,19 +342,16 @@ namespace TA3D
 
 	void NetClient::sendChan(const String &msg)
 	{
-		ThreadingPolicy::MutexLocker locker(*this);
 		sendMessage(String("SENDALL ") << msg);
 	}
 
 	void NetClient::clearServerJoined()
 	{
-		ThreadingPolicy::MutexLocker locker(*this);
 		serverJoined.clear();
 	}
 
 	bool NetClient::getHostAck()
 	{
-		ThreadingPolicy::MutexLocker locker(*this);
 		if (hostAck)
 		{
 			hostAck = false;
