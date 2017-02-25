@@ -26,31 +26,6 @@ namespace TA3D
 
 	typedef Yuni::Mutex Mutex;
 
-	/*! \class MutexLocker
-	**
-	** \code
-	**      class Foo
-	**      {
-	**      public:
-	**          Foo() : pValue(42) {}
-	**          ~Foo() {}
-	**          int getValue()
-	**          {
-	**              MutexLocker locker(pMutex);
-	**              return pValue;
-	**          }
-	**          void setValue(const int i)
-	**          {
-	**              pMutex.lock();
-	**              pValue = i;
-	**              pMutex.unlock();
-	**          }
-	**      private:
-	**          int pValue;
-	**          Mutex pMutex;
-	**      };
-	** \endcode
-	*/
 	class MutexLocker
 	{
 	public:
