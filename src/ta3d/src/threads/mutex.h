@@ -20,20 +20,20 @@
 
 #include <yuni/thread/mutex.h>
 #include <yuni/thread/condition.h>
+#include <mutex>
+#include <condition_variable>
 
 namespace TA3D
 {
 
-	typedef Yuni::Mutex Mutex;
+	typedef std::recursive_mutex Mutex;
 
 	class MutexLocker
 	{
 	public:
-		MutexLocker(Mutex& m) : pMutex(m) { m.lock(); }
-		~MutexLocker() { pMutex.unlock(); }
+		MutexLocker(Mutex& m) : lock(m) {}
 	private:
-		Mutex& pMutex;
-
+		std::unique_lock<std::recursive_mutex> lock;
 	}; // MutexLocker
 
 	class Synchronizer
@@ -53,10 +53,9 @@ namespace TA3D
 	protected:
 		int nbThreadsToSync;
 		volatile int nbThreadsWaiting;
-		Mutex pMutex;
+		std::mutex pMutex;
 
-		//! The PThread Condition
-		pthread_cond_t pCondition;
+		std::condition_variable pCondition;
 
 		//! Have the condition been really signalled ?
 		volatile unsigned int pSignalled;

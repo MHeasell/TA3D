@@ -7,46 +7,41 @@ namespace TA3D
 		  nbThreadsWaiting(0),
 		  pSignalled(0)
 	{
-		// Note: The linux implementation currently does not support
-		// any condition attr
-		::pthread_cond_init(&pCondition, NULL);
 	}
 
 	Synchronizer::~Synchronizer()
 	{
 		nbThreadsToSync = 0;
 		release();
-		::pthread_cond_destroy(&pCondition);
 	}
 
 	void Synchronizer::sync()
 	{
-		pMutex.lock();
+		std::unique_lock<std::mutex> lock(pMutex);
 		++nbThreadsWaiting;
 
 		if (nbThreadsToSync <= nbThreadsWaiting)
 		{
 			nbThreadsWaiting = 0;
 			++pSignalled;
-			pMutex.unlock();
-			::pthread_cond_broadcast(&pCondition);
+			lock.unlock();
+			pCondition.notify_all();
 		}
 		else
 		{
-			// The pthread_cond_wait will unlock the mutex and wait for
+			// The pCondition.wait() will release the lock and wait for
 			// signalling.
 
 			unsigned int curSignal = pSignalled;
-			int pthread_cond_wait_error;
 			do
 			{
 				// Spurious wakeups from this function can occur.
 				// Therefore we must check out pSignalled variable to ensure we have
 				// really been signalled.
-				pthread_cond_wait_error = ::pthread_cond_wait(&pCondition, &pMutex.pthreadMutex());
+				pCondition.wait(lock);
 			} while (pSignalled == curSignal);
 
-			pMutex.unlock();
+			lock.unlock();
 		}
 	}
 
@@ -57,7 +52,7 @@ namespace TA3D
 		nbThreadsWaiting = 0;
 		++pSignalled;
 
-		::pthread_cond_broadcast(&pCondition);
+		pCondition.notify_all();
 
 		pMutex.unlock();
 	}
