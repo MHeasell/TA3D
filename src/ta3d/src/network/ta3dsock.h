@@ -23,6 +23,7 @@
 #include <threads/thread.h>
 #include <threads/mutex.h>
 #include <misc/string.h>
+#include <memory>
 
 namespace TA3D
 {
@@ -156,7 +157,7 @@ namespace TA3D
 	//to the players. It is basically a TCP socket
 	class TA3DSock
 	{
-		SocketTCP tcpsock;
+		std::unique_ptr<SocketTCP> tcpsock;
 		Mutex tcpmutex;
 
 		//only touched by main thread
@@ -200,9 +201,8 @@ namespace TA3D
 
 		void send(const byte* data, int size);
 
-		String getAddress() const { return tcpsock.getIPstr(); }
-		uint16 getPort() const { return tcpsock.getPort(); }
-		SocketTCP& getSock() { return tcpsock; }
+		String getAddress() const { return tcpsock->getIPstr(); }
+		uint16 getPort() const { return tcpsock->getPort(); }
 		int isOpen();
 
 		//these are for outgoing packets

@@ -45,7 +45,7 @@ namespace TA3D
 		return msg;
 	}
 
-	TA3DSock::TA3DSock() : tcpsock(true) // Enable compression
+	TA3DSock::TA3DSock() : tcpsock(new SocketTCP(true)) // Enable compression
 	{
 		obp = 0;
 		tibp = 0;
@@ -56,8 +56,8 @@ namespace TA3D
 	{
 		if (!dump_file.is_open())
 			dump_file.open((String(TA3D::Paths::Logs) << "net.dump").c_str());
-		tcpsock.open(hostname, port);
-		if (!tcpsock.isOpen())
+		tcpsock->open(hostname, port);
+		if (!tcpsock->isOpen())
 			return -1;
 		return 0;
 	}
@@ -66,25 +66,25 @@ namespace TA3D
 	{
 		if (!dump_file.is_open())
 			dump_file.open((String(TA3D::Paths::Logs) << "net.dump").c_str());
-		tcpsock.open(port);
-		if (!tcpsock.isOpen())
+		tcpsock->open(port);
+		if (!tcpsock->isOpen())
 			return -1;
 		return 0;
 	}
 
 	int TA3DSock::accept(TA3DSock** sock)
 	{
-		tcpsock.check(0);
-		SocketTCP* newSock = tcpsock.accept();
+		tcpsock->check(0);
+		SocketTCP* newSock = tcpsock->accept();
 
 		if (newSock)
 		{
 			(*sock) = new TA3DSock();
 
-			(*sock)->tcpsock = *newSock;
+			(*sock)->tcpsock = std::unique_ptr<SocketTCP>(newSock);
 			newSock->reset();
 
-			if (!(*sock)->tcpsock.isOpen())
+			if (!(*sock)->tcpsock->isOpen())
 			{
 				delete *sock;
 				*sock = NULL;
@@ -98,17 +98,17 @@ namespace TA3D
 
 	int TA3DSock::accept(TA3DSock** sock, int timeout)
 	{
-		tcpsock.check(timeout);
-		SocketTCP* newSock = tcpsock.accept();
+		tcpsock->check(timeout);
+		SocketTCP* newSock = tcpsock->accept();
 
 		if (newSock)
 		{
 			(*sock) = new TA3DSock();
 
-			(*sock)->tcpsock = *newSock;
+			(*sock)->tcpsock = std::unique_ptr<SocketTCP>(newSock);
 			newSock->reset();
 
-			if (!(*sock)->tcpsock.isOpen())
+			if (!(*sock)->tcpsock->isOpen())
 			{
 				delete *sock;
 				*sock = NULL;
@@ -122,13 +122,13 @@ namespace TA3D
 
 	int TA3DSock::isOpen()
 	{
-		return tcpsock.isOpen();
+		return tcpsock->isOpen();
 	}
 
 	void TA3DSock::close()
 	{
-		if (tcpsock.isOpen())
-			tcpsock.close();
+		if (tcpsock->isOpen())
+			tcpsock->close();
 		if (dump_file.is_open())
 			dump_file.close();
 	}
@@ -261,8 +261,8 @@ namespace TA3D
 		tcpmutex.lock();
 
 		const uint16 length = (uint16)size;
-		tcpsock.send((const char*)&length, 2);
-		tcpsock.send((const char*)data, size);
+		tcpsock->send((const char*)&length, 2);
+		tcpsock->send((const char*)data, size);
 		if (dump_file.is_open())
 		{
 			dump_file.write((const char*)data, size);
@@ -277,8 +277,8 @@ namespace TA3D
 		tcpmutex.lock();
 
 		const uint16 length = (uint16)obp;
-		tcpsock.send((const char*)&length, 2);
-		tcpsock.send(outbuf, obp);
+		tcpsock->send((const char*)&length, 2);
+		tcpsock->send(outbuf, obp);
 		if (dump_file.is_open())
 		{
 			dump_file.write(outbuf, obp);
@@ -297,7 +297,7 @@ namespace TA3D
 		if (tiremain == -1)
 			tibp = 0;
 
-		int p = tcpsock.recv(tcpinbuf + tibp, tiremain == -1 ? 2 : tiremain);
+		int p = tcpsock->recv(tcpinbuf + tibp, tiremain == -1 ? 2 : tiremain);
 		if (p <= 0 && tiremain <= 0)
 		{
 			rest(1);
@@ -341,7 +341,7 @@ namespace TA3D
 
 	void TA3DSock::check(int time)
 	{
-		tcpsock.check(time);
+		tcpsock->check(time);
 	}
 
 	int TA3DSock::sendSpecial(struct chat* chat, bool all)
