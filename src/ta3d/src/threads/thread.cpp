@@ -18,12 +18,12 @@
 #include "thread.h"
 #include <logs/logs.h>
 #include <typeinfo>
+#include <chrono>
 
 namespace TA3D
 {
-	Thread::Thread() : pDead(1), threadObj()
+	Thread::Thread() : pDead(1), shouldStop(false)
 	{
-		threadObj.thisthread = this;
 	}
 
 	Thread::~Thread()
@@ -34,25 +34,60 @@ namespace TA3D
 	void Thread::spawn(void* param)
 	{
 		pDead = 0;
-		threadObj.more = param;
-		threadObj.start();
-	}
-
-	bool Thread::ThreadObject::onExecute()
-	{
-		thisthread->proc(more);
-		thisthread->pDead = 1;
-
-		return false;
+		threadObj = std::thread([this, param] {
+			proc(param);
+			pDead = 1;
+		});
 	}
 
 	void Thread::join()
 	{
-		if (pDead == 0)
+		if (threadObj.joinable())
 		{
-			signalExitThread();
-			pDead = 1;
-			threadObj.stop();
+			if (pDead == 0)
+			{
+				signalExitThread();
+				pDead = 1;
+			}
+			stop();
 		}
+	}
+
+	void Thread::stop()
+	{
+		// notify the thread that it should stop
+		{
+			std::lock_guard<std::mutex> lock(shouldStopMutex);
+			shouldStop = true;
+		}
+		shouldStopCondition.notify_one();
+
+		// wait for the thread to complete
+		threadObj.join();
+
+		// we stopped, so we should no longer stop
+		{
+			std::lock_guard<std::mutex> lock(shouldStopMutex);
+			shouldStop = false;
+		}
+	}
+
+	// returns true if the thread should stop
+	bool Thread::suspend(int ms)
+	{
+		std::unique_lock<std::mutex> lock(shouldStopMutex);
+
+		// check if we should stop immediately
+		if (shouldStop)
+		{
+			return true;
+		}
+
+		// go to sleep
+		shouldStopCondition.wait_for(lock, std::chrono::milliseconds(ms));
+
+		// we woke up either because the timer expired
+		// or because we should stop now.
+		return shouldStop;
 	}
 } // namespace TA3D

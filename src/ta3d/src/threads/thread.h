@@ -19,35 +19,32 @@
 #define __TA3D_THREAD_H__
 
 #include "mutex.h"
-#include <yuni/thread/thread.h>
+#include <thread>
 
 namespace TA3D
 {
 
 	class Thread
 	{
-	private:
-		class ThreadObject : public Yuni::Thread::IThread
-		{
-		public:
-			bool suspend(int ms) { return Yuni::Thread::IThread::suspend(ms); }
-		protected:
-			virtual bool onExecute();
-
-		public:
-			void* more;
-			Thread* thisthread;
-		};
-
 	protected:
 		volatile int pDead;
-		ThreadObject threadObj;
+		std::thread threadObj;
+
+	private:
+		bool shouldStop;
+		std::condition_variable shouldStopCondition;
+		std::mutex shouldStopMutex;
+
+	private:
+		void stop();
 
 	protected:
 		Thread();
 		virtual ~Thread();
 		virtual void proc(void* param) = 0;
 		virtual void signalExitThread() {}
+
+		bool suspend(int ms);
 
 	public:
 		// Call this to end the Thread, it will signal the thread to tell it to end
@@ -56,12 +53,11 @@ namespace TA3D
 		bool isRunning() const { return pDead == 0; }
 		bool isDead() const { return !isRunning(); }
 
-		bool suspend(int ms) { return threadObj.suspend(ms); }
 
 		void start() { spawn(NULL); }
 
-		virtual void spawn(void* param);
-		virtual void join();
+		void spawn(void* param);
+		void join();
 
 	}; // class Thread
 
