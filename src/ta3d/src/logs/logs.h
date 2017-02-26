@@ -22,6 +22,9 @@
 #include <yuni/core/logs.h>
 #include <yuni/core/logs/handler/file.h>
 #include <yuni/core/logs/decorators/applicationname.h>
+#include <memory>
+#include <fstream>
+#include <mutex>
 
 // FIXME : Those defines are ketp for compatibility reasons and shall be removed as soon as possible
 #ifdef LOGS_USE_DEBUG
@@ -102,35 +105,6 @@
 
 namespace TA3D
 {
-
-	/*!
-	** \brief A static list of logging Handelrs
-	**
-	** StdCout : Console printing
-	** File : Logging to a file
-	*/
-	typedef Yuni::Logs::StdCout<Yuni::Logs::File<>> LoggerHandlers;
-
-	/*!
-	** \brief A static list of decorators for the logger
-	*/
-	typedef Yuni::Logs::Time<			// Date/Time when the event occurs
-		Yuni::Logs::ApplicationName<	// name of the application
-			Yuni::Logs::VerbosityLevel< // The verbosity level
-				Yuni::Logs::Message<>   // The message itself
-				>>>
-		LoggerDecorators;
-
-	/*!
-	** \brief The TA3D logger type
-	*/
-	typedef Yuni::Logs::Logger<LoggerHandlers, LoggerDecorators> Logger;
-
-	/*!
-	** \brief The global TA3D Logger
-	*/
-	extern Logger logs;
-
 	/*!
 	** \brief Reset the logging mecanism with the default settings
 	**
@@ -138,6 +112,55 @@ namespace TA3D
 	*/
 	template <class U>
 	void ResetTheLoggingMecanism(const U& logfile);
+
+	class MyLogger
+	{
+	public:
+		bool logFileIsOpened() const;
+		const Yuni::String& logfile() const;
+
+		void Reset(const Yuni::String& filename);
+		void Log(const Yuni::String& message);
+
+		class MyLogBuffer
+		{
+		public:
+			MyLogBuffer(MyLogger& l): logger(l) {}
+			~MyLogBuffer()
+			{
+				logger.Log(pBuffer);
+			}
+
+			template<typename T> MyLogBuffer& operator<<(const T& item)
+			{
+				pBuffer.append(item);
+				return *this;
+			}
+		private:
+			MyLogger& logger;
+			Yuni::String pBuffer;
+		};
+
+		MyLogBuffer checkpoint();
+		MyLogBuffer info();
+		MyLogBuffer notice();
+		MyLogBuffer warning();
+		MyLogBuffer error();
+		MyLogBuffer fatal();
+		MyLogBuffer progress();
+		MyLogBuffer compatibility();
+		MyLogBuffer debug();
+
+	private:
+		Yuni::String log_file_name;
+		std::ofstream log_file;
+		mutable std::mutex mutex;
+	};
+
+	/*!
+	** \brief The global TA3D Logger
+	*/
+	extern MyLogger logs;
 
 } // namespace TA3D
 

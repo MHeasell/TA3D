@@ -7,8 +7,7 @@ namespace TA3D
 	template <class U>
 	inline void ResetTheLoggingMecanism(const U& logfile)
 	{
-		logs.applicationName("ta3d");
-		logs.logfile(logfile);
+		logs.Reset(logfile);
 	}
 
 } // namespace TA3D

@@ -45,12 +45,6 @@ namespace TA3D
 
 	void Initialize(int argc, char* argv[])
 	{
-		for (int i = 1; i < argc; i++)
-		{
-			if (!strcmp(argv[i], "--quiet") || !strcmp(argv[i], "/quiet"))
-				logs.verbosityLevel = -1;
-		}
-
 		// Load and prepare output directories
 		if (!TA3D::Paths::Initialize(argc, argv, "ta3d"))
 			exit(1);
