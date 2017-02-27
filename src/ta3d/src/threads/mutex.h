@@ -18,8 +18,6 @@
 #ifndef __TA3D_THREADS_MUTEX_H__
 #define __TA3D_THREADS_MUTEX_H__
 
-#include <yuni/thread/mutex.h>
-#include <yuni/thread/condition.h>
 #include <mutex>
 #include <condition_variable>
 

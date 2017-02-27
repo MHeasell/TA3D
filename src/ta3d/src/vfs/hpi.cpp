@@ -3,6 +3,7 @@
 #include <zlib.h>
 #include <logs/logs.h>
 #include "virtualfile.h"
+#include <misc/math.h>
 
 namespace TA3D
 {

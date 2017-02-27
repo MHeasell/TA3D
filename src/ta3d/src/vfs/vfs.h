@@ -26,8 +26,6 @@
 #ifndef __TA3D_UTILS_VFS_H__
 #define __TA3D_UTILS_VFS_H__
 
-#include <yuni/yuni.h>
-#include <yuni/thread/policy.h>
 #include <list>
 #include <vector>
 #include "archive.h"

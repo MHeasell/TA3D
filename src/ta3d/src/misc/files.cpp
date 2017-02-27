@@ -17,7 +17,6 @@
 
 #include "files.h"
 #include <logs/logs.h>
-#include <yuni/core/io/file/file.hxx>
 #include "paths.h"
 #include <vfs/realfile.h>
 #include <fstream>

@@ -18,7 +18,6 @@
 #ifndef __TA3D_ENGINE_H__
 #define __TA3D_ENGINE_H__
 
-#include <yuni/yuni.h>
 #include "threads/thread.h"
 
 namespace TA3D

@@ -15,8 +15,6 @@
 	along with this program; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA*/
 
-#include <yuni/yuni.h>
-#include <yuni/core/io/file.h>
 #include "i18n.h"
 #include <misc/resources.h>
 #include <misc/paths.h>
@@ -245,7 +243,7 @@ namespace TA3D
 	{
 		// Retrieve the list of all .po files
 		String path;
-		path << "languages" << Core::IO::Separator << "*.po";
+		path << "languages" << Paths::Separator << "*.po";
 		String::Vector list;
 		VFS::Instance()->getFilelist(path, list);
 
@@ -255,7 +253,7 @@ namespace TA3D
 			const String::Vector::const_iterator end = list.end();
 			for (String::Vector::const_iterator i = list.begin(); i != end; ++i)
 			{
-				path.clear() << "languages" << Core::IO::Separator << Paths::ExtractFileName(*i);
+				path.clear() << "languages" << Paths::Separator << Paths::ExtractFileName(*i);
 				if (loadFromFile(path, false))
 				{
 					// The operation will succeed if at least one .po has been loaded

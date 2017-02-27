@@ -20,8 +20,10 @@
 #ifndef __TA3D_BACKTRACE_H__
 #define __TA3D_BACKTRACE_H__
 
+#include "stdafx.h"
+
 void init_signals(void);
 void clear_signals(void);
-void criticalMessage(const String &msg);
+void criticalMessage(const Yuni::String &msg);
 
 #endif // __TA3D_BACKTRACE_H__

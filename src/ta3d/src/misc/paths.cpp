@@ -30,7 +30,6 @@
 #include <sys/types.h>
 #include <dirent.h>
 #include <errno.h>
-#include <yuni/core/io/directory.h>
 
 #ifdef TA3D_PLATFORM_WINDOWS
 #define FA_FILE 1
@@ -496,7 +495,7 @@ namespace TA3D
 		{
 			DIR* dp;
 			struct dirent* ep;
-			CustomString<2096> buffer;
+			Yuni::CustomString<2096> buffer;
 			struct stat st;
 
 			if (NULL != (dp = ::opendir(path)))

@@ -1,5 +1,4 @@
 
-#include <yuni/yuni.h>
 #include <stdafx.h>
 #include <TA3D_NameSpace.h>
 #include "netclient.h"

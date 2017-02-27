@@ -18,10 +18,7 @@
 #ifndef __TA3D_LOGS_LOGS_H__
 #define __TA3D_LOGS_LOGS_H__
 
-#include <yuni/yuni.h>
-#include <yuni/core/logs.h>
-#include <yuni/core/logs/handler/file.h>
-#include <yuni/core/logs/decorators/applicationname.h>
+#include <stdafx.h>
 #include <memory>
 #include <fstream>
 #include <mutex>

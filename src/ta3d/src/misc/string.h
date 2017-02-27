@@ -19,7 +19,6 @@
 #define __TA3D_TOOLBOX_STRING_H__
 
 #include <stdafx.h>
-#include <yuni/core/string.h>
 
 namespace TA3D
 {

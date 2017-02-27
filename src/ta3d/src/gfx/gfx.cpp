@@ -75,7 +75,7 @@ namespace TA3D
 		else if (glVendor.find("INTEL") != String::npos)
 			glVendorID = Intel;
 
-#ifdef YUNI_OS_LINUX
+#ifdef TA3D_PLATFORM_LINUX
 		switch (glVendorID)
 		{
 			case Ati:
@@ -179,7 +179,7 @@ namespace TA3D
 				lp_CONFIG->disable_GLSL = true;
 				break;
 		};
-#elif defined YUNI_OS_WINDOWS
+#elif defined TA3D_PLATFORM_WINDOWS
 		switch (glVendorID)
 		{
 			case Ati:
@@ -283,7 +283,7 @@ namespace TA3D
 				lp_CONFIG->disable_GLSL = true;
 				break;
 		};
-#elif defined YUNI_OS_MAC
+#elif defined TA3D_PLATFORM_MAC
 		switch (glVendorID)
 		{
 			case Ati:
@@ -523,7 +523,7 @@ namespace TA3D
 			lp_CONFIG->detail_tex = false;
 			lp_CONFIG->shadow_quality = Math::Min(lp_CONFIG->shadow_quality, sint16(1));
 		}
-#ifdef YUNI_OS_MAC
+#ifdef TA3D_PLATFORM_MAC
 		// For some reasons, the texture compression makes ta3d completely unstable on OS X,
 		// at least with an ATI video card.
 		// Currently, we don't know if it also affects NVidia cards

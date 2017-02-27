@@ -21,7 +21,7 @@
 #include <logs/logs.h>
 #include <sdl.h>
 
-#ifdef YUNI_OS_MACOS
+#ifdef TA3D_PLATFORM_MAC
 #include <stdio.h>
 #define TA3D_POPEN popen
 #define TA3D_PCLOSE pclose
@@ -118,7 +118,7 @@ namespace TA3D
 			vendorName = run_command("cat /proc/cpuinfo | grep vendor_id | head -n 1 | awk '{ print $3 }' | tr -d \"\\n\"");
 #else
 #endif
-			logs.notice() << LOG_PREFIX_SYSTEM << YUNI_OS_NAME << ", Vendor: " << (vendorName.empty() ? "Unknown" : vendorName)
+			logs.notice() << LOG_PREFIX_SYSTEM << TA3D_PLATFORM_NAME << ", Vendor: " << (vendorName.empty() ? "Unknown" : vendorName)
 						  << " " << CPUName()
 						  << " (" << CPUCapabilities() << ")";
 			displayScreenResolution();

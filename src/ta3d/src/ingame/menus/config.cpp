@@ -182,7 +182,7 @@ namespace TA3D
 
 					if (rect.w >= 640 && rect.h >= 480)
 					{
-#ifndef YUNI_OS_MAC
+#ifndef TA3D_PLATFORM_MAC
 						if (SDL_VideoModeOK(rect.w, rect.h, 16, SDL_FULLSCREEN | SDL_OPENGL) == 16)
 						{
 							res_bpp[nb_res] = 16;

@@ -1,7 +1,6 @@
 #ifndef __TA3D_NETWORK_NETCLIENT_H__
 #define __TA3D_NETWORK_NETCLIENT_H__
 
-#include <yuni/yuni.h>
 #include <misc/string.h>
 #include <mods/modinfo.h>
 #include "socket.tcp.h"
