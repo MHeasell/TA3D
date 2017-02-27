@@ -72,7 +72,7 @@ namespace TA3D
 		bool Splash::maySwitchToAnotherMenu()
 		{
 			// Waiting for the engine...
-			return (false == pEngine.started());
+			return (false == pEngine.isRunning());
 		}
 
 		void Splash::loadBackgroundTexture()

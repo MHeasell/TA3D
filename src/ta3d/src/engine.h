@@ -20,12 +20,11 @@
 
 #include <yuni/yuni.h>
 #include "threads/thread.h"
-#include <yuni/thread/thread.h>
 
 namespace TA3D
 {
 
-	class Engine : public Yuni::Thread::IThread
+	class Engine : public Thread
 	{
 		// These classes need access to the Synchronizer object
 		friend class INGAME_UNITS;
@@ -52,7 +51,7 @@ namespace TA3D
 		void initializationFromTheMainThread();
 
 	protected:
-		virtual bool onExecute();
+		virtual void proc(void* param);
 
 	private:
 		/*!

@@ -111,7 +111,7 @@ namespace TA3D
 
 	Engine::~Engine(void)
 	{
-		stop();
+		join();
 		cursor.clear();
 		ta3dSideData.destroy();
 
@@ -149,7 +149,7 @@ namespace TA3D
 			showWarning("FMOD WARNING");
 	}
 
-	bool Engine::onExecute()
+	void Engine::proc(void* /* param */)
 	{
 		// Creating translation manager
 		I18N::Instance()->loadFromFile("gamedata\\translate.tdf", true, true);
@@ -187,8 +187,6 @@ namespace TA3D
 		ta3dSideData.loadData();
 
 		sound_manager->loadTDFSounds(false);
-
-		return false;
 	}
 
 	void rest(uint32 msec)
