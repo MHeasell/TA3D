@@ -41,7 +41,7 @@ namespace TA3D
 
 		String run_command(const String& cmd)
 		{
-			if (!cmd)
+			if (cmd.empty())
 				return nullptr;
 #ifdef TA3D_POPEN
 			String result;

@@ -29,6 +29,12 @@ namespace TA3D
 		str.erase(str.begin(), first_non_whitespace);
 	}
 
+	void String::trimLeft(char ch)
+	{
+		auto first_non_whitespace = std::find(str.begin(), str.end(), ch);
+		str.erase(str.begin(), first_non_whitespace);
+	}
+
 	void String::trimRight()
 	{
 		auto first_trailing_whitespace = std::find_if(s.rbegin(), s.rend(), std::not1(std::ptr_fun<char, bool>(is_space))).base();

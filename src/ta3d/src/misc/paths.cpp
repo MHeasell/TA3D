@@ -495,7 +495,7 @@ namespace TA3D
 		{
 			DIR* dp;
 			struct dirent* ep;
-			Yuni::CustomString<2096> buffer;
+			String buffer;
 			struct stat st;
 
 			if (NULL != (dp = ::opendir(path)))

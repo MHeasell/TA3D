@@ -51,7 +51,7 @@
  * Declaration of the bug reporter. It's here because it should be visible only
  * from this module.
  */
-void bug_reporter(const Yuni::String &trace);
+void bug_reporter(const TA3D::String &trace);
 
 /*!
  * \brief Obtain a backtrace and print it to stdout.
@@ -73,17 +73,17 @@ void backtrace_handler(int signum)
 	// Get TA3D's PID
 	pid_t mypid = getpid();
 	// Try to get a stack trace from GDB
-	Yuni::String::Vector threads;
-	TA3D::System::run_command(Yuni::String("gdb --pid=") << mypid << " -ex \"info threads\" --batch").split(threads, "\n");
+	TA3D::String::Vector threads;
+	TA3D::System::run_command(TA3D::String("gdb --pid=") << mypid << " -ex \"info threads\" --batch").split(threads, "\n");
 	if (!threads.empty())
 	{
-		Yuni::String cmd;
+		TA3D::String cmd;
 		cmd << "gdb --pid="
 			<< mypid
 			<< " -ex \"info threads\"";
 		for (size_t i = 0; i < threads.size(); ++i)
 		{
-			Yuni::String &line = threads[i];
+			TA3D::String &line = threads[i];
 			if (line.startsWith('[') || line.startsWith("0x") || line.startsWith('#'))
 				continue;
 			if (line.startsWith('*'))
@@ -91,13 +91,13 @@ void backtrace_handler(int signum)
 				line[0] = ' ';
 				line.trimLeft(' ');
 			}
-			const int id = line.to<int>();
+			const int id = line.to_int();
 			if (id <= 0)
 				continue;
 			cmd << " -ex \"thread " << id << "\" -ex bt";
 		}
 		cmd << " --batch";
-		const Yuni::String trace = TA3D::System::run_command(cmd);
+		const TA3D::String trace = TA3D::System::run_command(cmd);
 		if (!trace.empty())
 		{
 			bug_reporter(trace);
@@ -114,7 +114,7 @@ void backtrace_handler(int signum)
 	char **strings = backtrace_symbols(array, size);
 
 	// Try to log it
-	Yuni::String backtrace_filename = Yuni::String(TA3D::Paths::Logs) << "backtrace.txt";
+	TA3D::String backtrace_filename = TA3D::String(TA3D::Paths::Logs) << "backtrace.txt";
 	std::ofstream m_File(backtrace_filename.c_str());
 	if (m_File.is_open())
 	{
@@ -130,7 +130,7 @@ void backtrace_handler(int signum)
 		for (int i = 0; i < size; ++i)
 			printf("%s\n", strings[i]);
 
-		Yuni::String szErrReport;
+		TA3D::String szErrReport;
 		szErrReport << "An error has occured.\nDebugging information have been logged to:\n"
 					<< TA3D::Paths::Logs
 					<< "backtrace.txt\nPlease report to our forums (http://www.ta3d.org/)\nand keep this file, it'll help us debugging.\n";
@@ -152,7 +152,7 @@ void backtrace_handler(int signum)
 #else // ifdef TA3D_BUILTIN_BACKTRACE_SUPPORT
 
 	// The backtrace support is disabled: warns the user
-	Yuni::String szErrReport = "An error has occured.\nDebugging information could not be logged.\nPlease report to our forums (http://www.ta3d.org/) so we can fix it.";
+	TA3D::String szErrReport = "An error has occured.\nDebugging information could not be logged.\nPlease report to our forums (http://www.ta3d.org/) so we can fix it.";
 	criticalMessage(szErrReport);
 
 #endif // ifdef TA3D_BUILTIN_BACKTRACE_SUPPORT
@@ -191,8 +191,8 @@ void init_signals(void)
 #ifdef TA3D_PLATFORM_LINUX
 	// Get TA3D's PID
 	pid_t mypid = getpid();
-	const Yuni::String ppid = TA3D::System::run_command(Yuni::String("ps -o ppid -p ") << mypid << " | tail -n 1");
-	const Yuni::String parent = TA3D::System::run_command(Yuni::String("ps -o command -p ") << ppid);
+	const TA3D::String ppid = TA3D::System::run_command(TA3D::String("ps -o ppid -p ") << mypid << " | tail -n 1");
+	const TA3D::String parent = TA3D::System::run_command(TA3D::String("ps -o command -p ") << ppid);
 	if (parent.contains("gdb"))
 	{
 		std::cerr << "Running under GDB, not overriding signals handlers" << std::endl;
@@ -241,7 +241,7 @@ void clear_signals(void)
 #endif // ifdef TA3D_PLATFORM_DARWIN
 }
 
-void criticalMessage(const Yuni::String &msg)
+void criticalMessage(const TA3D::String &msg)
 {
 	std::cerr << msg << std::endl; // Output error message to stderr
 
@@ -255,7 +255,7 @@ void criticalMessage(const Yuni::String &msg)
  * crash report that would be sent to the bug report server. The user can accept to send the
  * report or not.
  */
-void bug_reporter(const Yuni::String &trace)
+void bug_reporter(const TA3D::String &trace)
 {
 	bool bSendReport = false;
 	std::string report;
@@ -321,7 +321,7 @@ void bug_reporter(const Yuni::String &trace)
 							"and a stack trace to help us find what's wrong.\n"
 							"\n"
 							"Do you want to send the bug report ?");
-	Yuni::String buf;
+	TA3D::String buf;
 	buf << "(report size = " << report.size() << " bytes)";
 	LABEL(size)->setCaption(buf.c_str());
 

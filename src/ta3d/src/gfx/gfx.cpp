@@ -37,6 +37,8 @@
 #include <backtrace.h>
 #include <SDL_getenv.h>
 #include <fstream>
+#include <iostream>
+#include <cassert>
 
 namespace TA3D
 {

@@ -314,12 +314,12 @@ namespace TA3D
 			TA3D::UTILS::HashMap<String>::Dense::iterator entry = pTable.find(keyToFind);
 			if (entry == pTable.end() || entry->empty())
 				return def;
-			return entry->to<float>(f) ? f : def;
+			return entry->to_float(f) ? f : def;
 		}
 		TA3D::UTILS::HashMap<String>::Dense::iterator entry = pTable.find(key);
 		if (entry == pTable.end() || entry->empty())
 			return def;
-		return entry->to<float>(f) ? f : def;
+		return entry->to_float(f) ? f : def;
 	}
 
 	bool TDFParser::pullAsBool(const String& key, const bool def)
@@ -331,12 +331,12 @@ namespace TA3D
 			TA3D::UTILS::HashMap<String>::Dense::iterator entry = pTable.find(keyToFind);
 			if (entry == pTable.end() || entry->empty())
 				return def;
-			return entry->to<bool>();
+			return entry->to_bool();
 		}
 		TA3D::UTILS::HashMap<String>::Dense::iterator entry = pTable.find(key);
 		if (entry == pTable.end() || entry->empty())
 			return def;
-		return entry->to<bool>();
+		return entry->to_bool();
 	}
 
 	uint32 TDFParser::pullAsColor(const String& key, const uint32 def)
@@ -347,8 +347,8 @@ namespace TA3D
 		if (params.size() < 3)
 			return def;
 		if (params.size() == 3)
-			return makeacol(params[0].to<uint32>(), params[1].to<uint32>(), params[2].to<uint32>(), 0xFF);
-		return makeacol(params[0].to<uint32>(), params[1].to<uint32>(), params[2].to<uint32>(), params[3].to<uint32>());
+			return makeacol(params[0].to_uint32(), params[1].to_uint32(), params[2].to_uint32(), 0xFF);
+		return makeacol(params[0].to_uint32(), params[1].to_uint32(), params[2].to_uint32(), params[3].to_uint32());
 	}
 
 } // namespace TA3D
