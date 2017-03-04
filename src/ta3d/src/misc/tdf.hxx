@@ -12,10 +12,10 @@ namespace TA3D
 			String keyToFind(key);
 			keyToFind.toLower();
 			TA3D::UTILS::HashMap<String>::Dense::iterator entry = pTable.find(keyToFind);
-			return (entry == pTable.end() || entry->empty() ? def : entry->to<sint32>());
+			return (entry == pTable.end() || entry->empty() ? def : entry->to_sint32());
 		}
 		TA3D::UTILS::HashMap<String>::Dense::iterator entry = pTable.find(key);
-		return (entry == pTable.end() || entry->empty() ? def : entry->to<sint32>());
+		return (entry == pTable.end() || entry->empty() ? def : entry->to_sint32());
 	}
 
 	template <class K>
@@ -26,10 +26,10 @@ namespace TA3D
 			String keyToFind(key);
 			keyToFind.toLower();
 			TA3D::UTILS::HashMap<String>::Dense::iterator entry = pTable.find(keyToFind);
-			return (entry == pTable.end() || entry->empty() ? 0 : entry->to<sint32>());
+			return (entry == pTable.end() || entry->empty() ? 0 : entry->to_sint32());
 		}
 		TA3D::UTILS::HashMap<String>::Dense::iterator entry = pTable.find(key);
-		return (entry == pTable.end() || entry->empty() ? 0 : entry->to<sint32>());
+		return (entry == pTable.end() || entry->empty() ? 0 : entry->to_sint32());
 	}
 
 	template <class K, class V>
