@@ -87,6 +87,9 @@ namespace TA3D
 
 } // namespace TA3D
 
+namespace TA3D
+{
+
 // Addition
 inline TA3D::Matrix operator+(TA3D::Matrix A, const TA3D::Matrix &B)
 {
@@ -146,6 +149,8 @@ inline TA3D::Matrix operator*(const float &A, TA3D::Matrix B)
 	for (int i = 0; i < 16; ++i)
 		B.E[i >> 2][i & 3] *= A;
 	return B;
+}
+
 }
 
 #endif // __TA3D_MISC_MATRIX_H__
