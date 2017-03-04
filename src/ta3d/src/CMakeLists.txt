@@ -7,7 +7,7 @@ link_libraries("${LIBS}")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Yuni_CXXFLAGS}")
 link_libraries("${Yuni_LIBS}")
 
-
+include_directories("../../libs/utfcpp/source")
 
 include_directories(BEFORE ${CMAKE_CURRENT_SOURCE_DIR})
 
