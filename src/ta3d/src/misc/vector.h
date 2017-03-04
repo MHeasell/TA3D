@@ -287,6 +287,9 @@ namespace TA3D
 //! \name Operators for Vectors
 //@{
 
+namespace TA3D
+{
+
 inline const TA3D::Vector2D operator+(const TA3D::Vector2D& lhs, const TA3D::Vector2D& rhs)
 {
 	return TA3D::Vector2D(lhs) += rhs;
@@ -347,6 +350,8 @@ inline const TA3D::Vector3D operator*(const TA3D::Vector3D& lhs, const TA3D::Vec
 inline float operator%(const TA3D::Vector3D& lhs, const TA3D::Vector3D& rhs)
 {
 	return lhs.x * rhs.x + lhs.y * rhs.y + lhs.z * rhs.z;
+}
+
 }
 
 //@}
