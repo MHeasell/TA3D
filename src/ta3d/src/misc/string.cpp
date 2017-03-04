@@ -2,6 +2,8 @@
 #include "string.h"
 #include <logs/logs.h>
 
+#include <cstring>
+
 namespace TA3D
 {
 
