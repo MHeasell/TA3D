@@ -10,7 +10,7 @@ namespace TA3D
 	{
 	public:
 		//! A String with a smaller buffer than usual strings
-		typedef Yuni::StringBase<char, 40> ShortString;
+		typedef String ShortString;
 
 	public:
 		/*!
