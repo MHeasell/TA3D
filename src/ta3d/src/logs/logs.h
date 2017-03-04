@@ -114,10 +114,10 @@ namespace TA3D
 	{
 	public:
 		bool logFileIsOpened() const;
-		const Yuni::String& logfile() const;
+		const String& logfile() const;
 
-		void Reset(const Yuni::String& filename);
-		void Log(const Yuni::String& message);
+		void Reset(const String& filename);
+		void Log(const String& message);
 
 		class MyLogBuffer
 		{
@@ -135,7 +135,7 @@ namespace TA3D
 			}
 		private:
 			MyLogger& logger;
-			Yuni::String pBuffer;
+			String pBuffer;
 		};
 
 		MyLogBuffer checkpoint();
@@ -149,7 +149,7 @@ namespace TA3D
 		MyLogBuffer debug();
 
 	private:
-		Yuni::String log_file_name;
+		String log_file_name;
 		std::ofstream log_file;
 		mutable std::mutex mutex;
 	};

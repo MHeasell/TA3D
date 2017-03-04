@@ -25,7 +25,7 @@ namespace TA3D
 	// The unique instance of the ta3d logger
 	MyLogger logs;
 
-	void MyLogger::Log(const Yuni::String& msg)
+	void MyLogger::Log(const String& msg)
 	{
 		std::lock_guard<std::mutex> lock(mutex);
 
@@ -45,13 +45,13 @@ namespace TA3D
 		return log_file.is_open();
 	}
 
-	const Yuni::String& MyLogger::logfile() const
+	const String& MyLogger::logfile() const
 	{
 		std::lock_guard<std::mutex> lock(mutex);
 		return log_file_name;
 	}
 
-	void MyLogger::Reset(const Yuni::String& filename)
+	void MyLogger::Reset(const String& filename)
 	{
 		std::lock_guard<std::mutex> lock(mutex);
 		log_file_name = filename;
