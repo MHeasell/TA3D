@@ -722,7 +722,7 @@ namespace TA3D
 
 	std::ostream& operator<<(std::ostream& os, const String& str);
 
-	String::const_utf8iterator operator+(const String::const_utf8iterator& it, unsigned int count);
+	String::const_utf8iterator operator+(const String::const_utf8iterator& it, String::size_type count);
 
 	String operator+(char lhs, const String& rhs);
 

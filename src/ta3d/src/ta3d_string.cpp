@@ -53,10 +53,10 @@ namespace TA3D
 		return os << str.c_str();
 	}
 
-	String::const_utf8iterator operator+(const String::const_utf8iterator& it, unsigned int count)
+	String::const_utf8iterator operator+(const String::const_utf8iterator& it, String::size_type count)
 	{
 		auto new_it = String::const_utf8iterator(it);
-		for (unsigned int i = 0; i < count; ++i)
+		for (String::size_type i = 0; i < count; ++i)
 		{
 			++new_it;
 		}

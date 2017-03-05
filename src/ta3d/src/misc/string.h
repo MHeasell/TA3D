@@ -22,15 +22,15 @@
 
 namespace TA3D
 {
-	inline String Substr(const String& str, unsigned int start, unsigned int len = 0xFFFFFFFF)
+	inline String Substr(const String& str, String::size_type start, String::size_type len = String::npos)
 	{
-		len = std::min<unsigned int>(len, str.size() - start);
+		len = std::min(len, str.size() - start);
 		return String(str.data() + start, len);
 	}
 
-	inline String SubstrUTF8(const String& str, unsigned int start, unsigned int len = 0xFFFFFFFF)
+	inline String SubstrUTF8(const String& str, String::size_type start, String::size_type len = String::npos)
 	{
-		return String(str.utf8begin() + start, str.utf8begin() + start + std::min<unsigned int>(len, str.utf8size() - start));
+		return String(str.utf8begin() + start, str.utf8begin() + start + std::min(len, str.utf8size() - start));
 	}
 
 	inline String ToUpper(const String& str)
