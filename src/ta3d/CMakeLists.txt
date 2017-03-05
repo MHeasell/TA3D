@@ -6,12 +6,6 @@ message(STATUS "--- TA3D ---")
 message(STATUS "")
 
 
-#
-# --- Settings ---
-#
-# The maximum players
-set(TA3D_MAX_PLAYERS_HARD_LIMIT  10)
-
 set(CPACK_PACKAGE_VERSION_MAJOR "${TA3D_VERSION_HI}")
 set(CPACK_PACKAGE_VERSION_MINOR "${TA3D_VERSION_LO}")
 set(CPACK_PACKAGE_VERSION_PATCH "${TA3D_VERSION_PATCH}")

@@ -42,7 +42,7 @@
 /*!
 ** \brief The hard limit for the number of players
 */
-# define TA3D_PLAYERS_HARD_LIMIT   @TA3D_MAX_PLAYERS_HARD_LIMIT@
+# define TA3D_PLAYERS_HARD_LIMIT   10
 
 
 #cmakedefine __FTGL__lower__
