@@ -720,40 +720,15 @@ namespace TA3D
 		std::string str;
 	};
 
-	std::ostream& operator<<(std::ostream& os, const String& str)
-	{
-		return os << str.c_str();
-	}
+	std::ostream& operator<<(std::ostream& os, const String& str);
 
-	String::const_utf8iterator operator+(const String::const_utf8iterator& it, unsigned int count)
-	{
-		auto new_it = String::const_utf8iterator(it);
-		for (unsigned int i = 0; i < count; ++i)
-		{
-			++new_it;
-		}
+	String::const_utf8iterator operator+(const String::const_utf8iterator& it, unsigned int count);
 
-		return new_it;
-	}
+	String operator+(char lhs, const String& rhs);
 
-	String operator+(char lhs, const String& rhs)
-	{
-		String n(lhs);
-		n.append(rhs);
-		return n;
-	}
+	String operator+(const String& lhs, const char* rhs);
 
-	String operator+(const String& lhs, const char* rhs)
-	{
-		String n(lhs);
-		n.append(rhs);
-		return n;
-	}
-
-	bool operator==(const char* lhs, const String& rhs)
-	{
-		return rhs == lhs;
-	}
+	bool operator==(const char* lhs, const String& rhs);
 }
 
 #endif
