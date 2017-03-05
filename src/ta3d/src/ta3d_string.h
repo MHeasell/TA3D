@@ -198,6 +198,11 @@ namespace TA3D
 			return str.find(ch) != std::string::npos;
 		}
 
+		void reserve(size_type count)
+		{
+			str.reserve(count);
+		}
+
 		bool endsWith(const String& substr) const
 		{
 			size_type our_size = size();
@@ -279,6 +284,11 @@ namespace TA3D
 			return str.empty() ? '\0' : str.front();
 		}
 
+		size_type find_first_of(const String& chars, size_type pos) const
+		{
+			return str.find_first_of(chars.str, pos);
+		}
+
 		size_type find_last_of(const String& chars) const
 		{
 			return str.find_last_of(chars.c_str(), str.size(), chars.size());
@@ -287,6 +297,11 @@ namespace TA3D
 		size_type find_last_of(const char ch) const
 		{
 			return str.find_last_of(ch);
+		}
+
+		void erase(size_type index, size_type count)
+		{
+			str.erase(index, count);
 		}
 
 		void assign(const char* s, size_type count)

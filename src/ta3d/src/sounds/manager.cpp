@@ -569,7 +569,7 @@ namespace TA3D
 		{
 			doStopMusic();
 
-			if (!m_SDLMixerRunning || !filename)
+			if (!m_SDLMixerRunning || filename.empty())
 				return;
 
 			pCurrentItemPlaying = -1;
