@@ -119,6 +119,11 @@ namespace TA3D
 			return (uint32_t)std::stoul(str);
 		}
 
+		unsigned int to_uint() const
+		{
+			return (unsigned int)std::stoul(str);
+		}
+
 		float to_float() const
 		{
 			return std::stof(str);

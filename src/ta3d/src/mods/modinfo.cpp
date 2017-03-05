@@ -50,7 +50,7 @@ namespace TA3D
 			return;
 		}
 
-		ID = params[0].to<sint32>();
+		ID = params[0].to_sint32();
 		version = params[1];
 		name = params[2];
 		url = params[3];

@@ -25,6 +25,7 @@
 #include <misc/paths.h>
 #include <input/keyboard.h>
 #include <input/mouse.h>
+#include <cassert>
 
 #define FIX_COLOR(col) col = makeacol(getb(col), getg(col), getr(col), getr(col))
 
@@ -1285,7 +1286,7 @@ namespace TA3D
 					String::size_type e = object->SendDataTo[cur].find('.');
 					if (e != String::npos)
 					{
-						unsigned int target = Substr(object->SendDataTo[cur], 0, e).to<unsigned int>();
+						unsigned int target = Substr(object->SendDataTo[cur], 0, e).to_uint();
 						if (target < pObjects.size())
 						{
 							if (Substr(object->SendDataTo[cur], e + 1, object->SendDataTo[cur].length() - e) == "data")
@@ -1300,7 +1301,7 @@ namespace TA3D
 					String::size_type e = object->SendPosTo[cur].find('.');
 					if (e != String::npos)
 					{
-						unsigned int target = Substr(object->SendPosTo[cur], 0, e).to<unsigned int>();
+						unsigned int target = Substr(object->SendPosTo[cur], 0, e).to_uint();
 						if (target < pObjects.size())
 						{
 							if (Substr(object->SendPosTo[cur], e + 1, object->SendPosTo[cur].length() - e) == "data")

@@ -5,6 +5,7 @@
 #include <mods/modinfo.h>
 #include "socket.tcp.h"
 #include <memory>
+#include <map>
 
 namespace TA3D
 {
