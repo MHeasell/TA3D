@@ -29,47 +29,32 @@ namespace TA3D
 
 		static const size_type npos = std::string::npos;
 
-		String() {}
+		String();
 
-		String(const nullptr_t) {}
+		String(const nullptr_t);
 
-		String(char ch) : str(1, ch) {}
+		String(char ch);
 
-		String(const char* chars, size_type count) : str(chars, count) {}
+		String(const char* chars, size_type count);
 
-		String(const char* chars) : str(chars) {}
+		String(const char* chars);
 
-		String(std::string s) : str(s) {}
+		String(std::string s);
 
-		String(const String& other, size_type pos, size_type count = npos): str(other.str, pos, count) {}
+		String(const String& other, size_type pos, size_type count = npos);
 
 		template <class InputIt>
 		String(InputIt first, InputIt last) : str(first, last) {}
 
-		const char* c_str() const
-		{
-			return str.c_str();
-		}
+		const char* c_str() const;
 
-		const char* data() const
-		{
-			return str.data();
-		}
+		const char* data() const;
 
-		void append(const String& s)
-		{
-			append(s.str);
-		}
+		void append(const String& s);
 
-		void append(const std::string& s)
-		{
-			str.append(s);
-		}
+		void append(const std::string& s);
 
-		void append(const char* chars)
-		{
-			str.append(chars);
-		}
+		void append(const char* chars);
 
 		template <typename T>
 		void append(const T& t)
@@ -79,10 +64,7 @@ namespace TA3D
 			append(out.str());
 		}
 
-		void append(const char* s, size_type count)
-		{
-			str.append(s, count);
-		}
+		void append(const char* s, size_type count);
 
 		template <typename... Args>
 		void appendFormat(const char* fmt, const Args& ... args)
@@ -90,15 +72,9 @@ namespace TA3D
 			append(format(fmt, args...));
 		}
 
-		bool empty() const
-		{
-			return str.empty();
-		}
+		bool empty() const;
 
-		bool notEmpty() const
-		{
-			return !str.empty();
-		}
+		bool notEmpty() const;
 
 		String& clear()
 		{
@@ -106,240 +82,84 @@ namespace TA3D
 			return *this;
 		}
 
-		size_type find(char ch) const
-		{
-			return str.find(ch);
-		}
+		size_type find(char ch) const;
 
-		size_type find(const char* s) const
-		{
-			return str.find(s);
-		}
+		size_type find(const char* s) const;
 
-		size_type find(const String& substr) const
-		{
-			return str.find(substr.str);
-		}
+		size_type find(const String& substr) const;
 
-		int32_t to_sint32() const
-		{
-			return std::stoi(str);
-		}
+		int32_t to_sint32() const;
 
-		int to_int() const
-		{
-			return std::stoi(str);
-		}
+		int to_int() const;
 
-		uint32_t to_uint32() const
-		{
-			return (uint32_t)std::stoul(str);
-		}
+		uint32_t to_uint32() const;
 
-		unsigned int to_uint() const
-		{
-			return (unsigned int)std::stoul(str);
-		}
+		unsigned int to_uint() const;
 
-		float to_float() const
-		{
-			return std::stof(str);
-		}
+		float to_float() const;
 
-		bool to_float(float& f) const
-		{
-			try
-			{
-				f = std::stof(str);
-			}
-			catch (const std::invalid_argument&)
-			{
-				return false;
-			}
-			catch (const std::out_of_range&)
-			{
-				return false;
-			}
+		bool to_float(float& f) const;
 
-			return true;
-		}
-
-		bool to_bool() const
-		{
-			switch (size())
-			{
-				case 0:
-					return false;
-				case 1:
-					{
-						char c = first();
-						return c == '1' || c == 'Y' || c == 'y' || c == 'O' || c == 'o' || c == 't' || c == 'T';
-					}
-				default:
-					{
-						if (size() > 4)
-						{
-							return false;
-						}
-						String buf(*this, 0, std::min(size(), (size_type)4));
-						buf.toLower();
-						return buf == "true" || buf == "on" || buf == "yes";
-					}
-			}
-
-			return false;
-		}
+		bool to_bool() const;
 
 		// Counts the number of octets in the string.
 		// If the string is UTF8, this may be larger
 		// than the number of code points,
 		// because a code point can be encoded as multiple octets.
-		size_type size() const
-		{
-			return str.size();
-		}
+		size_type size() const;
 
 		// same as size()
-		size_type length() const
-		{
-			return str.length();
-		}
+		size_type length() const;
 		
-		bool contains(const String& substr) const
-		{
-			return str.find(substr.str) != std::string::npos;
-		}
+		bool contains(const String& substr) const;
 
-		bool contains(char ch) const
-		{
-			return str.find(ch) != std::string::npos;
-		}
+		bool contains(char ch) const;
 
-		void reserve(size_type count)
-		{
-			str.reserve(count);
-		}
+		void reserve(size_type count);
 
-		bool endsWith(const String& substr) const
-		{
-			size_type our_size = size();
-			size_type sub_size = substr.size();
+		bool endsWith(const String& substr) const;
 
-			if (sub_size > our_size)
-			{
-				return false;
-			}
+		bool endsWith(char ch) const;
 
-			size_type start_index = our_size - sub_size;
-			return str.compare(start_index, sub_size, substr.str) == 0;
-		}
+		bool startsWith(const String& substr) const;
 
-		bool endsWith(char ch) const
-		{
-			return empty() ? false : last() == ch;
-		}
-
-		bool startsWith(const String& substr) const
-		{
-			size_type our_size = size();
-			size_type sub_size = substr.size();
-
-			if (sub_size > our_size)
-			{
-				return false;
-			}
-
-			return str.compare(0, sub_size, substr.str) == 0;
-		}
-
-		bool startsWith(char ch) const
-		{
-			return empty() ? false : first() == ch;
-		}
+		bool startsWith(char ch) const;
 
 		// Removes the last n octets from the string.
 		// Note that this is unsafe on UTF-8 strings
 		// as it is possible to chop a portion of a multi-byte code point.
-		void chop(size_type n)
-		{
-			auto index_from_end = str.size() - n;
-			str.erase(index_from_end, n);
-		}
+		void chop(size_type n);
 
 		// Truncates the string to at most len code points
-		void truncate(size_type len)
-		{
-			if (len >= size())
-			{
-				return;
-			}
+		void truncate(size_type len);
 
-			str.erase(len);
-		}
+		iterator begin();
 
-		iterator begin()
-		{
-			return str.begin();
-		}
+		const_iterator begin() const;
 
-		const_iterator begin() const
-		{
-			return str.begin();
-		}
+		iterator end();
 
-		iterator end()
-		{
-			return str.end();
-		}
-
-		const_iterator end() const
-		{
-			return str.end();
-		}
+		const_iterator end() const;
 
 		// Returns the last octet.
 		// If the string is empty, returns NULL.
-		char last() const
-		{
-			return str.empty() ? '\0' : str.back();
-		}
+		char last() const;
 
 		// Returns the first octet.
 		// If the string is empty, returns NULL.
-		char first() const
-		{
-			return str.empty() ? '\0' : str.front();
-		}
+		char first() const;
 
-		size_type find_first_of(const String& chars, size_type pos) const
-		{
-			return str.find_first_of(chars.str, pos);
-		}
+		size_type find_first_of(const String& chars, size_type pos) const;
 
-		size_type find_first_of(const String& chars) const
-		{
-			return str.find_first_of(chars.str);
-		}
+		size_type find_first_of(const String& chars) const;
 
-		size_type find_first_not_of(const String& chars, size_type pos) const
-		{
-			return str.find_first_not_of(chars.str, pos);
-		}
+		size_type find_first_not_of(const String& chars, size_type pos) const;
 
-		size_type find_first_not_of(const String& chars) const
-		{
-			return str.find_first_not_of(chars.str);
-		}
+		size_type find_first_not_of(const String& chars) const;
 
-		size_type find_last_of(const String& chars) const
-		{
-			return str.find_last_of(chars.str);
-		}
+		size_type find_last_of(const String& chars) const;
 
-		size_type find_last_of(const char ch) const
-		{
-			return str.find_last_of(ch);
-		}
+		size_type find_last_of(const char ch) const;
 
 		template <typename... Args>
 		String format(const char* fmt, const Args& ... args)
@@ -347,32 +167,17 @@ namespace TA3D
 			return String(fmt::sprintf(fmt, args...));
 		}
 
-		void erase(size_type index, size_type count)
-		{
-			str.erase(index, count);
-		}
+		void erase(size_type index, size_type count);
 
-		void assign(const char* s, size_type count)
-		{
-			str.assign(s, count);
-		}
+		void assign(const char* s, size_type count);
 
-		void assign(const char* s)
-		{
-			str.assign(s);
-		}
+		void assign(const char* s);
 
-		void assign(const String& s, size_type count)
-		{
-			str.assign(s.str, 0, count);
-		}
+		void assign(const String& s, size_type count);
 
 		// Removes the last octet of the string.
 		// Note that this is not safe for UTF-8 strings.
-		void removeLast()
-		{
-			str.pop_back();
-		}
+		void removeLast();
 
 		// This is not safe on UTF-8 strings.
 		//
@@ -448,142 +253,25 @@ namespace TA3D
 		void trim();
 
 		// Replaces all occurrences of original with replacement
-		void replace(const String& original, const String& replacement)
-		{
-			std::string::size_type offset = 0;
-			std::string::size_type pos;
-			while (offset < size())
-			{
-				pos = str.find(original.str, offset);
-				if (pos == std::string::npos)
-				{
-					return;
-				}
-				str.replace(pos, original.size(), replacement.str);
-				offset = pos + replacement.size();
-			}
-		}
+		void replace(const String& original, const String& replacement);
 
-		void replace(char original, char replacement)
-		{
-			replace(String(original), String(replacement));
-		}
+		void replace(char original, char replacement);
 
-		void convertSlashesIntoBackslashes()
-		{
-			replace('/', '\\');
-		}
+		void convertSlashesIntoBackslashes();
 
-		void convertBackslashesIntoSlashes()
-		{
-			replace('\\', '/');
-		}
+		void convertBackslashesIntoSlashes();
 
-		void removeTrailingSlash()
-		{
-			if (empty())
-			{
-				return;
-			}
+		void removeTrailingSlash();
 
-			if (last() == '/' || last() == '\\')
-			{
-				chop(1);
-			}
-		}
+		bool glob(const String& pattern) const;
 
-		bool glob(const String& pattern) const
-		{
-			if (pattern.empty())
-			{
-				// if the pattern is empty,
-				// we only match if we're also empty
-				return empty();
-			}
+		size_type utf8size() const;
 
-			size_type pattern_index = 0;
+		const_utf8iterator utf8begin() const;
 
-			// place to jump back to for backtracking
-			size_type prev = npos;
+		const_utf8iterator utf8end() const;
 
-			for (size_type i = 0; i < size(); ++i)
-			{
-				if (pattern[pattern_index] == '*')
-				{
-					// if the wildcard is the last character,
-					// we're guaranteed to match
-					if (pattern_index + 1 == pattern.size())
-					{
-						return true;
-					}
-
-					// consume any additional wildcards
-					while (pattern[pattern_index + 1] == '*')
-					{
-						++pattern_index;
-					}
-
-					// if the wildcard is the last character,
-					// we're guaranteed to match
-					if (pattern_index + 1 == pattern.size())
-					{
-						return true;
-					}
-
-					// remember the position for backtracking
-					prev = pattern_index;
-
-					// check the first non-wildcard char
-					if (pattern[pattern_index + 1] == str[i])
-					{
-						pattern_index += 2;
-					}
-				}
-				else
-				{
-					if (pattern_index < pattern.size() && pattern[pattern_index] == str[i])
-					{
-						// we matched, advance to next char in pattern
-						++pattern_index;
-					}
-					else
-					{
-						// we didn't match, try to backtrack
-						if (prev == npos)
-						{
-							// no place to backtrack to, abort.
-							return false;
-						}
-
-						pattern_index = prev;
-					}
-				}
-			}
-
-			// We consumed the whole string.
-			// We matched if we also consumed the whole pattern.
-			return pattern_index == pattern.size();
-		}
-
-		size_type utf8size() const
-		{
-			return utf8::distance(str.begin(), str.end());
-		}
-
-		const_utf8iterator utf8begin() const
-		{
-			return const_utf8iterator(str.begin(), str.begin(), str.end());
-		}
-
-		const_utf8iterator utf8end() const
-		{
-			return const_utf8iterator(str.begin(), str.end(), str.end());
-		}
-
-		bool utf8valid() const
-		{
-			return utf8::is_valid(begin(), end());
-		}
+		bool utf8valid() const;
 
 		// Converts the string to uppercase in-place.
 		// This function only considers the standard latin alphabet,
@@ -597,65 +285,29 @@ namespace TA3D
 		// Other code points are left as-is.
 		String& toLower();
 
-		bool operator==(const String& rhs) const
-		{
-			return str == rhs.str;
-		}
+		bool operator==(const String& rhs) const;
 
-		bool operator!=(const String& rhs) const
-		{
-			return str != rhs.str;
-		}
+		bool operator!=(const String& rhs) const;
 
-		bool operator<(const String& rhs) const
-		{
-			return str < rhs.str;
-		}
+		bool operator<(const String& rhs) const;
 
-		bool operator<=(const String& rhs) const
-		{
-			return str <= rhs.str;
-		}
+		bool operator<=(const String& rhs) const;
 
-		bool operator>(const String& rhs) const
-		{
-			return str > rhs.str;
-		}
+		bool operator>(const String& rhs) const;
 
-		bool operator>=(const String& rhs) const
-		{
-			return str >= rhs.str;
-		}
+		bool operator>=(const String& rhs) const;
 
-		bool operator==(const char* rhs) const
-		{
-			return str == rhs;
-		}
+		bool operator==(const char* rhs) const;
 
-		bool operator!=(const char* rhs) const
-		{
-			return str != rhs;
-		}
+		bool operator!=(const char* rhs) const;
 
-		bool operator<(const char* rhs) const
-		{
-			return str < rhs;
-		}
+		bool operator<(const char* rhs) const;
 
-		bool operator<=(const char* rhs) const
-		{
-			return str <= rhs;
-		}
+		bool operator<=(const char* rhs) const;
 
-		bool operator>(const char* rhs) const
-		{
-			return str > rhs;
-		}
+		bool operator>(const char* rhs) const;
 
-		bool operator>=(const char* rhs) const
-		{
-			return str >= rhs;
-		}
+		bool operator>=(const char* rhs) const;
 
 		template <typename T>
 		String& operator<<(const T& t)
@@ -664,11 +316,7 @@ namespace TA3D
 			return *this;
 		}
 
-		String& operator<<(const NullPtr&)
-		{
-			// don't do anything
-			return *this;
-		}
+		String& operator<<(const NullPtr&);
 
 		template <typename T>
 		String& operator+=(const T& t)
@@ -677,63 +325,24 @@ namespace TA3D
 			return *this;
 		}
 
-		String& operator+=(const NullPtr&)
-		{
-			// don't do anything
-			return *this;
-		}
+		String& operator+=(const NullPtr&);
 
-		char& operator[](size_type pos)
-		{
-			return str[pos];
-		}
+		char& operator[](size_type pos);
 
-		const char& operator[](size_type pos) const
-		{
-			return str[pos];
-		}
+		const char& operator[](size_type pos) const;
 
 	private:
 		// If the octet is a UTF-8 character in the range a-z,
 		// returns the uppercase version.
 		// Otherwise, returns the octet as-is.
-		static char to_upper(char c)
-		{
-			int delta = c - 'a';
-			if (delta >= 0 && delta < 26)
-			{
-				return c & 0x5f;
-			}
-
-			return c;
-		}
+		static char to_upper(char c);
 
 		// If the octet is a UTF-8 character in the range a-z,
 		// returns the lowercase version.
 		// Otherwise, returns the octet as-is.
-		static char to_lower(char c)
-		{
-			int delta = c - 'A';
-			if (delta >= 0 && delta < 26)
-			{
-				return c | 32;
-			}
+		static char to_lower(char c);
 
-			return c;
-		}
-
-		static bool is_space(char c)
-		{
-			switch (c) {
-				case ' ':
-				case '\t':
-				case '\r':
-				case '\n':
-					return true;
-				default:
-					return false;
-			}
-		}
+		static bool is_space(char c);
 
 		std::string str;
 	};
