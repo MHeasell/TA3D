@@ -8,6 +8,7 @@
 #include <vector>
 #include <list>
 #include <algorithm>
+#include <sstream>
 
 #include <utf8.h>
 
@@ -59,9 +60,11 @@ namespace TA3D
 		}
 
 		template <typename T>
-		void append(T t)
+		void append(const T& t)
 		{
-			str.append(std::to_string(t));
+			std::ostringstream out;
+			out << t;
+			append(out.str().c_str());
 		}
 
 		void append(const char* s, size_type count)
