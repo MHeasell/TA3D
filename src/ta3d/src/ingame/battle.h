@@ -20,7 +20,7 @@
 #include <stdafx.h>
 #include <misc/string.h>
 #include "gamedata.h"
-#include <memory> // auto_ptr
+#include <memory>
 #include <gfx/gui/area.h>
 #include <gfx/sky.h>
 #include <gfx/texture.h>
@@ -280,8 +280,8 @@ namespace TA3D
 		Gui::AREA pArea;
 		//! Informations about FPS
 		FPSInfos fps;
-		//! The map of the game - TODO The auto_ptr is deprecated
-		std::auto_ptr<MAP> map;
+		//! The map of the game
+		std::unique_ptr<MAP> map;
 
 		//! \name Sky
 		//@{
