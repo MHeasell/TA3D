@@ -23,6 +23,7 @@ namespace TA3D
 		typedef std::vector<String> Vector;
 		typedef std::list<String> List;
 		typedef std::nullptr_t NullPtr;
+		typedef std::string::const_iterator const_iterator;
 
 		static const size_type npos = std::string::npos;
 
@@ -236,6 +237,27 @@ namespace TA3D
 		{
 			auto index_from_end = str.size() - n;
 			str.erase(index_from_end, n);
+		}
+
+		// Truncates the string to at most len code points
+		void truncate(size_type len)
+		{
+			if (len >= size())
+			{
+				return;
+			}
+
+			str.erase(len);
+		}
+
+		const_iterator begin() const
+		{
+			return str.begin();
+		}
+
+		const_iterator end() const
+		{
+			return str.end();
 		}
 
 		// Returns the last octet.
