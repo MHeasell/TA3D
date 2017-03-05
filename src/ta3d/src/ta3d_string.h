@@ -11,6 +11,7 @@
 #include <sstream>
 
 #include <utf8.h>
+#include <fmt/format.h>
 
 namespace TA3D
 {
@@ -71,6 +72,12 @@ namespace TA3D
 		void append(const char* s, size_type count)
 		{
 			str.append(s, count);
+		}
+
+		template <typename... Args>
+		void appendFormat(const char* fmt, const Args& ... args)
+		{
+			append(format(fmt, args...));
 		}
 
 		bool empty() const
@@ -297,6 +304,12 @@ namespace TA3D
 		size_type find_last_of(const char ch) const
 		{
 			return str.find_last_of(ch);
+		}
+
+		template <typename... Args>
+		String format(const char* fmt, const Args& ... args)
+		{
+			return String(fmt::format(fmt, args...));
 		}
 
 		void erase(size_type index, size_type count)
