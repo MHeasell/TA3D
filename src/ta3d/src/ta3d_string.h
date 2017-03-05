@@ -417,7 +417,7 @@ namespace TA3D
 		template<class T>
 		void split(T& out, const String& separators, bool keepEmptyElements = false, bool trimElements = true, bool emptyBefore = true) const
 		{
-			explode(out, emptyBefore, keepEmptyElements, trimElements);
+			explode(out, separators, emptyBefore, keepEmptyElements, trimElements);
 		}
 
 		void trimLeft();
