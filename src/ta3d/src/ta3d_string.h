@@ -386,13 +386,22 @@ namespace TA3D
 			size_type start_pos = 0;
 			while (start_pos < str.size())
 			{
-				size_type separator_pos = str.find_first_of(separators.c_str());
+				size_type separator_pos = str.find_first_of(separators.c_str(), start_pos);
 				if (separator_pos == std::string::npos)
 				{
-					separator_pos = str.size();
+					String tmp = String(str.c_str() + start_pos, str.size() - start_pos);
+					if (trimElements)
+					{
+						tmp.trim();
+					}
+					if (keepEmptyElements || tmp.notEmpty())
+					{
+						out.push_back(tmp);
+					}
+					return;
 				}
 
-				String tmp = String(str.c_str() + start_pos, str.size() - separator_pos);
+				String tmp = String(str.c_str() + start_pos, separator_pos - start_pos);
 				if (trimElements)
 				{
 					tmp.trim();
