@@ -53,7 +53,7 @@ namespace TA3D
 		GameServer::List serverList;
 		ModInfo::List modList;
 		SocketTCP sock;
-		char *buffer;
+		char* buffer;
 		int buffer_pos;
 		String currentChan;
 		bool modListChanged;
@@ -66,7 +66,7 @@ namespace TA3D
 		~NetClient();
 
 		void disconnect();
-		void connect(const String &server, const uint16 port, const String &login, const String &password, bool bRegister = false);
+		void connect(const String& server, const uint16 port, const String& login, const String& password, bool bRegister = false);
 		void reconnect();
 		NetState getState() const;
 		bool messageWaiting() const;
@@ -76,10 +76,10 @@ namespace TA3D
 		GameServer::List getServerList();
 		ModInfo::List getModList();
 		void clearMessageQueue();
-		void sendMessage(const String &msg);
-		void changeChan(const String &chan);
+		void sendMessage(const String& msg);
+		void changeChan(const String& chan);
 		void receive();
-		void sendChan(const String &msg);
+		void sendChan(const String& msg);
 		String getLogin() const;
 		String getChan() const;
 		String getServerJoined() const;
@@ -87,7 +87,7 @@ namespace TA3D
 		bool getHostAck();
 
 	private:
-		void processMessage(const String &msg);
+		void processMessage(const String& msg);
 
 	public:
 		static NetClient::Ptr instance();

@@ -78,8 +78,8 @@ namespace TA3D
 		{
 #ifdef __FTGL__lower__
 			font->Render(text.c_str(), -1,
-						 FTPoint(x, -(y + 0.5f * (-font->Descender() + font->Ascender())), z),
-						 FTPoint(), FTGL::RENDER_ALL);
+				FTPoint(x, -(y + 0.5f * (-font->Descender() + font->Ascender())), z),
+				FTPoint(), FTGL::RENDER_ALL);
 #else
 			glPushMatrix();
 			glTranslatef(x, -(y + 0.5f * (-font->Descender() + font->Ascender())), z);
@@ -289,12 +289,12 @@ namespace TA3D
 		key.toLower();
 
 		return (font_table.count(key) != 0)
-				   ? font_table[key]
-				   : internalRegisterFont(key, filename, size, type);
+			? font_table[key]
+			: internalRegisterFont(key, filename, size, type);
 	}
 
 	Font* FontManager::internalRegisterFont(const String& key, const String& filename, const int size,
-											const Font::Type type)
+		const Font::Type type)
 	{
 		String foundFilename;
 		find_font(foundFilename, TA3D_FONT_PATH, filename);

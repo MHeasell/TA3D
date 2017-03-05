@@ -57,31 +57,31 @@ namespace TA3D
 		** \param filename The filename to load
 		** \param scale The scale value
 		*/
-			void loadTDFFromFile(const String &filename, const float scale = 1.0f);
+			void loadTDFFromFile(const String& filename, const float scale = 1.0f);
 
 			//! \name Widgets rendering
 			//@{
-			void button(const float x, const float y, const float x2, const float y2, const String &Title, const bool State, const bool enabled) const;
-			void FloatMenu(float x, float y, const String::Vector &Entry, int Index, int StartEntry = 0) const;
-			void ListBox(float x1, float y1, float x2, float y2, const String::Vector &Entry, int Index, int Scroll, uint32 flags = 0) const;
-			void AppendLineToListBox(String::Vector &Entry, float x1, float x2, String line) const;
-			void OptionButton(float x, float y, const String &Title, bool Etat) const;
-			void OptionCase(float x, float y, const String &Title, bool Etat) const;
-			void TextBar(float x1, float y1, float x2, float y2, const String &Caption, bool State) const;
-			void TextEditor(float x1, float y1, float x2, float y2, const String::Vector &Entry, int row, int col, bool State) const;
+			void button(const float x, const float y, const float x2, const float y2, const String& Title, const bool State, const bool enabled) const;
+			void FloatMenu(float x, float y, const String::Vector& Entry, int Index, int StartEntry = 0) const;
+			void ListBox(float x1, float y1, float x2, float y2, const String::Vector& Entry, int Index, int Scroll, uint32 flags = 0) const;
+			void AppendLineToListBox(String::Vector& Entry, float x1, float x2, String line) const;
+			void OptionButton(float x, float y, const String& Title, bool Etat) const;
+			void OptionCase(float x, float y, const String& Title, bool Etat) const;
+			void TextBar(float x1, float y1, float x2, float y2, const String& Caption, bool State) const;
+			void TextEditor(float x1, float y1, float x2, float y2, const String::Vector& Entry, int row, int col, bool State) const;
 			void ProgressBar(float x1, float y1, float x2, float y2, int Value) const;
-			void PopupMenu(float x1, float y1, const String &msg) const;
+			void PopupMenu(float x1, float y1, const String& msg) const;
 			void ScrollBar(float x1, float y1, float x2, float y2, float Value, bool vertical = true) const;
-			int draw_text_adjust(float x1, float y1, float x2, float y2, const String &msg, int pos = 0, bool missionMode = false) const;
+			int draw_text_adjust(float x1, float y1, float x2, float y2, const String& msg, int pos = 0, bool missionMode = false) const;
 			void ObjectShadow(float x1, float y1, float x2, float y2, float dx, float dy, float alpha, float fuzzy) const;
 			//@}
 
 			//! Get the prefix
-			const String &prefix() const { return pPrefix; }
+			const String& prefix() const { return pPrefix; }
 
 			template <typename U>
-			void caption(const U &u);
-			const String &caption() const;
+			void caption(const U& u);
+			const String& caption() const;
 
 		public:
 			//! Default background for windows

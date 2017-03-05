@@ -29,29 +29,29 @@
 
 namespace TA3D
 {
-	inline byte &SurfaceByte(SDL_Surface *img, int x, int y)
+	inline byte& SurfaceByte(SDL_Surface* img, int x, int y)
 	{
 		LOG_ASSERT(x >= 0 && y >= 0 && x < img->pitch && y < img->h);
-		return ((byte *)(img->pixels))[y * img->pitch + x];
+		return ((byte*)(img->pixels))[y * img->pitch + x];
 	}
 
-	inline uint32 &SurfaceInt(SDL_Surface *img, int x, int y)
+	inline uint32& SurfaceInt(SDL_Surface* img, int x, int y)
 	{
 		LOG_ASSERT(x >= 0 && y >= 0 && (x << 2) < img->pitch && y < img->h);
-		return *(uint32 *)((byte *)(img->pixels) + (y * img->pitch) + (x << 2));
+		return *(uint32*)((byte*)(img->pixels) + (y * img->pitch) + (x << 2));
 	}
 
-	inline uint16 &SurfaceShort(SDL_Surface *img, int x, int y)
+	inline uint16& SurfaceShort(SDL_Surface* img, int x, int y)
 	{
 		LOG_ASSERT(x >= 0 && y >= 0 && (x << 1) < img->pitch && y < img->h);
-		return *(uint16 *)((byte *)(img->pixels) + (y * img->pitch) + (x << 1));
+		return *(uint16*)((byte*)(img->pixels) + (y * img->pitch) + (x << 1));
 	}
 
 	template <typename T>
-	inline T &SurfaceType(SDL_Surface *img, int x, int y)
+	inline T& SurfaceType(SDL_Surface* img, int x, int y)
 	{
 		LOG_ASSERT(x >= 0 && y >= 0 && x * sizeof(T) < img->pitch && y < img->h);
-		return *(T *)((byte *)(img->pixels) + (y * img->pitch) + (x * sizeof(T)));
+		return *(T*)((byte*)(img->pixels) + (y * img->pitch) + (x * sizeof(T)));
 	}
 }
 
@@ -68,40 +68,40 @@ namespace TA3D
 namespace TA3D
 {
 
-	void masked_blit(SDL_Surface *in, SDL_Surface *out, int x0, int y0, int x1, int y1, int w, int h);
-	void blit(SDL_Surface *in, SDL_Surface *out, int x0, int y0, int x1, int y1, int w, int h);
-	void stretch_blit(SDL_Surface *in, SDL_Surface *out, int x0, int y0, int w0, int h0, int x1, int y1, int w1, int h1);
-	void stretch_blit_smooth(SDL_Surface *in, SDL_Surface *out, int x0, int y0, int w0, int h0, int x1, int y1, int w1, int h1);
+	void masked_blit(SDL_Surface* in, SDL_Surface* out, int x0, int y0, int x1, int y1, int w, int h);
+	void blit(SDL_Surface* in, SDL_Surface* out, int x0, int y0, int x1, int y1, int w, int h);
+	void stretch_blit(SDL_Surface* in, SDL_Surface* out, int x0, int y0, int w0, int h0, int x1, int y1, int w1, int h1);
+	void stretch_blit_smooth(SDL_Surface* in, SDL_Surface* out, int x0, int y0, int w0, int h0, int x1, int y1, int w1, int h1);
 
-	SDL_Surface *shrink(const SDL_Surface *in, const int w, const int h);
+	SDL_Surface* shrink(const SDL_Surface* in, const int w, const int h);
 
-	void putpixel(SDL_Surface *bmp, int x, int y, uint32 col);
-	uint32 getpixel(SDL_Surface *bmp, int x, int y);
+	void putpixel(SDL_Surface* bmp, int x, int y, uint32 col);
+	uint32 getpixel(SDL_Surface* bmp, int x, int y);
 
-	void circlefill(SDL_Surface *bmp, int x, int y, int r, uint32 col);
+	void circlefill(SDL_Surface* bmp, int x, int y, int r, uint32 col);
 
-	void rectfill(SDL_Surface *bmp, int x0, int y0, int x1, int y1, uint32 col);
+	void rectfill(SDL_Surface* bmp, int x0, int y0, int x1, int y1, uint32 col);
 
-	SDL_Surface *convert_format_copy(SDL_Surface *bmp);
-	SDL_Surface *convert_format_24_copy(SDL_Surface *bmp);
-	SDL_Surface *convert_format_16_copy(SDL_Surface *bmp);
+	SDL_Surface* convert_format_copy(SDL_Surface* bmp);
+	SDL_Surface* convert_format_24_copy(SDL_Surface* bmp);
+	SDL_Surface* convert_format_16_copy(SDL_Surface* bmp);
 
-	SDL_Surface *convert_format(SDL_Surface *bmp);
-	SDL_Surface *convert_format_24(SDL_Surface *bmp);
-	SDL_Surface *convert_format_16(SDL_Surface *bmp);
+	SDL_Surface* convert_format(SDL_Surface* bmp);
+	SDL_Surface* convert_format_24(SDL_Surface* bmp);
+	SDL_Surface* convert_format_16(SDL_Surface* bmp);
 
 	void disable_TA_palette();
 	void enable_TA_palette();
 
-	void save_bitmap(const String &filename, SDL_Surface *bmp);
+	void save_bitmap(const String& filename, SDL_Surface* bmp);
 
-	void vflip_bitmap(SDL_Surface *bmp);
-	void hflip_bitmap(SDL_Surface *bmp);
+	void vflip_bitmap(SDL_Surface* bmp);
+	void hflip_bitmap(SDL_Surface* bmp);
 
-	SDL_Surface *LoadTex(const String &filename);
-	void SaveTex(SDL_Surface *bmp, const String &filename);
+	SDL_Surface* LoadTex(const String& filename);
+	void SaveTex(SDL_Surface* bmp, const String& filename);
 
-	void save_TGA(const String &filename, SDL_Surface *bmp, bool compress = true);
+	void save_TGA(const String& filename, SDL_Surface* bmp, bool compress = true);
 }
 
 #endif

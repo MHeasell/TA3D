@@ -47,7 +47,7 @@ namespace TA3D
 			virtual bool maySwitchToAnotherMenu();
 
 		private:
-			TA3DCONFIG *saved_config;
+			TA3DCONFIG* saved_config;
 			std::vector<String> fps_limits;
 			int nb_res;
 			int res_width[100];

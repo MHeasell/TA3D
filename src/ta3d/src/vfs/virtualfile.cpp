@@ -5,7 +5,7 @@ namespace TA3D
 {
 	namespace UTILS
 	{
-		void VirtualFile::setBuffer(byte *buf, int s, int start, int end)
+		void VirtualFile::setBuffer(byte* buf, int s, int start, int end)
 		{
 			pos = 0;
 			bufferSize = s;
@@ -21,7 +21,7 @@ namespace TA3D
 				streamSize = Math::Max(end, offset + bufferSize);
 		}
 
-		void VirtualFile::copyBuffer(byte *buf, int s, int start, int end)
+		void VirtualFile::copyBuffer(byte* buf, int s, int start, int end)
 		{
 			pos = 0;
 			bufferSize = s;
@@ -48,7 +48,7 @@ namespace TA3D
 		{
 		}
 
-		VirtualFile::VirtualFile(byte *buf, int s, int start, int end) : buffer(NULL), bufferSize(0), pos(0), offset(0), streamSize(0)
+		VirtualFile::VirtualFile(byte* buf, int s, int start, int end) : buffer(NULL), bufferSize(0), pos(0), offset(0), streamSize(0)
 		{
 			setBuffer(buf, s, start, end);
 		}
@@ -83,9 +83,9 @@ namespace TA3D
 			this->pos = Math::Clamp(pos, 0, streamSize);
 		}
 
-		int VirtualFile::read(void *q, int s)
+		int VirtualFile::read(void* q, int s)
 		{
-			char *p = (char *)q;
+			char* p = (char*)q;
 			int k = 0;
 			for (; s && pos < offset && pos < streamSize; ++pos, --s, ++p, ++k)
 				*p = 0;
@@ -104,7 +104,7 @@ namespace TA3D
 			return k + n;
 		}
 
-		bool VirtualFile::readLine(String &line)
+		bool VirtualFile::readLine(String& line)
 		{
 			if (pos == streamSize)
 				return false;
@@ -116,16 +116,16 @@ namespace TA3D
 				return true;
 			}
 
-			char *end = (char *)buffer + offset + bufferSize;
+			char* end = (char*)buffer + offset + bufferSize;
 			for (char *p = (char *)buffer + pos; p != end && *p != 0 && *p != 13 && *p != 10; ++pos, ++p)
 				line << *p;
 
 			return true;
 		}
 
-		const char *VirtualFile::data()
+		const char* VirtualFile::data()
 		{
-			return (const char *)buffer;
+			return (const char*)buffer;
 		}
 
 		void VirtualFile::close()
@@ -144,7 +144,7 @@ namespace TA3D
 			return false;
 		}
 
-		const String &VirtualFile::getRealFilename() const
+		const String& VirtualFile::getRealFilename() const
 		{
 			static String empty;
 			return empty;

@@ -36,8 +36,8 @@
 
 namespace TA3D
 {
-	std::vector<MeshTypeManager::MeshLoader> *MeshTypeManager::lMeshLoader = NULL;
-	String::Vector *MeshTypeManager::lMeshExtension = NULL;
+	std::vector<MeshTypeManager::MeshLoader>* MeshTypeManager::lMeshLoader = NULL;
+	String::Vector* MeshTypeManager::lMeshExtension = NULL;
 
 	void MeshTypeManager::registerMeshLoader(MeshLoader loader)
 	{
@@ -46,7 +46,7 @@ namespace TA3D
 		MeshTypeManager::lMeshLoader->push_back(loader);
 	}
 
-	void MeshTypeManager::registerMeshExtension(const String &ext)
+	void MeshTypeManager::registerMeshExtension(const String& ext)
 	{
 		if (!lMeshExtension)
 			lMeshExtension = new String::Vector;
@@ -116,7 +116,7 @@ namespace TA3D
 			{
 				for (int i = 0; i < 3; ++i)
 				{
-					Axe &axis = e->axe[i];
+					Axe& axis = e->axe[i];
 					if (i == 1 && (e->explosion_flag & EXPLODE_FALL))
 						axis.move_speed -= g;
 					axis.pos += axis.move_speed * dt;
@@ -128,7 +128,7 @@ namespace TA3D
 			{
 				for (int i = 0; i < 3; ++i)
 				{
-					Axe &axis = e->axe[i];
+					Axe& axis = e->axe[i];
 					if (!axis.is_moving)
 						continue;
 					axis.is_moving = false;
@@ -193,7 +193,7 @@ namespace TA3D
 		}
 	}
 
-	void Animation::animate(const float t, Vector3D &R, Vector3D &T) const
+	void Animation::animate(const float t, Vector3D& R, Vector3D& T) const
 	{
 		if (type & ROTATION)
 		{
@@ -328,7 +328,7 @@ namespace TA3D
 
 			String filename(TA3D::Paths::Caches);
 			filename << tex_cache_name[id];
-			SDL_Surface *bmp = LoadTex(filename);
+			SDL_Surface* bmp = LoadTex(filename);
 
 			if (bmp)
 			{
@@ -390,7 +390,7 @@ namespace TA3D
 		return emitter;
 	}
 
-	void Mesh::Identify(ScriptData *script) // Identifie les pièces utilisées par le script
+	void Mesh::Identify(ScriptData* script) // Identifie les pièces utilisées par le script
 	{
 		script_index = -1; // Pièce non utilisée / Unused piece
 		if (!name.empty())
@@ -401,7 +401,7 @@ namespace TA3D
 			child->Identify(script);
 	}
 
-	void Mesh::compute_center(Vector3D *center, const Vector3D &dec, int *coef) const // Calcule les coordonnÃ©es du centre de l'objet, objets liÃ©s compris
+	void Mesh::compute_center(Vector3D* center, const Vector3D& dec, int* coef) const // Calcule les coordonnÃ©es du centre de l'objet, objets liÃ©s compris
 	{
 		for (int i = 0; i < nb_vtx; ++i)
 		{
@@ -416,7 +416,7 @@ namespace TA3D
 			child->compute_center(center, dec + pos_from_parent, coef);
 	}
 
-	float Mesh::compute_size_sq(const Vector3D &center) const // CarrÃ© de la taille(on fera une racine aprÃ¨s)
+	float Mesh::compute_size_sq(const Vector3D& center) const // CarrÃ© de la taille(on fera une racine aprÃ¨s)
 	{
 		float size = 0.0f;
 		for (int i = 0; i < nb_vtx; ++i)
@@ -440,7 +440,7 @@ namespace TA3D
 		return size;
 	}
 
-	float Mesh::compute_top(float top, const Vector3D &dec) const
+	float Mesh::compute_top(float top, const Vector3D& dec) const
 	{
 		for (int i = 0; i < nb_vtx; ++i)
 			top = Math::Max(top, points[i].y + dec.y + pos_from_parent.y);
@@ -451,7 +451,7 @@ namespace TA3D
 		return top;
 	}
 
-	float Mesh::compute_bottom(float bottom, const Vector3D &dec) const
+	float Mesh::compute_bottom(float bottom, const Vector3D& dec) const
 	{
 		for (int i = 0; i < nb_vtx; ++i)
 			bottom = Math::Min(bottom, points[i].y + dec.y + pos_from_parent.y);
@@ -485,7 +485,7 @@ namespace TA3D
 		return id;
 	}
 
-	int Mesh::random_pos(const AnimationData *data_s, const int id, Vector3D *vec) const
+	int Mesh::random_pos(const AnimationData* data_s, const int id, Vector3D* vec) const
 	{
 		if (id == obj_id)
 		{
@@ -523,9 +523,9 @@ namespace TA3D
 		return 0;
 	}
 
-	void Mesh::compute_coord(AnimationData *data_s, Vector3D *pos, const bool c_part, const int p_tex, const Vector3D *target,
-							 Vector3D *upos, Matrix *M, const float size, const Vector3D *center, bool reverse,
-							 const Mesh *src, const AnimationData *src_data) const
+	void Mesh::compute_coord(AnimationData* data_s, Vector3D* pos, const bool c_part, const int p_tex, const Vector3D* target,
+		Vector3D* upos, Matrix* M, const float size, const Vector3D* center, bool reverse,
+		const Mesh* src, const AnimationData* src_data) const
 	{
 		const Vector3D opos = *pos;
 		const Matrix OM = M ? *M : Matrix();
@@ -534,15 +534,15 @@ namespace TA3D
 			if (M)
 			{
 				Vector3D ipos;
-				AnimationData::Data &data = data_s->data[script_index];
+				AnimationData::Data& data = data_s->data[script_index];
 				ipos.x = data.axe[0].pos;
 				ipos.y = data.axe[1].pos;
 				ipos.z = data.axe[2].pos;
 				*pos = *pos + (pos_from_parent + ipos) * (*M);
 				*M = RotateZYX(data.axe[2].angle * DEG2RAD,
-							   data.axe[1].angle * DEG2RAD,
-							   data.axe[0].angle * DEG2RAD) *
-					 (*M);
+						 data.axe[1].angle * DEG2RAD,
+						 data.axe[0].angle * DEG2RAD)
+					* (*M);
 				data.matrix = *M;
 				if (nb_l_index == 2)
 				{
@@ -572,7 +572,7 @@ namespace TA3D
 			Vector3D t_mod;
 			const float life = 1.0f;
 			const int nb = (Math::RandomTable() % 60) + 1;
-			ParticlesSystem *system = NULL;
+			ParticlesSystem* system = NULL;
 			for (int i = 0; i < nb; ++i)
 			{
 				bool random_vector = true;
@@ -619,7 +619,7 @@ namespace TA3D
 			next->compute_coord(data_s, pos, c_part, p_tex, target, upos, M, size, center, reverse, src, src_data);
 	}
 
-	bool Mesh::draw_shadow(Vector3D Dir, float t, AnimationData *data_s, bool alset, bool exploding_parts)
+	bool Mesh::draw_shadow(Vector3D Dir, float t, AnimationData* data_s, bool alset, bool exploding_parts)
 	{
 		const bool explodes = script_index >= 0 && data_s && (data_s->data[script_index].flag & FLAG_EXPLODE);
 		bool hide = false;
@@ -638,8 +638,8 @@ namespace TA3D
 					glRotatef(data_s->data[script_index].axe[1].angle, 0.0f, 1.0f, 0.0f);
 					glRotatef(data_s->data[script_index].axe[2].angle, 0.0f, 0.0f, 1.0f);
 					Dir = Dir * RotateXYZ(-data_s->data[script_index].axe[0].angle * DEG2RAD,
-										  -data_s->data[script_index].axe[1].angle * DEG2RAD,
-										  -data_s->data[script_index].axe[2].angle * DEG2RAD);
+									-data_s->data[script_index].axe[1].angle * DEG2RAD,
+									-data_s->data[script_index].axe[2].angle * DEG2RAD);
 				}
 				hide = data_s->data[script_index].flag & FLAG_HIDE;
 			}
@@ -715,7 +715,7 @@ namespace TA3D
 
 				if (Dir != last_dir) // Don't need to compute things twice
 				{
-					::memset((byte *)line_on, 0, nb_line);
+					::memset((byte*)line_on, 0, nb_line);
 					uint32 e = 0;
 					if (F_N == NULL)
 						F_N = new Vector3D[nb_t_index / 3];
@@ -779,7 +779,7 @@ namespace TA3D
 		return alset;
 	}
 
-	bool Mesh::draw_shadow_basic(Vector3D Dir, float t, AnimationData *data_s, bool alset, bool exploding_parts)
+	bool Mesh::draw_shadow_basic(Vector3D Dir, float t, AnimationData* data_s, bool alset, bool exploding_parts)
 	{
 		bool explodes = script_index >= 0 && data_s && (data_s->data[script_index].flag & FLAG_EXPLODE);
 		bool hide = false;
@@ -872,7 +872,7 @@ namespace TA3D
 
 				if (Dir != last_dir) // Don't need to compute things twice
 				{
-					::memset((byte *)line_on, 0, nb_line);
+					::memset((byte*)line_on, 0, nb_line);
 
 					uint16 e = 0;
 					for (int i = 0; i < nb_t_index; i += 3)
@@ -939,7 +939,7 @@ namespace TA3D
 		return alset;
 	}
 
-	int Mesh::hit(Vector3D Pos, Vector3D Dir, AnimationData *data_s, Vector3D *I, Matrix M) const
+	int Mesh::hit(Vector3D Pos, Vector3D Dir, AnimationData* data_s, Vector3D* I, Matrix M) const
 	{
 		const Matrix OM = M;
 		Matrix AM = Scale(1.0f);
@@ -977,9 +977,9 @@ namespace TA3D
 				//-----------------Code de calcul d'intersection--------------------------
 				for (int i = 0; i < nb_t_index; i += 3)
 				{
-					const Vector3D &A = points[t_index[i]];
-					const Vector3D &B = points[t_index[i + 1]];
-					const Vector3D &C = points[t_index[i + 2]];
+					const Vector3D& A = points[t_index[i]];
+					const Vector3D& B = points[t_index[i + 1]];
+					const Vector3D& C = points[t_index[i + 2]];
 					const Vector3D AB = B - A;
 					const Vector3D AC = C - A;
 					const Vector3D N = AB * AC;
@@ -1060,9 +1060,9 @@ namespace TA3D
 				{
 					for (int i = 0; i < 2; ++i) // Selection primitive ( used to allow selecting naval factories easily )
 					{
-						const Vector3D &A = points[sel[i]];
-						const Vector3D &B = points[sel[i + 1]];
-						const Vector3D &C = points[sel[3]];
+						const Vector3D& A = points[sel[i]];
+						const Vector3D& B = points[sel[i + 1]];
+						const Vector3D& C = points[sel[3]];
 						const Vector3D AB = B - A;
 						const Vector3D AC = C - A;
 						const Vector3D N = AB * AC;
@@ -1191,7 +1191,7 @@ namespace TA3D
 	}
 
 	// hit_fast is a faster version of hit but less precise, designed for use in weapon code
-	bool Mesh::hit_fast(Vector3D Pos, Vector3D Dir, AnimationData *data_s, Vector3D *I)
+	bool Mesh::hit_fast(Vector3D Pos, Vector3D Dir, AnimationData* data_s, Vector3D* I)
 	{
 		bool hide = false;
 		const Vector3D ODir = Dir;
@@ -1341,7 +1341,7 @@ namespace TA3D
 		return is_hit;
 	}
 
-	float Mesh::print_struct(float Y, float X, TA3D::Font *fnt)
+	float Mesh::print_struct(float Y, float X, TA3D::Font* fnt)
 	{
 		gfx->print(fnt, X, Y, 0.0f, 0xFFFFFFFF, String(name) << " [" << script_index << ']');
 		gfx->print(fnt, 320.0f, Y, 0.0f, 0xFFFFFFFF, String("(v:") << nb_vtx);
@@ -1367,7 +1367,7 @@ namespace TA3D
 			next->hideFlares();
 	}
 
-	Model *ModelManager::get_model(const String &name)
+	Model* ModelManager::get_model(const String& name)
 	{
 		if (name.empty())
 			return NULL;
@@ -1423,21 +1423,21 @@ namespace TA3D
 			model[i]->id = i;
 	}
 
-	void ModelManager::create_from_2d(SDL_Surface *bmp, float w, float h, float max_h, const String &filename)
+	void ModelManager::create_from_2d(SDL_Surface* bmp, float w, float h, float max_h, const String& filename)
 	{
 		mInternals.lock();
 
 		model_hashtable[ToLower(filename)] = nb_models;
 		name.push_back(filename);
 
-		Model *pModel = new Model;
+		Model* pModel = new Model;
 		model.push_back(pModel);
 		mInternals.unlock();
 
 		pModel->create_from_2d(bmp, w, h, max_h);
 	}
 
-	void MeshTypeManager::getMeshList(String::Vector &filelist)
+	void MeshTypeManager::getMeshList(String::Vector& filelist)
 	{
 		if (lMeshExtension == NULL)
 			return;
@@ -1445,7 +1445,7 @@ namespace TA3D
 			VFS::Instance()->getFilelist(String(ta3dSideData.model_dir) << '*' << *ext, filelist);
 	}
 
-	int ModelManager::load_all(ProgressNotifier *progress)
+	int ModelManager::load_all(ProgressNotifier* progress)
 	{
 		const String loading3DModelsText = I18N::Translate("Loading 3D Models");
 
@@ -1486,7 +1486,7 @@ namespace TA3D
 				mLoad.lock();
 				while (e < __end)
 				{
-					const String &filename = final_file_list[e++];
+					const String& filename = final_file_list[e++];
 					LOG_DEBUG("[Mesh] Loading `" << filename << "`");
 #ifdef _OPENMP
 					++progressIncrement;
@@ -1515,7 +1515,7 @@ namespace TA3D
 					if (get_model(Substr(filename, 0, filename.size() - 4)) == NULL) // Check if it's not already loaded
 					{
 						mLoad.unlock();
-						Model *pModel = MeshTypeManager::load(filename);
+						Model* pModel = MeshTypeManager::load(filename);
 						mLoad.lock();
 						if (pModel)
 						{
@@ -1580,10 +1580,10 @@ namespace TA3D
 		compute_topbottom();
 	}
 
-	void Model::draw(float t, AnimationData *data_s, bool sel, bool notex,
-					 bool c_part, int p_tex, const Vector3D *target, Vector3D *upos,
-					 Matrix *M, float Size, const Vector3D *Center, bool reverse, int side,
-					 bool chg_col, Mesh *src, AnimationData *src_data)
+	void Model::draw(float t, AnimationData* data_s, bool sel, bool notex,
+		bool c_part, int p_tex, const Vector3D* target, Vector3D* upos,
+		Matrix* M, float Size, const Vector3D* Center, bool reverse, int side,
+		bool chg_col, Mesh* src, AnimationData* src_data)
 	{
 		if (!mesh)
 			return;
@@ -1635,7 +1635,7 @@ namespace TA3D
 			glColor3ub(0xFF, 0xFF, 0xFF);
 	}
 
-	void Model::draw_shadow(const Vector3D &Dir, float t, AnimationData *data_s)
+	void Model::draw_shadow(const Vector3D& Dir, float t, AnimationData* data_s)
 	{
 		if (!mesh)
 			return;
@@ -1645,7 +1645,7 @@ namespace TA3D
 			mesh->draw_shadow(Dir, t, data_s, false, true);
 	}
 
-	void Model::draw_shadow_basic(const Vector3D &Dir, float t, AnimationData *data_s)
+	void Model::draw_shadow_basic(const Vector3D& Dir, float t, AnimationData* data_s)
 	{
 		if (!mesh)
 			return;
@@ -1655,7 +1655,7 @@ namespace TA3D
 			mesh->draw_shadow_basic(Dir, t, data_s, false, true);
 	}
 
-	void Model::compute_coord(AnimationData *data_s, Matrix *M) const
+	void Model::compute_coord(AnimationData* data_s, Matrix* M) const
 	{
 		if (!mesh)
 			return;
@@ -1670,7 +1670,7 @@ namespace TA3D
 		bottom = mesh->compute_bottom(99999.0f, O);
 	}
 
-	Model *MeshTypeManager::load(const String &filename)
+	Model* MeshTypeManager::load(const String& filename)
 	{
 		if (lMeshExtension == NULL)
 			return NULL;

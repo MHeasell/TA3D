@@ -3,19 +3,19 @@
 
 namespace TA3D
 {
-	Unit *Mission::Target::getUnit() const
+	Unit* Mission::Target::getUnit() const
 	{
 		if (type != TargetUnit || idx < 0 || idx >= (int)units.max_unit)
 			return NULL;
-		Unit *p = &(units.unit[idx]);
+		Unit* p = &(units.unit[idx]);
 		return (p->ID == UID) ? p : NULL;
 	}
 
-	Weapon *Mission::Target::getWeapon() const
+	Weapon* Mission::Target::getWeapon() const
 	{
 		if (type != TargetWeapon || idx < 0 || idx >= (int)weapons.weapon.size())
 			return NULL;
-		Weapon *p = &(weapons.weapon[idx]);
+		Weapon* p = &(weapons.weapon[idx]);
 		return p;
 	}
 
@@ -44,20 +44,20 @@ namespace TA3D
 		return false;
 	}
 
-	const Vector3D &Mission::Target::getPos() const
+	const Vector3D& Mission::Target::getPos() const
 	{
 		switch (type)
 		{
 			case TargetUnit:
 			{
-				const Unit *p = getUnit();
+				const Unit* p = getUnit();
 				if (p)
 					return p->Pos;
 			}
 			break;
 			case TargetWeapon:
 			{
-				const Weapon *p = getWeapon();
+				const Weapon* p = getWeapon();
 				if (p)
 					return p->Pos;
 			}
@@ -85,8 +85,8 @@ namespace TA3D
 		return empty() || ((this->mission() == MISSION_STOP || this->mission() == MISSION_STANDBY || this->mission() == MISSION_VTOL_STANDBY || this->mission() == MISSION_MOVE) && size() == 1 && front().size() == 1);
 	}
 
-#define SAVE(i) gzwrite(file, (void *)&(i), sizeof(i))
-#define LOAD(i) gzread(file, (void *)&(i), sizeof(i))
+#define SAVE(i) gzwrite(file, (void*)&(i), sizeof(i))
+#define LOAD(i) gzread(file, (void*)&(i), sizeof(i))
 
 	void Mission::Target::save(gzFile file) const
 	{

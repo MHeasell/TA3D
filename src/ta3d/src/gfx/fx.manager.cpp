@@ -352,8 +352,8 @@ namespace TA3D
 			const float s = power * (static_cast<float>(Math::RandomTable() % 9001) * 0.0001f + 0.1f);
 			const float scosb = s * cosf(b);
 			const Vector3D vs(cosf(a) * scosb,
-							  s * sinf(b),
-							  sinf(a) * scosb);
+				s * sinf(b),
+				sinf(a) * scosb);
 			const float l = static_cast<float>(Math::RandomTable() % 1001) * 0.001f - 0.5f + Math::Min(rev * vs.y, 10.0f);
 
 			pParticles.push_back(FXParticle(p, vs, l));

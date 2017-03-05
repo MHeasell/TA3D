@@ -51,10 +51,10 @@ namespace zuzuf
 			friend class hashset<T, HFn, MaxLoad>;
 
 		public:
-			tpl_iterator(HT *hset, size_t idx) : hset(hset), idx(idx) {}
-			tpl_iterator(const tpl_iterator &it) : hset(it.hset), idx(it.idx) {}
+			tpl_iterator(HT* hset, size_t idx) : hset(hset), idx(idx) {}
+			tpl_iterator(const tpl_iterator& it) : hset(it.hset), idx(it.idx) {}
 
-			tpl_iterator &operator=(const tpl_iterator &it)
+			tpl_iterator& operator=(const tpl_iterator& it)
 			{
 				hset = it.hset;
 				idx = it.idx;
@@ -66,17 +66,17 @@ namespace zuzuf
 				return const_iterator(hset, idx);
 			}
 
-			bool operator==(const iterator &it) const { return idx == it.idx; }
-			bool operator==(const const_iterator &it) const { return idx == it.idx; }
-			bool operator!=(const iterator &it) const { return idx != it.idx; }
-			bool operator!=(const const_iterator &it) const { return idx != it.idx; }
-			bool operator<(const iterator &it) const { return idx < it.idx; }
-			bool operator<(const const_iterator &it) const { return idx < it.idx; }
-			bool operator>(const iterator &it) const { return idx > it.idx; }
-			bool operator>(const const_iterator &it) const { return idx > it.idx; }
+			bool operator==(const iterator& it) const { return idx == it.idx; }
+			bool operator==(const const_iterator& it) const { return idx == it.idx; }
+			bool operator!=(const iterator& it) const { return idx != it.idx; }
+			bool operator!=(const const_iterator& it) const { return idx != it.idx; }
+			bool operator<(const iterator& it) const { return idx < it.idx; }
+			bool operator<(const const_iterator& it) const { return idx < it.idx; }
+			bool operator>(const iterator& it) const { return idx > it.idx; }
+			bool operator>(const const_iterator& it) const { return idx > it.idx; }
 
-			TT &operator*() const { return hset->data[idx]; }
-			TT *operator->() const { return hset->data + idx; }
+			TT& operator*() const { return hset->data[idx]; }
+			TT* operator->() const { return hset->data + idx; }
 
 			void operator++()
 			{
@@ -139,7 +139,7 @@ namespace zuzuf
 			}
 
 		private:
-			HT *hset;
+			HT* hset;
 			size_t idx;
 		};
 
@@ -153,10 +153,10 @@ namespace zuzuf
 
 	public:
 		inline hashset() : data(NULL), usemask(NULL), _capacity(0U), _size(0U), _mask(0U), _used(0U) {}
-		inline hashset(const hashset &v);
+		inline hashset(const hashset& v);
 		inline ~hashset();
 
-		inline hashset &operator=(const hashset &v);
+		inline hashset& operator=(const hashset& v);
 
 		inline void clear();
 
@@ -191,26 +191,26 @@ namespace zuzuf
 		inline void rehash(size_t size);
 		inline void reserve(size_t size) { rehash(size); }
 
-		inline void insert(const T &v);
+		inline void insert(const T& v);
 
-		inline iterator find(const T &key);
-		inline const_iterator find(const T &key) const;
-		inline const T &get(const T &key) const;
-		inline T &get(const T &key);
+		inline iterator find(const T& key);
+		inline const_iterator find(const T& key) const;
+		inline const T& get(const T& key) const;
+		inline T& get(const T& key);
 
-		inline bool contains(const T &key) const;
-		inline int count(const T &key) const { return contains(key); }
+		inline bool contains(const T& key) const;
+		inline int count(const T& key) const { return contains(key); }
 
-		inline void remove(const T &value);
-		inline void remove(const iterator &it);
-		inline void remove(const const_iterator &it);
-		inline void erase(const iterator &it) { remove(it); }
-		inline void erase(const const_iterator &it) { remove(it); }
-		inline void erase(const T &value) { remove(value); }
+		inline void remove(const T& value);
+		inline void remove(const iterator& it);
+		inline void remove(const const_iterator& it);
+		inline void erase(const iterator& it) { remove(it); }
+		inline void erase(const const_iterator& it) { remove(it); }
+		inline void erase(const T& value) { remove(value); }
 
 	private:
-		node_type *data;
-		unsigned char *usemask;
+		node_type* data;
+		unsigned char* usemask;
 		size_t _capacity;
 		size_t _size;
 		size_t _mask;
@@ -218,7 +218,7 @@ namespace zuzuf
 	};
 
 	template <class T, class HFn, int MaxLoad>
-	hashset<T, HFn, MaxLoad>::hashset(const hashset &v) : data(NULL), usemask(NULL), _capacity(0U), _size(0U), _mask(0U), _used(0U)
+	hashset<T, HFn, MaxLoad>::hashset(const hashset& v) : data(NULL), usemask(NULL), _capacity(0U), _size(0U), _mask(0U), _used(0U)
 	{
 		rehash(v.size());
 		for (const_iterator it = v.begin(), end = v.end(); it != end; ++it)
@@ -226,7 +226,7 @@ namespace zuzuf
 	}
 
 	template <class T, class HFn, int MaxLoad>
-	hashset<T, HFn, MaxLoad> &hashset<T, HFn, MaxLoad>::operator=(const hashset &v)
+	hashset<T, HFn, MaxLoad>& hashset<T, HFn, MaxLoad>::operator=(const hashset& v)
 	{
 		clear();
 		rehash(v.size());
@@ -277,16 +277,16 @@ namespace zuzuf
 
 		if (data == NULL)
 		{
-			data = (node_type *)malloc(sizeof(node_type) * _capacity);
-			usemask = (unsigned char *)malloc(sizeof(unsigned char) * _capacity);
+			data = (node_type*)malloc(sizeof(node_type) * _capacity);
+			usemask = (unsigned char*)malloc(sizeof(unsigned char) * _capacity);
 			memset(usemask, Empty, sizeof(unsigned char) * _capacity);
 			return;
 		}
-		node_type *o_data = data;
-		unsigned char *o_usemask = usemask;
+		node_type* o_data = data;
+		unsigned char* o_usemask = usemask;
 
-		data = (node_type *)malloc(sizeof(node_type) * _capacity);
-		usemask = (unsigned char *)malloc(sizeof(unsigned char) * _capacity);
+		data = (node_type*)malloc(sizeof(node_type) * _capacity);
+		usemask = (unsigned char*)malloc(sizeof(unsigned char) * _capacity);
 		memset(usemask, Empty, sizeof(unsigned char) * _capacity);
 
 		_used = 0U;
@@ -308,7 +308,7 @@ namespace zuzuf
 	}
 
 	template <class T, class HFn, int MaxLoad>
-	void hashset<T, HFn, MaxLoad>::insert(const T &v)
+	void hashset<T, HFn, MaxLoad>::insert(const T& v)
 	{
 		if (_used >= (_capacity * MaxLoad >> 8))
 			rehash(std::max<size_t>(_capacity << 1U, 16U));
@@ -342,7 +342,7 @@ namespace zuzuf
 	}
 
 	template <class T, class HFn, int MaxLoad>
-	bool hashset<T, HFn, MaxLoad>::contains(const T &key) const
+	bool hashset<T, HFn, MaxLoad>::contains(const T& key) const
 	{
 		if (_size == 0U)
 			return false;
@@ -367,7 +367,7 @@ namespace zuzuf
 	}
 
 	template <class T, class HFn, int MaxLoad>
-	void hashset<T, HFn, MaxLoad>::remove(const T &key)
+	void hashset<T, HFn, MaxLoad>::remove(const T& key)
 	{
 		if (_size == 0U)
 			return;
@@ -398,7 +398,7 @@ namespace zuzuf
 	}
 
 	template <class T, class HFn, int MaxLoad>
-	typename hashset<T, HFn, MaxLoad>::iterator hashset<T, HFn, MaxLoad>::find(const T &key)
+	typename hashset<T, HFn, MaxLoad>::iterator hashset<T, HFn, MaxLoad>::find(const T& key)
 	{
 		if (_size == 0U)
 			return end();
@@ -423,7 +423,7 @@ namespace zuzuf
 	}
 
 	template <class T, class HFn, int MaxLoad>
-	typename hashset<T, HFn, MaxLoad>::const_iterator hashset<T, HFn, MaxLoad>::find(const T &key) const
+	typename hashset<T, HFn, MaxLoad>::const_iterator hashset<T, HFn, MaxLoad>::find(const T& key) const
 	{
 		if (_size == 0U)
 			return end();
@@ -448,7 +448,7 @@ namespace zuzuf
 	}
 
 	template <class T, class HFn, int MaxLoad>
-	const T &hashset<T, HFn, MaxLoad>::get(const T &key) const
+	const T& hashset<T, HFn, MaxLoad>::get(const T& key) const
 	{
 		if (_size == 0U)
 		{
@@ -477,7 +477,7 @@ namespace zuzuf
 	}
 
 	template <class T, class HFn, int MaxLoad>
-	T &hashset<T, HFn, MaxLoad>::get(const T &key)
+	T& hashset<T, HFn, MaxLoad>::get(const T& key)
 	{
 		if (_size == 0U)
 		{
@@ -506,7 +506,7 @@ namespace zuzuf
 	}
 
 	template <class T, class HFn, int MaxLoad>
-	void hashset<T, HFn, MaxLoad>::remove(const iterator &it)
+	void hashset<T, HFn, MaxLoad>::remove(const iterator& it)
 	{
 		if (it.idx >= _capacity)
 			return;

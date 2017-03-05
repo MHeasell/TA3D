@@ -114,7 +114,7 @@ namespace TA3D
 			side_logos.loadGAFFromDirectory("anims\\newgame", true);
 			if (side_logos.size() == 0)
 			{
-				File *file = VFS::Instance()->readFile("anims\\newgame.gaf");
+				File* file = VFS::Instance()->readFile("anims\\newgame.gaf");
 				side_logos.loadGAFFromRawData(file, true);
 				delete file;
 			}

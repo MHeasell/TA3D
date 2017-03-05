@@ -51,7 +51,7 @@
  * Declaration of the bug reporter. It's here because it should be visible only
  * from this module.
  */
-void bug_reporter(const TA3D::String &trace);
+void bug_reporter(const TA3D::String& trace);
 
 /*!
  * \brief Obtain a backtrace and print it to stdout.
@@ -83,7 +83,7 @@ void backtrace_handler(int signum)
 			<< " -ex \"info threads\"";
 		for (size_t i = 0; i < threads.size(); ++i)
 		{
-			TA3D::String &line = threads[i];
+			TA3D::String& line = threads[i];
 			if (line.startsWith('[') || line.startsWith("0x") || line.startsWith('#'))
 				continue;
 			if (line.startsWith('*'))
@@ -109,9 +109,9 @@ void backtrace_handler(int signum)
 
 #ifdef TA3D_BUILTIN_BACKTRACE_SUPPORT
 	// Retrieving a backtrace
-	void *array[400];
+	void* array[400];
 	int size = backtrace(array, 400);
-	char **strings = backtrace_symbols(array, size);
+	char** strings = backtrace_symbols(array, size);
 
 	// Try to log it
 	TA3D::String backtrace_filename = TA3D::String(TA3D::Paths::Logs) << "backtrace.txt";
@@ -165,7 +165,7 @@ class sigpipe_exception : public std::exception
 {
 public:
 	virtual ~sigpipe_exception() throw() {}
-	virtual const char *sigpipe_what() const throw()
+	virtual const char* sigpipe_what() const throw()
 	{
 		return "broken pipe";
 	}
@@ -241,7 +241,7 @@ void clear_signals(void)
 #endif // ifdef TA3D_PLATFORM_DARWIN
 }
 
-void criticalMessage(const TA3D::String &msg)
+void criticalMessage(const TA3D::String& msg)
 {
 	std::cerr << msg << std::endl; // Output error message to stderr
 
@@ -255,7 +255,7 @@ void criticalMessage(const TA3D::String &msg)
  * crash report that would be sent to the bug report server. The user can accept to send the
  * report or not.
  */
-void bug_reporter(const TA3D::String &trace)
+void bug_reporter(const TA3D::String& trace)
 {
 	bool bSendReport = false;
 	std::string report;
@@ -290,11 +290,11 @@ void bug_reporter(const TA3D::String &trace)
 
 	// OpenGL info
 	report += "OpenGL Informations :\n";
-	(report += "Vendor: ") += (const char *)glGetString(GL_VENDOR);
-	(report += "\nRenderer: ") += (const char *)glGetString(GL_RENDERER);
-	(report += "\nVersion: ") += (const char *)glGetString(GL_VERSION);
+	(report += "Vendor: ") += (const char*)glGetString(GL_VENDOR);
+	(report += "\nRenderer: ") += (const char*)glGetString(GL_RENDERER);
+	(report += "\nVersion: ") += (const char*)glGetString(GL_VERSION);
 	report += "\nExtensions:\n";
-	const char *ext = (const char *)glGetString(GL_EXTENSIONS);
+	const char* ext = (const char*)glGetString(GL_EXTENSIONS);
 	for (; *ext; ++ext)
 		report += *ext == ' ' ? '\n' : *ext;
 	report += '\n';

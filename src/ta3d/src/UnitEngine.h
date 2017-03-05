@@ -60,7 +60,7 @@ namespace TA3D
 	{
 	public:
 		typedef Vector3D Vec;
-		typedef std::pair<const Unit *, Vec> T;
+		typedef std::pair<const Unit*, Vec> T;
 
 		struct Comparator
 		{
@@ -68,7 +68,7 @@ namespace TA3D
 
 			inline Comparator(const unsigned int N) : D(N) {}
 
-			inline bool operator()(const T &i, const T &j) const
+			inline bool operator()(const T& i, const T& j) const
 			{
 				if (i.first == j.first)
 					return false;
@@ -90,23 +90,23 @@ namespace TA3D
 			const unsigned int D;
 			const float f;
 
-			inline Predicate(const Vec &v, const unsigned int N) : D(N), f(v[N]) {}
+			inline Predicate(const Vec& v, const unsigned int N) : D(N), f(v[N]) {}
 
-			inline bool operator()(const T &i) const
+			inline bool operator()(const T& i) const
 			{
 				return i.second[D] < f;
 			}
 		};
 
 	public:
-		static inline const Vec &pos(const T &elt) { return elt.second; }
-		static inline float radius(const T &elt)
+		static inline const Vec& pos(const T& elt) { return elt.second; }
+		static inline float radius(const T& elt)
 		{
-			const Model *const model = elt.first->model;
+			const Model* const model = elt.first->model;
 			return model ? model->size2 : 0.0f;
 		}
-		static inline void getTopBottom(const std::vector<T>::const_iterator &begin, const std::vector<T>::const_iterator &end, Vec &top, Vec &bottom);
-		static inline unsigned int getPrincipalDirection(const Vec &v)
+		static inline void getTopBottom(const std::vector<T>::const_iterator& begin, const std::vector<T>::const_iterator& end, Vec& top, Vec& bottom);
+		static inline unsigned int getPrincipalDirection(const Vec& v)
 		{
 			const Vector3D m = TA3D::Math::Abs(v);
 			if (m.x > m.y)
@@ -121,7 +121,7 @@ namespace TA3D
 		}
 	};
 
-	inline void UnitTKit::getTopBottom(const std::vector<T>::const_iterator &begin, const std::vector<T>::const_iterator &end, Vec &top, Vec &bottom)
+	inline void UnitTKit::getTopBottom(const std::vector<T>::const_iterator& begin, const std::vector<T>::const_iterator& end, Vec& top, Vec& bottom)
 	{
 		top = bottom = begin->second;
 		for (std::vector<UnitTKit::T>::const_iterator i = begin; i != end; ++i)
@@ -133,7 +133,7 @@ namespace TA3D
 
 	extern int MAX_UNIT_PER_PLAYER;
 
-	void *create_unit(int type_id, int owner, Vector3D pos, bool sync = true, bool script = false);
+	void* create_unit(int type_id, int owner, Vector3D pos, bool sync = true, bool script = false);
 
 #define ICON_UNKNOWN 0x0
 #define ICON_BUILDER 0x1
@@ -157,10 +157,10 @@ namespace TA3D
 		/*----------------------- Variables générales ----------------------------------------------*/
 		uint32 nb_unit;  // Nombre d'unités
 		uint32 max_unit; // Nombre maximum d'unités stockables dans le tableau
-		Unit *unit;		 // Tableau contenant les références aux unités
+		Unit* unit;		 // Tableau contenant les références aux unités
 		uint32 index_list_size;
-		uint16 *idx_list;
-		uint16 *free_idx;
+		uint16* idx_list;
+		uint16* free_idx;
 		uint16 free_index_size[10];
 
 		/*----------------------- Variables réservées au joueur courant ----------------------------*/
@@ -187,7 +187,7 @@ namespace TA3D
 		volatile bool thread_running;
 		volatile bool thread_ask_to_stop;
 		bool wind_change;
-		MAP *map;
+		MAP* map;
 		uint32 next_unit_ID; // Used to make it unique
 		uint32 current_tick;
 		uint32 client_tick[10];
@@ -197,9 +197,9 @@ namespace TA3D
 		sint32 last_on; // Indicate the unit index which was under the cursor (mini map orders)
 
 		std::vector<uint32> visible_unit;					 // A list to store visible units
-		KDTree<UnitTKit::T, UnitTKit> *kdTree[10];			 // A KDTree filled with units to speed up target detection (one per player)
-		KDTree<UnitTKit::T, UnitTKit> *kdTreeFriends[10];	// A KDTree filled with units to speed up friend detection (one per player)
-		KDTree<UnitTKit::T, UnitTKit> *kdTreeRepairPads[10]; // A KDTree filled with units to speed up friend detection (one per player)
+		KDTree<UnitTKit::T, UnitTKit>* kdTree[10];			 // A KDTree filled with units to speed up target detection (one per player)
+		KDTree<UnitTKit::T, UnitTKit>* kdTreeFriends[10];	// A KDTree filled with units to speed up friend detection (one per player)
+		KDTree<UnitTKit::T, UnitTKit>* kdTreeRepairPads[10]; // A KDTree filled with units to speed up friend detection (one per player)
 		bool shootallMode;
 
 		std::vector<Vector3D> hbars_bkg;
@@ -207,14 +207,14 @@ namespace TA3D
 		std::vector<uint32> hbars_color;
 
 	public:
-		float *mini_pos;  // Position on mini map
-		uint32 *mini_col; // Colors of units
+		float* mini_pos;  // Position on mini map
+		uint32* mini_col; // Colors of units
 
 	private:
-		virtual uint32 InterfaceMsg(const uint32 MsgID, const String &msg); // Manage signals sent through the interface to unit manager
+		virtual uint32 InterfaceMsg(const uint32 MsgID, const String& msg); // Manage signals sent through the interface to unit manager
 
 	protected:
-		void proc(void *);
+		void proc(void*);
 		void signalExitThread();
 
 	public:
@@ -236,7 +236,7 @@ namespace TA3D
 
 		void drawHealthBars(); // Draw health bars / dessine les barres de vie
 
-		void draw_shadow(float t, const Vector3D &Dir, float alpha = 0.5f); // Dessine les ombres des unités visibles
+		void draw_shadow(float t, const Vector3D& Dir, float alpha = 0.5f); // Dessine les ombres des unités visibles
 
 		void draw_mini(float map_w, float map_h, int mini_w, int mini_h); // Repère les unités sur la mini-carte
 
@@ -251,25 +251,25 @@ namespace TA3D
 		** \param pos The user selection, from the mouse coordinates
 		** /return True if at least one unit has been selected
 		*/
-		bool selectUnits(const RectTest &reigon);
+		bool selectUnits(const RectTest& reigon);
 
-		int pick(Camera &cam);
+		int pick(Camera& cam);
 
 		int pick_minimap();
 
-		void give_order_move(int player_id, const Vector3D &target, bool set = true, byte flags = 0);
+		void give_order_move(int player_id, const Vector3D& target, bool set = true, byte flags = 0);
 
-		void give_order_patrol(int player_id, const Vector3D &target, bool set = true);
+		void give_order_patrol(int player_id, const Vector3D& target, bool set = true);
 
 		void give_order_guard(int player_id, int target, bool set = true);
 
-		void give_order_unload(int player_id, const Vector3D &target, bool set = true);
+		void give_order_unload(int player_id, const Vector3D& target, bool set = true);
 
 		void give_order_load(int player_id, int target, bool set = true);
 
-		void give_order_build(int player_id, int unit_type_id, const Vector3D &target, bool set = true);
+		void give_order_build(int player_id, int unit_type_id, const Vector3D& target, bool set = true);
 
-		bool remove_order(int player_id, const Vector3D &target);
+		bool remove_order(int player_id, const Vector3D& target);
 
 		void complete_menu(int index, bool hide_info = false, bool hide_bpic = false);
 
@@ -277,7 +277,7 @@ namespace TA3D
 
 	extern INGAME_UNITS units;
 
-	bool can_be_built(const Vector3D &Pos, const int unit_type_id, const int player_id);
+	bool can_be_built(const Vector3D& Pos, const int unit_type_id, const int player_id);
 
 	bool can_be_there(const int px, const int py, const int unit_type_id, const int player_id, const int unit_id = -1);
 

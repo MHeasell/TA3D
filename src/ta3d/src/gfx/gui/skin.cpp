@@ -27,8 +27,7 @@ namespace TA3D
 	{
 
 		Skin::Skin()
-			: wnd_background(0), bkg_w(0), bkg_h(0), text_y_offset(0.f),
-			  pCacheFontHeight(gui_font->height())
+			: wnd_background(0), bkg_w(0), bkg_h(0), text_y_offset(0.f), pCacheFontHeight(gui_font->height())
 		{
 			init();
 		}
@@ -86,7 +85,7 @@ namespace TA3D
 			gfx->destroy_texture(wnd_background);
 		}
 
-		void Skin::loadTDFFromFile(const String &filename, const float scale)
+		void Skin::loadTDFFromFile(const String& filename, const float scale)
 		{
 			destroy(); // In case there is a skin loaded so we don't waste memory
 
@@ -139,7 +138,7 @@ namespace TA3D
 				wnd_background = gfx->load_texture(tex_file_name, FILTER_LINEAR, &bkg_w, &bkg_h, false);
 		}
 
-		void Skin::button(const float x, const float y, const float x2, const float y2, const String &Title, const bool State, const bool enabled) const
+		void Skin::button(const float x, const float y, const float x2, const float y2, const String& Title, const bool State, const bool enabled) const
 		{
 			gfx->set_alpha_blending();
 			if (enabled)
@@ -152,7 +151,7 @@ namespace TA3D
 
 			if (!Title.empty())
 			{
-				const TEXT_COLOR &color = enabled ? button_color : button_color_disabled;
+				const TEXT_COLOR& color = enabled ? button_color : button_color_disabled;
 				if (State)
 					color.print(gui_font, (x + x2) * 0.5f - (gui_font->length(Title) * 0.5f) + 1.0f, (y + y2 - pCacheFontHeight) * 0.5f + 1.0f, Title);
 				else
@@ -164,7 +163,7 @@ namespace TA3D
 	|        Draw a list box displaying the content of Entry                     |
 	\---------------------------------------------------------------------------*/
 
-		void Skin::ListBox(float x1, float y1, float x2, float y2, const String::Vector &Entry, int Index, int Scroll, uint32 flags) const
+		void Skin::ListBox(float x1, float y1, float x2, float y2, const String::Vector& Entry, int Index, int Scroll, uint32 flags) const
 		{
 			gfx->set_color(0xFFFFFFFF);
 
@@ -189,7 +188,7 @@ namespace TA3D
 					pCacheDrawTextStr = Substr(pCacheDrawTextStr, 3, pCacheDrawTextStr.size() - 3);
 					glDisable(GL_TEXTURE_2D);
 					gfx->rectfill(x1 + text_background.x1, y1 + text_background.y1 + pCacheFontHeight * float(line),
-								  x2 + text_background.x2 - scroll[0].sw, y1 + text_background.y1 + pCacheFontHeight * float(line + 1), makeacol(0x7F, 0x7F, 0xFF, 0xFF));
+						x2 + text_background.x2 - scroll[0].sw, y1 + text_background.y1 + pCacheFontHeight * float(line + 1), makeacol(0x7F, 0x7F, 0xFF, 0xFF));
 				}
 				rest.clear();
 				do
@@ -233,7 +232,7 @@ namespace TA3D
 					else
 						rest.clear();
 					gfx->print(gui_font, 10.0f + x1 + text_background.x1, y1 + text_background.y1 + pCacheFontHeight * float(line),
-							   0.0f, White, pCacheDrawTextStr);
+						0.0f, White, pCacheDrawTextStr);
 				} while (!rest.empty());
 			}
 
@@ -242,11 +241,11 @@ namespace TA3D
 				TotalScroll = 0;
 
 			ScrollBar(x2 + text_background.x2 - scroll[0].sw, y1 + text_background.y1,
-					  x2 + text_background.x2, y2 + text_background.y2,
-					  TotalScroll ? ((float)Scroll) / (float)TotalScroll : 0.0f, true);
+				x2 + text_background.x2, y2 + text_background.y2,
+				TotalScroll ? ((float)Scroll) / (float)TotalScroll : 0.0f, true);
 		}
 
-		void Skin::AppendLineToListBox(String::Vector &Entry, float x1, float x2, String line) const
+		void Skin::AppendLineToListBox(String::Vector& Entry, float x1, float x2, String line) const
 		{
 			String rest;
 			do
@@ -288,7 +287,7 @@ namespace TA3D
 	  |        Draw a popup menu displaying the text msg using the skin object     |
 	  \---------------------------------------------------------------------------*/
 
-		void Skin::PopupMenu(float x1, float y1, const String &msg) const
+		void Skin::PopupMenu(float x1, float y1, const String& msg) const
 		{
 			float x2 = x1;
 			std::vector<String> Entry;
@@ -324,9 +323,9 @@ namespace TA3D
 			}
 
 			ObjectShadow(x1, y1,
-						 x2, y2,
-						 2, 2,
-						 0.5f, 4.0f);
+				x2, y2,
+				2, 2,
+				0.5f, 4.0f);
 
 			gfx->set_alpha_blending();
 			gfx->set_color(0xFFFFFFFF);
@@ -343,7 +342,7 @@ namespace TA3D
 	  |        Draw a floatting menu with the parameters from Entry[]              |
 	  \---------------------------------------------------------------------------*/
 
-		void Skin::FloatMenu(float x, float y, const String::Vector &Entry, int Index, int StartEntry) const
+		void Skin::FloatMenu(float x, float y, const String::Vector& Entry, int Index, int StartEntry) const
 		{
 			if (StartEntry < (int)Entry.size())
 			{
@@ -354,9 +353,9 @@ namespace TA3D
 				width += menu_background.x1 - menu_background.x2;
 
 				ObjectShadow(x, y,
-							 x + width, y + menu_background.y1 - menu_background.y2 + pCacheFontHeight * float(Entry.size() - StartEntry),
-							 2, 2,
-							 0.5f, 4.0f);
+					x + width, y + menu_background.y1 - menu_background.y2 + pCacheFontHeight * float(Entry.size() - StartEntry),
+					2, 2,
+					0.5f, 4.0f);
 
 				gfx->set_color(0xFFFFFFFF);
 				gfx->set_alpha_blending();
@@ -377,7 +376,7 @@ namespace TA3D
 	  |        Draw an option button with text Title                               |
 	  \---------------------------------------------------------------------------*/
 
-		void Skin::OptionButton(float x, float y, const String &Title, bool State) const
+		void Skin::OptionButton(float x, float y, const String& Title, bool State) const
 		{
 			gfx->set_color(0xFFFFFFFF);
 			gfx->set_alpha_blending();
@@ -392,7 +391,7 @@ namespace TA3D
 	  |        Draw an option case with text Title                                 |
 	  \---------------------------------------------------------------------------*/
 
-		void Skin::OptionCase(float x, float y, const String &Title, bool State) const
+		void Skin::OptionCase(float x, float y, const String& Title, bool State) const
 		{
 			gfx->set_color(0xFFFFFFFF);
 			gfx->set_alpha_blending();
@@ -407,7 +406,7 @@ namespace TA3D
 	  |        Draw a TEXTEDITOR widget (a large text input widget)                |
 	  \---------------------------------------------------------------------------*/
 
-		void Skin::TextEditor(float x1, float y1, float x2, float y2, const String::Vector &Entry, int row, int col, bool State) const
+		void Skin::TextEditor(float x1, float y1, float x2, float y2, const String::Vector& Entry, int row, int col, bool State) const
 		{
 			bool blink = State && (msec_timer % 1000) >= 500;
 
@@ -470,16 +469,16 @@ namespace TA3D
 					buf = SubstrUTF8(buf, s);
 
 					gfx->print(gui_font,
-							   x1 + text_background.x1,
-							   y1 + text_background.y1 + text_y_offset + pCacheFontHeight * float(y),
-							   0.0f,
-							   White,
-							   strtoprint);
+						x1 + text_background.x1,
+						y1 + text_background.y1 + text_y_offset + pCacheFontHeight * float(y),
+						0.0f,
+						White,
+						strtoprint);
 					if (row == y + H && x <= col && col < x + s && blink)
 					{
 						gfx->print(gui_font, x1 + text_background.x1 + gui_font->length(SubstrUTF8(strtoprint, 0, col - x)),
-								   y1 + text_background.y1 + text_y_offset + pCacheFontHeight * float(y),
-								   0.0f, White, "_");
+							y1 + text_background.y1 + text_y_offset + pCacheFontHeight * float(y),
+							0.0f, White, "_");
 					}
 					x += s;
 					if (!buf.empty())
@@ -493,8 +492,8 @@ namespace TA3D
 				if (y + H == row && col == row_size && blink)
 				{
 					gfx->print(gui_font, x1 + text_background.x1 + gui_font->length(strtoprint),
-							   y1 + text_background.y1 + text_y_offset + pCacheFontHeight * float(y),
-							   0.0f, White, "_");
+						y1 + text_background.y1 + text_y_offset + pCacheFontHeight * float(y),
+						0.0f, White, "_");
 				}
 				++y;
 			}
@@ -504,7 +503,7 @@ namespace TA3D
 	  |        Draw a text input bar, a way for user to enter text                 |
 	  \---------------------------------------------------------------------------*/
 
-		void Skin::TextBar(float x1, float y1, float x2, float y2, const String &Caption, bool State) const
+		void Skin::TextBar(float x1, float y1, float x2, float y2, const String& Caption, bool State) const
 		{
 			bool blink = State && (msec_timer % 1000) >= 500;
 
@@ -581,7 +580,7 @@ namespace TA3D
 	  |        Draw a the given text within the given space                        |
 	  \---------------------------------------------------------------------------*/
 
-		int Skin::draw_text_adjust(float x1, float y1, float x2, float y2, const String &msg, int pos, bool missionMode) const
+		int Skin::draw_text_adjust(float x1, float y1, float x2, float y2, const String& msg, int pos, bool missionMode) const
 		{
 			int last = 0;
 			String pCacheDrawTextStr;
@@ -659,7 +658,7 @@ namespace TA3D
 				uint32 current_color = 0xFFFFFFFF;
 				for (unsigned int e = pos; e < pCacheDrawTextVector.size(); ++e)
 				{
-					const String &item = pCacheDrawTextVector[e];
+					const String& item = pCacheDrawTextVector[e];
 					if (y1 + pCacheFontHeight * float(e + 1 - pos) <= y2)
 					{
 						float x_offset = 0.0f;

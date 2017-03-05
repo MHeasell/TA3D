@@ -49,7 +49,7 @@ namespace TA3D
 		}
 
 		template <typename T>
-		inline T Clamp(const T &v, const T m, const T M)
+		inline T Clamp(const T& v, const T m, const T M)
 		{
 			return (v > M) ? M : v < m ? m : v;
 		}

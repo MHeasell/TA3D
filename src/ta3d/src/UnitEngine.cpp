@@ -213,7 +213,7 @@ namespace TA3D
 		t.x = float(((int)(t.x) + map->map_w_d) >> 3);
 		t.z = float(((int)(t.z) + map->map_h_d) >> 3);
 		t.y = map->get_max_rect_h((int)t.x, (int)t.z, unit_manager.unit_type[unit_type_id]->FootprintX,
-								  unit_manager.unit_type[unit_type_id]->FootprintZ);
+			unit_manager.unit_type[unit_type_id]->FootprintZ);
 		if (unit_manager.unit_type[unit_type_id]->floatting())
 			t.y = Math::Max(t.y, map->sealvl + ((float)unit_manager.unit_type[unit_type_id]->AltFromSeaLevel - (float)unit_manager.unit_type[unit_type_id]->WaterLine) * H_DIV);
 		t.x = t.x * 8.0f - (float)map->map_w_d;
@@ -526,7 +526,7 @@ namespace TA3D
 	}
 
 	bool can_be_there_ai(const int px, const int py, const int unit_type_id,
-						 const int, const int unit_id, const bool leave_space)
+		const int, const int unit_id, const bool leave_space)
 	{
 		if (unit_type_id < 0 || unit_type_id >= unit_manager.nb_unit)
 			return false;
@@ -565,7 +565,7 @@ namespace TA3D
 	}
 
 	bool can_be_there(const int px, const int py, const int unit_type_id,
-					  const int, const int unit_id)
+		const int, const int unit_id)
 	{
 		if (unit_type_id < 0 || unit_type_id >= unit_manager.nb_unit)
 			return false;
@@ -706,13 +706,13 @@ namespace TA3D
 						buf << nb;
 						glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 						gfx->print(gfx->TA_font,
-								   float(px + 1) + (float)pw * 0.5f - 0.5f * gfx->TA_font->length(buf),
-								   float(py + 1) + (float)ph * 0.5f - 0.5f * gfx->TA_font->height(),
-								   0.0f, Black, buf);
+							float(px + 1) + (float)pw * 0.5f - 0.5f * gfx->TA_font->length(buf),
+							float(py + 1) + (float)ph * 0.5f - 0.5f * gfx->TA_font->height(),
+							0.0f, Black, buf);
 						gfx->print(gfx->TA_font,
-								   (float)px + (float)pw * 0.5f - 0.5f * gfx->TA_font->length(buf),
-								   (float)py + (float)ph * 0.5f - 0.5f * gfx->TA_font->height(),
-								   0.0f, 0xFFFFFFFFU, buf);
+							(float)px + (float)pw * 0.5f - 0.5f * gfx->TA_font->length(buf),
+							(float)py + (float)ph * 0.5f - 0.5f * gfx->TA_font->height(),
+							0.0f, 0xFFFFFFFFU, buf);
 					}
 					else
 					{
@@ -725,13 +725,13 @@ namespace TA3D
 								buf << (int)unit[index].planned_weapons + 1 << '(' << stock << ')';
 							glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 							gfx->print(gfx->TA_font,
-									   float(px + 1) + (float)pw * 0.5f - 0.5f * gfx->TA_font->length(buf),
-									   float(py + 1) + (float)ph * 0.5f - 0.5f * gfx->TA_font->height(),
-									   0.0f, Black, buf);
+								float(px + 1) + (float)pw * 0.5f - 0.5f * gfx->TA_font->length(buf),
+								float(py + 1) + (float)ph * 0.5f - 0.5f * gfx->TA_font->height(),
+								0.0f, Black, buf);
 							gfx->print(gfx->TA_font,
-									   (float)px + (float)pw * 0.5f - 0.5f * gfx->TA_font->length(buf),
-									   (float)py + (float)ph * 0.5f - 0.5f * gfx->TA_font->height(),
-									   0.0f, 0xFFFFFFFFU, buf);
+								(float)px + (float)pw * 0.5f - 0.5f * gfx->TA_font->length(buf),
+								(float)py + (float)ph * 0.5f - 0.5f * gfx->TA_font->height(),
+								0.0f, 0xFFFFFFFFU, buf);
 						}
 					}
 				}
@@ -764,9 +764,9 @@ namespace TA3D
 			{
 				glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 				gfx->print_center(gfx->normal_font,
-								  (float)ta3dSideData.side_int_data[players.side_view].UnitName.x1,
-								  (float)ta3dSideData.side_int_data[players.side_view].UnitName.y1,
-								  0.0f, 0xFFFFFFFF, unit_manager.unit_type[unit[index].type_id]->name);
+					(float)ta3dSideData.side_int_data[players.side_view].UnitName.x1,
+					(float)ta3dSideData.side_int_data[players.side_view].UnitName.y1,
+					0.0f, 0xFFFFFFFF, unit_manager.unit_type[unit[index].type_id]->name);
 				if (target && !unit[index].mission.empty() && (unit[index].mission->getFlags() & MISSION_FLAG_TARGET_WEAPON) != MISSION_FLAG_TARGET_WEAPON)
 				{
 					unit[index].unlock();
@@ -775,9 +775,9 @@ namespace TA3D
 					{
 						glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 						gfx->print_center(gfx->normal_font,
-										  (float)ta3dSideData.side_int_data[players.side_view].UnitName2.x1,
-										  (float)ta3dSideData.side_int_data[players.side_view].UnitName2.y1,
-										  0.0f, 0xFFFFFFFF, unit_manager.unit_type[target->type_id]->name);
+							(float)ta3dSideData.side_int_data[players.side_view].UnitName2.x1,
+							(float)ta3dSideData.side_int_data[players.side_view].UnitName2.y1,
+							0.0f, 0xFFFFFFFF, unit_manager.unit_type[target->type_id]->name);
 					}
 					target->unlock();
 					unit[index].lock();
@@ -786,9 +786,9 @@ namespace TA3D
 				{
 					glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 					gfx->print_center(gfx->normal_font,
-									  (float)ta3dSideData.side_int_data[players.side_view].UnitName2.x1,
-									  (float)ta3dSideData.side_int_data[players.side_view].UnitName2.y1,
-									  0.0f, 0xFFFFFFFF, I18N::Translate("weapon"));
+						(float)ta3dSideData.side_int_data[players.side_view].UnitName2.x1,
+						(float)ta3dSideData.side_int_data[players.side_view].UnitName2.y1,
+						0.0f, 0xFFFFFFFF, I18N::Translate("weapon"));
 				}
 
 				glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_COLOR);
@@ -798,23 +798,23 @@ namespace TA3D
 				{
 					gfx->set_color(ta3dSideData.side_int_data[players.side_view].metal_color);
 					gfx->print_center(gfx->small_font,
-									  (float)ta3dSideData.side_int_data[players.side_view].UnitMetalMake.x1,
-									  (float)ta3dSideData.side_int_data[players.side_view].UnitMetalMake.y1,
-									  0.0f, String().format("+%.2f", unit[index].cur_metal_prod));
+						(float)ta3dSideData.side_int_data[players.side_view].UnitMetalMake.x1,
+						(float)ta3dSideData.side_int_data[players.side_view].UnitMetalMake.y1,
+						0.0f, String().format("+%.2f", unit[index].cur_metal_prod));
 					gfx->print_center(gfx->small_font,
-									  (float)ta3dSideData.side_int_data[players.side_view].UnitMetalUse.x1,
-									  (float)ta3dSideData.side_int_data[players.side_view].UnitMetalUse.y1,
-									  0.0f, String().format("-%.2f", unit[index].cur_metal_cons));
+						(float)ta3dSideData.side_int_data[players.side_view].UnitMetalUse.x1,
+						(float)ta3dSideData.side_int_data[players.side_view].UnitMetalUse.y1,
+						0.0f, String().format("-%.2f", unit[index].cur_metal_cons));
 
 					gfx->set_color(ta3dSideData.side_int_data[players.side_view].energy_color);
 					gfx->print_center(gfx->small_font,
-									  (float)ta3dSideData.side_int_data[players.side_view].UnitEnergyMake.x1,
-									  (float)ta3dSideData.side_int_data[players.side_view].UnitEnergyMake.y1,
-									  0.0f, String().format("+%.2f", unit[index].cur_energy_prod));
+						(float)ta3dSideData.side_int_data[players.side_view].UnitEnergyMake.x1,
+						(float)ta3dSideData.side_int_data[players.side_view].UnitEnergyMake.y1,
+						0.0f, String().format("+%.2f", unit[index].cur_energy_prod));
 					gfx->print_center(gfx->small_font,
-									  (float)ta3dSideData.side_int_data[players.side_view].UnitEnergyUse.x1,
-									  (float)ta3dSideData.side_int_data[players.side_view].UnitEnergyUse.y1,
-									  0.0f, String().format("-%.2f", unit[index].cur_energy_cons));
+						(float)ta3dSideData.side_int_data[players.side_view].UnitEnergyUse.x1,
+						(float)ta3dSideData.side_int_data[players.side_view].UnitEnergyUse.y1,
+						0.0f, String().format("-%.2f", unit[index].cur_energy_cons));
 				}
 
 				glColor4ub(0xFF, 0xFF, 0xFF, 0xFF);
@@ -866,13 +866,13 @@ namespace TA3D
 					const UnitType* const pType = unit_manager.unit_type[unit[index].type_id];
 					const InterfaceData& side_data = ta3dSideData.side_int_data[players.side_view];
 					glVertex2f((float)side_data.DamageBar.x1,
-							   (float)side_data.DamageBar.y1);
+						(float)side_data.DamageBar.y1);
 					glVertex2f((float)side_data.DamageBar.x1 + unit[index].hp / float(pType->MaxDamage) * float(side_data.DamageBar.x2 - side_data.DamageBar.x1),
-							   (float)side_data.DamageBar.y1);
+						(float)side_data.DamageBar.y1);
 					glVertex2f((float)side_data.DamageBar.x1 + unit[index].hp / float(pType->MaxDamage) * float(side_data.DamageBar.x2 - side_data.DamageBar.x1),
-							   (float)side_data.DamageBar.y2);
+						(float)side_data.DamageBar.y2);
 					glVertex2f((float)side_data.DamageBar.x1,
-							   (float)side_data.DamageBar.y2);
+						(float)side_data.DamageBar.y2);
 				}
 
 				if (unit[index].owner_id == players.local_human_id)
@@ -886,13 +886,13 @@ namespace TA3D
 							const UnitType* const pType = unit_manager.unit_type[target->type_id];
 							const InterfaceData& side_data = ta3dSideData.side_int_data[players.side_view];
 							glVertex2f((float)side_data.DamageBar2.x1,
-									   (float)side_data.DamageBar2.y1);
+								(float)side_data.DamageBar2.y1);
 							glVertex2f((float)side_data.DamageBar2.x1 + target->hp / float(pType->MaxDamage) * float(side_data.DamageBar2.x2 - side_data.DamageBar2.x1),
-									   (float)side_data.DamageBar2.y1);
+								(float)side_data.DamageBar2.y1);
 							glVertex2f((float)side_data.DamageBar2.x1 + target->hp / float(pType->MaxDamage) * float(side_data.DamageBar2.x2 - side_data.DamageBar2.x1),
-									   (float)side_data.DamageBar2.y2);
+								(float)side_data.DamageBar2.y2);
 							glVertex2f((float)side_data.DamageBar2.x1,
-									   (float)side_data.DamageBar2.y2);
+								(float)side_data.DamageBar2.y2);
 						}
 						target->unlock();
 						unit[index].lock();
@@ -904,13 +904,13 @@ namespace TA3D
 							p = 0.0f;
 						const InterfaceData& side_data = ta3dSideData.side_int_data[players.side_view];
 						glVertex2f((float)side_data.DamageBar2.x1,
-								   (float)side_data.DamageBar2.y1);
+							(float)side_data.DamageBar2.y1);
 						glVertex2f((float)side_data.DamageBar2.x1 + p * float(side_data.DamageBar2.x2 - side_data.DamageBar2.x1),
-								   (float)side_data.DamageBar2.y1);
+							(float)side_data.DamageBar2.y1);
 						glVertex2f((float)side_data.DamageBar2.x1 + p * float(side_data.DamageBar2.x2 - side_data.DamageBar2.x1),
-								   (float)side_data.DamageBar2.y2);
+							(float)side_data.DamageBar2.y2);
 						glVertex2f((float)side_data.DamageBar2.x1,
-								   (float)side_data.DamageBar2.y2);
+							(float)side_data.DamageBar2.y2);
 					}
 				}
 
@@ -1276,13 +1276,13 @@ namespace TA3D
 		for (uint32 i = 0; i < players.count(); ++i)
 		{
 			player_col_32[i] = makeacol((int)(player_color[player_color_map[i] * 3] * 255.0f),
-										(int)(player_color[player_color_map[i] * 3 + 1] * 255.0f),
-										(int)(player_color[player_color_map[i] * 3 + 2] * 255.0f),
-										i);
+				(int)(player_color[player_color_map[i] * 3 + 1] * 255.0f),
+				(int)(player_color[player_color_map[i] * 3 + 2] * 255.0f),
+				i);
 			player_col_32_h[i] = makeacol((int)(player_color[player_color_map[i] * 3] * 127.5f),
-										  (int)(player_color[player_color_map[i] * 3 + 1] * 127.5f),
-										  (int)(player_color[player_color_map[i] * 3 + 2] * 127.5f),
-										  i);
+				(int)(player_color[player_color_map[i] * 3 + 1] * 127.5f),
+				(int)(player_color[player_color_map[i] * 3 + 2] * 127.5f),
+				i);
 		}
 
 		pMutex.lock();

@@ -29,7 +29,7 @@ namespace TA3D
 		return (!size) ? 0.f : (float)(pos * 100.0 / size);
 	}
 
-	void Http::proc(void * /*param*/)
+	void Http::proc(void* /*param*/)
 	{
 		bStop = false;
 
@@ -139,7 +139,7 @@ namespace TA3D
 						{
 							/* i points to the second LF */
 							/* output the buffer to the file */
-							f.write((char *)(buffer + i + 1), count - i - 1);
+							f.write((char*)(buffer + i + 1), count - i - 1);
 							pos += count - i - 1;
 							size = Math::Max(size, pos);
 							break;
@@ -161,7 +161,7 @@ namespace TA3D
 				}
 				else
 				{
-					f.write((const char *)buffer, count);
+					f.write((const char*)buffer, count);
 					pos += count;
 					size = Math::Max(size, pos);
 				}
@@ -187,7 +187,7 @@ namespace TA3D
 		return isRunning();
 	}
 
-	void Http::get(const String &filename, const String &url)
+	void Http::get(const String& filename, const String& url)
 	{
 		destroyThread();
 		this->filename = filename;
@@ -209,7 +209,7 @@ namespace TA3D
 		destroyThread();
 	}
 
-	String Http::request(const String &servername, const String &_request)
+	String Http::request(const String& servername, const String& _request)
 	{
 		SocketTCP sock;
 		char buffer[4096];
@@ -296,7 +296,7 @@ namespace TA3D
 		return f;
 	}
 
-	bool Http::getFile(const String &filename, const String &servername, const String &_request)
+	bool Http::getFile(const String& filename, const String& servername, const String& _request)
 	{
 		SocketTCP sock;
 		char buffer[4096];
@@ -373,13 +373,13 @@ namespace TA3D
 						{
 							/* i points to the second LF */
 							/* output the buffer to the file */
-							f.write((const char *)(buffer + i + 1), count - i - 1);
+							f.write((const char*)(buffer + i + 1), count - i - 1);
 							break;
 						}
 					}
 				}
 				else
-					f.write((const char *)buffer, count);
+					f.write((const char*)buffer, count);
 			}
 		}
 		sock.close();

@@ -29,7 +29,7 @@ namespace TA3D
 	class HWLight
 	{
 	public:
-		static HWLight *inGame;
+		static HWLight* inGame;
 
 	public:
 		inline HWLight() { init(); }
@@ -54,13 +54,13 @@ namespace TA3D
 		** \brief
 		** \param c
 		*/
-		void Set(Camera &c);
+		void Set(Camera& c);
 
 		/*!
 		** \brief Set a camera from the light position, centered on the view frustum of c, used for shadow mapping
 		** \param c
 		*/
-		void SetView(const std::vector<Vector3D> &frustum);
+		void SetView(const std::vector<Vector3D>& frustum);
 
 	public:
 		//! Position

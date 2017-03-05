@@ -5,7 +5,7 @@
 
 namespace TA3D
 {
-	Mods *Mods::instance()
+	Mods* Mods::instance()
 	{
 		static Mods sInstance;
 		return &sInstance;
@@ -116,7 +116,7 @@ namespace TA3D
 		return modList;
 	}
 
-	ModInfo *Mods::getMod(int ID)
+	ModInfo* Mods::getMod(int ID)
 	{
 		MutexLocker mLock(pMutex);
 		for (ModInfo::List::iterator i = mods.begin(); i != mods.end(); ++i)

@@ -50,7 +50,7 @@ namespace TA3D
 	class GFX : public ObjectSync, protected IInterface
 	{
 	public:
-		typedef GFX *Ptr;
+		typedef GFX* Ptr;
 
 	public:
 		//! \name 2D/3D Mode
@@ -81,7 +81,7 @@ namespace TA3D
 		** \param filealpha The mask
 		** \return A valid SDL_Surface
 		*/
-		static SDL_Surface *LoadMaskedTextureToBmp(const String &file, const String &filealpha);
+		static SDL_Surface* LoadMaskedTextureToBmp(const String& file, const String& filealpha);
 
 	public:
 		//! \name Constructor & Destructor
@@ -163,9 +163,9 @@ namespace TA3D
 		*/
 		float get_a(const uint32 col) const { return (float)geta(col) * BYTE_TO_FLOAT; }
 
-		inline void loadVertex(const Vector3D &v) const
+		inline void loadVertex(const Vector3D& v) const
 		{
-			glVertex3fv((const GLfloat *)&v);
+			glVertex3fv((const GLfloat*)&v);
 		}
 
 		/*!
@@ -202,9 +202,9 @@ namespace TA3D
 		void circle_zoned(const float x, const float y, const float r, const float mx, const float my, const float Mx, const float My);
 		void dot_circle_zoned(const float t, const float x, const float y, const float r, const float mx, const float my, const float Mx, const float My);
 		void rectdot(const float x1, const float y1, const float x2, const float y2);
-		void drawtexture(const GLuint &tex, const float x1, const float y1, const float x2, const float y2);
-		void drawtexture_flip(const GLuint &tex, const float x1, const float y1, const float x2, const float y2);
-		void drawtexture(const GLuint &tex, const float x1, const float y1, const float x2, const float y2, const float u1, const float v1, const float u2, const float v2);
+		void drawtexture(const GLuint& tex, const float x1, const float y1, const float x2, const float y2);
+		void drawtexture_flip(const GLuint& tex, const float x1, const float y1, const float x2, const float y2);
+		void drawtexture(const GLuint& tex, const float x1, const float y1, const float x2, const float y2, const float u1, const float v1, const float u2, const float v2);
 
 		void line(const float x1, const float y1, const float x2, const float y2, const uint32 col); // Basic drawing routines (with color arguments)
 		void rect(const float x1, const float y1, const float x2, const float y2, const uint32 col);
@@ -214,44 +214,44 @@ namespace TA3D
 		void circle_zoned(const float x, const float y, const float r, const float mx, const float my, const float Mx, const float My, const uint32 col);
 		void dot_circle_zoned(const float t, const float x, const float y, const float r, const float mx, const float my, const float Mx, const float My, const uint32 col);
 		void rectdot(const float x1, const float y1, const float x2, const float y2, const uint32 col);
-		void drawtexture(const GLuint &tex, const float x1, const float y1, const float x2, const float y2, const uint32 col);
-		void drawtexture_flip(const GLuint &tex, const float x1, const float y1, const float x2, const float y2, const uint32 col);
+		void drawtexture(const GLuint& tex, const float x1, const float y1, const float x2, const float y2, const uint32 col);
+		void drawtexture_flip(const GLuint& tex, const float x1, const float y1, const float x2, const float y2, const uint32 col);
 
 		//! \name Text manipulation
 		//@{
-		void print(Font *font, const float x, const float y, const float z, const String &text); // Font related routines
-		void print(Font *font, const float x, const float y, const float z, const uint32 col, const String &text);
+		void print(Font* font, const float x, const float y, const float z, const String& text); // Font related routines
+		void print(Font* font, const float x, const float y, const float z, const uint32 col, const String& text);
 
-		void print_center(Font *font, const float x, const float y, const float z, const String &text); // Font related routines
-		void print_center(Font *font, const float x, const float y, const float z, const uint32 col, const String &text);
+		void print_center(Font* font, const float x, const float y, const float z, const String& text); // Font related routines
+		void print_center(Font* font, const float x, const float y, const float z, const uint32 col, const String& text);
 
-		void print_right(Font *font, const float x, const float y, const float z, const String &text); // Font related routines
-		void print_right(Font *font, const float x, const float y, const float z, const uint32 col, const String &text);
+		void print_right(Font* font, const float x, const float y, const float z, const String& text); // Font related routines
+		void print_right(Font* font, const float x, const float y, const float z, const uint32 col, const String& text);
 		//@} // Text manipilation
 
-		GLuint make_texture(SDL_Surface *bmp, int filter_type = FILTER_TRILINEAR, bool clamp = true);
+		GLuint make_texture(SDL_Surface* bmp, int filter_type = FILTER_TRILINEAR, bool clamp = true);
 		GLuint create_color_texture(uint32 color);
 		GLuint create_texture(int w, int h, int filter_type = FILTER_TRILINEAR, bool clamp = true);
-		void blit_texture(SDL_Surface *src, GLuint dst);
-		GLuint load_texture(const String &file, int filter_type = FILTER_TRILINEAR, uint32 *width = NULL, uint32 *height = NULL, bool clamp = true, GLuint texFormat = 0, bool *useAlpha = NULL, bool checkSize = false);
-		GLuint load_texture_mask(const String &file, uint32 level, int filter_type = FILTER_TRILINEAR, uint32 *width = NULL, uint32 *height = NULL, bool clamp = true);
-		GLuint load_texture_from_cache(const String &file, int filter_type = FILTER_TRILINEAR, uint32 *width = NULL, uint32 *height = NULL, bool clamp = true, bool *useAlpha = NULL);
+		void blit_texture(SDL_Surface* src, GLuint dst);
+		GLuint load_texture(const String& file, int filter_type = FILTER_TRILINEAR, uint32* width = NULL, uint32* height = NULL, bool clamp = true, GLuint texFormat = 0, bool* useAlpha = NULL, bool checkSize = false);
+		GLuint load_texture_mask(const String& file, uint32 level, int filter_type = FILTER_TRILINEAR, uint32* width = NULL, uint32* height = NULL, bool clamp = true);
+		GLuint load_texture_from_cache(const String& file, int filter_type = FILTER_TRILINEAR, uint32* width = NULL, uint32* height = NULL, bool clamp = true, bool* useAlpha = NULL);
 		GLuint load_masked_texture(String file, String mask, int filter_type = FILTER_TRILINEAR);
 		void save_texture_to_cache(String file, GLuint tex, uint32 width, uint32 height, bool useAlpha);
 		uint32 texture_width(const GLuint gltex);
 		uint32 texture_height(const GLuint gltex);
-		void destroy_texture(GLuint &gltex);
+		void destroy_texture(GLuint& gltex);
 		void disable_texturing();
 		void enable_texturing();
-		bool is_texture_in_cache(const String &file);
+		bool is_texture_in_cache(const String& file);
 		int max_texture_size();
 
-		GLuint make_texture_RGB32F(int w, int h, float *data, int filter_type = FILTER_NONE, bool clamp = false);
-		GLuint make_texture_RGBA32F(int w, int h, float *data, int filter_type = FILTER_NONE, bool clamp = false);
-		GLuint make_texture_RGB16F(int w, int h, float *data, int filter_type = FILTER_NONE, bool clamp = false);
-		GLuint make_texture_RGBA16F(int w, int h, float *data, int filter_type = FILTER_NONE, bool clamp = false);
-		GLuint make_texture_A16F(int w, int h, float *data, int filter_type = FILTER_NONE, bool clamp = false);
-		GLuint make_texture_A32F(int w, int h, float *data, int filter_type = FILTER_NONE, bool clamp = false);
+		GLuint make_texture_RGB32F(int w, int h, float* data, int filter_type = FILTER_NONE, bool clamp = false);
+		GLuint make_texture_RGBA32F(int w, int h, float* data, int filter_type = FILTER_NONE, bool clamp = false);
+		GLuint make_texture_RGB16F(int w, int h, float* data, int filter_type = FILTER_NONE, bool clamp = false);
+		GLuint make_texture_RGBA16F(int w, int h, float* data, int filter_type = FILTER_NONE, bool clamp = false);
+		GLuint make_texture_A16F(int w, int h, float* data, int filter_type = FILTER_NONE, bool clamp = false);
+		GLuint make_texture_A32F(int w, int h, float* data, int filter_type = FILTER_NONE, bool clamp = false);
 
 		GLuint create_texture_RGB32F(int w, int h, int filter_type = FILTER_NONE, bool clamp = true);
 		GLuint create_texture_RGBA32F(int w, int h, int filter_type = FILTER_NONE, bool clamp = true);
@@ -265,7 +265,7 @@ namespace TA3D
 		void delete_shadow_map();
 		void readShadowMapProjectionMatrix();
 
-		SDL_Surface *load_image(const String &filename);
+		SDL_Surface* load_image(const String& filename);
 
 		void set_alpha_blending();
 		void unset_alpha_blending();
@@ -303,8 +303,8 @@ namespace TA3D
 		static void runTests();
 		static void runOpenGLTests();
 
-		SDL_Surface *create_surface_ex(int bpp, int w, int h);
-		SDL_Surface *create_surface(int w, int h);
+		SDL_Surface* create_surface_ex(int bpp, int w, int h);
+		SDL_Surface* create_surface(int w, int h);
 
 		/*!
 		** \brief returns default texture formats for RGB and RGBA textures
@@ -323,11 +323,11 @@ namespace TA3D
 		int width; // Size of this window on the screen
 		int height;
 		int x, y;		   // Position on the screen
-		Font *normal_font; // Fonts
-		Font *small_font;
-		Font *TA_font;
-		Font *ta3d_gui_font;
-		Font *big_font;
+		Font* normal_font; // Fonts
+		Font* small_font;
+		Font* TA_font;
+		Font* ta3d_gui_font;
+		Font* big_font;
 
 		sint32 SCREEN_W_HALF;
 		sint32 SCREEN_H_HALF;
@@ -358,7 +358,7 @@ namespace TA3D
 		bool shadowMapWasActive;
 
 	private:
-		virtual uint32 InterfaceMsg(const uint32 MsgID, const String &msg);
+		virtual uint32 InterfaceMsg(const uint32 MsgID, const String& msg);
 
 		void preCalculations();
 		void initSDL();

@@ -178,7 +178,7 @@ namespace TA3D
 		** \param truecolor
 		*/
 		static void ToTexturesList(std::vector<GLuint>& out, const String& filename, const String& imgname,
-								   int* w = NULL, int* h = NULL, const bool truecolor = true, const int filter = FILTER_TRILINEAR);
+			int* w = NULL, int* h = NULL, const bool truecolor = true, const int filter = FILTER_TRILINEAR);
 
 		/*!
 		** \brief Load a GAF image into a SDL_Surface

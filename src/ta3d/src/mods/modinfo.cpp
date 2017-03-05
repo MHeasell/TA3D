@@ -7,17 +7,17 @@
 
 namespace TA3D
 {
-	ModInfo::ModInfo(const int ID, const String &name, const String &version, const String &author, const String &comment, const String &url)
+	ModInfo::ModInfo(const int ID, const String& name, const String& version, const String& author, const String& comment, const String& url)
 		: ID(ID), name(name), version(version), author(author), comment(comment), url(url), installed(false), availableUpdate(false)
 	{
 	}
 
-	ModInfo::ModInfo(const String &info)
+	ModInfo::ModInfo(const String& info)
 	{
 		parse(info);
 	}
 
-	void ModInfo::parse(const String &info)
+	void ModInfo::parse(const String& info)
 	{
 		String::Vector params;
 
@@ -60,7 +60,7 @@ namespace TA3D
 		availableUpdate = false;
 	}
 
-	void ModInfo::read(const String &modName)
+	void ModInfo::read(const String& modName)
 	{
 		name = modName;
 		String filename = getPathToMod() << Paths::Separator << "info.mod";
@@ -146,7 +146,7 @@ namespace TA3D
 		LOG_INFO(LOG_PREFIX_RESOURCES << "mod uninstalled");
 	}
 
-	String ModInfo::cleanStringForPortablePathName(const String &s)
+	String ModInfo::cleanStringForPortablePathName(const String& s)
 	{
 		String result;
 		result.reserve(s.size());

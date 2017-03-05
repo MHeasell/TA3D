@@ -102,7 +102,7 @@ namespace TA3D
 		open("", port);
 	}
 
-	void SocketTCP::open(const String &hostname, uint16 port)
+	void SocketTCP::open(const String& hostname, uint16 port)
 	{
 		MutexLocker locker(pMutex);
 		close();
@@ -199,16 +199,16 @@ namespace TA3D
 		}
 	}
 
-	SocketTCP *SocketTCP::accept()
+	SocketTCP* SocketTCP::accept()
 	{
 		try
 		{
 			TCPsocket child = SDLNet_TCP_Accept(sock);
 			if (child == NULL)
 				return NULL;
-			SocketTCP *newSock = new SocketTCP(compression);
+			SocketTCP* newSock = new SocketTCP(compression);
 			newSock->sock = child;
-			IPaddress *remote_addr = SDLNet_TCP_GetPeerAddress(child);
+			IPaddress* remote_addr = SDLNet_TCP_GetPeerAddress(child);
 			if (remote_addr == NULL)
 			{
 				LOG_ERROR(LOG_PREFIX_NET << "error getting remote address : " << SDLNet_GetError());
@@ -233,7 +233,7 @@ namespace TA3D
 
 			return newSock;
 		}
-		catch (std::exception &e)
+		catch (std::exception& e)
 		{
 			LOG_ERROR(LOG_PREFIX_NET_SOCKET << "exception caught : " << e.what());
 			close();
@@ -241,12 +241,12 @@ namespace TA3D
 		}
 	}
 
-	void SocketTCP::send(const String &str)
+	void SocketTCP::send(const String& str)
 	{
 		send(str.c_str(), int(str.size()));
 	}
 
-	void SocketTCP::send(const char *data, int size)
+	void SocketTCP::send(const char* data, int size)
 	{
 		if (!sock)
 			return;
@@ -255,7 +255,7 @@ namespace TA3D
 		{
 			if (compression)
 			{
-				zSend->next_in = (Bytef *)data;
+				zSend->next_in = (Bytef*)data;
 				zSend->avail_in = size;
 				zSend->avail_out = 0;
 				bytesProcessed += size;
@@ -287,14 +287,14 @@ namespace TA3D
 				}
 			}
 		}
-		catch (std::exception &e)
+		catch (std::exception& e)
 		{
 			LOG_ERROR(LOG_PREFIX_NET_SOCKET << "exception caught : " << e.what());
 			close();
 		}
 	}
 
-	inline void zStreamError(int ret, char *msg)
+	inline void zStreamError(int ret, char* msg)
 	{
 		if (ret != Z_OK)
 		{
@@ -318,7 +318,7 @@ namespace TA3D
 		}
 	}
 
-	int SocketTCP::recv(char *data, int size)
+	int SocketTCP::recv(char* data, int size)
 	{
 		if (!sock)
 			return -1;
@@ -328,13 +328,13 @@ namespace TA3D
 			if (compression)
 			{
 				zRecv->avail_out = size;
-				zRecv->next_out = (Bytef *)data;
+				zRecv->next_out = (Bytef*)data;
 
 				int ret = Z_OK;
 				do
 				{
 					check(0);
-					byte *pIn = zRecv->next_in + zRecv->avail_in;
+					byte* pIn = zRecv->next_in + zRecv->avail_in;
 					while (ready() && zRecv->avail_in < TCP_BUFFER_SIZE)
 					{
 						const int n = SDLNet_TCP_Recv(sock, pIn++, 1);
@@ -424,7 +424,7 @@ namespace TA3D
 				return n;
 			}
 		}
-		catch (std::exception &e)
+		catch (std::exception& e)
 		{
 			LOG_ERROR(LOG_PREFIX_NET_SOCKET << "exception caught : " << e.what());
 			close();
@@ -440,7 +440,7 @@ namespace TA3D
 			{
 				SDLNet_CheckSockets(set, msec);
 			}
-			catch (std::exception &e)
+			catch (std::exception& e)
 			{
 				LOG_ERROR(LOG_PREFIX_NET_SOCKET << "exception caught : " << e.what());
 				close();
@@ -459,7 +459,7 @@ namespace TA3D
 			if (set && sock && checked)
 				return SDLNet_SocketReady(sock);
 		}
-		catch (std::exception &e)
+		catch (std::exception& e)
 		{
 			LOG_ERROR(LOG_PREFIX_NET_SOCKET << "exception caught : " << e.what());
 			close();

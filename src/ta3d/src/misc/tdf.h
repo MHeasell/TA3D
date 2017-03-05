@@ -52,7 +52,7 @@ namespace TA3D
 		** \see loadFromFile()
 		*/
 		explicit TDFParser(const String& filename, const bool caSensitive = false, const bool toUTF8 = false,
-						   const bool gadgetMode = false, const bool realFS = false, const bool widgetMode = false);
+			const bool gadgetMode = false, const bool realFS = false, const bool widgetMode = false);
 
 		//! Destructor
 		~TDFParser();
@@ -89,7 +89,7 @@ namespace TA3D
 		** \return True if the operation succeeded, False otherwise
 		*/
 		bool loadFromMemory(const String& caption, const char* data, uint64 size, const bool clear = false,
-							const bool toUTF8 = false, const bool gadgetMode = false, const bool widgetMode = false);
+			const bool toUTF8 = false, const bool gadgetMode = false, const bool widgetMode = false);
 		//@}
 
 		//! \name Keys & Values

@@ -33,9 +33,9 @@
 namespace TA3D
 {
 
-	Console *Console::pInstance = NULL;
+	Console* Console::pInstance = NULL;
 
-	Console *Console::Instance()
+	Console* Console::Instance()
 	{
 		if (!pInstance)
 			return new Console;
@@ -63,7 +63,7 @@ namespace TA3D
 		pInstance = NULL;
 	}
 
-	void Console::addEntry(const String &newEntry)
+	void Console::addEntry(const String& newEntry)
 	{
 		pMutex.lock();
 		pLastEntries.push_back(newEntry);
@@ -80,7 +80,7 @@ namespace TA3D
 		pMutex.unlock();
 	}
 
-	void Console::draw(TA3D::Font *fnt, const float dt, const bool forceShow)
+	void Console::draw(TA3D::Font* fnt, const float dt, const bool forceShow)
 	{
 		MutexLocker locker(pMutex);
 
@@ -312,17 +312,17 @@ namespace TA3D
 				for (uint32 k = 0; k < cols.size(); ++k)
 				{
 					gfx->print(fnt, tableWidth * float(k) + 1.0f, maxh - fsize * float(pLastEntries.size() + 1 - i) - 4.0f, 0.0f,
-							   makeacol32(0, 0, 0, 0xFF), cols[k]);
+						makeacol32(0, 0, 0, 0xFF), cols[k]);
 					gfx->print(fnt, tableWidth * float(k) + 0.0f, maxh - fsize * float(pLastEntries.size() + 1 - i) - 5.0f, 0.0f,
-							   makeacol32(0xFF, 0xFF, 0, 0xFF), cols[k]);
+						makeacol32(0xFF, 0xFF, 0, 0xFF), cols[k]);
 				}
 			}
 			else
 			{
 				gfx->print(fnt, 1.0f, maxh - fsize * float(pLastEntries.size() + 1 - i) - 4.0f, 0.0f,
-						   makeacol32(0, 0, 0, 0xFF), *i_entry);
+					makeacol32(0, 0, 0, 0xFF), *i_entry);
 				gfx->print(fnt, 0.0f, maxh - fsize * float(pLastEntries.size() + 1 - i) - 5.0f, 0.0f,
-						   0xDFDFDFDF, *i_entry);
+					0xDFDFDFDF, *i_entry);
 			}
 		}
 
@@ -355,14 +355,14 @@ namespace TA3D
 		return (pShow || pVisible > 0.0f);
 	}
 
-	String Console::execute(const String &cmd)
+	String Console::execute(const String& cmd)
 	{
 		MutexLocker mLocker(pMutex);
 		if (L == NULL)
 			return String();
 
 		lua_settop(L, 0);
-		if (luaL_loadbuffer(L, (const char *)cmd.c_str(), cmd.size(), NULL))
+		if (luaL_loadbuffer(L, (const char*)cmd.c_str(), cmd.size(), NULL))
 		{
 			if (lua_gettop(L) > 0 && lua_tostring(L, -1) != NULL && strlen(lua_tostring(L, -1)) > 0)
 				addEntry(lua_tostring(L, -1));
@@ -406,18 +406,18 @@ namespace TA3D
 
 		uint32 filesize = 0;
 		String initScript = "scripts/console/init.lua";
-		byte *buffer = loadLuaFile(initScript, filesize);
+		byte* buffer = loadLuaFile(initScript, filesize);
 		if (buffer)
 		{
 
-			if (luaL_loadbuffer(L, (const char *)buffer, filesize, "init"))
+			if (luaL_loadbuffer(L, (const char*)buffer, filesize, "init"))
 			{
 				if (lua_gettop(L) > 0 && lua_tostring(L, -1) != NULL && strlen(lua_tostring(L, -1)) > 0)
 				{
 					LOG_ERROR(LOG_PREFIX_LUA << __FILE__ << " l." << __LINE__);
 					LOG_ERROR(LOG_PREFIX_LUA << lua_tostring(L, -1));
 					LOG_ERROR(LOG_PREFIX_LUA << filesize << " -> " << (int)buffer[filesize - 1]);
-					LOG_ERROR((const char *)buffer);
+					LOG_ERROR((const char*)buffer);
 				}
 
 				DELETE_ARRAY(buffer);

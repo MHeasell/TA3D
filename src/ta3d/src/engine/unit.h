@@ -44,7 +44,7 @@ namespace TA3D
 		void script_explode(int obj, int explosion_type);
 		void script_turn_object(int obj, int axis, float angle, float speed);
 		void script_move_object(int obj, int axis, float pos, float speed);
-		int script_get_value_from_port(int portID, int *param = NULL);
+		int script_get_value_from_port(int portID, int* param = NULL);
 		void script_spin_object(int obj, int axis, float target_speed, float accel);
 		void script_show_object(int obj);
 		void script_hide_object(int obj);
@@ -85,13 +85,13 @@ namespace TA3D
 
 		void clear_mission();
 
-		void add_mission(int mission_type, const Vector3D *target = NULL, bool step = false, int dat = 0,
-						 void *pointer = NULL, byte m_flags = 0,
-						 int move_data = 0, int patrol_node = -1);
+		void add_mission(int mission_type, const Vector3D* target = NULL, bool step = false, int dat = 0,
+			void* pointer = NULL, byte m_flags = 0,
+			int move_data = 0, int patrol_node = -1);
 
-		void set_mission(int mission_type, const Vector3D *target = NULL, bool step = false, int dat = 0,
-						 bool stopit = true, void *pointer = NULL, byte m_flags = 0,
-						 int move_data = 0);
+		void set_mission(int mission_type, const Vector3D* target = NULL, bool step = false, int dat = 0,
+			bool stopit = true, void* pointer = NULL, byte m_flags = 0,
+			int move_data = 0);
 
 		void compute_model_coord();
 
@@ -113,25 +113,25 @@ namespace TA3D
 
 		void drawHealthBar() const;
 
-		void draw_shadow(const Vector3D &Dir);
+		void draw_shadow(const Vector3D& Dir);
 
-		void drawShadowBasic(const Vector3D &Dir);
+		void drawShadowBasic(const Vector3D& Dir);
 
-		int launchScript(const int id, int nb_param = 0, int *param = NULL); // Start a script as a separate "thread" of the unit
+		int launchScript(const int id, int nb_param = 0, int* param = NULL); // Start a script as a separate "thread" of the unit
 
-		int runScriptFunction(const int id, int nb_param = 0, int *param = NULL); // Launch and run the script, returning it's values to param if not NULL
+		int runScriptFunction(const int id, int nb_param = 0, int* param = NULL); // Launch and run the script, returning it's values to param if not NULL
 
 		void resetScript();
 
-		bool playSound(const String &key);
+		bool playSound(const String& key);
 
 		int move(const float dt, const int key_frame = 0);
 
-		void computeHeadingBasedOnEnergy(Vector3D &dir, const bool moving);
+		void computeHeadingBasedOnEnergy(Vector3D& dir, const bool moving);
 
 		inline float getLocalMapEnergy(int x, int y);
 
-		void followPath(const float dt, bool &b_TargetAngle, float &f_TargetAngle, Vector3D &NPos, int &n_px, int &n_py, bool &precomputed_position);
+		void followPath(const float dt, bool& b_TargetAngle, float& f_TargetAngle, Vector3D& NPos, int& n_px, int& n_py, bool& precomputed_position);
 
 		void show_orders(bool only_build_commands = false, bool def_orders = false); // Dessine les ordres reçus
 
@@ -139,11 +139,11 @@ namespace TA3D
 
 		void deactivate();
 
-		int shoot(const int target, const Vector3D &startpos, const Vector3D &Dir, const int w_id, const Vector3D &target_pos);
+		int shoot(const int target, const Vector3D& startpos, const Vector3D& Dir, const int w_id, const Vector3D& target_pos);
 
-		bool hit(const Vector3D &P, const Vector3D &Dir, Vector3D *hit_vec, const float length = 100.0f);
+		bool hit(const Vector3D& P, const Vector3D& Dir, Vector3D* hit_vec, const float length = 100.0f);
 
-		bool hit_fast(const Vector3D &P, const Vector3D &Dir, Vector3D *hit_vec, const float length = 100.0f);
+		bool hit_fast(const Vector3D& P, const Vector3D& Dir, Vector3D* hit_vec, const float length = 100.0f);
 
 		void stopMoving();
 
@@ -174,7 +174,7 @@ namespace TA3D
 	public:
 		UnitScriptInterface::Ptr script; // Scripts concernant l'unité
 		RenderData render;				 // Store render data in a sub object
-		Model *model;					 // Modèle représentant l'objet
+		Model* model;					 // Modèle représentant l'objet
 		byte owner_id;					 // Numéro du propriétaire de l'unité
 		int type_id;					 // Type d'unité
 		float hp;						 // Points de vie restant à l'unité
@@ -187,7 +187,7 @@ namespace TA3D
 		volatile bool drawing;
 		bool movingAnimation;
 		bool requestedMovingAnimationState;
-		sint16 *port;			  // Ports
+		sint16* port;			  // Ports
 		MissionStack mission;	 // Orders given to the unit
 		MissionStack def_mission; // Orders given to units built by this plant
 		byte flags;				  // Pour indiquer entre autres au gestionnaire d'unités si l'unité existe
@@ -210,11 +210,11 @@ namespace TA3D
 		bool built;			   // Indique si l'unité est en cours de construction (par une autre unité)
 		bool attacked;		   // Indique si l'unité est attaquée
 		float planned_weapons; // Armes en construction / all is in the name
-		uint32 *memory;		   // Pour se rappeler sur quelles armes on a déjà tiré
+		uint32* memory;		   // Pour se rappeler sur quelles armes on a déjà tiré
 		int mem_size;
 		bool attached;
-		short *attached_list;
-		short *link_list;
+		short* attached_list;
+		short* link_list;
 		int nb_attached;
 		bool just_created;
 		bool first_move;
@@ -277,7 +277,7 @@ namespace TA3D
 
 		// Following variables are used to control the synchronization of data between game clients
 		uint32 sync_hash;
-		uint32 *last_synctick;
+		uint32* last_synctick;
 		bool local;
 		bool exploding;
 		struct sync previous_sync; // previous sync data
@@ -286,7 +286,7 @@ namespace TA3D
 		bool nanolathe_feature;
 
 	private:
-		void start_building(const Vector3D &dir);
+		void start_building(const Vector3D& dir);
 
 	}; // class Unit
 

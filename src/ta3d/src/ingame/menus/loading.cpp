@@ -30,8 +30,10 @@ namespace TA3D
 		Loading::Loading()
 			: pLastPercent(-1.0f),
 			  pLastCaption(),
-			  pBackgroundTexture(0), pCurrentFontHeight(0.0f),
-			  pCacheScreenRatioWidth(0.f), pCacheScreenRatioHeight(0.f)
+			  pBackgroundTexture(0),
+			  pCurrentFontHeight(0.0f),
+			  pCacheScreenRatioWidth(0.f),
+			  pCacheScreenRatioHeight(0.f)
 		{
 			LOG_DEBUG(LOG_PREFIX_MENU_LOADING << "Starting...");
 			pStartTime = msec_timer;
@@ -90,7 +92,7 @@ namespace TA3D
 				network_manager.sendAll(String("LOADING ") << percent);
 		}
 
-		void Loading::operator()(const float percent, const String &message)
+		void Loading::operator()(const float percent, const String& message)
 		{
 			LOG_ASSERT(NULL != gfx);
 
@@ -143,19 +145,19 @@ namespace TA3D
 			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 			glColor4ub(0xFF, 0xFF, 0xFF, 0xFF);
 			gfx->drawtexture(pBackgroundTexture, 100.0f * pCacheScreenRatioWidth, 856.0f * pCacheScreenRatioHeight,
-							 1172.0f * pCacheScreenRatioWidth, 917.0f * pCacheScreenRatioHeight,
-							 100.0f / 1280.0f, 856.0f / 1024.0f, 1172.0f / 1280.0f, 917.0f / 1024.0f);
+				1172.0f * pCacheScreenRatioWidth, 917.0f * pCacheScreenRatioHeight,
+				100.0f / 1280.0f, 856.0f / 1024.0f, 1172.0f / 1280.0f, 917.0f / 1024.0f);
 			glDisable(GL_BLEND);
 
 			// Draw the caption (horizontally centered)
 			glEnable(GL_TEXTURE_2D);
 			glEnable(GL_BLEND);
 			gfx->print(Gui::gui_font, 640.0f * pCacheScreenRatioWidth - 0.5f * Gui::gui_font->length(message) + 1.0f,
-					   830 * pCacheScreenRatioHeight - pCurrentFontHeight * 0.5f + 1.0f, 0.0f, makeacol(0, 0, 0, 0xFF),
-					   message);
+				830 * pCacheScreenRatioHeight - pCurrentFontHeight * 0.5f + 1.0f, 0.0f, makeacol(0, 0, 0, 0xFF),
+				message);
 			gfx->print(Gui::gui_font, 640.0f * pCacheScreenRatioWidth - 0.5f * Gui::gui_font->length(message),
-					   830 * pCacheScreenRatioHeight - pCurrentFontHeight * 0.5f, 0.0f, 0xFFFFFFFF,
-					   message);
+				830 * pCacheScreenRatioHeight - pCurrentFontHeight * 0.5f, 0.0f, 0xFFFFFFFF,
+				message);
 			glDisable(GL_BLEND);
 
 			glPopMatrix();

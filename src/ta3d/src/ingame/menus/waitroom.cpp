@@ -27,13 +27,13 @@ namespace TA3D
 	namespace Menus
 	{
 
-		bool WaitRoom::Execute(GameData *game_data)
+		bool WaitRoom::Execute(GameData* game_data)
 		{
 			WaitRoom m(game_data);
 			return m.execute();
 		}
 
-		WaitRoom::WaitRoom(GameData *game_data)
+		WaitRoom::WaitRoom(GameData* game_data)
 			: Abstract(), game_data(game_data)
 		{
 		}
@@ -117,7 +117,7 @@ namespace TA3D
 			{
 				playerDropped = network_manager.getPlayerDropped();
 				if (network_manager.getNextSpecial(&received_special_msg) == 0)
-					special_msg = (char *)received_special_msg.message;
+					special_msg = (char*)received_special_msg.message;
 				if (!network_manager.isConnected()) // We're disconnected !!
 					break;
 
@@ -172,7 +172,7 @@ namespace TA3D
 				const int from = received_special_msg.from;
 				const int player_id = game_data->net2id(from);
 				String::Vector params;
-				String((char *)received_special_msg.message).explode(params, ' ');
+				String((char*)received_special_msg.message).explode(params, ' ');
 				if (params.size() == 1)
 				{
 					if (params[0] == "NOT_READY")

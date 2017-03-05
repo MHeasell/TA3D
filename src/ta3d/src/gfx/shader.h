@@ -45,12 +45,12 @@ namespace TA3D
 		/*!
 		** \brief Load a shader from files
 		*/
-		void load(const String &pShaderFragmentFilename, const String &vertexFilename);
+		void load(const String& pShaderFragmentFilename, const String& vertexFilename);
 
 		/*!
 		** \brief Load a shader from a memory buffer
 		*/
-		void load_memory(const char *pShaderFragment_data, const int frag_len, const char *vertex_data, const int vert_len);
+		void load_memory(const char* pShaderFragment_data, const int frag_len, const char* vertex_data, const int vert_len);
 
 		/*!
 		** \brief Enable the shader
@@ -64,16 +64,16 @@ namespace TA3D
 
 		//! \name Variable for the ARB extension
 		//@{
-		void setvar1f(const String &var, const float v0);
-		void setvar2f(const String &var, const float v0, const float v1);
-		void setvar3f(const String &var, const float v0, const float v1, const float v2);
-		void setvar4f(const String &var, const float v0, const float v1, const float v2, const float v3);
-		void setvar1i(const String &var, const int v0);
-		void setvar2i(const String &var, const int v0, const int v1);
-		void setvar3i(const String &var, const int v0, const int v1, const int v2);
-		void setvar4i(const String &var, const int v0, const int v1, const int v2, const int v3);
+		void setvar1f(const String& var, const float v0);
+		void setvar2f(const String& var, const float v0, const float v1);
+		void setvar3f(const String& var, const float v0, const float v1, const float v2);
+		void setvar4f(const String& var, const float v0, const float v1, const float v2, const float v3);
+		void setvar1i(const String& var, const int v0);
+		void setvar2i(const String& var, const int v0, const int v1);
+		void setvar3i(const String& var, const int v0, const int v1, const int v2);
+		void setvar4i(const String& var, const int v0, const int v1, const int v2, const int v3);
 
-		void setmat4f(const String &var, const GLfloat *mat);
+		void setmat4f(const String& var, const GLfloat* mat);
 		//@}
 
 		/*!

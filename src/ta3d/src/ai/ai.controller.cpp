@@ -427,9 +427,9 @@ namespace TA3D
 
 #ifdef AI_DEBUG
 		printf("AI %d :\nARMY = %f\nFACTORY = %f\nDEFENSE = %f\nBUILDER = %f\nMETAL_P = %f\nMETAL_S = %f\nENERGY_P = %f\nENERGY_S = %f\n",
-			   playerID, order_weight[ORDER_ARMY], order_weight[ORDER_FACTORY], order_weight[ORDER_DEFENSE],
-			   order_weight[ORDER_BUILDER], order_weight[ORDER_METAL_P], order_weight[ORDER_METAL_S],
-			   order_weight[ORDER_ENERGY_P], order_weight[ORDER_ENERGY_S]);
+			playerID, order_weight[ORDER_ARMY], order_weight[ORDER_FACTORY], order_weight[ORDER_DEFENSE],
+			order_weight[ORDER_BUILDER], order_weight[ORDER_METAL_P], order_weight[ORDER_METAL_S],
+			order_weight[ORDER_ENERGY_P], order_weight[ORDER_ENERGY_S]);
 #endif
 
 		return; // Shortcut to prevent execution of this function because AI will be finished later

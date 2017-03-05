@@ -26,7 +26,7 @@ namespace TA3D
 			SkyData();
 			~SkyData();
 
-			void load_tdf(const String &filename);
+			void load_tdf(const String& filename);
 		};
 
 	private:
@@ -34,7 +34,7 @@ namespace TA3D
 		float w;
 		GLuint tex[6]; // Our cube textures
 		GLuint dlist;
-		SkyData *skyInfo;
+		SkyData* skyInfo;
 
 	public:
 		Sky();
@@ -44,14 +44,14 @@ namespace TA3D
 		void destroy();
 
 		float getW() const { return w; }
-		const float *fogColor() const { return skyInfo->FogColor; }
+		const float* fogColor() const { return skyInfo->FogColor; }
 		float rotationOffset() const { return skyInfo->rotation_offset; }
 		float rotationSpeed() const { return skyInfo->rotation_speed; }
 
 		void draw();
 		GLuint skyTex() const { return tex[5]; }
 
-		void choose_a_sky(const String &mapname, const String &planet);
+		void choose_a_sky(const String& mapname, const String& planet);
 
 	protected:
 		void build(int d, float size);

@@ -290,68 +290,67 @@ namespace TA3D
 namespace TA3D
 {
 
-inline const TA3D::Vector2D operator+(const TA3D::Vector2D& lhs, const TA3D::Vector2D& rhs)
-{
-	return TA3D::Vector2D(lhs) += rhs;
-}
+	inline const TA3D::Vector2D operator+(const TA3D::Vector2D& lhs, const TA3D::Vector2D& rhs)
+	{
+		return TA3D::Vector2D(lhs) += rhs;
+	}
 
-inline const TA3D::Vector2D operator-(const TA3D::Vector2D& lhs)
-{
-	TA3D::Vector2D r(lhs);
-	r.x = -r.x;
-	r.y = -r.y;
-	return r;
-}
+	inline const TA3D::Vector2D operator-(const TA3D::Vector2D& lhs)
+	{
+		TA3D::Vector2D r(lhs);
+		r.x = -r.x;
+		r.y = -r.y;
+		return r;
+	}
 
-inline const TA3D::Vector2D operator-(const TA3D::Vector2D& lhs, const TA3D::Vector2D& rhs)
-{
-	return TA3D::Vector2D(lhs) -= rhs;
-}
+	inline const TA3D::Vector2D operator-(const TA3D::Vector2D& lhs, const TA3D::Vector2D& rhs)
+	{
+		return TA3D::Vector2D(lhs) -= rhs;
+	}
 
-inline const TA3D::Vector2D operator*(const float v, const TA3D::Vector2D& lhs)
-{
-	return TA3D::Vector2D(lhs) *= v;
-}
+	inline const TA3D::Vector2D operator*(const float v, const TA3D::Vector2D& lhs)
+	{
+		return TA3D::Vector2D(lhs) *= v;
+	}
 
-inline float operator%(const TA3D::Vector2D& lhs, const TA3D::Vector2D& rhs)
-{
-	return lhs.x * rhs.x + lhs.y * rhs.y;
-}
+	inline float operator%(const TA3D::Vector2D& lhs, const TA3D::Vector2D& rhs)
+	{
+		return lhs.x * rhs.x + lhs.y * rhs.y;
+	}
 
-inline const TA3D::Vector3D operator+(const TA3D::Vector3D& lhs, const TA3D::Vector3D& rhs)
-{
-	return TA3D::Vector3D(lhs) += rhs;
-}
+	inline const TA3D::Vector3D operator+(const TA3D::Vector3D& lhs, const TA3D::Vector3D& rhs)
+	{
+		return TA3D::Vector3D(lhs) += rhs;
+	}
 
-inline const TA3D::Vector3D operator-(const TA3D::Vector3D& lhs)
-{
-	TA3D::Vector3D r(lhs);
-	r.x = -r.x;
-	r.y = -r.y;
-	r.z = -r.z;
-	return r;
-}
+	inline const TA3D::Vector3D operator-(const TA3D::Vector3D& lhs)
+	{
+		TA3D::Vector3D r(lhs);
+		r.x = -r.x;
+		r.y = -r.y;
+		r.z = -r.z;
+		return r;
+	}
 
-inline const TA3D::Vector3D operator-(const TA3D::Vector3D& lhs, const TA3D::Vector3D& rhs)
-{
-	return TA3D::Vector3D(lhs) -= rhs;
-}
+	inline const TA3D::Vector3D operator-(const TA3D::Vector3D& lhs, const TA3D::Vector3D& rhs)
+	{
+		return TA3D::Vector3D(lhs) -= rhs;
+	}
 
-inline const TA3D::Vector3D operator*(const float v, const TA3D::Vector3D& lhs)
-{
-	return TA3D::Vector3D(lhs) *= v;
-}
+	inline const TA3D::Vector3D operator*(const float v, const TA3D::Vector3D& lhs)
+	{
+		return TA3D::Vector3D(lhs) *= v;
+	}
 
-inline const TA3D::Vector3D operator*(const TA3D::Vector3D& lhs, const TA3D::Vector3D& rhs)
-{
-	return TA3D::Vector3D(lhs) *= rhs;
-}
+	inline const TA3D::Vector3D operator*(const TA3D::Vector3D& lhs, const TA3D::Vector3D& rhs)
+	{
+		return TA3D::Vector3D(lhs) *= rhs;
+	}
 
-inline float operator%(const TA3D::Vector3D& lhs, const TA3D::Vector3D& rhs)
-{
-	return lhs.x * rhs.x + lhs.y * rhs.y + lhs.z * rhs.z;
-}
-
+	inline float operator%(const TA3D::Vector3D& lhs, const TA3D::Vector3D& rhs)
+	{
+		return lhs.x * rhs.x + lhs.y * rhs.y + lhs.z * rhs.z;
+	}
 }
 
 //@}

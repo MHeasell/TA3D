@@ -8,7 +8,7 @@ namespace TA3D
 		{
 		}
 
-		RealFile::RealFile(const String &filename) : buffer(NULL)
+		RealFile::RealFile(const String& filename) : buffer(NULL)
 		{
 			open(filename);
 		}
@@ -20,7 +20,7 @@ namespace TA3D
 				delete[] buffer;
 		}
 
-		void RealFile::open(const String &filename)
+		void RealFile::open(const String& filename)
 		{
 			sFile.close();
 			if (buffer)
@@ -65,15 +65,15 @@ namespace TA3D
 			sFile.seekg(pos);
 		}
 
-		int RealFile::read(void *p, int s)
+		int RealFile::read(void* p, int s)
 		{
 			if (!sFile.is_open())
 				return 0;
-			sFile.read((char *)p, s);
+			sFile.read((char*)p, s);
 			return sFile.gcount();
 		}
 
-		bool RealFile::readLine(String &line)
+		bool RealFile::readLine(String& line)
 		{
 			if (sFile.eof())
 				return false;
@@ -85,7 +85,7 @@ namespace TA3D
 			return true;
 		}
 
-		const char *RealFile::data()
+		const char* RealFile::data()
 		{
 			if (buffer)
 				return buffer;
@@ -113,7 +113,7 @@ namespace TA3D
 			return true;
 		}
 
-		const String &RealFile::getRealFilename() const
+		const String& RealFile::getRealFilename() const
 		{
 			return realFilename;
 		}

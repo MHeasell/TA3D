@@ -20,7 +20,7 @@
 namespace TA3D
 {
 
-	Matrix Transpose(const Matrix &A)
+	Matrix Transpose(const Matrix& A)
 	{
 		Matrix B;
 		for (int i = 0; i < 4; ++i)
@@ -31,7 +31,7 @@ namespace TA3D
 		return B;
 	}
 
-	float Norme_Ligne(const Matrix &A)
+	float Norme_Ligne(const Matrix& A)
 	{
 		float n, n2;
 		n = 0.0f;
@@ -46,7 +46,7 @@ namespace TA3D
 		return n;
 	}
 
-	float Norme_Colonne(const Matrix &A)
+	float Norme_Colonne(const Matrix& A)
 	{
 		float n, n2;
 		n = 0.0f;
@@ -61,7 +61,7 @@ namespace TA3D
 		return n;
 	}
 
-	inline Matrix Invert(const Matrix &A, const int P)
+	inline Matrix Invert(const Matrix& A, const int P)
 	{
 		Matrix I, E, B;
 		I = Scale(1.0f);
@@ -195,7 +195,7 @@ namespace TA3D
 		return M;
 	}
 
-	TA3D::Vector3D glNMult(const TA3D::Vector3D &A, const TA3D::Matrix &B)
+	TA3D::Vector3D glNMult(const TA3D::Vector3D& A, const TA3D::Matrix& B)
 	{
 		TA3D::Vector3D C;
 		C.x = A.x * B.E[0][0] + A.y * B.E[0][1] + A.z * B.E[0][2] + B.E[0][3];
@@ -208,7 +208,7 @@ namespace TA3D
 		return C;
 	}
 
-	TA3D::Matrix Translate(const TA3D::Vector3D &A)
+	TA3D::Matrix Translate(const TA3D::Vector3D& A)
 	{
 		TA3D::Matrix B;
 		B.E[0][0] = 1.0f;

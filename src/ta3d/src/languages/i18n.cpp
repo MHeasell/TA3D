@@ -49,8 +49,7 @@ namespace TA3D
 	}
 
 	I18N::I18N()
-		: pNextLangID(0), pDefaultLanguage(NULL), pCurrentLanguage(NULL),
-		  pTranslations()
+		: pNextLangID(0), pDefaultLanguage(NULL), pCurrentLanguage(NULL), pTranslations()
 	{
 		// English
 		pDefaultLanguage = addNewLanguageWL("english", "English");
@@ -193,8 +192,8 @@ namespace TA3D
 		ThreadingPolicy::MutexLocker locker;
 		k += pLanguageSuffix;
 		return (defaultValue.empty())
-				   ? pTranslations.pullAsString(k, key)
-				   : pTranslations.pullAsString(k, defaultValue);
+			? pTranslations.pullAsString(k, key)
+			: pTranslations.pullAsString(k, defaultValue);
 	}
 
 	void I18N::translate(String::Vector& out)

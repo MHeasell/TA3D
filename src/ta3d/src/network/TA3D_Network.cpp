@@ -77,7 +77,7 @@ namespace TA3D
 		tiremain = -1;
 	}
 
-	TA3DNetwork::TA3DNetwork(Gui::AREA *a, GameData *g)
+	TA3DNetwork::TA3DNetwork(Gui::AREA* a, GameData* g)
 		: messages(), enter(false), area(a), game_data(g), signal(0)
 	{
 	}
@@ -149,7 +149,7 @@ namespace TA3D
 			struct chat received_chat_msg;
 
 			if (network_manager.getNextChat(&received_chat_msg) == 0)
-				chat_msg = (char *)received_chat_msg.message;
+				chat_msg = (char*)received_chat_msg.message;
 			else
 				break;
 
@@ -177,7 +177,7 @@ namespace TA3D
 			special received_special_msg;
 
 			if (network_manager.getNextSpecial(&received_special_msg) == 0)
-				special_msg = (char *)received_special_msg.message;
+				special_msg = (char*)received_special_msg.message;
 			else
 				break;
 
@@ -249,7 +249,7 @@ namespace TA3D
 		// We'll put all the units we've updated here in order to do a grouped update
 		// WARNING: this should work only because remote units should not lock other units!!
 		units.lock();
-		std::deque<Unit *> updateList;
+		std::deque<Unit*> updateList;
 		while (--n) // Sync message receiver
 		{
 			struct sync sync_msg;
@@ -259,7 +259,7 @@ namespace TA3D
 
 			if (sync_msg.unit < units.max_unit)
 			{
-				Unit *pUnit = &(units.unit[sync_msg.unit]);
+				Unit* pUnit = &(units.unit[sync_msg.unit]);
 				pUnit->lock();
 				if (!(pUnit->flags & 1) || pUnit->exploding || pUnit->last_synctick[0] >= sync_msg.timestamp)
 				{
@@ -299,7 +299,7 @@ namespace TA3D
 				updateList.push_back(pUnit);
 			}
 		}
-		for (std::deque<Unit *>::iterator i = updateList.begin(); i != updateList.end(); ++i)
+		for (std::deque<Unit*>::iterator i = updateList.begin(); i != updateList.end(); ++i)
 		{
 			(*i)->draw_on_map();
 			(*i)->unlock();
@@ -347,10 +347,10 @@ namespace TA3D
 					const int sy = event_msg.opt4;
 					if (sx < the_map->bloc_w_db && sy < the_map->bloc_h_db)
 					{
-						const int type = feature_manager.get_feature_index((const char *)(event_msg.str));
+						const int type = feature_manager.get_feature_index((const char*)(event_msg.str));
 						if (type >= 0)
 						{
-							const Feature *const feature = feature_manager.getFeaturePointer(type);
+							const Feature* const feature = feature_manager.getFeaturePointer(type);
 							const Vector3D feature_pos(event_msg.x, event_msg.y, event_msg.z);
 							the_map->map_data(sx, sy).stuff = features.add_feature(feature_pos, type);
 							if (feature->blocking)
@@ -380,7 +380,7 @@ namespace TA3D
 						const int idx = the_map->map_data(sx, sy).stuff;
 						if (idx >= 0)
 						{
-							const Feature *const feature = feature_manager.getFeaturePointer(features.feature[idx].type);
+							const Feature* const feature = feature_manager.getFeaturePointer(features.feature[idx].type);
 							the_map->rect(sx - (feature->footprintx >> 1), sy - (feature->footprintz >> 1), feature->footprintx, feature->footprintz, -1);
 							features.delete_feature(idx); // Delete it
 						}
@@ -423,7 +423,7 @@ namespace TA3D
 						draw_obj.y[0] = event_msg.x;
 						draw_obj.x[1] = event_msg.y;
 						draw_obj.y[1] = event_msg.z;
-						draw_obj.text = I18N::Translate((char *)event_msg.str); // We can't load it now because of thread safety
+						draw_obj.text = I18N::Translate((char*)event_msg.str); // We can't load it now because of thread safety
 						draw_obj.tex = 0;
 						LuaProgram::inGame->draw_list.add(draw_obj);
 					}
@@ -438,13 +438,13 @@ namespace TA3D
 						draw_obj.b[0] = 1.0f;
 						draw_obj.x[0] = event_msg.x;
 						draw_obj.y[0] = event_msg.y;
-						draw_obj.text = I18N::Translate((char *)event_msg.str);
+						draw_obj.text = I18N::Translate((char*)event_msg.str);
 						LuaProgram::inGame->draw_list.add(draw_obj);
 					}
 					break;
 				case EVENT_PLAY:
 					if (event_msg.opt1 == players.local_human_id || event_msg.opt1 == 0xFFFF) // Do it only if the packet is for us
-						sound_manager->playSound((char *)event_msg.str);
+						sound_manager->playSound((char*)event_msg.str);
 					break;
 				case EVENT_CLF:
 					the_map->clear_FOW();
@@ -524,7 +524,7 @@ namespace TA3D
 					const Vector3D Dir((float)event_msg.dx / 16384.0f, (float)event_msg.dy / 16384.0f, (float)event_msg.dz / 16384.0f);
 					const Vector3D startpos(event_msg.vx, event_msg.vy, event_msg.vz);
 
-					const int w_type = weapon_manager.get_weapon_index((char *)event_msg.str);
+					const int w_type = weapon_manager.get_weapon_index((char*)event_msg.str);
 					if (w_type >= 0)
 					{
 						weapons.lock();
@@ -569,16 +569,16 @@ namespace TA3D
 								weapons.weapon[w_idx].ticks_to_compute = units.current_tick - event_msg.opt3; // Guess what happened (compensate latency)
 						}
 						else
-							LOG_WARNING(LOG_PREFIX_NET << "couldn't create weapon '" << (char *)event_msg.str << "'");
+							LOG_WARNING(LOG_PREFIX_NET << "couldn't create weapon '" << (char*)event_msg.str << "'");
 						weapons.unlock();
 					}
 					else
-						LOG_WARNING(LOG_PREFIX_NET << "couldn't identify weapon '" << (char *)event_msg.str << "'");
+						LOG_WARNING(LOG_PREFIX_NET << "couldn't identify weapon '" << (char*)event_msg.str << "'");
 				}
 				break;
 				case EVENT_UNIT_SCRIPT:
 					if (event_msg.opt1 < units.max_unit && (units.unit[event_msg.opt1].flags & 1))
-						units.unit[event_msg.opt1].launchScript(event_msg.opt2, event_msg.opt3, (int *)event_msg.str);
+						units.unit[event_msg.opt1].launchScript(event_msg.opt2, event_msg.opt3, (int*)event_msg.str);
 					break;
 				case EVENT_UNIT_DEATH:
 				{
@@ -603,14 +603,14 @@ namespace TA3D
 				{
 					units.lock();
 
-					const int idx = unit_manager.get_unit_index((char *)event_msg.str);
+					const int idx = unit_manager.get_unit_index((char*)event_msg.str);
 					if (idx >= 0)
 					{
 						Vector3D pos;
 						pos.x = event_msg.x;
 						pos.z = event_msg.z;
 						pos.y = the_map->get_unit_h(pos.x, pos.z);
-						Unit *unit = (Unit *)create_unit(idx, (event_msg.opt2 & 0xFF), pos, false); // We don't want to send sync data for this ...
+						Unit* unit = (Unit*)create_unit(idx, (event_msg.opt2 & 0xFF), pos, false); // We don't want to send sync data for this ...
 						if (unit)
 						{
 							unit->lock();
@@ -633,10 +633,10 @@ namespace TA3D
 							unit->unlock();
 						}
 						else
-							LOG_ERROR("Cannot create unit of type `" << (const char *)event_msg.str << "`");
+							LOG_ERROR("Cannot create unit of type `" << (const char*)event_msg.str << "`");
 					}
 					else
-						LOG_ERROR("Cannot create unit, `" << (const char *)event_msg.str << "` not found");
+						LOG_ERROR("Cannot create unit, `" << (const char*)event_msg.str << "` not found");
 
 					units.unlock();
 				}

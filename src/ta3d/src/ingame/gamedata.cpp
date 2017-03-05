@@ -105,7 +105,7 @@ namespace TA3D
 		return data;
 	}
 
-	void GameData::unserialize(const String &data)
+	void GameData::unserialize(const String& data)
 	{
 		String::Vector args;
 		data.explode(args, ',', false, true, true);

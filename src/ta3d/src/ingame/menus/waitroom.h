@@ -33,10 +33,10 @@ namespace TA3D
 			/*!
 		** \brief Execute an instance of WaitRoom
 		*/
-			static bool Execute(GameData *game_data);
+			static bool Execute(GameData* game_data);
 
 		public:
-			WaitRoom(GameData *game_data);
+			WaitRoom(GameData* game_data);
 			//! Destructor
 			virtual ~WaitRoom();
 
@@ -47,7 +47,7 @@ namespace TA3D
 			virtual bool maySwitchToAnotherMenu();
 
 		private:
-			GameData *game_data;
+			GameData* game_data;
 			bool dead_player[TA3D_PLAYERS_HARD_LIMIT];
 			uint32 ping_timer;
 

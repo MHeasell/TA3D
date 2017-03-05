@@ -30,7 +30,7 @@ namespace TA3D
 {
 	namespace VARS
 	{
-		extern SDL_Color *pal;
+		extern SDL_Color* pal;
 	}
 
 	using namespace TA3D::VARS;

@@ -26,11 +26,11 @@ namespace zuzuf
 	struct hash
 	{
 		inline hash() {}
-		inline size_t operator()(const K &v) const
+		inline size_t operator()(const K& v) const
 		{
 			size_t h(0U);
-			const unsigned char *p = (const unsigned char *)(&v);
-			for (const unsigned char *end = p + sizeof(K); p != end; ++p)
+			const unsigned char* p = (const unsigned char*)(&v);
+			for (const unsigned char* end = p + sizeof(K); p != end; ++p)
 				h = (h << 5) + h + *p;
 			return h;
 		}
@@ -38,7 +38,7 @@ namespace zuzuf
 
 #define TRIVIAL_HASH(T) \
 	template <>         \
-	inline size_t hash<T>::operator()(const T &v) const { return static_cast<T>(v); }
+	inline size_t hash<T>::operator()(const T& v) const { return static_cast<T>(v); }
 
 	TRIVIAL_HASH(bool)
 	TRIVIAL_HASH(char)
@@ -55,7 +55,7 @@ namespace zuzuf
 #include "murmurhash2.h"
 
 	template <>
-	inline size_t hash<std::string>::operator()(const std::string &v) const
+	inline size_t hash<std::string>::operator()(const std::string& v) const
 	{
 		return MurmurHash2(v.data(), (unsigned int)v.size());
 	}

@@ -34,11 +34,11 @@ namespace TA3D
 			class Download
 			{
 			public:
-				typedef std::list<Download *> List;
+				typedef std::list<Download*> List;
 
 			public:
 				~Download();
-				void start(const String &filename, const String &url, const int mID);
+				void start(const String& filename, const String& url, const int mID);
 				void stop();
 				void update();
 				bool downloading();
@@ -69,7 +69,7 @@ namespace TA3D
 			virtual void doFinalize();
 			virtual void waitForEvent();
 			virtual bool maySwitchToAnotherMenu();
-			virtual void addChatMessage(const String &message);
+			virtual void addChatMessage(const String& message);
 			virtual void parseServerMessages();
 			virtual void updateGUI();
 			virtual void hostAGame();

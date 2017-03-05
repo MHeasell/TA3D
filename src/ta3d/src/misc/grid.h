@@ -23,16 +23,16 @@ namespace TA3D
 	public:
 		typedef typename GridDataType<T>::type Type;
 		typedef typename std::vector<Type> Container;
-		typedef Type &reference;
-		typedef const Type &const_reference;
+		typedef Type& reference;
+		typedef const Type& const_reference;
 
 	public:
 		Grid();
 		Grid(unsigned int w, unsigned int h);
 
 	private:
-		Grid(const Grid &) {}
-		Grid &operator=(const Grid &) {}
+		Grid(const Grid&) {}
+		Grid& operator=(const Grid&) {}
 	public:
 		~Grid();
 		void resize(unsigned int w, unsigned int h);
@@ -42,15 +42,15 @@ namespace TA3D
 
 		inline int getWidth() const { return w; }
 		inline int getHeight() const { return h; }
-		inline void add(const Grid<T> &grid, int x, int y);
-		inline void sub(const Grid<T> &grid, int x, int y);
-		inline void clear(const T &v = T(0));
+		inline void add(const Grid<T>& grid, int x, int y);
+		inline void sub(const Grid<T>& grid, int x, int y);
+		inline void clear(const T& v = T(0));
 
-		inline void *getData() { return &(data.front()); }
+		inline void* getData() { return &(data.front()); }
 		inline unsigned int getSize() const { return (unsigned int)(data.size() * sizeof(T)); }
 
-		inline void hline(const int x0, const int x1, const int y, const T &col);
-		inline void circlefill(const int x, const int y, const int r, const T &col);
+		inline void hline(const int x0, const int x1, const int y, const T& col);
+		inline void circlefill(const int x, const int y, const int r, const T& col);
 
 	private:
 		unsigned int w;
@@ -58,7 +58,7 @@ namespace TA3D
 		Container data;
 	};
 
-	void gaussianFilter(Grid<float> &grid, float sigma);
+	void gaussianFilter(Grid<float>& grid, float sigma);
 }
 
 #include "grid.hxx"

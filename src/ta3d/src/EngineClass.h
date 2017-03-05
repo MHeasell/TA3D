@@ -92,8 +92,8 @@ namespace TA3D
 
 		void destroy();
 
-		void load(File *data);
-		void load(const String &filename);
+		void load(File* data);
+		void load(const String& filename);
 
 	public:
 		String missionname;
@@ -123,8 +123,8 @@ namespace TA3D
 	class BLOC // Blocs composant la carte
 	{
 	public:
-		Vector3D *point; // Points du bloc / Array of points
-		float *texcoord; // Coordonnées de texture / Texture coordinates
+		Vector3D* point; // Points du bloc / Array of points
+		float* texcoord; // Coordonnées de texture / Texture coordinates
 		GLuint tex;		 // Indice de texture OpenGl / OpenGL texture handle
 		byte nbindex;	// Nombre d'indices	/ Number of indexes
 		byte nbpoint;	// Nombre de points / Number of points
@@ -158,9 +158,9 @@ namespace TA3D
 	{
 	public:
 		short ntex;			   // Indique si la texture est chargée et doit être détruite
-		GLuint *tex;		   // Texture de surface
+		GLuint* tex;		   // Texture de surface
 		int nbbloc;			   // Nombre de blocs
-		BLOC *bloc;			   // Blocs composant le terrain
+		BLOC* bloc;			   // Blocs composant le terrain
 		Grid<uint16> bmap;	 // Tableau d'indice des blocs
 		Grid<float> h_map;	 // Tableau de l'élévation du terrain
 		Grid<float> ph_map;	// Tableau du relief projeté pour le calcul inverse(projection) lors de l'affichage
@@ -186,12 +186,12 @@ namespace TA3D
 		int bloc_h_db;
 		float map2blocdb_w;
 		float map2blocdb_h;
-		SDL_Surface *mini; // Minimap
+		SDL_Surface* mini; // Minimap
 		GLuint glmini;	 // Texture OpenGl pour la minimap
 		int mini_w;
 		int mini_h;
 		float sealvl;   // Niveau de la mer
-		Vector3D **lvl; // Bloc de flottants pour le relief de la carte
+		Vector3D** lvl; // Bloc de flottants pour le relief de la carte
 		bool water;		// Indique qu'il faut dessiner la mer
 		bool tnt;		// Indique si la carte est format tnt(format de total annihilation)
 		float sea_dec;  // Décalage de la mer
@@ -220,18 +220,18 @@ namespace TA3D
 
 		int low_nb_idx;
 		int low_w, low_h;
-		Vector3D *low_vtx;
-		Vector3D *low_vtx_flat;
-		float *low_tcoord;
-		uint8 *low_col;
-		GLuint *low_index;
+		Vector3D* low_vtx;
+		Vector3D* low_vtx_flat;
+		float* low_tcoord;
+		uint8* low_col;
+		GLuint* low_index;
 		GLuint low_tex;
 
 		uint8 fog_of_war;
 
 		void clear_FOW(sint8 FOW_flags = -1);
 
-		void load_details_texture(const String &filename);
+		void load_details_texture(const String& filename);
 
 		void init();
 
@@ -249,7 +249,7 @@ namespace TA3D
 
 		void update_player_visibility(int player_id, int px, int py, int r, int rd, int sn, int rd_j, int sn_j, bool jamming = false, bool black = false); // r -> sight, rd -> radar range, sn -> sonar range, j for jamming ray
 
-		void draw_mini(int x1 = 0, int y1 = 0, int w = 252, int h = 252, Camera *cam = NULL, byte player_mask = 0xFF); // Dessine la mini-carte
+		void draw_mini(int x1 = 0, int y1 = 0, int w = 252, int h = 252, Camera* cam = NULL, byte player_mask = 0xFF); // Dessine la mini-carte
 
 		float get_unit_h(float x, float y) const;
 
@@ -265,8 +265,8 @@ namespace TA3D
 
 		inline float get_nh(const int x, const int y) const;
 
-		void rect(int x1, int y1, int w, int h, int c, const String &yardmap = String(), bool open = false);
-		void obstaclesRect(int x1, int y1, int w, int h, bool b, const String &yardmap = String(), bool open = false);
+		void rect(int x1, int y1, int w, int h, int c, const String& yardmap = String(), bool open = false);
+		void obstaclesRect(int x1, int y1, int w, int h, bool b, const String& yardmap = String(), bool open = false);
 
 		bool check_rect(int x1, int y1, int w, int h, const int c) const;
 
@@ -278,15 +278,15 @@ namespace TA3D
 
 		float check_min_depth(int x1, int y1, int w, int h) const;
 
-		bool check_vents(int x1, int y1, int w, int h, const String &yard_map) const;
+		bool check_vents(int x1, int y1, int w, int h, const String& yard_map) const;
 
 		bool check_lava(int x1, int y1, int w, int h) const;
 
-		int check_metal(int x1, int y1, int unit_idx, int *stuff_id = NULL) const;
+		int check_metal(int x1, int y1, int unit_idx, int* stuff_id = NULL) const;
 
 		void draw_LD(byte player_mask, bool FLAT = false, float niv = 0.f, float t = 0.f);
-		void draw_HD(Camera *cam, byte player_mask, bool FLAT = false, float niv = 0.0f, float t = 0.0f, float dt = 1.0f, bool depth_only = false, bool check_visibility = true, bool draw_uw = true);
-		void draw(Camera *cam, byte player_mask, bool FLAT = false, float niv = 0.0f, float t = 0.0f, float dt = 1.0f, bool depth_only = false, bool check_visibility = true, bool draw_uw = true);
+		void draw_HD(Camera* cam, byte player_mask, bool FLAT = false, float niv = 0.0f, float t = 0.0f, float dt = 1.0f, bool depth_only = false, bool check_visibility = true, bool draw_uw = true);
+		void draw(Camera* cam, byte player_mask, bool FLAT = false, float niv = 0.0f, float t = 0.0f, float dt = 1.0f, bool depth_only = false, bool check_visibility = true, bool draw_uw = true);
 
 		Vector3D hit(Vector3D Pos, Vector3D Dir, bool water = true, float length = 200000.0f, bool allow_out = false) const; // Calcule l'intersection d'un rayon avec la carte(le rayon partant du dessus de la carte)
 	};
@@ -296,7 +296,7 @@ namespace TA3D
 	inline int MAP::get_zdec_notest(const int x, const int y) const { return static_cast<int>(ph_map(x, y) * (0.125f * tnt_transform_H_DIV) + 0.5f); }
 	inline float MAP::get_h(const int x, const int y) const { return h_map(Math::Clamp(x, 0, bloc_w_db - 2), Math::Clamp(y, 0, bloc_h_db - 2)); }
 
-	extern MAP *the_map;
+	extern MAP* the_map;
 
 	class WATER
 	{

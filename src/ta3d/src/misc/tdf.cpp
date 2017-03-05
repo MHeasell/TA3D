@@ -119,7 +119,7 @@ namespace TA3D
 	}
 
 	bool TDFParser::loadFromMemory(const String& caption, const char* data, uint64 size, const bool clearTable,
-								   const bool toUTF8, const bool gadgetMode, const bool widgetMode)
+		const bool toUTF8, const bool gadgetMode, const bool widgetMode)
 	{
 		if (NULL == data || 0 == size)
 			return true;

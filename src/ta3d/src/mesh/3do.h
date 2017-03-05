@@ -97,10 +97,10 @@ namespace TA3D
 	class Mesh3DO : public Mesh // Classe pour la gestion des (sous-)objets des modèles 3do
 	{
 	public:
-		int load(File *file, int dec = 0, const String &filename = String());
-		void create_from_2d(SDL_Surface *bmp, float w, float h, float max_h);
+		int load(File* file, int dec = 0, const String& filename = String());
+		void create_from_2d(SDL_Surface* bmp, float w, float h, float max_h);
 
-		virtual bool draw(float t, AnimationData *data_s = NULL, bool sel_primitive = false, bool alset = false, bool notex = false, int side = 0, bool chg_col = true, bool exploding_parts = false);
+		virtual bool draw(float t, AnimationData* data_s = NULL, bool sel_primitive = false, bool alset = false, bool notex = false, int side = 0, bool chg_col = true, bool exploding_parts = false);
 		virtual bool draw_nodl(bool alset = false);
 
 		void init3DO();
@@ -112,8 +112,8 @@ namespace TA3D
 		virtual ~Mesh3DO() { destroy3DO(); }
 
 	public:
-		static Model *load(const String &filename);
-		static const char *getExt();
+		static Model* load(const String& filename);
+		static const char* getExt();
 	};
 } // namespace TA3D
 

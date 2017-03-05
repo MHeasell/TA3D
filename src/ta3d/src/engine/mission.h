@@ -76,7 +76,7 @@ namespace TA3D
 			Target(Type type, int idx = -1, uint32 UID = 0) : type(type), idx(idx), UID(UID), Pos()
 			{
 			}
-			Target(const Vector3D &Pos) : type(TargetNone), idx(-1), UID(0), Pos(Pos)
+			Target(const Vector3D& Pos) : type(TargetNone), idx(-1), UID(0), Pos(Pos)
 			{
 			}
 
@@ -97,16 +97,16 @@ namespace TA3D
 				this->UID = UID;
 			}
 
-			void setPos(const Vector3D &Pos)
+			void setPos(const Vector3D& Pos)
 			{
 				if (type == TargetStatic)
 					this->Pos = Pos;
 			}
 
 			//! Functions to get a pointer to the target (checks target type)
-			Unit *getUnit() const;
-			Weapon *getWeapon() const;
-			const Vector3D &getPos() const;
+			Unit* getUnit() const;
+			Weapon* getWeapon() const;
+			const Vector3D& getPos() const;
 			bool isValid() const;
 
 			void save(gzFile file) const;
@@ -128,9 +128,9 @@ namespace TA3D
 			MissionStep() : type(MISSION_STANDBY), target(), flags(0), data(0) {}
 
 			uint8 getType() const { return type; }
-			Target &getTarget() { return target; }
+			Target& getTarget() { return target; }
 			byte getFlags() const { return flags; }
-			byte &Flags() { return flags; }
+			byte& Flags() { return flags; }
 			int getData() const { return data; }
 
 			void setType(uint8 type) { this->type = type; }
@@ -153,13 +153,13 @@ namespace TA3D
 		//! Default constructor
 		Mission();
 		//! Copy constructor
-		Mission(const Mission &rhs);
+		Mission(const Mission& rhs);
 		//! Destructor
 		~Mission();
 		//@}
 
 		//! Operator =
-		Mission &operator=(const Mission &rhs);
+		Mission& operator=(const Mission& rhs);
 
 		bool empty() const { return qStep.empty(); }
 		int size() const { return int(qStep.size()); }
@@ -180,7 +180,7 @@ namespace TA3D
 
 		bool hasNext() const { return qStep.size() > 1; }
 
-		MissionStep &lastStep() { return qStep.bottom(); }
+		MissionStep& lastStep() { return qStep.bottom(); }
 		uint8 lastMission() const { return qStep.bottom().getType(); }
 		uint8 mission() const { return qStep.top().getType(); }
 		uint8 getMissionType() const { return qStep.top().getType(); }
@@ -188,15 +188,15 @@ namespace TA3D
 		float getLastD() const { return last_d; }
 		int getData() const { return qStep.top().getData(); }
 		int getMoveData() const { return move_data; }
-		const AI::Path &getPath() const { return path; }
-		AI::Path &Path() { return path; }
-		Target &getTarget() { return qStep.top().getTarget(); }
+		const AI::Path& getPath() const { return path; }
+		AI::Path& Path() { return path; }
+		Target& getTarget() { return qStep.top().getTarget(); }
 		bool isStep() const { return qStep.size() != 1; }
 		byte getFlags() const { return qStep.top().getFlags(); }
-		byte &Flags() { return qStep.top().Flags(); }
+		byte& Flags() { return qStep.top().Flags(); }
 		uint16 getNode() const { return node; }
-		Unit *getUnit() { return getTarget().getUnit(); }
-		Weapon *getWeapon() { return getTarget().getWeapon(); }
+		Unit* getUnit() { return getTarget().getUnit(); }
+		Weapon* getWeapon() { return getTarget().getWeapon(); }
 
 		void setMissionType(uint8 type) { qStep.top().setType(type); }
 		void setTime(float time) { this->time = time; }
@@ -241,52 +241,52 @@ namespace TA3D
 		iterator end() { return sMission.end(); }
 		const_iterator begin() const { return sMission.begin(); }
 		const_iterator end() const { return sMission.end(); }
-		iterator erase(iterator &it) { return sMission.erase(it); }
+		iterator erase(iterator& it) { return sMission.erase(it); }
 		void clear() { sMission.clear(); }
 		void add()
 		{
 			sMission.push_back(Mission());
 			front().addStep();
 		}
-		void add(const Mission &mission) { sMission.push_back(mission); }
-		void insert(const iterator &it, const Mission &mission)
+		void add(const Mission& mission) { sMission.push_back(mission); }
+		void insert(const iterator& it, const Mission& mission)
 		{
 			sMission.insert(it, mission);
 		}
 
 		uint8 mission() const { return empty() ? uint8(0) : sMission.front().getMissionType(); }
 
-		Mission &front()
+		Mission& front()
 		{
 			return sMission.front();
 		}
 
-		const Mission &front() const
+		const Mission& front() const
 		{
 			return sMission.front();
 		}
 
-		Mission &back()
+		Mission& back()
 		{
 			return sMission.back();
 		}
 
-		const Mission &back() const
+		const Mission& back() const
 		{
 			return sMission.back();
 		}
 
-		Mission *operator->()
+		Mission* operator->()
 		{
 			return &(sMission.front());
 		}
 
-		const Mission *operator->() const
+		const Mission* operator->() const
 		{
 			return &(sMission.front());
 		}
 
-		Mission &operator[](int n)
+		Mission& operator[](int n)
 		{
 			iterator i = begin();
 			for (; n > 0 && i != end(); --n)
@@ -294,7 +294,7 @@ namespace TA3D
 			return *i;
 		}
 
-		const Mission &operator[](int n) const
+		const Mission& operator[](int n) const
 		{
 			const_iterator i = begin();
 			for (; n > 0 && i != end(); --n)

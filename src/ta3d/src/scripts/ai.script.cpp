@@ -66,7 +66,7 @@ namespace TA3D
 		return AI_TYPE_LUA;
 	}
 
-	void AiScript::changeName(const String &newName) // Change le nom de l'IA (conduit à la création d'un nouveau fichier)
+	void AiScript::changeName(const String& newName) // Change le nom de l'IA (conduit à la création d'un nouveau fichier)
 	{
 		pMutex.lock();
 		name = newName;
@@ -81,15 +81,15 @@ namespace TA3D
 		remove(filename.c_str()); // We don't want to save anything here, the Lua script is responsible for everything now
 	}
 
-	void AiScript::loadAI(const String &filename, const int id)
+	void AiScript::loadAI(const String& filename, const int id)
 	{
-		File *file = VFS::Instance()->readFile(filename);
+		File* file = VFS::Instance()->readFile(filename);
 
 		// Length of the name
 		byte l = (byte)file->getc();
 
 		// Reading the name
-		char *n = new char[l + 1];
+		char* n = new char[l + 1];
 		n[l] = 0;
 		file->read(n, l);
 		name = n;
@@ -101,7 +101,7 @@ namespace TA3D
 		register_info();
 	}
 
-	int lua_currentPlayerID(lua_State *L)
+	int lua_currentPlayerID(lua_State* L)
 	{
 		lua_getfield(L, LUA_REGISTRYINDEX, "playerID");
 		const int playerID = (int)lua_tointeger(L, -1);
@@ -109,41 +109,41 @@ namespace TA3D
 		return playerID;
 	}
 
-	int ai_playerID(lua_State *L) // playerID()
+	int ai_playerID(lua_State* L) // playerID()
 	{
 		lua_pushinteger(L, lua_currentPlayerID(L));
 		return 1;
 	}
 
-	int ai_nb_players(lua_State *L) // nb_players()
+	int ai_nb_players(lua_State* L) // nb_players()
 	{
 		lua_pushinteger(L, players.count());
 		return 1;
 	}
 
-	int ai_get_unit_number_for_player(lua_State *L) // get_unit_number_for_player( player_id )
+	int ai_get_unit_number_for_player(lua_State* L) // get_unit_number_for_player( player_id )
 	{
 		return program_get_unit_number_for_player(L);
 	}
 
-	int ai_get_unit_owner(lua_State *L) // get_unit_owner( unit_id )
+	int ai_get_unit_owner(lua_State* L) // get_unit_owner( unit_id )
 	{
 		return program_get_unit_owner(L);
 	}
 
-	int ai_get_unit_number(lua_State *L) // get_unit_number()
+	int ai_get_unit_number(lua_State* L) // get_unit_number()
 	{
 		lua_pushinteger(L, units.nb_unit);
 		return 1;
 	}
 
-	int ai_get_max_unit_number(lua_State *L) // get_max_unit_number()
+	int ai_get_max_unit_number(lua_State* L) // get_max_unit_number()
 	{
 		lua_pushinteger(L, units.max_unit);
 		return 1;
 	}
 
-	int ai_add_area_build_mission(lua_State *L) // add_area_build_mission( unit_id, pos_x, pos_z, radius, unit_type )
+	int ai_add_area_build_mission(lua_State* L) // add_area_build_mission( unit_id, pos_x, pos_z, radius, unit_type )
 	{
 		const int unit_id = (int)lua_tointeger(L, 1);
 		const float pos_x = (float)lua_tonumber(L, 2);
@@ -172,7 +172,7 @@ namespace TA3D
 		return 1;
 	}
 
-	int ai_add_build_mission(lua_State *L) // add_build_mission( unit_id, pos_x, pos_z, unit_type )
+	int ai_add_build_mission(lua_State* L) // add_build_mission( unit_id, pos_x, pos_z, unit_type )
 	{
 		const int unit_id = (int)lua_tointeger(L, 1);
 		const float pos_x = (float)lua_tonumber(L, 2);
@@ -198,7 +198,7 @@ namespace TA3D
 		return 0;
 	}
 
-	int ai_add_move_mission(lua_State *L) // add_move_mission( unit_id, pos_x, pos_z )
+	int ai_add_move_mission(lua_State* L) // add_move_mission( unit_id, pos_x, pos_z )
 	{
 		const int unit_id = (int)lua_tointeger(L, 1);
 		const float pos_x = (float)lua_tonumber(L, 2);
@@ -221,7 +221,7 @@ namespace TA3D
 		return 0;
 	}
 
-	int ai_add_attack_mission(lua_State *L) // add_attack_mission( unit_id, target_id )
+	int ai_add_attack_mission(lua_State* L) // add_attack_mission( unit_id, target_id )
 	{
 		const int unit_id = (int)lua_tointeger(L, 1);
 		const int target_id = (int)lua_tointeger(L, 2);
@@ -240,7 +240,7 @@ namespace TA3D
 		return 0;
 	}
 
-	int ai_add_patrol_mission(lua_State *L) // add_patrol_mission( unit_id, pos_x, pos_z )
+	int ai_add_patrol_mission(lua_State* L) // add_patrol_mission( unit_id, pos_x, pos_z )
 	{
 		const int unit_id = (int)lua_tointeger(L, 1);
 		const float pos_x = (float)lua_tonumber(L, 2);
@@ -263,7 +263,7 @@ namespace TA3D
 		return 0;
 	}
 
-	int ai_add_wait_mission(lua_State *L) // add_wait_mission( unit_id, time )
+	int ai_add_wait_mission(lua_State* L) // add_wait_mission( unit_id, time )
 	{
 		const int unit_id = (int)lua_tointeger(L, 1);
 		const float time = (float)lua_tonumber(L, 2);
@@ -280,7 +280,7 @@ namespace TA3D
 		return 0;
 	}
 
-	int ai_add_guard_mission(lua_State *L) // add_guard_mission( unit_id, target_id )
+	int ai_add_guard_mission(lua_State* L) // add_guard_mission( unit_id, target_id )
 	{
 		const int unit_id = (int)lua_tointeger(L, 1);
 		const int target_id = (int)lua_tointeger(L, 2);
@@ -297,7 +297,7 @@ namespace TA3D
 		return 0;
 	}
 
-	int ai_set_standing_orders(lua_State *L) // set_standing_orders( unit_id, move_order, fire_order )
+	int ai_set_standing_orders(lua_State* L) // set_standing_orders( unit_id, move_order, fire_order )
 	{
 		const int unit_id = (int)lua_tointeger(L, 1);
 		const int move_order = (int)lua_tointeger(L, 2);
@@ -318,7 +318,7 @@ namespace TA3D
 		return 0;
 	}
 
-	int ai_get_unit_health(lua_State *L) // get_unit_health( unit_id )
+	int ai_get_unit_health(lua_State* L) // get_unit_health( unit_id )
 	{
 		const int unit_id = (int)lua_tointeger(L, 1);
 		lua_pop(L, 1);
@@ -336,19 +336,19 @@ namespace TA3D
 		return 0;
 	}
 
-	int ai_map_w(lua_State *L) // map_w()
+	int ai_map_w(lua_State* L) // map_w()
 	{
 		lua_pushinteger(L, the_map->map_w);
 		return 1;
 	}
 
-	int ai_map_h(lua_State *L) // map_h()
+	int ai_map_h(lua_State* L) // map_h()
 	{
 		lua_pushinteger(L, the_map->map_h);
 		return 1;
 	}
 
-	int ai_player_side(lua_State *L) // player_side( player_id )
+	int ai_player_side(lua_State* L) // player_side( player_id )
 	{
 		const int player_id = (int)lua_tointeger(L, 1);
 		lua_pop(L, 1);
@@ -361,7 +361,7 @@ namespace TA3D
 		return 1;
 	}
 
-	int ai_allied(lua_State *L) // allied( id0, id1 )
+	int ai_allied(lua_State* L) // allied( id0, id1 )
 	{
 		const int player_id0 = (int)lua_tointeger(L, 1);
 		const int player_id1 = (int)lua_tointeger(L, 2);
@@ -375,7 +375,7 @@ namespace TA3D
 		return 1;
 	}
 
-	int ai_unit_position(lua_State *L) // unit_position( unit_id )
+	int ai_unit_position(lua_State* L) // unit_position( unit_id )
 	{
 		const int unit_id = (int)lua_tointeger(L, 1);
 		lua_pop(L, 1);
@@ -392,7 +392,7 @@ namespace TA3D
 		return 1;
 	}
 
-	int ai_self_destruct_unit(lua_State *L) // self_destruct_unit( unit_id )
+	int ai_self_destruct_unit(lua_State* L) // self_destruct_unit( unit_id )
 	{
 		const int unit_id = (int)lua_tointeger(L, 1);
 		lua_pop(L, 1);
@@ -408,7 +408,7 @@ namespace TA3D
 		return 0;
 	}
 
-	int ai_attack(lua_State *L) // attack( attacker_id, target_id )
+	int ai_attack(lua_State* L) // attack( attacker_id, target_id )
 	{
 		const int attacker_idx = (int)lua_tointeger(L, 1);
 		const int target_idx = (int)lua_tointeger(L, 2);
@@ -424,14 +424,14 @@ namespace TA3D
 		return 0;
 	}
 
-	int ai_get_build_list(lua_State *L) // get_build_list( type )
+	int ai_get_build_list(lua_State* L) // get_build_list( type )
 	{
 		const int type = (int)lua_tointeger(L, -1);
 		lua_pop(L, 1);
 
 		if (type >= 0 && type < unit_manager.nb_unit)
 		{
-			UnitType *pType = unit_manager.unit_type[type];
+			UnitType* pType = unit_manager.unit_type[type];
 			lua_newtable(L); // Create the list
 
 			for (int i = 0; i < pType->nb_unit; i++) // Fill the list
@@ -445,14 +445,14 @@ namespace TA3D
 		return 1;
 	}
 
-	int ai_get_type_data(lua_State *L) // get_type_data( type )
+	int ai_get_type_data(lua_State* L) // get_type_data( type )
 	{
 		const int type = (int)lua_tointeger(L, -1);
 		lua_pop(L, 1);
 
 		if (type >= 0 && type < unit_manager.nb_unit)
 		{
-			UnitType *pType = unit_manager.unit_type[type];
+			UnitType* pType = unit_manager.unit_type[type];
 			lua_newtable(L); // Create the list
 
 			lua_pushboolean(L, pType->canattack); // unit can attack
@@ -539,14 +539,14 @@ namespace TA3D
 		return 1;
 	}
 
-	int ai_get_unit_data(lua_State *L) // get_unit_data( index )
+	int ai_get_unit_data(lua_State* L) // get_unit_data( index )
 	{
 		const int idx = (int)lua_tointeger(L, -1);
 		lua_pop(L, 1);
 
 		if (idx >= 0 && idx < (int)units.max_unit)
 		{
-			Unit *pUnit = &(units.unit[idx]);
+			Unit* pUnit = &(units.unit[idx]);
 			pUnit->lock();
 			lua_newtable(L); // Create a new entry
 
@@ -574,7 +574,7 @@ namespace TA3D
 		return 1;
 	}
 
-	int ai_get_unit_list(lua_State *L) // get_unit_list( player_id ), if player_id == -1 or unset, returns all units
+	int ai_get_unit_list(lua_State* L) // get_unit_list( player_id ), if player_id == -1 or unset, returns all units
 	{
 		const int player_id = lua_isnoneornil(L, 1) ? -1 : (int)lua_tointeger(L, 1);
 		if (!lua_isnone(L, 1))
@@ -589,7 +589,7 @@ namespace TA3D
 			const uint32 e = units.idx_list[i];
 			units.unlock();
 
-			Unit *pUnit = &(units.unit[e]);
+			Unit* pUnit = &(units.unit[e]);
 			pUnit->lock();
 			if (pUnit->owner_id == player_id || player_id == -1)
 			{
@@ -605,7 +605,7 @@ namespace TA3D
 		return 1;
 	}
 
-	int ai_kmeans(lua_State *L) // kmeans( array_of_vectors, k ), returns k centroids
+	int ai_kmeans(lua_State* L) // kmeans( array_of_vectors, k ), returns k centroids
 	{
 		const int k = (int)lua_tointeger(L, 2);
 		const int n = (int)lua_objlen(L, 1);
@@ -664,13 +664,13 @@ namespace TA3D
 		return 1;
 	}
 
-	int ai_nb_unit_types(lua_State *L) // nb_unit_types()
+	int ai_nb_unit_types(lua_State* L) // nb_unit_types()
 	{
 		lua_pushinteger(L, unit_manager.nb_unit);
 		return 1;
 	}
 
-	int ai_get_path_length_for_unit_type(lua_State *L) // get_path_length_for_unit_type( start_x, start_z, end_x, end_z, unit_id, max_dist ) = path length if any, -1 if none was found
+	int ai_get_path_length_for_unit_type(lua_State* L) // get_path_length_for_unit_type( start_x, start_z, end_x, end_z, unit_id, max_dist ) = path length if any, -1 if none was found
 	{
 		const float start_x = (float)lua_tonumber(L, 1);
 		const float start_z = (float)lua_tonumber(L, 2);
@@ -705,7 +705,7 @@ namespace TA3D
 		return 1;
 	}
 
-	int ai_get_area_units(lua_State *L) // get_area_units (nx, ny, sx, sy, Type, playerID)
+	int ai_get_area_units(lua_State* L) // get_area_units (nx, ny, sx, sy, Type, playerID)
 	{
 		const float nx = (float)lua_tonumber(L, 1);
 		const float ny = (float)lua_tonumber(L, 2);
@@ -725,17 +725,13 @@ namespace TA3D
 		int n = 1;
 		for (uint32 i = 0; i < units.max_unit; ++i)
 		{
-			const Unit *const pUnit = &(units.unit[i]);
+			const Unit* const pUnit = &(units.unit[i]);
 			if (!(pUnit->flags & 1))
 				continue;
 			if (pUnit->cur_px < x0 || pUnit->cur_px >= x1 || pUnit->cur_py < y0 || pUnit->cur_py >= y1)
 				continue;
 			const int type_id = pUnit->type_id;
-			if ((pUnit->owner_id == player_id || player_id == -1) && type_id >= 0 &&
-				(unit_type_id == -1 || type_id == unit_type_id ||
-				 (unit_type_id == -2 && unit_manager.unit_type[type_id]->canattack) ||
-				 (unit_type_id == -3 && unit_manager.unit_type[type_id]->Builder)) &&
-				!seen.contains(pUnit->idx))
+			if ((pUnit->owner_id == player_id || player_id == -1) && type_id >= 0 && (unit_type_id == -1 || type_id == unit_type_id || (unit_type_id == -2 && unit_manager.unit_type[type_id]->canattack) || (unit_type_id == -3 && unit_manager.unit_type[type_id]->Builder)) && !seen.contains(pUnit->idx))
 			{
 				seen.insert(pUnit->idx);
 				lua_pushinteger(L, pUnit->idx);
@@ -747,7 +743,7 @@ namespace TA3D
 		return 1;
 	}
 
-	int ai_get_player_resources(lua_State *L) // get_player_resources (playerID)
+	int ai_get_player_resources(lua_State* L) // get_player_resources (playerID)
 	{
 		const int player_id = lua_isnoneornil(L, 1) ? -1 : (int)lua_tointeger(L, 1);
 		lua_pop(L, 1);
@@ -834,7 +830,7 @@ namespace TA3D
 		}
 	}
 
-	void AiScript::proc(void * /*param*/)
+	void AiScript::proc(void* /*param*/)
 	{
 		while (isRunning() && is_running() && !crashed)
 		{

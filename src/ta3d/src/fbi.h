@@ -92,8 +92,8 @@ namespace TA3D
 	public:
 		ScriptData::Ptr script; // Scripts de l'unité
 		GLuint glpic;			// Image de l'unité sous forme de texture OpenGl
-		Model *model;			// Modèle associé à l'unité
-		SDL_Surface *unitpic;   // Image de l'unité / Unit picture
+		Model* model;			// Modèle associé à l'unité
+		SDL_Surface* unitpic;   // Image de l'unité / Unit picture
 		bool isfeature;			// tell if we must turn this unit into a feature
 		byte SortBias;
 		short AltFromSeaLevel;
@@ -190,16 +190,16 @@ namespace TA3D
 		bool HideDamage;					// Cache la vie de l'unité aux autres joueurs
 		bool ImmuneToParalyzer;				// Immunisation
 		bool Stealth;
-		float MakesMetal;				 // Si l'unité produit du métal
-		float ExtractsMetal;			 // métal extrait par l'unité
-		bool TidalGenerator;			 // Si l'unité est une centrale marée-motrice
-		int TransportMaxUnits;			 // Maximum d'unités transportables
-		bool kamikaze;					 // Unité kamikaze
-		uint16 kamikazedistance;		 // Maximal distance from its target before self-destructing
-		short WindGenerator;			 // Centrale de type Eolienne
-		String yardmap;					 // To tell where the unit is on the map
-		std::vector<WeaponDef *> weapon; // Weapons
-		int attackrunlength;			 // Distance à laquelle l'unité commence une attaque (bombardiers)
+		float MakesMetal;				// Si l'unité produit du métal
+		float ExtractsMetal;			// métal extrait par l'unité
+		bool TidalGenerator;			// Si l'unité est une centrale marée-motrice
+		int TransportMaxUnits;			// Maximum d'unités transportables
+		bool kamikaze;					// Unité kamikaze
+		uint16 kamikazedistance;		// Maximal distance from its target before self-destructing
+		short WindGenerator;			// Centrale de type Eolienne
+		String yardmap;					// To tell where the unit is on the map
+		std::vector<WeaponDef*> weapon; // Weapons
+		int attackrunlength;			// Distance à laquelle l'unité commence une attaque (bombardiers)
 		bool antiweapons;
 		bool emitting_points_computed; // Just to test if we need to get emitting point from script
 		uint8 selfdestructcountdown;
@@ -224,7 +224,7 @@ namespace TA3D
 		std::vector<GLuint> PicList;
 		short nb_pages;
 
-		DlData *dl_data;
+		DlData* dl_data;
 
 		/*-----------------------------------------------------------------------*/
 
@@ -262,7 +262,7 @@ namespace TA3D
         ** \brief Check if the unit belongs to the cat category
         ** \param cat The category to check
         */
-		bool checkCategory(const String &cat) const
+		bool checkCategory(const String& cat) const
 		{
 			return !cat.empty() && Category.count(ToLower(cat)) != 0;
 		}
@@ -296,7 +296,7 @@ namespace TA3D
         ** \param data The file buffer
         ** \param size File size
         */
-		int load(const String &filename);
+		int load(const String& filename);
 
 		/*!
         ** \brief Load data contained in `download/ *dl.tdf` files to build extra build menus
@@ -324,7 +324,7 @@ namespace TA3D
 		friend class UnitDataLoader;
 
 	public:
-		typedef std::vector<UnitType *> UnitList;
+		typedef std::vector<UnitType*> UnitList;
 
 	public:
 		int nb_unit;					 // Nombre d'unités
@@ -341,7 +341,7 @@ namespace TA3D
 		Mutex mInternals;
 
 	public:
-		HashMap<DlData *>::Dense h_dl_data; // To speed things up
+		HashMap<DlData*>::Dense h_dl_data; // To speed things up
 
 		void init();
 
@@ -356,11 +356,11 @@ namespace TA3D
 			h_dl_data.clear();
 		}
 
-		void load_panel_texture(const String &intgaf);
+		void load_panel_texture(const String& intgaf);
 
-		UnitType *load_unit(const String &filename); // Ajoute une nouvelle unité
+		UnitType* load_unit(const String& filename); // Ajoute une nouvelle unité
 
-		inline int get_unit_index(const String &unit_name) // Cherche l'indice de l'unité unit_name dans la liste d'unités
+		inline int get_unit_index(const String& unit_name) // Cherche l'indice de l'unité unit_name dans la liste d'unités
 		{
 			HashMap<int>::Dense::const_iterator it = unit_hashtable.find(ToLower(unit_name));
 			if (it == unit_hashtable.end())
@@ -369,9 +369,9 @@ namespace TA3D
 		}
 
 	public:
-		void analyse(const String &filename, const int unit_index);
+		void analyse(const String& filename, const int unit_index);
 
-		void analyse2(File *file);
+		void analyse2(File* file);
 
 		void gather_build_data();
 
@@ -379,15 +379,15 @@ namespace TA3D
 
 		void gather_all_build_data();
 
-		void load_script_file(const String &unit_name);
+		void load_script_file(const String& unit_name);
 
 		void waitUntilReady() const;
 
-		int unit_build_menu(int index, int omb, float &dt, int scrolling, bool GUI); // Affiche et gère le menu des unités
+		int unit_build_menu(int index, int omb, float& dt, int scrolling, bool GUI); // Affiche et gère le menu des unités
 
 		void Identify(); // Identifie les pièces aux quelles les scripts font référence
 
-		int load_all_units(ProgressNotifier *progress = NULL);
+		int load_all_units(ProgressNotifier* progress = NULL);
 	};
 
 	class UnitDataLoader : public Thread
@@ -397,7 +397,7 @@ namespace TA3D
 	protected:
 		UnitDataLoader();
 
-		virtual void proc(void *);
+		virtual void proc(void*);
 	};
 
 	extern UnitManager unit_manager;

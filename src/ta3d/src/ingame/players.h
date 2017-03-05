@@ -59,7 +59,7 @@ namespace TA3D
 		/*!
 		** \brief
 		*/
-		void set_network(const TA3DNetwork::Ptr &net) { ta3d_network = net; }
+		void set_network(const TA3DNetwork::Ptr& net) { ta3d_network = net; }
 
 		/*!
 		** \brief
@@ -84,8 +84,8 @@ namespace TA3D
 		/*!
 		** \brief
 		*/
-		int add(const String &name, const String &SIDE, byte _control, unsigned int E = 10000, unsigned int M = 10000,
-				const String &AI_level = "[C] EASY", uint16 teamMask = 0);
+		int add(const String& name, const String& SIDE, byte _control, unsigned int E = 10000, unsigned int M = 10000,
+			const String& AI_level = "[C] EASY", uint16 teamMask = 0);
 
 		/*!
 		** \brief
@@ -150,7 +150,7 @@ namespace TA3D
 		//!
 		bool annihilated[TA3D_PLAYERS_HARD_LIMIT]; // Le joueur a perdu la partie??
 		//!
-		AI_PLAYER *ai_command; // Controleurs d'intelligence artificielle
+		AI_PLAYER* ai_command; // Controleurs d'intelligence artificielle
 		//!
 		uint32 nb_unit[TA3D_PLAYERS_HARD_LIMIT]; // Nombre d'unités de chaque joueur
 		//! Side of which we draw the game interface
@@ -200,7 +200,7 @@ namespace TA3D
 
 	protected:
 		//!
-		void proc(void *);
+		void proc(void*);
 		//!
 		void signalExitThread();
 

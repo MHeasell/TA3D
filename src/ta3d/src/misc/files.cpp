@@ -94,7 +94,8 @@ namespace TA3D
 				// but in practice it does behave this way
 				// on the platforms we care about.
 				std::ifstream file(filename.c_str(), std::ios::binary);
-				if (file.is_open()) {
+				if (file.is_open())
+				{
 					uint64 start = file.tellg();
 					file.seekg(0, file.end);
 					uint64 end = file.tellg();
@@ -138,7 +139,8 @@ namespace TA3D
 			bool SaveToFile(const String& filename, const String& content)
 			{
 				std::ofstream file(filename.c_str(), std::ios::trunc);
-				if (!file.is_open()) {
+				if (!file.is_open())
+				{
 					return false;
 				}
 
@@ -162,7 +164,8 @@ namespace TA3D
 
 			bool Copy(const String& from, const String& to, const bool overwrite)
 			{
-				if  (overwrite && Exists(to)) {
+				if (overwrite && Exists(to))
+				{
 					return false;
 				}
 
@@ -173,7 +176,8 @@ namespace TA3D
 				}
 
 				std::ofstream out(to.c_str(), std::ios::binary);
-				if (!out.is_open()) {
+				if (!out.is_open())
+				{
 					return false;
 				}
 

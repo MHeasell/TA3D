@@ -51,7 +51,7 @@ namespace TA3D
 		init();
 	}
 
-	int WeaponManager::add_weapon(const String &name)
+	int WeaponManager::add_weapon(const String& name)
 	{
 		++nb_weapons;
 		weapon.resize(nb_weapons);
@@ -64,7 +64,7 @@ namespace TA3D
 		return nb_weapons - 1;
 	}
 
-	void WeaponManager::load_tdf(File *file)
+	void WeaponManager::load_tdf(File* file)
 	{
 		TDFParser parser;
 		parser.setSpecialSection("damage"); // We want to get the list of units in damage sections

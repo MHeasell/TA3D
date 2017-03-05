@@ -38,7 +38,7 @@ namespace TA3D
 			destroy();
 		}
 
-		void GfxTexture::load(const String &filename)
+		void GfxTexture::load(const String& filename)
 		{
 			destroy();
 			set(gfx->load_texture(filename, FILTER_TRILINEAR, &width, &height));

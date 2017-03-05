@@ -67,7 +67,7 @@ namespace TA3D
 		void append(const char* s, size_type count);
 
 		template <typename... Args>
-		void appendFormat(const char* fmt, const Args& ... args)
+		void appendFormat(const char* fmt, const Args&... args)
 		{
 			append(format(fmt, args...));
 		}
@@ -110,7 +110,7 @@ namespace TA3D
 
 		// same as size()
 		size_type length() const;
-		
+
 		bool contains(const String& substr) const;
 
 		bool contains(char ch) const;
@@ -162,7 +162,7 @@ namespace TA3D
 		size_type find_last_of(const char ch) const;
 
 		template <typename... Args>
-		String format(const char* fmt, const Args& ... args)
+		String format(const char* fmt, const Args&... args)
 		{
 			return String(fmt::sprintf(fmt, args...));
 		}
@@ -184,7 +184,7 @@ namespace TA3D
 		// The following behaviours are quirks from Yuni:
 		//  - All elements are trimmed
 		//  - Empty strings are not kept
-		template<class T>
+		template <class T>
 		void explode(T& out, const String& separators, bool emptyBefore = true, bool keepEmptyElements = false, bool trimElements = true) const
 		{
 			if (emptyBefore)
@@ -228,7 +228,7 @@ namespace TA3D
 			}
 		}
 
-		template<class T>
+		template <class T>
 		void explode(T& out, char separator, bool emptyBefore = true, bool keepEmptyElements = false, bool trimElements = true) const
 		{
 			String s;
@@ -237,7 +237,7 @@ namespace TA3D
 		}
 
 		// From yuni, a different interface for explode
-		template<class T>
+		template <class T>
 		void split(T& out, const String& separators, bool keepEmptyElements = false, bool trimElements = true, bool emptyBefore = true) const
 		{
 			explode(out, separators, emptyBefore, keepEmptyElements, trimElements);

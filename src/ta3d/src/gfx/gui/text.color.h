@@ -31,11 +31,11 @@ namespace TA3D
 		public:
 			TEXT_COLOR();
 
-			void load(TA3D::TDFParser &parser, const String &prefix, float scale);
+			void load(TA3D::TDFParser& parser, const String& prefix, float scale);
 
-			void print(Font *font, const float x, const float y, const String &text) const;
+			void print(Font* font, const float x, const float y, const String& text) const;
 
-			void print(Font *font, const float x, const float y, const uint32 col, const String &text) const;
+			void print(Font* font, const float x, const float y, const uint32 col, const String& text) const;
 
 		public:
 			uint32 font_color;

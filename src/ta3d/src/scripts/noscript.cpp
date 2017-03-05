@@ -37,7 +37,7 @@ namespace TA3D
 		return 0;
 	}
 
-	void NoScript::load(ScriptData *)
+	void NoScript::load(ScriptData*)
 	{
 	}
 
@@ -47,22 +47,22 @@ namespace TA3D
 	}
 
 	//! functions used to call/run functions
-	void NoScript::call(const String &, int *, int)
+	void NoScript::call(const String&, int*, int)
 	{
 	}
 
-	int NoScript::execute(const String &, int *, int)
+	int NoScript::execute(const String&, int*, int)
 	{
 		return 0;
 	}
 
 	//! functions used to create new threads sharing the same environment
-	NoScript *NoScript::fork()
+	NoScript* NoScript::fork()
 	{
 		return NULL;
 	}
 
-	NoScript *NoScript::fork(const String &, int *, int)
+	NoScript* NoScript::fork(const String&, int*, int)
 	{
 		return NULL;
 	}

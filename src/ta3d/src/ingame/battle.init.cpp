@@ -95,22 +95,7 @@ namespace TA3D
 	}
 
 	Battle::Battle(GameData* g)
-		: pResult(brUnknown), pGameData(g), pNetworkEnabled(false), pNetworkIsServer(false),
-		  map(nullptr),
-		  sky(),
-		  water(0),
-		  water_sim0(0),
-		  water_sim1(0),
-		  water_sim2(0),
-		  water_distortions(0),
-		  escMenuWasVisible(false),
-		  height_tex(0),
-		  transtex(0),
-		  reflectex(0),
-		  first_pass(0),
-		  second_pass(0),
-		  water_color(0),
-		  bShowPing(false)
+		: pResult(brUnknown), pGameData(g), pNetworkEnabled(false), pNetworkIsServer(false), map(nullptr), sky(), water(0), water_sim0(0), water_sim1(0), water_sim2(0), water_distortions(0), escMenuWasVisible(false), height_tex(0), transtex(0), reflectex(0), first_pass(0), second_pass(0), water_color(0), bShowPing(false)
 	{
 		LOG_INFO(LOG_PREFIX_BATTLE << "Preparing a new battle...");
 		grab_mouse(lp_CONFIG->grab_inputs);
@@ -282,27 +267,27 @@ namespace TA3D
 #ifdef TA3D_LOADING_STATS
 		LOG_INFO(LOG_PREFIX_BATTLE << "statistics:");
 		const char* functionName[] = {"initPreflight(g)",
-									  "initTextures()",
-									  "init3DModels()",
-									  "initGraphicalFeatures()",
-									  "initWeapons()",
-									  "initUnits()",
-									  "initIntermediateCleanup()",
-									  "initEngine()",
-									  "initPlayers()",
-									  "initRestrictions()",
-									  "initGUI()",
-									  "initTheMap()",
-									  "initTheSky()",
-									  "initTheSun()",
-									  "initAllTextures()",
-									  "initTheCamera()",
-									  "initTheWind()",
-									  "initTheFog()",
-									  "initParticules()",
-									  "initTheWater()",
-									  "initPostFlight()",
-									  "waitUntilReady()"};
+			"initTextures()",
+			"init3DModels()",
+			"initGraphicalFeatures()",
+			"initWeapons()",
+			"initUnits()",
+			"initIntermediateCleanup()",
+			"initEngine()",
+			"initPlayers()",
+			"initRestrictions()",
+			"initGUI()",
+			"initTheMap()",
+			"initTheSky()",
+			"initTheSun()",
+			"initAllTextures()",
+			"initTheCamera()",
+			"initTheWind()",
+			"initTheFog()",
+			"initParticules()",
+			"initTheWater()",
+			"initPostFlight()",
+			"waitUntilReady()"};
 		for (int i = 0; i < 22; ++i)
 			LOG_INFO(LOG_PREFIX_BATTLE << functionName[i] << " done in " << timer[i + 1] - timer[i] << " msec.");
 #endif
@@ -413,9 +398,9 @@ namespace TA3D
 		for (int i = 0; i < pGameData->nb_players; ++i)
 		{
 			players.add(pGameData->player_names[i], pGameData->player_sides[i],
-						pGameData->player_control[i],
-						pGameData->energy[i], pGameData->metal[i],
-						pGameData->ai_level[i], pGameData->team[i]); // add a player
+				pGameData->player_control[i],
+				pGameData->energy[i], pGameData->metal[i],
+				pGameData->ai_level[i], pGameData->team[i]); // add a player
 		}
 
 		if (players.local_human_id >= 0)

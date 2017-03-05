@@ -122,17 +122,19 @@ namespace TA3D
 		class MyLogBuffer
 		{
 		public:
-			MyLogBuffer(MyLogger& l): logger(l) {}
+			MyLogBuffer(MyLogger& l) : logger(l) {}
 			~MyLogBuffer()
 			{
 				logger.Log(pBuffer);
 			}
 
-			template<typename T> MyLogBuffer& operator<<(const T& item)
+			template <typename T>
+			MyLogBuffer& operator<<(const T& item)
 			{
 				pBuffer.append(item);
 				return *this;
 			}
+
 		private:
 			MyLogger& logger;
 			String pBuffer;

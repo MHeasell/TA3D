@@ -39,7 +39,7 @@ namespace TA3D
 		init();
 	}
 
-	void DrawList::add(DrawObject &obj)
+	void DrawList::add(DrawObject& obj)
 	{
 		LuaProgram::inGame->lock();
 		if (!next)
@@ -52,7 +52,7 @@ namespace TA3D
 		LuaProgram::inGame->unlock();
 	}
 
-	void DrawList::draw(Font *fnt)
+	void DrawList::draw(Font* fnt)
 	{
 		glPushMatrix();
 		const float screen_w = float(SCREEN_W);

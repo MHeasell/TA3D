@@ -62,8 +62,7 @@ namespace TA3D
 	}
 
 	Gaf::Frame::Data::Data()
-		: Width(0), Height(0), XPos(0), YPos(0), Transparency(0), Compressed(0),
-		  FramePointers(0), Unknown2(0), PtrFrameData(0), Unknown3(0)
+		: Width(0), Height(0), XPos(0), YPos(0), Transparency(0), Compressed(0), FramePointers(0), Unknown2(0), PtrFrameData(0), Unknown3(0)
 	{
 	}
 
@@ -83,7 +82,7 @@ namespace TA3D
 	}
 
 	void Gaf::ToTexturesList(std::vector<GLuint>& out, const String& filename, const String& imgname,
-							 int* w, int* h, const bool truecolor, const int filter)
+		int* w, int* h, const bool truecolor, const int filter)
 	{
 		out.clear();
 

@@ -35,12 +35,12 @@ namespace TA3D
 		unlock();
 	}
 
-	int SockList::Add(TA3DSock *sock)
+	int SockList::Add(TA3DSock* sock)
 	{
 		MutexLocker mLock(*this);
 		if (maxid > 10000) //arbitrary limit
 			return -1;
-		SocketNode *node = new SocketNode;
+		SocketNode* node = new SocketNode;
 		++maxid;
 		sockets[maxid] = node;
 		node->sock = sock;
@@ -58,7 +58,7 @@ namespace TA3D
 		return 0;
 	}
 
-	SocketThread *SockList::getThread(const int id)
+	SocketThread* SockList::getThread(const int id)
 	{
 		MutexLocker mLock(*this);
 		SockType::iterator i = sockets.find(id);
@@ -67,7 +67,7 @@ namespace TA3D
 		return &((*i)->thread);
 	}
 
-	TA3DSock *SockList::getSock(const int id)
+	TA3DSock* SockList::getSock(const int id)
 	{
 		MutexLocker mLock(*this);
 		SockType::iterator i = sockets.find(id);

@@ -11,12 +11,7 @@ namespace TA3D
 	{
 
 		GUIOBJ::GUIOBJ()
-			: Type(0), Focus(false), Etat(false),
-			  x1(0.0f), y1(0.0f), x2(0.0f), y2(0.0f), Func(NULL), Data(0),
-			  Pos(0), Value(-1), s(1.0f), Flag(0),
-			  MouseOn(false), activated(false), destroy_img(false),
-			  u1(0.0f), v1(0.0f), u2(1.0f), v2(1.0f),
-			  wait_a_turn(false), current_state(0), nb_stages(0), shortcut_key(-1)
+			: Type(0), Focus(false), Etat(false), x1(0.0f), y1(0.0f), x2(0.0f), y2(0.0f), Func(NULL), Data(0), Pos(0), Value(-1), s(1.0f), Flag(0), MouseOn(false), activated(false), destroy_img(false), u1(0.0f), v1(0.0f), u2(1.0f), v2(1.0f), wait_a_turn(false), current_state(0), nb_stages(0), shortcut_key(-1)
 		{
 		}
 
@@ -158,7 +153,7 @@ namespace TA3D
 		}
 
 		void GUIOBJ::create_ta_button(float X1, float Y1, const String::Vector& Caption,
-									  const std::vector<GLuint>& states, int nb_st)
+			const std::vector<GLuint>& states, int nb_st)
 		{
 			gltex_states.clear();
 			gltex_states.resize(states.size());
@@ -189,7 +184,7 @@ namespace TA3D
 		}
 
 		void GUIOBJ::create_button(const float X1, const float Y1, const float X2, const float Y2,
-								   const String& caption, void (*F)(int), const float size)
+			const String& caption, void (*F)(int), const float size)
 		{
 			Type = OBJ_BUTTON;
 			x1 = X1;
@@ -206,7 +201,7 @@ namespace TA3D
 		}
 
 		void GUIOBJ::create_optionc(const float X1, const float Y1, const String& caption, const bool ETAT,
-									void (*F)(int), Skin* skin, const float size)
+			void (*F)(int), Skin* skin, const float size)
 		{
 			Type = OBJ_OPTIONC;
 			x1 = X1;
@@ -235,7 +230,7 @@ namespace TA3D
 		}
 
 		void GUIOBJ::create_optionb(const float X1, const float Y1, const String& Caption, const bool ETAT,
-									void (*F)(int), Skin* skin, const float size)
+			void (*F)(int), Skin* skin, const float size)
 		{
 			Type = OBJ_OPTIONB;
 			x1 = X1;
@@ -264,7 +259,7 @@ namespace TA3D
 		}
 
 		void GUIOBJ::create_texteditor(const float X1, const float Y1, const float X2, const float Y2,
-									   const String& caption, const float size)
+			const String& caption, const float size)
 		{
 			Type = OBJ_TEXTEDITOR;
 			x1 = X1;
@@ -293,7 +288,7 @@ namespace TA3D
 		}
 
 		void GUIOBJ::create_textbar(const float X1, const float Y1, const float X2, const float Y2, const String& Caption,
-									const unsigned int MaxChar, void (*F)(int), const float size)
+			const unsigned int MaxChar, void (*F)(int), const float size)
 		{
 			Type = OBJ_TEXTBAR;
 			x1 = X1;
@@ -313,7 +308,7 @@ namespace TA3D
 		}
 
 		void GUIOBJ::create_menu(const float X1, const float Y1, const String::Vector& Entry,
-								 void (*F)(int), const float size)
+			void (*F)(int), const float size)
 		{
 			Type = OBJ_FMENU;
 			x1 = X1;
@@ -331,7 +326,7 @@ namespace TA3D
 		}
 
 		void GUIOBJ::create_menu(const float X1, const float Y1, const float X2, const float Y2,
-								 const String::Vector& Entry, void (*F)(int), const float size)
+			const String::Vector& Entry, void (*F)(int), const float size)
 		{
 			Type = OBJ_MENU;
 			x1 = X1;
@@ -351,7 +346,7 @@ namespace TA3D
 
 		// Crée une barre de progression
 		void GUIOBJ::create_pbar(const float X1, const float Y1, const float X2, const float Y2,
-								 const int PCent, const float size)
+			const int PCent, const float size)
 		{
 			Type = OBJ_PBAR;
 			x1 = X1;
@@ -447,7 +442,7 @@ namespace TA3D
 		}
 
 		void GUIOBJ::create_hslider(const float X1, const float Y1, const float X2, const float Y2,
-									const int vmin, const int vmax, const int value)
+			const int vmin, const int vmax, const int value)
 		{
 			Type = OBJ_HSLIDER;
 			x1 = X1;
@@ -466,7 +461,7 @@ namespace TA3D
 		}
 
 		void GUIOBJ::create_vslider(const float X1, const float Y1, const float X2, const float Y2,
-									const int vmin, const int vmax, const int value)
+			const int vmin, const int vmax, const int value)
 		{
 			Type = OBJ_VSLIDER;
 			x1 = X1;

@@ -21,19 +21,19 @@ namespace TA3D
         ** \param comment a few things about the mod
         ** \param url where to download the mod
         */
-		ModInfo(const int ID = -1, const String &name = String(), const String &version = String(), const String &author = String(), const String &comment = String(), const String &url = String());
+		ModInfo(const int ID = -1, const String& name = String(), const String& version = String(), const String& author = String(), const String& comment = String(), const String& url = String());
 
 		/*!
         ** \brief Constructor
         ** \param info the mod info line returned by netserver, something like MOD "ID" "version" "name" "url" "author" "comment"
         */
-		ModInfo(const String &info);
+		ModInfo(const String& info);
 
 		/*!
         ** \brief Parse the MOD line returned by netserver
         ** \param info the mod info line returned by netserver, something like MOD "ID" "version" "name" "url" "author" "comment"
         */
-		void parse(const String &info);
+		void parse(const String& info);
 
 		/*!
         ** \brief Write mod information to the associated info.mod file
@@ -44,7 +44,7 @@ namespace TA3D
         ** \brief Load mod information from the given info.mod file
         ** \param modName the name of the mod to read
         */
-		void read(const String &modName);
+		void read(const String& modName);
 
 		int getID() const { return ID; }
 		String getName() const { return name; }
@@ -59,7 +59,7 @@ namespace TA3D
 		void setInstalled(bool b);
 		void uninstall();
 
-		static String cleanStringForPortablePathName(const String &s);
+		static String cleanStringForPortablePathName(const String& s);
 
 	private:
 		int ID;

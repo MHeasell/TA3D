@@ -38,7 +38,7 @@ namespace TA3D
 			virtual ~File() {}
 
 			//! Read s bytes and write them in memory pointed by p
-			virtual int read(void *p, int s) = 0;
+			virtual int read(void* p, int s) = 0;
 			//! Returns the size of the file
 			virtual int size() = 0;
 			//! Returns true if end of file has been reached
@@ -48,19 +48,19 @@ namespace TA3D
 			//! Set absolute position in file
 			virtual void seek(int pos) = 0;
 			//! Read a single line from the file, returns true while end of file has not been reached
-			virtual bool readLine(String &line) = 0;
+			virtual bool readLine(String& line) = 0;
 			//! Returns true if the file is opened
 			virtual bool isOpen() = 0;
 			//! Returns a pointer to a memory buffer containing the file
-			virtual const char *data() = 0;
+			virtual const char* data() = 0;
 			//! Close the file
 			virtual void close() = 0;
 			//! Tell if this is a real file (useful for use with external libraries)
 			virtual bool isReal() const = 0;
 			//! Returns the real filename (if it's a real file)
-			virtual const String &getRealFilename() const = 0;
+			virtual const String& getRealFilename() const = 0;
 
-			virtual File &operator=(const File &f) = 0;
+			virtual File& operator=(const File& f) = 0;
 
 			inline String getString()
 			{
@@ -85,16 +85,16 @@ namespace TA3D
 
 			//! Read binary data to fill a variable of arbitrary type
 			template <class T>
-			inline void read(T &a) { read((char *)&a, sizeof(a)); }
+			inline void read(T& a) { read((char*)&a, sizeof(a)); }
 			template <class T>
-			inline File &operator>>(T &a)
+			inline File& operator>>(T& a)
 			{
 				read(a);
 				return *this;
 			}
 
 			template <class T>
-			void load(T &out)
+			void load(T& out)
 			{
 				String line;
 				while (this->readLine(line))

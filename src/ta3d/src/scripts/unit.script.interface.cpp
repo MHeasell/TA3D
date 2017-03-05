@@ -24,13 +24,13 @@
 
 namespace TA3D
 {
-	UnitScriptInterface *UnitScriptInterface::instanciate(ScriptData::Ptr data)
+	UnitScriptInterface* UnitScriptInterface::instanciate(ScriptData::Ptr data)
 	{
-		UnitScriptInterface *usi = NULL;
+		UnitScriptInterface* usi = NULL;
 
-		if (dynamic_cast<CobScript *>(data)) // Try CobScript (OTA COB/BOS)
+		if (dynamic_cast<CobScript*>(data)) // Try CobScript (OTA COB/BOS)
 			usi = new CobVm();
-		else if (dynamic_cast<LuaData *>(data)) // Try LuaData (Lua)
+		else if (dynamic_cast<LuaData*>(data)) // Try LuaData (Lua)
 			usi = new UnitScript();
 
 		if (usi)
@@ -40,38 +40,37 @@ namespace TA3D
 		return usi;
 	}
 
-	int UnitScriptInterface::getReturnValue(const String &name)
+	int UnitScriptInterface::getReturnValue(const String& name)
 	{
 		if (caller)
-			return (static_cast<UnitScriptInterface *>(caller))->getReturnValue(name);
+			return (static_cast<UnitScriptInterface*>(caller))->getReturnValue(name);
 		return return_value[ToUpper(name)];
 	}
 
-	void UnitScriptInterface::setReturnValue(const String &name, int value)
+	void UnitScriptInterface::setReturnValue(const String& name, int value)
 	{
 		if (caller)
-			(static_cast<UnitScriptInterface *>(caller))->setReturnValue(name, value);
+			(static_cast<UnitScriptInterface*>(caller))->setReturnValue(name, value);
 		else
 			return_value[ToUpper(name)] = value;
 	}
 
-	const char *UnitScriptInterface::script_name[] =
-		{
-			"QueryPrimary", "AimPrimary", "FirePrimary",
-			"QuerySecondary", "AimSecondary", "FireSecondary",
-			"QueryTertiary", "AimTertiary", "FireTertiary",
-			"TargetCleared", "StopBuilding", "Stop",
-			"StartBuilding", "Go", "Killed",
-			"StopMoving", "Deactivate", "Activate",
-			"Create", "MotionControl", "StartMoving",
-			"MoveRate1", "MoveRate2", "MoveRate3",
-			"RequestState", "TransportPickup", "TransportDrop",
-			"QueryTransport", "BeginTransport", "EndTransport",
-			"SetSpeed", "SetDirection", "SetMaxReloadTime",
-			"QueryBuildInfo", "SweetSpot", "RockUnit",
-			"QueryLandingPad", "SetSFXoccupy", "HitByWeapon",
-			"QueryNanoPiece", "AimFromPrimary", "AimFromSecondary",
-			"AimFromTertiary"};
+	const char* UnitScriptInterface::script_name[] = {
+		"QueryPrimary", "AimPrimary", "FirePrimary",
+		"QuerySecondary", "AimSecondary", "FireSecondary",
+		"QueryTertiary", "AimTertiary", "FireTertiary",
+		"TargetCleared", "StopBuilding", "Stop",
+		"StartBuilding", "Go", "Killed",
+		"StopMoving", "Deactivate", "Activate",
+		"Create", "MotionControl", "StartMoving",
+		"MoveRate1", "MoveRate2", "MoveRate3",
+		"RequestState", "TransportPickup", "TransportDrop",
+		"QueryTransport", "BeginTransport", "EndTransport",
+		"SetSpeed", "SetDirection", "SetMaxReloadTime",
+		"QueryBuildInfo", "SweetSpot", "RockUnit",
+		"QueryLandingPad", "SetSFXoccupy", "HitByWeapon",
+		"QueryNanoPiece", "AimFromPrimary", "AimFromSecondary",
+		"AimFromTertiary"};
 
 	const String UnitScriptInterface::get_script_name(int id)
 	{
@@ -95,7 +94,7 @@ namespace TA3D
 		return script_name[id];
 	}
 
-	int UnitScriptInterface::get_script_id(const String &name)
+	int UnitScriptInterface::get_script_id(const String& name)
 	{
 		for (int id = 0; id < NB_SCRIPT; id++)
 			if (strcasecmp(script_name[id], name.c_str()) == 0)

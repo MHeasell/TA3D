@@ -78,7 +78,7 @@ namespace TA3D
 		** \param size
 		*/
 			void create_button(const float X1, const float Y1, const float X2, const float Y2,
-							   const String& caption, void (*F)(int), const float size = 1.0f);
+				const String& caption, void (*F)(int), const float size = 1.0f);
 
 			/*!
 		** \brief Option Checkbox
@@ -92,7 +92,7 @@ namespace TA3D
 		** \param size
 		*/
 			void create_optionc(const float X1, const float Y1, const String& caption, const bool ETAT,
-								void (*F)(int), Skin* skin = NULL, const float size = 1.0f);
+				void (*F)(int), Skin* skin = NULL, const float size = 1.0f);
 
 			/*!
 		** \brief Option button
@@ -101,7 +101,7 @@ namespace TA3D
 		** \param Y1
 		*/
 			void create_optionb(const float X1, const float Y1, const String& Caption, const bool ETAT, void (*F)(int),
-								Skin* skin = NULL, const float size = 1.0f);
+				Skin* skin = NULL, const float size = 1.0f);
 
 			/*!
 		** \brief Create a Text edit
@@ -112,7 +112,7 @@ namespace TA3D
 		** \param Y2
 		*/
 			void create_textbar(const float X1, const float Y1, const float X2, const float Y2, const String& Caption,
-								const unsigned int MaxChar, void (*F)(int) = NULL, const float size = 1.0f);
+				const unsigned int MaxChar, void (*F)(int) = NULL, const float size = 1.0f);
 
 			/*!
 		** \brief Create a TEXTEDITOR widget, it's a large text editor
@@ -125,7 +125,7 @@ namespace TA3D
 		** \param size
 		*/
 			void create_texteditor(const float X1, const float Y1, const float X2, const float Y2,
-								   const String& caption, const float size = 1.0f);
+				const String& caption, const float size = 1.0f);
 
 			/*!
 		** \brief Create a floatting menu
@@ -137,7 +137,7 @@ namespace TA3D
 		** \param size
 		*/
 			void create_menu(const float X1, const float Y1, const String::Vector& Entry, void (*F)(int),
-							 const float size = 1.0f);
+				const float size = 1.0f);
 
 			/*!
 		** \brief Create a Popup menu
@@ -151,7 +151,7 @@ namespace TA3D
 		** \param size
 		*/
 			void create_menu(const float X1, const float Y1, const float X2, const float Y2, const String::Vector& Entry,
-							 void (*F)(int), const float size = 1.0f);
+				void (*F)(int), const float size = 1.0f);
 
 			/*!
 		** \brief
@@ -162,7 +162,7 @@ namespace TA3D
 		** \param Y2
 		*/
 			void create_pbar(const float X1, const float Y1, const float X2, const float Y2,
-							 const int PCent, const float size = 1.0f);
+				const int PCent, const float size = 1.0f);
 
 			/*!
 		** \brief
@@ -223,7 +223,7 @@ namespace TA3D
 		** \param nb_st
 		*/
 			void create_ta_button(const float X1, const float Y1, const String::Vector& Caption,
-								  const std::vector<GLuint>& states, const int nb_st);
+				const std::vector<GLuint>& states, const int nb_st);
 
 			/*!
 		** \brief
@@ -237,9 +237,9 @@ namespace TA3D
 		** \param value
 		*/
 			void create_hslider(const float X1, const float Y1, const float X2, const float Y2,
-								const int vmin, const int vmax, const int value);
+				const int vmin, const int vmax, const int value);
 			void create_vslider(const float X1, const float Y1, const float X2, const float Y2,
-								const int vmin, const int vmax, const int value);
+				const int vmin, const int vmax, const int value);
 
 			void print(std::ostream& out);
 

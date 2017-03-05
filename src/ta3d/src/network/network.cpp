@@ -31,12 +31,7 @@ namespace TA3D
 	/**  methods for Network  *****/
 	/******************************/
 
-	Network::Network() : getfile_thread(), sendfile_thread(), transfer_progress(),
-						 specialq(),
-						 chatq(),
-						 syncq(),
-						 eventq(),
-						 broadcastq(), broadcastaddressq()
+	Network::Network() : getfile_thread(), sendfile_thread(), transfer_progress(), specialq(), chatq(), syncq(), eventq(), broadcastq(), broadcastaddressq()
 	{
 		myMode = 0;
 		tohost_socket = NULL;
@@ -50,12 +45,12 @@ namespace TA3D
 		admin_thread.join();
 		broadcast_thread.join();
 
-		for (std::list<GetFileThread *>::iterator i = getfile_thread.begin(); i != getfile_thread.end(); ++i)
+		for (std::list<GetFileThread*>::iterator i = getfile_thread.begin(); i != getfile_thread.end(); ++i)
 		{
 			(*i)->join();
 			delete *i;
 		}
-		for (std::list<SendFileThread *>::iterator i = sendfile_thread.begin(); i != sendfile_thread.end(); ++i)
+		for (std::list<SendFileThread*>::iterator i = sendfile_thread.begin(); i != sendfile_thread.end(); ++i)
 		{
 			(*i)->join();
 			delete *i;
@@ -75,7 +70,7 @@ namespace TA3D
 	{
 		broadcast_socket.open(port);
 		//spawn broadcast thread
-		net_thread_params *params = new net_thread_params;
+		net_thread_params* params = new net_thread_params;
 		params->network = this;
 		LOG_DEBUG(LOG_PREFIX_NET << "Spawning a thread for broadcasting...");
 		broadcast_thread.spawn(params);
@@ -85,7 +80,7 @@ namespace TA3D
 	//port is the port the game listens on for connections
 	//proto 4=ipv4only 6=ipv6only 0=automatic
 	//not finished
-	int Network::HostGame(const String &name, uint16 port)
+	int Network::HostGame(const String& name, uint16 port)
 	{
 		if (myMode == 0)
 		{
@@ -114,7 +109,7 @@ namespace TA3D
 		ping_delay.clear();
 
 		//spawn listening thread
-		net_thread_params *params = new net_thread_params;
+		net_thread_params* params = new net_thread_params;
 		params->network = this;
 		LOG_DEBUG(LOG_PREFIX_NET << "Spawning a thread for listening...");
 		listen_thread.spawn(params);
@@ -131,7 +126,7 @@ namespace TA3D
 	}
 
 	//not finished
-	int Network::Connect(const String &target, uint16 port)
+	int Network::Connect(const String& target, uint16 port)
 	{
 		if (myMode == 0)
 			myMode = 2;
@@ -162,7 +157,7 @@ namespace TA3D
 
 		//get game info or start admin thread here
 		LOG_DEBUG(LOG_PREFIX_NET << "Spawning a thread for admin");
-		net_thread_params *params = new net_thread_params;
+		net_thread_params* params = new net_thread_params;
 		params->network = this;
 		admin_thread.spawn(params);
 
@@ -182,12 +177,12 @@ namespace TA3D
 
 		ftmutex.lock();
 
-		for (std::list<GetFileThread *>::iterator i = getfile_thread.begin(); i != getfile_thread.end(); ++i)
+		for (std::list<GetFileThread*>::iterator i = getfile_thread.begin(); i != getfile_thread.end(); ++i)
 		{
 			(*i)->join();
 			delete *i;
 		}
-		for (std::list<SendFileThread *>::iterator i = sendfile_thread.begin(); i != sendfile_thread.end(); ++i)
+		for (std::list<SendFileThread*>::iterator i = sendfile_thread.begin(); i != sendfile_thread.end(); ++i)
 		{
 			(*i)->join();
 			delete *i;
@@ -213,17 +208,17 @@ namespace TA3D
 		ping_delay.clear();
 	}
 
-	void Network::stopFileTransfer(const String &port, int to_id)
+	void Network::stopFileTransfer(const String& port, int to_id)
 	{
 		if (port.empty())
 		{
 			ftmutex.lock();
-			for (std::list<GetFileThread *>::iterator i = getfile_thread.begin(); i != getfile_thread.end(); ++i)
+			for (std::list<GetFileThread*>::iterator i = getfile_thread.begin(); i != getfile_thread.end(); ++i)
 			{
 				(*i)->join();
 				delete *i;
 			}
-			for (std::list<SendFileThread *>::iterator i = sendfile_thread.begin(); i != sendfile_thread.end(); ++i)
+			for (std::list<SendFileThread*>::iterator i = sendfile_thread.begin(); i != sendfile_thread.end(); ++i)
 			{
 				(*i)->join();
 				delete *i;
@@ -239,11 +234,11 @@ namespace TA3D
 		{
 			ftmutex.lock();
 			int nb_port = port.to_int();
-			for (std::list<GetFileThread *>::iterator i = getfile_thread.begin(); i != getfile_thread.end();)
+			for (std::list<GetFileThread*>::iterator i = getfile_thread.begin(); i != getfile_thread.end();)
 			{
 				if ((*i)->port == nb_port)
 				{
-					GetFileThread *p = *i;
+					GetFileThread* p = *i;
 					getfile_thread.erase(i++);
 
 					p->join();
@@ -254,11 +249,11 @@ namespace TA3D
 				else
 					++i;
 			}
-			for (std::list<SendFileThread *>::iterator i = sendfile_thread.begin(); i != sendfile_thread.end();)
+			for (std::list<SendFileThread*>::iterator i = sendfile_thread.begin(); i != sendfile_thread.end();)
 			{
 				if ((*i)->port == nb_port && (to_id == -1 || to_id == (*i)->player_id))
 				{
-					SendFileThread *p = *i;
+					SendFileThread* p = *i;
 					sendfile_thread.erase(i++);
 
 					p->join();
@@ -275,24 +270,24 @@ namespace TA3D
 		setFileDirty();
 	}
 
-	bool Network::isTransferFinished(const String &port)
+	bool Network::isTransferFinished(const String& port)
 	{
 		MutexLocker mLock(ftmutex);
 		int nb_port = port.to_int();
-		for (std::list<GetFileThread *>::iterator i = getfile_thread.begin(); i != getfile_thread.end(); i++)
+		for (std::list<GetFileThread*>::iterator i = getfile_thread.begin(); i != getfile_thread.end(); i++)
 			if ((*i)->port == nb_port)
 				return false;
-		for (std::list<SendFileThread *>::iterator i = sendfile_thread.begin(); i != sendfile_thread.end(); i++)
+		for (std::list<SendFileThread*>::iterator i = sendfile_thread.begin(); i != sendfile_thread.end(); i++)
 			if ((*i)->port == nb_port)
 				return false;
 		return true;
 	}
 
 	//not completely finished
-	int Network::addPlayer(TA3DSock *sock)
+	int Network::addPlayer(TA3DSock* sock)
 	{
 		int n;
-		SocketThread *thread;
+		SocketThread* thread;
 
 		slmutex.lock();
 		n = players.Add(sock);
@@ -306,7 +301,7 @@ namespace TA3D
 			return -1;
 		}
 
-		net_thread_params *params = new net_thread_params;
+		net_thread_params* params = new net_thread_params;
 		params->network = this;
 		params->sockid = n;
 		LOG_DEBUG(LOG_PREFIX_NET << "Spawning socket thread");
@@ -338,7 +333,7 @@ namespace TA3D
 		int v = 0;
 		for (int i = 1; i <= players.getMaxId(); ++i)
 		{
-			TA3DSock *sock = players.getSock(i);
+			TA3DSock* sock = players.getSock(i);
 			if (sock && !sock->isOpen())
 			{
 				v = players.Remove(i);
@@ -372,7 +367,7 @@ namespace TA3D
 		if (!fileDirty)
 			return;
 		ftmutex.lock();
-		for (std::list<GetFileThread *>::iterator i = getfile_thread.begin(); i != getfile_thread.end();)
+		for (std::list<GetFileThread*>::iterator i = getfile_thread.begin(); i != getfile_thread.end();)
 		{
 			if ((*i)->isDead())
 			{
@@ -391,7 +386,7 @@ namespace TA3D
 			else
 				i++;
 		}
-		for (std::list<SendFileThread *>::iterator i = sendfile_thread.begin(); i != sendfile_thread.end();)
+		for (std::list<SendFileThread*>::iterator i = sendfile_thread.begin(); i != sendfile_thread.end();)
 		{
 			if ((*i)->isDead())
 			{
@@ -439,7 +434,7 @@ namespace TA3D
 						if (getNextSpecial(&special_msg) == 0)
 						{
 							String::Vector params;
-							String((char *)(special_msg.message)).explode(params, ' ');
+							String((char*)(special_msg.message)).explode(params, ' ');
 							if (params.size() == 3 && params[0] == "RESPONSE" && params[1] == "PLAYER_ID")
 							{
 								myID = params[2].to_int();
@@ -476,7 +471,7 @@ namespace TA3D
 						if (getNextSpecial(&special_msg) == 0)
 						{
 							String::Vector params;
-							String((char *)(special_msg.message)).explode(params, ' ');
+							String((char*)(special_msg.message)).explode(params, ' ');
 							if (params.size() == 2 && params[0] == "STATUS")
 							{
 								if (params[1] == "NEW")
@@ -499,7 +494,7 @@ namespace TA3D
 		return nullptr; // Not connected
 	}
 
-	int Network::sendAll(const String &msg)
+	int Network::sendAll(const String& msg)
 	{
 		LOG_DEBUG(String("sendAll(\"") << msg << "\")");
 		struct chat chat;
@@ -512,7 +507,7 @@ namespace TA3D
 		return sendSpecial(strtochat(&chat, msg), src_id, dst_id);
 	}
 
-	int Network::sendSpecial(struct chat *chat, int src_id, int dst_id, bool all)
+	int Network::sendSpecial(struct chat* chat, int src_id, int dst_id, bool all)
 	{
 		if (src_id == -1)
 			chat->from = (uint16)myID;
@@ -523,7 +518,7 @@ namespace TA3D
 			int v = 0;
 			for (int i = 1; i <= players.getMaxId(); i++)
 			{
-				TA3DSock *sock = players.getSock(i);
+				TA3DSock* sock = players.getSock(i);
 				if (sock && i != src_id && (dst_id == -1 || i == dst_id))
 					v += sock->sendSpecial(chat, all);
 			}
@@ -547,7 +542,7 @@ namespace TA3D
 			int v = 0;
 			for (int i = 1; i <= players.getMaxId(); ++i)
 			{
-				TA3DSock *sock = players.getSock(i);
+				TA3DSock* sock = players.getSock(i);
 				if (sock && i != src_id && (dst_id == -1 || i == dst_id))
 				{
 					v += sock->sendPing();
@@ -573,7 +568,7 @@ namespace TA3D
 	{
 		if (myMode == 1) // Server mode
 		{
-			TA3DSock *sock = players.getSock(dst_id);
+			TA3DSock* sock = players.getSock(dst_id);
 			if (sock)
 				return sock->sendPong();
 			return 0;
@@ -587,7 +582,7 @@ namespace TA3D
 		return -1; // Not connected, it shouldn't be possible to get here if we're not connected ...
 	}
 
-	int Network::sendChat(struct chat *chat, int src_id)
+	int Network::sendChat(struct chat* chat, int src_id)
 	{
 		if (src_id == -1)
 			chat->from = (uint16)myID;
@@ -598,7 +593,7 @@ namespace TA3D
 			int v = 0;
 			for (int i = 1; i <= players.getMaxId(); i++)
 			{
-				TA3DSock *sock = players.getSock(i);
+				TA3DSock* sock = players.getSock(i);
 				if (sock && i != src_id)
 					v += sock->sendChat(chat);
 			}
@@ -613,9 +608,9 @@ namespace TA3D
 		return -1; // Not connected, it shouldn't be possible to get here if we're not connected ...
 	}
 
-	int Network::sendFileData(int player, uint16 port, const byte *data, int size)
+	int Network::sendFileData(int player, uint16 port, const byte* data, int size)
 	{
-		TA3DSock *sock = players.getSock(player);
+		TA3DSock* sock = players.getSock(player);
 		if (sock)
 		{
 			size += 3;
@@ -629,9 +624,9 @@ namespace TA3D
 		return -1;
 	}
 
-	int Network::sendFileResponse(int player, uint16 port, const byte *data, int size)
+	int Network::sendFileResponse(int player, uint16 port, const byte* data, int size)
 	{
-		TA3DSock *sock = players.getSock(player);
+		TA3DSock* sock = players.getSock(player);
 		if (sock)
 		{
 			size += 3;
@@ -645,7 +640,7 @@ namespace TA3D
 		return -1;
 	}
 
-	int Network::sendSync(struct sync *sync, int src_id)
+	int Network::sendSync(struct sync* sync, int src_id)
 	{
 		if (myMode == 1) // Server mode
 		{
@@ -654,7 +649,7 @@ namespace TA3D
 			int v = 0;
 			for (int i = 1; i <= players.getMaxId(); i++)
 			{
-				TA3DSock *sock = players.getSock(i);
+				TA3DSock* sock = players.getSock(i);
 				if (sock && i != src_id)
 					v += sock->sendSync(sync);
 			}
@@ -676,7 +671,7 @@ namespace TA3D
 			int v = 0;
 			for (int i = 1; i <= players.getMaxId(); i++)
 			{
-				TA3DSock *sock = players.getSock(i);
+				TA3DSock* sock = players.getSock(i);
 				if (sock)
 					v += sock->sendTick(tick, speed);
 			}
@@ -691,7 +686,7 @@ namespace TA3D
 		return -1; // Not connected, it shouldn't be possible to get here if we're not connected ...
 	}
 
-	int Network::sendEvent(struct event *event, int src_id)
+	int Network::sendEvent(struct event* event, int src_id)
 	{
 		if (myMode == 1) // Server mode
 		{
@@ -702,7 +697,7 @@ namespace TA3D
 			{
 				if (i == src_id)
 					continue;
-				TA3DSock *sock = players.getSock(i);
+				TA3DSock* sock = players.getSock(i);
 				if (sock)
 					v = sock->sendEvent(event);
 			}
@@ -717,15 +712,15 @@ namespace TA3D
 		return -1;
 	}
 
-	int Network::sendFile(int player, const String &filename, const String &port)
+	int Network::sendFile(int player, const String& filename, const String& port)
 	{
 		ftmutex.lock();
-		SendFileThread *thread = new SendFileThread();
+		SendFileThread* thread = new SendFileThread();
 		sendfile_thread.push_back(thread);
 		thread->port = port.to_int();
 		thread->player_id = player;
 
-		net_thread_params *params = new net_thread_params;
+		net_thread_params* params = new net_thread_params;
 		params->network = this;
 		params->sockid = player;
 		params->filename = filename;
@@ -736,7 +731,7 @@ namespace TA3D
 		return 0;
 	}
 
-	int Network::getNextSpecial(struct chat *chat)
+	int Network::getNextSpecial(struct chat* chat)
 	{
 		MutexLocker mLock(xqmutex);
 		if (specialq.empty())
@@ -746,7 +741,7 @@ namespace TA3D
 		return 0;
 	}
 
-	int Network::getNextChat(struct chat *chat)
+	int Network::getNextChat(struct chat* chat)
 	{
 		MutexLocker mLock(cqmutex);
 		if (chatq.empty())
@@ -756,7 +751,7 @@ namespace TA3D
 		return 0;
 	}
 
-	int Network::getNextSync(struct sync *sync)
+	int Network::getNextSync(struct sync* sync)
 	{
 		MutexLocker mLock(sqmutex);
 		if (syncq.empty())
@@ -766,7 +761,7 @@ namespace TA3D
 		return 0;
 	}
 
-	int Network::getNextEvent(struct event *event)
+	int Network::getNextEvent(struct event* event)
 	{
 		MutexLocker mLock(eqmutex);
 		if (eventq.empty())
@@ -776,20 +771,20 @@ namespace TA3D
 		return 0;
 	}
 
-	String Network::getFile(int player, const String &filename)
+	String Network::getFile(int player, const String& filename)
 	{
 		ftmutex.lock();
 
 		int port = 7776; // Take the next port not in use
-		for (std::list<GetFileThread *>::iterator i = getfile_thread.begin(); i != getfile_thread.end(); ++i)
+		for (std::list<GetFileThread*>::iterator i = getfile_thread.begin(); i != getfile_thread.end(); ++i)
 			port = Math::Max((*i)->port, port);
 		++port;
 
-		GetFileThread *thread = new GetFileThread();
+		GetFileThread* thread = new GetFileThread();
 		thread->port = port;
 		getfile_thread.push_back(thread);
 
-		net_thread_params *params = new net_thread_params;
+		net_thread_params* params = new net_thread_params;
 		params->network = this;
 		params->sockid = player;
 		params->filename = filename;
@@ -800,7 +795,7 @@ namespace TA3D
 		return String(port);
 	}
 
-	int Network::broadcastMessage(const String &msg)
+	int Network::broadcastMessage(const String& msg)
 	{
 		if (!broadcast_socket.isOpen())
 			return -1;
@@ -955,7 +950,7 @@ namespace TA3D
 		if (myMode == 2)
 			id = 0;
 		phmutex.lock();
-		std::deque<uint32> &times = ping_timer[id];
+		std::deque<uint32>& times = ping_timer[id];
 		if (!times.empty())
 		{
 			const uint32 t = times.front();

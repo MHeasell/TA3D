@@ -52,10 +52,10 @@ namespace zuzuf
 			friend class tpl_iterator<hashmap const, const K, const T>;
 
 		public:
-			tpl_iterator(HT *hmap, size_t idx) : hmap(hmap), idx(idx) {}
-			tpl_iterator(const tpl_iterator &it) : hmap(it.hmap), idx(it.idx) {}
+			tpl_iterator(HT* hmap, size_t idx) : hmap(hmap), idx(idx) {}
+			tpl_iterator(const tpl_iterator& it) : hmap(it.hmap), idx(it.idx) {}
 
-			tpl_iterator &operator=(const tpl_iterator &it)
+			tpl_iterator& operator=(const tpl_iterator& it)
 			{
 				hmap = it.hmap;
 				idx = it.idx;
@@ -67,22 +67,22 @@ namespace zuzuf
 				return const_iterator(hmap, idx);
 			}
 
-			bool operator==(const iterator &it) const { return idx == it.idx; }
-			bool operator==(const const_iterator &it) const { return idx == it.idx; }
-			bool operator!=(const iterator &it) const { return idx != it.idx; }
-			bool operator!=(const const_iterator &it) const { return idx != it.idx; }
-			bool operator<(const iterator &it) const { return idx < it.idx; }
-			bool operator<(const const_iterator &it) const { return idx < it.idx; }
-			bool operator>(const iterator &it) const { return idx > it.idx; }
-			bool operator>(const const_iterator &it) const { return idx > it.idx; }
+			bool operator==(const iterator& it) const { return idx == it.idx; }
+			bool operator==(const const_iterator& it) const { return idx == it.idx; }
+			bool operator!=(const iterator& it) const { return idx != it.idx; }
+			bool operator!=(const const_iterator& it) const { return idx != it.idx; }
+			bool operator<(const iterator& it) const { return idx < it.idx; }
+			bool operator<(const const_iterator& it) const { return idx < it.idx; }
+			bool operator>(const iterator& it) const { return idx > it.idx; }
+			bool operator>(const const_iterator& it) const { return idx > it.idx; }
 
-			const KT &key() const { return hmap->keys[idx]; }
+			const KT& key() const { return hmap->keys[idx]; }
 
-			TT &value() const { return hmap->values[idx]; }
+			TT& value() const { return hmap->values[idx]; }
 
-			TT &operator*() const { return hmap->values[idx]; }
+			TT& operator*() const { return hmap->values[idx]; }
 
-			TT *operator->() const { return hmap->values + idx; }
+			TT* operator->() const { return hmap->values + idx; }
 
 			void operator++()
 			{
@@ -145,7 +145,7 @@ namespace zuzuf
 			}
 
 		private:
-			HT *hmap;
+			HT* hmap;
 			size_t idx;
 		};
 
@@ -159,10 +159,10 @@ namespace zuzuf
 
 	public:
 		inline hashmap() : values(NULL), keys(NULL), usemask(NULL), _capacity(0U), _size(0U), _mask(0U), _used(0U) {}
-		inline hashmap(const hashmap &v);
+		inline hashmap(const hashmap& v);
 		inline ~hashmap();
 
-		hashmap &operator=(const hashmap &v);
+		hashmap& operator=(const hashmap& v);
 
 		inline void clear();
 
@@ -197,31 +197,31 @@ namespace zuzuf
 		inline void rehash(size_t size);
 		inline void reserve(size_t size) { rehash(size); }
 
-		inline void insert(const node_type &v) { insert(v.first, v.second); }
-		inline void insert(const K &key, const T &value);
+		inline void insert(const node_type& v) { insert(v.first, v.second); }
+		inline void insert(const K& key, const T& value);
 
-		inline const T *fast_find(const K &key) const;
-		inline T *fast_find(const K &key);
+		inline const T* fast_find(const K& key) const;
+		inline T* fast_find(const K& key);
 
-		inline const_iterator find(const K &key) const;
-		inline iterator find(const K &key);
+		inline const_iterator find(const K& key) const;
+		inline iterator find(const K& key);
 
-		inline T &operator[](const K &key);
+		inline T& operator[](const K& key);
 
-		inline void remove(const K &key);
-		inline void remove(const iterator &it);
-		inline void remove(const const_iterator &it);
+		inline void remove(const K& key);
+		inline void remove(const iterator& it);
+		inline void remove(const const_iterator& it);
 
-		inline void erase(const iterator &it) { remove(it); }
-		inline void erase(const const_iterator &it) { remove(it); }
-		inline void erase(const K &key) { remove(key); }
+		inline void erase(const iterator& it) { remove(it); }
+		inline void erase(const const_iterator& it) { remove(it); }
+		inline void erase(const K& key) { remove(key); }
 
-		inline bool contains(const K &key) const { return fast_find(key); }
-		inline int count(const K &key) const { return contains(key); }
+		inline bool contains(const K& key) const { return fast_find(key); }
+		inline int count(const K& key) const { return contains(key); }
 	private:
-		value_type *values;
-		key_type *keys;
-		unsigned char *usemask;
+		value_type* values;
+		key_type* keys;
+		unsigned char* usemask;
 		size_t _capacity;
 		size_t _size;
 		size_t _mask;
@@ -229,7 +229,7 @@ namespace zuzuf
 	};
 
 	template <class K, class T, class HFn, int MaxLoad>
-	hashmap<K, T, HFn, MaxLoad>::hashmap(const hashmap &v) : values(NULL), keys(NULL), usemask(NULL), _capacity(0U), _size(0U), _mask(0U), _used(0U)
+	hashmap<K, T, HFn, MaxLoad>::hashmap(const hashmap& v) : values(NULL), keys(NULL), usemask(NULL), _capacity(0U), _size(0U), _mask(0U), _used(0U)
 	{
 		rehash(v.size());
 		for (const_iterator it = v.begin(), end = v.end(); it != end; ++it)
@@ -237,7 +237,7 @@ namespace zuzuf
 	}
 
 	template <class K, class T, class HFn, int MaxLoad>
-	hashmap<K, T, HFn, MaxLoad> &hashmap<K, T, HFn, MaxLoad>::operator=(const hashmap &v)
+	hashmap<K, T, HFn, MaxLoad>& hashmap<K, T, HFn, MaxLoad>::operator=(const hashmap& v)
 	{
 		clear();
 		rehash(v.size());
@@ -293,19 +293,19 @@ namespace zuzuf
 
 		if (values == NULL)
 		{
-			values = (value_type *)malloc(sizeof(value_type) * _capacity);
-			keys = (key_type *)malloc(sizeof(key_type) * _capacity);
-			usemask = (unsigned char *)malloc(sizeof(unsigned char) * _capacity);
+			values = (value_type*)malloc(sizeof(value_type) * _capacity);
+			keys = (key_type*)malloc(sizeof(key_type) * _capacity);
+			usemask = (unsigned char*)malloc(sizeof(unsigned char) * _capacity);
 			memset(usemask, Empty, sizeof(unsigned char) * _capacity);
 			return;
 		}
-		value_type *o_values = values;
-		key_type *o_keys = keys;
-		unsigned char *o_usemask = usemask;
+		value_type* o_values = values;
+		key_type* o_keys = keys;
+		unsigned char* o_usemask = usemask;
 
-		values = (value_type *)malloc(sizeof(value_type) * _capacity);
-		keys = (key_type *)malloc(sizeof(key_type) * _capacity);
-		usemask = (unsigned char *)malloc(sizeof(unsigned char) * _capacity);
+		values = (value_type*)malloc(sizeof(value_type) * _capacity);
+		keys = (key_type*)malloc(sizeof(key_type) * _capacity);
+		usemask = (unsigned char*)malloc(sizeof(unsigned char) * _capacity);
 		memset(usemask, Empty, sizeof(unsigned char) * _capacity);
 
 		_used = 0U;
@@ -329,7 +329,7 @@ namespace zuzuf
 	}
 
 	template <class K, class T, class HFn, int MaxLoad>
-	void hashmap<K, T, HFn, MaxLoad>::insert(const K &key, const T &value)
+	void hashmap<K, T, HFn, MaxLoad>::insert(const K& key, const T& value)
 	{
 		if (_used >= (_capacity * MaxLoad >> 8))
 			rehash(std::max<size_t>(_capacity << 1U, 16U));
@@ -368,7 +368,7 @@ namespace zuzuf
 	}
 
 	template <class K, class T, class HFn, int MaxLoad>
-	const T *hashmap<K, T, HFn, MaxLoad>::fast_find(const K &key) const
+	const T* hashmap<K, T, HFn, MaxLoad>::fast_find(const K& key) const
 	{
 		if (_size == 0U)
 			return NULL;
@@ -393,7 +393,7 @@ namespace zuzuf
 	}
 
 	template <class K, class T, class HFn, int MaxLoad>
-	T *hashmap<K, T, HFn, MaxLoad>::fast_find(const K &key)
+	T* hashmap<K, T, HFn, MaxLoad>::fast_find(const K& key)
 	{
 		if (_size == 0U)
 			return NULL;
@@ -418,7 +418,7 @@ namespace zuzuf
 	}
 
 	template <class K, class T, class HFn, int MaxLoad>
-	T &hashmap<K, T, HFn, MaxLoad>::operator[](const K &key)
+	T& hashmap<K, T, HFn, MaxLoad>::operator[](const K& key)
 	{
 		if (_used >= (_capacity * MaxLoad >> 8))
 			rehash(std::max<size_t>(_capacity << 1U, 16U));
@@ -454,7 +454,7 @@ namespace zuzuf
 	}
 
 	template <class K, class T, class HFn, int MaxLoad>
-	void hashmap<K, T, HFn, MaxLoad>::remove(const K &key)
+	void hashmap<K, T, HFn, MaxLoad>::remove(const K& key)
 	{
 		if (_size == 0U)
 			return;
@@ -486,7 +486,7 @@ namespace zuzuf
 	}
 
 	template <class K, class T, class HFn, int MaxLoad>
-	typename hashmap<K, T, HFn, MaxLoad>::iterator hashmap<K, T, HFn, MaxLoad>::find(const K &key)
+	typename hashmap<K, T, HFn, MaxLoad>::iterator hashmap<K, T, HFn, MaxLoad>::find(const K& key)
 	{
 		if (_size == 0U)
 			return end();
@@ -511,7 +511,7 @@ namespace zuzuf
 	}
 
 	template <class K, class T, class HFn, int MaxLoad>
-	typename hashmap<K, T, HFn, MaxLoad>::const_iterator hashmap<K, T, HFn, MaxLoad>::find(const K &key) const
+	typename hashmap<K, T, HFn, MaxLoad>::const_iterator hashmap<K, T, HFn, MaxLoad>::find(const K& key) const
 	{
 		if (_size == 0U)
 			return end();
@@ -536,7 +536,7 @@ namespace zuzuf
 	}
 
 	template <class K, class T, class HFn, int MaxLoad>
-	void hashmap<K, T, HFn, MaxLoad>::remove(const iterator &it)
+	void hashmap<K, T, HFn, MaxLoad>::remove(const iterator& it)
 	{
 		if (it.idx >= _capacity)
 			return;
@@ -551,7 +551,7 @@ namespace zuzuf
 	}
 
 	template <class K, class T, class HFn, int MaxLoad>
-	void hashmap<K, T, HFn, MaxLoad>::remove(const const_iterator &it)
+	void hashmap<K, T, HFn, MaxLoad>::remove(const const_iterator& it)
 	{
 		if (it.idx >= _capacity)
 			return;

@@ -29,7 +29,7 @@
 #include "ingame/players.h"
 #include "engine/mission.h"
 
-#define SAVE(i) gzwrite(file, (void *)&(i), sizeof(i))
+#define SAVE(i) gzwrite(file, (void*)&(i), sizeof(i))
 #define LOAD(i) gzread(file, &(i), sizeof(i))
 
 namespace TA3D
@@ -48,14 +48,14 @@ namespace TA3D
 		return ret;
 	}
 
-	static inline void writestring(gzFile file, const String &str)
+	static inline void writestring(gzFile file, const String& str)
 	{
 		if (!str.empty())
 			gzputs(file, str.c_str());
 		gzputc(file, 0);
 	}
 
-	gzFile TA3D_gzopen(const String &FileName, const String Mode)
+	gzFile TA3D_gzopen(const String& FileName, const String Mode)
 	{
 
 		// TODO This should be removed
@@ -64,7 +64,7 @@ namespace TA3D
 		return gzopen(FileName.c_str(), Mode.c_str());
 	}
 
-	void save_game(const String filename, GameData *game_data)
+	void save_game(const String filename, GameData* game_data)
 	{
 		gzFile file = TA3D_gzopen(filename, "wb");
 
@@ -307,7 +307,7 @@ namespace TA3D
 				SAVE(units.unit[i].weapon[f].delay);
 				SAVE(units.unit[i].weapon[f].time);
 				SAVE(units.unit[i].weapon[f].target_pos);
-				int g = units.unit[i].weapon[f].target ? (int)((units.unit[i].weapon[f].state & WEAPON_FLAG_WEAPON) ? ((Weapon *)units.unit[i].weapon[f].target)->idx : ((Unit *)units.unit[i].weapon[f].target)->idx) : -1;
+				int g = units.unit[i].weapon[f].target ? (int)((units.unit[i].weapon[f].state & WEAPON_FLAG_WEAPON) ? ((Weapon*)units.unit[i].weapon[f].target)->idx : ((Unit*)units.unit[i].weapon[f].target)->idx) : -1;
 				SAVE(g);
 				SAVE(units.unit[i].weapon[f].data);
 				SAVE(units.unit[i].weapon[f].flags);
@@ -393,7 +393,7 @@ namespace TA3D
 		lp_CONFIG->pause = previous_pause_state;
 	}
 
-	bool load_game_data(const String filename, GameData *game_data, bool loading)
+	bool load_game_data(const String filename, GameData* game_data, bool loading)
 	{
 		gzFile file = TA3D_gzopen(filename, "rb");
 
@@ -474,7 +474,7 @@ namespace TA3D
 		return network;
 	}
 
-	void load_game(GameData *game_data)
+	void load_game(GameData* game_data)
 	{
 		gzFile file = TA3D_gzopen(game_data->saved_file, "rb");
 
@@ -795,7 +795,7 @@ namespace TA3D
 				LOAD(units.unit[i].weapon[f].target_pos);
 				int g;
 				LOAD(g);
-				units.unit[i].weapon[f].target = (g == -1) ? NULL : ((units.unit[i].weapon[f].state & WEAPON_FLAG_WEAPON) ? (void *)&(weapons.weapon[g]) : (void *)&(units.unit[g]));
+				units.unit[i].weapon[f].target = (g == -1) ? NULL : ((units.unit[i].weapon[f].state & WEAPON_FLAG_WEAPON) ? (void*)&(weapons.weapon[g]) : (void*)&(units.unit[g]));
 				LOAD(units.unit[i].weapon[f].data);
 				LOAD(units.unit[i].weapon[f].flags);
 				LOAD(units.unit[i].weapon[f].aim_dir);

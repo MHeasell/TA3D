@@ -145,7 +145,7 @@ namespace TA3D
 		poll_inputs();
 	}
 
-	void get_mouse_mickeys(int *mx, int *my)
+	void get_mouse_mickeys(int* mx, int* my)
 	{
 		poll_inputs();
 		int dx = mouse_x - mouse_lx;
@@ -163,8 +163,8 @@ namespace TA3D
 	int anim_cursor(const int type)
 	{
 		return (type < 0)
-				   ? ((msec_timer - start) / 100) % cursor[cursor_type].nb_bmp
-				   : ((msec_timer - start) / 100) % cursor[type].nb_bmp;
+			? ((msec_timer - start) / 100) % cursor[cursor_type].nb_bmp
+			: ((msec_timer - start) / 100) % cursor[type].nb_bmp;
 	}
 
 	void draw_cursor()
@@ -182,10 +182,10 @@ namespace TA3D
 		gfx->set_color(0xFFFFFFFF);
 		gfx->set_alpha_blending();
 		gfx->drawtexture(cursor[cursor_type].glbmp[curseur],
-						 float(mouse_x - dx),
-						 float(mouse_y - dy),
-						 float(mouse_x - dx + sx),
-						 float(mouse_y - dy + sy));
+			float(mouse_x - dx),
+			float(mouse_y - dy),
+			float(mouse_x - dx + sx),
+			float(mouse_y - dy + sy));
 		gfx->unset_alpha_blending();
 	}
 
@@ -199,7 +199,7 @@ namespace TA3D
 		SDL_ShowCursor(SDL_DISABLE);
 
 		// Loading and creating cursors
-		File *file = VFS::Instance()->readFile("anims\\cursors.gaf"); // Load cursors
+		File* file = VFS::Instance()->readFile("anims\\cursors.gaf"); // Load cursors
 		if (file)
 		{
 			cursor.loadGAFFromRawData(file, false);

@@ -40,7 +40,7 @@ namespace TA3D
 			stop();
 		}
 
-		void NetMenu::Download::start(const String &filename, const String &url, const int mID)
+		void NetMenu::Download::start(const String& filename, const String& url, const int mID)
 		{
 			if (Gui::AREA::current())
 			{
@@ -255,7 +255,7 @@ namespace TA3D
 							{
 								pArea->set_state("mods.b_install", false);
 								Paths::MakeDir(dir);
-								Download *download = new Download;
+								Download* download = new Download;
 								download->start(filename, pIdx->getUrl(), pIdx->getID());
 								downloadList.push_back(download);
 								pIdx->write();
@@ -271,7 +271,7 @@ namespace TA3D
 								pArea->set_state("mods.b_update", false);
 								pIdx->uninstall();
 
-								Download *download = new Download;
+								Download* download = new Download;
 								download->start(filename, pIdx->getUrl(), pIdx->getID());
 								downloadList.push_back(download);
 							}
@@ -379,7 +379,7 @@ namespace TA3D
 						}
 						if (success)
 						{
-							ModInfo *pMod = Mods::instance()->getMod((*i)->getModID());
+							ModInfo* pMod = Mods::instance()->getMod((*i)->getModID());
 							if (pMod)
 							{
 								pMod->setInstalled(true);
@@ -617,7 +617,7 @@ namespace TA3D
 			return false;
 		}
 
-		void NetMenu::addChatMessage(const String &message)
+		void NetMenu::addChatMessage(const String& message)
 		{
 			Gui::GUIOBJ::Ptr obj = pArea->get_object("netmenu.chat_history");
 			if (obj)
@@ -657,7 +657,7 @@ namespace TA3D
 
 		void NetMenu::changeMod(const int ID)
 		{
-			ModInfo *inf = Mods::instance()->getMod(ID);
+			ModInfo* inf = Mods::instance()->getMod(ID);
 			String newMod = (ID < 0 || inf == NULL) ? String() : (String("mods/") << ModInfo::cleanStringForPortablePathName(inf->getName()) << "/");
 			if (TA3D_CURRENT_MOD != newMod) // Refresh the file structure
 			{

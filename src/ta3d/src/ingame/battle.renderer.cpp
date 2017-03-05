@@ -110,8 +110,8 @@ namespace TA3D
 					glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
 				map->draw(&refcam, byte(1 << players.local_human_id), false, 0.0f, t,
-						  dt * units.apparent_timefactor,
-						  false, false, false);
+					dt * units.apparent_timefactor,
+					false, false, false);
 
 				if (lp_CONFIG->wireframe)
 					glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);

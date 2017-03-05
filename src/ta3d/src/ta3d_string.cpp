@@ -52,10 +52,10 @@ namespace TA3D
 	void String::trimRight()
 	{
 		auto first_trailing_whitespace = std::find_if(
-				str.rbegin(),
-				str.rend(),
-				std::not1(std::ptr_fun<char, bool>(is_space)))
-				.base();
+			str.rbegin(),
+			str.rend(),
+			std::not1(std::ptr_fun<char, bool>(is_space)))
+											 .base();
 		str.erase(first_trailing_whitespace, str.end());
 	}
 

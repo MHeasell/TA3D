@@ -34,26 +34,26 @@ namespace TA3D
 	{
 	public:
 		typedef Vector3D Vec;
-		typedef std::pair<const Unit *, std::pair<Vec, float>> T;
+		typedef std::pair<const Unit*, std::pair<Vec, float>> T;
 
 		struct Predicate
 		{
 			const unsigned int D;
 			const float f;
 
-			inline Predicate(const Vec &v, const unsigned int N) : D(N), f(v[N]) {}
+			inline Predicate(const Vec& v, const unsigned int N) : D(N), f(v[N]) {}
 
-			inline bool operator()(const T &i) const
+			inline bool operator()(const T& i) const
 			{
 				return i.second.first[D] < f;
 			}
 		};
 
 	public:
-		static inline const Vec &pos(const T &elt) { return elt.second.first; }
-		static inline float radius(const T &elt) { return elt.second.second; }
-		static inline void getTopBottom(const std::vector<T>::const_iterator &begin, const std::vector<T>::const_iterator &end, Vec &top, Vec &bottom);
-		static inline unsigned int getPrincipalDirection(const Vec &v)
+		static inline const Vec& pos(const T& elt) { return elt.second.first; }
+		static inline float radius(const T& elt) { return elt.second.second; }
+		static inline void getTopBottom(const std::vector<T>::const_iterator& begin, const std::vector<T>::const_iterator& end, Vec& top, Vec& bottom);
+		static inline unsigned int getPrincipalDirection(const Vec& v)
 		{
 			const Vector3D m = TA3D::Math::Abs(v);
 			if (m.x > m.y)
@@ -68,7 +68,7 @@ namespace TA3D
 		}
 	};
 
-	inline void BVH_UnitTKit::getTopBottom(const std::vector<T>::const_iterator &begin, const std::vector<T>::const_iterator &end, Vec &top, Vec &bottom)
+	inline void BVH_UnitTKit::getTopBottom(const std::vector<T>::const_iterator& begin, const std::vector<T>::const_iterator& end, Vec& top, Vec& bottom)
 	{
 		if (begin == end)
 		{
@@ -145,7 +145,7 @@ namespace TA3D
 		//!
 		std::vector<uint32> free_idx;
 		//! A BVH structure to store units (for fast collision detection)
-		BVH<BVH_UnitTKit::T, BVH_UnitTKit> *bvhUnits;
+		BVH<BVH_UnitTKit::T, BVH_UnitTKit>* bvhUnits;
 
 	protected:
 		//!
@@ -153,7 +153,7 @@ namespace TA3D
 		//!
 		volatile bool thread_ask_to_stop;
 		//!
-		void proc(void *);
+		void proc(void*);
 		//!
 		void signalExitThread();
 

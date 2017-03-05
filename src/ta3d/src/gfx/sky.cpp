@@ -40,7 +40,7 @@ namespace TA3D
 		init();
 	}
 
-	inline uint32 getpixelBL(SDL_Surface *bmp, float u, float v)
+	inline uint32 getpixelBL(SDL_Surface* bmp, float u, float v)
 	{
 		const float tu = u * float(bmp->w);
 		const float tv = v * float(bmp->h);
@@ -102,12 +102,12 @@ namespace TA3D
 		w = size;
 
 		// Compute the cube map
-		SDL_Surface *stex = gfx->load_image(skyInfo->texture_name);
+		SDL_Surface* stex = gfx->load_image(skyInfo->texture_name);
 		if (stex)
 		{
 			stex = convert_format(stex);
 			const int skyRes = std::min<int>(1024, lp_CONFIG->getMaxTextureSizeAllowed());
-			SDL_Surface *img[6];
+			SDL_Surface* img[6];
 			for (int i = 0; i < 6; ++i)
 				img[i] = gfx->create_surface(skyRes, skyRes);
 			const uint32 fcol = makeacol32(int(skyInfo->FogColor[0] * 255.0f), int(skyInfo->FogColor[1] * 255.0f), int(skyInfo->FogColor[2] * 255.0f), int(skyInfo->FogColor[3] * 255.0f));
@@ -256,7 +256,7 @@ namespace TA3D
 		glEndList();
 	}
 
-	void Sky::SkyData::load_tdf(const String &filename)
+	void Sky::SkyData::load_tdf(const String& filename)
 	{
 		TDFParser parser;
 		if (!parser.loadFromFile(filename))
@@ -274,13 +274,13 @@ namespace TA3D
 		parser.pullAsString("sky.map").explode(MapName, ',');
 	}
 
-	void Sky::choose_a_sky(const String &mapname, const String &planet)
+	void Sky::choose_a_sky(const String& mapname, const String& planet)
 	{
 		if (skyInfo)
 			delete skyInfo;
 		skyInfo = NULL;
 
-		std::vector<SkyData *> sky_list;
+		std::vector<SkyData*> sky_list;
 		sky_list.clear();
 
 		String::Vector file_list;
@@ -290,7 +290,7 @@ namespace TA3D
 		for (String::Vector::const_iterator it = file_list.begin(); it != file_list.end(); ++it)
 		{
 			LOG_DEBUG("loading sky : " << *it);
-			SkyData *sky_data = new SkyData;
+			SkyData* sky_data = new SkyData;
 			sky_data->load_tdf(*it);
 
 			bool keep = false;
@@ -331,7 +331,7 @@ namespace TA3D
 			LOG_DEBUG(LOG_PREFIX_GFX << "no sky associated with this map('" << mapname << "') or this planet('" << planet << "') found, looking for default skies");
 			for (String::Vector::const_iterator it = file_list.begin(); it != file_list.end(); ++it)
 			{
-				SkyData *sky_data = new SkyData;
+				SkyData* sky_data = new SkyData;
 				sky_data->load_tdf(*it);
 
 				bool keep = sky_data->def;
@@ -345,7 +345,7 @@ namespace TA3D
 			}
 		}
 
-		SkyData *selected_sky = NULL;
+		SkyData* selected_sky = NULL;
 
 		if (nb_sky > 0)
 		{
@@ -361,7 +361,7 @@ namespace TA3D
 			}
 		}
 
-		for (std::vector<SkyData *>::iterator it = sky_list.begin(); it != sky_list.end(); ++it)
+		for (std::vector<SkyData*>::iterator it = sky_list.begin(); it != sky_list.end(); ++it)
 		{
 			if (*it != NULL)
 				delete *it;

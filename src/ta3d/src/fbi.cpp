@@ -98,7 +98,7 @@ namespace TA3D
 					for (int j = 0; j < nb_unit && found; ++j)
 					{
 						if (Pic_p[j] == i && overlaps(Pic_x[j], Pic_y[j], Pic_w[j], Pic_h[j],
-													  (*dl_data)[k].x, (*dl_data)[k].y, (*dl_data)[k].w, (*dl_data)[k].h))
+												 (*dl_data)[k].x, (*dl_data)[k].y, (*dl_data)[k].w, (*dl_data)[k].h))
 							found = false;
 					}
 					if (found)
@@ -125,18 +125,18 @@ namespace TA3D
 		Pic_p.push_back(short(p));
 	}
 
-	GLuint loadBuildPic(const String &gafFileName, const String &name, int *w = NULL, int *h = NULL)
+	GLuint loadBuildPic(const String& gafFileName, const String& name, int* w = NULL, int* h = NULL)
 	{
 		if (name.empty())
 			return 0;
 
 		if (unit_manager.name2gaf.empty())
 		{
-			const String::Vector &animsList = unit_manager.animsList;
+			const String::Vector& animsList = unit_manager.animsList;
 
 			for (String::Vector::const_iterator it = animsList.begin(); it != animsList.end(); ++it)
 			{
-				const String &gafName = *it;
+				const String& gafName = *it;
 				String::Vector entries;
 				if (VFS::Instance()->getDirlist(String(gafName) << "\\*", entries)) // GAF-like directory
 				{
@@ -151,7 +151,7 @@ namespace TA3D
 				}
 				else // normal GAF
 				{
-					File *gaf_file = VFS::Instance()->readFile(gafName);
+					File* gaf_file = VFS::Instance()->readFile(gafName);
 					if (gaf_file)
 					{
 						const int nbEntries = Gaf::RawDataEntriesCount(gaf_file);
@@ -184,10 +184,10 @@ namespace TA3D
 			{
 				if (it->find(".gaf") != String::npos) // Is it a normal GAF ?
 				{
-					File *gaf_file = VFS::Instance()->readFile(*it);
+					File* gaf_file = VFS::Instance()->readFile(*it);
 					if (gaf_file)
 					{
-						SDL_Surface *img = Gaf::RawDataToBitmap(gaf_file, Gaf::RawDataGetEntryIndex(gaf_file, name), 0);
+						SDL_Surface* img = Gaf::RawDataToBitmap(gaf_file, Gaf::RawDataGetEntryIndex(gaf_file, name), 0);
 						if (img)
 						{
 							if (w)
@@ -210,7 +210,7 @@ namespace TA3D
 		return tex;
 	}
 
-	void UnitManager::analyse(const String &filename, int unit_index)
+	void UnitManager::analyse(const String& filename, int unit_index)
 	{
 		TDFParser gui_parser(filename, false, false, true);
 
@@ -255,7 +255,7 @@ namespace TA3D
 		}
 	}
 
-	void UnitManager::analyse2(File *file)
+	void UnitManager::analyse2(File* file)
 	{
 		TDFParser parser;
 		parser.loadFromMemory("analyse2", file->data(), file->size(), false, false, true);
@@ -303,9 +303,9 @@ namespace TA3D
 		}
 	}
 
-	UnitType *UnitManager::load_unit(const String &filename) // Ajoute une nouvelle unité
+	UnitType* UnitManager::load_unit(const String& filename) // Ajoute une nouvelle unité
 	{
-		UnitType *pUnitType = new UnitType();
+		UnitType* pUnitType = new UnitType();
 		pUnitType->load(filename);
 		mInternals.lock();
 		unit_type.push_back(pUnitType);
@@ -331,7 +331,7 @@ namespace TA3D
 
 		for (String::Vector::const_iterator f = file_list.begin(); f != file_list.end(); ++f) // Cherche un fichier pouvant contenir des informations sur l'unité unit_name
 		{
-			File *file = VFS::Instance()->readFile(*f); // Lit le fichier
+			File* file = VFS::Instance()->readFile(*f); // Lit le fichier
 			if (file)
 			{
 				analyse2(file);
@@ -413,7 +413,7 @@ namespace TA3D
 		name2gaf.clear();
 	}
 
-	void UnitManager::load_script_file(const String &unit_name)
+	void UnitManager::load_script_file(const String& unit_name)
 	{
 		const String uprname = String(unit_name).toUpper();
 		const int unit_index = get_unit_index(uprname);
@@ -640,7 +640,7 @@ namespace TA3D
 		Gui::AREA::current()->caption("unit_info.tBuildTime", I18N::Translate("Build time") << ": " << BuildTime);
 
 		String tWeapons;
-		for (std::vector<WeaponDef *>::iterator i = weapon.begin(); i != weapon.end(); ++i)
+		for (std::vector<WeaponDef*>::iterator i = weapon.begin(); i != weapon.end(); ++i)
 			if (*i)
 				tWeapons << (*i)->name << ": " << (*i)->damage << "\n";
 		Gui::AREA::current()->caption("unit_info.tWeaponList", tWeapons);
@@ -674,7 +674,7 @@ namespace TA3D
 #define parseBool(x) (unitParser.pullAsBool(x, unitParser_ci.pullAsBool(x)))
 #define parseFloat(x) (unitParser.pullAsFloat(x, unitParser_ci.pullAsFloat(x)))
 
-	int UnitType::load(const String &filename)
+	int UnitType::load(const String& filename)
 	{
 		destroy();
 		int nb_inconnu = 0;
@@ -1066,7 +1066,7 @@ namespace TA3D
 	{
 		unit_hashtable.clear();
 
-		for (HashMap<DlData *>::Dense::iterator i = h_dl_data.begin(); i != h_dl_data.end(); ++i)
+		for (HashMap<DlData*>::Dense::iterator i = h_dl_data.begin(); i != h_dl_data.end(); ++i)
 			delete *i;
 		h_dl_data.clear();
 
@@ -1079,7 +1079,7 @@ namespace TA3D
 		init();
 	}
 
-	void UnitManager::load_panel_texture(const String &intgaf)
+	void UnitManager::load_panel_texture(const String& intgaf)
 	{
 		panel.destroy();
 
@@ -1100,7 +1100,7 @@ namespace TA3D
 		panelbottom.height = h;
 	}
 
-	int UnitManager::unit_build_menu(int index, int omb, float &dt, int scrolling, bool GUI) // Affiche et gère le menu des unités
+	int UnitManager::unit_build_menu(int index, int omb, float& dt, int scrolling, bool GUI) // Affiche et gère le menu des unités
 	{
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -1118,7 +1118,7 @@ namespace TA3D
 				for (int k = 0; 128 + paneltop.width + panelbottom.width * k < uint32(SCREEN_W); ++k)
 				{
 					gfx->drawtexture(panelbottom.tex, 128.0f + float(paneltop.width + k * panelbottom.width), 0.0f,
-									 128.0f + float(paneltop.width + panelbottom.width * (k + 1)), float(panelbottom.height));
+						128.0f + float(paneltop.width + panelbottom.width * (k + 1)), float(panelbottom.height));
 				}
 			}
 
@@ -1127,7 +1127,7 @@ namespace TA3D
 				for (int k = 0; 128 + panelbottom.width * k < uint32(SCREEN_W); ++k)
 				{
 					gfx->drawtexture(panelbottom.tex, 128.0f + float(k * panelbottom.width),
-									 float(SCREEN_H - panelbottom.height), 128.0f + float(panelbottom.width * (k + 1)), float(SCREEN_H));
+						float(SCREEN_H - panelbottom.height), 128.0f + float(panelbottom.width * (k + 1)), float(SCREEN_H));
 				}
 			}
 
@@ -1238,18 +1238,18 @@ namespace TA3D
 			}
 			else
 			{ // Print info at the bottom of the screen
-				const InterfaceData &side_data = ta3dSideData.side_int_data[players.side_view];
+				const InterfaceData& side_data = ta3dSideData.side_int_data[players.side_view];
 				gfx->print(gfx->normal_font,
-						   (float)side_data.Name.x1,
-						   (float)side_data.Name.y1,
-						   0.0f, 0xFFFFFFFF,
-						   String(unit_type[sel]->name) << " M:" << unit_type[sel]->BuildCostMetal << " E:" << unit_type[sel]->BuildCostEnergy << " HP:" << unit_type[sel]->MaxDamage);
+					(float)side_data.Name.x1,
+					(float)side_data.Name.y1,
+					0.0f, 0xFFFFFFFF,
+					String(unit_type[sel]->name) << " M:" << unit_type[sel]->BuildCostMetal << " E:" << unit_type[sel]->BuildCostEnergy << " HP:" << unit_type[sel]->MaxDamage);
 
 				if (!unit_type[sel]->Description.empty())
 					gfx->print(gfx->normal_font,
-							   (float)side_data.Description.x1,
-							   (float)side_data.Description.y1,
-							   0.0f, 0xFFFFFFFF, unit_type[sel]->Description);
+						(float)side_data.Description.x1,
+						(float)side_data.Description.y1,
+						0.0f, 0xFFFFFFFF, unit_type[sel]->Description);
 			}
 			glDisable(GL_BLEND);
 		}
@@ -1263,7 +1263,7 @@ namespace TA3D
 		return sel;
 	}
 
-	int UnitManager::load_all_units(ProgressNotifier *progress)
+	int UnitManager::load_all_units(ProgressNotifier* progress)
 	{
 		init();
 		String::Vector file_list;
@@ -1299,7 +1299,7 @@ namespace TA3D
 				{
 					LOG_DEBUG("Loading the unit `" << nom << "`...");
 					mInternals.unlock();
-					UnitType *pUnitType = unit_manager.load_unit(file_list[i]);
+					UnitType* pUnitType = unit_manager.load_unit(file_list[i]);
 					if (!pUnitType->Unitname.empty())
 					{
 						String nom_pcx;
@@ -1359,7 +1359,7 @@ namespace TA3D
 		start();
 	}
 
-	void UnitDataLoader::proc(void *)
+	void UnitDataLoader::proc(void*)
 	{
 		for (int i = 0; i < unit_manager.nb_unit; ++i)
 			unit_manager.load_script_file(unit_manager.unit_type[i]->Unitname);

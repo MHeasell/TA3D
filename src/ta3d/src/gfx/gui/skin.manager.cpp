@@ -42,16 +42,16 @@ namespace TA3D
 
 		void SKIN_MANAGER::destroy()
 		{
-			for (std::vector<Skin *>::iterator it = skins.begin(); it != skins.end(); ++it)
+			for (std::vector<Skin*>::iterator it = skins.begin(); it != skins.end(); ++it)
 				delete *it;
 			init();
 		}
 
-		Skin *SKIN_MANAGER::load(const String &filename, const float scale)
+		Skin* SKIN_MANAGER::load(const String& filename, const float scale)
 		{
 			String key(filename);
 			key.appendFormat("-%.2f", scale);
-			Skin *pSkin = hash_skin[key];
+			Skin* pSkin = hash_skin[key];
 			if (!pSkin)
 			{
 				pSkin = new Skin();

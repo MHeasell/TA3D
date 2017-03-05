@@ -36,16 +36,16 @@ namespace TA3D
 
 	DrawingTable::~DrawingTable()
 	{
-		for (std::vector<std::vector<RenderQueue *>>::iterator i = hash_table.begin(); i != hash_table.end(); ++i)
-			for (std::vector<RenderQueue *>::iterator e = i->begin(); e != i->end(); ++e)
+		for (std::vector<std::vector<RenderQueue*>>::iterator i = hash_table.begin(); i != hash_table.end(); ++i)
+			for (std::vector<RenderQueue*>::iterator e = i->begin(); e != i->end(); ++e)
 				delete *e;
 		hash_table.clear();
 	}
 
-	void DrawingTable::queue_Instance(uint32 model_id, const Instance &instance)
+	void DrawingTable::queue_Instance(uint32 model_id, const Instance& instance)
 	{
 		uint32 hash = model_id & DrawingTable_MASK;
-		for (std::vector<RenderQueue *>::iterator i = hash_table[hash].begin(); i != hash_table[hash].end(); ++i)
+		for (std::vector<RenderQueue*>::iterator i = hash_table[hash].begin(); i != hash_table[hash].end(); ++i)
 		{
 			if ((*i)->model_id == model_id) // We found an already existing render queue
 			{
@@ -53,15 +53,15 @@ namespace TA3D
 				return;
 			}
 		}
-		RenderQueue *renderQueue = new RenderQueue(model_id);
+		RenderQueue* renderQueue = new RenderQueue(model_id);
 		hash_table[hash].push_back(renderQueue);
 		renderQueue->queue.push_back(instance);
 	}
 
 	void DrawingTable::draw_all()
 	{
-		for (std::vector<std::vector<RenderQueue *>>::iterator i = hash_table.begin(); i != hash_table.end(); ++i)
-			for (std::vector<RenderQueue *>::iterator e = i->begin(); e != i->end(); ++e)
+		for (std::vector<std::vector<RenderQueue*>>::iterator i = hash_table.begin(); i != hash_table.end(); ++i)
+			for (std::vector<RenderQueue*>::iterator e = i->begin(); e != i->end(); ++e)
 				(*e)->draw_queue();
 	}
 
@@ -71,7 +71,7 @@ namespace TA3D
 			return;
 		glPushMatrix();
 
-		Model *model = model_manager.model[model_id];
+		Model* model = model_manager.model[model_id];
 
 		if (model->from_2d)
 			glEnable(GL_ALPHA_TEST);
@@ -98,7 +98,7 @@ namespace TA3D
 				glClipPlane(GL_CLIP_PLANE2, eqn);
 			}
 			glRotatef(i->angle, 0.0f, 1.0f, 0.0f);
-			glColor4ubv((GLubyte *)&i->col);
+			glColor4ubv((GLubyte*)&i->col);
 			glCallList(model->dlist);
 			if (lp_CONFIG->underwater_bright && INSTANCING::water && i->pos.y < INSTANCING::sealvl)
 			{
@@ -125,16 +125,16 @@ namespace TA3D
 	{
 		for (uint32 i = 0; i < hash_table.size(); ++i)
 		{
-			for (std::vector<QUAD_QUEUE *>::iterator e = hash_table[i].begin(); e != hash_table[i].end(); ++e)
+			for (std::vector<QUAD_QUEUE*>::iterator e = hash_table[i].begin(); e != hash_table[i].end(); ++e)
 				delete *e;
 		}
 		hash_table.clear();
 	}
 
-	void QUAD_TABLE::queue_quad(GLuint &texture_id, const QUAD &quad)
+	void QUAD_TABLE::queue_quad(GLuint& texture_id, const QUAD& quad)
 	{
 		uint32 hash = texture_id & DrawingTable_MASK;
-		for (std::vector<QUAD_QUEUE *>::iterator i = hash_table[hash].begin(); i != hash_table[hash].end(); ++i)
+		for (std::vector<QUAD_QUEUE*>::iterator i = hash_table[hash].begin(); i != hash_table[hash].end(); ++i)
 		{
 			if ((*i)->texture_id == texture_id) // We found an already existing render queue
 			{
@@ -142,7 +142,7 @@ namespace TA3D
 				return;
 			}
 		}
-		QUAD_QUEUE *quad_queue = new QUAD_QUEUE(texture_id);
+		QUAD_QUEUE* quad_queue = new QUAD_QUEUE(texture_id);
 		hash_table[hash].push_back(quad_queue);
 		quad_queue->queue.push_back(quad);
 	}
@@ -152,15 +152,15 @@ namespace TA3D
 		uint32 max_size = 0;
 		for (uint32 i = 0U; i < DrawingTable_SIZE; ++i)
 		{
-			for (std::vector<QUAD_QUEUE *>::iterator e = hash_table[i].begin(); e != hash_table[i].end(); ++e)
+			for (std::vector<QUAD_QUEUE*>::iterator e = hash_table[i].begin(); e != hash_table[i].end(); ++e)
 				max_size = Math::Max(max_size, (uint32)(*e)->queue.size());
 		}
 		if (max_size == 0U)
 			return;
 
-		static Vector3D *P = NULL;
-		static uint32 *C = NULL;
-		static GLfloat *T = NULL;
+		static Vector3D* P = NULL;
+		static uint32* C = NULL;
+		static GLfloat* T = NULL;
 		static uint32 capacity = 0U;
 
 		if (max_size > capacity)
@@ -208,7 +208,7 @@ namespace TA3D
 
 		for (uint32 i = 0; i < DrawingTable_SIZE; ++i)
 		{
-			for (std::vector<QUAD_QUEUE *>::iterator e = hash_table[i].begin(); e != hash_table[i].end(); ++e)
+			for (std::vector<QUAD_QUEUE*>::iterator e = hash_table[i].begin(); e != hash_table[i].end(); ++e)
 				(*e)->draw_queue(P, C);
 		}
 
@@ -216,13 +216,13 @@ namespace TA3D
 		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 	}
 
-	void QUAD_QUEUE::draw_queue(Vector3D *P, uint32 *C)
+	void QUAD_QUEUE::draw_queue(Vector3D* P, uint32* C)
 	{
 		if (queue.empty())
 			return;
 
-		Vector3D *p = P;
-		uint32 *c = C;
+		Vector3D* p = P;
+		uint32* c = C;
 		for (std::vector<QUAD>::iterator e = queue.begin(); e != queue.end(); ++e)
 		{
 			p->x = e->pos.x - e->size_x;

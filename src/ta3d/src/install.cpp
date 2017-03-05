@@ -33,9 +33,9 @@ namespace TA3D
 			LOG_ERROR("archive not found : '" << HPI_file << "'");
 			return;
 		}
-		std::deque<Archive::FileInfo *> lFiles;
+		std::deque<Archive::FileInfo*> lFiles;
 		archive->getFileList(lFiles);
-		File *file = archive->readFile(filename); // Extract the file
+		File* file = archive->readFile(filename); // Extract the file
 		if (file)
 		{
 			String output_filename = String(Paths::Resources) << Paths::ExtractFileName(filename);

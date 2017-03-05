@@ -31,14 +31,14 @@ namespace TA3D
 	namespace Menus
 	{
 
-		Battle::Result BriefScreen::Execute(const String &campaign_name, const int mission_id)
+		Battle::Result BriefScreen::Execute(const String& campaign_name, const int mission_id)
 		{
 			BriefScreen m(campaign_name, mission_id);
 			m.execute();
 			return m.exit_mode;
 		}
 
-		BriefScreen::BriefScreen(const String &campaign_name, const int mission_id)
+		BriefScreen::BriefScreen(const String& campaign_name, const int mission_id)
 			: Abstract(), campaign_name(campaign_name), mission_id(mission_id)
 		{
 		}
@@ -164,10 +164,10 @@ namespace TA3D
 					brief_file = String("camps\\briefs\\") << ota_parser.pullAsString("GlobalHeader.brief") << ".txt";
 				if (!VFS::Instance()->fileExists(brief_file)) // try without the suffix if we cannot find it
 					brief_file = String("camps\\briefs\\") << ota_parser.pullAsString("GlobalHeader.brief");
-				File *file = VFS::Instance()->readFile(brief_file);
+				File* file = VFS::Instance()->readFile(brief_file);
 				if (file)
 				{
-					String brief_info = (const char *)file->data();
+					String brief_info = (const char*)file->data();
 					brief_info = ConvertToUTF8(brief_info);
 					pArea->caption("brief.info", brief_info);
 					delete file;
@@ -206,7 +206,7 @@ namespace TA3D
 				planet_animation.loadGAFFromDirectory(Substr(planet_file, 0, planet_file.size() - 4), true);
 			if (planet_animation.size() == 0)
 			{
-				File *file = VFS::Instance()->readFile(planet_file);
+				File* file = VFS::Instance()->readFile(planet_file);
 				if (file)
 				{
 					planet_animation.loadGAFFromRawData(file, true);

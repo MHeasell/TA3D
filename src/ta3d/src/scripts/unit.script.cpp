@@ -24,43 +24,43 @@
 namespace TA3D
 {
 
-	lua_State *UnitScript::pLuaVM = NULL;
+	lua_State* UnitScript::pLuaVM = NULL;
 	Mutex UnitScript::mLuaVM;
 
-	inline Unit *lua_currentUnit(lua_State *L, int pos)
+	inline Unit* lua_currentUnit(lua_State* L, int pos)
 	{
 		lua_getfield(L, pos, "unitID");
-		Unit *p = &(units.unit[lua_tointeger(L, -1)]);
+		Unit* p = &(units.unit[lua_tointeger(L, -1)]);
 		lua_pop(L, 1);
 		return p;
 	}
 
-	inline UnitScript *lua_scriptID(lua_State *L, int pos)
+	inline UnitScript* lua_scriptID(lua_State* L, int pos)
 	{
-		Unit *unit = lua_currentUnit(L, pos);
-		UnitScript *p = static_cast<UnitScript *>(unit->script.get());
+		Unit* unit = lua_currentUnit(L, pos);
+		UnitScript* p = static_cast<UnitScript*>(unit->script.get());
 		return p;
 	}
 
-	int unit_thread_signal(lua_State *L) // signal( unitID, sig )
+	int unit_thread_signal(lua_State* L) // signal( unitID, sig )
 	{
-		UnitScript *lua_script = lua_scriptID(L, 1);
+		UnitScript* lua_script = lua_scriptID(L, 1);
 		if (lua_script)
 			lua_script->processSignal((uint32)lua_tointeger(L, 2));
 		lua_settop(L, 0);
 		return 0;
 	}
 
-	int unit_thread_start_script(lua_State *L) // start_script( unitID, function, params )
+	int unit_thread_start_script(lua_State* L) // start_script( unitID, function, params )
 	{
 		const int n = lua_gettop(L);
 
 		if (lua_isfunction(L, 2))
 		{
-			UnitScript *lua_script = lua_scriptID(L, 1);
+			UnitScript* lua_script = lua_scriptID(L, 1);
 			if (lua_script)
 			{
-				UnitScript *newThread = lua_script->fork(L, n - 1);
+				UnitScript* newThread = lua_script->fork(L, n - 1);
 				newThread->setSignalMask(lua_script->getSignalMask());
 			}
 		}
@@ -72,11 +72,11 @@ namespace TA3D
 	int UnitScript::getNextID()
 	{
 		if (caller)
-			return static_cast<UnitScript *>(caller)->getNextID();
+			return static_cast<UnitScript*>(caller)->getNextID();
 		return nextID++;
 	}
 
-	lua_State *UnitScript::luaVM()
+	lua_State* UnitScript::luaVM()
 	{
 		MutexLocker mLock(mLuaVM);
 		if (pLuaVM)
@@ -114,9 +114,9 @@ namespace TA3D
 		destroy();
 	}
 
-	int unit_is_turning(lua_State *L) // is_turning(unitID, obj_id, axis_id)
+	int unit_is_turning(lua_State* L) // is_turning(unitID, obj_id, axis_id)
 	{
-		Unit *pUnit = lua_currentUnit(L, 1);
+		Unit* pUnit = lua_currentUnit(L, 1);
 		const int obj = (int)lua_tointeger(L, 2);
 		const int axis = (int)lua_tointeger(L, 3);
 		lua_settop(L, 0);
@@ -124,9 +124,9 @@ namespace TA3D
 		return 1;
 	}
 
-	int unit_is_moving(lua_State *L) // is_moving(unitID, obj_id, axis_id)
+	int unit_is_moving(lua_State* L) // is_moving(unitID, obj_id, axis_id)
 	{
-		Unit *pUnit = lua_currentUnit(L, 1);
+		Unit* pUnit = lua_currentUnit(L, 1);
 		const int obj = (int)lua_tointeger(L, 2);
 		const int axis = (int)lua_tointeger(L, 3);
 		lua_settop(L, 0);
@@ -134,9 +134,9 @@ namespace TA3D
 		return 1;
 	}
 
-	int unit_move(lua_State *L) // move(unitID, obj_id, axis_id, target_pos, speed)
+	int unit_move(lua_State* L) // move(unitID, obj_id, axis_id, target_pos, speed)
 	{
-		Unit *pUnit = lua_currentUnit(L, 1);
+		Unit* pUnit = lua_currentUnit(L, 1);
 		const int obj = (int)lua_tointeger(L, 2);
 		const int axis = (int)lua_tointeger(L, 3);
 		const float pos = (float)lua_tonumber(L, 4);
@@ -146,9 +146,9 @@ namespace TA3D
 		return 0;
 	}
 
-	int unit_explode(lua_State *L) // explode(unitID, obj_id, explosion_type)
+	int unit_explode(lua_State* L) // explode(unitID, obj_id, explosion_type)
 	{
-		Unit *pUnit = lua_currentUnit(L, 1);
+		Unit* pUnit = lua_currentUnit(L, 1);
 		const int obj = (int)lua_tointeger(L, 2);
 		const int type = (int)lua_tointeger(L, 3);
 		lua_settop(L, 0);
@@ -156,9 +156,9 @@ namespace TA3D
 		return 0;
 	}
 
-	int unit_turn(lua_State *L) // turn(unitID, obj_id, axis, angle, speed)
+	int unit_turn(lua_State* L) // turn(unitID, obj_id, axis, angle, speed)
 	{
-		Unit *pUnit = lua_currentUnit(L, 1);
+		Unit* pUnit = lua_currentUnit(L, 1);
 		const int obj = (int)lua_tointeger(L, 2);
 		const int type = (int)lua_tointeger(L, 3);
 		const float angle = (float)lua_tonumber(L, 4);
@@ -168,9 +168,9 @@ namespace TA3D
 		return 0;
 	}
 
-	int unit_get_value_from_port(lua_State *L) // get_value_from_port(unitID, port)
+	int unit_get_value_from_port(lua_State* L) // get_value_from_port(unitID, port)
 	{
-		Unit *pUnit = lua_currentUnit(L, 1);
+		Unit* pUnit = lua_currentUnit(L, 1);
 		const int port = (int)lua_tointeger(L, 2);
 		lua_settop(L, 0);
 
@@ -178,63 +178,63 @@ namespace TA3D
 		return 1;
 	}
 
-	int unit_show(lua_State *L) // show(unitID, obj_id)
+	int unit_show(lua_State* L) // show(unitID, obj_id)
 	{
-		Unit *pUnit = lua_currentUnit(L, 1);
+		Unit* pUnit = lua_currentUnit(L, 1);
 		const int obj = (int)lua_tointeger(L, 2);
 		lua_settop(L, 0);
 		pUnit->script_show_object(obj);
 		return 0;
 	}
 
-	int unit_hide(lua_State *L) // hide(unitID, obj_id)
+	int unit_hide(lua_State* L) // hide(unitID, obj_id)
 	{
-		Unit *pUnit = lua_currentUnit(L, 1);
+		Unit* pUnit = lua_currentUnit(L, 1);
 		const int obj = (int)lua_tointeger(L, 2);
 		lua_settop(L, 0);
 		pUnit->script_hide_object(obj);
 		return 0;
 	}
 
-	int unit_cache(lua_State *L) // cache(unitID, obj_id)
+	int unit_cache(lua_State* L) // cache(unitID, obj_id)
 	{
-		Unit *pUnit = lua_currentUnit(L, 1);
+		Unit* pUnit = lua_currentUnit(L, 1);
 		const int obj = (int)lua_tointeger(L, 2);
 		lua_settop(L, 0);
 		pUnit->script_cache(obj);
 		return 0;
 	}
 
-	int unit_dont_cache(lua_State *L) // dont_cache(unitID, obj_id)
+	int unit_dont_cache(lua_State* L) // dont_cache(unitID, obj_id)
 	{
-		Unit *pUnit = lua_currentUnit(L, 1);
+		Unit* pUnit = lua_currentUnit(L, 1);
 		const int obj = (int)lua_tointeger(L, 2);
 		lua_settop(L, 0);
 		pUnit->script_dont_cache(obj);
 		return 0;
 	}
 
-	int unit_dont_shade(lua_State *L) // dont_shade(unitID, obj_id)
+	int unit_dont_shade(lua_State* L) // dont_shade(unitID, obj_id)
 	{
-		Unit *pUnit = lua_currentUnit(L, 1);
+		Unit* pUnit = lua_currentUnit(L, 1);
 		const int obj = (int)lua_tointeger(L, 2);
 		lua_settop(L, 0);
 		pUnit->script_dont_shade(obj);
 		return 0;
 	}
 
-	int unit_shade(lua_State *L) // shade(unitID, obj_id)
+	int unit_shade(lua_State* L) // shade(unitID, obj_id)
 	{
-		Unit *pUnit = lua_currentUnit(L, 1);
+		Unit* pUnit = lua_currentUnit(L, 1);
 		const int obj = (int)lua_tointeger(L, 2);
 		lua_settop(L, 0);
 		pUnit->script_shade(obj);
 		return 0;
 	}
 
-	int unit_emit_sfx(lua_State *L) // emit_sfx(unitID, smoke_type, from_piece)
+	int unit_emit_sfx(lua_State* L) // emit_sfx(unitID, smoke_type, from_piece)
 	{
-		Unit *pUnit = lua_currentUnit(L, 1);
+		Unit* pUnit = lua_currentUnit(L, 1);
 		const int smoke_type = (int)lua_tointeger(L, 2);
 		const int from_piece = (int)lua_tointeger(L, 3);
 		lua_settop(L, 0);
@@ -242,9 +242,9 @@ namespace TA3D
 		return 0;
 	}
 
-	int unit_spin(lua_State *L) // spin(unitID, obj, axis, speed, (accel))
+	int unit_spin(lua_State* L) // spin(unitID, obj, axis, speed, (accel))
 	{
-		Unit *pUnit = lua_currentUnit(L, 1);
+		Unit* pUnit = lua_currentUnit(L, 1);
 		const int obj = (int)lua_tointeger(L, 2);
 		const int axis = (int)lua_tointeger(L, 3);
 		const float speed = (float)lua_tonumber(L, 4);
@@ -254,9 +254,9 @@ namespace TA3D
 		return 0;
 	}
 
-	int unit_stop_spin(lua_State *L) // stop_spin(unitID, obj, axis, (speed))
+	int unit_stop_spin(lua_State* L) // stop_spin(unitID, obj, axis, (speed))
 	{
-		Unit *pUnit = lua_currentUnit(L, 1);
+		Unit* pUnit = lua_currentUnit(L, 1);
 		const int obj = (int)lua_tointeger(L, 2);
 		const int axis = (int)lua_tointeger(L, 3);
 		const float speed = lua_isnoneornil(L, 4) ? 0.0f : (float)lua_tonumber(L, 4);
@@ -265,9 +265,9 @@ namespace TA3D
 		return 0;
 	}
 
-	int unit_move_piece_now(lua_State *L) // move_piece_now(unitID, obj, axis, pos)
+	int unit_move_piece_now(lua_State* L) // move_piece_now(unitID, obj, axis, pos)
 	{
-		Unit *pUnit = lua_currentUnit(L, 1);
+		Unit* pUnit = lua_currentUnit(L, 1);
 		const int obj = (int)lua_tointeger(L, 2);
 		const int axis = (int)lua_tointeger(L, 3);
 		const float pos = (float)lua_tonumber(L, 4);
@@ -276,9 +276,9 @@ namespace TA3D
 		return 0;
 	}
 
-	int unit_turn_piece_now(lua_State *L) // turn_piece_now(unitID, obj, axis, angle)
+	int unit_turn_piece_now(lua_State* L) // turn_piece_now(unitID, obj, axis, angle)
 	{
-		Unit *pUnit = lua_currentUnit(L, 1);
+		Unit* pUnit = lua_currentUnit(L, 1);
 		const int obj = (int)lua_tointeger(L, 2);
 		const int axis = (int)lua_tointeger(L, 3);
 		const float angle = (float)lua_tonumber(L, 4);
@@ -287,9 +287,9 @@ namespace TA3D
 		return 0;
 	}
 
-	int unit_get(lua_State *L) // get(unitID, type, v1, v2)
+	int unit_get(lua_State* L) // get(unitID, type, v1, v2)
 	{
-		Unit *pUnit = lua_currentUnit(L, 1);
+		Unit* pUnit = lua_currentUnit(L, 1);
 		const int type = (int)lua_tointeger(L, 2);
 		const int v1 = lua_isnoneornil(L, 3) ? 0 : (int)lua_tointeger(L, 3);
 		const int v2 = lua_isnoneornil(L, 4) ? 0 : (int)lua_tointeger(L, 4);
@@ -298,9 +298,9 @@ namespace TA3D
 		return 1;
 	}
 
-	int unit_set_value(lua_State *L) // set_value(unitID, type, v)
+	int unit_set_value(lua_State* L) // set_value(unitID, type, v)
 	{
-		Unit *pUnit = lua_currentUnit(L, 1);
+		Unit* pUnit = lua_currentUnit(L, 1);
 		const int type = (int)lua_tointeger(L, 2);
 		const int v = lua_isboolean(L, 3) ? lua_toboolean(L, 3) : (int)lua_tointeger(L, 3);
 		lua_settop(L, 0);
@@ -308,9 +308,9 @@ namespace TA3D
 		return 0;
 	}
 
-	int unit_attach_unit(lua_State *L) // attach_unit(unitID, unit_id, piece_id)
+	int unit_attach_unit(lua_State* L) // attach_unit(unitID, unit_id, piece_id)
 	{
-		Unit *pUnit = lua_currentUnit(L, 1);
+		Unit* pUnit = lua_currentUnit(L, 1);
 		const int unit_id = (int)lua_tointeger(L, 2);
 		const int piece_id = (int)lua_tointeger(L, 3);
 		lua_settop(L, 0);
@@ -318,16 +318,16 @@ namespace TA3D
 		return 0;
 	}
 
-	int unit_drop_unit(lua_State *L) // drop_unit(unitID, unit_id)
+	int unit_drop_unit(lua_State* L) // drop_unit(unitID, unit_id)
 	{
-		Unit *pUnit = lua_currentUnit(L, 1);
+		Unit* pUnit = lua_currentUnit(L, 1);
 		const int unit_id = (int)lua_tointeger(L, 2);
 		lua_settop(L, 0);
 		pUnit->script_drop_unit(unit_id);
 		return 0;
 	}
 
-	int unit_unit_position(lua_State *L) // unit_position(unitID, unit_id)
+	int unit_unit_position(lua_State* L) // unit_position(unitID, unit_id)
 	{
 		const int unit_id = (int)lua_tointeger(L, 2);
 		lua_settop(L, 0);
@@ -338,9 +338,9 @@ namespace TA3D
 		return 1;
 	}
 
-	int unit_set_script_value(lua_State *L) // set_script_value(unitID, script_name, value)
+	int unit_set_script_value(lua_State* L) // set_script_value(unitID, script_name, value)
 	{
-		Unit *pUnit = lua_currentUnit(L, 1);
+		Unit* pUnit = lua_currentUnit(L, 1);
 		const String scriptName = lua_isstring(L, 2) ? String(lua_tostring(L, 2)) : nullptr;
 		const int value = lua_isboolean(L, 3) ? lua_toboolean(L, 3) : (int)lua_tointeger(L, 3);
 		lua_settop(L, 0);
@@ -349,7 +349,7 @@ namespace TA3D
 		return 0;
 	}
 
-	void UnitScript::register_functions(lua_State *L)
+	void UnitScript::register_functions(lua_State* L)
 	{
 		lua_gc(L, LUA_GCSTOP, 0); // Load libraries
 		luaopen_base(L);
@@ -460,9 +460,9 @@ namespace TA3D
 		};
 	}
 
-	void UnitScript::load(ScriptData *data)
+	void UnitScript::load(ScriptData* data)
 	{
-		LuaData *lData = dynamic_cast<LuaData *>(data);
+		LuaData* lData = dynamic_cast<LuaData*>(data);
 		name.clear();
 		if (lData)
 			name = lData->getName();
@@ -471,13 +471,13 @@ namespace TA3D
 		L = NULL;
 	}
 
-	void UnitScript::load(const String &filename) // Load a lua script
+	void UnitScript::load(const String& filename) // Load a lua script
 	{
 		uint32 filesize = 0;
-		byte *buffer = loadLuaFile(filename, filesize);
+		byte* buffer = loadLuaFile(filename, filesize);
 		if (buffer)
 		{
-			lua_State *L = luaVM(); // Get the lua state object
+			lua_State* L = luaVM(); // Get the lua state object
 
 			if (L == NULL)
 			{
@@ -486,7 +486,7 @@ namespace TA3D
 			}
 
 			uint32 filesize2 = 0;
-			byte *header_buffer = loadLuaFile("scripts/ta3d.lh", filesize2);
+			byte* header_buffer = loadLuaFile("scripts/ta3d.lh", filesize2);
 			if (header_buffer == NULL)
 			{
 				if (lua_tostring(L, -1) != NULL && strlen(lua_tostring(L, -1)) > 0)
@@ -495,7 +495,7 @@ namespace TA3D
 				DELETE_ARRAY(buffer);
 				return;
 			}
-			byte *tmp = buffer;
+			byte* tmp = buffer;
 			buffer = new byte[filesize + filesize2 + 2];
 			memcpy(buffer, header_buffer, filesize2);
 			memcpy(buffer + filesize2 + 1, tmp, filesize);
@@ -505,14 +505,14 @@ namespace TA3D
 			DELETE_ARRAY(header_buffer);
 			DELETE_ARRAY(tmp);
 
-			if (luaL_loadbuffer(L, (const char *)buffer, filesize, filename.c_str()))
+			if (luaL_loadbuffer(L, (const char*)buffer, filesize, filename.c_str()))
 			{
 				if (lua_gettop(L) > 0 && lua_tostring(L, -1) != NULL && strlen(lua_tostring(L, -1)) > 0)
 				{
 					LOG_ERROR(LOG_PREFIX_LUA << __FILE__ << " l." << __LINE__ << " (" << filename << ')');
 					LOG_ERROR(LOG_PREFIX_LUA << lua_tostring(L, -1));
 					LOG_ERROR(LOG_PREFIX_LUA << filesize << " -> " << (int)buffer[filesize - 1]);
-					LOG_ERROR((const char *)buffer);
+					LOG_ERROR((const char*)buffer);
 				}
 
 				DELETE_ARRAY(buffer);
@@ -622,7 +622,7 @@ namespace TA3D
 	}
 
 	//! functions used to call/run Lua functions
-	void UnitScript::call(const String &functionName, int *parameters, int nb_params)
+	void UnitScript::call(const String& functionName, int* parameters, int nb_params)
 	{
 		if (running)
 			return; // We cannot run several functions at the same time on the same stack
@@ -661,7 +661,7 @@ namespace TA3D
 		}
 	}
 
-	int UnitScript::execute(const String &functionName, int *parameters, int nb_params)
+	int UnitScript::execute(const String& functionName, int* parameters, int nb_params)
 	{
 		MutexLocker mLock(mLuaVM);
 		try
@@ -733,14 +733,14 @@ namespace TA3D
 	}
 
 	//! functions used to create new threads sharing the same environment
-	UnitScript *UnitScript::fork()
+	UnitScript* UnitScript::fork()
 	{
 		if (caller)
 			caller->clean();
 		else
 			clean();
 
-		UnitScript *newThread = static_cast<UnitScript *>(getFreeThread());
+		UnitScript* newThread = static_cast<UnitScript*>(getFreeThread());
 		if (newThread)
 		{
 			MutexLocker mLock(mLuaVM);
@@ -806,18 +806,18 @@ namespace TA3D
 		return newThread;
 	}
 
-	UnitScript *UnitScript::fork(const String &functionName, int *parameters, int nb_params)
+	UnitScript* UnitScript::fork(const String& functionName, int* parameters, int nb_params)
 	{
-		UnitScript *newThread = fork();
+		UnitScript* newThread = fork();
 		if (newThread)
 			newThread->call(functionName, parameters, nb_params);
 
 		return newThread;
 	}
 
-	UnitScript *UnitScript::fork(lua_State *cL, int n)
+	UnitScript* UnitScript::fork(lua_State* cL, int n)
 	{
-		UnitScript *newThread = fork();
+		UnitScript* newThread = fork();
 
 		try
 		{
@@ -928,7 +928,7 @@ namespace TA3D
 			}
 			int size = data.size();
 			gzwrite(file, &size, sizeof(size));
-			gzwrite(file, (void *)data.c_str(), size);
+			gzwrite(file, (void*)data.c_str(), size);
 		}
 	}
 
@@ -939,7 +939,7 @@ namespace TA3D
 		{
 			int size;
 			gzread(file, &size, sizeof(size));
-			char *buf = new char[size + 1];
+			char* buf = new char[size + 1];
 			if (size > 0)
 				gzread(file, buf, size);
 			buf[size] = 0;

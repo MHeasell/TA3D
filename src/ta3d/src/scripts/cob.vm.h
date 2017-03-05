@@ -85,8 +85,8 @@ namespace TA3D
 	class CobVm : public UnitScriptInterface
 	{
 	protected:
-		CobScript *script;
-		int *global_env; // Global COB environment
+		CobScript* script;
+		int* global_env; // Global COB environment
 		Stack<int> cur;
 		Stack<int> sStack;			 // Script stack
 		Stack<SCRIPT_ENV> local_env; // Local COB environment
@@ -95,19 +95,19 @@ namespace TA3D
 		CobVm();
 		virtual ~CobVm();
 
-		/*virtual*/ void load(ScriptData *data);
+		/*virtual*/ void load(ScriptData* data);
 
 		/*virtual*/ int run(float dt, bool alone = false);				 // Run the script
-		int run(float dt, bool alone, int *pParam, const uint32 nParam); // Run the script
+		int run(float dt, bool alone, int* pParam, const uint32 nParam); // Run the script
 
 		//! functions used to call/run functions
-		void call(const int functionID, int *parameters = NULL, int nb_params = 0);
-		/*virtual*/ void call(const String &functionName, int *parameters = NULL, int nb_params = 0);
-		/*virtual*/ int execute(const String &functionName, int *parameters = NULL, int nb_params = 0);
+		void call(const int functionID, int* parameters = NULL, int nb_params = 0);
+		/*virtual*/ void call(const String& functionName, int* parameters = NULL, int nb_params = 0);
+		/*virtual*/ int execute(const String& functionName, int* parameters = NULL, int nb_params = 0);
 
 		//! functions used to create new threads sharing the same environment
-		/*virtual*/ CobVm *fork();
-		/*virtual*/ CobVm *fork(const String &functionName, int *parameters = NULL, int nb_params = 0);
+		/*virtual*/ CobVm* fork();
+		/*virtual*/ CobVm* fork(const String& functionName, int* parameters = NULL, int nb_params = 0);
 
 		//! functions used to save/restore scripts state
 		/*virtual*/ void save_thread_state(gzFile file);

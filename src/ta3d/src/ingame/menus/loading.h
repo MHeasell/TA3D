@@ -55,7 +55,7 @@ namespace TA3D
 		**
 		** This method must be called from the main thread.
 		*/
-			virtual void operator()(const float percent, const String &message);
+			virtual void operator()(const float percent, const String& message);
 			//@}
 
 		private:

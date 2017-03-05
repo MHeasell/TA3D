@@ -55,8 +55,8 @@ namespace TA3D
 
 	void GFX::detectDefaultSettings()
 	{
-		const GLubyte *glStr = glGetString(GL_VENDOR);
-		String glVendor = glStr ? ToUpper((const char *)glStr) : String();
+		const GLubyte* glStr = glGetString(GL_VENDOR);
+		String glVendor = glStr ? ToUpper((const char*)glStr) : String();
 
 		enum VENDOR
 		{
@@ -408,9 +408,9 @@ namespace TA3D
 		}
 
 		// We want a centered window
-		SDL_putenv(const_cast<char *>("SDL_VIDEO_CENTERED=1"));
+		SDL_putenv(const_cast<char*>("SDL_VIDEO_CENTERED=1"));
 
-		SDL_Surface *icon = load_image("gfx\\icon.png");
+		SDL_Surface* icon = load_image("gfx\\icon.png");
 		if (icon)
 		{
 			SDL_WM_SetIcon(icon, NULL);
@@ -542,21 +542,14 @@ namespace TA3D
 	bool GFX::checkVideoCardWorkaround() const
 	{
 		// Check for ATI workarounds (if an ATI card is present)
-		bool workaround = Substr(ToUpper((const char *)glGetString(GL_VENDOR)), 0, 3) == "ATI";
+		bool workaround = Substr(ToUpper((const char*)glGetString(GL_VENDOR)), 0, 3) == "ATI";
 		// Check for SIS workarounds (if an SIS card is present) (the same than ATI)
-		workaround |= ToUpper((const char *)glGetString(GL_VENDOR)).find("SIS") != String::npos;
+		workaround |= ToUpper((const char*)glGetString(GL_VENDOR)).find("SIS") != String::npos;
 		return workaround;
 	}
 
 	GFX::GFX()
-		: width(0), height(0), x(0), y(0),
-		  normal_font(NULL), small_font(NULL), TA_font(NULL), ta3d_gui_font(NULL), big_font(NULL),
-		  SCREEN_W_HALF(0), SCREEN_H_HALF(0), SCREEN_W_INV(0.), SCREEN_H_INV(0.), SCREEN_W_TO_640(0.), SCREEN_H_TO_480(0.),
-		  low_def_limit(600.), glfond(0), textureFBO(0), textureDepth(0), textureColor(0), shadowMap(0),
-		  model_shader(),
-		  ati_workaround(false), max_tex_size(0), default_texture(0),
-		  alpha_blending_set(false), texture_format(0), build_mipmaps(false), shadowMapMode(false),
-		  defaultRGBTextureFormat(GL_RGB8), defaultRGBATextureFormat(GL_RGBA8)
+		: width(0), height(0), x(0), y(0), normal_font(NULL), small_font(NULL), TA_font(NULL), ta3d_gui_font(NULL), big_font(NULL), SCREEN_W_HALF(0), SCREEN_H_HALF(0), SCREEN_W_INV(0.), SCREEN_H_INV(0.), SCREEN_W_TO_640(0.), SCREEN_H_TO_480(0.), low_def_limit(600.), glfond(0), textureFBO(0), textureDepth(0), textureColor(0), shadowMap(0), model_shader(), ati_workaround(false), max_tex_size(0), default_texture(0), alpha_blending_set(false), texture_format(0), build_mipmaps(false), shadowMapMode(false), defaultRGBTextureFormat(GL_RGB8), defaultRGBATextureFormat(GL_RGBA8)
 	{
 		// Initialize the GFX Engine
 		if (lp_CONFIG->first_start)
@@ -732,7 +725,7 @@ namespace TA3D
 	{
 		float d_alpha = DB_PI / (r + 1.0f);
 		int n = (int)(DB_PI / d_alpha) + 1;
-		float *points = new float[n * 2];
+		float* points = new float[n * 2];
 		int i = 0;
 		for (float alpha = 0.0f; alpha <= DB_PI; alpha += d_alpha)
 		{
@@ -757,7 +750,7 @@ namespace TA3D
 	{
 		float d_alpha = DB_PI / (r + 1.0f);
 		int n = (int)(DB_PI / d_alpha) + 2;
-		float *points = new float[n * 2];
+		float* points = new float[n * 2];
 		int i = 0;
 		for (float alpha = 0.0f; alpha <= DB_PI; alpha += d_alpha)
 		{
@@ -787,7 +780,7 @@ namespace TA3D
 	{
 		float d_alpha = DB_PI / (r + 1.0f);
 		int n = (int)(DB_PI / d_alpha) + 2;
-		float *points = new float[n * 2];
+		float* points = new float[n * 2];
 		int i = 0;
 		for (float alpha = 0.0f; alpha <= DB_PI; alpha += d_alpha)
 		{
@@ -829,7 +822,7 @@ namespace TA3D
 	{
 		float d_alpha = DB_PI / (r + 1.0f);
 		int n = (int)(DB_PI / d_alpha) + 4;
-		float *points = new float[n * 2];
+		float* points = new float[n * 2];
 		int i = 0;
 		points[i++] = x;
 		points[i++] = y;
@@ -866,7 +859,7 @@ namespace TA3D
 		rectdot(x1, y1, x2, y2);
 	}
 
-	void GFX::drawtexture(const GLuint &tex, const float x1, const float y1, const float x2, const float y2, const float u1, const float v1, const float u2, const float v2)
+	void GFX::drawtexture(const GLuint& tex, const float x1, const float y1, const float x2, const float y2, const float u1, const float v1, const float u2, const float v2)
 	{
 		glEnable(GL_TEXTURE_2D);
 		glBindTexture(GL_TEXTURE_2D, tex);
@@ -883,7 +876,7 @@ namespace TA3D
 		glDrawArrays(GL_QUADS, 0, 4);
 	}
 
-	void GFX::drawtexture(const GLuint &tex, const float x1, const float y1, const float x2, const float y2)
+	void GFX::drawtexture(const GLuint& tex, const float x1, const float y1, const float x2, const float y2)
 	{
 		glEnable(GL_TEXTURE_2D);
 		glBindTexture(GL_TEXTURE_2D, tex);
@@ -900,7 +893,7 @@ namespace TA3D
 		glDrawArrays(GL_QUADS, 0, 4);
 	}
 
-	void GFX::drawtexture_flip(const GLuint &tex, const float x1, const float y1, const float x2, const float y2)
+	void GFX::drawtexture_flip(const GLuint& tex, const float x1, const float y1, const float x2, const float y2)
 	{
 		glEnable(GL_TEXTURE_2D);
 		glBindTexture(GL_TEXTURE_2D, tex);
@@ -917,19 +910,19 @@ namespace TA3D
 		glDrawArrays(GL_QUADS, 0, 4);
 	}
 
-	void GFX::drawtexture(const GLuint &tex, const float x1, const float y1, const float x2, const float y2, const uint32 col)
+	void GFX::drawtexture(const GLuint& tex, const float x1, const float y1, const float x2, const float y2, const uint32 col)
 	{
 		set_color(col);
 		drawtexture(tex, x1, y1, x2, y2);
 	}
 
-	void GFX::drawtexture_flip(const GLuint &tex, const float x1, const float y1, const float x2, const float y2, const uint32 col)
+	void GFX::drawtexture_flip(const GLuint& tex, const float x1, const float y1, const float x2, const float y2, const uint32 col)
 	{
 		set_color(col);
 		drawtexture_flip(tex, x1, y1, x2, y2);
 	}
 
-	void GFX::print(Font *font, const float x, const float y, const float z, const String &text) // Font related routines
+	void GFX::print(Font* font, const float x, const float y, const float z, const String& text) // Font related routines
 	{
 		assert(NULL != font);
 		if (!text.empty())
@@ -942,13 +935,13 @@ namespace TA3D
 		}
 	}
 
-	void GFX::print(Font *font, const float x, const float y, const float z, const uint32 col, const String &text) // Font related routines
+	void GFX::print(Font* font, const float x, const float y, const float z, const uint32 col, const String& text) // Font related routines
 	{
 		set_color(col);
 		print(font, x, y, z, text);
 	}
 
-	void GFX::print_center(Font *font, const float x, const float y, const float z, const String &text) // Font related routines
+	void GFX::print_center(Font* font, const float x, const float y, const float z, const String& text) // Font related routines
 	{
 		if (font)
 		{
@@ -963,13 +956,13 @@ namespace TA3D
 		}
 	}
 
-	void GFX::print_center(Font *font, const float x, const float y, const float z, const uint32 col, const String &text) // Font related routines
+	void GFX::print_center(Font* font, const float x, const float y, const float z, const uint32 col, const String& text) // Font related routines
 	{
 		set_color(col);
 		print_center(font, x, y, z, text);
 	}
 
-	void GFX::print_right(Font *font, const float x, const float y, const float z, const String &text) // Font related routines
+	void GFX::print_right(Font* font, const float x, const float y, const float z, const String& text) // Font related routines
 	{
 		if (!font)
 			return;
@@ -984,7 +977,7 @@ namespace TA3D
 		font->print(X, y, z, text);
 	}
 
-	void GFX::print_right(Font *font, const float x, const float y, const float z, const uint32 col, const String &text) // Font related routines
+	void GFX::print_right(Font* font, const float x, const float y, const float z, const uint32 col, const String& text) // Font related routines
 	{
 		set_color(col);
 		print_right(font, x, y, z, text);
@@ -995,7 +988,7 @@ namespace TA3D
 		return max_tex_size;
 	}
 
-	GLuint GFX::make_texture(SDL_Surface *bmp, int filter_type, bool clamp)
+	GLuint GFX::make_texture(SDL_Surface* bmp, int filter_type, bool clamp)
 	{
 		if (bmp == NULL)
 		{
@@ -1006,8 +999,8 @@ namespace TA3D
 
 		if (bmp->w > max_tex_size || bmp->h > max_tex_size)
 		{
-			SDL_Surface *tmp = create_surface_ex(bmp->format->BitsPerPixel,
-												 Math::Min(bmp->w, max_tex_size), Math::Min(bmp->h, max_tex_size));
+			SDL_Surface* tmp = create_surface_ex(bmp->format->BitsPerPixel,
+				Math::Min(bmp->w, max_tex_size), Math::Min(bmp->h, max_tex_size));
 			stretch_blit(bmp, tmp, 0, 0, bmp->w, bmp->h, 0, 0, tmp->w, tmp->h);
 			GLuint tex = make_texture(tmp, filter_type, clamp);
 			SDL_FreeSurface(tmp);
@@ -1022,7 +1015,7 @@ namespace TA3D
 				w <<= 1;
 			if (h < bmp->h)
 				h <<= 1;
-			SDL_Surface *tmp = create_surface_ex(bmp->format->BitsPerPixel, w, h);
+			SDL_Surface* tmp = create_surface_ex(bmp->format->BitsPerPixel, w, h);
 			stretch_blit_smooth(bmp, tmp, 0, 0, bmp->w, bmp->h, 0, 0, tmp->w, tmp->h);
 			GLuint tex = make_texture(tmp, filter_type, clamp);
 			SDL_FreeSurface(tmp);
@@ -1134,7 +1127,7 @@ namespace TA3D
 				{
 					w = Math::Max(w / 2, 1);
 					h = Math::Max(h / 2, 1);
-					SDL_Surface *tmp = create_surface_ex(bmp->format->BitsPerPixel, w, h);
+					SDL_Surface* tmp = create_surface_ex(bmp->format->BitsPerPixel, w, h);
 					stretch_blit(bmp, tmp, 0, 0, bmp->w, bmp->h, 0, 0, w, h);
 					switch (tmp->format->BitsPerPixel)
 					{
@@ -1161,7 +1154,7 @@ namespace TA3D
 		return gl_tex;
 	}
 
-	GLuint GFX::make_texture_A32F(int w, int h, float *data, int filter_type, bool clamp)
+	GLuint GFX::make_texture_A32F(int w, int h, float* data, int filter_type, bool clamp)
 	{
 		MutexLocker locker(pMutex);
 
@@ -1210,21 +1203,21 @@ namespace TA3D
 		}
 
 		glTexImage2D(GL_TEXTURE_2D,
-					 0,
-					 GL_ALPHA32F_ARB,
-					 w,
-					 h,
-					 0,
-					 GL_ALPHA,
-					 GL_FLOAT,
-					 data);
+			0,
+			GL_ALPHA32F_ARB,
+			w,
+			h,
+			0,
+			GL_ALPHA,
+			GL_FLOAT,
+			data);
 
 		set_texture_format(defaultRGBTextureFormat);
 
 		return gl_tex;
 	}
 
-	GLuint GFX::make_texture_A16F(int w, int h, float *data, int filter_type, bool clamp)
+	GLuint GFX::make_texture_A16F(int w, int h, float* data, int filter_type, bool clamp)
 	{
 		MutexLocker locker(pMutex);
 
@@ -1273,20 +1266,20 @@ namespace TA3D
 		}
 
 		glTexImage2D(GL_TEXTURE_2D,
-					 0,
-					 GL_ALPHA16F_ARB,
-					 w,
-					 h,
-					 0,
-					 GL_ALPHA,
-					 GL_FLOAT,
-					 data);
+			0,
+			GL_ALPHA16F_ARB,
+			w,
+			h,
+			0,
+			GL_ALPHA,
+			GL_FLOAT,
+			data);
 
 		set_texture_format(defaultRGBTextureFormat);
 
 		return gl_tex;
 	}
-	GLuint GFX::make_texture_RGBA32F(int w, int h, float *data, int filter_type, bool clamp)
+	GLuint GFX::make_texture_RGBA32F(int w, int h, float* data, int filter_type, bool clamp)
 	{
 		MutexLocker locker(pMutex);
 
@@ -1335,21 +1328,21 @@ namespace TA3D
 		}
 
 		glTexImage2D(GL_TEXTURE_2D,
-					 0,
-					 GL_RGBA32F_ARB,
-					 w,
-					 h,
-					 0,
-					 GL_RGBA,
-					 GL_FLOAT,
-					 data);
+			0,
+			GL_RGBA32F_ARB,
+			w,
+			h,
+			0,
+			GL_RGBA,
+			GL_FLOAT,
+			data);
 
 		set_texture_format(defaultRGBTextureFormat);
 
 		return gl_tex;
 	}
 
-	GLuint GFX::make_texture_RGBA16F(int w, int h, float *data, int filter_type, bool clamp)
+	GLuint GFX::make_texture_RGBA16F(int w, int h, float* data, int filter_type, bool clamp)
 	{
 		MutexLocker locker(pMutex);
 
@@ -1398,21 +1391,21 @@ namespace TA3D
 		}
 
 		glTexImage2D(GL_TEXTURE_2D,
-					 0,
-					 GL_RGBA16F_ARB,
-					 w,
-					 h,
-					 0,
-					 GL_RGBA,
-					 GL_FLOAT,
-					 data);
+			0,
+			GL_RGBA16F_ARB,
+			w,
+			h,
+			0,
+			GL_RGBA,
+			GL_FLOAT,
+			data);
 
 		set_texture_format(defaultRGBTextureFormat);
 
 		return gl_tex;
 	}
 
-	GLuint GFX::make_texture_RGB32F(int w, int h, float *data, int filter_type, bool clamp)
+	GLuint GFX::make_texture_RGB32F(int w, int h, float* data, int filter_type, bool clamp)
 	{
 		MutexLocker locker(pMutex);
 
@@ -1461,21 +1454,21 @@ namespace TA3D
 		}
 
 		glTexImage2D(GL_TEXTURE_2D,
-					 0,
-					 GL_RGB32F_ARB,
-					 w,
-					 h,
-					 0,
-					 GL_RGB,
-					 GL_FLOAT,
-					 data);
+			0,
+			GL_RGB32F_ARB,
+			w,
+			h,
+			0,
+			GL_RGB,
+			GL_FLOAT,
+			data);
 
 		set_texture_format(defaultRGBTextureFormat);
 
 		return gl_tex;
 	}
 
-	GLuint GFX::make_texture_RGB16F(int w, int h, float *data, int filter_type, bool clamp)
+	GLuint GFX::make_texture_RGB16F(int w, int h, float* data, int filter_type, bool clamp)
 	{
 		MutexLocker locker(pMutex);
 
@@ -1524,14 +1517,14 @@ namespace TA3D
 		}
 
 		glTexImage2D(GL_TEXTURE_2D,
-					 0,
-					 GL_RGB16F_ARB,
-					 w,
-					 h,
-					 0,
-					 GL_RGB,
-					 GL_FLOAT,
-					 data);
+			0,
+			GL_RGB16F_ARB,
+			w,
+			h,
+			0,
+			GL_RGB,
+			GL_FLOAT,
+			data);
 
 		set_texture_format(defaultRGBTextureFormat);
 
@@ -1640,7 +1633,7 @@ namespace TA3D
 		return tex;
 	}
 
-	void GFX::blit_texture(SDL_Surface *src, GLuint dst)
+	void GFX::blit_texture(SDL_Surface* src, GLuint dst)
 	{
 		if (!dst)
 			return;
@@ -1654,13 +1647,13 @@ namespace TA3D
 		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, src->w, src->h, GL_RGBA, GL_UNSIGNED_BYTE, src->pixels);
 	}
 
-	SDL_Surface *GFX::load_image(const String &filename)
+	SDL_Surface* GFX::load_image(const String& filename)
 	{
-		File *vfile = VFS::Instance()->readFile(filename);
+		File* vfile = VFS::Instance()->readFile(filename);
 		if (vfile)
 		{
-			SDL_RWops *file = SDL_RWFromMem((void *)vfile->data(), vfile->size());
-			SDL_Surface *img = NULL;
+			SDL_RWops* file = SDL_RWFromMem((void*)vfile->data(), vfile->size());
+			SDL_Surface* img = NULL;
 			if (Paths::ExtractFileExt(filename).toLower() == ".tga")
 				img = IMG_LoadTGA_RW(file);
 			else
@@ -1685,7 +1678,7 @@ namespace TA3D
 		return NULL;
 	}
 
-	GLuint GFX::load_texture(const String &file, int filter_type, uint32 *width, uint32 *height, bool clamp, GLuint texFormat, bool *useAlpha, bool checkSize)
+	GLuint GFX::load_texture(const String& file, int filter_type, uint32* width, uint32* height, bool clamp, GLuint texFormat, bool* useAlpha, bool checkSize)
 	{
 		if (!VFS::Instance()->fileExists(file)) // The file doesn't exist
 			return 0;
@@ -1718,7 +1711,7 @@ namespace TA3D
 				return gltex;
 		}
 
-		SDL_Surface *bmp = load_image(file);
+		SDL_Surface* bmp = load_image(file);
 		if (bmp == NULL)
 		{
 			LOG_ERROR("Failed to load texture `" << file << "`");
@@ -1736,7 +1729,7 @@ namespace TA3D
 			const int maxTextureSizeAllowed = lp_CONFIG->getMaxTextureSizeAllowed();
 			if (std::max(bmp->w, bmp->h) > maxTextureSizeAllowed)
 			{
-				SDL_Surface *tmp = shrink(bmp, std::min(bmp->w, maxTextureSizeAllowed), std::min(bmp->h, maxTextureSizeAllowed));
+				SDL_Surface* tmp = shrink(bmp, std::min(bmp->w, maxTextureSizeAllowed), std::min(bmp->h, maxTextureSizeAllowed));
 				SDL_FreeSurface(bmp);
 				bmp = tmp;
 			}
@@ -1781,12 +1774,12 @@ namespace TA3D
 		return gl_tex;
 	}
 
-	GLuint GFX::load_texture_mask(const String &file, uint32 level, int filter_type, uint32 *width, uint32 *height, bool clamp)
+	GLuint GFX::load_texture_mask(const String& file, uint32 level, int filter_type, uint32* width, uint32* height, bool clamp)
 	{
 		if (!VFS::Instance()->fileExists(file)) // The file doesn't exist
 			return 0;
 
-		SDL_Surface *bmp = load_image(file);
+		SDL_Surface* bmp = load_image(file);
 		if (bmp == NULL)
 			return 0; // Operation failed
 		if (width)
@@ -1831,7 +1824,7 @@ namespace TA3D
 		return gl_tex;
 	}
 
-	bool GFX::is_texture_in_cache(const String &file)
+	bool GFX::is_texture_in_cache(const String& file)
 	{
 		if (ati_workaround || !lp_CONFIG->use_texture_cache || !lp_CONFIG->use_texture_compression || lp_CONFIG->developerMode)
 			return false;
@@ -1841,7 +1834,7 @@ namespace TA3D
 		{
 			std::ifstream cache_file(realFile.c_str());
 			uint32 mod_hash;
-			cache_file.read((char *)&mod_hash, sizeof(mod_hash));
+			cache_file.read((char*)&mod_hash, sizeof(mod_hash));
 			cache_file.close();
 
 			return mod_hash == hash<String>()(TA3D_CURRENT_MOD); // Check if it corresponds to current mod
@@ -1849,7 +1842,7 @@ namespace TA3D
 		return false;
 	}
 
-	GLuint GFX::load_texture_from_cache(const String &file, int filter_type, uint32 *width, uint32 *height, bool clamp, bool *useAlpha)
+	GLuint GFX::load_texture_from_cache(const String& file, int filter_type, uint32* width, uint32* height, bool clamp, bool* useAlpha)
 	{
 		if (ati_workaround || !lp_CONFIG->use_texture_cache || !lp_CONFIG->use_texture_compression || !g_useGenMipMaps || !g_useNonPowerOfTwoTextures || lp_CONFIG->developerMode) // No caching in developer mode
 			return 0;
@@ -1860,7 +1853,7 @@ namespace TA3D
 		{
 			std::ifstream cache_file(realFile.c_str());
 			uint32 mod_hash;
-			cache_file.read((char *)&mod_hash, sizeof(mod_hash));
+			cache_file.read((char*)&mod_hash, sizeof(mod_hash));
 
 			if (mod_hash != hash<String>()(TA3D_CURRENT_MOD)) // Doesn't correspond to current mod
 			{
@@ -1874,8 +1867,8 @@ namespace TA3D
 				cache_file.get();
 
 			uint32 rw, rh;
-			cache_file.read((char *)&rw, 4);
-			cache_file.read((char *)&rh, 4);
+			cache_file.read((char*)&rw, 4);
+			cache_file.read((char*)&rh, 4);
 			if (width)
 				*width = rw;
 			if (height)
@@ -1884,7 +1877,7 @@ namespace TA3D
 			int lod_max = 0;
 			GLint size, internal_format;
 
-			cache_file.read((char *)&lod_max, sizeof(lod_max));
+			cache_file.read((char*)&lod_max, sizeof(lod_max));
 
 			GLuint tex;
 			glEnable(GL_TEXTURE_2D);
@@ -1904,15 +1897,15 @@ namespace TA3D
 			for (int lod = 0; lod < lod_max; ++lod)
 			{
 				GLint w, h, border;
-				cache_file.read((char *)&size, sizeof(GLint));
+				cache_file.read((char*)&size, sizeof(GLint));
 
-				byte *img = new byte[size];
+				byte* img = new byte[size];
 
-				cache_file.read((char *)&internal_format, sizeof(GLint));
-				cache_file.read((char *)&border, sizeof(GLint));
-				cache_file.read((char *)&w, sizeof(GLint));
-				cache_file.read((char *)&h, sizeof(GLint));
-				cache_file.read((char *)img, size);
+				cache_file.read((char*)&internal_format, sizeof(GLint));
+				cache_file.read((char*)&border, sizeof(GLint));
+				cache_file.read((char*)&w, sizeof(GLint));
+				cache_file.read((char*)&h, sizeof(GLint));
+				cache_file.read((char*)img, size);
 				if (lod == 0)
 					glCompressedTexImage2D(GL_TEXTURE_2D, 0, internal_format, w, h, border, size, img);
 				else
@@ -1992,17 +1985,17 @@ namespace TA3D
 
 		uint32 mod_hash = static_cast<uint32>(hash<String>()(TA3D_CURRENT_MOD)); // Save a hash of current mod
 
-		cache_file.write((const char *)&mod_hash, sizeof(mod_hash));
+		cache_file.write((const char*)&mod_hash, sizeof(mod_hash));
 
 		cache_file.put(useAlpha);
-		cache_file.write((const char *)&width, 4);
-		cache_file.write((const char *)&height, 4);
+		cache_file.write((const char*)&width, 4);
+		cache_file.write((const char*)&height, 4);
 
 		int lod_max = Math::Max(Math::Log2(rw), Math::Log2(rh));
 		if ((1 << lod_max) < rw && (1 << lod_max) < rh)
 			lod_max++;
 
-		cache_file.write((const char *)&lod_max, sizeof(lod_max));
+		cache_file.write((const char*)&lod_max, sizeof(lod_max));
 
 		for (int lod = 0; lod < lod_max; ++lod)
 		{
@@ -2011,7 +2004,7 @@ namespace TA3D
 			glGetTexLevelParameteriv(GL_TEXTURE_2D, lod, GL_TEXTURE_COMPRESSED_IMAGE_SIZE_ARB, &size);
 			glGetTexLevelParameteriv(GL_TEXTURE_2D, lod, GL_TEXTURE_INTERNAL_FORMAT, &internal_format);
 
-			byte *img = new byte[size];
+			byte* img = new byte[size];
 			memset(img, 0, size);
 
 			glGetCompressedTexImageARB(GL_TEXTURE_2D, lod, img);
@@ -2020,12 +2013,12 @@ namespace TA3D
 			glGetTexLevelParameteriv(GL_TEXTURE_2D, lod, GL_TEXTURE_WIDTH, &w);
 			glGetTexLevelParameteriv(GL_TEXTURE_2D, lod, GL_TEXTURE_HEIGHT, &h);
 
-			cache_file.write((const char *)&size, sizeof(GLint));
-			cache_file.write((const char *)&internal_format, sizeof(GLint));
-			cache_file.write((const char *)&border, sizeof(GLint));
-			cache_file.write((const char *)&w, sizeof(GLint));
-			cache_file.write((const char *)&h, sizeof(GLint));
-			cache_file.write((const char *)img, size);
+			cache_file.write((const char*)&size, sizeof(GLint));
+			cache_file.write((const char*)&internal_format, sizeof(GLint));
+			cache_file.write((const char*)&border, sizeof(GLint));
+			cache_file.write((const char*)&w, sizeof(GLint));
+			cache_file.write((const char*)&h, sizeof(GLint));
+			cache_file.write((const char*)img, size);
 
 			DELETE_ARRAY(img);
 		}
@@ -2038,10 +2031,10 @@ namespace TA3D
 		if ((!VFS::Instance()->fileExists(file)) || (!VFS::Instance()->fileExists(mask)))
 			return 0; // The file doesn't exist
 
-		SDL_Surface *bmp = load_image(file);
+		SDL_Surface* bmp = load_image(file);
 		if (bmp == NULL)
 			return 0; // Operation failed
-		SDL_Surface *alpha = load_image(mask);
+		SDL_Surface* alpha = load_image(mask);
 		if (!alpha)
 		{
 			SDL_FreeSurface(bmp);
@@ -2081,7 +2074,7 @@ namespace TA3D
 		return height;
 	}
 
-	void GFX::destroy_texture(GLuint &gltex)
+	void GFX::destroy_texture(GLuint& gltex)
 	{
 		if (gltex) // Test if the texture exists
 		{
@@ -2195,7 +2188,7 @@ namespace TA3D
 		glDisableClientState(GL_COLOR_ARRAY);
 	}
 
-	uint32 GFX::InterfaceMsg(const uint32 MsgID, const String &)
+	uint32 GFX::InterfaceMsg(const uint32 MsgID, const String&)
 	{
 		if (MsgID != TA3D_IM_GFX_MSG)
 			return INTERFACE_RESULT_CONTINUE;
@@ -2229,7 +2222,7 @@ namespace TA3D
 
 	void GFX::preCalculations()
 	{
-		const SDL_VideoInfo *info = SDL_GetVideoInfo();
+		const SDL_VideoInfo* info = SDL_GetVideoInfo();
 		width = info->current_w;
 		height = info->current_h;
 		SCREEN_W_HALF = width >> 1;
@@ -2373,14 +2366,14 @@ namespace TA3D
 		gfx->loadFonts();
 
 		byte filter[] = {FILTER_NONE, FILTER_LINEAR, FILTER_BILINEAR, FILTER_TRILINEAR};
-		const char *filterInfo[] = {"FILTER_NONE", "FILTER_LINEAR", "FILTER_BILINEAR", "FILTER_TRILINEAR"};
+		const char* filterInfo[] = {"FILTER_NONE", "FILTER_LINEAR", "FILTER_BILINEAR", "FILTER_TRILINEAR"};
 
 		for (int e = 0; e < 4; e++)
 		{
 			GLuint tex[11];
 
 			GLuint texFormat[] = {GL_COMPRESSED_RGBA_ARB, GL_COMPRESSED_RGB_ARB, GL_RGB8, GL_RGBA8, GL_RGB5, GL_RGB5_A1, GL_RGB4, GL_RGBA4, GL_COMPRESSED_RGBA_S3TC_DXT1_EXT, GL_COMPRESSED_RGBA_S3TC_DXT3_EXT, GL_COMPRESSED_RGBA_S3TC_DXT5_EXT};
-			const char *info[] = {"COMPRESSED_RGBA", "COMPRESSED_RGB", "RGB8", "RGBA8", "RGB5", "RGB5_A1", "RGB4", "RGBA4", "COMPRESSED_RGBA_S3TC_DXT1", "COMPRESSED_RGBA_S3TC_DXT3", "COMPRESSED_RGBA_S3TC_DXT5"};
+			const char* info[] = {"COMPRESSED_RGBA", "COMPRESSED_RGB", "RGB8", "RGBA8", "RGB5", "RGB5_A1", "RGB4", "RGBA4", "COMPRESSED_RGBA_S3TC_DXT1", "COMPRESSED_RGBA_S3TC_DXT3", "COMPRESSED_RGBA_S3TC_DXT5"};
 
 			for (int i = 0; i < 11; i++)
 				tex[i] = gfx->load_texture("gfx/mdrn_background.jpg", filter[e], NULL, NULL, true, texFormat[i]);
@@ -2416,13 +2409,13 @@ namespace TA3D
 		InterfaceManager = NULL;
 	}
 
-	SDL_Surface *GFX::create_surface_ex(int bpp, int w, int h)
+	SDL_Surface* GFX::create_surface_ex(int bpp, int w, int h)
 	{
 		return SDL_CreateRGBSurface(SDL_SWSURFACE, w, h, bpp,
-									0x000000FF, 0x0000FF00, 0x00FF0000, 0xFF000000);
+			0x000000FF, 0x0000FF00, 0x00FF0000, 0xFF000000);
 	}
 
-	SDL_Surface *GFX::create_surface(int w, int h)
+	SDL_Surface* GFX::create_surface(int w, int h)
 	{
 		return create_surface_ex(32, w, h);
 	}
@@ -2435,14 +2428,14 @@ namespace TA3D
 	{
 	}
 
-	SDL_Surface *GFX::LoadMaskedTextureToBmp(const String &file, const String &filealpha)
+	SDL_Surface* GFX::LoadMaskedTextureToBmp(const String& file, const String& filealpha)
 	{
 		// Load the texture (32Bits)
-		SDL_Surface *bmp = gfx->load_image(file);
+		SDL_Surface* bmp = gfx->load_image(file);
 		LOG_ASSERT(bmp != NULL);
 
 		// Load the mask
-		SDL_Surface *alpha = gfx->load_image(filealpha);
+		SDL_Surface* alpha = gfx->load_image(filealpha);
 		LOG_ASSERT(alpha != NULL);
 
 		// Apply the mask, pixel by pixel
@@ -2463,7 +2456,7 @@ namespace TA3D
 		glGenTextures(1, &shadowMapTexture);
 		glBindTexture(GL_TEXTURE_2D, shadowMapTexture);
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT24, w, h, 0,
-					 GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE, NULL);
+			GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE, NULL);
 		if (lp_CONFIG->shadow_quality == 2)
 		{
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST); // We want fast shadows
@@ -2615,7 +2608,7 @@ namespace TA3D
 
 										if (SDL_SetVideoMode(w, h, bpp, SDL_OPENGL | SDL_HWSURFACE))
 										{
-											if (String((const char *)glGetString(GL_RENDERER)).toLower() != "gdi generic")
+											if (String((const char*)glGetString(GL_RENDERER)).toLower() != "gdi generic")
 											{
 												std::cout << "test passed for following settings:" << std::endl;
 												std::cout << "stencil = " << (stencil ? 8 : 0) << std::endl;

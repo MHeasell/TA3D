@@ -46,8 +46,7 @@ namespace TA3D
 		}
 
 		Intro::Intro()
-			: Abstract(), pContentSize(0), pBackgroundTexture(0),
-			  pCurrentFontHeight(1.0f)
+			: Abstract(), pContentSize(0), pBackgroundTexture(0), pCurrentFontHeight(1.0f)
 		{
 		}
 
@@ -111,7 +110,7 @@ namespace TA3D
 				pContent.push_back(nullptr);
 
 			// Load all text files
-			File *file = VFS::Instance()->readFile(String("intro") << Paths::SeparatorAsString << I18N::Translate("en.ta3d.txt"));
+			File* file = VFS::Instance()->readFile(String("intro") << Paths::SeparatorAsString << I18N::Translate("en.ta3d.txt"));
 			if (file == NULL)
 				throw(String("Intro file not found! (") << "intro" << Paths::SeparatorAsString << I18N::Translate("en.ta3d.txt") << ')');
 			if (file->size() <= 5 * 1024)

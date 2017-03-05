@@ -44,15 +44,15 @@ namespace TA3D
 		bool sleeping;	// Is the thread paused ?
 		bool waiting;	 // Is the thread waiting for some user action ?
 
-		uint32 signal_mask;							// This thread will be killed as soon as it catchs this signal
-		ScriptInterface *caller;					// NULL if main thread
-		std::vector<ScriptInterface *> childs;		// Child processes, empty for childs this is to keep track of running threads
-		std::vector<ScriptInterface *> freeThreads; // Old childs processes that are not used, we keep them to prevent allocating/freeing things uselessly
+		uint32 signal_mask;						   // This thread will be killed as soon as it catchs this signal
+		ScriptInterface* caller;				   // NULL if main thread
+		std::vector<ScriptInterface*> childs;	  // Child processes, empty for childs this is to keep track of running threads
+		std::vector<ScriptInterface*> freeThreads; // Old childs processes that are not used, we keep them to prevent allocating/freeing things uselessly
 	public:
 		ScriptInterface();
 		virtual ~ScriptInterface() { deleteThreads(); }
 
-		virtual void load(ScriptData *data) = 0;
+		virtual void load(ScriptData* data) = 0;
 
 		//! stops definitely the thread
 		void kill();
@@ -70,8 +70,8 @@ namespace TA3D
 		inline int nb_threads() { return (running ? 1 : 0) + int(childs.size()); }
 
 		//! functions used to call/run functions
-		virtual void call(const String &functionName, int *parameters = NULL, int nb_params = 0) = 0;
-		virtual int execute(const String &functionName, int *parameters = NULL, int nb_params = 0) = 0;
+		virtual void call(const String& functionName, int* parameters = NULL, int nb_params = 0) = 0;
+		virtual int execute(const String& functionName, int* parameters = NULL, int nb_params = 0) = 0;
 
 		//! functions used to save/restore scripts state
 		virtual void save_thread_state(gzFile file) = 0;
@@ -80,17 +80,17 @@ namespace TA3D
 		void restore_state(gzFile file);
 
 		//! functions used to create new threads sharing the same environment
-		virtual ScriptInterface *fork() = 0;
-		virtual ScriptInterface *fork(const String &functionName, int *parameters = NULL, int nb_params = 0) = 0;
+		virtual ScriptInterface* fork() = 0;
+		virtual ScriptInterface* fork(const String& functionName, int* parameters = NULL, int nb_params = 0) = 0;
 
-		ScriptInterface *getFreeThread();
+		ScriptInterface* getFreeThread();
 
 		//! debug functions
 		virtual void dumpDebugInfo();
 
 	protected:
-		void addThread(ScriptInterface *pChild);
-		void removeThread(ScriptInterface *pChild);
+		void addThread(ScriptInterface* pChild);
+		void removeThread(ScriptInterface* pChild);
 		void deleteThreads();
 
 	public:

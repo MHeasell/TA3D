@@ -37,7 +37,7 @@ namespace TA3D
 		use_TA_palette = true;
 	}
 
-	SDL_Surface *convert_format(SDL_Surface *bmp)
+	SDL_Surface* convert_format(SDL_Surface* bmp)
 	{
 		if (bmp->format->BitsPerPixel != 32 || bmp->format->Rmask != 0x000000FF || bmp->format->Gmask != 0x0000FF00 || bmp->format->Bmask != 0x00FF0000 || bmp->format->Amask != 0xFF000000)
 		{
@@ -60,14 +60,14 @@ namespace TA3D
 			if (bmp->format->BitsPerPixel == 8 && use_TA_palette)
 				SDL_SetPalette(bmp, SDL_LOGPAL | SDL_PHYSPAL, TA3D::VARS::pal, 0, 256);
 
-			SDL_Surface *tmp = SDL_ConvertSurface(bmp, &target_format, SDL_SWSURFACE);
+			SDL_Surface* tmp = SDL_ConvertSurface(bmp, &target_format, SDL_SWSURFACE);
 			SDL_FreeSurface(bmp);
 			bmp = tmp;
 		}
 		return bmp;
 	}
 
-	SDL_Surface *convert_format_copy(SDL_Surface *bmp)
+	SDL_Surface* convert_format_copy(SDL_Surface* bmp)
 	{
 		SDL_PixelFormat target_format;
 		target_format.palette = NULL;
@@ -88,12 +88,12 @@ namespace TA3D
 		if (bmp->format->BitsPerPixel == 8 && use_TA_palette)
 			SDL_SetPalette(bmp, SDL_LOGPAL | SDL_PHYSPAL, TA3D::VARS::pal, 0, 256);
 
-		SDL_Surface *tmp = SDL_ConvertSurface(bmp, &target_format, SDL_SWSURFACE);
+		SDL_Surface* tmp = SDL_ConvertSurface(bmp, &target_format, SDL_SWSURFACE);
 
 		return tmp;
 	}
 
-	SDL_Surface *convert_format_24(SDL_Surface *bmp)
+	SDL_Surface* convert_format_24(SDL_Surface* bmp)
 	{
 		if (bmp->format->BitsPerPixel != 24 || bmp->format->Rmask != 0x000000FF || bmp->format->Gmask != 0x0000FF00 || bmp->format->Bmask != 0x00FF0000)
 		{
@@ -117,14 +117,14 @@ namespace TA3D
 			if (bmp->format->BitsPerPixel == 8 && use_TA_palette)
 				SDL_SetPalette(bmp, SDL_LOGPAL | SDL_PHYSPAL, TA3D::VARS::pal, 0, 256);
 
-			SDL_Surface *tmp = SDL_ConvertSurface(bmp, &target_format, SDL_SWSURFACE);
+			SDL_Surface* tmp = SDL_ConvertSurface(bmp, &target_format, SDL_SWSURFACE);
 			SDL_FreeSurface(bmp);
 			bmp = tmp;
 		}
 		return bmp;
 	}
 
-	SDL_Surface *convert_format_24_copy(SDL_Surface *bmp)
+	SDL_Surface* convert_format_24_copy(SDL_Surface* bmp)
 	{
 		SDL_PixelFormat target_format;
 		target_format.palette = NULL;
@@ -149,7 +149,7 @@ namespace TA3D
 		return SDL_ConvertSurface(bmp, &target_format, SDL_SWSURFACE);
 	}
 
-	SDL_Surface *convert_format_16(SDL_Surface *bmp)
+	SDL_Surface* convert_format_16(SDL_Surface* bmp)
 	{
 		if (bmp->format->BitsPerPixel != 16)
 		{
@@ -175,14 +175,14 @@ namespace TA3D
 			if (bmp->format->BitsPerPixel == 8 && use_TA_palette)
 				SDL_SetPalette(bmp, SDL_LOGPAL | SDL_PHYSPAL, TA3D::VARS::pal, 0, 256);
 
-			SDL_Surface *tmp = SDL_ConvertSurface(bmp, &target_format, SDL_SWSURFACE);
+			SDL_Surface* tmp = SDL_ConvertSurface(bmp, &target_format, SDL_SWSURFACE);
 			SDL_FreeSurface(bmp);
 			bmp = tmp;
 		}
 		return bmp;
 	}
 
-	SDL_Surface *convert_format_16_copy(SDL_Surface *bmp)
+	SDL_Surface* convert_format_16_copy(SDL_Surface* bmp)
 	{
 		SDL_PixelFormat target_format;
 		target_format.palette = NULL;
@@ -209,9 +209,9 @@ namespace TA3D
 		return SDL_ConvertSurface(bmp, &target_format, SDL_SWSURFACE);
 	}
 
-	void blit(SDL_Surface *in, SDL_Surface *out, int x0, int y0, int x1, int y1, int w, int h)
+	void blit(SDL_Surface* in, SDL_Surface* out, int x0, int y0, int x1, int y1, int w, int h)
 	{
-		SDL_Surface *tmp = in;
+		SDL_Surface* tmp = in;
 		if (in->format->BitsPerPixel != out->format->BitsPerPixel)
 		{
 			if (in->format->BitsPerPixel == 8 && use_TA_palette)
@@ -253,7 +253,7 @@ namespace TA3D
 				dy *= out->pitch;
 				sy *= tmp->pitch;
 
-				memcpy(((byte *)out->pixels) + dy + dx, ((byte *)tmp->pixels) + sy + sx, cw);
+				memcpy(((byte*)out->pixels) + dy + dx, ((byte*)tmp->pixels) + sy + sx, cw);
 			}
 		}
 
@@ -264,7 +264,7 @@ namespace TA3D
 			SDL_FreeSurface(tmp);
 	}
 
-	void masked_blit(SDL_Surface *in, SDL_Surface *out, int x0, int y0, int x1, int y1, int w, int h)
+	void masked_blit(SDL_Surface* in, SDL_Surface* out, int x0, int y0, int x1, int y1, int w, int h)
 	{
 		SDL_LockSurface(in);
 		SDL_LockSurface(out);
@@ -276,16 +276,16 @@ namespace TA3D
 			{
 				const int sx = x + x0;
 				const int dx = x1 + x;
-				byte b = ((byte *)in->pixels)[sy + sx];
+				byte b = ((byte*)in->pixels)[sy + sx];
 				if (b)
-					((byte *)out->pixels)[dy + dx] = b;
+					((byte*)out->pixels)[dy + dx] = b;
 			}
 		}
 		SDL_UnlockSurface(in);
 		SDL_UnlockSurface(out);
 	}
 
-	void stretch_blit(SDL_Surface *in, SDL_Surface *out, int x0, int y0, int w0, int h0, int x1, int y1, int w1, int h1)
+	void stretch_blit(SDL_Surface* in, SDL_Surface* out, int x0, int y0, int w0, int h0, int x1, int y1, int w1, int h1)
 	{
 		sint32 dw = (w0 << 16) / w1;
 		sint32 dh = (h0 << 16) / h1;
@@ -296,11 +296,11 @@ namespace TA3D
 				for (int y = 0; y < h1; y++)
 				{
 					const int sy = (y0 + (y * dh >> 16)) * in->pitch;
-					byte *d = ((byte *)out->pixels) + x1 + dy;
+					byte* d = ((byte*)out->pixels) + x1 + dy;
 					int sx = (sy + x0) << 16;
 					for (int x = 0; x < w1; x++)
 					{
-						*d = ((byte *)in->pixels)[sx >> 16];
+						*d = ((byte*)in->pixels)[sx >> 16];
 						d++;
 						sx += dw;
 					}
@@ -313,11 +313,11 @@ namespace TA3D
 				for (int y = 0; y < h1; y++)
 				{
 					const int sy = (y0 + (y * dh >> 16)) * in->pitch >> 1;
-					uint16 *d = ((uint16 *)out->pixels) + dy + x1;
+					uint16* d = ((uint16*)out->pixels) + dy + x1;
 					int sx = (sy + x0) << 16;
 					for (int x = 0; x < w1; x++)
 					{
-						*d = ((uint16 *)in->pixels)[sx >> 16];
+						*d = ((uint16*)in->pixels)[sx >> 16];
 						d++;
 						sx += dw;
 					}
@@ -329,11 +329,11 @@ namespace TA3D
 				for (int y = 0; y < h1; y++)
 				{
 					const int sy = (y0 + (y * dh >> 16)) * in->pitch;
-					byte *d = ((byte *)out->pixels) + dy + x1;
+					byte* d = ((byte*)out->pixels) + dy + x1;
 					int sx = x0 << 16;
 					for (int x = 0; x < w1; x++)
 					{
-						byte *ref = ((byte *)in->pixels) + sy + (sx >> 16) * 3;
+						byte* ref = ((byte*)in->pixels) + sy + (sx >> 16) * 3;
 						*(d++) = *(ref++);
 						*(d++) = *(ref++);
 						*(d++) = *(ref++);
@@ -347,11 +347,11 @@ namespace TA3D
 				for (int y = 0; y < h1; y++)
 				{
 					const int sy = (y0 + (y * dh >> 16)) * in->pitch;
-					uint32 *d = (uint32 *)(((byte *)out->pixels) + dy + x1);
+					uint32* d = (uint32*)(((byte*)out->pixels) + dy + x1);
 					int sx = x0 << 16;
 					for (int x = 0; x < w1; x++)
 					{
-						*d++ = *(uint32 *)(((byte *)in->pixels) + sy + ((sx >> 16) << 2));
+						*d++ = *(uint32*)(((byte*)in->pixels) + sy + ((sx >> 16) << 2));
 						sx += dw;
 					}
 					dy += out->pitch;
@@ -360,7 +360,7 @@ namespace TA3D
 		};
 	}
 
-	void stretch_blit_smooth(SDL_Surface *in, SDL_Surface *out, int x0, int y0, int w0, int h0, int x1, int y1, int w1, int h1)
+	void stretch_blit_smooth(SDL_Surface* in, SDL_Surface* out, int x0, int y0, int w0, int h0, int x1, int y1, int w1, int h1)
 	{
 		w0--;
 		h0--;
@@ -374,11 +374,11 @@ namespace TA3D
 				{
 					const int gy = y * dh;
 					const int sy = (y0 + (gy >> 16)) * in->pitch;
-					byte *d = ((byte *)out->pixels) + x1 + dy;
+					byte* d = ((byte*)out->pixels) + x1 + dy;
 					int sx = (sy + x0) << 16;
 					for (int x = 0; x < w1; x++)
 					{
-						byte *ref = ((byte *)in->pixels) + (sx >> 16);
+						byte* ref = ((byte*)in->pixels) + (sx >> 16);
 						int c0 = *ref++, c1, c2, c3;
 						c1 = *ref;
 						ref += in->pitch - 1;
@@ -402,11 +402,11 @@ namespace TA3D
 				{
 					const int gy = y * dh;
 					const int sy = (y0 + (gy >> 16)) * in->pitch;
-					byte *d = ((byte *)out->pixels) + dy + x1;
+					byte* d = ((byte*)out->pixels) + dy + x1;
 					int sx = x0 << 16;
 					for (int x = 0; x < w1; x++)
 					{
-						byte *ref = ((byte *)in->pixels) + sy + (sx >> 16) * 3;
+						byte* ref = ((byte*)in->pixels) + sy + (sx >> 16) * 3;
 						int r0 = *ref++, r1, r2, r3;
 						int g0 = *ref++, g1, g2, g3;
 						int b0 = *ref++, b1, b2, b3;
@@ -443,11 +443,11 @@ namespace TA3D
 				{
 					const int gy = y * dh;
 					const int sy = (y0 + (gy >> 16)) * in->pitch;
-					byte *d = ((byte *)out->pixels) + dy + x1;
+					byte* d = ((byte*)out->pixels) + dy + x1;
 					int sx = x0 << 16;
 					for (int x = 0; x < w1; x++)
 					{
-						byte *ref = ((byte *)in->pixels) + sy + ((sx >> 16) << 2);
+						byte* ref = ((byte*)in->pixels) + sy + ((sx >> 16) << 2);
 
 						int r0 = *ref++, r1, r2, r3;
 						int g0 = *ref++, g1, g2, g3;
@@ -491,10 +491,10 @@ namespace TA3D
 		};
 	}
 
-	SDL_Surface *shrink(const SDL_Surface *in, const int w, const int h)
+	SDL_Surface* shrink(const SDL_Surface* in, const int w, const int h)
 	{
-		SDL_Surface *tmp = gfx->create_surface_ex(in->format->BitsPerPixel, in->w, in->h);
-		SDL_Surface *out = gfx->create_surface_ex(in->format->BitsPerPixel, w, h);
+		SDL_Surface* tmp = gfx->create_surface_ex(in->format->BitsPerPixel, in->w, in->h);
+		SDL_Surface* out = gfx->create_surface_ex(in->format->BitsPerPixel, w, h);
 		// Gaussian blur pass to remove HF components
 		const float sigx = float(in->w) / float(w) - 1.0f;
 		const float sigy = float(in->h) / float(h) - 1.0f;
@@ -502,8 +502,8 @@ namespace TA3D
 		const int sy = static_cast<int>((sigy + 1.0f) * 2.0f);
 		const int sx2 = 2 * sx - 1;
 		const int sy2 = 2 * sy - 1;
-		uint32 *kerX = new uint32[sx];
-		uint32 *kerY = new uint32[sy];
+		uint32* kerX = new uint32[sx];
+		uint32* kerY = new uint32[sy];
 		if (sigx > 0.0f)
 		{
 			uint32 sum = 0U;
@@ -553,11 +553,11 @@ namespace TA3D
 					for (int x = 0; x < out->w; ++x)
 					{
 						const int X = x * mx >> 16;
-						byte *p = (byte *)tmp->pixels + y * tmp->pitch + X * 3;
+						byte* p = (byte*)tmp->pixels + y * tmp->pitch + X * 3;
 						uint32 col[3] = {0U, 0U, 0U};
 						const int start = std::max(-sx + 1, -X);
 						const int end = std::min(sx, in->w - X);
-						byte *c = (byte *)in->pixels + y * in->pitch + (X + start) * 3;
+						byte* c = (byte*)in->pixels + y * in->pitch + (X + start) * 3;
 						if (end - start == sx2)
 						{
 							for (int i = -sx + 1; i < sx; ++i, c += 3)
@@ -592,14 +592,14 @@ namespace TA3D
 				for (int x = 0; x < out->w; ++x)
 				{
 					const int X = x * mx >> 16;
-					byte *p = (byte *)out->pixels + x * 3;
+					byte* p = (byte*)out->pixels + x * 3;
 					for (int y = 0; y < out->h; ++y, p += out->pitch)
 					{
 						const int Y = y * my >> 16;
 						uint32 col[3] = {0U, 0U, 0U};
 						const int start = std::max(-sy + 1, -Y);
 						const int end = std::min(sy, in->h - Y);
-						byte *c = (byte *)tmp->pixels + (Y + start) * tmp->pitch + X * 3;
+						byte* c = (byte*)tmp->pixels + (Y + start) * tmp->pitch + X * 3;
 						if (end - start == sy2)
 						{
 							for (int i = -sy + 1; i < sy; ++i, c += tmp->pitch)
@@ -638,11 +638,11 @@ namespace TA3D
 					for (int x = 0; x < out->w; ++x)
 					{
 						const int X = x * mx >> 16;
-						byte *p = (byte *)tmp->pixels + y * tmp->pitch + (X << 2);
+						byte* p = (byte*)tmp->pixels + y * tmp->pitch + (X << 2);
 						uint32 col[4] = {0U, 0U, 0U, 0U};
 						const int start = std::max(-sx + 1, -X);
 						const int end = std::min(sx, in->w - X);
-						byte *c = (byte *)in->pixels + y * in->pitch + ((X + start) << 2);
+						byte* c = (byte*)in->pixels + y * in->pitch + ((X + start) << 2);
 						if (end - start == sx2)
 						{
 							for (int i = -sx + 1; i < sx; ++i, c += 4)
@@ -681,14 +681,14 @@ namespace TA3D
 				for (int x = 0; x < out->w; ++x)
 				{
 					const int X = x * mx >> 16;
-					byte *p = (byte *)out->pixels + (x << 2);
+					byte* p = (byte*)out->pixels + (x << 2);
 					for (int y = 0; y < out->h; ++y, p += out->pitch)
 					{
 						const int Y = y * my >> 16;
 						uint32 col[4] = {0U, 0U, 0U, 0U};
 						const int start = std::max(-sy + 1, -Y);
 						const int end = std::min(sy, in->h - Y);
-						byte *c = (byte *)tmp->pixels + (Y + start) * tmp->pitch + (X << 2);
+						byte* c = (byte*)tmp->pixels + (Y + start) * tmp->pitch + (X << 2);
 						if (end - start == sy2)
 						{
 							for (int i = -sy + 1; i < sy; ++i, c += tmp->pitch)
@@ -731,7 +731,7 @@ namespace TA3D
 		return out;
 	}
 
-	inline void putpixel(SDL_Surface *bmp, int x, int y, uint32 col)
+	inline void putpixel(SDL_Surface* bmp, int x, int y, uint32 col)
 	{
 		if (x < 0 || y < 0 || x >= bmp->w || y >= bmp->h)
 			return;
@@ -741,7 +741,7 @@ namespace TA3D
 				SurfaceByte(bmp, x, y) = byte(col);
 				break;
 			case 16:
-				(((uint16 *)((bmp)->pixels))[(y) * ((bmp)->pitch >> 1) + (x)]) = uint16(col);
+				(((uint16*)((bmp)->pixels))[(y) * ((bmp)->pitch >> 1) + (x)]) = uint16(col);
 				break;
 			case 24:
 				SurfaceByte(bmp, x * 3, y) = getb32(col);
@@ -754,7 +754,7 @@ namespace TA3D
 		};
 	}
 
-	uint32 getpixel(SDL_Surface *bmp, int x, int y)
+	uint32 getpixel(SDL_Surface* bmp, int x, int y)
 	{
 		if (x < 0 || y < 0 || x >= bmp->w || y >= bmp->h)
 			return 0;
@@ -763,7 +763,7 @@ namespace TA3D
 			case 8:
 				return SurfaceByte(bmp, x, y);
 			case 16:
-				return (((uint16 *)((bmp)->pixels))[(y) * ((bmp)->pitch >> 1) + (x)]);
+				return (((uint16*)((bmp)->pixels))[(y) * ((bmp)->pitch >> 1) + (x)]);
 			case 24:
 			{
 				const int b = SurfaceByte(bmp, x * 3, y);
@@ -777,7 +777,7 @@ namespace TA3D
 		return 0;
 	}
 
-	void circlefill(SDL_Surface *bmp, int x, int y, int r, const uint32 col)
+	void circlefill(SDL_Surface* bmp, int x, int y, int r, const uint32 col)
 	{
 		const int r2 = r * r;
 		const int my = Math::Max(-r, -y);
@@ -790,7 +790,7 @@ namespace TA3D
 					const int dx = int(sqrtf(float(r2 - sy * sy)));
 					const int ax = Math::Max(x - dx, 0);
 					const int bx = Math::Min(x + dx, bmp->w - 1);
-					memset((byte *)bmp->pixels + ax + (y + sy) * bmp->pitch, col, bx - ax + 1);
+					memset((byte*)bmp->pixels + ax + (y + sy) * bmp->pitch, col, bx - ax + 1);
 				}
 				break;
 			case 16:
@@ -801,8 +801,8 @@ namespace TA3D
 					const int dx = int(sqrtf(float(r - sy * sy)));
 					const int ax = Math::Max(x - dx, 0);
 					const int bx = Math::Min(x + dx, bmp->w - 1);
-					uint16 *p = (uint16 *)bmp->pixels + ax + (y + sy) * (bmp->pitch >> 1);
-					for (uint16 *end = p + bx - ax + 1; p != end; ++p)
+					uint16* p = (uint16*)bmp->pixels + ax + (y + sy) * (bmp->pitch >> 1);
+					for (uint16* end = p + bx - ax + 1; p != end; ++p)
 						*p = col16;
 				}
 			}
@@ -817,8 +817,8 @@ namespace TA3D
 					const int dx = int(sqrtf(float(r - sy * sy)));
 					const int ax = Math::Max(x - dx, 0);
 					const int bx = Math::Min(x + dx, bmp->w - 1);
-					byte *p = (byte *)bmp->pixels + ax * 3 + (y + sy) * bmp->pitch;
-					for (byte *end = p + (bx - ax + 1) * 3; p != end; ++p)
+					byte* p = (byte*)bmp->pixels + ax * 3 + (y + sy) * bmp->pitch;
+					for (byte* end = p + (bx - ax + 1) * 3; p != end; ++p)
 					{
 						*p++ = colb;
 						*p++ = colg;
@@ -833,21 +833,21 @@ namespace TA3D
 					const int dx = int(sqrtf(float(r - sy * sy)));
 					const int ax = Math::Max(x - dx, 0);
 					const int bx = Math::Min(x + dx, bmp->w - 1);
-					uint32 *p = (uint32 *)bmp->pixels + ax + (y + sy) * (bmp->pitch >> 2);
-					for (uint32 *end = p + bx - ax + 1; p != end; ++p)
+					uint32* p = (uint32*)bmp->pixels + ax + (y + sy) * (bmp->pitch >> 2);
+					for (uint32* end = p + bx - ax + 1; p != end; ++p)
 						*p = col;
 				}
 				break;
 		};
 	}
 
-	void rectfill(SDL_Surface *bmp, int x0, int y0, int x1, int y1, uint32 col)
+	void rectfill(SDL_Surface* bmp, int x0, int y0, int x1, int y1, uint32 col)
 	{
 		SDL_Rect rect = {Sint16(x0), Sint16(y0), Uint16(x1 - x0), Uint16(y1 - y0)};
 		SDL_FillRect(bmp, &rect, col);
 	}
 
-	void vflip_bitmap(SDL_Surface *bmp)
+	void vflip_bitmap(SDL_Surface* bmp)
 	{
 		for (int y = 0; y < ((bmp->h + 1) >> 1); ++y)
 			for (int x = 0; x < bmp->w; ++x)
@@ -858,7 +858,7 @@ namespace TA3D
 			}
 	}
 
-	void hflip_bitmap(SDL_Surface *bmp)
+	void hflip_bitmap(SDL_Surface* bmp)
 	{
 		for (int y = 0; y < bmp->h; ++y)
 			for (int x = 0; x < ((bmp->w + 1) >> 1); ++x)
@@ -869,12 +869,12 @@ namespace TA3D
 			}
 	}
 
-	void SaveTex(SDL_Surface *bmp, const String &filename)
+	void SaveTex(SDL_Surface* bmp, const String& filename)
 	{
 		const int maxTextureSizeAllowed = lp_CONFIG->getMaxTextureSizeAllowed();
 		if (std::max(bmp->w, bmp->h) > maxTextureSizeAllowed)
 		{
-			SDL_Surface *tmp = shrink(bmp, std::min(bmp->w, maxTextureSizeAllowed), std::min(bmp->h, maxTextureSizeAllowed));
+			SDL_Surface* tmp = shrink(bmp, std::min(bmp->w, maxTextureSizeAllowed), std::min(bmp->h, maxTextureSizeAllowed));
 			SaveTex(tmp, filename);
 			SDL_FreeSurface(tmp);
 			return;
@@ -890,7 +890,7 @@ namespace TA3D
 			gzwrite(file, &h, sizeof(h));
 			gzwrite(file, &bpp, sizeof(bpp));
 			for (int y = 0; y < bmp->h; y++)
-				gzwrite(file, ((char *)(bmp->pixels)) + y * bmp->pitch, bmp->w * bmp->format->BytesPerPixel);
+				gzwrite(file, ((char*)(bmp->pixels)) + y * bmp->pitch, bmp->w * bmp->format->BytesPerPixel);
 			SDL_UnlockSurface(bmp);
 
 			gzclose(file);
@@ -899,7 +899,7 @@ namespace TA3D
 			LOG_ERROR("could not save file : " << filename);
 	}
 
-	SDL_Surface *LoadTex(const String &filename)
+	SDL_Surface* LoadTex(const String& filename)
 	{
 		gzFile file = gzopen(filename.c_str(), "rb");
 		if (file)
@@ -908,10 +908,10 @@ namespace TA3D
 			gzread(file, &w, sizeof(w));
 			gzread(file, &h, sizeof(h));
 			gzread(file, &bpp, sizeof(bpp));
-			SDL_Surface *bmp = gfx->create_surface_ex(bpp, w, h);
+			SDL_Surface* bmp = gfx->create_surface_ex(bpp, w, h);
 			SDL_LockSurface(bmp);
 			for (int y = 0; y < bmp->h; y++)
-				gzread(file, ((char *)(bmp->pixels)) + y * bmp->pitch, bmp->w * bmp->format->BytesPerPixel);
+				gzread(file, ((char*)(bmp->pixels)) + y * bmp->pitch, bmp->w * bmp->format->BytesPerPixel);
 			SDL_UnlockSurface(bmp);
 
 			gzclose(file);
@@ -923,7 +923,7 @@ namespace TA3D
 		return NULL;
 	}
 
-	void save_bitmap(const String &filename, SDL_Surface *bmp)
+	void save_bitmap(const String& filename, SDL_Surface* bmp)
 	{
 		String ext = ToLower(Paths::ExtractFileExt(filename));
 		if (ext == ".bmp")
@@ -955,7 +955,7 @@ namespace TA3D
 		byte description;
 	};
 
-	void save_TGA(const String &filename, SDL_Surface *bmp, bool compress)
+	void save_TGA(const String& filename, SDL_Surface* bmp, bool compress)
 	{
 		TGAHeader header;
 
@@ -975,7 +975,7 @@ namespace TA3D
 
 		if (file.is_open())
 		{
-			file.write((const char *)&header, sizeof(header));
+			file.write((const char*)&header, sizeof(header));
 			if (!compress) // Uncompressed
 			{
 				for (int y = 0; y < bmp->h; ++y)
@@ -988,7 +988,7 @@ namespace TA3D
 								file.put(static_cast<char>(getpixel(bmp, x, y)));
 								break;
 							case 16:
-								file.write((const char *)bmp->pixels + ((bmp->w * y + x) << 1), 2);
+								file.write((const char*)bmp->pixels + ((bmp->w * y + x) << 1), 2);
 								break;
 							case 24:
 							{
@@ -1050,7 +1050,7 @@ namespace TA3D
 									file.put(static_cast<char>(getpixel(bmp, x, y)));
 									break;
 								case 16:
-									file.write((const char *)bmp->pixels + ((bmp->w * y + x) << 1), 2);
+									file.write((const char*)bmp->pixels + ((bmp->w * y + x) << 1), 2);
 									break;
 								case 24:
 								{
@@ -1096,7 +1096,7 @@ namespace TA3D
 								file.put(static_cast<char>(getpixel(bmp, x, y)));
 								break;
 							case 16:
-								file.write((const char *)bmp->pixels + ((bmp->w * y + x) << 1), 2);
+								file.write((const char*)bmp->pixels + ((bmp->w * y + x) << 1), 2);
 								break;
 							case 24:
 							{

@@ -48,7 +48,7 @@ namespace TA3D
 
 	Mutex Pathfinder::sMutex;
 
-	Pathfinder *Pathfinder::instance()
+	Pathfinder* Pathfinder::instance()
 	{
 		static Pathfinder sInstance;
 		return &sInstance;
@@ -82,8 +82,8 @@ namespace TA3D
 			pos.y = 0.0f;
 		}
 
-#define SAVE(i) gzwrite(file, (void *)&(i), sizeof(i))
-#define LOAD(i) gzread(file, (void *)&(i), sizeof(i))
+#define SAVE(i) gzwrite(file, (void*)&(i), sizeof(i))
+#define LOAD(i) gzread(file, (void*)&(i), sizeof(i))
 
 		void Path::save(gzFile file)
 		{
@@ -130,7 +130,7 @@ namespace TA3D
 		taskOffset = 0;
 	}
 
-	void Pathfinder::addTask(int idx, int dist, const Vector3D &start, const Vector3D &end)
+	void Pathfinder::addTask(int idx, int dist, const Vector3D& start, const Vector3D& end)
 	{
 		Task t = {dist, idx, units.unit[idx].ID, start, end};
 
@@ -164,7 +164,7 @@ namespace TA3D
 		return stasks.count(UID) != 0;
 	}
 
-	AI::Path Pathfinder::directPath(const Vector3D &end)
+	AI::Path Pathfinder::directPath(const Vector3D& end)
 	{
 		const int x = ((int)end.x + the_map->map_w_d) >> 3;
 		const int z = ((int)end.z + the_map->map_h_d) >> 3;
@@ -180,12 +180,12 @@ namespace TA3D
 	{
 		destroyThread();
 
-		for (HashMap<BitMap *>::Dense::iterator it = hBitMap.begin(); it != hBitMap.end(); ++it)
+		for (HashMap<BitMap*>::Dense::iterator it = hBitMap.begin(); it != hBitMap.end(); ++it)
 			if (*it)
 				delete *it;
 	}
 
-	void Pathfinder::proc(void *)
+	void Pathfinder::proc(void*)
 	{
 		bRunning = true;
 		while (!pDead)
@@ -218,7 +218,7 @@ namespace TA3D
 #endif
 				path._ready = true;
 
-				Unit *pUnit = &(units.unit[cur.idx]);
+				Unit* pUnit = &(units.unit[cur.idx]);
 				pUnit->lock();
 				if (pUnit->ID == cur.UID && (pUnit->flags & 1) && !pUnit->mission.empty() && pUnit->requesting_pathfinder && (pUnit->mission->getFlags() & MISSION_FLAG_MOVE))
 				{
@@ -241,7 +241,7 @@ namespace TA3D
 		bRunning = false;
 	}
 
-	void Pathfinder::findPath(AI::Path &path, const Task &task)
+	void Pathfinder::findPath(AI::Path& path, const Task& task)
 	{
 		if (task.idx >= 0)
 		{
@@ -252,14 +252,14 @@ namespace TA3D
 				return;
 			}
 		}
-		const UnitType *pType = task.idx >= 0
-									? unit_manager.unit_type[units.unit[task.idx].type_id]
-									: unit_manager.unit_type[-task.idx];
+		const UnitType* pType = task.idx >= 0
+			? unit_manager.unit_type[units.unit[task.idx].type_id]
+			: unit_manager.unit_type[-task.idx];
 		if (task.idx >= 0)
 			units.unit[task.idx].unlock();
 
 		// Get the precomputed walkable area quadmap
-		const BitMap *bmap = Pathfinder::instance()->hBitMap[pType->getMoveStringID()];
+		const BitMap* bmap = Pathfinder::instance()->hBitMap[pType->getMoveStringID()];
 		if (!bmap)
 		{
 			LOG_ERROR(LOG_PREFIX_PATHS << "path request for a unit without precomputed walkable area quadmap");
@@ -299,8 +299,8 @@ namespace TA3D
 			return; // So we can't find a path
 		}
 
-		Grid<int> &zone = the_map->path;
-		const Grid<float> &energy = the_map->energy;
+		Grid<int>& zone = the_map->path;
+		const Grid<float>& energy = the_map->energy;
 		std::deque<AI::Path::Node> qNode;
 		std::deque<int> qDistFromStart;
 
@@ -439,7 +439,7 @@ namespace TA3D
 			}
 		}
 #ifdef DEBUG_AI_PATHFINDER
-		SDL_Surface *bmp = gfx->create_surface_ex(32, zone.getWidth(), zone.getHeight());
+		SDL_Surface* bmp = gfx->create_surface_ex(32, zone.getWidth(), zone.getHeight());
 		memset(bmp->pixels, 0, bmp->w * bmp->h * sizeof(int));
 		for (int z = 0; z < the_map->bloc_h_db; ++z)
 			for (int x = 0; x < the_map->bloc_w_db; ++x)
@@ -557,7 +557,7 @@ namespace TA3D
 			}
 //#define DEBUG_AI_PATHFINDER
 #ifdef DEBUG_AI_PATHFINDER
-			SDL_Surface *bmp = gfx->create_surface_ex(32, zone.getWidth(), zone.getHeight());
+			SDL_Surface* bmp = gfx->create_surface_ex(32, zone.getWidth(), zone.getHeight());
 			memset(bmp->pixels, 0, bmp->w * bmp->h * sizeof(int));
 			for (int z = 0; z < the_map->bloc_h_db; ++z)
 				for (int x = 0; x < the_map->bloc_w_db; ++x)
@@ -624,8 +624,7 @@ namespace TA3D
 				}
 				std::vector<AI::Path::Node>::const_iterator next = cur;
 				++next;
-				if (next == nodes.end() ||
-					(next->x() - path.back().x()) * (cur->z() - path.back().z()) != (cur->x() - path.back().x()) * (next->z() - path.back().z())) // Remove useless points
+				if (next == nodes.end() || (next->x() - path.back().x()) * (cur->z() - path.back().z()) != (cur->x() - path.back().x()) * (next->z() - path.back().z())) // Remove useless points
 					path.push_back(*cur);
 			}
 
@@ -639,11 +638,11 @@ namespace TA3D
 		}
 	}
 
-	inline bool Pathfinder::checkRectFast(const int x1, const int y1, const UnitType *pType)
+	inline bool Pathfinder::checkRectFast(const int x1, const int y1, const UnitType* pType)
 	{
 		const int fy = Math::Min(y1 + pType->FootprintZ, the_map->bloc_h_db);
 		const int fx = Math::Min(x1 + pType->FootprintX, the_map->bloc_w_db);
-		const Grid<bool> &obstacles = the_map->obstacles;
+		const Grid<bool>& obstacles = the_map->obstacles;
 		const int x0 = Math::Max(x1, 0);
 		bool result = true;
 		for (int y = Math::Max(y1, 0); y < fy && result; ++y)
@@ -652,7 +651,7 @@ namespace TA3D
 		return result;
 	}
 
-	bool Pathfinder::checkRectFull(int x1, int y1, const UnitType *pType)
+	bool Pathfinder::checkRectFull(int x1, int y1, const UnitType* pType)
 	{
 		const float dh_max = float(pType->MaxSlope) * H_DIV;
 		const float h_min = pType->canhover ? -100.0f : the_map->sealvl - float(pType->MaxWaterDepth) * H_DIV;
@@ -687,7 +686,7 @@ namespace TA3D
 
 	void Pathfinder::computeWalkableAreas()
 	{
-		for (HashMap<BitMap *>::Dense::iterator it = hBitMap.begin(); it != hBitMap.end(); ++it)
+		for (HashMap<BitMap*>::Dense::iterator it = hBitMap.begin(); it != hBitMap.end(); ++it)
 			if (*it)
 				delete *it;
 		hBitMap.clear();
@@ -702,7 +701,7 @@ namespace TA3D
 			{
 				const size_t e = i++;
 				mLoad.unlock();
-				const UnitType *const pType = unit_manager.unit_type[e];
+				const UnitType* const pType = unit_manager.unit_type[e];
 				if (!pType || pType->canfly || !pType->BMcode || !pType->canmove)
 				{
 					mLoad.lock();
@@ -712,7 +711,7 @@ namespace TA3D
 				mLoad.lock();
 				if (hBitMap.count(key)) // Already done ?
 					continue;
-				BitMap *bmap = new BitMap(the_map->bloc_w_db, the_map->bloc_h_db);
+				BitMap* bmap = new BitMap(the_map->bloc_w_db, the_map->bloc_h_db);
 				hBitMap[key] = bmap;
 
 				mLoad.unlock();

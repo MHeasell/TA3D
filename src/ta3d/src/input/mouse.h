@@ -40,7 +40,7 @@ namespace TA3D
 	/*!
 	** \brief return mouse move since last call
 	*/
-	void get_mouse_mickeys(int *mx, int *my);
+	void get_mouse_mickeys(int* mx, int* my);
 
 	/*!
 	** \brief draw mouse cursor at mouse position

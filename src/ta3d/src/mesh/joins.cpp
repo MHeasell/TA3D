@@ -7,24 +7,24 @@ using namespace std;
 
 namespace TA3D
 {
-	Mesh *Joins::computeStructure(Mesh *mesh, const String &filename)
+	Mesh* Joins::computeStructure(Mesh* mesh, const String& filename)
 	{
 		if (mesh == NULL)
 			return NULL;
 
-		typedef UTILS::HashMap<Mesh *>::Dense ObjectMap;
-		typedef UTILS::HashSet<Mesh *>::Sparse ObjectSet;
-		typedef UTILS::HashMap<Vector3D, Mesh *>::Dense ObjectPos;
+		typedef UTILS::HashMap<Mesh*>::Dense ObjectMap;
+		typedef UTILS::HashSet<Mesh*>::Sparse ObjectSet;
+		typedef UTILS::HashMap<Vector3D, Mesh*>::Dense ObjectPos;
 		ObjectMap objects;
 		ObjectSet rootObjects;
 		ObjectPos objectPos;
 
 		// Link all objects to their name
-		std::vector<Mesh *> queue;
+		std::vector<Mesh*> queue;
 		queue.push_back(mesh);
 		while (!queue.empty())
 		{
-			Mesh *cur = queue.back();
+			Mesh* cur = queue.back();
 			queue.pop_back();
 			while (cur)
 			{
@@ -82,14 +82,14 @@ namespace TA3D
 				LOG_WARNING("[mesh] [joins] object not found : '" << elts[1] << "' (" << filename << ')');
 				continue;
 			}
-			Mesh *parent = it_parent.value();
-			Mesh *child = it_child.value();
+			Mesh* parent = it_parent.value();
+			Mesh* child = it_child.value();
 
 			child->pos_from_parent = pos - objectPos[parent];
 			objectPos[child] = pos;
 			for (int j = 0; j < child->nb_vtx; ++j)
 				child->points[j] -= pos;
-			Mesh *cur = child->child;
+			Mesh* cur = child->child;
 			while (cur)
 			{
 				cur->pos_from_parent -= pos;
@@ -98,7 +98,7 @@ namespace TA3D
 
 			if (parent->child) // Let's make a list
 			{
-				Mesh *cur = parent->child;
+				Mesh* cur = parent->child;
 				while (cur->next)
 					cur = cur->next;
 				cur->next = child;
@@ -116,7 +116,7 @@ namespace TA3D
 			*i = NULL;
 		}
 
-		Mesh *root = NULL;
+		Mesh* root = NULL;
 
 		for (ObjectSet::iterator i = rootObjects.begin(); i != rootObjects.end(); ++i)
 		{
@@ -126,7 +126,7 @@ namespace TA3D
 				root = *i;
 				continue;
 			}
-			Mesh *cur = root;
+			Mesh* cur = root;
 			while (cur->next)
 				cur = cur->next;
 			cur->next = *i;
@@ -135,18 +135,18 @@ namespace TA3D
 		return root;
 	}
 
-	void Joins::computeSelection(Model *model)
+	void Joins::computeSelection(Model* model)
 	{
 		if (model == NULL || model->mesh == NULL)
 			return;
 		float s = 0.0f;
-		vector<Mesh *> queue;
+		vector<Mesh*> queue;
 		vector<Vector3D> pqueue;
 		queue.push_back(model->mesh);
 		pqueue.push_back(Vector3D());
 		while (!queue.empty())
 		{
-			Mesh *cur = queue.back();
+			Mesh* cur = queue.back();
 			Vector3D P = pqueue.back();
 			queue.pop_back();
 			pqueue.pop_back();
@@ -167,7 +167,7 @@ namespace TA3D
 		}
 
 		int pos = model->mesh->nb_vtx << 1;
-		Vector3D *np = new Vector3D[(model->mesh->nb_vtx << 1) + 4];
+		Vector3D* np = new Vector3D[(model->mesh->nb_vtx << 1) + 4];
 		memcpy(np, model->mesh->points, sizeof(Vector3D) * model->mesh->nb_vtx);
 		delete[] model->mesh->points;
 		model->mesh->points = np;

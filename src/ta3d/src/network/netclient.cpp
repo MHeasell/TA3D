@@ -18,9 +18,7 @@ namespace TA3D
 	}
 
 	NetClient::NetClient()
-		: port(0), state(NetClient::DISCONNECTED), buffer_pos(0), currentChan("*"),
-		  modListChanged(false), serverListChanged(false),
-		  hostAck(false)
+		: port(0), state(NetClient::DISCONNECTED), buffer_pos(0), currentChan("*"), modListChanged(false), serverListChanged(false), hostAck(false)
 	{
 		buffer = new char[BUFFER_SIZE];
 	}
@@ -52,7 +50,7 @@ namespace TA3D
 		return msg;
 	}
 
-	void NetClient::sendMessage(const String &msg)
+	void NetClient::sendMessage(const String& msg)
 	{
 		if (sock.isOpen())
 			sock.send((String(msg) << "\n").data(), msg.size() + 1);
@@ -74,7 +72,7 @@ namespace TA3D
 		connect(server, port, login, password);
 	}
 
-	void NetClient::connect(const String &server, const uint16 port, const String &login, const String &password, bool bRegister)
+	void NetClient::connect(const String& server, const uint16 port, const String& login, const String& password, bool bRegister)
 	{
 		if (sock.isOpen())
 			disconnect();
@@ -188,7 +186,7 @@ namespace TA3D
 		}
 	}
 
-	void NetClient::processMessage(const String &msg)
+	void NetClient::processMessage(const String& msg)
 	{
 		if (msg.empty())
 			return;
@@ -331,7 +329,7 @@ namespace TA3D
 		return serverList;
 	}
 
-	void NetClient::changeChan(const String &chan)
+	void NetClient::changeChan(const String& chan)
 	{
 		currentChan = chan.empty() ? "*" : chan;
 		sendMessage(String("CHAN ") << chan);
@@ -339,7 +337,7 @@ namespace TA3D
 		peerList.clear();
 	}
 
-	void NetClient::sendChan(const String &msg)
+	void NetClient::sendChan(const String& msg)
 	{
 		sendMessage(String("SENDALL ") << msg);
 	}

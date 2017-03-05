@@ -32,10 +32,10 @@ namespace TA3D
 			/*!
 		** \brief Execute an instance of BriefScreen
 		*/
-			static Battle::Result Execute(const String &campaign_name, const int mission_id);
+			static Battle::Result Execute(const String& campaign_name, const int mission_id);
 
 		public:
-			BriefScreen(const String &campaign_name, const int mission_id);
+			BriefScreen(const String& campaign_name, const int mission_id);
 			//! Destructor
 			virtual ~BriefScreen();
 
@@ -46,7 +46,7 @@ namespace TA3D
 			virtual bool maySwitchToAnotherMenu();
 
 		private:
-			const String &campaign_name;
+			const String& campaign_name;
 			const int mission_id;
 
 			Battle::Result exit_mode;

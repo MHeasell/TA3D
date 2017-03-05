@@ -34,14 +34,14 @@
 
 namespace TA3D
 {
-	static inline String FixBlank(const String &s)
+	static inline String FixBlank(const String& s)
 	{
 		String t(s);
 		t.replace(' ', char(1));
 		return t;
 	}
 
-	static inline String UnfixBlank(const String &s)
+	static inline String UnfixBlank(const String& s)
 	{
 		String t(s);
 		t.replace(char(1), ' ');
@@ -50,13 +50,13 @@ namespace TA3D
 	namespace Menus
 	{
 
-		bool SetupGame::Execute(bool client, const String &host, const String &saved_game, bool bNetServer, bool instantStart)
+		bool SetupGame::Execute(bool client, const String& host, const String& saved_game, bool bNetServer, bool instantStart)
 		{
 			SetupGame m(client, host, saved_game, bNetServer, instantStart);
 			return m.execute();
 		}
 
-		SetupGame::SetupGame(bool client, const String &host, const String &saved_game, bool bNetServer, bool instantStart)
+		SetupGame::SetupGame(bool client, const String& host, const String& saved_game, bool bNetServer, bool instantStart)
 			: Abstract(), client(client), host(host), saved_game(saved_game), bNetServer(bNetServer), instantStart(instantStart), start_game(false)
 		{
 			map_data = new MAP_OTA;
@@ -489,9 +489,9 @@ namespace TA3D
 				playerDropped = network_manager.getPlayerDropped();
 				broadcast_msg = network_manager.getNextBroadcastedMessage();
 				if (network_manager.getNextChat(&received_chat_msg) == 0)
-					chat_msg = (char *)received_chat_msg.message;
+					chat_msg = (char*)received_chat_msg.message;
 				if (network_manager.getNextSpecial(&received_special_msg) == 0)
-					special_msg = (char *)received_special_msg.message;
+					special_msg = (char*)received_special_msg.message;
 				if (host.notEmpty() && !network_manager.isConnected()) // We're disconnected !!
 					break;
 
@@ -512,7 +512,7 @@ namespace TA3D
 			if (instantStart)
 			{
 				LOG_DEBUG("[menu::setupgame] "
-						  << "instant start");
+					<< "instant start");
 				return true;
 			}
 
@@ -782,8 +782,7 @@ namespace TA3D
 				Menus::UnitSelector::Execute(game_data.use_only, game_data.use_only); // Change unit selection
 			}
 
-			if (minimap_obj != NULL &&
-				(((pArea->get_state("gamesetup.minimap") || pArea->get_state("gamesetup.change_map")) && !client) || (client && !set_map.empty())) && saved_game.empty()) // Clic on the mini-map or received map set command
+			if (minimap_obj != NULL && (((pArea->get_state("gamesetup.minimap") || pArea->get_state("gamesetup.change_map")) && !client) || (client && !set_map.empty())) && saved_game.empty()) // Clic on the mini-map or received map set command
 			{
 				String new_map;
 				if (!client)
@@ -939,8 +938,8 @@ namespace TA3D
 			{
 				const int from = received_special_msg.from;
 				String::Vector params;
-				LOG_DEBUG(LOG_PREFIX_NET << "parsing '" << (char *)(received_special_msg.message) << "' from " << from << " [" << game_data.net2id(from) << ']');
-				String((char *)(received_special_msg.message)).explode(params, ' ', true, false, true);
+				LOG_DEBUG(LOG_PREFIX_NET << "parsing '" << (char*)(received_special_msg.message) << "' from " << from << " [" << game_data.net2id(from) << ']');
+				String((char*)(received_special_msg.message)).explode(params, ' ', true, false, true);
 				switch (params.size())
 				{
 					case 2:
@@ -1059,8 +1058,8 @@ namespace TA3D
 									if (guiobj)
 									{
 										guiobj->Data = gfx->makeintcol(player_color[player_color_map[slot] * 3],
-																	   player_color[player_color_map[slot] * 3 + 1],
-																	   player_color[player_color_map[slot] * 3 + 2]); // Update gui
+											player_color[player_color_map[slot] * 3 + 1],
+											player_color[player_color_map[slot] * 3 + 2]); // Update gui
 										guiobj->Flag &= ~FLAG_HIDDEN;
 									}
 									network_manager.sendSpecial("NOTIFY UPDATE", from); // Tell others that things have changed
@@ -1304,7 +1303,7 @@ namespace TA3D
 				}
 
 				if (network_manager.getNextSpecial(&received_special_msg) == 0)
-					special_msg = (char *)received_special_msg.message;
+					special_msg = (char*)received_special_msg.message;
 				else
 					special_msg.clear();
 			}
@@ -1324,7 +1323,7 @@ namespace TA3D
 				}
 
 				if (network_manager.getNextChat(&received_chat_msg) == 0)
-					chat_msg = (char *)received_chat_msg.message;
+					chat_msg = (char*)received_chat_msg.message;
 				else
 					chat_msg.clear();
 			}

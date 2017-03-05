@@ -50,8 +50,8 @@ namespace TA3D
 			{
 			public:
 				Node(int x, int z) : _x(x), _z(z) {}
-				int &x() { return _x; }
-				int &z() { return _z; }
+				int& x() { return _x; }
+				int& z() { return _z; }
 				int x() const { return _x; }
 				int z() const { return _z; }
 			private:
@@ -66,18 +66,18 @@ namespace TA3D
 			bool empty() const { return nodes.empty(); }
 			void clear();
 			bool ready() const { return _ready; }
-			Node &front() { return nodes.front(); }
-			Node &back() { return nodes.back(); }
-			const Node &front() const { return nodes.front(); }
-			const Node &back() const { return nodes.back(); }
-			void push_back(const Node &n) { nodes.push_back(n); }
-			void push_front(const Node &n) { nodes.push_front(n); }
+			Node& front() { return nodes.front(); }
+			Node& back() { return nodes.back(); }
+			const Node& front() const { return nodes.front(); }
+			const Node& back() const { return nodes.back(); }
+			void push_back(const Node& n) { nodes.push_back(n); }
+			void push_front(const Node& n) { nodes.push_front(n); }
 			int length() const { return int(nodes.size()); }
 
-			void setPos(const Vector3D &pos) { this->pos = pos; }
-			const Vector3D &Pos() const { return pos; }
+			void setPos(const Vector3D& pos) { this->pos = pos; }
+			const Vector3D& Pos() const { return pos; }
 
-			void replaceWith(Path &p)
+			void replaceWith(Path& p)
 			{
 				pos = p.pos;
 				_ready = p._ready;
@@ -118,14 +118,14 @@ namespace TA3D
 	public:
 		Pathfinder();
 		void clear();
-		void addTask(int idx, int dist, const Vector3D &start, const Vector3D &end);
+		void addTask(int idx, int dist, const Vector3D& start, const Vector3D& end);
 		bool hasTaskQueueForUnit(uint32 UID);
 		int taskCount();
 		void computeWalkableAreas();
 
 	private:
 		virtual ~Pathfinder();
-		virtual void proc(void *param);
+		virtual void proc(void* param);
 		virtual void signalExitThread();
 
 	private:
@@ -136,18 +136,18 @@ namespace TA3D
 		int taskOffset;
 		int nbCores;
 		Synchronizer pSync;
-		HashMap<BitMap *>::Dense hBitMap;
+		HashMap<BitMap*>::Dense hBitMap;
 		volatile bool bRunning;
 
 	private:
-		static inline bool checkRectFast(const int x1, const int y1, const UnitType *pType);
-		static bool checkRectFull(int x1, int y1, const UnitType *pType);
+		static inline bool checkRectFast(const int x1, const int y1, const UnitType* pType);
+		static bool checkRectFull(int x1, int y1, const UnitType* pType);
 		static Mutex sMutex;
 
 	public:
-		static Pathfinder *instance();
-		static void findPath(AI::Path &path, const Task &task);
-		static AI::Path directPath(const Vector3D &end);
+		static Pathfinder* instance();
+		static void findPath(AI::Path& path, const Task& task);
+		static AI::Path directPath(const Vector3D& end);
 	};
 } // namespace TA3D
 

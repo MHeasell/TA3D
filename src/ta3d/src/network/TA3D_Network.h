@@ -41,22 +41,22 @@ namespace TA3D
 			String text;
 			uint32 timer;
 
-			NetworkMessage(const String &m, uint32 t) : text(m), timer(t) {}
+			NetworkMessage(const String& m, uint32 t) : text(m), timer(t) {}
 			~NetworkMessage() { text.clear(); }
 		};
 
 		std::deque<NetworkMessage> messages;
 		bool enter;
-		Gui::AREA *area;
+		Gui::AREA* area;
 
 	public:
-		GameData *game_data;
+		GameData* game_data;
 
 	private:
 		int signal;
 
 	public:
-		TA3DNetwork(Gui::AREA *area, GameData *game_data);
+		TA3DNetwork(Gui::AREA* area, GameData* game_data);
 		virtual ~TA3DNetwork();
 
 		void set_signal(int s) { signal = s; }

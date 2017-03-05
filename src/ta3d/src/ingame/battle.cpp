@@ -58,9 +58,9 @@ namespace TA3D
 
 	int start = 0;
 
-	Battle *Battle::pInstance = NULL;
+	Battle* Battle::pInstance = NULL;
 
-	Battle *Battle::Instance()
+	Battle* Battle::Instance()
 	{
 		return pInstance;
 	}
@@ -93,7 +93,7 @@ namespace TA3D
 		return defaultValue;
 	}
 
-	bool Battle::preExecute(LuaProgram &gameScript)
+	bool Battle::preExecute(LuaProgram& gameScript)
 	{
 		if (!pGameData) // no gamedata, nothing to do
 			return false;
@@ -524,7 +524,7 @@ namespace TA3D
 					int i = units.idx_list[e];
 					if ((units.unit[i].flags & 1) && units.unit[i].owner_id == players.local_human_id && units.unit[i].sel)
 					{
-						UnitType *pType = unit_manager.unit_type[units.unit[i].type_id];
+						UnitType* pType = unit_manager.unit_type[units.unit[i].type_id];
 						builders |= pType->Builder;
 						canattack |= pType->canattack;
 						canreclamate |= pType->CanReclamate;
@@ -562,7 +562,7 @@ namespace TA3D
 												if (feature_idx >= 0)
 												{
 													idx = feature_idx;
-													const Feature *const feature = feature_manager.getFeaturePointer(features.feature[idx].type);
+													const Feature* const feature = feature_manager.getFeaturePointer(features.feature[idx].type);
 													if (feature && feature->footprintx + 1 >= (abs(dx) << 1) && feature->footprintz + 1 >= (abs(dy) << 1))
 													{
 														units.last_on = -idx - 2;
@@ -588,7 +588,7 @@ namespace TA3D
 				{
 					if (pointing < -1)
 					{
-						Feature *feature = feature_manager.getFeaturePointer(features.feature[-pointing - 2].type);
+						Feature* feature = feature_manager.getFeaturePointer(features.feature[-pointing - 2].type);
 						if (feature && canreclamate && feature->reclaimable && build == -1)
 							cursor_type = CURSOR_RECLAIM;
 						if (feature && canresurrect && feature->reclaimable && build == -1 && CURSOR_REVIVE != CURSOR_RECLAIM)
@@ -1115,7 +1115,7 @@ namespace TA3D
 											if (map->map_data(px + dx, py + dy).stuff >= 0)
 											{
 												idx = map->map_data(px + dx, py + dy).stuff;
-												const Feature *const feature = feature_manager.getFeaturePointer(features.feature[idx].type);
+												const Feature* const feature = feature_manager.getFeaturePointer(features.feature[idx].type);
 												if (feature && feature->footprintx + 1 >= (abs(dx) << 1) && feature->footprintz + 1 >= (abs(dy) << 1))
 												{
 													units.last_on = -idx - 2;
@@ -1873,9 +1873,7 @@ namespace TA3D
 				pArea.msg(pCurrentGUICache[cgcShow]); // Show it
 			}
 
-			if ((pArea.get_state(String(pCurrentGUICache[cgcDot]) << ta3dSideData.side_pref[players.side_view] << "BUILD") ||
-				 pArea.get_state(String(pCurrentGUI) << ".ARMBUILD")) &&
-				old_gui_sel >= 0) // Back to the build menu
+			if ((pArea.get_state(String(pCurrentGUICache[cgcDot]) << ta3dSideData.side_pref[players.side_view] << "BUILD") || pArea.get_state(String(pCurrentGUI) << ".ARMBUILD")) && old_gui_sel >= 0) // Back to the build menu
 			{
 				pArea.set_state(String(pCurrentGUICache[cgcDot]) << ta3dSideData.side_pref[players.side_view] << "BUILD", false);
 				pArea.set_state(String(pCurrentGUI) << ".ARMBUILD", false);
@@ -2274,13 +2272,12 @@ namespace TA3D
 
 			if (last_on != -1 && show_mission_info) // Sur les unités sélectionnées / on selected units
 			{
-				static const char *unit_info[] =
-					{
-						"MISSION_STANDBY", "MISSION_VTOL_STANDBY", "MISSION_GUARD_NOMOVE",
-						"MISSION_MOVE", "MISSION_BUILD", "MISSION_BUILD_2", "MISSION_STOP",
-						"MISSION_REPAIR", "MISSION_ATTACK",
-						"MISSION_PATROL", "MISSION_GUARD", "MISSION_RECLAIM", "MISSION_LOAD",
-						"MISSION_UNLOAD", "MISSION_STANDBY_MINE"};
+				static const char* unit_info[] = {
+					"MISSION_STANDBY", "MISSION_VTOL_STANDBY", "MISSION_GUARD_NOMOVE",
+					"MISSION_MOVE", "MISSION_BUILD", "MISSION_BUILD_2", "MISSION_STOP",
+					"MISSION_REPAIR", "MISSION_ATTACK",
+					"MISSION_PATROL", "MISSION_GUARD", "MISSION_RECLAIM", "MISSION_LOAD",
+					"MISSION_UNLOAD", "MISSION_STANDBY_MINE"};
 				float y(32.0f);
 				for (size_t i = 0; i < units.max_unit; ++i)
 				{
@@ -2369,7 +2366,7 @@ namespace TA3D
 
 			if (shoot)
 			{
-				SDL_Surface *shoot_bmp = gfx->create_surface_ex(24, SCREEN_W, SCREEN_H);
+				SDL_Surface* shoot_bmp = gfx->create_surface_ex(24, SCREEN_W, SCREEN_H);
 				glReadBuffer(GL_BACK);
 				glReadPixels(0, 0, SCREEN_W, SCREEN_H, GL_BGR, GL_UNSIGNED_BYTE, shoot_bmp->pixels);
 				vflip_bitmap(shoot_bmp);
@@ -2537,11 +2534,11 @@ namespace TA3D
 		glDisable(GL_TEXTURE_2D);
 		glColor4f(0.0f, 0.0f, 0.0f, 1.0f);
 		gfx->rect((float)pMouseRectSelection.x1 + 1.0f, (float)pMouseRectSelection.y1 + 1.0f,
-				  (float)pMouseRectSelection.x2 + 1.0f, (float)pMouseRectSelection.y2 + 1.0f);
+			(float)pMouseRectSelection.x2 + 1.0f, (float)pMouseRectSelection.y2 + 1.0f);
 
 		glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 		gfx->rect((float)pMouseRectSelection.x1, (float)pMouseRectSelection.y1,
-				  (float)pMouseRectSelection.x2, (float)pMouseRectSelection.y2);
+			(float)pMouseRectSelection.x2, (float)pMouseRectSelection.y2);
 	}
 
 } // namespace TA3D

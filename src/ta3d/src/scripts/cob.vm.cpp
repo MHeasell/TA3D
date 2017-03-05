@@ -37,9 +37,9 @@
 
 namespace TA3D
 {
-	void CobVm::load(ScriptData *data)
+	void CobVm::load(ScriptData* data)
 	{
-		CobScript *p_script = dynamic_cast<CobScript *>(data);
+		CobScript* p_script = dynamic_cast<CobScript*>(data);
 
 		destroy();
 
@@ -89,7 +89,7 @@ namespace TA3D
 		return run(dt, alone, NULL, 0);
 	}
 
-	int CobVm::run(float dt, bool alone, int *pParam, const uint32 nParam) // Run the script
+	int CobVm::run(float dt, bool alone, int* pParam, const uint32 nParam) // Run the script
 	{
 		if (script == NULL)
 		{
@@ -144,7 +144,7 @@ namespace TA3D
 			return -1; // Erreur, ce n'est pas un script repertoriÃ©
 		}
 
-		Unit *pUnit = &(units.unit[unitID]);
+		Unit* pUnit = &(units.unit[unitID]);
 
 		const float divisor(I2PWR16);
 		const float div = 0.5f * divisor;
@@ -466,7 +466,7 @@ namespace TA3D
 					DEBUG_PRINT_CODE("START_SCRIPT");
 					const int function_id = script->script_code[script_id][pos++]; // Lit un code
 					const int num_param = script->script_code[script_id][pos++];   // Lit un code
-					CobVm *p_cob = fork();
+					CobVm* p_cob = fork();
 					if (p_cob)
 					{
 						p_cob->call(function_id, NULL, 0);
@@ -653,7 +653,7 @@ namespace TA3D
 		return 0;
 	}
 
-	void CobVm::call(const int functionID, int *parameters, int nb_params)
+	void CobVm::call(const int functionID, int* parameters, int nb_params)
 	{
 		if (!script || functionID < 0 || functionID >= script->nb_script || !cur.empty())
 			return;
@@ -670,7 +670,7 @@ namespace TA3D
 		}
 	}
 
-	CobVm *CobVm::fork()
+	CobVm* CobVm::fork()
 	{
 		if (!running && caller == NULL)
 		{
@@ -683,7 +683,7 @@ namespace TA3D
 			return this;
 		}
 
-		CobVm *newThread = static_cast<CobVm *>(getFreeThread());
+		CobVm* newThread = static_cast<CobVm*>(getFreeThread());
 		if (newThread)
 		{
 			newThread->sStack.clear();
@@ -714,20 +714,20 @@ namespace TA3D
 		return newThread;
 	}
 
-	CobVm *CobVm::fork(const String &functionName, int *parameters, int nb_params)
+	CobVm* CobVm::fork(const String& functionName, int* parameters, int nb_params)
 	{
-		CobVm *newThread = fork();
+		CobVm* newThread = fork();
 		if (newThread)
 			newThread->call(functionName, parameters, nb_params);
 		return newThread;
 	}
 
-	void CobVm::call(const String &functionName, int *parameters, int nb_params)
+	void CobVm::call(const String& functionName, int* parameters, int nb_params)
 	{
 		call(script->findFromName(functionName), parameters, nb_params);
 	}
 
-	int CobVm::execute(const String &functionName, int *parameters, int nb_params)
+	int CobVm::execute(const String& functionName, int* parameters, int nb_params)
 	{
 		int params[1] = {-1};
 		if (parameters == NULL || nb_params == 0)
@@ -735,7 +735,7 @@ namespace TA3D
 			parameters = params;
 			nb_params = 1;
 		}
-		CobVm *cob_thread = fork(functionName, parameters, nb_params);
+		CobVm* cob_thread = fork(functionName, parameters, nb_params);
 		if (cob_thread)
 		{
 			int res = -1;
@@ -782,9 +782,9 @@ namespace TA3D
 				if (childs[i]->is_waiting())
 					state << " (waiting)";
 				if (childs[i]->is_sleeping())
-					state << " (sleeping = " << (dynamic_cast<CobVm *>(childs[i]))->sleep_time << ")";
-				LOG_DEBUG(LOG_PREFIX_SCRIPT << "child thread " << i << " running : " << script->names[(dynamic_cast<CobVm *>(childs[i]))->cur.top() & 0xFF] << state);
-				Console::Instance()->addEntry(String("child thread ") << i << " running : " << script->names[(dynamic_cast<CobVm *>(childs[i]))->cur.top() & 0xFF] << state);
+					state << " (sleeping = " << (dynamic_cast<CobVm*>(childs[i]))->sleep_time << ")";
+				LOG_DEBUG(LOG_PREFIX_SCRIPT << "child thread " << i << " running : " << script->names[(dynamic_cast<CobVm*>(childs[i]))->cur.top() & 0xFF] << state);
+				Console::Instance()->addEntry(String("child thread ") << i << " running : " << script->names[(dynamic_cast<CobVm*>(childs[i]))->cur.top() & 0xFF] << state);
 			}
 	}
 
@@ -794,7 +794,7 @@ namespace TA3D
 		{
 			gzputc(file, 1);
 			const int t = script->nbStaticVar;
-			gzwrite(file, const_cast<void *>((const void *)&t), (int)sizeof(t));
+			gzwrite(file, const_cast<void*>((const void*)&t), (int)sizeof(t));
 			gzwrite(file, global_env, t * (int)sizeof(int));
 		}
 		else
@@ -815,7 +815,7 @@ namespace TA3D
 		for (int i = 0; i < t; i++)
 		{
 			const int f = (int)local_env[i].size();
-			gzwrite(file, const_cast<void *>((const void *)&f), sizeof(f));
+			gzwrite(file, const_cast<void*>((const void*)&f), sizeof(f));
 			for (int e = 0; e < f; e++)
 				gzwrite(file, &(local_env[i][e]), sizeof(int));
 		}

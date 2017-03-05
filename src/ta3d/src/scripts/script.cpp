@@ -48,11 +48,11 @@ namespace TA3D
 
 	bool LuaProgram::passive = false; // LuaProgram::passive mode, won't do anything like creating units, move units, etc... used to resync a multiplayer game
 
-	LuaProgram *LuaProgram::inGame = NULL;
+	LuaProgram* LuaProgram::inGame = NULL;
 
-	int program_print_for(lua_State *L) // text_print_for( x, y, str, player_id )
+	int program_print_for(lua_State* L) // text_print_for( x, y, str, player_id )
 	{
-		const char *str = lua_tostring(L, 3); // Read the result
+		const char* str = lua_tostring(L, 3); // Read the result
 		if (str)
 		{
 			if (lua_tointeger(L, 4) == players.local_human_id || lua_tointeger(L, 4) == -1)
@@ -84,14 +84,14 @@ namespace TA3D
 		return 0;
 	}
 
-	int program_print(lua_State *L) // text_print( x, y, str )
+	int program_print(lua_State* L) // text_print( x, y, str )
 	{
 		lua_pushinteger(L, -1);
 		program_print_for(L);
 		return 0;
 	}
 
-	int program_line(lua_State *L) // line( x1,y1,x2,y2,r,g,b )
+	int program_line(lua_State* L) // line( x1,y1,x2,y2,r,g,b )
 	{
 		DrawObject draw_obj;
 		draw_obj.type = DRAW_TYPE_LINE;
@@ -108,7 +108,7 @@ namespace TA3D
 		return 0;
 	}
 
-	int program_point(lua_State *L) // point( x,y,r,g,b )
+	int program_point(lua_State* L) // point( x,y,r,g,b )
 	{
 		DrawObject draw_obj;
 		draw_obj.type = DRAW_TYPE_POINT;
@@ -123,7 +123,7 @@ namespace TA3D
 		return 0;
 	}
 
-	int program_triangle(lua_State *L) // triangle( x1,y1,x2,y2,x3,y3,r,g,b )
+	int program_triangle(lua_State* L) // triangle( x1,y1,x2,y2,x3,y3,r,g,b )
 	{
 		DrawObject draw_obj;
 		draw_obj.type = DRAW_TYPE_TRIANGLE;
@@ -142,7 +142,7 @@ namespace TA3D
 		return 0;
 	}
 
-	int program_cls_for(lua_State *L) // cls_for( player_id )
+	int program_cls_for(lua_State* L) // cls_for( player_id )
 	{
 		if (lua_tointeger(L, 1) == players.local_human_id || lua_tointeger(L, 1) == -1)
 		{
@@ -165,14 +165,14 @@ namespace TA3D
 		return 0;
 	}
 
-	int program_cls(lua_State *L) // cls()
+	int program_cls(lua_State* L) // cls()
 	{
 		lua_pushinteger(L, -1);
 		program_cls_for(L);
 		return 0;
 	}
 
-	int program_box(lua_State *L) // box( x1,y1,x2,y2,r,g,b )
+	int program_box(lua_State* L) // box( x1,y1,x2,y2,r,g,b )
 	{
 		DrawObject draw_obj;
 		draw_obj.type = DRAW_TYPE_BOX;
@@ -189,7 +189,7 @@ namespace TA3D
 		return 0;
 	}
 
-	int program_fillbox(lua_State *L) // fillbox( x1,y1,x2,y2,r,g,b )
+	int program_fillbox(lua_State* L) // fillbox( x1,y1,x2,y2,r,g,b )
 	{
 		DrawObject draw_obj;
 		draw_obj.type = DRAW_TYPE_FILLBOX;
@@ -206,7 +206,7 @@ namespace TA3D
 		return 0;
 	}
 
-	int program_circle(lua_State *L) // circle( x,y,ray,r,g,b )
+	int program_circle(lua_State* L) // circle( x,y,ray,r,g,b )
 	{
 		DrawObject draw_obj;
 		draw_obj.type = DRAW_TYPE_CIRCLE;
@@ -222,7 +222,7 @@ namespace TA3D
 		return 0;
 	}
 
-	int program_draw_image_for(lua_State *L) // draw_image_for( str image_name, x1, y1, x2, y2, player_id )
+	int program_draw_image_for(lua_State* L) // draw_image_for( str image_name, x1, y1, x2, y2, player_id )
 	{
 		if (lua_tointeger(L, 6) == players.local_human_id || lua_tointeger(L, 6) == -1)
 		{
@@ -256,16 +256,16 @@ namespace TA3D
 		return 0;
 	}
 
-	int program_draw_image(lua_State *L) // draw_image( str image_name, x1, y1, x2, y2 )
+	int program_draw_image(lua_State* L) // draw_image( str image_name, x1, y1, x2, y2 )
 	{
 		lua_pushinteger(L, -1);
 		program_draw_image_for(L);
 		return 0;
 	}
 
-	int program_get_image_size(lua_State *L)
+	int program_get_image_size(lua_State* L)
 	{
-		SDL_Surface *img = gfx->load_image(lua_tostring(L, 1));
+		SDL_Surface* img = gfx->load_image(lua_tostring(L, 1));
 		lua_pop(L, 1);
 		if (img)
 		{
@@ -281,20 +281,20 @@ namespace TA3D
 		return 2;
 	}
 
-	int program_get_screen_size(lua_State *L)
+	int program_get_screen_size(lua_State* L)
 	{
 		lua_pushinteger(L, SCREEN_W);
 		lua_pushinteger(L, SCREEN_H);
 		return 2;
 	}
 
-	int program_nb_players(lua_State *L) // nb_players()
+	int program_nb_players(lua_State* L) // nb_players()
 	{
 		lua_pushinteger(L, NB_PLAYERS);
 		return 1;
 	}
 
-	int program_get_unit_number_for_player(lua_State *L) // get_unit_number_for_player( player_id )
+	int program_get_unit_number_for_player(lua_State* L) // get_unit_number_for_player( player_id )
 	{
 		const int player_id = (int)lua_tointeger(L, 1);
 		lua_pop(L, 1);
@@ -314,7 +314,7 @@ namespace TA3D
 		return 1;
 	}
 
-	int program_get_unit_owner(lua_State *L) // get_unit_owner( unit_id )
+	int program_get_unit_owner(lua_State* L) // get_unit_owner( unit_id )
 	{
 		const int unit_idx = (int)lua_tointeger(L, 1);
 		lua_pop(L, 1);
@@ -330,19 +330,19 @@ namespace TA3D
 		return 1;
 	}
 
-	int program_get_unit_number(lua_State *L) // get_unit_number()
+	int program_get_unit_number(lua_State* L) // get_unit_number()
 	{
 		lua_pushinteger(L, units.nb_unit);
 		return 1;
 	}
 
-	int program_get_max_unit_number(lua_State *L) // get_max_unit_number()
+	int program_get_max_unit_number(lua_State* L) // get_max_unit_number()
 	{
 		lua_pushinteger(L, units.max_unit);
 		return 1;
 	}
 
-	int program_annihilated(lua_State *L) // annihilated( player_id )
+	int program_annihilated(lua_State* L) // annihilated( player_id )
 	{
 		const int player_id = (int)lua_tointeger(L, 1);
 		lua_pop(L, 1);
@@ -353,7 +353,7 @@ namespace TA3D
 		return 1;
 	}
 
-	int program_has_unit(lua_State *L) // has_unit( player_id, unit_type_id )
+	int program_has_unit(lua_State* L) // has_unit( player_id, unit_type_id )
 	{
 		const int player_id = (int)lua_tointeger(L, 1);
 		if (player_id >= 0 && player_id < NB_PLAYERS)
@@ -378,7 +378,7 @@ namespace TA3D
 		return 1;
 	}
 
-	int program_nb_unit_of_type(lua_State *L) // nb_unit_of_type( player_id, unit_type_id )
+	int program_nb_unit_of_type(lua_State* L) // nb_unit_of_type( player_id, unit_type_id )
 	{
 		const int player_id = (int)lua_tointeger(L, 1);
 		if (player_id >= 0 && player_id < NB_PLAYERS)
@@ -400,7 +400,7 @@ namespace TA3D
 		return 1;
 	}
 
-	int program_is_unit_of_type(lua_State *L) // is_unit_of_type( unit_id, unit_type_id )
+	int program_is_unit_of_type(lua_State* L) // is_unit_of_type( unit_id, unit_type_id )
 	{
 		const int unit_id = (int)lua_tointeger(L, 1);
 		if (unit_id >= 0 && unit_id < (int)units.max_unit)
@@ -417,7 +417,7 @@ namespace TA3D
 		return 1;
 	}
 
-	int program_has_mobile_units(lua_State *L) // has_mobile_units( player_id )
+	int program_has_mobile_units(lua_State* L) // has_mobile_units( player_id )
 	{
 		const int player_id = (int)lua_tointeger(L, 1);
 		lua_pop(L, 1);
@@ -441,7 +441,7 @@ namespace TA3D
 		return 1;
 	}
 
-	int program_move_unit(lua_State *L) // move_unit( unit_id, x, z )
+	int program_move_unit(lua_State* L) // move_unit( unit_id, x, z )
 	{
 		int unit_id = (int)lua_tointeger(L, 1);
 
@@ -526,9 +526,9 @@ namespace TA3D
 				target_pos.x = float(((int)(target_pos.x) + the_map->map_w_d) >> 3);
 				target_pos.z = float(((int)(target_pos.z) + the_map->map_h_d) >> 3);
 				target_pos.y = Math::Max(the_map->get_max_rect_h((int)target_pos.x, (int)target_pos.z,
-																 unit_manager.unit_type[units.unit[unit_id].type_id]->FootprintX,
-																 unit_manager.unit_type[units.unit[unit_id].type_id]->FootprintZ),
-										 the_map->sealvl);
+											 unit_manager.unit_type[units.unit[unit_id].type_id]->FootprintX,
+											 unit_manager.unit_type[units.unit[unit_id].type_id]->FootprintZ),
+					the_map->sealvl);
 				units.unit[unit_id].Pos.y = target_pos.y;
 				units.unit[unit_id].draw_on_map();
 			}
@@ -540,7 +540,7 @@ namespace TA3D
 		return 0;
 	}
 
-	int program_create_unit(lua_State *L) // create_unit( player_id, unit_type_id, x, z )
+	int program_create_unit(lua_State* L) // create_unit( player_id, unit_type_id, x, z )
 	{
 		const int player_id = (int)lua_tointeger(L, 1);
 		int unit_type_id = !lua_isnumber(L, 2) ? unit_manager.get_unit_index(lua_tostring(L, 2)) : (int)lua_tointeger(L, 2);
@@ -558,7 +558,7 @@ namespace TA3D
 			pos.x = x;
 			pos.z = z;
 			pos.y = Math::Max(the_map->get_max_rect_h((int)x, (int)z, unit_manager.unit_type[unit_type_id]->FootprintX, unit_manager.unit_type[unit_type_id]->FootprintZ), the_map->sealvl);
-			Unit *unit = (Unit *)create_unit(unit_type_id, player_id, pos, true, true); // Force synchronization
+			Unit* unit = (Unit*)create_unit(unit_type_id, player_id, pos, true, true); // Force synchronization
 			int idx = unit ? unit->idx : -1;
 			if (unit)
 			{
@@ -587,7 +587,7 @@ namespace TA3D
 		return 1;
 	}
 
-	int program_change_unit_owner(lua_State *L) // change_unit_owner( unit_id, player_id )
+	int program_change_unit_owner(lua_State* L) // change_unit_owner( unit_id, player_id )
 	{
 		const int player_id = (int)lua_tointeger(L, 2);
 		const int unit_id = (int)lua_tointeger(L, 1);
@@ -603,7 +603,7 @@ namespace TA3D
 		return 0;
 	}
 
-	int program_set_unit_health(lua_State *L) // set_unit_health( unit_id, health_percentage )
+	int program_set_unit_health(lua_State* L) // set_unit_health( unit_id, health_percentage )
 	{
 		const float health = (float)lua_tonumber(L, 2) * 0.01f;
 		const int unit_id = (int)lua_tointeger(L, 1);
@@ -620,7 +620,7 @@ namespace TA3D
 		return 0;
 	}
 
-	int program_add_build_mission(lua_State *L) // add_build_mission( unit_id, pos_x, pos_z, unit_type )
+	int program_add_build_mission(lua_State* L) // add_build_mission( unit_id, pos_x, pos_z, unit_type )
 	{
 		const int unit_id = (int)lua_tointeger(L, 1);
 		const float pos_x = (float)lua_tonumber(L, 2);
@@ -646,7 +646,7 @@ namespace TA3D
 		return 0;
 	}
 
-	int program_add_move_mission(lua_State *L) // add_move_mission( unit_id, pos_x, pos_z )
+	int program_add_move_mission(lua_State* L) // add_move_mission( unit_id, pos_x, pos_z )
 	{
 		const int unit_id = (int)lua_tointeger(L, 1);
 		const float pos_x = (float)lua_tonumber(L, 2);
@@ -669,7 +669,7 @@ namespace TA3D
 		return 0;
 	}
 
-	int program_add_attack_mission(lua_State *L) // add_attack_mission( unit_id, target_id )
+	int program_add_attack_mission(lua_State* L) // add_attack_mission( unit_id, target_id )
 	{
 		const int unit_id = (int)lua_tointeger(L, 1);
 		const int target_id = (int)lua_tointeger(L, 2);
@@ -688,7 +688,7 @@ namespace TA3D
 		return 0;
 	}
 
-	int program_add_patrol_mission(lua_State *L) // add_patrol_mission( unit_id, pos_x, pos_z )
+	int program_add_patrol_mission(lua_State* L) // add_patrol_mission( unit_id, pos_x, pos_z )
 	{
 		const int unit_id = (int)lua_tointeger(L, 1);
 		const float pos_x = (float)lua_tonumber(L, 2);
@@ -711,7 +711,7 @@ namespace TA3D
 		return 0;
 	}
 
-	int program_add_wait_mission(lua_State *L) // add_wait_mission( unit_id, time )
+	int program_add_wait_mission(lua_State* L) // add_wait_mission( unit_id, time )
 	{
 		const int unit_id = (int)lua_tointeger(L, 1);
 		const float time = (float)lua_tonumber(L, 2);
@@ -728,7 +728,7 @@ namespace TA3D
 		return 0;
 	}
 
-	int program_add_wait_attacked_mission(lua_State *L) // add_wait_attacked_mission( unit_id, target_id )
+	int program_add_wait_attacked_mission(lua_State* L) // add_wait_attacked_mission( unit_id, target_id )
 	{
 		const int unit_id = (int)lua_tointeger(L, 1);
 		const int target_id = (int)lua_tointeger(L, 2);
@@ -745,7 +745,7 @@ namespace TA3D
 		return 0;
 	}
 
-	int program_add_guard_mission(lua_State *L) // add_guard_mission( unit_id, target_id )
+	int program_add_guard_mission(lua_State* L) // add_guard_mission( unit_id, target_id )
 	{
 		const int unit_id = (int)lua_tointeger(L, 1);
 		const int target_id = (int)lua_tointeger(L, 2);
@@ -762,7 +762,7 @@ namespace TA3D
 		return 0;
 	}
 
-	int program_set_standing_orders(lua_State *L) // set_standing_orders( unit_id, move_order, fire_order )
+	int program_set_standing_orders(lua_State* L) // set_standing_orders( unit_id, move_order, fire_order )
 	{
 		const int unit_id = (int)lua_tointeger(L, 1);
 		const int move_order = (int)lua_tointeger(L, 2);
@@ -783,7 +783,7 @@ namespace TA3D
 		return 0;
 	}
 
-	int program_lock_orders(lua_State *L) // lock_orders( unit_id )
+	int program_lock_orders(lua_State* L) // lock_orders( unit_id )
 	{
 		const int unit_id = (int)lua_tointeger(L, 1);
 		lua_pop(L, 1);
@@ -794,7 +794,7 @@ namespace TA3D
 		return 0;
 	}
 
-	int program_unlock_orders(lua_State *L) // unlock_orders( unit_id )
+	int program_unlock_orders(lua_State* L) // unlock_orders( unit_id )
 	{
 		const int unit_id = (int)lua_tointeger(L, 1);
 		lua_pop(L, 1);
@@ -805,7 +805,7 @@ namespace TA3D
 		return 0;
 	}
 
-	int program_get_unit_health(lua_State *L) // get_unit_health( unit_id )
+	int program_get_unit_health(lua_State* L) // get_unit_health( unit_id )
 	{
 		const int unit_id = (int)lua_tointeger(L, 1);
 		lua_pop(L, 1);
@@ -823,25 +823,25 @@ namespace TA3D
 		return 0;
 	}
 
-	int program_local_player(lua_State *L) // local_player()
+	int program_local_player(lua_State* L) // local_player()
 	{
 		lua_pushinteger(L, players.local_human_id);
 		return 1;
 	}
 
-	int program_map_w(lua_State *L) // map_w()
+	int program_map_w(lua_State* L) // map_w()
 	{
 		lua_pushinteger(L, the_map->map_w);
 		return 1;
 	}
 
-	int program_map_h(lua_State *L) // map_h()
+	int program_map_h(lua_State* L) // map_h()
 	{
 		lua_pushinteger(L, the_map->map_h);
 		return 1;
 	}
 
-	int program_player_side(lua_State *L) // player_side( player_id )
+	int program_player_side(lua_State* L) // player_side( player_id )
 	{
 		const int player_id = (int)lua_tointeger(L, 1);
 		lua_pop(L, 1);
@@ -854,7 +854,7 @@ namespace TA3D
 		return 1;
 	}
 
-	int program_allied(lua_State *L) // allied( id0, id1 )
+	int program_allied(lua_State* L) // allied( id0, id1 )
 	{
 		const int player_id0 = (int)lua_tointeger(L, 1);
 		const int player_id1 = (int)lua_tointeger(L, 2);
@@ -868,7 +868,7 @@ namespace TA3D
 		return 1;
 	}
 
-	int program_unit_height(lua_State *L) // unit_height( unit_id )
+	int program_unit_height(lua_State* L) // unit_height( unit_id )
 	{
 		const int unit_id = (int)lua_tointeger(L, 1);
 		lua_pop(L, 1);
@@ -876,7 +876,7 @@ namespace TA3D
 		if (unit_id >= 0 && unit_id < (int)units.max_unit && units.unit[unit_id].flags)
 		{
 			units.lock();
-			const UnitType *pType = units.unit[unit_id].type_id >= 0 ? unit_manager.unit_type[units.unit[unit_id].type_id] : NULL;
+			const UnitType* pType = units.unit[unit_id].type_id >= 0 ? unit_manager.unit_type[units.unit[unit_id].type_id] : NULL;
 			if (pType && pType->model)
 				lua_pushnumber(L, pType->model->top);
 			else
@@ -889,14 +889,14 @@ namespace TA3D
 		return 1;
 	}
 
-	int program_unit_piece_pos(lua_State *L) // unit_piece_pos( unit_id, piece )
+	int program_unit_piece_pos(lua_State* L) // unit_piece_pos( unit_id, piece )
 	{
 		const int unit_id = (int)lua_tointeger(L, 1);
 
 		if (unit_id >= 0 && unit_id < (int)units.max_unit && units.unit[unit_id].flags)
 		{
 			units.lock();
-			UnitType *pType = units.unit[unit_id].type_id >= 0 ? unit_manager.unit_type[units.unit[unit_id].type_id] : NULL;
+			UnitType* pType = units.unit[unit_id].type_id >= 0 ? unit_manager.unit_type[units.unit[unit_id].type_id] : NULL;
 			if (pType && pType->model && pType->script)
 			{
 				const int piece_id = pType->script->identify(lua_tostring(L, -1));
@@ -925,14 +925,14 @@ namespace TA3D
 		return 1;
 	}
 
-	int program_unit_piece_dir(lua_State *L) // unit_piece_dir( unit_id, piece )
+	int program_unit_piece_dir(lua_State* L) // unit_piece_dir( unit_id, piece )
 	{
 		const int unit_id = (int)lua_tointeger(L, 1);
 
 		if (unit_id >= 0 && unit_id < (int)units.max_unit && units.unit[unit_id].flags)
 		{
 			units.lock();
-			UnitType *pType = units.unit[unit_id].type_id >= 0 ? unit_manager.unit_type[units.unit[unit_id].type_id] : NULL;
+			UnitType* pType = units.unit[unit_id].type_id >= 0 ? unit_manager.unit_type[units.unit[unit_id].type_id] : NULL;
 			if (pType && pType->model && pType->script)
 			{
 				const int piece_id = pType->script->identify(lua_tostring(L, -1));
@@ -961,7 +961,7 @@ namespace TA3D
 		return 1;
 	}
 
-	int program_unit_x(lua_State *L) // unit_x( unit_id )
+	int program_unit_x(lua_State* L) // unit_x( unit_id )
 	{
 		const int unit_id = (int)lua_tointeger(L, 1);
 		lua_pop(L, 1);
@@ -978,7 +978,7 @@ namespace TA3D
 		return 1;
 	}
 
-	int program_unit_y(lua_State *L) // unit_y( unit_id )
+	int program_unit_y(lua_State* L) // unit_y( unit_id )
 	{
 		const int unit_id = (int)lua_tointeger(L, 1);
 		lua_pop(L, 1);
@@ -995,7 +995,7 @@ namespace TA3D
 		return 1;
 	}
 
-	int program_unit_z(lua_State *L) // unit_z( unit_id )
+	int program_unit_z(lua_State* L) // unit_z( unit_id )
 	{
 		const int unit_id = (int)lua_tointeger(L, 1);
 		lua_pop(L, 1);
@@ -1012,7 +1012,7 @@ namespace TA3D
 		return 1;
 	}
 
-	int program_unit_pos(lua_State *L) // unit_pos( unit_id )
+	int program_unit_pos(lua_State* L) // unit_pos( unit_id )
 	{
 		const int unit_id = (int)lua_tointeger(L, 1);
 		lua_pop(L, 1);
@@ -1029,7 +1029,7 @@ namespace TA3D
 		return 1;
 	}
 
-	int program_unit_angle(lua_State *L) // unit_angle( unit_id )
+	int program_unit_angle(lua_State* L) // unit_angle( unit_id )
 	{
 		const int unit_id = (int)lua_tointeger(L, 1);
 		lua_pop(L, 1);
@@ -1046,7 +1046,7 @@ namespace TA3D
 		return 1;
 	}
 
-	int program_kill_unit(lua_State *L) // kill_unit( unit_id )
+	int program_kill_unit(lua_State* L) // kill_unit( unit_id )
 	{
 		const int unit_id = (int)lua_tointeger(L, 1);
 		lua_pop(L, 1);
@@ -1070,7 +1070,7 @@ namespace TA3D
 		return 0;
 	}
 
-	int program_kick_unit(lua_State *L) // kick_unit( unit_id, damage )
+	int program_kick_unit(lua_State* L) // kick_unit( unit_id, damage )
 	{
 		const int unit_id = (int)lua_tointeger(L, 1);
 		const float damage = (float)lua_tonumber(L, 2);
@@ -1088,10 +1088,10 @@ namespace TA3D
 		return 0;
 	}
 
-	int program_play_for(lua_State *L) // play_for( filename, player_id )
+	int program_play_for(lua_State* L) // play_for( filename, player_id )
 	{
 		if (lua_tointeger(L, 2) == players.local_human_id || lua_tointeger(L, 2) == -1)
-			sound_manager->playSound((const char *)lua_tostring(L, 1));
+			sound_manager->playSound((const char*)lua_tostring(L, 1));
 
 		if (network_manager.isServer() && !LuaProgram::passive)
 		{
@@ -1106,14 +1106,14 @@ namespace TA3D
 		return 0;
 	}
 
-	int program_play(lua_State *L) // play( filename )
+	int program_play(lua_State* L) // play( filename )
 	{
 		lua_pushinteger(L, -1);
 		program_play_for(L);
 		return 0;
 	}
 
-	int program_set_cam_pos(lua_State *L) // set_cam_pos( player_id,x,z )
+	int program_set_cam_pos(lua_State* L) // set_cam_pos( player_id,x,z )
 	{
 		if ((int)lua_tointeger(L, 1) == players.local_human_id)
 		{
@@ -1137,7 +1137,7 @@ namespace TA3D
 		return 0;
 	}
 
-	int program_set_cam(lua_State *L) // set_cam( player_id, { pos = { x, y, z }, dir = { x, y, z }, mode } )
+	int program_set_cam(lua_State* L) // set_cam( player_id, { pos = { x, y, z }, dir = { x, y, z }, mode } )
 	{
 		if ((int)lua_tointeger(L, 1) == players.local_human_id)
 		{
@@ -1175,7 +1175,7 @@ namespace TA3D
 		return 0;
 	}
 
-	int program_clf(lua_State * /*L*/)
+	int program_clf(lua_State* /*L*/)
 	{
 		the_map->clear_FOW();
 		units.lock();
@@ -1192,7 +1192,7 @@ namespace TA3D
 		return 0;
 	}
 
-	int program_start_x(lua_State *L) // start_x( player_id )
+	int program_start_x(lua_State* L) // start_x( player_id )
 	{
 		const unsigned int player_id = (unsigned int)lua_tointeger(L, 1);
 		lua_pop(L, 1);
@@ -1204,7 +1204,7 @@ namespace TA3D
 		return 1;
 	}
 
-	int program_start_z(lua_State *L) // start_z( player_id )
+	int program_start_z(lua_State* L) // start_z( player_id )
 	{
 		const unsigned int player_id = (unsigned int)lua_tointeger(L, 1);
 		lua_pop(L, 1);
@@ -1216,7 +1216,7 @@ namespace TA3D
 		return 1;
 	}
 
-	int program_init_res(lua_State * /*L*/) // init_res()
+	int program_init_res(lua_State* /*L*/) // init_res()
 	{
 		for (unsigned int i = 0; i < players.count(); ++i)
 		{
@@ -1234,7 +1234,7 @@ namespace TA3D
 		return 0;
 	}
 
-	int program_give_metal(lua_State *L) // give_metal( player_id, amount )
+	int program_give_metal(lua_State* L) // give_metal( player_id, amount )
 	{
 		const unsigned int player_id = (unsigned int)lua_tointeger(L, 1);
 		const float amount = (float)lua_tonumber(L, 2);
@@ -1250,7 +1250,7 @@ namespace TA3D
 		return 0;
 	}
 
-	int program_give_energy(lua_State *L) // give_energy( player_id, amount )
+	int program_give_energy(lua_State* L) // give_energy( player_id, amount )
 	{
 		const unsigned int player_id = (unsigned int)lua_tointeger(L, 1);
 		const float amount = (float)lua_tonumber(L, 2);
@@ -1266,7 +1266,7 @@ namespace TA3D
 		return 0;
 	}
 
-	int program_commander(lua_State *L) // commander( player_id )
+	int program_commander(lua_State* L) // commander( player_id )
 	{
 		const unsigned int player_id = (unsigned int)lua_tointeger(L, 1);
 		lua_pop(L, 1);
@@ -1287,7 +1287,7 @@ namespace TA3D
 		return 1;
 	}
 
-	int program_attack(lua_State *L) // attack( attacker_id, target_id )
+	int program_attack(lua_State* L) // attack( attacker_id, target_id )
 	{
 		const int attacker_idx = (int)lua_tointeger(L, 1);
 		const int target_idx = (int)lua_tointeger(L, 2);
@@ -1303,7 +1303,7 @@ namespace TA3D
 		return 0;
 	}
 
-	int program_create_feature(lua_State *L) // create_feature( feature_type, x, z )
+	int program_create_feature(lua_State* L) // create_feature( feature_type, x, z )
 	{
 		const int feature_type_id = lua_isstring(L, 1) ? feature_manager.get_feature_index(lua_tostring(L, 1)) : (int)lua_tointeger(L, 1);
 		const float X = (float)lua_tonumber(L, 2);
@@ -1311,7 +1311,7 @@ namespace TA3D
 
 		lua_pop(L, 3);
 
-		Feature *feature = feature_manager.getFeaturePointer(feature_type_id);
+		Feature* feature = feature_manager.getFeaturePointer(feature_type_id);
 		if (feature && !LuaProgram::passive)
 		{
 			const int x = (int)(X + (float)the_map->map_w_d - 8.0f) >> 3;
@@ -1332,7 +1332,7 @@ namespace TA3D
 		return 0;
 	}
 
-	int program_send_signal(lua_State *L) // send_signal( player_id, signal )
+	int program_send_signal(lua_State* L) // send_signal( player_id, signal )
 	{
 		const int player_id = (int)lua_tointeger(L, 1);
 		const int signal_id = (int)lua_tointeger(L, 2);
@@ -1353,7 +1353,7 @@ namespace TA3D
 		return 0;
 	}
 
-	int program_time(lua_State *L) // time()
+	int program_time(lua_State* L) // time()
 	{
 		lua_pushnumber(L, (double)units.current_tick / (double)TICKS_PER_SEC);
 		return 1;
@@ -1471,7 +1471,7 @@ namespace TA3D
 		return ret;
 	}
 
-	void LuaProgram::proc(void * /*param*/)
+	void LuaProgram::proc(void* /*param*/)
 	{
 		uint32 last_tick = units.current_tick;
 		signal = 0;
@@ -1512,7 +1512,7 @@ namespace TA3D
 	}
 
 	// Create the script that will do what the mission description .ota file tells us to do
-	void generate_script_from_mission(String Filename, TDFParser &ota_parser, int schema)
+	void generate_script_from_mission(String Filename, TDFParser& ota_parser, int schema)
 	{
 		std::ofstream m_File(Filename.c_str());
 

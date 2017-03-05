@@ -94,7 +94,7 @@ namespace TA3D
 			data.data[obj].axe[axis].move_speed = fabsf(speed * 0.5f);
 	}
 
-	int Unit::script_get_value_from_port(int portID, int *param)
+	int Unit::script_get_value_from_port(int portID, int* param)
 	{
 		switch (portID)
 		{
@@ -128,10 +128,10 @@ namespace TA3D
 					return 0;
 			case BUGGER_OFF:
 				return the_map->check_rect((((int)(Pos.x + (float)the_map->map_w_d)) >> 3) - (unit_manager.unit_type[type_id]->FootprintX >> 1),
-										   (((int)(Pos.z + (float)the_map->map_h_d)) >> 3) - (unit_manager.unit_type[type_id]->FootprintZ >> 1),
-										   unit_manager.unit_type[type_id]->FootprintX, unit_manager.unit_type[type_id]->FootprintZ, idx)
-						   ? 0
-						   : 1;
+						   (((int)(Pos.z + (float)the_map->map_h_d)) >> 3) - (unit_manager.unit_type[type_id]->FootprintZ >> 1),
+						   unit_manager.unit_type[type_id]->FootprintX, unit_manager.unit_type[type_id]->FootprintZ, idx)
+					? 0
+					: 1;
 			case BUILD_PERCENT_LEFT:
 				return (int)build_percent_left + ((build_percent_left > (int)build_percent_left) ? 1 : 0);
 			case YARD_OPEN:
@@ -219,7 +219,7 @@ namespace TA3D
 			compute_model_coord();
 			if (!Math::AlmostZero(data.data[from_piece].dir.x) || !Math::AlmostZero(data.data[from_piece].dir.y) || !Math::AlmostZero(data.data[from_piece].dir.z))
 			{
-				const Vector3D &dir = data.data[from_piece].dir;
+				const Vector3D& dir = data.data[from_piece].dir;
 				switch (smoke_type)
 				{
 					case 0:
@@ -389,8 +389,8 @@ namespace TA3D
 			case YARD_OPEN:
 				port[type] = sint16(v);
 				if (!the_map->check_rect((((int)(Pos.x + (float)the_map->map_w_d)) >> 3) - (unit_manager.unit_type[type_id]->FootprintX >> 1),
-										 (((int)(Pos.z + (float)the_map->map_h_d)) >> 3) - (unit_manager.unit_type[type_id]->FootprintZ >> 1),
-										 unit_manager.unit_type[type_id]->FootprintX, unit_manager.unit_type[type_id]->FootprintZ, idx))
+						(((int)(Pos.z + (float)the_map->map_h_d)) >> 3) - (unit_manager.unit_type[type_id]->FootprintZ >> 1),
+						unit_manager.unit_type[type_id]->FootprintX, unit_manager.unit_type[type_id]->FootprintZ, idx))
 					port[type] ^= 1;
 				break;
 			case BUGGER_OFF:
@@ -412,7 +412,7 @@ namespace TA3D
 									{
 										units.unit[cur_idx].lock();
 										const int type = units.unit[cur_idx].type_id;
-										const UnitType *const tType = type >= 0 ? unit_manager.unit_type[type] : NULL;
+										const UnitType* const tType = type >= 0 ? unit_manager.unit_type[type] : NULL;
 										if (units.unit[cur_idx].owner_id == owner_id && tType != NULL && tType->canmove && tType->BMcode == 1 && Math::AlmostZero(units.unit[cur_idx].build_percent_left) && (!units.unit[cur_idx].mission || (units.unit[cur_idx].mission->mission() & 0xFF) != MISSION_MOVE))
 										{
 											Vector3D target = units.unit[cur_idx].Pos;
@@ -441,7 +441,7 @@ namespace TA3D
 	{
 		if (unit_id >= 0 && unit_id < (int)units.max_unit && units.unit[unit_id].flags)
 		{
-			Unit *target_unit = &(units.unit[unit_id]);
+			Unit* target_unit = &(units.unit[unit_id]);
 			target_unit->hidden = (piece_id < 0);
 			bool already_in = false;
 			if (target_unit->attached)
@@ -468,7 +468,7 @@ namespace TA3D
 	{
 		if (unit_id >= 0 && unit_id < (int)units.max_unit && units.unit[unit_id].flags)
 		{
-			Unit *target_unit = &(units.unit[unit_id]);
+			Unit* target_unit = &(units.unit[unit_id]);
 			target_unit->attached = false;
 			target_unit->hidden = false;
 			nb_attached--; // Remove the unit from the attached list

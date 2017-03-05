@@ -134,20 +134,20 @@ namespace TA3D
 
 			public:
 				virtual ~HpiFile() {}
-				inline void setName(const String &name) { Archive::FileInfo::name = name; }
-				inline void setParent(Archive *parent) { Archive::FileInfo::parent = parent; }
+				inline void setName(const String& name) { Archive::FileInfo::name = name; }
+				inline void setParent(Archive* parent) { Archive::FileInfo::parent = parent; }
 			};
 
 		public:
 			//! Constructor
-			Hpi(const String &filename);
+			Hpi(const String& filename);
 			//! Destructor
 			virtual ~Hpi();
 
 			/*!
             ** \brief Loads an archive
             */
-			virtual void open(const String &filename);
+			virtual void open(const String& filename);
 
 			/*!
             ** \brief Just close the opened archive
@@ -157,13 +157,13 @@ namespace TA3D
 			/*!
             ** \brief Return the list of all files in the archive
             */
-			virtual void getFileList(std::deque<FileInfo *> &lFiles);
+			virtual void getFileList(std::deque<FileInfo*>& lFiles);
 
 			/*!
             ** \brief
             */
-			virtual File *readFile(const String &filename);
-			virtual File *readFile(const FileInfo *file);
+			virtual File* readFile(const String& filename);
+			virtual File* readFile(const FileInfo* file);
 
 			/*!
             ** \brief
@@ -172,8 +172,8 @@ namespace TA3D
             ** \param length
             ** \return
             */
-			virtual File *readFileRange(const String &filename, const uint32 start, const uint32 length);
-			virtual File *readFileRange(const FileInfo *file, const uint32 start, const uint32 length);
+			virtual File* readFileRange(const String& filename, const uint32 start, const uint32 length);
+			virtual File* readFileRange(const FileInfo* file, const uint32 start, const uint32 length);
 
 			/*!
             ** \brief returns true if using the cache is a good idea (real FS will return false)
@@ -182,8 +182,8 @@ namespace TA3D
 			virtual bool needsCaching();
 
 		public:
-			static void finder(String::List &fileList, const String &path);
-			static Archive *loader(const String &filename);
+			static void finder(String::List& fileList, const String& path);
+			static Archive* loader(const String& filename);
 
 		private:
 			//!
@@ -193,11 +193,11 @@ namespace TA3D
 			//!
 			sint8 key;
 			//!
-			sint8 *directory;
+			sint8* directory;
 			//!
 			std::ifstream HPIFile;
 			//!
-			HashMap<HpiFile *>::Sparse files;
+			HashMap<HpiFile*>::Sparse files;
 			//!
 			int priority;
 
@@ -209,12 +209,12 @@ namespace TA3D
         ** \param startPath
         ** \param offset
         */
-			void processRoot(const String &startPath, const sint32 offset);
+			void processRoot(const String& startPath, const sint32 offset);
 
 			/*!
         ** \brief
         */
-			void processSubDir(HPIENTRY *base);
+			void processSubDir(HPIENTRY* base);
 
 			/*!
         ** \brief
@@ -224,7 +224,7 @@ namespace TA3D
         ** \param buffsize
         ** \return
         */
-			sint32 readAndDecrypt(sint32 fpos, byte *buff, sint32 buffsize);
+			sint32 readAndDecrypt(sint32 fpos, byte* buff, sint32 buffsize);
 
 			/*!
         ** \brief
@@ -234,7 +234,7 @@ namespace TA3D
         ** \param Chunk
         ** \return
         */
-			sint32 ZLibDecompress(byte *out, byte *in, HPICHUNK *Chunk);
+			sint32 ZLibDecompress(byte* out, byte* in, HPICHUNK* Chunk);
 
 			/*!
         ** \brief
@@ -243,7 +243,7 @@ namespace TA3D
         ** \param in
         ** \return
         */
-			sint32 LZ77Decompress(byte *out, byte *in);
+			sint32 LZ77Decompress(byte* out, byte* in);
 
 			/*!
         ** \brief
@@ -253,7 +253,7 @@ namespace TA3D
         ** \param Chunk
         ** \return
         */
-			sint32 decompress(byte *out, byte *in, HPICHUNK *Chunk);
+			sint32 decompress(byte* out, byte* in, HPICHUNK* Chunk);
 		}; // class Hpi
 	}	  // namespace utils
 } // namespace TA3D

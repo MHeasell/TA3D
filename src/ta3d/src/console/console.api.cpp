@@ -9,7 +9,7 @@
 namespace TA3D
 {
 
-	int CAPI::print(lua_State *L)
+	int CAPI::print(lua_State* L)
 	{
 		String tmp;
 		for (int i = 1; i <= lua_gettop(L); ++i)
@@ -53,7 +53,7 @@ namespace TA3D
 		return 0;
 	}
 
-	int CAPI::setShowPing(lua_State *L)
+	int CAPI::setShowPing(lua_State* L)
 	{
 		if (lua_gettop(L) > 0)
 			Battle::Instance()->setShowPing(lua_toboolean(L, -1));
@@ -61,7 +61,7 @@ namespace TA3D
 		return 1;
 	}
 
-	int CAPI::setFps(lua_State *L)
+	int CAPI::setFps(lua_State* L)
 	{
 		if (lua_gettop(L) > 0)
 			lp_CONFIG->showfps = lua_toboolean(L, -1);
@@ -69,9 +69,9 @@ namespace TA3D
 		return 1;
 	}
 
-	int CAPI::zshoot(lua_State *)
+	int CAPI::zshoot(lua_State*)
 	{
-		SDL_Surface *bmp = gfx->create_surface_ex(32, SCREEN_W, SCREEN_H);
+		SDL_Surface* bmp = gfx->create_surface_ex(32, SCREEN_W, SCREEN_H);
 		SDL_FillRect(bmp, NULL, 0);
 		glReadPixels(0, 0, SCREEN_W, SCREEN_H, GL_DEPTH_COMPONENT, GL_INT, bmp->pixels);
 		//                        save_bitmap(String(TA3D::Paths::Screenshots) << "z.tga",bmp);
@@ -79,7 +79,7 @@ namespace TA3D
 		return 0;
 	}
 
-	int CAPI::setFarsight(lua_State *L)
+	int CAPI::setFarsight(lua_State* L)
 	{
 		if (lua_gettop(L) > 0)
 			lp_CONFIG->far_sight = lua_toboolean(L, -1);
@@ -87,7 +87,7 @@ namespace TA3D
 		return 1;
 	}
 
-	int CAPI::setTooltips(lua_State *L)
+	int CAPI::setTooltips(lua_State* L)
 	{
 		if (lua_gettop(L) > 0)
 			lp_CONFIG->tooltips = lua_toboolean(L, -1);
@@ -95,7 +95,7 @@ namespace TA3D
 		return 1;
 	}
 
-	int CAPI::setSoundVolume(lua_State *L)
+	int CAPI::setSoundVolume(lua_State* L)
 	{
 		if (lua_gettop(L) > 0)
 		{
@@ -106,7 +106,7 @@ namespace TA3D
 		return 1;
 	}
 
-	int CAPI::setMusicVolume(lua_State *L)
+	int CAPI::setMusicVolume(lua_State* L)
 	{
 		if (lua_gettop(L) > 0)
 		{
@@ -117,7 +117,7 @@ namespace TA3D
 		return 1;
 	}
 
-	int CAPI::setRightClickInterface(lua_State *L)
+	int CAPI::setRightClickInterface(lua_State* L)
 	{
 		if (lua_gettop(L) > 0)
 			lp_CONFIG->right_click_interface = lua_toboolean(L, -1);
@@ -125,7 +125,7 @@ namespace TA3D
 		return 1;
 	}
 
-	int CAPI::setCameraOrtho(lua_State *L)
+	int CAPI::setCameraOrtho(lua_State* L)
 	{
 		if (lua_gettop(L) > 0)
 			lp_CONFIG->ortho_camera = lua_toboolean(L, -1);
@@ -133,7 +133,7 @@ namespace TA3D
 		return 1;
 	}
 
-	int CAPI::setGrabInputs(lua_State *L)
+	int CAPI::setGrabInputs(lua_State* L)
 	{
 		if (lua_gettop(L) > 0)
 		{
@@ -144,7 +144,7 @@ namespace TA3D
 		return 1;
 	}
 
-	int CAPI::setVideoShoot(lua_State *L)
+	int CAPI::setVideoShoot(lua_State* L)
 	{
 		if (lua_gettop(L) > 0)
 			Battle::Instance()->video_shoot = lua_toboolean(L, -1);
@@ -152,13 +152,13 @@ namespace TA3D
 		return 1;
 	}
 
-	int CAPI::screenshot(lua_State *)
+	int CAPI::screenshot(lua_State*)
 	{
 		Battle::Instance()->shoot = true;
 		return 0;
 	}
 
-	int CAPI::makeposter(lua_State *L)
+	int CAPI::makeposter(lua_State* L)
 	{
 		int w = SCREEN_W;
 		int h = SCREEN_H;
@@ -171,13 +171,13 @@ namespace TA3D
 		return 0;
 	}
 
-	int CAPI::reloadShaders(lua_State *)
+	int CAPI::reloadShaders(lua_State*)
 	{
 		Battle::Instance()->reloadShaders();
 		return 0;
 	}
 
-	int CAPI::setShowMissionInfo(lua_State *L)
+	int CAPI::setShowMissionInfo(lua_State* L)
 	{
 		if (lua_gettop(L) > 0)
 			Battle::Instance()->show_mission_info = lua_toboolean(L, -1);
@@ -185,7 +185,7 @@ namespace TA3D
 		return 1;
 	}
 
-	int CAPI::setViewDebug(lua_State *L)
+	int CAPI::setViewDebug(lua_State* L)
 	{
 		if (lua_gettop(L) > 0)
 			Battle::Instance()->view_dbg = lua_toboolean(L, -1);
@@ -193,7 +193,7 @@ namespace TA3D
 		return 1;
 	}
 
-	int CAPI::setAIDebug(lua_State *L)
+	int CAPI::setAIDebug(lua_State* L)
 	{
 		if (lua_gettop(L) > 0)
 			Battle::Instance()->ia_debug = lua_toboolean(L, -1);
@@ -201,7 +201,7 @@ namespace TA3D
 		return 1;
 	}
 
-	int CAPI::setInternalName(lua_State *L)
+	int CAPI::setInternalName(lua_State* L)
 	{
 		if (lua_gettop(L) > 0)
 			Battle::Instance()->internal_name = lua_toboolean(L, -1);
@@ -209,7 +209,7 @@ namespace TA3D
 		return 1;
 	}
 
-	int CAPI::setInternalIdx(lua_State *L)
+	int CAPI::setInternalIdx(lua_State* L)
 	{
 		if (lua_gettop(L) > 0)
 			Battle::Instance()->internal_idx = lua_toboolean(L, -1);
@@ -217,13 +217,13 @@ namespace TA3D
 		return 1;
 	}
 
-	int CAPI::exit(lua_State *)
+	int CAPI::exit(lua_State*)
 	{
 		Battle::Instance()->done = true;
 		return 0;
 	}
 
-	int CAPI::setWireframe(lua_State *L)
+	int CAPI::setWireframe(lua_State* L)
 	{
 		if (lua_gettop(L) > 0)
 			lp_CONFIG->wireframe = lua_toboolean(L, -1);
@@ -231,7 +231,7 @@ namespace TA3D
 		return 1;
 	}
 
-	int CAPI::setPriority(lua_State *L)
+	int CAPI::setPriority(lua_State* L)
 	{
 		if (lua_gettop(L) > 0)
 			lp_CONFIG->priority_level = (sint16)lua_tointeger(L, -1);
@@ -239,7 +239,7 @@ namespace TA3D
 		return 1;
 	}
 
-	int CAPI::setWaterQuality(lua_State *L)
+	int CAPI::setWaterQuality(lua_State* L)
 	{
 		if (lua_gettop(L) > 0)
 			lp_CONFIG->water_quality = (sint16)lua_tointeger(L, -1) % 6;
@@ -247,7 +247,7 @@ namespace TA3D
 		return 1;
 	}
 
-	int CAPI::setShadowQuality(lua_State *L)
+	int CAPI::setShadowQuality(lua_State* L)
 	{
 		if (lua_gettop(L) > 0)
 		{
@@ -258,7 +258,7 @@ namespace TA3D
 		return 1;
 	}
 
-	int CAPI::setShadowMapSize(lua_State *L)
+	int CAPI::setShadowMapSize(lua_State* L)
 	{
 		if (lua_gettop(L) > 0)
 		{
@@ -269,7 +269,7 @@ namespace TA3D
 		return 1;
 	}
 
-	int CAPI::setDetailsTexture(lua_State *L)
+	int CAPI::setDetailsTexture(lua_State* L)
 	{
 		if (lua_gettop(L) > 0)
 			lp_CONFIG->detail_tex = lua_toboolean(L, -1);
@@ -277,7 +277,7 @@ namespace TA3D
 		return 1;
 	}
 
-	int CAPI::setParticles(lua_State *L)
+	int CAPI::setParticles(lua_State* L)
 	{
 		if (lua_gettop(L) > 0)
 			lp_CONFIG->particle = lua_toboolean(L, -1);
@@ -285,7 +285,7 @@ namespace TA3D
 		return 1;
 	}
 
-	int CAPI::setExplosionParticles(lua_State *L)
+	int CAPI::setExplosionParticles(lua_State* L)
 	{
 		if (lua_gettop(L) > 0)
 			lp_CONFIG->explosion_particles = lua_toboolean(L, -1);
@@ -293,7 +293,7 @@ namespace TA3D
 		return 1;
 	}
 
-	int CAPI::setWaves(lua_State *L)
+	int CAPI::setWaves(lua_State* L)
 	{
 		if (lua_gettop(L) > 0)
 			lp_CONFIG->waves = lua_toboolean(L, -1);
@@ -301,14 +301,14 @@ namespace TA3D
 		return 1;
 	}
 
-	int CAPI::scriptDumpDebugInfo(lua_State *)
+	int CAPI::scriptDumpDebugInfo(lua_State*)
 	{
 		if (Battle::Instance()->cur_sel_index >= 0 && units.unit[Battle::Instance()->cur_sel_index].script)
 			units.unit[Battle::Instance()->cur_sel_index].script->dumpDebugInfo();
 		return 0;
 	}
 
-	int CAPI::setShowModel(lua_State *L)
+	int CAPI::setShowModel(lua_State* L)
 	{
 		if (lua_gettop(L) > 0)
 			Battle::Instance()->show_model = lua_toboolean(L, -1);
@@ -316,7 +316,7 @@ namespace TA3D
 		return 1;
 	}
 
-	int CAPI::setRotateLight(lua_State *L)
+	int CAPI::setRotateLight(lua_State* L)
 	{
 		if (lua_gettop(L) > 0)
 			Battle::Instance()->rotate_light = lua_toboolean(L, -1);
@@ -324,13 +324,13 @@ namespace TA3D
 		return 1;
 	}
 
-	int CAPI::shake(lua_State *)
+	int CAPI::shake(lua_State*)
 	{
 		Battle::Instance()->cam.setShake(1.0f, 32.0f);
 		return 0;
 	}
 
-	int CAPI::setFreecam(lua_State *L)
+	int CAPI::setFreecam(lua_State* L)
 	{
 		if (lua_gettop(L) > 0)
 		{
@@ -342,7 +342,7 @@ namespace TA3D
 		return 1;
 	}
 
-	int CAPI::setFpsLimit(lua_State *L)
+	int CAPI::setFpsLimit(lua_State* L)
 	{
 		if (lua_gettop(L) > 0)
 		{
@@ -355,7 +355,7 @@ namespace TA3D
 		return 1;
 	}
 
-	int CAPI::spawn(lua_State *L)
+	int CAPI::spawn(lua_State* L)
 	{
 		int unit_type = -1;
 		int player_id = players.local_human_id;
@@ -398,9 +398,9 @@ namespace TA3D
 				target_pos.x = (float)(((int)(target_pos.x) + the_map->map_w_d) >> 3);
 				target_pos.z = (float)(((int)(target_pos.z) + the_map->map_h_d) >> 3);
 				target_pos.y = Math::Max(the_map->get_max_rect_h((int)target_pos.x, (int)target_pos.z,
-																 unit_manager.unit_type[units.unit[id].type_id]->FootprintX,
-																 unit_manager.unit_type[units.unit[id].type_id]->FootprintZ),
-										 the_map->sealvl);
+											 unit_manager.unit_type[units.unit[id].type_id]->FootprintX,
+											 unit_manager.unit_type[units.unit[id].type_id]->FootprintZ),
+					the_map->sealvl);
 
 				units.unit[id].Pos.y = target_pos.y;
 				units.unit[id].cur_px = (int)target_pos.x;
@@ -424,7 +424,7 @@ namespace TA3D
 		return 0;
 	}
 
-	int CAPI::setTimeFactor(lua_State *L)
+	int CAPI::setTimeFactor(lua_State* L)
 	{
 		if (lua_gettop(L) > 0)
 			lp_CONFIG->timefactor = (float)lua_tonumber(L, -1);
@@ -432,7 +432,7 @@ namespace TA3D
 		return 1;
 	}
 
-	int CAPI::addhp(lua_State *L)
+	int CAPI::addhp(lua_State* L)
 	{
 		if (lua_gettop(L) == 0)
 			return 0;
@@ -460,7 +460,7 @@ namespace TA3D
 		return 0;
 	}
 
-	int CAPI::deactivate(lua_State *)
+	int CAPI::deactivate(lua_State*)
 	{
 		if (Battle::Instance()->selected) // Sur les unités sélectionnées
 		{
@@ -476,7 +476,7 @@ namespace TA3D
 		return 0;
 	}
 
-	int CAPI::activate(lua_State *)
+	int CAPI::activate(lua_State*)
 	{
 		if (Battle::Instance()->selected) // Sur les unités sélectionnées
 		{
@@ -492,7 +492,7 @@ namespace TA3D
 		return 0;
 	}
 
-	int CAPI::resetScript(lua_State *)
+	int CAPI::resetScript(lua_State*)
 	{
 		if (Battle::Instance()->selected) // Sur les unités sélectionnées
 		{
@@ -510,17 +510,16 @@ namespace TA3D
 		return 0;
 	}
 
-	int CAPI::dumpUnitInfo(lua_State *)
+	int CAPI::dumpUnitInfo(lua_State*)
 	{
 		if (Battle::Instance()->selected && Battle::Instance()->cur_sel != -1) // Sur les unités sélectionnées
 		{
-			static const char *unit_info[] =
-				{
-					"ACTIVATION", "STANDINGMOVEORDERS", "STANDINGFIREORDERS",
-					"HEALTH", "INBUILDSTANCE", "BUSY", "PIECE_XZ", "PIECE_Y", "UNIT_XZ", "UNIT_Y",
-					"UNIT_HEIGHT", "XZ_ATAN", "XZ_HYPOT", "ATAN",
-					"HYPOT", "GROUND_HEIGHT", "BUILD_PERCENT_LEFT", "YARD_OPEN",
-					"BUGGER_OFF", "ARMORED"};
+			static const char* unit_info[] = {
+				"ACTIVATION", "STANDINGMOVEORDERS", "STANDINGFIREORDERS",
+				"HEALTH", "INBUILDSTANCE", "BUSY", "PIECE_XZ", "PIECE_Y", "UNIT_XZ", "UNIT_Y",
+				"UNIT_HEIGHT", "XZ_ATAN", "XZ_HYPOT", "ATAN",
+				"HYPOT", "GROUND_HEIGHT", "BUILD_PERCENT_LEFT", "YARD_OPEN",
+				"BUGGER_OFF", "ARMORED"};
 			units.lock();
 			for (unsigned int e = 0; e < units.index_list_size; ++e)
 			{
@@ -540,7 +539,7 @@ namespace TA3D
 		return 0;
 	}
 
-	int CAPI::kill(lua_State *)
+	int CAPI::kill(lua_State*)
 	{
 		if (Battle::Instance()->selected) // Sur les unités sélectionnées
 		{
@@ -563,7 +562,7 @@ namespace TA3D
 		return 0;
 	}
 
-	int CAPI::setShootall(lua_State *L)
+	int CAPI::setShootall(lua_State* L)
 	{
 		if (lua_gettop(L) > 0)
 			units.shootallMode = lua_toboolean(L, -1);
@@ -571,7 +570,7 @@ namespace TA3D
 		return 1;
 	}
 
-	int CAPI::startScript(lua_State *L) // Force l'éxecution d'un script
+	int CAPI::startScript(lua_State* L) // Force l'éxecution d'un script
 	{
 		if (lua_gettop(L) == 0)
 			return 0;
@@ -589,7 +588,7 @@ namespace TA3D
 		return 0;
 	}
 
-	int CAPI::setPause(lua_State *L)
+	int CAPI::setPause(lua_State* L)
 	{
 		if (lua_gettop(L) > 0)
 			lp_CONFIG->pause = lua_toboolean(L, -1);
@@ -597,7 +596,7 @@ namespace TA3D
 		return 1;
 	}
 
-	int CAPI::give(lua_State *L) // Give resources to player_id
+	int CAPI::give(lua_State* L) // Give resources to player_id
 	{
 		bool success = false;
 		if (lua_gettop(L) == 3)
@@ -624,7 +623,7 @@ namespace TA3D
 		return 0;
 	}
 
-	int CAPI::setMetalCheat(lua_State *L)
+	int CAPI::setMetalCheat(lua_State* L)
 	{
 		if (lua_gettop(L) > 0)
 			Battle::Instance()->cheat_metal = lua_toboolean(L, -1);
@@ -632,7 +631,7 @@ namespace TA3D
 		return 1;
 	}
 
-	int CAPI::setEnergyCheat(lua_State *L)
+	int CAPI::setEnergyCheat(lua_State* L)
 	{
 		if (lua_gettop(L) > 0)
 			Battle::Instance()->cheat_energy = lua_toboolean(L, -1);
@@ -640,7 +639,7 @@ namespace TA3D
 		return 1;
 	}
 
-	int CAPI::setGUIalpha(lua_State *L)
+	int CAPI::setGUIalpha(lua_State* L)
 	{
 		if (lua_gettop(L) > 0)
 			lp_CONFIG->menuTransparency = Math::Clamp(float(lua_tonumber(L, -1)), 0.0f, 1.0f);
@@ -649,7 +648,7 @@ namespace TA3D
 	}
 
 	// ---------------    Debug commands    ---------------
-	int CAPI::_debugSetContext(lua_State *L) // Switch debug context
+	int CAPI::_debugSetContext(lua_State* L) // Switch debug context
 	{
 		const String context = lua_gettop(L) > 0 ? lua_tostring(L, 1) : String();
 		if (context == "mission")
@@ -670,7 +669,7 @@ namespace TA3D
 		return 0;
 	}
 
-	int CAPI::_debugState(lua_State *) // Print LuaThread state
+	int CAPI::_debugState(lua_State*) // Print LuaThread state
 	{
 		if (Battle::Instance()->debugInfo.process == NULL)
 			return 0;
@@ -686,7 +685,7 @@ namespace TA3D
 		return 0;
 	}
 
-	int CAPI::_debugLoad(lua_State *L) // Load a Lua script into the Lua thread
+	int CAPI::_debugLoad(lua_State* L) // Load a Lua script into the Lua thread
 	{
 		if (Battle::Instance()->debugInfo.process == NULL || lua_gettop(L) == 0)
 			return 0;
@@ -695,7 +694,7 @@ namespace TA3D
 		return 0;
 	}
 
-	int CAPI::_debugStop(lua_State *) // Stop the LuaThread (it doesn't kill it)
+	int CAPI::_debugStop(lua_State*) // Stop the LuaThread (it doesn't kill it)
 	{
 		if (Battle::Instance()->debugInfo.process == NULL)
 			return 0;
@@ -704,7 +703,7 @@ namespace TA3D
 		return 0;
 	}
 
-	int CAPI::_debugResume(lua_State *) // Resume the LuaThread (it doesn't uncrash it)
+	int CAPI::_debugResume(lua_State*) // Resume the LuaThread (it doesn't uncrash it)
 	{
 		if (Battle::Instance()->debugInfo.process == NULL)
 			return 0;
@@ -713,7 +712,7 @@ namespace TA3D
 		return 0;
 	}
 
-	int CAPI::_debugKill(lua_State *) // Kill the LuaThread
+	int CAPI::_debugKill(lua_State*) // Kill the LuaThread
 	{
 		if (Battle::Instance()->debugInfo.process == NULL)
 			return 0;
@@ -722,7 +721,7 @@ namespace TA3D
 		return 0;
 	}
 
-	int CAPI::_debugCrash(lua_State *) // Crash the LuaThread
+	int CAPI::_debugCrash(lua_State*) // Crash the LuaThread
 	{
 		if (Battle::Instance()->debugInfo.process == NULL)
 			return 0;
@@ -731,7 +730,7 @@ namespace TA3D
 		return 0;
 	}
 
-	int CAPI::_debugContinue(lua_State *) // Uncrash the LuaThread
+	int CAPI::_debugContinue(lua_State*) // Uncrash the LuaThread
 	{
 		if (Battle::Instance()->debugInfo.process == NULL)
 			return 0;
@@ -740,7 +739,7 @@ namespace TA3D
 		return 0;
 	}
 
-	int CAPI::_debugRun(lua_State *L)
+	int CAPI::_debugRun(lua_State* L)
 	{
 		if (Battle::Instance()->debugInfo.process == NULL)
 			return 0;
@@ -757,7 +756,7 @@ namespace TA3D
 		return 0;
 	}
 
-	int CAPI::_debugMemory(lua_State *) // Show the memory used by the select Lua VM
+	int CAPI::_debugMemory(lua_State*) // Show the memory used by the select Lua VM
 	{
 		if (Battle::Instance()->debugInfo.process == NULL)
 			return 0;
@@ -767,7 +766,7 @@ namespace TA3D
 	}
 
 	// ---------------    OS specific commands    ---------------
-	int CAPI::setFullscreen(lua_State *L) // This works only on Linux/X11
+	int CAPI::setFullscreen(lua_State* L) // This works only on Linux/X11
 	{
 #ifdef TA3D_PLATFORM_LINUX
 		if (lua_gettop(L) == 1 && lua_toboolean(L, 1) != lp_CONFIG->fullscreen)

@@ -44,17 +44,17 @@ namespace TA3D
 		UnitScript();
 		virtual ~UnitScript();
 
-		/*virtual*/ void load(ScriptData *data);
+		/*virtual*/ void load(ScriptData* data);
 		/*virtual*/ int run(float dt, bool alone = false); // Run the script
 
 		//! functions used to call/run Lua functions
-		/*virtual*/ void call(const String &functionName, int *parameters = NULL, int nb_params = 0);
-		/*virtual*/ int execute(const String &functionName, int *parameters = NULL, int nb_params = 0);
+		/*virtual*/ void call(const String& functionName, int* parameters = NULL, int nb_params = 0);
+		/*virtual*/ int execute(const String& functionName, int* parameters = NULL, int nb_params = 0);
 
 		//! functions used to create new threads sharing the same environment
-		/*virtual*/ UnitScript *fork();
-		/*virtual*/ UnitScript *fork(const String &functionName, int *parameters = NULL, int nb_params = 0);
-		UnitScript *fork(lua_State *cL, int n);
+		/*virtual*/ UnitScript* fork();
+		/*virtual*/ UnitScript* fork(const String& functionName, int* parameters = NULL, int nb_params = 0);
+		UnitScript* fork(lua_State* cL, int n);
 
 		//! functions used to save/restore scripts state
 		/*virtual*/ void save_thread_state(gzFile file);
@@ -63,7 +63,7 @@ namespace TA3D
 		int getNextID();
 
 	private:
-		lua_State *L;
+		lua_State* L;
 
 		int nextID;
 
@@ -72,8 +72,8 @@ namespace TA3D
 		String name;
 
 	private:
-		static void load(const String &filename);
-		static void register_functions(lua_State *L);
+		static void load(const String& filename);
+		static void register_functions(lua_State* L);
 		void register_info();
 
 		/*virtual*/ void setUnitID(uint32 ID);
@@ -85,8 +85,8 @@ namespace TA3D
 		void destroy();
 
 	private:
-		static lua_State *pLuaVM;
-		static lua_State *luaVM();
+		static lua_State* pLuaVM;
+		static lua_State* luaVM();
 		static Mutex mLuaVM;
 	};
 }

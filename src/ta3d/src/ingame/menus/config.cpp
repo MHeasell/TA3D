@@ -71,11 +71,7 @@ namespace TA3D
 				// Check we're not trying to crash the game :P
 				gfx->checkConfig();
 
-				if (lp_CONFIG->screen_width != saved_config->screen_width ||
-					lp_CONFIG->screen_height != saved_config->screen_height ||
-					lp_CONFIG->color_depth != saved_config->color_depth ||
-					lp_CONFIG->fsaa != saved_config->fsaa ||
-					(lp_CONFIG->fullscreen != saved_config->fullscreen)) // Need to restart
+				if (lp_CONFIG->screen_width != saved_config->screen_width || lp_CONFIG->screen_height != saved_config->screen_height || lp_CONFIG->color_depth != saved_config->color_depth || lp_CONFIG->fsaa != saved_config->fsaa || (lp_CONFIG->fullscreen != saved_config->fullscreen)) // Need to restart
 				{
 					lp_CONFIG->quickrestart = true;
 				}
@@ -146,11 +142,11 @@ namespace TA3D
 
 			nb_res = 0;
 
-			SDL_Rect **mode_list = SDL_ListModes(NULL, SDL_FULLSCREEN | SDL_OPENGL);
+			SDL_Rect** mode_list = SDL_ListModes(NULL, SDL_FULLSCREEN | SDL_OPENGL);
 
-			if (mode_list == (SDL_Rect **)0) // No resolution available (normally this shouldn't be possible if we get here)
+			if (mode_list == (SDL_Rect**)0) // No resolution available (normally this shouldn't be possible if we get here)
 				nb_res = 0;
-			else if (mode_list == (SDL_Rect **)-1) // Ok, everything is possible so let's use standard sizes
+			else if (mode_list == (SDL_Rect**)-1) // Ok, everything is possible so let's use standard sizes
 			{
 #define ADD_RES(w, h)         \
 	res_bpp[nb_res++] = 16;   \
@@ -178,7 +174,7 @@ namespace TA3D
 				for (unsigned int i = 0; mode_list[i] != NULL; ++i)
 				{
 					// Reference to the current SDL Rect
-					const SDL_Rect &rect = *(mode_list[i]);
+					const SDL_Rect& rect = *(mode_list[i]);
 
 					if (rect.w >= 640 && rect.h >= 480)
 					{
@@ -240,7 +236,7 @@ namespace TA3D
 			{
 				Gui::GUIOBJ::Ptr objLang = pArea->get_object("*.LANG");
 				objLang->Text.clear();
-				I18N::Language *l = I18N::Instance()->language(lp_CONFIG->Lang);
+				I18N::Language* l = I18N::Instance()->language(lp_CONFIG->Lang);
 				if (l)
 					objLang->Text.push_back(l->caption());
 				else
@@ -258,8 +254,7 @@ namespace TA3D
 				Gui::GUIOBJ::Ptr obj = pArea->get_object("*.screenres");
 				obj->Text.clear();
 				int current = 0;
-				while (current < nb_res &&
-					   (res_width[current] != lp_CONFIG->screen_width || res_height[current] != lp_CONFIG->screen_height || res_bpp[current] != lp_CONFIG->color_depth))
+				while (current < nb_res && (res_width[current] != lp_CONFIG->screen_width || res_height[current] != lp_CONFIG->screen_height || res_bpp[current] != lp_CONFIG->color_depth))
 					current++;
 				if (current >= nb_res)
 					current = 0;

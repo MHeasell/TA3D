@@ -220,7 +220,7 @@ namespace TA3D
 			if (String::npos == pos)
 				out.clear();
 			else
-				out.assign(p.c_str() +  pos + 1);
+				out.assign(p.c_str() + pos + 1);
 		}
 
 		void ExtractFileNameDependent(const String& p, String& out)
@@ -231,7 +231,7 @@ namespace TA3D
 			if (String::npos == pos)
 				out.clear();
 			else
-				out.assign(p.c_str() +  pos + 1);
+				out.assign(p.c_str() + pos + 1);
 		}
 
 		void ExtractFileName(const String& p, String& out, const bool systemDependant)
@@ -463,79 +463,76 @@ namespace TA3D
 		}
 
 
+#ifdef TA3D_PLATFORM_WINDOWS
 
-# ifdef TA3D_PLATFORM_WINDOWS
-
-	bool Remove(const char* path)
-	{
-		WString<true> fsource(path);
-		if (fsource.empty())
-			return false;
-		int cr;
-
-		SHFILEOPSTRUCTW shf;
-		shf.hwnd = NULL;
-
-		shf.wFunc = FO_DELETE;
-		shf.pFrom = fsource.c_str();
-		shf.pTo = fsource.c_str();
-		shf.fFlags = FOF_SILENT | FOF_NOCONFIRMATION | FOF_NOCONFIRMMKDIR | FOF_NOERRORUI;
-
-		cr = SHFileOperationW(&shf);
-		return (!cr);
-	}
-
-# else
-
-
-	namespace // Anonymous namespace
-	{
-
-		bool RmDirRecursiveInternal(const char path[])
+		bool Remove(const char* path)
 		{
-			DIR* dp;
-			struct dirent* ep;
-			String buffer;
-			struct stat st;
+			WString<true> fsource(path);
+			if (fsource.empty())
+				return false;
+			int cr;
 
-			if (NULL != (dp = ::opendir(path)))
-			{
-				while (NULL != (ep = ::readdir(dp)))
-				{
-					buffer.clear() << path << Separator << (const char*)ep->d_name;
-					if (0 == ::stat(buffer.c_str(), &st))
-					{
-						if (S_ISDIR(st.st_mode))
-						{
-							if (strcmp(".", (ep->d_name)) != 0 && strcmp("..", (ep->d_name)) != 0)
-							{
-								RmDirRecursiveInternal(buffer.c_str());
-								::rmdir(buffer.c_str());
-							}
-						}
-						else
-							::unlink(buffer.c_str());
-					}
-				}
-				(void)::closedir(dp);
-			}
-			return (0 == rmdir(path));
+			SHFILEOPSTRUCTW shf;
+			shf.hwnd = NULL;
+
+			shf.wFunc = FO_DELETE;
+			shf.pFrom = fsource.c_str();
+			shf.pTo = fsource.c_str();
+			shf.fFlags = FOF_SILENT | FOF_NOCONFIRMATION | FOF_NOCONFIRMMKDIR | FOF_NOERRORUI;
+
+			cr = SHFileOperationW(&shf);
+			return (!cr);
 		}
 
-	} // anonymous namespace
+#else
 
 
+		namespace // Anonymous namespace
+		{
+
+			bool RmDirRecursiveInternal(const char path[])
+			{
+				DIR* dp;
+				struct dirent* ep;
+				String buffer;
+				struct stat st;
+
+				if (NULL != (dp = ::opendir(path)))
+				{
+					while (NULL != (ep = ::readdir(dp)))
+					{
+						buffer.clear() << path << Separator << (const char*)ep->d_name;
+						if (0 == ::stat(buffer.c_str(), &st))
+						{
+							if (S_ISDIR(st.st_mode))
+							{
+								if (strcmp(".", (ep->d_name)) != 0 && strcmp("..", (ep->d_name)) != 0)
+								{
+									RmDirRecursiveInternal(buffer.c_str());
+									::rmdir(buffer.c_str());
+								}
+							}
+							else
+								::unlink(buffer.c_str());
+						}
+					}
+					(void)::closedir(dp);
+				}
+				return (0 == rmdir(path));
+			}
+
+		} // anonymous namespace
 
 
-	bool Remove(const char path[])
-	{
-		if (NULL == path || '\0' == *path)
-			return true;
-		return RmDirRecursiveInternal(path);
-	}
+		bool Remove(const char path[])
+		{
+			if (NULL == path || '\0' == *path)
+				return true;
+			return RmDirRecursiveInternal(path);
+		}
 
 
-# endif
+#endif
 
 
 		void RemoveDir(const String& p)

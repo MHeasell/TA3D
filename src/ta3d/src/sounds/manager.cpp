@@ -37,9 +37,7 @@ namespace TA3D
 		const int nbChannels = 16;
 
 		Manager::Manager()
-			: m_SDLMixerRunning(false), m_InBattle(false), pBattleTunesCount(0),
-			  pMusic(NULL), bPlayMusic(false), pBasicSound(NULL),
-			  pCurrentItemToPlay(-1), pCurrentItemPlaying(-1)
+			: m_SDLMixerRunning(false), m_InBattle(false), pBattleTunesCount(0), pMusic(NULL), bPlayMusic(false), pBasicSound(NULL), pCurrentItemToPlay(-1), pCurrentItemPlaying(-1)
 		{
 			pMinTicks = 500;
 

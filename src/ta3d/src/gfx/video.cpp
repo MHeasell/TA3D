@@ -19,28 +19,28 @@ namespace TA3D
 	using namespace TA3D::UTILS;
 
 	GLuint Video::gltex = 0;
-	SDL_Surface *Video::buf = NULL;
+	SDL_Surface* Video::buf = NULL;
 
 	Synchronizer mpegSynchronizer(2);
 
-	void Video::update(SDL_Surface *img, sint32, sint32, uint32, uint32)
+	void Video::update(SDL_Surface* img, sint32, sint32, uint32, uint32)
 	{
 		// Swap the buffers
-		void *tmp = buf->pixels;
+		void* tmp = buf->pixels;
 		buf->pixels = img->pixels;
 		img->pixels = tmp;
 		mpegSynchronizer.sync();
 	}
 
-	void Video::play(const String &filename)
+	void Video::play(const String& filename)
 	{
 		SMPEG_Info info;
-		SMPEG *mpeg;
+		SMPEG* mpeg;
 
 		String tmp;
 		tmp << TA3D::Paths::Caches << Paths::ExtractFileName(filename) << ".mpg";
 
-		File *file = VFS::Instance()->readFile(filename);
+		File* file = VFS::Instance()->readFile(filename);
 		if (file)
 		{
 			if (file->isReal())				   // Check if the file is real
@@ -53,7 +53,7 @@ namespace TA3D
 				tmp_file.open(tmp.c_str());
 				if (tmp_file.is_open())
 				{
-					char *buf = new char[10240];
+					char* buf = new char[10240];
 					for (int i = 0; i < file->size(); i += 10240)
 					{
 						int l = Math::Min(10240, file->size() - i);
@@ -124,7 +124,7 @@ namespace TA3D
 		}
 
 		gfx->set_texture_format(gfx->defaultTextureFormat_RGB());
-		SDL_Surface *img = gfx->create_surface(w, h);
+		SDL_Surface* img = gfx->create_surface(w, h);
 		buf = gfx->create_surface(w, h);
 		gltex = gfx->create_texture(w, h, FILTER_LINEAR, true);
 

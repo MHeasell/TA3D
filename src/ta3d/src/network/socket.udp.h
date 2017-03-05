@@ -21,15 +21,15 @@ namespace TA3D
 
 		virtual bool isOpen() const;
 
-		virtual void open(const String &hostname, uint16 port);
+		virtual void open(const String& hostname, uint16 port);
 		virtual void close();
 
 		virtual void check(uint32 msec);
 		virtual bool ready();
 
-		virtual void send(const String &str);
-		virtual void send(const char *data, int size);
-		virtual int recv(char *data, int size);
+		virtual void send(const String& str);
+		virtual void send(const char* data, int size);
+		virtual int recv(char* data, int size);
 
 		IPaddress getRemoteIP_sdl() const;
 		String getRemoteIPstr() const;

@@ -63,8 +63,8 @@ namespace TA3D
 			for (short i = 0; i < short(players.count()); ++i)
 			{
 				uint32 color = gfx->makeintcol(player_color[3 * player_color_map[i]],
-											   player_color[3 * player_color_map[i] + 1],
-											   player_color[3 * player_color_map[i] + 2]);
+					player_color[3 * player_color_map[i] + 1],
+					player_color[3 * player_color_map[i] + 2]);
 
 				doUpdateObject("player", i, color, players.nom[i]);
 				doUpdateObject("side", i, color, players.side[i]);

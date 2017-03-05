@@ -80,12 +80,12 @@ namespace TA3D
 		{
 			if (parser.pullAsBool("TA3D.Server")) // Server code
 			{
-				const String &host_name = parser.pullAsString("TA3D.Server name", TA3D::VARS::lp_CONFIG->player_name);
+				const String& host_name = parser.pullAsString("TA3D.Server name", TA3D::VARS::lp_CONFIG->player_name);
 				Menus::SetupGame::Execute(false, host_name); // Start the game in networking mode as server
 			}
 			else // Client code
 			{
-				const String &host_name = parser.pullAsString("TA3D.Server name");
+				const String& host_name = parser.pullAsString("TA3D.Server name");
 				Menus::SetupGame::Execute(true, host_name); // Start the game in networking mode as server
 			}
 		}
@@ -124,7 +124,7 @@ using namespace TA3D;
 **           Remember if you throw an error, or generate one, you are responsible for
 **             cleaning up what you initialized!
 */
-static int ParseCommandLine(int argc, char *argv[])
+static int ParseCommandLine(int argc, char* argv[])
 {
 	if (argc > 1)
 	{
@@ -167,7 +167,7 @@ static int ParseCommandLine(int argc, char *argv[])
 	return 0;
 }
 
-static void InitializeTheEngine(TA3D::Engine &engine)
+static void InitializeTheEngine(TA3D::Engine& engine)
 {
 	// Engine: Start the loading of data in background (thread)
 	engine.start();
@@ -177,7 +177,7 @@ static void InitializeTheEngine(TA3D::Engine &engine)
 	LOG_INFO("The engine is ready.");
 }
 
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
 	// Initialize signals
 	init_signals();
@@ -226,17 +226,17 @@ int main(int argc, char *argv[])
 		//   need to try/catch this but no worries for now since its not doing anything.
 		TA3D::Settings::Save();
 	}
-	catch (const char *msg)
+	catch (const char* msg)
 	{
 		criticalMessage(msg);
 		return 1;
 	}
-	catch (const String &msg)
+	catch (const String& msg)
 	{
 		criticalMessage(msg);
 		return 1;
 	}
-	catch (const std::exception &e)
+	catch (const std::exception& e)
 	{
 		criticalMessage(String("Uncaught exception: ") << e.what());
 		return 1;

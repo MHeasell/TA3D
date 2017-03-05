@@ -10,10 +10,10 @@ namespace TA3D
 		}
 
 		//! The getArchiveList mechanism
-		std::list<Archive::ArchiveFinder> *Archive::listArchiveFinder = NULL;
-		std::list<Archive::ArchiveLoader> *Archive::listArchiveLoader = NULL;
+		std::list<Archive::ArchiveFinder>* Archive::listArchiveFinder = NULL;
+		std::list<Archive::ArchiveLoader>* Archive::listArchiveLoader = NULL;
 
-		void Archive::getArchiveList(String::List &fileList, const String &path)
+		void Archive::getArchiveList(String::List& fileList, const String& path)
 		{
 			if (!listArchiveFinder)
 				listArchiveFinder = new std::list<Archive::ArchiveFinder>;
@@ -35,25 +35,25 @@ namespace TA3D
 			Archive::listArchiveLoader->push_back(loader);
 		}
 
-		Archive *Archive::load(const String &filename)
+		Archive* Archive::load(const String& filename)
 		{
 			if (!listArchiveLoader)
 				listArchiveLoader = new std::list<Archive::ArchiveLoader>;
 			for (std::list<ArchiveLoader>::iterator i = listArchiveLoader->begin(); i != listArchiveLoader->end(); ++i)
 			{
-				Archive *archive = (*i)(filename);
+				Archive* archive = (*i)(filename);
 				if (archive)
 					return archive;
 			}
 			return NULL;
 		}
 
-		File *Archive::FileInfo::read()
+		File* Archive::FileInfo::read()
 		{
 			return parent->readFile(this);
 		}
 
-		File *Archive::FileInfo::readRange(const uint32 start, const uint32 length)
+		File* Archive::FileInfo::readRange(const uint32 start, const uint32 length)
 		{
 			return parent->readFileRange(this, start, length);
 		}

@@ -35,12 +35,7 @@ namespace TA3D
 	{
 
 		WND::WND()
-			: x(SCREEN_W >> 2), y(SCREEN_H >> 2), width(SCREEN_W >> 1), height(SCREEN_H >> 1),
-			  title_h(0), Title(), Name(), obj_hashtable(),
-			  background(0), repeat_bkg(false), bkg_w(1), bkg_h(1), Lock(false), show_title(true),
-			  draw_borders(true), hidden(false), was_hidden(false), tab_was_pressed(false),
-			  background_wnd(false), get_focus(false), delete_gltex(false), size_factor(1.),
-			  ingame_window(false)
+			: x(SCREEN_W >> 2), y(SCREEN_H >> 2), width(SCREEN_W >> 1), height(SCREEN_H >> 1), title_h(0), Title(), Name(), obj_hashtable(), background(0), repeat_bkg(false), bkg_w(1), bkg_h(1), Lock(false), show_title(true), draw_borders(true), hidden(false), was_hidden(false), tab_was_pressed(false), background_wnd(false), get_focus(false), delete_gltex(false), size_factor(1.), ingame_window(false)
 		{
 			color = makeacol(0x7F, 0x7F, 0x7F, 0xFF); // Default : grey
 			pCacheFontHeight = gui_font->height();
@@ -52,12 +47,7 @@ namespace TA3D
 		}
 
 		WND::WND(const String& filename)
-			: x(SCREEN_W >> 2), y(SCREEN_H >> 2), width(SCREEN_W >> 1), height(SCREEN_H >> 1),
-			  title_h(0), Title(), Name(), obj_hashtable(),
-			  background(0), repeat_bkg(false), bkg_w(1), bkg_h(1), Lock(false), show_title(true),
-			  draw_borders(true), hidden(false), was_hidden(false), tab_was_pressed(false),
-			  background_wnd(false), get_focus(false), delete_gltex(false), size_factor(1.),
-			  ingame_window(false)
+			: x(SCREEN_W >> 2), y(SCREEN_H >> 2), width(SCREEN_W >> 1), height(SCREEN_H >> 1), title_h(0), Title(), Name(), obj_hashtable(), background(0), repeat_bkg(false), bkg_w(1), bkg_h(1), Lock(false), show_title(true), draw_borders(true), hidden(false), was_hidden(false), tab_was_pressed(false), background_wnd(false), get_focus(false), delete_gltex(false), size_factor(1.), ingame_window(false)
 
 		{
 			scrolling = 0;
@@ -139,9 +129,9 @@ namespace TA3D
 				return;
 
 			skin->ObjectShadow((float)x - skin->wnd_border.x1, (float)y - skin->wnd_border.y1,
-							   (float)(x + width) - skin->wnd_border.x2, (float)(y + height) - skin->wnd_border.y2,
-							   3, 3,
-							   0.5f, 10.0f);
+				(float)(x + width) - skin->wnd_border.x2, (float)(y + height) - skin->wnd_border.y2,
+				3, 3,
+				0.5f, 10.0f);
 		}
 
 		void WND::doDrawWindowBackground(Skin* skin)
@@ -191,9 +181,9 @@ namespace TA3D
 				if (draw_borders && skin->wnd_border.tex)
 				{
 					skin->wnd_border.draw((float)x - skin->wnd_border.x1,
-										  (float)y - skin->wnd_border.y1,
-										  (float)(x + width) - skin->wnd_border.x2,
-										  (float)(y + height) - skin->wnd_border.y2, false);
+						(float)y - skin->wnd_border.y1,
+						(float)(x + width) - skin->wnd_border.x2,
+						(float)(y + height) - skin->wnd_border.y2, false);
 				}
 				if (show_title && skin->wnd_title_bar.tex)
 				{
@@ -229,9 +219,9 @@ namespace TA3D
 						} while (s > 0 && smin != smax);
 					}
 					gfx->print(gui_font,
-							   (float)(x + 5) + skin->wnd_title_bar.x1,
-							   (float)(y + 3) + ((float)title_h - pCacheFontHeight) * 0.5f,
-							   0, White, cutTitle);
+						(float)(x + 5) + skin->wnd_title_bar.x1,
+						(float)(y + 3) + ((float)title_h - pCacheFontHeight) * 0.5f,
+						0, White, cutTitle);
 				}
 				glDisable(GL_BLEND);
 				glBindTexture(GL_TEXTURE_2D, 0);
@@ -351,7 +341,7 @@ namespace TA3D
 					else
 					{
 						object->Data = skin->draw_text_adjust(x + object->x1, y + object->y1, x + object->x2, y + object->y2,
-															  object->Text[0], object->Pos, object->Flag & FLAG_MISSION_MODE);
+							object->Text[0], object->Pos, object->Flag & FLAG_MISSION_MODE);
 						if (object->Data > 0)
 							object->Pos %= object->Data;
 					}
@@ -361,10 +351,10 @@ namespace TA3D
 				case OBJ_TA_BUTTON:
 				{
 					const int cur_img = (object->Flag & FLAG_DISABLED)
-											? (int)object->gltex_states.size() - 1
-											: ((object->activated && object->nb_stages == 1)
-												   ? (int)object->gltex_states.size() - 2
-												   : (int)object->current_state);
+						? (int)object->gltex_states.size() - 1
+						: ((object->activated && object->nb_stages == 1)
+								  ? (int)object->gltex_states.size() - 2
+								  : (int)object->current_state);
 					if (cur_img < (int)object->gltex_states.size() && cur_img >= 0)
 					{
 						gfx->set_color(0xFFFFFFFF);
@@ -388,13 +378,13 @@ namespace TA3D
 				case OBJ_HSLIDER:
 				case OBJ_VSLIDER:
 					skin->ScrollBar(x + object->x1, y + object->y1, x + object->x2, y + object->y2,
-									((float)(object->Value - object->Data)) / float(object->Pos - object->Data),
-									object->Type == OBJ_VSLIDER);
+						((float)(object->Value - object->Data)) / float(object->Pos - object->Data),
+						object->Type == OBJ_VSLIDER);
 					break;
 
 				case OBJ_LIST:
 					skin->ListBox(x + object->x1, y + object->y1, x + object->x2, y + object->y2,
-								  object->Text, object->Pos, object->Data, object->Flag);
+						object->Text, object->Pos, object->Data, object->Flag);
 					break;
 
 				case OBJ_LINE:
@@ -408,7 +398,7 @@ namespace TA3D
 					gfx->disable_texturing();
 					if (object->Flag & FLAG_FILL)
 						gfx->rectfill(x + object->x1, y + object->y1,
-									  x + object->x2, y + object->y2, object->Data);
+							x + object->x2, y + object->y2, object->Data);
 					else
 						gfx->rect(x + object->x1, y + object->y1, x + object->x2, y + object->y2, object->Data);
 					gfx->enable_texturing();
@@ -459,7 +449,7 @@ namespace TA3D
 					if (!object->Etat)
 					{
 						skin->button(x + object->x1, y + object->y1, x + object->x2, y + object->y2,
-									 object->Text[0], object->activated || object->Etat, !disabled);
+							object->Text[0], object->activated || object->Etat, !disabled);
 						disabled = false;
 					}
 					break;
@@ -499,18 +489,18 @@ namespace TA3D
 			{
 				case OBJ_FMENU: // Menu flottant
 					skin->FloatMenu(x + object->x1, y + object->y1, object->Text,
-									object->Data, 0);
+						object->Data, 0);
 					break;
 				case OBJ_MENU: // Menu déroulant
 					if (object->Etat)
 					{
 						skin->button(x + object->x1, y + object->y1,
-									 x + object->x2, y + object->y2,
-									 object->Text[0],
-									 object->activated || object->Etat, true);
+							x + object->x2, y + object->y2,
+							object->Text[0],
+							object->activated || object->Etat, true);
 						skin->FloatMenu(x + object->x1, y + object->y2 + 1.0f,
-										object->Text, object->Data + 1,
-										1 + object->Pos);
+							object->Text, object->Data + 1,
+							1 + object->Pos);
 					}
 					break;
 			}
@@ -872,7 +862,7 @@ namespace TA3D
 									if (object->Pos < object->Text[object->Data].utf8size())
 									{
 										object->Text[object->Data] = SubstrUTF8(object->Text[object->Data], 0, object->Pos)
-																	 << SubstrUTF8(object->Text[object->Data], object->Pos + 1, object->Text[object->Data].utf8size() - object->Pos - 1);
+											<< SubstrUTF8(object->Text[object->Data], object->Pos + 1, object->Text[object->Data].utf8size() - object->Pos - 1);
 									}
 									else if (object->Data + 1 < object->Text.size())
 									{
@@ -886,7 +876,7 @@ namespace TA3D
 									if (object->Pos > 0)
 									{
 										object->Text[object->Data] = SubstrUTF8(object->Text[object->Data], 0, object->Pos - 1)
-																	 << SubstrUTF8(object->Text[object->Data], object->Pos, object->Text[object->Data].utf8size() - object->Pos);
+											<< SubstrUTF8(object->Text[object->Data], object->Pos, object->Text[object->Data].utf8size() - object->Pos);
 										object->Pos--;
 									}
 									else if (object->Data > 0)
@@ -939,8 +929,8 @@ namespace TA3D
 											break;
 										default:
 											object->Text[object->Data] = SubstrUTF8(object->Text[object->Data], 0, object->Pos)
-																		 << InttoUTF8(Key)
-																		 << SubstrUTF8(object->Text[object->Data], object->Pos, object->Text[object->Data].utf8size() - object->Pos);
+												<< InttoUTF8(Key)
+												<< SubstrUTF8(object->Text[object->Data], object->Pos, object->Text[object->Data].utf8size() - object->Pos);
 											object->Pos++;
 									}
 							}

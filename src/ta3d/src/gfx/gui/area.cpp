@@ -296,8 +296,8 @@ namespace TA3D
 
 			name = areaFile.pullAsString("area.name", name); // The TDF may override the area name
 			skin_name = (lp_CONFIG != NULL && !lp_CONFIG->skin_name.empty())
-							? lp_CONFIG->skin_name
-							: areaFile.pullAsString("area.skin");
+				? lp_CONFIG->skin_name
+				: areaFile.pullAsString("area.skin");
 
 			if (VFS::Instance()->fileExists(skin_name)) // Loads a skin
 			{

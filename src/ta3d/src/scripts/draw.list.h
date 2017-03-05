@@ -63,9 +63,9 @@ namespace TA3D
 		DrawList() { init(); }
 		~DrawList() { destroy(); }
 
-		void add(DrawObject &obj);
+		void add(DrawObject& obj);
 
-		void draw(Font *fnt);
+		void draw(Font* fnt);
 	};
 
 } // namespace TA3D

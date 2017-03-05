@@ -30,8 +30,8 @@ namespace TA3D
 	public:
 		MemoryPool(const size_t capacity) : capacity(capacity)
 		{
-			buffer = (T *)malloc(sizeof(T) * capacity);
-			unused = (T **)malloc(sizeof(T *) * capacity);
+			buffer = (T*)malloc(sizeof(T) * capacity);
+			unused = (T**)malloc(sizeof(T*) * capacity);
 			reset();
 		}
 
@@ -48,17 +48,17 @@ namespace TA3D
 			used = 0;
 		}
 
-		T *alloc()
+		T* alloc()
 		{
 			if (used == capacity) // No more pre-allocated slot
 				throw std::bad_alloc();
-			T *p = unused[used];
+			T* p = unused[used];
 			++used;
 			new (p) T;
 			return p;
 		}
 
-		void release(T *p)
+		void release(T* p)
 		{
 			if (used == 0U)
 				throw std::invalid_argument(std::string("MemoryPool::release has no slot in use"));
@@ -69,8 +69,8 @@ namespace TA3D
 	private:
 		const size_t capacity;
 		size_t used;
-		T **unused;
-		T *buffer;
+		T** unused;
+		T* buffer;
 	};
 }
 

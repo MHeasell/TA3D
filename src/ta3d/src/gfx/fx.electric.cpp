@@ -56,9 +56,9 @@ namespace TA3D
 		for (float i = start; i <= end; i += step)
 		{
 			glColor4ub(static_cast<GLubyte>(0x70 + (Math::RandomTable() & 0x1F)),
-					   static_cast<GLubyte>(0x70 + (Math::RandomTable() & 0x1F)),
-					   static_cast<GLubyte>(0xFF - ((int)Math::RandomTable() & 0xF)),
-					   0xFF);
+				static_cast<GLubyte>(0x70 + (Math::RandomTable() & 0x1F)),
+				static_cast<GLubyte>(0xFF - ((int)Math::RandomTable() & 0xF)),
+				0xFF);
 
 			p = Pos;
 			p += (cosf(i) * 2.0f) * V;

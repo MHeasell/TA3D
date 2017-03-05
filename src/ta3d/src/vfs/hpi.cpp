@@ -12,7 +12,7 @@ namespace TA3D
 		//! Magic autoregistration
 		REGISTER_ARCHIVE_TYPE(Hpi);
 
-		void Hpi::finder(String::List &fileList, const String &path)
+		void Hpi::finder(String::List& fileList, const String& path)
 		{
 			String::List files;
 			if (path.last() == Paths::Separator)
@@ -27,7 +27,7 @@ namespace TA3D
 			}
 		}
 
-		Archive *Hpi::loader(const String &filename)
+		Archive* Hpi::loader(const String& filename)
 		{
 			String ext = Paths::ExtractFileExt(filename).toLower();
 			if (ext == ".hpi" || ext == ".gp3" || ext == ".ccx" || ext == ".ufo")
@@ -35,7 +35,7 @@ namespace TA3D
 			return NULL;
 		}
 
-		Hpi::Hpi(const String &filename)
+		Hpi::Hpi(const String& filename)
 		{
 			directory = NULL;
 			open(filename);
@@ -46,7 +46,7 @@ namespace TA3D
 			close();
 		}
 
-		void Hpi::open(const String &filename)
+		void Hpi::open(const String& filename)
 		{
 			close();
 
@@ -69,7 +69,7 @@ namespace TA3D
 			}
 
 			HPIVERSION hv;
-			HPIFile.read((char *)&hv, sizeof(HPIVERSION));
+			HPIFile.read((char*)&hv, sizeof(HPIVERSION));
 
 			if (hv.Version != HPI_V1 || hv.HPIMarker != HEX_HAPI)
 			{
@@ -78,7 +78,7 @@ namespace TA3D
 				return;
 			}
 
-			HPIFile.read((char *)&header, sizeof(HPIHEADER));
+			HPIFile.read((char*)&header, sizeof(HPIHEADER));
 			if (header.Key)
 				key = sint8((header.Key * 4) | (header.Key >> 6));
 			else
@@ -89,7 +89,7 @@ namespace TA3D
 
 			directory = new sint8[size];
 
-			readAndDecrypt(start, (byte *)directory + start, size - start);
+			readAndDecrypt(start, (byte*)directory + start, size - start);
 		}
 
 		void Hpi::close()
@@ -100,48 +100,48 @@ namespace TA3D
 			if (HPIFile.is_open())
 				HPIFile.close();
 
-			for (HashMap<HpiFile *>::Sparse::iterator i = files.begin(); i != files.end(); ++i)
+			for (HashMap<HpiFile*>::Sparse::iterator i = files.begin(); i != files.end(); ++i)
 				delete *i;
 			files.clear();
 		}
 
-		void Hpi::getFileList(std::deque<FileInfo *> &lFiles)
+		void Hpi::getFileList(std::deque<FileInfo*>& lFiles)
 		{
 			if (files.empty())
 			{
 				m_cDir.clear();
 				processRoot(String(), header.Start);
 			}
-			for (HashMap<HpiFile *>::Sparse::iterator i = files.begin(); i != files.end(); ++i)
+			for (HashMap<HpiFile*>::Sparse::iterator i = files.begin(); i != files.end(); ++i)
 				lFiles.push_back(*i);
 		}
 
-		File *Hpi::readFile(const String &filename)
+		File* Hpi::readFile(const String& filename)
 		{
 			String key = ToLower(filename);
 			key.convertSlashesIntoBackslashes();
-			HashMap<HpiFile *>::Sparse::iterator item = files.find(key);
+			HashMap<HpiFile*>::Sparse::iterator item = files.find(key);
 			if (item == files.end())
 				return NULL;
 			return readFile(*item);
 		}
 
-		File *Hpi::readFile(const FileInfo *file)
+		File* Hpi::readFile(const FileInfo* file)
 		{
-			const HpiFile *hi = (const HpiFile *)file;
+			const HpiFile* hi = (const HpiFile*)file;
 
 			if (!hi)
 				return NULL;
 
 			sint32 DeCount, DeLen, x, WriteSize, WritePtr, Offset, Length, FileFlag, *DeSize;
 			byte *DeBuff, *WriteBuff;
-			const HPIENTRY *entry;
-			HPICHUNK *chunk;
+			const HPIENTRY* entry;
+			HPICHUNK* chunk;
 
 			entry = &(hi->entry);
 
-			Offset = *((sint32 *)(directory + entry->CountOffset));
-			Length = *((sint32 *)(directory + entry->CountOffset + 4));
+			Offset = *((sint32*)(directory + entry->CountOffset));
+			Length = *((sint32*)(directory + entry->CountOffset + 4));
 			FileFlag = *(directory + entry->CountOffset + 8);
 
 			WriteBuff = new byte[Length + 1];
@@ -158,7 +158,7 @@ namespace TA3D
 
 				DeLen = DeCount * (int)sizeof(sint32);
 
-				readAndDecrypt(Offset, (byte *)DeSize, DeLen);
+				readAndDecrypt(Offset, (byte*)DeSize, DeLen);
 
 				Offset += DeLen;
 
@@ -166,11 +166,11 @@ namespace TA3D
 
 				for (x = 0; x < DeCount; ++x)
 				{
-					chunk = (HPICHUNK *)new byte[DeSize[x]];
-					readAndDecrypt(Offset, (byte *)chunk, DeSize[x]);
+					chunk = (HPICHUNK*)new byte[DeSize[x]];
+					readAndDecrypt(Offset, (byte*)chunk, DeSize[x]);
 					Offset += DeSize[x];
 
-					DeBuff = (byte *)(chunk + 1);
+					DeBuff = (byte*)(chunk + 1);
 
 					WriteSize = decompress(WriteBuff + WritePtr, DeBuff, chunk);
 					WritePtr += WriteSize;
@@ -190,29 +190,29 @@ namespace TA3D
 			return new VirtualFile(WriteBuff, Length);
 		}
 
-		File *Hpi::readFileRange(const String &filename, const uint32 start, const uint32 length)
+		File* Hpi::readFileRange(const String& filename, const uint32 start, const uint32 length)
 		{
 			String key = ToLower(filename);
 			key.convertSlashesIntoBackslashes();
-			HashMap<HpiFile *>::Sparse::iterator item = files.find(key);
+			HashMap<HpiFile*>::Sparse::iterator item = files.find(key);
 			if (item == files.end())
 				return NULL;
 			return readFileRange(*item, start, length);
 		}
 
-		File *Hpi::readFileRange(const FileInfo *file, const uint32 start, const uint32 length)
+		File* Hpi::readFileRange(const FileInfo* file, const uint32 start, const uint32 length)
 		{
-			const HpiFile *hi = (const HpiFile *)file;
+			const HpiFile* hi = (const HpiFile*)file;
 			if (!hi)
 				return NULL;
 			sint32 DeCount, DeLen, x, WriteSize, WritePtr, Offset, Length, FileFlag, *DeSize;
 			byte *DeBuff, *WriteBuff;
-			const HPIENTRY *entry;
+			const HPIENTRY* entry;
 
 			entry = &(hi->entry);
 
-			Offset = *((sint32 *)(directory + entry->CountOffset));
-			Length = *((sint32 *)(directory + entry->CountOffset + 4));
+			Offset = *((sint32*)(directory + entry->CountOffset));
+			Length = *((sint32*)(directory + entry->CountOffset + 4));
 			FileFlag = *(directory + entry->CountOffset + 8);
 
 			WriteBuff = new byte[Length + 1];
@@ -228,21 +228,21 @@ namespace TA3D
 				DeSize = new sint32[DeCount];
 				DeLen = DeCount * (int)sizeof(sint32);
 
-				readAndDecrypt(Offset, (byte *)DeSize, DeLen);
+				readAndDecrypt(Offset, (byte*)DeSize, DeLen);
 				Offset += DeLen;
 				WritePtr = 0;
 
 				for (x = 0; x < DeCount; ++x)
 				{
-					byte *ChunkBytes = new byte[DeSize[x]];
+					byte* ChunkBytes = new byte[DeSize[x]];
 					readAndDecrypt(Offset, ChunkBytes, DeSize[x]);
 					Offset += DeSize[x];
 
-					HPICHUNK *Chunk = &((HPICHUNK_U *)ChunkBytes)->chunk; // strict-aliasing safe
+					HPICHUNK* Chunk = &((HPICHUNK_U*)ChunkBytes)->chunk; // strict-aliasing safe
 					if ((uint32)WritePtr >= start || WritePtr + Chunk->DecompressedSize >= (sint32)start)
 					{
 
-						DeBuff = (byte *)(Chunk + 1);
+						DeBuff = (byte*)(Chunk + 1);
 
 						WriteSize = decompress(WriteBuff + WritePtr, DeBuff, Chunk);
 						WritePtr += WriteSize;
@@ -265,11 +265,11 @@ namespace TA3D
 			return new VirtualFile(WriteBuff, Math::Min(length, Length - start), start, Length);
 		}
 
-		sint32 Hpi::readAndDecrypt(sint32 fpos, byte *buff, const sint32 buffsize)
+		sint32 Hpi::readAndDecrypt(sint32 fpos, byte* buff, const sint32 buffsize)
 		{
 			sint32 result;
 			HPIFile.seekg(fpos);
-			HPIFile.read((char *)buff, buffsize);
+			HPIFile.read((char*)buff, buffsize);
 			result = HPIFile.gcount();
 			if (key)
 			{
@@ -279,7 +279,7 @@ namespace TA3D
 			return result;
 		}
 
-		sint32 Hpi::ZLibDecompress(byte *out, byte *in, HPICHUNK *Chunk)
+		sint32 Hpi::ZLibDecompress(byte* out, byte* in, HPICHUNK* Chunk)
 		{
 			z_stream zs;
 			sint32 result;
@@ -325,9 +325,9 @@ namespace TA3D
 			return (sint32)zs.total_out;
 		}
 
-		sint32 Hpi::LZ77Decompress(byte *out, byte *in)
+		sint32 Hpi::LZ77Decompress(byte* out, byte* in)
 		{
-			byte *out0 = out;
+			byte* out0 = out;
 			sint32 work1, work2, work3;
 			schar DBuff[4096];
 
@@ -346,7 +346,7 @@ namespace TA3D
 				}
 				else
 				{
-					int count = *((uint16 *)(in));
+					int count = *((uint16*)(in));
 					in += 2;
 					int DPtr = count >> 4;
 					if (DPtr == 0)
@@ -356,7 +356,7 @@ namespace TA3D
 						count = (count & 0x0f) + 2;
 						if (count >= 0)
 						{
-							for (byte *end = out + count; out != end; ++out)
+							for (byte* end = out + count; out != end; ++out)
 							{
 								*out = DBuff[work1] = DBuff[DPtr];
 								DPtr = (DPtr + 1) & 0xFFF;
@@ -375,7 +375,7 @@ namespace TA3D
 			return sint32(out - out0);
 		}
 
-		sint32 Hpi::decompress(byte *out, byte *in, HPICHUNK *Chunk)
+		sint32 Hpi::decompress(byte* out, byte* in, HPICHUNK* Chunk)
 		{
 			sint32 Checksum(0);
 			for (sint32 x = 0; x < Chunk->CompressedSize; ++x)
@@ -402,30 +402,30 @@ namespace TA3D
 			};
 		}
 
-		void Hpi::processSubDir(HPIENTRY *base)
+		void Hpi::processSubDir(HPIENTRY* base)
 		{
 			sint32 *FileCount, *FileLength, *EntryOffset, *Entries, count;
-			schar *Name;
-			HPIENTRY *Entry;
+			schar* Name;
+			HPIENTRY* Entry;
 
 			if (base)
-				Entries = (sint32 *)(directory + base->CountOffset);
+				Entries = (sint32*)(directory + base->CountOffset);
 			else
-				Entries = (sint32 *)(directory + header.Start);
+				Entries = (sint32*)(directory + header.Start);
 
 			EntryOffset = Entries + 1;
-			Entry = (HPIENTRY *)(directory + *EntryOffset);
+			Entry = (HPIENTRY*)(directory + *EntryOffset);
 
 			for (count = 0; count < *Entries; ++count)
 			{
-				Name = (schar *)(directory + Entry->NameOffset);
-				FileCount = (sint32 *)(directory + Entry->CountOffset);
+				Name = (schar*)(directory + Entry->NameOffset);
+				FileCount = (sint32*)(directory + Entry->CountOffset);
 				FileLength = FileCount + 1;
 
 				if (Entry->Flag == 1)
 				{
 					String sDir = m_cDir; // save directory
-					m_cDir << (char *)Name << "\\";
+					m_cDir << (char*)Name << "\\";
 
 					processSubDir(Entry); // process new directory
 
@@ -433,54 +433,54 @@ namespace TA3D
 				}
 				else
 				{
-					HpiFile *li = new HpiFile;
-					String f(ToLower(m_cDir + (char *)Name));
+					HpiFile* li = new HpiFile;
+					String f(ToLower(m_cDir + (char*)Name));
 					li->setName(f);
 					li->setParent(this);
 					li->setPriority(priority);
 					li->entry = *Entry;
 					li->size = *FileLength;
-					files.insert(std::pair<String, HpiFile *>(f, li));
+					files.insert(std::pair<String, HpiFile*>(f, li));
 				}
 				++Entry;
 			}
 		}
 
-		void Hpi::processRoot(const String &startPath, const sint32 offset)
+		void Hpi::processRoot(const String& startPath, const sint32 offset)
 		{
 			sint32 *Entries, *FileCount, *FileLength, *EntryOffset;
-			schar *Name;
+			schar* Name;
 			String MyPath;
 
-			Entries = (sint32 *)(directory + offset);
+			Entries = (sint32*)(directory + offset);
 			EntryOffset = Entries + 1;
-			HPIENTRY *Entry = (HPIENTRY *)(directory + *EntryOffset);
+			HPIENTRY* Entry = (HPIENTRY*)(directory + *EntryOffset);
 
 			for (sint32 count = 0; count < *Entries; ++count)
 			{
-				Name = (schar *)(directory + Entry->NameOffset);
-				FileCount = (sint32 *)(directory + Entry->CountOffset);
+				Name = (schar*)(directory + Entry->NameOffset);
+				FileCount = (sint32*)(directory + Entry->CountOffset);
 				FileLength = FileCount + 1;
 				if (Entry->Flag == 1)
 				{
 					MyPath = startPath;
 					if (MyPath.length())
 						MyPath << "\\";
-					MyPath += (char *)Name;
+					MyPath += (char*)Name;
 					m_cDir = String(MyPath) << "\\";
 
 					processSubDir(Entry);
 				}
 				else
 				{
-					HpiFile *li = new HpiFile;
-					String f(ToLower(m_cDir + (char *)Name));
+					HpiFile* li = new HpiFile;
+					String f(ToLower(m_cDir + (char*)Name));
 					li->setName(f);
 					li->setParent(this);
 					li->setPriority(priority);
 					li->entry = *Entry;
 					li->size = *FileLength;
-					files.insert(std::pair<String, HpiFile *>(f, li));
+					files.insert(std::pair<String, HpiFile*>(f, li));
 				}
 				++Entry;
 			}

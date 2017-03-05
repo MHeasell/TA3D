@@ -72,7 +72,7 @@ namespace TA3D
 		WeightCoef(uint32 a, uint32 b);
 	};
 
-	inline bool operator<(const WeightCoef &a, const WeightCoef &b) { return a.c > b.c; }
+	inline bool operator<(const WeightCoef& a, const WeightCoef& b) { return a.c > b.c; }
 
 } // namespace TA3D
 

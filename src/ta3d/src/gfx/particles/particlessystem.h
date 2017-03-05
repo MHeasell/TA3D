@@ -61,8 +61,8 @@ namespace TA3D
 
 	public:
 		uint32 nb_particles;
-		Vector3D *pos;
-		Vector3D *V;
+		Vector3D* pos;
+		Vector3D* V;
 		Vector3D common_pos;
 		float size;
 		float dsize;

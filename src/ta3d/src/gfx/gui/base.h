@@ -145,7 +145,7 @@ namespace TA3D
 	namespace Gui
 	{
 
-		extern TA3D::Font *gui_font;
+		extern TA3D::Font* gui_font;
 
 	} // namespace Gui
 } // namespace TA3D

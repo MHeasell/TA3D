@@ -57,7 +57,7 @@ namespace TA3D
 		** \return serialized data
 		*/
 		String serialize() const;
-		void unserialize(const String &data);
+		void unserialize(const String& data);
 
 	public:
 		//! Which map to play

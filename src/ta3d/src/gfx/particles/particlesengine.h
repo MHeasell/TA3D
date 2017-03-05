@@ -62,7 +62,7 @@ namespace TA3D
         ** \param file
         ** \param filealpha
         */
-		int addtex(const String &file, const String &filealpha = "");
+		int addtex(const String& file, const String& filealpha = "");
 
 		/*!
         ** \brief
@@ -70,7 +70,7 @@ namespace TA3D
         ** \param g
         ** \param wind_dir
         */
-		void set_data(float &g, Vector3D &wind_dir)
+		void set_data(float& g, Vector3D& wind_dir)
 		{
 			p_g = &g;
 			p_wind_dir = &wind_dir;
@@ -79,44 +79,44 @@ namespace TA3D
 		/*!
         ** \brief
         */
-		void emit_part(const Vector3D &pos, const Vector3D &Dir, int tex, int nb, float speed, float life = 10.0f, float psize = 10.0f, bool white = false, float trans_factor = 1.0f);
+		void emit_part(const Vector3D& pos, const Vector3D& Dir, int tex, int nb, float speed, float life = 10.0f, float psize = 10.0f, bool white = false, float trans_factor = 1.0f);
 
 		/*!
         ** \brief
         */
-		ParticlesSystem *emit_part_fast(ParticlesSystem *system, const Vector3D &pos, const Vector3D &Dir,
-										int tex, int nb, float speed, float life = 10.0f,
-										float psize = 10.0f, bool white = false, float trans_factor = 1.0f);
+		ParticlesSystem* emit_part_fast(ParticlesSystem* system, const Vector3D& pos, const Vector3D& Dir,
+			int tex, int nb, float speed, float life = 10.0f,
+			float psize = 10.0f, bool white = false, float trans_factor = 1.0f);
 
 		/*!
         ** \brief
         */
-		void emit_lava(const Vector3D &pos, const Vector3D &Dir, int tex, int nb, float speed, float life = 10.0f);
+		void emit_lava(const Vector3D& pos, const Vector3D& Dir, int tex, int nb, float speed, float life = 10.0f);
 
 		/*!
         ** \brief
         */
-		void make_smoke(const Vector3D &pos, int tex, int nb, float speed, float mass = -1.0f, float ddsize = 0.0f, float alpha = 1.0f);
+		void make_smoke(const Vector3D& pos, int tex, int nb, float speed, float mass = -1.0f, float ddsize = 0.0f, float alpha = 1.0f);
 
 		/*!
         ** \brief
         */
-		void make_dark_smoke(const Vector3D &pos, int tex, int nb, float speed, float mass = -1.0f, float ddsize = 0.0f, float alpha = 1.0f);
+		void make_dark_smoke(const Vector3D& pos, int tex, int nb, float speed, float mass = -1.0f, float ddsize = 0.0f, float alpha = 1.0f);
 
 		/*!
         ** \brief
         */
-		void make_fire(const Vector3D &pos, int tex, int nb, float speed);
+		void make_fire(const Vector3D& pos, int tex, int nb, float speed);
 
 		/*!
         ** \brief
         */
-		void make_shockwave(const Vector3D &pos, int tex, int nb, float speed);
+		void make_shockwave(const Vector3D& pos, int tex, int nb, float speed);
 
 		/*!
         ** \brief
         */
-		void make_nuke(const Vector3D &pos, int tex, int nb, float speed);
+		void make_nuke(const Vector3D& pos, int tex, int nb, float speed);
 
 		/*!
         ** \brief
@@ -125,12 +125,12 @@ namespace TA3D
         ** \param wind_dir
         ** \param g Constant of Gravity
         */
-		void move(float dt, const Vector3D &wind_dir, float g = 9.81f);
+		void move(float dt, const Vector3D& wind_dir, float g = 9.81f);
 
 		/*!
         ** \brief
         */
-		void draw(Camera *cam);
+		void draw(Camera* cam);
 
 		/*!
 		** \brief
@@ -142,24 +142,24 @@ namespace TA3D
 		uint32 size;				// Quantité maximale de particules stockables dans le tableau
 		std::vector<PARTICLE> part; // Liste des particules / Particle list
 		GLuint parttex;				// Textures des particules
-		SDL_Surface *partbmp;		// Textures des particules
+		SDL_Surface* partbmp;		// Textures des particules
 		bool dsmoke;
 		uint32 ntex;
 		std::vector<GLuint> gltex;
 
-		Vector3D *point;   // Vertex array
-		GLfloat *texcoord; // Texture coordinates array
-		GLubyte *color;	// Color array
+		Vector3D* point;   // Vertex array
+		GLfloat* texcoord; // Texture coordinates array
+		GLubyte* color;	// Color array
 
 	protected:
 		volatile bool thread_running;
 		volatile bool thread_ask_to_stop;
-		Vector3D *p_wind_dir;
-		float *p_g;
-		std::vector<ParticlesSystem *> particle_systems;
+		Vector3D* p_wind_dir;
+		float* p_g;
+		std::vector<ParticlesSystem*> particle_systems;
 
 	private:
-		void proc(void *);
+		void proc(void*);
 		void signalExitThread();
 
 	}; // class PARTICLE_ENGINE

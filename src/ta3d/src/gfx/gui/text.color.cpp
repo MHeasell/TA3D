@@ -32,7 +32,7 @@ namespace TA3D
 			shadow_dy = 1.0f;
 		}
 
-		void TEXT_COLOR::load(TDFParser &parser, const String &prefix, float scale)
+		void TEXT_COLOR::load(TDFParser& parser, const String& prefix, float scale)
 		{
 			font_color = parser.pullAsColor(String(prefix) << "font_color", makeacol(0xFF, 0xFF, 0xFF, 0xFF));
 			shadow_color = parser.pullAsColor(String(prefix) << "shadow_color", makeacol(0, 0, 0, 0xFF));
@@ -41,7 +41,7 @@ namespace TA3D
 			shadow_dy = parser.pullAsFloat(String(prefix) << "shadow_dy", 1.0f) * scale;
 		}
 
-		void TEXT_COLOR::print(Font *font, const float x, const float y, const String &text) const
+		void TEXT_COLOR::print(Font* font, const float x, const float y, const String& text) const
 		{
 			if (!text.empty())
 			{
@@ -57,7 +57,7 @@ namespace TA3D
 			}
 		}
 
-		void TEXT_COLOR::print(Font *font, const float x, const float y, const uint32 col, const String &text) const
+		void TEXT_COLOR::print(Font* font, const float x, const float y, const uint32 col, const String& text) const
 		{
 			if (!text.empty())
 			{

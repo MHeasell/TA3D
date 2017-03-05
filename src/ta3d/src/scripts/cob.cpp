@@ -75,11 +75,11 @@ namespace TA3D
 		destroy();
 	}
 
-	void CobScript::load(const String &filename)
+	void CobScript::load(const String& filename)
 	{
 		destroy(); // Au cas où
 
-		File *file = VFS::Instance()->readFile(filename);
+		File* file = VFS::Instance()->readFile(filename);
 
 		if (file == NULL)
 			return;
@@ -123,14 +123,14 @@ namespace TA3D
 		Data = new byte[codeSize];
 		file->seek(header.OffsetToScriptCode);
 		file->read(Data, codeSize);
-		script_code = new int *[nb_script];
+		script_code = new int*[nb_script];
 		dec_offset = new int[nb_script];
 		file->seek(header.OffsetToScriptCodeIndexArray);
 		file->read(dec_offset, (int)sizeof(int) * nb_script);
 		for (i = 0; i < nb_script; ++i)
 		{
 			file->seek(4 * dec_offset[i]);
-			script_code[i] = (int *)(Data + 4 * dec_offset[i]);
+			script_code[i] = (int*)(Data + 4 * dec_offset[i]);
 		}
 
 		delete file;
@@ -159,7 +159,7 @@ namespace TA3D
 		codeSize = 0;
 	}
 
-	int CobScript::findFromName(const String &name)
+	int CobScript::findFromName(const String& name)
 	{
 		String nameUpper = name;
 		nameUpper.toUpper();
@@ -172,7 +172,7 @@ namespace TA3D
 		return -1;
 	}
 
-	int CobScript::identify(const String &name)
+	int CobScript::identify(const String& name)
 	{
 		for (int i = 0; i < nb_piece; ++i)
 		{

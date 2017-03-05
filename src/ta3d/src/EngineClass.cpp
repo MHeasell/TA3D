@@ -39,19 +39,18 @@ namespace TA3D
 {
 	unsigned int player_color_map[TA3D_PLAYERS_HARD_LIMIT] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
 
-	const float player_color[TA3D_PLAYERS_HARD_LIMIT * 3] =
-		{0.11f, 0.28f, 0.91f,
-		 0.83f, 0.17f, 0.0f,
-		 1.0f, 1.0f, 1.0f,
-		 0.11f, 0.62f, 0.07f,
-		 0.03f, 0.12f, 0.48f,
-		 0.5f, 0.34f, 0.62f,
-		 1.0f, 1.0f, 0.0f,
-		 0.0f, 0.0f, 0.0f,
-		 0.61f, 0.8f, 0.87f,
-		 0.67f, 0.67f, 0.51f};
+	const float player_color[TA3D_PLAYERS_HARD_LIMIT * 3] = {0.11f, 0.28f, 0.91f,
+		0.83f, 0.17f, 0.0f,
+		1.0f, 1.0f, 1.0f,
+		0.11f, 0.62f, 0.07f,
+		0.03f, 0.12f, 0.48f,
+		0.5f, 0.34f, 0.62f,
+		1.0f, 1.0f, 0.0f,
+		0.0f, 0.0f, 0.0f,
+		0.61f, 0.8f, 0.87f,
+		0.67f, 0.67f, 0.51f};
 
-	MAP *the_map = NULL;
+	MAP* the_map = NULL;
 
 	void SECTOR::init()
 	{
@@ -231,7 +230,7 @@ namespace TA3D
 		return max_h;
 	}
 
-	void MAP::obstaclesRect(int x1, int y1, int w, int h, bool b, const String &yardmap, bool open)
+	void MAP::obstaclesRect(int x1, int y1, int w, int h, bool b, const String& yardmap, bool open)
 	{
 		if (yardmap.empty())
 		{
@@ -282,7 +281,7 @@ namespace TA3D
 		}
 	}
 
-	void MAP::rect(int x1, int y1, int w, int h, int c, const String &yardmap, bool open)
+	void MAP::rect(int x1, int y1, int w, int h, int c, const String& yardmap, bool open)
 	{
 		if (yardmap.empty())
 		{
@@ -438,7 +437,7 @@ namespace TA3D
 		return depth + sealvl;
 	}
 
-	bool MAP::check_vents(int x1, int y1, int w, int h, const String &yard_map) const
+	bool MAP::check_vents(int x1, int y1, int w, int h, const String& yard_map) const
 	{
 		if (yard_map.empty())
 			return true;
@@ -466,7 +465,7 @@ namespace TA3D
 					const int feature_id = map_data(x, y).stuff;
 					if (feature_id >= 0)
 					{
-						const Feature *const pFeature = feature_manager.getFeaturePointer(features.feature[feature_id].type);
+						const Feature* const pFeature = feature_manager.getFeaturePointer(features.feature[feature_id].type);
 						if (pFeature && pFeature->geothermal)
 							return true;
 					}
@@ -601,9 +600,9 @@ namespace TA3D
 		}
 	}
 
-	void MAP::load_details_texture(const String &filename)
+	void MAP::load_details_texture(const String& filename)
 	{
-		SDL_Surface *tex = gfx->load_image(filename);
+		SDL_Surface* tex = gfx->load_image(filename);
 		if (tex)
 		{
 			uint32 average = 0;
@@ -653,9 +652,9 @@ namespace TA3D
 		}
 	}
 
-	void MAP_OTA::load(const String &filename)
+	void MAP_OTA::load(const String& filename)
 	{
-		File *file = VFS::Instance()->readFile(filename);
+		File* file = VFS::Instance()->readFile(filename);
 		if (file)
 		{
 			load(file);
@@ -663,7 +662,7 @@ namespace TA3D
 		}
 	}
 
-	void MAP_OTA::load(File *file)
+	void MAP_OTA::load(File* file)
 	{
 		destroy();
 
@@ -710,7 +709,7 @@ namespace TA3D
 			waterdoesdamage = false;
 	}
 
-	void MAP::draw_mini(int x1, int y1, int w, int h, Camera *cam, byte player_mask) // Draw the mini-map
+	void MAP::draw_mini(int x1, int y1, int w, int h, Camera* cam, byte player_mask) // Draw the mini-map
 	{
 		if (!mini)
 			return; // Check if it exists
@@ -1096,7 +1095,7 @@ namespace TA3D
 
 	inline float sq(float a) { return a * a; }
 
-	void MAP::draw(Camera *cam, byte player_mask, bool FLAT, float niv, float t, float dt, bool depth_only, bool check_visibility, bool draw_uw)
+	void MAP::draw(Camera* cam, byte player_mask, bool FLAT, float niv, float t, float dt, bool depth_only, bool check_visibility, bool draw_uw)
 	{
 		if (FLAT && !water)
 			return;
@@ -1216,7 +1215,7 @@ namespace TA3D
 		gfx->unlock();
 	}
 
-	void renderLine(std::vector<int> &xMin, std::vector<int> &xMax, int x0, int y0, int x1, int y1, int xmax)
+	void renderLine(std::vector<int>& xMin, std::vector<int>& xMax, int x0, int y0, int x1, int y1, int xmax)
 	{
 		if (y0 == y1) // We don't need to handle this case here
 			return;
@@ -1244,7 +1243,7 @@ namespace TA3D
 		}
 	}
 
-	void MAP::draw_HD(Camera *cam, byte player_mask, bool FLAT, float niv, float t, float dt, bool depth_only, bool check_visibility, bool draw_uw)
+	void MAP::draw_HD(Camera* cam, byte player_mask, bool FLAT, float niv, float t, float dt, bool depth_only, bool check_visibility, bool draw_uw)
 	{
 		glPushMatrix();
 
@@ -1273,19 +1272,19 @@ namespace TA3D
 
 		const int nLinks = 18;
 		const int fLink[][2] = {{0, 1}, {1, 2}, {2, 3}, {0, 2}, {1, 3}, // Front face
-								{4, 5},
-								{5, 6},
-								{6, 7},
-								{4, 6},
-								{5, 7}, // Back face
-								{0, 4},
-								{1, 5},
-								{2, 6},
-								{3, 7}, // Sides
-								{0, 6},
-								{1, 7},
-								{0, 5},
-								{2, 7}}; // NB: fLink[i][0] < fLink[i][1] for all possible i
+			{4, 5},
+			{5, 6},
+			{6, 7},
+			{4, 6},
+			{5, 7}, // Back face
+			{0, 4},
+			{1, 5},
+			{2, 6},
+			{3, 7}, // Sides
+			{0, 6},
+			{1, 7},
+			{0, 5},
+			{2, 7}}; // NB: fLink[i][0] < fLink[i][1] for all possible i
 
 		// Once we have the frustum volume, we compute the intersection between this volume and the map "plane" (y = ymin, then y = ymax)
 		// So we need to know what is below yref and what is above (maybe we'll have nothing to render)
@@ -1364,8 +1363,7 @@ namespace TA3D
 					y2 = Math::Max(y2, Y0);
 					for (int e = i + 1; e < nLinks; ++e)
 					{
-						if (fLink[i][0] == fLink[e][0] || fLink[i][0] == fLink[e][1] ||
-							fLink[i][1] == fLink[e][0] || fLink[i][1] == fLink[e][1]) // We have detected a border of the visible area
+						if (fLink[i][0] == fLink[e][0] || fLink[i][0] == fLink[e][1] || fLink[i][1] == fLink[e][0] || fLink[i][1] == fLink[e][1]) // We have detected a border of the visible area
 						{
 							Vector3D C = frustum[fLink[e][0]];
 							Vector3D D = frustum[fLink[e][1]];
@@ -1656,9 +1654,7 @@ namespace TA3D
 				if (FLAT)
 				{
 					bloc[i].point = lvl[pre_y2 + x];
-					if (bloc[i].point == NULL || bloc[i].point[0].y < niv || bloc[i].point[1].y < niv || bloc[i].point[2].y < niv ||
-						bloc[i].point[3].y < niv || bloc[i].point[4].y < niv || bloc[i].point[5].y < niv ||
-						bloc[i].point[6].y < niv || bloc[i].point[7].y < niv || bloc[i].point[8].y < niv)
+					if (bloc[i].point == NULL || bloc[i].point[0].y < niv || bloc[i].point[1].y < niv || bloc[i].point[2].y < niv || bloc[i].point[3].y < niv || bloc[i].point[4].y < niv || bloc[i].point[5].y < niv || bloc[i].point[6].y < niv || bloc[i].point[7].y < niv || bloc[i].point[8].y < niv)
 						bloc[i].point = flat;
 					else
 					{
@@ -1684,10 +1680,7 @@ namespace TA3D
 						else
 						{
 							if (!map_data(X, Y).isLava() && water && !ota_data.lavaworld && !ota_data.whitefog && !under_water && !lp_CONFIG->pause && // A wave
-								(h_map(X | 1, Y | 1) < sealvl || h_map(X | 1, Y) < sealvl || h_map(X, Y | 1) < sealvl || h_map(X, Y) < sealvl) &&
-								(h_map(X | 1, Y | 1) >= sealvl || h_map(X, Y | 1) >= sealvl || h_map(X | 1, Y) >= sealvl || h_map(X, Y) >= sealvl) &&
-								(Math::RandomTable() % 4000) <= lavaprob &&
-								(view_map(x, y) & player_mask) && lp_CONFIG->waves)
+								(h_map(X | 1, Y | 1) < sealvl || h_map(X | 1, Y) < sealvl || h_map(X, Y | 1) < sealvl || h_map(X, Y) < sealvl) && (h_map(X | 1, Y | 1) >= sealvl || h_map(X, Y | 1) >= sealvl || h_map(X | 1, Y) >= sealvl || h_map(X, Y) >= sealvl) && (Math::RandomTable() % 4000) <= lavaprob && (view_map(x, y) & player_mask) && lp_CONFIG->waves)
 							{
 								Vector3D grad;
 								for (int dz = -2; dz <= 2; ++dz)
@@ -1822,7 +1815,7 @@ namespace TA3D
 					}
 				}
 
-				uint8 *color = buf_c + (buf_pos << 2);
+				uint8* color = buf_c + (buf_pos << 2);
 				if (FLAT)
 					for (int e = 0; e < 36; e += 4)
 					{
@@ -2045,8 +2038,8 @@ namespace TA3D
 				X &= 0xFFFFFE;
 				for (i = 0; i < 9; ++i)
 					color[i << 2] = color[(i << 2) + 1] = color[(i << 2) + 2] = color[(i << 2) + 3] = Math::Max(Math::Max(energy(X, Z), energy(X + 1, Z)),
-																												Math::Max(energy(X, Z + 1), energy(X + 1, Z + 1))) *
-																									  IEmax;
+																										  Math::Max(energy(X, Z + 1), energy(X + 1, Z + 1)))
+						* IEmax;
 #endif
 				++buf_size;
 			}
@@ -2143,7 +2136,7 @@ namespace TA3D
 		return Pos; // Best approximate solution found
 	}
 
-	int MAP::check_metal(int x1, int y1, int unit_idx, int *stuff_id) const
+	int MAP::check_metal(int x1, int y1, int unit_idx, int* stuff_id) const
 	{
 		if (unit_idx < 0 || unit_idx >= unit_manager.nb_unit)
 			return 0;
@@ -2169,7 +2162,7 @@ namespace TA3D
 							if (ID >= 0) // We have to recheck this in case it has changed before locking
 							{
 								const int type = features.feature[ID].type;
-								const Feature *const feature = feature_manager.getFeaturePointer(type);
+								const Feature* const feature = feature_manager.getFeaturePointer(type);
 								if (feature && !feature->reclaimable && !feature->blocking)
 								{
 									metal_base += feature->metal;

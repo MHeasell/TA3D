@@ -68,7 +68,7 @@ namespace TA3D
 		/*!
         ** \brief Add an entry in the console
         */
-		void addEntry(const String &newEntry);
+		void addEntry(const String& newEntry);
 
 		/*!
         ** \brief Draw the console
@@ -78,9 +78,9 @@ namespace TA3D
         ** \param fsize Size of the font
         ** \param forceShow Display the console even it should be displayed
         */
-		void draw(TA3D::Font *fnt, const float dt, const bool forceShow = false);
+		void draw(TA3D::Font* fnt, const float dt, const bool forceShow = false);
 
-		String execute(const String &cmd);
+		String execute(const String& cmd);
 
 	private:
 		void registerConsoleAPI();
@@ -108,13 +108,13 @@ namespace TA3D
 		uint32 cursorPos;
 
 		//! The Lua state used to execute commands
-		lua_State *L;
+		lua_State* L;
 
 	private:
-		static Console *pInstance;
+		static Console* pInstance;
 
 	public:
-		static Console *Instance();
+		static Console* Instance();
 	}; //class Console
 
 } // namespace TA3D

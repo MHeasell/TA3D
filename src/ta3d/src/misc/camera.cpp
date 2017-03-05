@@ -94,8 +94,8 @@ namespace TA3D
 			{
 				float rdt = Math::Min(dt_step, dt - c_dt);
 				Vector3D rand_vec(float((TA3D_RAND() % 2001) - 1000) * 0.001f * shakeMagnitude,
-								  float((TA3D_RAND() % 2001) - 1000) * 0.001f * shakeMagnitude,
-								  float((TA3D_RAND() % 2001) - 1000) * 0.001f * shakeMagnitude);
+					float((TA3D_RAND() % 2001) - 1000) * 0.001f * shakeMagnitude,
+					float((TA3D_RAND() % 2001) - 1000) * 0.001f * shakeMagnitude);
 				shakeVector += -rdt * 10.0f * shakeVector;
 				shakeVector += rand_vec;
 				if (shakeVector.x < -20.0f)
@@ -158,8 +158,8 @@ namespace TA3D
 		FP += dir;
 		FP += shakeVector;
 		gluLookAt(pos.x + shakeVector.x, pos.y + shakeVector.y, pos.z + shakeVector.z,
-				  FP.x, FP.y, FP.z,
-				  up.x, up.y, up.z);
+			FP.x, FP.y, FP.z,
+			up.x, up.y, up.z);
 
 		if (!classic)
 		{
@@ -185,8 +185,8 @@ namespace TA3D
 
 		const Vector3D FP(rpos + dir + shakeVector);
 		gluLookAt(pos.x + shakeVector.x, pos.y + shakeVector.y, pos.z + shakeVector.z,
-				  FP.x, FP.y, FP.z,
-				  up.x, up.y, up.z);
+			FP.x, FP.y, FP.z,
+			up.x, up.y, up.z);
 
 		if (mirror)
 		{

@@ -65,7 +65,7 @@ namespace TA3D
 		init3DO();
 	}
 
-	int Mesh3DO::load(File *file, int dec, const String &filename)
+	int Mesh3DO::load(File* file, int dec, const String& filename)
 	{
 		if (nb_vtx > 0)
 			destroy3DO(); // Au cas où l'objet ne serait pas vierge
@@ -108,7 +108,7 @@ namespace TA3D
 #endif
 		if (header.OffsetToChildObject) // Charge récursivement les différents objets du modèle
 		{
-			Mesh3DO *pChild = new Mesh3DO;
+			Mesh3DO* pChild = new Mesh3DO;
 			child = pChild;
 			file->seek(header.OffsetToChildObject);
 			if (pChild->load(file, dec + 1, filename))
@@ -119,7 +119,7 @@ namespace TA3D
 		}
 		if (header.OffsetToSiblingObject) // Charge récursivement les différents objets du modèle
 		{
-			Mesh3DO *pNext = new Mesh3DO;
+			Mesh3DO* pNext = new Mesh3DO;
 			next = pNext;
 			file->seek(header.OffsetToSiblingObject);
 			if (pNext->load(file, dec, filename))
@@ -189,8 +189,8 @@ namespace TA3D
 			p_index = new GLushort[nb_p_index];
 		if (nb_l_index > 0)
 			l_index = new GLushort[nb_l_index];
-		int *tex = NULL;
-		byte *usetex = NULL;
+		int* tex = NULL;
+		byte* usetex = NULL;
 		if (nb_t_index > 0)
 		{
 			tex = new int[nb_t_index];
@@ -204,7 +204,7 @@ namespace TA3D
 		int pos_t = 0;
 		int cur = 0;
 		int nb_diff_tex = 0;
-		int *index_tex = new int[nb_prim];
+		int* index_tex = new int[nb_prim];
 		int t_m = 0;
 		for (i = 0; i < nb_prim; ++i) // Compte le nombre de primitive de chaque sorte
 		{
@@ -293,8 +293,8 @@ namespace TA3D
 		}
 
 		/*------------------------------Création de la texture unique pour l'unité--------------*/
-		int *px = new int[nb_diff_tex];
-		int *py = new int[nb_diff_tex]; // Pour placer les différentes mini-textures sur une grande texture
+		int* px = new int[nb_diff_tex];
+		int* py = new int[nb_diff_tex]; // Pour placer les différentes mini-textures sur une grande texture
 		int mx = 0;
 		int my = 0;
 
@@ -396,7 +396,7 @@ namespace TA3D
 				my = py[i] + dy;
 		}
 
-		SDL_Surface *bmp = gfx->create_surface_ex(32, mx, my);
+		SDL_Surface* bmp = gfx->create_surface_ex(32, mx, my);
 		if (bmp != NULL && mx != 0 && my != 0)
 		{
 			if (g_useTextureCompression && lp_CONFIG->use_texture_compression)
@@ -426,9 +426,9 @@ namespace TA3D
 					{
 						int f = e % texture_manager.tex[index_tex[i]].nb_bmp;
 						blit(texture_manager.tex[index_tex[i]].bmp[f], bmp,
-							 0, 0, px[i], py[i],
-							 texture_manager.tex[index_tex[i]].bmp[f]->w,
-							 texture_manager.tex[index_tex[i]].bmp[f]->h);
+							0, 0, px[i], py[i],
+							texture_manager.tex[index_tex[i]].bmp[f]->w,
+							texture_manager.tex[index_tex[i]].bmp[f]->h);
 					}
 					cache_filename = TA3D::Paths::Files::ReplaceExtension(cache_filename, ".tex");
 					if (!TA3D::Paths::Exists(String(TA3D::Paths::Caches) << cache_filename))
@@ -450,7 +450,7 @@ namespace TA3D
 		if (selprim >= 0)
 			nb_total_point += 4;
 
-		Vector3D *p = new Vector3D[nb_total_point << 1]; // *2 pour le volume d'ombre
+		Vector3D* p = new Vector3D[nb_total_point << 1]; // *2 pour le volume d'ombre
 		int prim_dec = selprim >= 0 ? 4 : 0;
 		for (i = 0; i < nb_total_point - nb_l_index - prim_dec; ++i)
 		{
@@ -490,7 +490,7 @@ namespace TA3D
 		int nb_triangle = 0;
 		for (i = 0; i < nb_t_index; ++i)
 			nb_triangle += nb_index[i] - 2;
-		GLushort *index = new GLushort[nb_triangle * 3];
+		GLushort* index = new GLushort[nb_triangle * 3];
 		tcoord = new float[nb_vtx << 1];
 		cur = 0;
 		int curt = 0;
@@ -584,7 +584,7 @@ namespace TA3D
 		return 0;
 	}
 
-	void Mesh3DO::create_from_2d(SDL_Surface *bmp, float w, float h, float max_h)
+	void Mesh3DO::create_from_2d(SDL_Surface* bmp, float w, float h, float max_h)
 	{
 		destroy(); // Au cas où l'objet ne serait pas vierge
 
@@ -784,7 +784,7 @@ namespace TA3D
 			N[i].unit();
 	}
 
-	bool Mesh3DO::draw(float t, AnimationData *data_s, bool sel_primitive, bool alset, bool notex, int side, bool chg_col, bool exploding_parts)
+	bool Mesh3DO::draw(float t, AnimationData* data_s, bool sel_primitive, bool alset, bool notex, int side, bool chg_col, bool exploding_parts)
 	{
 		bool culling = glIsEnabled(GL_CULL_FACE);
 		glEnable(GL_CULL_FACE);
@@ -1010,33 +1010,33 @@ namespace TA3D
 		return alset;
 	}
 
-	Model *Mesh3DO::load(const String &filename)
+	Model* Mesh3DO::load(const String& filename)
 	{
-		File *file = VFS::Instance()->readFile(filename);
+		File* file = VFS::Instance()->readFile(filename);
 		if (!file)
 		{
 			LOG_ERROR(LOG_PREFIX_3DO << "could not read file '" << filename << "'");
 			return NULL;
 		}
 
-		Mesh3DO *mesh = new Mesh3DO;
+		Mesh3DO* mesh = new Mesh3DO;
 		mesh->load(file, 0, filename);
 		delete file;
 
-		Model *model = new Model;
+		Model* model = new Model;
 		model->mesh = mesh;
 		model->postLoadComputations();
 		return model;
 	}
 
-	const char *Mesh3DO::getExt()
+	const char* Mesh3DO::getExt()
 	{
 		return ".3do";
 	}
 
-	void Model::create_from_2d(SDL_Surface *bmp, float w, float h, float max_h)
+	void Model::create_from_2d(SDL_Surface* bmp, float w, float h, float max_h)
 	{
-		Mesh3DO *pMesh = new Mesh3DO;
+		Mesh3DO* pMesh = new Mesh3DO;
 		pMesh->create_from_2d(bmp, w, h, max_h);
 		mesh = pMesh;
 

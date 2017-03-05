@@ -45,7 +45,7 @@ namespace TA3D
 {
 	struct TA3DCONFIG
 	{
-		typedef TA3DCONFIG *Ptr;
+		typedef TA3DCONFIG* Ptr;
 
 		float fps_limit;
 		float timefactor; // 1.0 -> 10.0
@@ -143,11 +143,11 @@ namespace TA3D
 
 	namespace VARS
 	{
-		extern SDL_Surface *screen;
+		extern SDL_Surface* screen;
 		extern TA3D::IInterfaceManager::Ptr InterfaceManager;
 		extern TA3D::GFX::Ptr gfx;
 
-		extern SDL_Color *pal;
+		extern SDL_Color* pal;
 		extern TA3D::TA3DCONFIG::Ptr lp_CONFIG;
 
 		extern String TA3D_CURRENT_MOD;
@@ -157,13 +157,13 @@ namespace TA3D
 	}
 
 	template <class T>
-	inline void setFlag(T &out, const int flag) { out = T(out | flag); }
+	inline void setFlag(T& out, const int flag) { out = T(out | flag); }
 
 	template <class T>
-	inline void unsetFlag(T &out, const int flag) { out = T(out & ~flag); }
+	inline void unsetFlag(T& out, const int flag) { out = T(out & ~flag); }
 
 	template <class T>
-	inline bool isFlagSet(const T &in, const int flag) { return (in & flag) != 0; }
+	inline bool isFlagSet(const T& in, const int flag) { return (in & flag) != 0; }
 } // namespace TA3D
 
 #define SCREEN_W (TA3D::VARS::gfx->width)

@@ -172,7 +172,7 @@ namespace TA3D
 		{
 		}
 
-		void animate(const float t, Vector3D &R, Vector3D &T) const;
+		void animate(const float t, Vector3D& R, Vector3D& T) const;
 	};
 
 	class Mesh // The basic mesh class
@@ -180,7 +180,7 @@ namespace TA3D
 		friend class Joins;
 
 	public:
-		typedef Mesh *Ptr;
+		typedef Mesh* Ptr;
 
 	protected:
 		short nb_vtx;				   // Nombre de points
@@ -188,20 +188,20 @@ namespace TA3D
 		String name;				   // Nom de l'objet / Object name
 		Ptr next;					   // Objet suivant / Next object
 		Ptr child;					   // Objet fils / Child object
-		Vector3D *points;			   // Points composant l'objet / Vertices
+		Vector3D* points;			   // Points composant l'objet / Vertices
 		short nb_p_index;			   // Nombre d'indices de points
 		short nb_l_index;			   // Nombre d'indices de lignes
 		short nb_t_index;			   // Nombre d'indices de triangles
 		Vector3D pos_from_parent;	  // Position par rapport à l'objet parent
-		GLushort *p_index;			   // Tableau d'indices pour les points isolés
-		GLushort *l_index;			   // Tableau d'indices pour les lignes
-		GLushort *t_index;			   // Tableau d'indices pour les triangles
-		short *nb_index;			   // Nombre d'indices par primitive
-		Vector3D *N;				   // Tableau de normales pour les sommet
-		Vector3D *F_N;				   // face normals
+		GLushort* p_index;			   // Tableau d'indices pour les points isolés
+		GLushort* l_index;			   // Tableau d'indices pour les lignes
+		GLushort* t_index;			   // Tableau d'indices pour les triangles
+		short* nb_index;			   // Nombre d'indices par primitive
+		Vector3D* N;				   // Tableau de normales pour les sommet
+		Vector3D* F_N;				   // face normals
 		std::vector<GLuint> gltex;	 // Texture pour le dessin de l'objet
 		String::Vector tex_cache_name; // Used for on-the-fly loading
-		float *tcoord;				   // Tableau de coordonnées de texture
+		float* tcoord;				   // Tableau de coordonnées de texture
 		GLushort sel[4];			   // Primitive de sélection
 		sint32 script_index;		   // Indice donné par le script associé à l'unité
 		bool emitter;				   // This object can or has sub-objects which can emit particles
@@ -213,12 +213,12 @@ namespace TA3D
 		sint16 selprim; // Polygone de selection
 
 	protected:
-		GLushort *shadow_index; // Pour la géométrie du volume d'ombre
-		short *t_line;			// Repère les arêtes
-		short *line_v_idx[2];
+		GLushort* shadow_index; // Pour la géométrie du volume d'ombre
+		short* t_line;			// Repère les arêtes
+		short* line_v_idx[2];
 		int nb_line;
-		byte *line_on;
-		byte *face_reverse;
+		byte* line_on;
+		byte* face_reverse;
 		GLuint type;	   // Tell which type of geometric data we have here (triangles, quads, triangle strips)
 		Vector3D last_dir; // To speed up things when shadow has already been cast
 
@@ -241,31 +241,31 @@ namespace TA3D
 
 		sint32 set_obj_id(sint32 id);
 
-		void compute_coord(AnimationData *data_s = NULL,
-						   Vector3D *pos = NULL,
-						   const bool c_part = false,
-						   const int p_tex = 0,
-						   const Vector3D *target = NULL,
-						   Vector3D *upos = NULL,
-						   Matrix *M = NULL,
-						   const float size = 0.0f,
-						   const Vector3D *center = NULL,
-						   const bool reverse = false,
-						   const Mesh *src = NULL,
-						   const AnimationData *src_data = NULL) const;
+		void compute_coord(AnimationData* data_s = NULL,
+			Vector3D* pos = NULL,
+			const bool c_part = false,
+			const int p_tex = 0,
+			const Vector3D* target = NULL,
+			Vector3D* upos = NULL,
+			Matrix* M = NULL,
+			const float size = 0.0f,
+			const Vector3D* center = NULL,
+			const bool reverse = false,
+			const Mesh* src = NULL,
+			const AnimationData* src_data = NULL) const;
 
-		virtual bool draw(float t, AnimationData *data_s = NULL, bool sel_primitive = false, bool alset = false, bool notex = false, int side = 0, bool chg_col = true, bool exploding_parts = false) = 0;
+		virtual bool draw(float t, AnimationData* data_s = NULL, bool sel_primitive = false, bool alset = false, bool notex = false, int side = 0, bool chg_col = true, bool exploding_parts = false) = 0;
 		virtual bool draw_nodl(bool alset = false) = 0;
 
-		bool draw_shadow(Vector3D Dir, float t, AnimationData *data_s = NULL, bool alset = false, bool exploding_parts = false);
+		bool draw_shadow(Vector3D Dir, float t, AnimationData* data_s = NULL, bool alset = false, bool exploding_parts = false);
 
-		bool draw_shadow_basic(Vector3D Dir, float t, AnimationData *data_s = NULL, bool alset = false, bool exploding_parts = false);
+		bool draw_shadow_basic(Vector3D Dir, float t, AnimationData* data_s = NULL, bool alset = false, bool exploding_parts = false);
 
-		int hit(Vector3D Pos, Vector3D Dir, AnimationData *data_s, Vector3D *I, Matrix M) const;
+		int hit(Vector3D Pos, Vector3D Dir, AnimationData* data_s, Vector3D* I, Matrix M) const;
 
-		bool hit_fast(Vector3D Pos, Vector3D Dir, AnimationData *data_s, Vector3D *I);
+		bool hit_fast(Vector3D Pos, Vector3D Dir, AnimationData* data_s, Vector3D* I);
 
-		int random_pos(const AnimationData *data_s, const int id, Vector3D *vec) const;
+		int random_pos(const AnimationData* data_s, const int id, Vector3D* vec) const;
 
 		bool compute_emitter();
 
@@ -277,17 +277,17 @@ namespace TA3D
 
 		void init();
 
-		void Identify(ScriptData *script); // Identifie les pièces utilisées par le script
+		void Identify(ScriptData* script); // Identifie les pièces utilisées par le script
 
-		void compute_center(Vector3D *center, const Vector3D &dec, int *coef) const; // Calcule les coordonnées du centre de l'objet, objets liés compris
+		void compute_center(Vector3D* center, const Vector3D& dec, int* coef) const; // Calcule les coordonnées du centre de l'objet, objets liés compris
 
-		float compute_size_sq(const Vector3D &center) const; // Carré de la taille(on fera une racine après)
+		float compute_size_sq(const Vector3D& center) const; // Carré de la taille(on fera une racine après)
 
-		float print_struct(const float Y, const float X, TA3D::Font *fnt);
+		float print_struct(const float Y, const float X, TA3D::Font* fnt);
 
-		float compute_top(float top, const Vector3D &dec) const;
+		float compute_top(float top, const Vector3D& dec) const;
 
-		float compute_bottom(float bottom, const Vector3D &dec) const;
+		float compute_bottom(float bottom, const Vector3D& dec) const;
 
 		virtual bool has_animation_data() const;
 
@@ -312,35 +312,35 @@ namespace TA3D
 		/*!
         ** \brief
         */
-		void create_from_2d(SDL_Surface *bmp, float w, float h, float max_h);
+		void create_from_2d(SDL_Surface* bmp, float w, float h, float max_h);
 
 		/*!
         ** \brief
         */
-		void draw(float t, AnimationData *data_s = NULL, bool sel = false, bool notex = false,
-				  bool c_part = false, int p_tex = 0, const Vector3D *target = NULL, Vector3D *upos = NULL,
-				  Matrix *M = NULL, float Size = 0.0f, const Vector3D *Center = NULL, bool reverse = false,
-				  int side = 0, bool chg_col = true, Mesh *src = NULL, AnimationData *src_data = NULL);
+		void draw(float t, AnimationData* data_s = NULL, bool sel = false, bool notex = false,
+			bool c_part = false, int p_tex = 0, const Vector3D* target = NULL, Vector3D* upos = NULL,
+			Matrix* M = NULL, float Size = 0.0f, const Vector3D* Center = NULL, bool reverse = false,
+			int side = 0, bool chg_col = true, Mesh* src = NULL, AnimationData* src_data = NULL);
 
 		/*!
         ** \brief
         */
-		void compute_coord(AnimationData *data_s = NULL, Matrix *M = NULL) const;
+		void compute_coord(AnimationData* data_s = NULL, Matrix* M = NULL) const;
 
 		/*!
         ** \brief
         */
-		void draw_shadow(const Vector3D &Dir, float t, AnimationData *data_s = NULL);
+		void draw_shadow(const Vector3D& Dir, float t, AnimationData* data_s = NULL);
 
 		/*!
         ** \brief
         */
-		void draw_shadow_basic(const Vector3D &Dir, float t, AnimationData *data_s = NULL);
+		void draw_shadow_basic(const Vector3D& Dir, float t, AnimationData* data_s = NULL);
 
 		/*!
         ** \brief
         */
-		int hit(const Vector3D &Pos, const Vector3D &Dir, AnimationData *data_s, Vector3D *I, const Matrix &M) const
+		int hit(const Vector3D& Pos, const Vector3D& Dir, AnimationData* data_s, Vector3D* I, const Matrix& M) const
 		{
 			return mesh->hit(Pos, Dir, data_s, I, M);
 		}
@@ -348,7 +348,7 @@ namespace TA3D
 		/*!
         ** \brief
         */
-		bool hit_fast(const Vector3D &Pos, const Vector3D &Dir, AnimationData *data_s, Vector3D *I, const Matrix &M) const
+		bool hit_fast(const Vector3D& Pos, const Vector3D& Dir, AnimationData* data_s, Vector3D* I, const Matrix& M) const
 		{
 			return mesh->hit_fast(Pos, Dir * M, data_s, I);
 		}
@@ -356,7 +356,7 @@ namespace TA3D
 		/*!
         ** \brief
         */
-		void Identify(ScriptData *script)
+		void Identify(ScriptData* script)
 		{
 			mesh->Identify(script);
 		}
@@ -364,7 +364,7 @@ namespace TA3D
 		/*!
         ** \brief
         */
-		void print_struct(const float Y, const float X, TA3D::Font *fnt)
+		void print_struct(const float Y, const float X, TA3D::Font* fnt)
 		{
 			mesh->print_struct(Y, X, fnt);
 		}
@@ -418,12 +418,12 @@ namespace TA3D
 		void init();
 		void destroy();
 
-		Model *get_model(const String &name);
+		Model* get_model(const String& name);
 
 		/*!
         ** \brief
         */
-		int load_all(ProgressNotifier *progress);
+		int load_all(ProgressNotifier* progress);
 
 		/*!
         ** \brief
@@ -433,12 +433,12 @@ namespace TA3D
 		/*!
         ** \brief
         */
-		void create_from_2d(SDL_Surface *bmp, float w, float h, float max_h, const String &filename);
+		void create_from_2d(SDL_Surface* bmp, float w, float h, float max_h, const String& filename);
 
 	public:
-		int nb_models;				// Nombre de modèles
-		std::vector<Model *> model; // Tableau de modèles
-		String::Vector name;		// Tableau contenant les noms des modèles
+		int nb_models;			   // Nombre de modèles
+		std::vector<Model*> model; // Tableau de modèles
+		String::Vector name;	   // Tableau contenant les noms des modèles
 
 	private:
 		//! hashtable used to speed up operations on MODEL objects
@@ -453,17 +453,17 @@ namespace TA3D
 		friend class ModelManager;
 
 	public:
-		typedef Model *(*MeshLoader)(const String &filename);
+		typedef Model* (*MeshLoader)(const String& filename);
 
 	private:
-		static std::vector<MeshLoader> *lMeshLoader;
-		static String::Vector *lMeshExtension;
+		static std::vector<MeshLoader>* lMeshLoader;
+		static String::Vector* lMeshExtension;
 
 	public:
 		static void registerMeshLoader(MeshLoader loader);
-		static void registerMeshExtension(const String &ext);
-		static Model *load(const String &filename);
-		static void getMeshList(String::Vector &filelist);
+		static void registerMeshExtension(const String& ext);
+		static Model* load(const String& filename);
+		static void getMeshList(String::Vector& filelist);
 	}; // class Archive
 
 //! A simple macro to auto register Mesh classes functionnalities :) (you don't even need to include the headers \o/)

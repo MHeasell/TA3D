@@ -128,7 +128,7 @@ namespace TA3D
 			{
 				String tmp("anims\\");
 				tmp << filename << ".gaf";
-				File *gaf = VFS::Instance()->readFile(tmp);
+				File* gaf = VFS::Instance()->readFile(tmp);
 				if (gaf)
 				{
 					sint32 index = Gaf::RawDataGetEntryIndex(gaf, seqname);
@@ -168,14 +168,14 @@ namespace TA3D
 		feature.clear();
 	}
 
-	int FeatureManager::get_feature_index(const String &name)
+	int FeatureManager::get_feature_index(const String& name)
 	{
 		if (name.empty())
 			return -1;
 		return feature_hashtable[ToLower(name)] - 1;
 	}
 
-	int FeatureManager::add_feature(const String &name) // Ajoute un élément
+	int FeatureManager::add_feature(const String& name) // Ajoute un élément
 	{
 		MutexLocker mLock(mInternals);
 		++nb_features;
@@ -210,13 +210,13 @@ namespace TA3D
 		}
 	}
 
-	void FeatureManager::load_tdf(File *file) // Charge un fichier tdf
+	void FeatureManager::load_tdf(File* file) // Charge un fichier tdf
 	{
 		TDFParser parser;
 		parser.loadFromMemory("TDF", file->data(), file->size(), false, true, true);
 		file->close();
 
-		std::vector<Feature *> vfeats;
+		std::vector<Feature*> vfeats;
 
 		for (int g = 0; parser.exists(String("gadget") << g); g++)
 		{
@@ -224,7 +224,7 @@ namespace TA3D
 
 			mInternals.lock();
 			const int index = add_feature(parser.pullAsString(String("gadget") << g));
-			Feature *pFeature = feature[index];
+			Feature* pFeature = feature[index];
 			mInternals.unlock();
 
 			vfeats.push_back(pFeature);
@@ -285,9 +285,9 @@ namespace TA3D
 			}
 		}
 
-		for (std::vector<Feature *>::iterator i = vfeats.begin(); i != vfeats.end(); ++i) // Charge les fichiers d'animation
+		for (std::vector<Feature*>::iterator i = vfeats.begin(); i != vfeats.end(); ++i) // Charge les fichiers d'animation
 		{
-			Feature *pFeature = *i;
+			Feature* pFeature = *i;
 			if (!pFeature->category.empty())
 				pFeature->vent = pFeature->category.find("vents") != String::npos;
 			if (!pFeature->filename.empty() && !pFeature->seqname.empty() && !pFeature->m3d)
@@ -306,7 +306,7 @@ namespace TA3D
 					{
 						String tmp("anims\\");
 						tmp << pFeature->filename << ".gaf";
-						File *gaf = VFS::Instance()->readFile(tmp);
+						File* gaf = VFS::Instance()->readFile(tmp);
 						if (gaf)
 						{
 							sint32 index = Gaf::RawDataGetEntryIndex(gaf, pFeature->seqname);
@@ -328,7 +328,7 @@ namespace TA3D
 		}
 	}
 
-	void load_features(ProgressNotifier *progress) // Charge tout les éléments
+	void load_features(ProgressNotifier* progress) // Charge tout les éléments
 	{
 		String::Vector files;
 		VFS::Instance()->getFilelist("features\\*.tdf", files);
@@ -349,7 +349,7 @@ namespace TA3D
 			while (i < end)
 			{
 #ifdef _OPENMP
-				const String &curFile = files[i++];
+				const String& curFile = files[i++];
 				if (omp_get_thread_num() == 0)
 					if (progress != NULL && m >= 0xF)
 					{
@@ -360,13 +360,13 @@ namespace TA3D
 				++n;
 				mLoad.unlock();
 #else
-				const String &curFile = files[i];
+				const String& curFile = files[i];
 				if (progress != NULL && !(n & 0xF))
 					(*progress)((200.0f + float(n) * 50.0f / float(end + 1)) / 7.0f, I18N::Translate("Loading graphical features"));
 				++n;
 #endif
 
-				File *file = VFS::Instance()->readFile(curFile);
+				File* file = VFS::Instance()->readFile(curFile);
 				if (file)
 				{
 #ifdef _OPENMP
@@ -398,7 +398,7 @@ namespace TA3D
 #pragma omp parallel for
 		for (int i = 0; i < feature_manager.getNbFeatures(); ++i)
 		{
-			Feature *feature = feature_manager.getFeaturePointer(i);
+			Feature* feature = feature_manager.getFeaturePointer(i);
 			if (feature->m3d && feature->model == NULL && !feature->filename.empty() && !feature->seqname.empty())
 			{
 				String tmp = feature->filename;
@@ -416,8 +416,7 @@ namespace TA3D
 	}
 
 	Features::Features()
-		: nb_features(0), max_features(0), feature(NULL),
-		  burning_features(), sinking_features()
+		: nb_features(0), max_features(0), feature(NULL), burning_features(), sinking_features()
 	{
 	}
 
@@ -480,56 +479,53 @@ namespace TA3D
 		GLuint old = 0;
 		bool texture_loaded = false;
 
-		static const GLubyte index[] =
-			{
-				0, 1, 2, 3,
-				4, 1, 2, 5,
-				6, 1, 2, 7,
-				8, 9, 10, 11,
-				1, 12, 13, 2,
-				1, 14, 15, 2,
-				1, 16, 17, 2};
+		static const GLubyte index[] = {
+			0, 1, 2, 3,
+			4, 1, 2, 5,
+			6, 1, 2, 7,
+			8, 9, 10, 11,
+			1, 12, 13, 2,
+			1, 14, 15, 2,
+			1, 16, 17, 2};
 
-		static const float texcoord[] =
-			{
-				0.0f, 0.0f,
-				0.5f, 0.0f,
-				0.5f, 1.0f,
-				0.0f, 1.0f,
-				0.0f, 0.0f,
-				0.0f, 1.0f,
-				0.0f, 0.0f,
-				0.0f, 1.0f,
-				0.0f, 0.0f,
-				1.0f, 0.0f,
-				1.0f, 1.0f,
-				0.0f, 1.0f,
-				1.0f, 0.0f,
-				1.0f, 1.0f,
-				1.0f, 0.0f,
-				1.0f, 1.0f,
-				1.0f, 0.0f,
-				1.0f, 1.0f};
-		const float points[] =
-			{
-				0.0f, 1.0f, -1.0f,
-				0.0f, 1.0f, 0.0f,
-				0.0f, 0.0f, 0.0f,
-				0.0f, 0.0f, -1.0f,
-				-sq2, 1.0f, -sq2,
-				-sq2, 0.0f, -sq2,
-				sq2, 1.0f, -sq2,
-				sq2, 0.0f, -sq2,
-				-1.0f, 1.0f, 0.0f,
-				1.0f, 1.0f, 0.0f,
-				1.0f, 0.0f, 0.0f,
-				-1.0f, 0.0f, 0.0f,
-				-sq2, 1.0f, sq2,
-				-sq2, 0.0f, sq2,
-				sq2, 1.0f, sq2,
-				sq2, 0.0f, sq2,
-				0.0f, 1.0f, 1.0f,
-				0.0f, 0.0f, 1.0f};
+		static const float texcoord[] = {
+			0.0f, 0.0f,
+			0.5f, 0.0f,
+			0.5f, 1.0f,
+			0.0f, 1.0f,
+			0.0f, 0.0f,
+			0.0f, 1.0f,
+			0.0f, 0.0f,
+			0.0f, 1.0f,
+			0.0f, 0.0f,
+			1.0f, 0.0f,
+			1.0f, 1.0f,
+			0.0f, 1.0f,
+			1.0f, 0.0f,
+			1.0f, 1.0f,
+			1.0f, 0.0f,
+			1.0f, 1.0f,
+			1.0f, 0.0f,
+			1.0f, 1.0f};
+		const float points[] = {
+			0.0f, 1.0f, -1.0f,
+			0.0f, 1.0f, 0.0f,
+			0.0f, 0.0f, 0.0f,
+			0.0f, 0.0f, -1.0f,
+			-sq2, 1.0f, -sq2,
+			-sq2, 0.0f, -sq2,
+			sq2, 1.0f, -sq2,
+			sq2, 0.0f, -sq2,
+			-1.0f, 1.0f, 0.0f,
+			1.0f, 1.0f, 0.0f,
+			1.0f, 0.0f, 0.0f,
+			-1.0f, 0.0f, 0.0f,
+			-sq2, 1.0f, sq2,
+			-sq2, 0.0f, sq2,
+			sq2, 1.0f, sq2,
+			sq2, 0.0f, sq2,
+			0.0f, 1.0f, 1.0f,
+			0.0f, 0.0f, 1.0f};
 		bool set = true;
 
 		glDisableClientState(GL_NORMAL_ARRAY);
@@ -558,9 +554,9 @@ namespace TA3D
 			if (feature[i].type < 0 || !feature[i].draw)
 				continue;
 
-			Feature *pFeature = feature_manager.getFeaturePointer(feature[i].type);
+			Feature* pFeature = feature_manager.getFeaturePointer(feature[i].type);
 			if (Camera::inGame->mirror && ((pFeature->height > 5.0f && pFeature->m3d) // Perform a small visibility check
-										   || (pFeature->m3d && pFeature->model != NULL)))
+											  || (pFeature->m3d && pFeature->model != NULL)))
 			{
 				Vector3D Pos(feature[i].Pos);
 				if (pFeature->m3d)
@@ -650,8 +646,8 @@ namespace TA3D
 					if (!pFeature->model->animated && !feature[i].sinking && pFeature->model->useDL)
 					{
 						DrawingTable.queue_Instance(pFeature->model->id,
-													Instance(feature[i].Pos, feature[i].grey ? 0xFF7F7F7F : 0xFFFFFFFF,
-															 feature[i].angle));
+							Instance(feature[i].Pos, feature[i].grey ? 0xFF7F7F7F : 0xFFFFFFFF,
+								feature[i].angle));
 					}
 					else
 					{
@@ -715,7 +711,7 @@ namespace TA3D
 		{
 			glDisableClientState(GL_NORMAL_ARRAY);
 			if (HWLight::inGame)
-				glNormal3fv((GLfloat *)&(HWLight::inGame->Dir));
+				glNormal3fv((GLfloat*)&(HWLight::inGame->Dir));
 			glPolygonOffset(-1.0f, -1.0f);
 			glEnable(GL_POLYGON_OFFSET_FILL);
 			quad_table.draw_all();
@@ -746,7 +742,7 @@ namespace TA3D
 		glEnable(GL_TEXTURE_2D);
 	}
 
-	void Features::draw_shadow(float t, const Vector3D &Dir)
+	void Features::draw_shadow(float t, const Vector3D& Dir)
 	{
 		if (nb_features <= 0)
 			return;
@@ -763,7 +759,7 @@ namespace TA3D
 			int i = list[e];
 			if (feature[i].type < 0)
 				continue;
-			Feature *pFeature = feature_manager.getFeaturePointer(feature[i].type);
+			Feature* pFeature = feature_manager.getFeaturePointer(feature[i].type);
 
 			if (!(!pFeature->m3d && pFeature->anim.nb_bmp > 0))
 			{
@@ -830,7 +826,7 @@ namespace TA3D
 				delete_feature(i);
 				continue;
 			}
-			Feature *pFeature = feature_manager.getFeaturePointer(feature[i].type);
+			Feature* pFeature = feature_manager.getFeaturePointer(feature[i].type);
 			if (!pFeature->vent && !feature[i].burning)
 			{
 				feature[i].draw = false;
@@ -887,7 +883,7 @@ namespace TA3D
 
 		if (idx >= 0 && idx < max_features)
 		{
-			Feature *pFeature = feature_manager.getFeaturePointer(feature[idx].type);
+			Feature* pFeature = feature_manager.getFeaturePointer(feature[idx].type);
 			if (pFeature && pFeature->flamable && !feature[idx].burning) // We get something to burn !!
 			{
 				feature[idx].burning = true;
@@ -947,7 +943,7 @@ namespace TA3D
 			}
 			const uint32 e = burning_features[i];
 			feature[e].burning_time += dt;
-			Feature *pFeature = feature_manager.getFeaturePointer(features.feature[e].type);
+			Feature* pFeature = feature_manager.getFeaturePointer(features.feature[e].type);
 			if (feature[e].burning_time >= feature[e].time_to_burn) // If we aren't burning anymore :(
 			{
 				if (network_manager.isServer())
@@ -1039,7 +1035,7 @@ namespace TA3D
 		{
 			if (feature[*i].sinking)
 			{
-				Feature *pFeature = feature_manager.getFeaturePointer(feature[*i].type);
+				Feature* pFeature = feature_manager.getFeaturePointer(feature[*i].type);
 				if (pFeature == NULL)
 				{
 					if (i + 1 != sinking_features.end())
@@ -1102,21 +1098,21 @@ namespace TA3D
 		if (idx < 0 || idx >= max_features || feature[idx].type < 0)
 			return; // Nothing to display
 
-		const Feature *pFeature = feature_manager.getFeaturePointer(feature[idx].type);
+		const Feature* pFeature = feature_manager.getFeaturePointer(feature[idx].type);
 
 		if (!pFeature->description.empty())
 		{
-			const InterfaceData &side_data = ta3dSideData.side_int_data[players.side_view];
+			const InterfaceData& side_data = ta3dSideData.side_int_data[players.side_view];
 			if (pFeature->reclaimable)
 				gfx->print(gfx->normal_font,
-						   (float)side_data.Description.x1,
-						   (float)side_data.Description.y1,
-						   0.0f, 0xFFFFFFFF, I18N::Translate(pFeature->description) << " M:" << pFeature->metal << " E:" << pFeature->energy);
+					(float)side_data.Description.x1,
+					(float)side_data.Description.y1,
+					0.0f, 0xFFFFFFFF, I18N::Translate(pFeature->description) << " M:" << pFeature->metal << " E:" << pFeature->energy);
 			else
 				gfx->print(gfx->normal_font,
-						   (float)side_data.Description.x1,
-						   (float)side_data.Description.y1,
-						   0.0f, 0xFFFFFFFF, I18N::Translate(pFeature->description));
+					(float)side_data.Description.x1,
+					(float)side_data.Description.y1,
+					0.0f, 0xFFFFFFFF, I18N::Translate(pFeature->description));
 		}
 		glDisable(GL_BLEND);
 	}
@@ -1154,7 +1150,7 @@ namespace TA3D
 		list.clear();
 	}
 
-	int Features::add_feature(const Vector3D &Pos, const int type)
+	int Features::add_feature(const Vector3D& Pos, const int type)
 	{
 		if (type < 0 || type >= feature_manager.getNbFeatures())
 			return -1;
@@ -1167,7 +1163,7 @@ namespace TA3D
 			if (max_features == 0)
 				max_features = 250;
 			max_features *= 2; // Double memory pool size
-			FeatureData *n_feature = new FeatureData[max_features];
+			FeatureData* n_feature = new FeatureData[max_features];
 			if (feature && nb_features > 0)
 			{
 				for (int i = 0; i < nb_features - 1; ++i)
@@ -1195,7 +1191,7 @@ namespace TA3D
 				}
 			}
 		}
-		const Feature *const pFeature = feature_manager.getFeaturePointer(type);
+		const Feature* const pFeature = feature_manager.getFeaturePointer(type);
 		feature[idx].Pos = Pos;
 		feature[idx].timeRef = Math::RandomTable() % 100000;
 		feature[idx].type = type;
@@ -1227,20 +1223,20 @@ namespace TA3D
 		if (idx < 0 || idx >= max_features || feature[idx].drawnOnMap)
 			return;
 		compute_on_map_pos(idx);
-		const Feature *const pFeature = feature_manager.getFeaturePointer(feature[idx].type);
+		const Feature* const pFeature = feature_manager.getFeaturePointer(feature[idx].type);
 		if (pFeature && pFeature->blocking) // Check if it is a blocking feature
 		{
 			const int X = pFeature->footprintx;
 			const int Z = pFeature->footprintz;
 			the_map->obstaclesRect(feature[idx].px - (X >> 1),
-								   feature[idx].py - (Z >> 1),
-								   X, Z, true);
+				feature[idx].py - (Z >> 1),
+				X, Z, true);
 			the_map->rect(feature[idx].px - (X >> 1),
-						  feature[idx].py - (Z >> 1),
-						  X, Z, -2 - idx);
+				feature[idx].py - (Z >> 1),
+				X, Z, -2 - idx);
 			the_map->energy.add(pFeature->gRepulsion,
-								feature[idx].px - (pFeature->gRepulsion.getWidth() >> 1),
-								feature[idx].py - (pFeature->gRepulsion.getHeight() >> 1));
+				feature[idx].px - (pFeature->gRepulsion.getWidth() >> 1),
+				feature[idx].py - (pFeature->gRepulsion.getHeight() >> 1));
 		}
 		feature[idx].drawnOnMap = true;
 	}
@@ -1250,7 +1246,7 @@ namespace TA3D
 		MutexLocker mLock(pMutex);
 		if (idx < 0 || idx >= max_features || !feature[idx].drawnOnMap)
 			return;
-		const Feature *const pFeature = feature_manager.getFeaturePointer(feature[idx].type);
+		const Feature* const pFeature = feature_manager.getFeaturePointer(feature[idx].type);
 		if (pFeature && pFeature->blocking) // Check if it is a blocking feature
 		{
 			const int X = pFeature->footprintx;
@@ -1258,8 +1254,8 @@ namespace TA3D
 			the_map->obstaclesRect(feature[idx].px - (X >> 1), feature[idx].py - (Z >> 1), X, Z, false);
 			the_map->rect(feature[idx].px - (X >> 1), feature[idx].py - (Z >> 1), X, Z, -1);
 			the_map->energy.sub(pFeature->gRepulsion,
-								feature[idx].px - (pFeature->gRepulsion.getWidth() >> 1),
-								feature[idx].py - (pFeature->gRepulsion.getHeight() >> 1));
+				feature[idx].px - (pFeature->gRepulsion.getWidth() >> 1),
+				feature[idx].py - (pFeature->gRepulsion.getHeight() >> 1));
 		}
 		the_map->map_data(feature[idx].px, feature[idx].py).stuff = -1;
 		feature[idx].drawnOnMap = false;
@@ -1285,8 +1281,8 @@ namespace TA3D
 		const uint32 player_mask = 1 << players.local_human_id;
 		for (FeaturesSet::const_iterator it = symbolic_features.begin(); it != symbolic_features.end(); ++it)
 		{
-			const FeatureData *const pFeature = &(feature[*it]);
-			const Feature *const pFeatureType = feature_manager.getFeaturePointer(pFeature->type);
+			const FeatureData* const pFeature = &(feature[*it]);
+			const Feature* const pFeatureType = feature_manager.getFeaturePointer(pFeature->type);
 			if (pFeatureType == NULL)
 				continue;
 			if (!(the_map->view_map(pFeature->px >> 1, pFeature->py >> 1) & player_mask))

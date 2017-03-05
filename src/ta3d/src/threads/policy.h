@@ -12,7 +12,7 @@ namespace TA3D
 		class MutexLocker
 		{
 		public:
-			MutexLocker(const ObjectLevelLockable &obj) : lock(obj.mutex) {}
+			MutexLocker(const ObjectLevelLockable& obj) : lock(obj.mutex) {}
 		private:
 			std::unique_lock<std::recursive_mutex> lock;
 		};
@@ -37,7 +37,8 @@ namespace TA3D
 		static std::recursive_mutex mutex;
 	};
 
-	template<class T> std::recursive_mutex ClassLevelLockable<T>::mutex;
+	template <class T>
+	std::recursive_mutex ClassLevelLockable<T>::mutex;
 }
 
 #endif

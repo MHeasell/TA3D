@@ -15,9 +15,9 @@ namespace TA3D
 			bool rebuild_cache = false;
 			// Check cache date
 			const String cache_info_data = (lp_CONFIG
-												? String("build info : ") << __DATE__ << " , " << __TIME__ << "\ncurrent mod : " << lp_CONFIG->last_MOD << '\n'
-												: String("build info : ") << __DATE__ << " , " << __TIME__ << "\ncurrent mod : \n")
-										   << "Texture Quality : " << lp_CONFIG->unitTextureQuality;
+												   ? String("build info : ") << __DATE__ << " , " << __TIME__ << "\ncurrent mod : " << lp_CONFIG->last_MOD << '\n'
+												   : String("build info : ") << __DATE__ << " , " << __TIME__ << "\ncurrent mod : \n")
+				<< "Texture Quality : " << lp_CONFIG->unitTextureQuality;
 
 			String cache_info_filename = String(Paths::Caches) << "cache_info.txt";
 
@@ -26,7 +26,7 @@ namespace TA3D
 				std::ifstream cache_info(cache_info_filename.c_str());
 				if (cache_info.is_open())
 				{
-					char *buf = new char[cache_info_data.size() + 1];
+					char* buf = new char[cache_info_data.size() + 1];
 					if (buf)
 					{
 						::memset(buf, 0, cache_info_data.size() + 1);

@@ -22,7 +22,7 @@ namespace TA3D
 		return sock != NULL;
 	}
 
-	void SocketUDP::open(const String &hostname, uint16 port)
+	void SocketUDP::open(const String& hostname, uint16 port)
 	{
 		MutexLocker locker(pMutex);
 		close();
@@ -61,12 +61,12 @@ namespace TA3D
 		checked = false;
 	}
 
-	void SocketUDP::send(const String &str)
+	void SocketUDP::send(const String& str)
 	{
 		send(str.c_str(), str.size());
 	}
 
-	void SocketUDP::send(const char *data, int size)
+	void SocketUDP::send(const char* data, int size)
 	{
 		if (!sock)
 			return;
@@ -76,21 +76,21 @@ namespace TA3D
 			UDPpacket packet;
 
 			packet.channel = -1;
-			packet.data = (Uint8 *)data;
+			packet.data = (Uint8*)data;
 			packet.len = size;
 			packet.maxlen = size;
 			packet.address = IP;
 
 			SDLNet_UDP_Send(sock, packet.channel, &packet);
 		}
-		catch (std::exception &e)
+		catch (std::exception& e)
 		{
 			LOG_ERROR(LOG_PREFIX_NET_SOCKET << "exception caught : " << e.what());
 			close();
 		}
 	}
 
-	int SocketUDP::recv(char *data, int size)
+	int SocketUDP::recv(char* data, int size)
 	{
 		if (!sock)
 			return 0;
@@ -98,7 +98,7 @@ namespace TA3D
 		try
 		{
 			UDPpacket packet;
-			packet.data = (Uint8 *)data;
+			packet.data = (Uint8*)data;
 			packet.len = 0;
 			packet.maxlen = size;
 
@@ -113,7 +113,7 @@ namespace TA3D
 
 			return packet.len;
 		}
-		catch (std::exception &e)
+		catch (std::exception& e)
 		{
 			LOG_ERROR(LOG_PREFIX_NET_SOCKET << "exception caught : " << e.what());
 			close();
@@ -133,7 +133,7 @@ namespace TA3D
 			else
 				SDL_Delay(msec);
 		}
-		catch (std::exception &e)
+		catch (std::exception& e)
 		{
 			LOG_ERROR(LOG_PREFIX_NET_SOCKET << "exception caught : " << e.what());
 			close();
@@ -147,7 +147,7 @@ namespace TA3D
 			if (set && sock && checked)
 				return SDLNet_SocketReady(sock);
 		}
-		catch (std::exception &e)
+		catch (std::exception& e)
 		{
 			LOG_ERROR(LOG_PREFIX_NET_SOCKET << "exception caught : " << e.what());
 			close();

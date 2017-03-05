@@ -44,16 +44,16 @@ namespace TA3D
 			protected:
 				String name;
 				int priority;
-				Archive *parent;
+				Archive* parent;
 
 			public:
 				virtual ~FileInfo() {}
 				inline String getName() const { return name; }
 				inline int getPriority() const { return priority; }
 				inline void setPriority(int p) { priority = p; }
-				inline Archive *getParent() const { return parent; }
-				File *read();
-				File *readRange(const uint32 start, const uint32 length);
+				inline Archive* getParent() const { return parent; }
+				File* read();
+				File* readRange(const uint32 start, const uint32 length);
 				bool needsCaching() const;
 			};
 
@@ -69,7 +69,7 @@ namespace TA3D
 			/*!
             ** \brief Loads an archive
             */
-			virtual void open(const String &filename) = 0;
+			virtual void open(const String& filename) = 0;
 
 			/*!
             ** \brief Just close the opened archive
@@ -79,13 +79,13 @@ namespace TA3D
 			/*!
             ** \brief Return the list of all files in the archive
             */
-			virtual void getFileList(std::deque<FileInfo *> &lFiles) = 0;
+			virtual void getFileList(std::deque<FileInfo*>& lFiles) = 0;
 
 			/*!
             ** \brief
             */
-			virtual File *readFile(const String &filename) = 0;
-			virtual File *readFile(const FileInfo *file) = 0;
+			virtual File* readFile(const String& filename) = 0;
+			virtual File* readFile(const FileInfo* file) = 0;
 
 			/*!
             ** \brief
@@ -94,8 +94,8 @@ namespace TA3D
             ** \param length
             ** \return
             */
-			virtual File *readFileRange(const String &filename, const uint32 start, const uint32 length) = 0;
-			virtual File *readFileRange(const FileInfo *file, const uint32 start, const uint32 length) = 0;
+			virtual File* readFileRange(const String& filename, const uint32 start, const uint32 length) = 0;
+			virtual File* readFileRange(const FileInfo* file, const uint32 start, const uint32 length) = 0;
 
 			/*!
             ** \brief returns true if using the cache is a good idea (real FS will return false)
@@ -104,18 +104,18 @@ namespace TA3D
 			virtual bool needsCaching();
 
 		public:
-			typedef void (*ArchiveFinder)(String::List &fileList, const String &path);
-			typedef Archive *(*ArchiveLoader)(const String &filename);
+			typedef void (*ArchiveFinder)(String::List& fileList, const String& path);
+			typedef Archive* (*ArchiveLoader)(const String& filename);
 
 		private:
-			static std::list<ArchiveFinder> *listArchiveFinder;
-			static std::list<ArchiveLoader> *listArchiveLoader;
+			static std::list<ArchiveFinder>* listArchiveFinder;
+			static std::list<ArchiveLoader>* listArchiveLoader;
 
 		public:
 			static void registerArchiveFinder(ArchiveFinder finder);
 			static void registerArchiveLoader(ArchiveLoader loader);
-			static Archive *load(const String &filename);
-			static void getArchiveList(String::List &fileList, const String &path);
+			static Archive* load(const String& filename);
+			static void getArchiveList(String::List& fileList, const String& path);
 		}; // class Archive
 
 //! A simple macro to auto register Archive classes functionnalities :) (you don't even need to include the headers \o/)

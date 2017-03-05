@@ -35,13 +35,13 @@ namespace TA3D
 		{
 		public:
 			RealFile();
-			RealFile(const String &filename);
+			RealFile(const String& filename);
 
 			//! This is an abstract class, its destructor must be virtual
 			virtual ~RealFile();
 
 			//! Read s bytes and write them in memory pointed by p
-			virtual int read(void *p, int s);
+			virtual int read(void* p, int s);
 			//! Returns the size of the file
 			virtual int size();
 			//! Returns true if end of file has been reached
@@ -51,26 +51,26 @@ namespace TA3D
 			//! Set absolute position in file
 			virtual void seek(int pos);
 			//! Read a single line from the file, returns true while end of file has not been reached
-			virtual bool readLine(String &line);
+			virtual bool readLine(String& line);
 			//! Returns true if the file is opened
 			virtual bool isOpen();
 			//! Returns a pointer to a memory buffer containing the file
-			virtual const char *data();
+			virtual const char* data();
 			//! Close the file
 			virtual void close();
 			//! Tell if this is a real file (useful for use with external libraries)
 			virtual bool isReal() const;
 			//! Returns the real filename (if it's a real file)
-			virtual const String &getRealFilename() const;
+			virtual const String& getRealFilename() const;
 
-			void open(const String &filename);
+			void open(const String& filename);
 
 		private:
-			virtual File &operator=(const File &) { return *this; }
+			virtual File& operator=(const File&) { return *this; }
 
 		private:
 			std::ifstream sFile;
-			char *buffer;
+			char* buffer;
 			String realFilename;
 		};
 	}
