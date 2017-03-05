@@ -135,23 +135,21 @@ namespace TA3D
 				{
 					String tmp = pInputText;
 					const String delimiters(" ()'\"");
-					for (int i = pInputText.size() - 1; i >= 0; --i)
-						if (delimiters.contains(pInputText[i]))
-						{
-							tmp = Substr(pInputText, i + 1);
-							break;
-						}
+					String::size_type delimeterIndex = pInputText.find_last_of(delimiters);
+					if (delimeterIndex != String::npos)
+					{
+						tmp = Substr(pInputText, delimeterIndex + 1);
+					}
 					if (!tmp.empty())
 					{
 						String obj("_G.");
 						String param(tmp);
-						for (int i = tmp.size() - 1; i >= 0; --i)
-							if (tmp[i] == '.')
-							{
-								obj = Substr(tmp, 0, i + 1);
-								param = Substr(tmp, i + 1);
-								break;
-							}
+						String::size_type dotIndex = tmp.find_last_of('.');
+						if (dotIndex != String::npos)
+						{
+							obj = Substr(tmp, 0, dotIndex + 1);
+							param = Substr(tmp, dotIndex + 1);
+						}
 
 						String request = String("return ") << obj << "__tab_complete(\"" << param << "\")";
 
