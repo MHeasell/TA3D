@@ -31,6 +31,8 @@ namespace TA3D
 
 		String() {}
 
+		String(const nullptr_t) {}
+
 		String(char ch) : str(1, ch) {}
 
 		String(const char* chars, size_type count) : str(chars, count) {}
