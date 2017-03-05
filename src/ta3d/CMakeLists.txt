@@ -394,7 +394,7 @@ endif()
 #
 # --- SDL_sgui ---
 #
-set(SDL_SGUI_LIB ${CMAKE_CURRENT_SOURCE_DIR}/../libs/SDL_sgui/libSDL_sgui.a)
+set(SDL_SGUI_LIB ${CMAKE_CURRENT_BINARY_DIR}/../libs/SDL_sgui/libSDL_sgui.a)
 include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/../libs/SDL_sgui/include )
 
 message(STATUS "SDL_sgui Library : ${SDL_SGUI_LIB}")
@@ -422,11 +422,6 @@ if(OPENMP_FOUND)
 else()
 	message(STATUS "OpenMP not found")
 endif()
-
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
-# for compatibility with old versions of cmake
-set(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_SOURCE_DIR})
-
 
 #
 # --- CPack: Installation process ---
