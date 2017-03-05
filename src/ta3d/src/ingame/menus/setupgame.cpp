@@ -610,7 +610,7 @@ namespace TA3D
 			{
 				Gui::GUIOBJ::Ptr obj = pArea->get_object("gamesetup.max_units");
 				obj->Text[0] = obj->Text[1 + obj->Value];
-				game_data.max_unit_per_player = obj->Text[0].to<sint32>();
+				game_data.max_unit_per_player = obj->Text[0].to_sint32();
 				network_manager.sendSpecial(String("SET UNIT LIMIT ") << game_data.max_unit_per_player);
 			}
 
@@ -1073,11 +1073,11 @@ namespace TA3D
 							}
 							else if (params[1] == "PLAYER_BACK" && saved_game.notEmpty()) // A player is back in the game :), let's find who it is
 							{
-								LOG_DEBUG("received identifier from " << from << " : " << params[2].to<sint32>());
+								LOG_DEBUG("received identifier from " << from << " : " << params[2].to_sint32());
 								int slot = -1;
 								for (int i = 0; i < TA3D_PLAYERS_HARD_LIMIT; ++i)
 								{
-									if (net_id_table[i] == params[2].to<sint32>())
+									if (net_id_table[i] == params[2].to_sint32())
 									{
 										slot = i;
 										break;
@@ -1098,7 +1098,7 @@ namespace TA3D
 							}
 							else if (params[1] == "COLORCHANGE")
 							{
-								int i = params[2].to<sint32>();
+								int i = params[2].to_sint32();
 								if (!client) // From client to server only
 								{
 									const unsigned int e = player_color_map[i];
@@ -1137,7 +1137,7 @@ namespace TA3D
 						{
 							if (params[1] == "FOW")
 							{
-								int value = params[2].to<sint32>();
+								int value = params[2].to_sint32();
 								Gui::GUIOBJ::Ptr obj = pArea->get_object("gamesetup.FOW");
 								if (obj && value >= 0 && value < 4)
 								{
@@ -1216,8 +1216,8 @@ namespace TA3D
 						{
 							if (params[1] == "TEAM")
 							{
-								int i = params[2].to<sint32>();
-								int n_team = params[3].to<sint32>();
+								int i = params[2].to_sint32();
+								int n_team = params[3].to_sint32();
 								if (i >= 0 && i < TA3D_PLAYERS_HARD_LIMIT && (client || from == game_data.player_network_id[i])) // Server doesn't accept someone telling him what to do
 								{
 									Gui::GUIOBJ::Ptr guiobj = pArea->get_object(String("gamesetup.team") << i);
@@ -1233,7 +1233,7 @@ namespace TA3D
 						{
 							if (params[1] == "UNIT" && params[2] == "LIMIT")
 							{
-								game_data.max_unit_per_player = params[3].to<sint32>();
+								game_data.max_unit_per_player = params[3].to_sint32();
 								Gui::GUIOBJ::Ptr obj = pArea->get_object("gamesetup.max_units");
 								if (obj)
 									obj->Text[0] = String() << game_data.max_unit_per_player;
@@ -1243,14 +1243,14 @@ namespace TA3D
 					case 9:
 						if (params[0] == "PLAYER_INFO") // We've received player information, let's update :)
 						{
-							int i = params[1].to<sint32>();
-							int n_id = params[2].to<sint32>();
+							int i = params[1].to_sint32();
+							int n_id = params[2].to_sint32();
 							if (i >= 0 && i < TA3D_PLAYERS_HARD_LIMIT && (client || from == n_id)) // Server doesn't accept someone telling him what to do
 							{
-								int side_id = params[3].to<sint32>();
-								int metal_q = params[5].to<sint32>();
-								int energy_q = params[6].to<sint32>();
-								bool ready = params[8].to<sint32>();
+								int side_id = params[3].to_sint32();
+								int metal_q = params[5].to_sint32();
+								int energy_q = params[6].to_sint32();
+								bool ready = params[8].to_sint32();
 								game_data.player_network_id[i] = n_id;
 								game_data.player_sides[i] = side_str[side_id];
 								game_data.ai_level[i] = UnfixBlank(params[4]);
@@ -1294,7 +1294,7 @@ namespace TA3D
 						{
 							for (int i = 0; i < TA3D_PLAYERS_HARD_LIMIT; ++i)
 							{
-								player_color_map[i] = byte(params[i + 1].to<sint32>());
+								player_color_map[i] = byte(params[i + 1].to_sint32());
 								Gui::GUIOBJ::Ptr guiobj = pArea->get_object(String("gamesetup.color") << i);
 								if (guiobj)
 									guiobj->Data = gfx->makeintcol(player_color[player_color_map[i] * 3], player_color[player_color_map[i] * 3 + 1], player_color[player_color_map[i] * 3 + 2]); // Update gui

@@ -115,12 +115,12 @@ namespace TA3D
 			LOG_ERROR(LOG_PREFIX_GAMEDATA << "not enought fields");
 			return;
 		}
-		max_unit_per_player = args[0].to<int>();
+		max_unit_per_player = args[0].to_int();
 		map_filename = args[1];
 		game_script = args[2];
 		use_only = args[3];
-		fog_of_war = (uint8)args[4].to<int>();
-		nb_players = args[5].to<int>();
+		fog_of_war = (uint8)args[4].to_int();
+		nb_players = args[5].to_int();
 		if ((int)args.size() < 6 + nb_players * 7)
 		{
 			LOG_ERROR(LOG_PREFIX_GAMEDATA << "player data missing");
@@ -130,11 +130,11 @@ namespace TA3D
 		{
 			player_names[i] = args[6 + i * 7];
 			player_sides[i] = args[7 + i * 7];
-			player_control[i] = (byte)args[8 + i * 7].to<int>();
+			player_control[i] = (byte)args[8 + i * 7].to_int();
 			ai_level[i] = args[9 + i * 7];
-			energy[i] = args[10 + i * 7].to<int>();
-			metal[i] = args[11 + i * 7].to<int>();
-			team[i] = (uint8)args[12 + i * 7].to<int>();
+			energy[i] = args[10 + i * 7].to_int();
+			metal[i] = args[11 + i * 7].to_int();
+			team[i] = (uint8)args[12 + i * 7].to_int();
 		}
 	}
 } // namespace TA3D

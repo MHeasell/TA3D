@@ -534,7 +534,7 @@ namespace TA3D
 				if (obj && obj->Value >= 0)
 				{
 					obj->Text[0] = obj->Text[1 + obj->Value];
-					lp_CONFIG->camera_def_angle = obj->Text[0].to<float>();
+					lp_CONFIG->camera_def_angle = obj->Text[0].to_float();
 				}
 			}
 			if (pArea->get_value("*.camera_def_h") >= 0)
@@ -543,7 +543,7 @@ namespace TA3D
 				if (obj && obj->Value >= 0)
 				{
 					obj->Text[0] = obj->Text[1 + obj->Value];
-					lp_CONFIG->camera_def_h = obj->Text[0].to<float>();
+					lp_CONFIG->camera_def_h = obj->Text[0].to_float();
 				}
 			}
 			if (pArea->get_value("*.camera_zoom_speed") >= 0)
@@ -552,7 +552,7 @@ namespace TA3D
 				if (obj && obj->Value >= 0)
 				{
 					obj->Text[0] = obj->Text[1 + obj->Value];
-					lp_CONFIG->camera_zoom_speed = obj->Text[0].to<float>();
+					lp_CONFIG->camera_zoom_speed = obj->Text[0].to_float();
 				}
 			}
 			if (pArea->get_value("*.LANG") >= 0)

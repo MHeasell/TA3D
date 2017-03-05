@@ -153,7 +153,7 @@ namespace TA3D
 						{
 							header.erase(0, offset + 16);
 							header.trimRight(" \n\t");
-							size = header.to<int>();
+							size = header.to_int();
 							LOG_DEBUG("header = " << header);
 							LOG_DEBUG("Http: size = " << size);
 						}

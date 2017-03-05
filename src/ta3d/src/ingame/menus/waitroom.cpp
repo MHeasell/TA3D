@@ -198,7 +198,7 @@ namespace TA3D
 					{
 						if (params[0] == "LOADING")
 						{
-							int percent = Math::Min(100, Math::Max(0, params[1].to<int>()));
+							int percent = Math::Min(100, Math::Max(0, params[1].to_int()));
 							pArea->set_data(String("wait.progress") << player_id, percent);
 						}
 						else

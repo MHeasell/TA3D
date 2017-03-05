@@ -128,7 +128,7 @@ namespace TA3D
 							mod.clear();
 						String version = UnfixBlank(params[4]);
 						String host_address = network_manager.getLastMessageAddress();
-						int nb_open = params[5].to<sint32>();
+						int nb_open = params[5].to_sint32();
 
 						if (Substr(version, 0, 3) == Substr(TA3D_ENGINE_VERSION, 0, 3) && version.size() == String(TA3D_ENGINE_VERSION).size() && mod == TA3D_CURRENT_MOD && nb_open != 0)
 						{

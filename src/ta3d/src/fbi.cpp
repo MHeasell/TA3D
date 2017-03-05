@@ -221,7 +221,7 @@ namespace TA3D
 		++first;
 		number = Substr(number, first, number.size() - first);
 
-		const int page = number.to<int>() - 1; // Extract the page number
+		const int page = number.to_int() - 1; // Extract the page number
 
 		const int NbObj = gui_parser.pullAsInt("gadget0.totalgadgets");
 
@@ -935,9 +935,9 @@ namespace TA3D
 					if (vec.size() == 3)
 					{
 						aim_data[i].check = true;
-						aim_data[i].dir.x = vec[0].to<float>();
-						aim_data[i].dir.y = vec[1].to<float>();
-						aim_data[i].dir.z = vec[2].to<float>();
+						aim_data[i].dir.x = vec[0].to_float();
+						aim_data[i].dir.y = vec[1].to_float();
+						aim_data[i].dir.z = vec[2].to_float();
 						// Should read almost every possible case
 						aim_data[i].Maxangledif = parseFloat(String("UNITINFO.Maxangledif") << i);
 					}

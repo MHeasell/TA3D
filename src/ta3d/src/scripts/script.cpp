@@ -1580,8 +1580,8 @@ namespace TA3D
 				{
 					if (params.size() >= 3)
 					{
-						const float pos_x = params[1].to<float>() * 0.5f;
-						const float pos_z = params[2].to<float>() * 0.5f;
+						const float pos_x = params[1].to_float() * 0.5f;
+						const float pos_z = params[2].to_float() * 0.5f;
 						m_File << String("add_move_mission( unit_id, ") << pos_x << " - 0.5 * map_w(), " << pos_z << " - 0.5 * map_h() )\n";
 					}
 					orders_given = true;
@@ -1602,8 +1602,8 @@ namespace TA3D
 					}
 					else if (params.size() == 4) // Mobile builders
 					{
-						float pos_x = params[2].to<float>() * 0.5f;
-						float pos_z = params[3].to<float>() * 0.5f;
+						float pos_x = params[2].to_float() * 0.5f;
+						float pos_z = params[3].to_float() * 0.5f;
 						m_File << "add_build_mission( unit_id, " << pos_x << " - 0.5 * map_w(), " << pos_z << " - 0.5 * map_h(), " << params[1] << " )\n";
 					}
 					orders_given = true;
@@ -1615,8 +1615,8 @@ namespace TA3D
 					unsigned int e = 0;
 					while (params.size() >= 3 + e * 2)
 					{
-						float pos_x = params[2 * e + 1].to<float>() * 0.5f;
-						float pos_z = params[2 * e + 2].to<float>() * 0.5f;
+						float pos_x = params[2 * e + 1].to_float() * 0.5f;
+						float pos_z = params[2 * e + 2].to_float() * 0.5f;
 						m_File << "add_patrol_mission( unit_id, " << pos_x << " - 0.5 * map_w(), " << pos_z << " - 0.5 * map_h() )\n";
 						++e;
 					}
@@ -1626,7 +1626,7 @@ namespace TA3D
 				{
 					if (params.size() >= 2)
 					{
-						float time = params[1].to<float>();
+						float time = params[1].to_float();
 						m_File << "add_wait_mission( unit_id, " << time << " )\n";
 					}
 					orders_given = true;
@@ -1985,7 +1985,7 @@ namespace TA3D
 			m_File << "			local dx = unit_x( i ) + 0.5 * (map_w() - " << params[1] << " )\n";
 			m_File << "			local dz = unit_z( i ) + 0.5 * (map_h() - " << params[2] << " )\n";
 			m_File << "			local dist = dx * dx + dz * dz\n";
-			const float dist = (float)params[3].to<sint32>() * 0.5f;
+			const float dist = (float)params[3].to_sint32() * 0.5f;
 			m_File << "			if dist <= " << (dist * dist) << " then\n";
 			m_File << "				if not first_launch and not check[ i ] and not MoveUnitToRadius then\n";
 			m_File << "					victory_conditions = victory_conditions + 1\n";

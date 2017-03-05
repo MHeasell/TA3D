@@ -240,7 +240,7 @@ namespace TA3D
 				}
 				else if (params[0] == "TIMEFACTOR")
 				{
-					Battle::Instance()->setTimeFactor(params[1].to<float>());
+					Battle::Instance()->setTimeFactor(params[1].to_float());
 				}
 			}
 		}
