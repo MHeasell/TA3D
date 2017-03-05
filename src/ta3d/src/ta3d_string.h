@@ -445,13 +445,13 @@ namespace TA3D
 			std::string::size_type pos;
 			while (offset < size())
 			{
-				pos = str.find(original.c_str(), offset, original.length());
+				pos = str.find(original.str, offset);
 				if (pos == std::string::npos)
 				{
 					return;
 				}
-				str.replace(pos, original.length(), replacement.c_str(), replacement.length());
-				offset = pos + replacement.length();
+				str.replace(pos, original.size(), replacement.str);
+				offset = pos + replacement.size();
 			}
 		}
 
