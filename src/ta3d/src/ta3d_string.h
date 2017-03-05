@@ -24,6 +24,7 @@ namespace TA3D
 		typedef std::vector<String> Vector;
 		typedef std::list<String> List;
 		typedef std::nullptr_t NullPtr;
+		typedef std::string::iterator iterator;
 		typedef std::string::const_iterator const_iterator;
 
 		static const size_type npos = std::string::npos;
@@ -267,9 +268,19 @@ namespace TA3D
 			str.erase(len);
 		}
 
+		iterator begin()
+		{
+			return str.begin();
+		}
+
 		const_iterator begin() const
 		{
 			return str.begin();
+		}
+
+		iterator end()
+		{
+			return str.end();
 		}
 
 		const_iterator end() const
@@ -423,6 +434,11 @@ namespace TA3D
 		void replace(char original, char replacement)
 		{
 			replace(String(original), String(replacement));
+		}
+
+		void convertSlashesIntoBackslashes()
+		{
+			replace('/', '\\');
 		}
 
 		bool glob(const String& pattern) const

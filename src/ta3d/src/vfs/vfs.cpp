@@ -252,7 +252,7 @@ namespace TA3D
 
 		VFS::CacheFileData* VFS::isInCache(const String& filename)
 		{
-			if (!filename)
+			if (filename.empty())
 				return NULL;
 			ThreadingPolicy::MutexLocker locker(*this);
 			return isInCacheWL(filename);
