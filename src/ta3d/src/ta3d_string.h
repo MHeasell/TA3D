@@ -307,6 +307,11 @@ namespace TA3D
 			return str.find_first_of(chars.str, pos);
 		}
 
+		size_type find_first_not_of(const String& chars) const
+		{
+			return str.find_first_not_of(chars.str);
+		}
+
 		size_type find_last_of(const String& chars) const
 		{
 			return str.find_last_of(chars.c_str(), str.size(), chars.size());
@@ -439,6 +444,24 @@ namespace TA3D
 		void convertSlashesIntoBackslashes()
 		{
 			replace('/', '\\');
+		}
+
+		void convertBackslashesIntoSlashes()
+		{
+			replace('\\', '/');
+		}
+
+		void removeTrailingSlash()
+		{
+			if (empty())
+			{
+				return;
+			}
+
+			if (last() == '/' || last() == '\\')
+			{
+				chop(1);
+			}
 		}
 
 		bool glob(const String& pattern) const
@@ -698,7 +721,14 @@ namespace TA3D
 		return new_it;
 	}
 
-	String operator+(char lhs, String& rhs)
+	String operator+(char lhs, const String& rhs)
+	{
+		String n(lhs);
+		n.append(rhs);
+		return n;
+	}
+
+	String operator+(const String& lhs, const char* rhs)
 	{
 		String n(lhs);
 		n.append(rhs);
