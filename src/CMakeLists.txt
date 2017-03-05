@@ -82,6 +82,8 @@ if (WIN32 OR (CMAKE_CROSSCOMPILING AND NOT UNIX))
 endif ()
 add_subdirectory(libs/SDL_sgui)
 
+add_subdirectory(libs/fmt-3.0.1)
+
 # TA3D
 add_subdirectory(ta3d)
 

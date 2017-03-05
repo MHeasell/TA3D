@@ -8,6 +8,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Yuni_CXXFLAGS}")
 link_libraries("${Yuni_LIBS}")
 
 include_directories("../../libs/utfcpp/source")
+include_directories("../../libs/fmt-3.0.1")
 
 include_directories(BEFORE ${CMAKE_CURRENT_SOURCE_DIR})
 
@@ -470,7 +471,7 @@ if(APPLE)
 endif()
 
 string(STRIP "${LIBS}" LIBS)
-target_link_libraries(${TA3D_BIN} ${LIBS})
+target_link_libraries(${TA3D_BIN} FMT ${LIBS})
 
 
 #
