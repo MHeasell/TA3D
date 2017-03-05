@@ -1,5 +1,5 @@
-#ifndef __TA3D_STRING_H__
-#define __TA3D_STRING_H__
+#ifndef __TA3D_TA3D_STRING_H__
+#define __TA3D_TA3D_STRING_H__
 
 #include <cstddef>
 #include <cstdint>
