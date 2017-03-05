@@ -307,6 +307,16 @@ namespace TA3D
 			return str.find_first_of(chars.str, pos);
 		}
 
+		size_type find_first_of(const String& chars) const
+		{
+			return str.find_first_of(chars.str);
+		}
+
+		size_type find_first_not_of(const String& chars, size_type pos) const
+		{
+			return str.find_first_not_of(chars.str, pos);
+		}
+
 		size_type find_first_not_of(const String& chars) const
 		{
 			return str.find_first_not_of(chars.str);
