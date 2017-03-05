@@ -41,6 +41,8 @@ namespace TA3D
 
 		String(std::string s) : str(s) {}
 
+		String(const String& other, size_type pos, size_type count = npos): str(other.str, pos, count) {}
+
 		template <class InputIt>
 		String(InputIt first, InputIt last) : str(first, last) {}
 
@@ -56,7 +58,12 @@ namespace TA3D
 
 		void append(const String& s)
 		{
-			str.append(s.c_str());
+			append(s.str);
+		}
+
+		void append(const std::string& s)
+		{
+			str.append(s);
 		}
 
 		void append(const char* chars)
@@ -69,7 +76,7 @@ namespace TA3D
 		{
 			std::ostringstream out;
 			out << t;
-			append(out.str().c_str());
+			append(out.str());
 		}
 
 		void append(const char* s, size_type count)
@@ -111,7 +118,7 @@ namespace TA3D
 
 		size_type find(const String& substr) const
 		{
-			return str.find(substr.c_str());
+			return str.find(substr.str);
 		}
 
 		int32_t to_sint32() const
@@ -174,7 +181,7 @@ namespace TA3D
 						{
 							return false;
 						}
-						String buf(c_str(), std::min(size(), (size_type)4));
+						String buf(*this, 0, std::min(size(), (size_type)4));
 						buf.toLower();
 						return buf == "true" || buf == "on" || buf == "yes";
 					}
@@ -200,7 +207,7 @@ namespace TA3D
 		
 		bool contains(const String& substr) const
 		{
-			return str.find(substr.c_str()) != std::string::npos;
+			return str.find(substr.str) != std::string::npos;
 		}
 
 		bool contains(char ch) const
@@ -224,7 +231,7 @@ namespace TA3D
 			}
 
 			size_type start_index = our_size - sub_size;
-			return str.compare(start_index, sub_size, substr.c_str(), sub_size) == 0;
+			return str.compare(start_index, sub_size, substr.str) == 0;
 		}
 
 		bool endsWith(char ch) const
@@ -242,7 +249,7 @@ namespace TA3D
 				return false;
 			}
 
-			return str.compare(0, sub_size, substr.c_str(), sub_size) == 0;
+			return str.compare(0, sub_size, substr.str) == 0;
 		}
 
 		bool startsWith(char ch) const
@@ -326,7 +333,7 @@ namespace TA3D
 
 		size_type find_last_of(const String& chars) const
 		{
-			return str.find_last_of(chars.c_str(), str.size(), chars.size());
+			return str.find_last_of(chars.str);
 		}
 
 		size_type find_last_of(const char ch) const
@@ -357,7 +364,7 @@ namespace TA3D
 
 		void assign(const String& s, size_type count)
 		{
-			str.assign(s.c_str(), count);
+			str.assign(s.str, 0, count);
 		}
 
 		// Removes the last octet of the string.
@@ -388,10 +395,10 @@ namespace TA3D
 			size_type start_pos = 0;
 			while (start_pos < str.size())
 			{
-				size_type separator_pos = str.find_first_of(separators.c_str(), start_pos);
+				size_type separator_pos = str.find_first_of(separators.str, start_pos);
 				if (separator_pos == std::string::npos)
 				{
-					String tmp = String(str.c_str() + start_pos, str.size() - start_pos);
+					String tmp = String(*this, start_pos);
 					if (trimElements)
 					{
 						tmp.trim();
@@ -403,7 +410,7 @@ namespace TA3D
 					return;
 				}
 
-				String tmp = String(str.c_str() + start_pos, separator_pos - start_pos);
+				String tmp = String(str, start_pos, separator_pos - start_pos);
 				if (trimElements)
 				{
 					tmp.trim();
