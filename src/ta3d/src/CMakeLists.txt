@@ -34,6 +34,9 @@ set(SRC_MESHES
 		mesh/instancing.cpp mesh/instancing.h
 		mesh/joins.cpp mesh/joins.h)
 
+set(SRC_TA3D_STRING
+		ta3d_string.h ta3d_string.cpp)
+
 #
 # Logs
 #
@@ -269,7 +272,7 @@ set(TA3D_BIN ta3d)
 
 
 set(TA3D_SOURCES
-		${SRC_STDAFX} ${SRC_LOGS} ${SRC_I18N} ${SRC_MISC}
+		${SRC_STDAFX} ${SRC_TA3D_STRING} ${SRC_LOGS} ${SRC_I18N} ${SRC_MISC}
 		${SRC_THREADS} ${SRC_DEBUG} ${SRC_CONSOLE}
 		${SRC_GFX} ${SRC_GFX_GUI}
 		${SRC_GFX_PARTICLES}
