@@ -95,7 +95,7 @@ namespace TA3D
 			{
 				if (!game_data.map_filename.empty() && !game_data.game_script.empty())
 				{
-					if (!saved_game) // For a saved game, we already have everything set
+					if (saved_game.empty()) // For a saved game, we already have everything set
 					{
 						game_data.nb_players = 0;
 						for (int i = 0; i < TA3D_PLAYERS_HARD_LIMIT; ++i) // Move players to the top of the vector, so it's easier to access data
@@ -262,7 +262,7 @@ namespace TA3D
 						game_data.player_network_id[0] = my_player_id;
 						game_data.ai_level[0] = AI_list.empty() ? String("none") : AI_list[0];
 
-						if (!host)
+						if (host.empty())
 						{
 							game_data.player_names[1] = player_str[1];
 							game_data.player_sides[1] = side_str[1];
@@ -383,7 +383,7 @@ namespace TA3D
 				pArea->caption("gamesetup.map_info", map_info);
 			}
 
-			if (!host)
+			if (host.empty())
 				for (int i = 0; i < TA3D_PLAYERS_HARD_LIMIT; ++i)
 					pArea->msg(String("gamesetup.ready") << i << ".hide");
 
@@ -548,7 +548,7 @@ namespace TA3D
 				pArea->caption("gamesetup.t_chat", "");
 			}
 
-			if (pArea->get_value("gamesetup.FOW") >= 0 && !client && !saved_game)
+			if (pArea->get_value("gamesetup.FOW") >= 0 && !client && saved_game.empty())
 			{
 				Gui::GUIOBJ::Ptr obj = pArea->get_object("gamesetup.FOW");
 				if (obj && obj->Value != -1)
@@ -563,7 +563,7 @@ namespace TA3D
 			if (client || saved_game.notEmpty())
 				pArea->msg("scripts.hide"); // Hide the scripts window in client mode
 
-			if (pArea->get_state("scripts.b_ok") && !client && !saved_game)
+			if (pArea->get_state("scripts.b_ok") && !client && saved_game.empty())
 			{
 				Gui::GUIOBJ::Ptr guiobj = pArea->get_object("scripts.script_list");
 				if (guiobj && guiobj->Pos < guiobj->num_entries())
@@ -606,7 +606,7 @@ namespace TA3D
 				return true; // En cas de click sur "retour", on quitte la fenêtre
 			}
 
-			if (!saved_game && pArea->get_value("gamesetup.max_units") >= 0 && !client)
+			if (saved_game.empty() && pArea->get_value("gamesetup.max_units") >= 0 && !client)
 			{
 				Gui::GUIOBJ::Ptr obj = pArea->get_object("gamesetup.max_units");
 				obj->Text[0] = obj->Text[1 + obj->Value];
@@ -618,7 +618,7 @@ namespace TA3D
 			{
 				if (pArea->get_state(String("gamesetup.ready") << i) != game_data.ready[i])
 				{
-					if (game_data.player_control[i] == PLAYER_CONTROL_LOCAL_HUMAN && !saved_game)
+					if (game_data.player_control[i] == PLAYER_CONTROL_LOCAL_HUMAN && saved_game.empty())
 					{
 						network_manager.sendSpecial("NOTIFY UPDATE");
 						game_data.ready[i] = !game_data.ready[i];
@@ -777,13 +777,13 @@ namespace TA3D
 				}
 			}
 
-			if (pArea->get_state("gamesetup.b_units") && !client && !saved_game) // Select available units
+			if (pArea->get_state("gamesetup.b_units") && !client && saved_game.empty()) // Select available units
 			{
 				Menus::UnitSelector::Execute(game_data.use_only, game_data.use_only); // Change unit selection
 			}
 
 			if (minimap_obj != NULL &&
-				(((pArea->get_state("gamesetup.minimap") || pArea->get_state("gamesetup.change_map")) && !client) || (client && !set_map.empty())) && !saved_game) // Clic on the mini-map or received map set command
+				(((pArea->get_state("gamesetup.minimap") || pArea->get_state("gamesetup.change_map")) && !client) || (client && !set_map.empty())) && saved_game.empty()) // Clic on the mini-map or received map set command
 			{
 				String new_map;
 				if (!client)
@@ -918,7 +918,7 @@ namespace TA3D
 							game_data.player_names[i] = player_str[2];
 							game_data.player_sides[i] = side_str[0];
 							game_data.player_control[i] = player_control[2];
-							game_data.ai_level[i] = AI_TYPE_EASY;
+							game_data.ai_level[i] = std::to_string(AI_TYPE_EASY);
 							game_data.player_network_id[i] = -1;
 
 							pArea->caption(String("gamesetup.name") << i, game_data.player_names[i]); // Update gui
@@ -1037,7 +1037,7 @@ namespace TA3D
 					case 3:
 						if (params[0] == "NOTIFY")
 						{
-							if (params[1] == "NEW_PLAYER" && !saved_game) // Add new player
+							if (params[1] == "NEW_PLAYER" && saved_game.empty()) // Add new player
 							{
 								int slot = -1;
 								for (int i = 0; i < TA3D_PLAYERS_HARD_LIMIT; ++i)

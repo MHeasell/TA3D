@@ -562,6 +562,11 @@ namespace TA3D
 			return const_utf8iterator(str.begin(), str.end(), str.end());
 		}
 
+		bool utf8valid() const
+		{
+			return utf8::is_valid(begin(), end());
+		}
+
 		// Converts the string to uppercase in-place.
 		// This function only considers the standard latin alphabet,
 		// where "uppercase" is well defined.
@@ -743,6 +748,11 @@ namespace TA3D
 		String n(lhs);
 		n.append(rhs);
 		return n;
+	}
+
+	bool operator==(const char* lhs, const String& rhs)
+	{
+		return rhs == lhs;
 	}
 }
 
