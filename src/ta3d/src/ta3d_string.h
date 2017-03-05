@@ -337,7 +337,7 @@ namespace TA3D
 		template <typename... Args>
 		String format(const char* fmt, const Args& ... args)
 		{
-			return String(fmt::format(fmt, args...));
+			return String(fmt::sprintf(fmt, args...));
 		}
 
 		void erase(size_type index, size_type count)
