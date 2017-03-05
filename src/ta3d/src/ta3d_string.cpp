@@ -55,7 +55,7 @@ namespace TA3D
 
 	String::const_utf8iterator operator+(const String::const_utf8iterator& it, String::size_type count)
 	{
-		auto new_it = String::const_utf8iterator(it);
+		String::const_utf8iterator new_it(it);
 		for (String::size_type i = 0; i < count; ++i)
 		{
 			++new_it;
