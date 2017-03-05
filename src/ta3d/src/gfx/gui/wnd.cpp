@@ -195,7 +195,7 @@ namespace TA3D
 					{
 						int smax = Title.utf8size();
 						int smin = 0;
-						int s = (smin + smax) >> 1;
+						int s;
 						do
 						{
 							s = (smin + smax) >> 1;
