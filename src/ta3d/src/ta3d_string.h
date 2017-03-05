@@ -443,7 +443,7 @@ namespace TA3D
 		{
 			std::string::size_type offset = 0;
 			std::string::size_type pos;
-			while (offset < size());
+			while (offset < size())
 			{
 				pos = str.find(original.c_str(), offset, original.length());
 				if (pos == std::string::npos)
