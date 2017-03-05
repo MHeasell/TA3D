@@ -474,7 +474,7 @@ if(APPLE)
 endif()
 
 string(STRIP "${LIBS}" LIBS)
-target_link_libraries(${TA3D_BIN} FMT ${LIBS})
+target_link_libraries(${TA3D_BIN} fmt ${LIBS})
 
 
 #
