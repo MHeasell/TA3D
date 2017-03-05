@@ -365,7 +365,7 @@ namespace TA3D
 			// If the string is empty, the buffer may be invalid (NULL)
 			if (filename.size())
 			{
-				unsigned int i = filename.size();
+				String::size_type i = filename.size();
 				do
 				{
 					--i;
