@@ -186,8 +186,6 @@ namespace TA3D
 				return buf == "true" || buf == "on" || buf == "yes";
 			}
 		}
-
-		return false;
 	}
 
 	String::size_type String::size() const
