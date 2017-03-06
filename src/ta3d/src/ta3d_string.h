@@ -76,11 +76,7 @@ namespace TA3D
 
 		bool notEmpty() const;
 
-		String& clear()
-		{
-			str.clear();
-			return *this;
-		}
+		String& clear();
 
 		size_type find(char ch) const;
 

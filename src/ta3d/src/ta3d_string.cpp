@@ -608,6 +608,12 @@ namespace TA3D
 		}
 	}
 
+	String& String::clear()
+	{
+		str.clear();
+		return *this;
+	}
+
 	std::ostream& operator<<(std::ostream& os, const String& str)
 	{
 		return os << str.c_str();
