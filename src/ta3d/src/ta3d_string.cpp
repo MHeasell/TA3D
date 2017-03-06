@@ -288,12 +288,12 @@ namespace TA3D
 
 	char String::last() const
 	{
-		return str.empty() ? '\0' : str.back();
+		return str.empty() ? char(0) : str.back();
 	}
 
 	char String::first() const
 	{
-		return str.empty() ? '\0' : str.front();
+		return str.empty() ? char(0) : str.front();
 	}
 
 	String::size_type String::find_first_of(const String& chars, String::size_type pos) const
@@ -575,7 +575,7 @@ namespace TA3D
 		int delta = c - 'a';
 		if (delta >= 0 && delta < 26)
 		{
-			return c & 0x5f;
+			return c & char(0x5f);
 		}
 
 		return c;
@@ -586,7 +586,7 @@ namespace TA3D
 		int delta = c - 'A';
 		if (delta >= 0 && delta < 26)
 		{
-			return c | 32;
+			return c | char(32);
 		}
 
 		return c;
