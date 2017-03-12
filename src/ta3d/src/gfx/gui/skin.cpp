@@ -211,11 +211,11 @@ namespace TA3D
 					{
 						// Dychotomic search of the longest string that fits
 						rest = pCacheDrawTextStr;
-						int top = rest.size();
-						int bottom = 0;
+						String::size_type top = rest.size();
+						String::size_type bottom = 0;
 						while (top != bottom)
 						{
-							const int mid = (top + bottom) >> 1;
+							String::size_type mid = (top + bottom) >> 1;
 							pCacheDrawTextStr = Substr(rest, 0, mid);
 							if (gui_font->length(pCacheDrawTextStr) >= x2 - x1 - text_background.x1 + text_background.x2 - scroll[0].sw - 10)
 								top = mid;
@@ -420,7 +420,7 @@ namespace TA3D
 			float maxheight = y2 - y1 + text_background.y2 - text_background.y1 - text_y_offset;
 			int H = Math::Max(row - (int)(0.5f * maxheight / pCacheFontHeight), 0);
 			int y = 0;
-			int row_size = Entry[row].utf8size();
+			String::size_type row_size = Entry[row].utf8size();
 			while (pCacheFontHeight * float(y + 1) <= maxheight && y + H < (int)Entry.size())
 			{
 				String strtoprint;
@@ -436,10 +436,10 @@ namespace TA3D
 						x += k;
 					}
 
-					int len = buf.utf8size();
-					int smax = len + 1;
-					int smin = 0;
-					int s = (smax + smin) >> 1;
+					String::size_type len = buf.utf8size();
+					String::size_type smax = len + 1;
+					String::size_type smin = 0;
+					String::size_type s;
 					do
 					{
 						s = (smax + smin) >> 1;
@@ -457,7 +457,7 @@ namespace TA3D
 
 					if (len > s && SubstrUTF8(strtoprint, s - 1, 1) != " " && SubstrUTF8(buf, s, 1) != " ") // We're splitting a word :s
 					{
-						int olds = s;
+						String::size_type olds = s;
 						while (s > 0 && SubstrUTF8(strtoprint, s - 1, 1) != " " && SubstrUTF8(buf, s, 1) != " ")
 							--s;
 						if (s == 0)

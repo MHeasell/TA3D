@@ -318,7 +318,7 @@ namespace TA3D
 			{
 				if (skin && !skin->prefix().empty())
 				{
-					int name_len = Paths::ExtractFileName(background_name).size();
+					String::size_type name_len = Paths::ExtractFileName(background_name).size();
 					if (name_len > 0)
 						background_name = Substr(background_name, 0, background_name.size() - name_len) << skin->prefix() << Paths::ExtractFileName(background_name);
 					else

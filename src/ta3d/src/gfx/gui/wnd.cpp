@@ -193,9 +193,9 @@ namespace TA3D
 					String cutTitle = Title;
 					if (gui_font->length(cutTitle) > maxTitleLength)
 					{
-						int smax = Title.utf8size();
-						int smin = 0;
-						int s;
+						String::size_type smax = Title.utf8size();
+						String::size_type smin = 0;
+						String::size_type s;
 						do
 						{
 							s = (smin + smax) >> 1;
