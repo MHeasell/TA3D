@@ -738,9 +738,8 @@ namespace TA3D
 		CobVm* cob_thread = fork(functionName, parameters, nb_params);
 		if (cob_thread)
 		{
-			int res = -1;
 			while (cob_thread->running)
-				res = cob_thread->run(0.0f, true, parameters, nb_params);
+				cob_thread->run(0.0f, true, parameters, nb_params);
 			cob_thread->kill();
 			return parameters[nb_params - 1];
 		}

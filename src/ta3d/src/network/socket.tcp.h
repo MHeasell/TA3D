@@ -44,6 +44,11 @@ namespace TA3D
 		/*virtual*/ void check(uint32 msec);
 		/*virtual*/ bool ready();
 
+		/**
+		 * Sends the given string over the network.
+		 * The string cannot be longer than MAX_INT.
+		 * If the string is longer, a std::range_error is thrown.
+		 */
 		/*virtual*/ void send(const String& str);
 		/*virtual*/ void send(const char* data, int size);
 		/*virtual*/ int recv(char* data, int size);

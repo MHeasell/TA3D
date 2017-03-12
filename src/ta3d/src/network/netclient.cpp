@@ -53,7 +53,7 @@ namespace TA3D
 	void NetClient::sendMessage(const String& msg)
 	{
 		if (sock.isOpen())
-			sock.send((String(msg) << "\n").data(), msg.size() + 1);
+			sock.send(String(msg) << "\n");
 		else
 		{
 			state = DISCONNECTED;

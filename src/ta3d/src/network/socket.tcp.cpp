@@ -1,6 +1,8 @@
 #include <stdafx.h>
 #include <logs/logs.h>
 #include "socket.tcp.h"
+#include <limits>
+#include <stdexcept>
 
 #define TCP_BUFFER_SIZE 32
 #define TCP_COMPRESSION_LEVEL 6
@@ -243,7 +245,11 @@ namespace TA3D
 
 	void SocketTCP::send(const String& str)
 	{
-		send(str.c_str(), int(str.size()));
+		auto size = str.size();
+		if (size > std::numeric_limits<int>::max()) {
+			throw std::range_error("str is too large to send");
+		}
+		send(str.c_str(), int(size));
 	}
 
 	void SocketTCP::send(const char* data, int size)

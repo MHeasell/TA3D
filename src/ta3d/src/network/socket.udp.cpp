@@ -1,6 +1,8 @@
 #include <stdafx.h>
 #include <logs/logs.h>
 #include "socket.udp.h"
+#include <limits>
+#include <stdexcept>
 
 namespace TA3D
 {
@@ -63,7 +65,11 @@ namespace TA3D
 
 	void SocketUDP::send(const String& str)
 	{
-		send(str.c_str(), str.size());
+		auto size = str.size();
+		if (size > std::numeric_limits<int>::max()) {
+			throw std::range_error("str is too large to send");
+		}
+		send(str.c_str(), int(size));
 	}
 
 	void SocketUDP::send(const char* data, int size)
