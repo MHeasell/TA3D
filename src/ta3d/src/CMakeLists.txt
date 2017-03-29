@@ -302,7 +302,7 @@ set(TA3D_LIB_SOURCES
 
 set(TA3D_SOURCES main.cpp)
 
-set(TA3D_TEST_SOURCES test_main.cpp)
+set(TA3D_TEST_SOURCES test_main.cpp ta3d_string_test.cpp)
 
 
 
