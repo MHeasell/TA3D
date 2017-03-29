@@ -9,6 +9,7 @@ link_libraries("${Yuni_LIBS}")
 
 include_directories("../../libs/utfcpp/source")
 include_directories("../../libs/fmt-3.0.1")
+include_directories("../../libs/catch")
 
 include_directories(BEFORE ${CMAKE_CURRENT_SOURCE_DIR})
 
