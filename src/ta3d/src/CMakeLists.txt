@@ -270,11 +270,11 @@ set(SRC_INGAME_MENUS
 # --------------------------------------------------------------------
 # --- TA3D
 # --------------------------------------------------------------------
+set(TA3D_LIB libta3d)
 set(TA3D_BIN ta3d)
 set(TA3D_TEST_BIN ta3d_test)
 
-
-set(TA3D_SOURCES
+set(TA3D_LIB_SOURCES
 		${SRC_STDAFX} ${SRC_TA3D_STRING} ${SRC_LOGS} ${SRC_I18N} ${SRC_MISC}
 		${SRC_THREADS} ${SRC_DEBUG} ${SRC_CONSOLE}
 		${SRC_GFX} ${SRC_GFX_GUI}
@@ -297,34 +297,12 @@ set(TA3D_SOURCES
 		TA3D_NameSpace.cpp TA3D_NameSpace.h ta3dbase.h
 		cache.h cache.cpp
 		read_file_parameter.h read_file_parameter.cpp
-		main.cpp sdl.h
-		)
+		sdl.h
+	)
 
-set(TA3D_TEST_SOURCES
-		${SRC_STDAFX} ${SRC_TA3D_STRING} ${SRC_LOGS} ${SRC_I18N} ${SRC_MISC}
-		${SRC_THREADS} ${SRC_DEBUG} ${SRC_CONSOLE}
-		${SRC_GFX} ${SRC_GFX_GUI}
-		${SRC_GFX_PARTICLES}
-		${SRC_MESHES}
-		${SRC_MODS}
-		${SRC_SOUND}
-		${SRC_SCRIPTS}
-		${SRC_ENGINE}
-		${SRC_INPUT}
-		${SRC_FILEFORMATS}
-		${SRC_VFS}
-		${SRC_NETWORK}
-		${SRC_AI}
-		${SRC_INGAME} ${SRC_INGAME_WEAPONS} ${SRC_INGAME_MENUS}
-		install.cpp
-		restore.cpp restore.h
-		fbi.cpp fbi.h
-		tdf.cpp tdf.h tnt.cpp tnt.h
-		TA3D_NameSpace.cpp TA3D_NameSpace.h ta3dbase.h
-		cache.h cache.cpp
-		read_file_parameter.h read_file_parameter.cpp
-		test_main.cpp sdl.h
-		)
+set(TA3D_SOURCES main.cpp)
+
+set(TA3D_TEST_SOURCES test_main.cpp)
 
 
 
@@ -332,6 +310,8 @@ set(TA3D_TEST_SOURCES
 
 
 if(NOT APPLE)
+
+	add_library(${TA3D_LIB} ${TA3D_LIB_SOURCES})
 
 	add_executable(${TA3D_BIN} ${TA3D_SOURCES})
 
@@ -507,8 +487,8 @@ if(APPLE)
 endif()
 
 string(STRIP "${LIBS}" LIBS)
-target_link_libraries(${TA3D_BIN} fmt ${LIBS})
-target_link_libraries(${TA3D_TEST_BIN} fmt ${LIBS})
+target_link_libraries(${TA3D_BIN} ${TA3D_LIB} fmt ${LIBS})
+target_link_libraries(${TA3D_TEST_BIN} ${TA3D_LIB} fmt ${LIBS})
 
 
 #
