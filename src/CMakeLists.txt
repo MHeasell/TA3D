@@ -1,6 +1,8 @@
 project(TA3DRepository)
 cmake_minimum_required(VERSION 2.6)
 
+enable_testing()
+
 message(STATUS "")
 message(STATUS "--- TA3D, Remake of the Total Annihilation engine ---")
 message(STATUS "")
