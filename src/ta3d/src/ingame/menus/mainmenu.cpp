@@ -28,12 +28,10 @@
 #include <input/keyboard.h>
 #include <input/mouse.h>
 #include <gfx/video.h>
+#include "read_file_parameter.h"
 
 namespace TA3D
 {
-
-	// TODO Must be removed
-	void ReadFileParameter();
 
 	namespace Menus
 	{

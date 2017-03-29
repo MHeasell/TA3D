@@ -295,6 +295,7 @@ set(TA3D_SOURCES
 		tdf.cpp tdf.h tnt.cpp tnt.h
 		TA3D_NameSpace.cpp TA3D_NameSpace.h ta3dbase.h
 		cache.h cache.cpp
+		read_file_parameter.h read_file_parameter.cpp
 		main.cpp sdl.h
 		)
 
