@@ -2,6 +2,7 @@
 string(STRIP "${LIBS}" LIBS)
 link_libraries("${LIBS}")
 
+set(CMAKE_CXX_STANDARD 11)
 
 # Yuni Settins
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Yuni_CXXFLAGS}")
