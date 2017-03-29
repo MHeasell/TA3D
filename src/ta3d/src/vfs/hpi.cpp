@@ -9,9 +9,6 @@ namespace TA3D
 {
 	namespace UTILS
 	{
-		//! Magic autoregistration
-		REGISTER_ARCHIVE_TYPE(Hpi);
-
 		void Hpi::finder(String::List& fileList, const String& path)
 		{
 			String::List files;

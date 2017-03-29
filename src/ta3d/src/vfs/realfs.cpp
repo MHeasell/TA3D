@@ -10,9 +10,6 @@ namespace TA3D
 {
 	namespace UTILS
 	{
-		//! Magic autoregistration
-		REGISTER_ARCHIVE_TYPE(RealFS);
-
 		void RealFS::finder(String::List& fileList, const String& path)
 		{
 			fileList.push_back(path); // We consider a path to a directory as an archive of the real filesystem

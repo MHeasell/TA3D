@@ -117,19 +117,6 @@ namespace TA3D
 			static Archive* load(const String& filename);
 			static void getArchiveList(String::List& fileList, const String& path);
 		}; // class Archive
-
-//! A simple macro to auto register Archive classes functionnalities :) (you don't even need to include the headers \o/)
-#define REGISTER_ARCHIVE_TYPE(x)                                    \
-	class __class_register_archive__##x                             \
-	{                                                               \
-	public:                                                         \
-		inline __class_register_archive__##x()                      \
-		{                                                           \
-			TA3D::UTILS::Archive::registerArchiveFinder(x::finder); \
-			TA3D::UTILS::Archive::registerArchiveLoader(x::loader); \
-		}                                                           \
-	};                                                              \
-	__class_register_archive__##x __my__##x##__registerer; // Instantiate an object to have it fully functionnal :)
 	}													   // namespace utils
 } // namespace TA3D
 

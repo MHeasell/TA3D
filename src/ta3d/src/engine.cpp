@@ -17,6 +17,8 @@
 
 #include <thread>
 #include <memory>
+#include <vfs/hpi.h>
+#include <vfs/realfs.h>
 
 #include "stdafx.h"
 #include "TA3D_NameSpace.h"
@@ -76,6 +78,12 @@ namespace TA3D
 		// Initializing SDL Net
 		if (::SDLNet_Init() == -1)
 			throw("SDLNet_Init() failed.");
+
+		// register archives loaders which VFS will use
+		TA3D::UTILS::Archive::registerArchiveFinder(Hpi::finder);
+		TA3D::UTILS::Archive::registerArchiveLoader(Hpi::loader);
+		TA3D::UTILS::Archive::registerArchiveFinder(RealFS::finder);
+		TA3D::UTILS::Archive::registerArchiveLoader(RealFS::loader);
 
 		// Load the VFS
 		VFS::Instance()->reload();
