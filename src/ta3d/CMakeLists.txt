@@ -40,10 +40,6 @@ if(NOT WIN32 OR MINGW)
 	set(TA3D_COMMON_CPP_FLAGS  "${TA3D_COMMON_CPP_FLAGS} -W -Wextra -Wall -Wfloat-equal -Woverloaded-virtual")
 	set(TA3D_COMMON_CPP_FLAGS  "${TA3D_COMMON_CPP_FLAGS} -Wconversion")
 endif()
-if(APPLE)
-	set(TA3D_COMMON_CPP_FLAGS  "${TA3D_COMMON_CPP_FLAGS} -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64")
-	set(TA3D_COMMON_CPP_FLAGS  "${TA3D_COMMON_CPP_FLAGS} -fvisibility=hidden")
-endif()
 
 
 #
@@ -80,9 +76,6 @@ else()
 
 	if(NOT WIN32)
 		Set(CMAKE_CXX_FLAGS "${TA3D_COMMON_CPP_FLAGS} -g -ggdb2")
-		if(APPLE)
-			set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -gfull")
-		endif()
 	else()
 		if(MINGW)
 			set(CMAKE_CXX_FLAGS "${TA3D_COMMON_CPP_FLAGS} -g2")
@@ -103,12 +96,8 @@ endif()
 # Platform
 #
 if(NOT WIN32)
-	if(APPLE)
-		add_definitions("-DTA3D_PLATFORM_DARWIN -DTA3D_PLATFORM_MAC")
-	else()
-		set(LINUX 1)
-		add_definitions("-DTA3D_PLATFORM_LINUX")
-	endif()
+	set(LINUX 1)
+	add_definitions("-DTA3D_PLATFORM_LINUX")
 else()
 	add_definitions("-DTA3D_PLATFORM_WINDOWS -DTA3D_PLATFORM_WIN32")
 	if(MSVC)
@@ -195,115 +184,100 @@ link_directories("${CMAKE_CURRENT_SOURCE_DIR}/src/lua/")
 #
 # --- LUA / LUAJIT ---
 #
-if(APPLE)
-	# On OS X, we will directly use luajit from macports
-	set(LUA_NOJIT 1)
-	execute_process(COMMAND pkg-config lua --cflags OUTPUT_VARIABLE LUA_CFLAGS OUTPUT_STRIP_TRAILING_WHITESPACE)
-	execute_process(COMMAND pkg-config lua --libs OUTPUT_VARIABLE LUA_LIBS OUTPUT_STRIP_TRAILING_WHITESPACE)
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${LUA_CFLAGS}")
-	set(LIBS "${LUA_LIBS} -lz")
-	message(STATUS "lua cflags : ${LUA_CFLAGS}")
-	message(STATUS "lua libs   : ${LUA_LIBS}")
-else()
-	if(LUA_NOJIT)
-		if(WIN32 OR (CMAKE_CROSSCOMPILING AND NOT UNIX))
+if(LUA_NOJIT)
+	if(WIN32 OR (CMAKE_CROSSCOMPILING AND NOT UNIX))
 
-			if( CMAKE_CROSSCOMPILING )
-				set( target i586-mingw32msvc- )
-				set( MAKE_WIN "make")
-				set( RANLIB_WIN "${target}ranlib")
-			else()
-				find_program(MAKE_WIN "mingw32-make.exe")
-				find_program(RANLIB_WIN "ranlib.exe")
-			endif()
-
-			if( NOT BUILT_LUA )
-				message(STATUS "Building Lua")
-				execute_process(WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/src/lua" COMMAND ${MAKE_WIN} clean)
-				execute_process(WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/src/lua" COMMAND ${MAKE_WIN} mingw CC=${CMAKE_C_COMPILER} RANLIB=${RANLIB_WIN})
-				set( BUILT_LUA 1 CACHE BOOL "Lua has been built" )
-			endif()
-
-			execute_process( COMMAND cp "${CMAKE_CURRENT_SOURCE_DIR}/src/lua/lua51.dll" "${CMAKE_CURRENT_SOURCE_DIR}/" )
-
-			if( NOT BUILT_LUA )
-				execute_process( COMMAND make -C "${CMAKE_CURRENT_SOURCE_DIR}/src/lua/" clean)
-				execute_process( COMMAND make -C "${CMAKE_CURRENT_SOURCE_DIR}/src/lua/" mingw)
-				set( BUILT_LUA 1 CACHE BOOL "Lua has been built")
-			endif()
-
-			set( LIBS "-L./lua -llua -luser32 -lgdi32 -lopengl32 -lglu32 -lz")
-
-			if(NOT CMAKE_CROSSCOMPILING)
-				set( LIBS "${LIBS} -lSDLmain")
-			endif()
-
-			link_directories("${CMAKE_CURRENT_SOURCE_DIR}/src/tools/win32/mingw32/libs/")
-
+		if( CMAKE_CROSSCOMPILING )
+			set( target i586-mingw32msvc- )
+			set( MAKE_WIN "make")
+			set( RANLIB_WIN "${target}ranlib")
 		else()
-
-			if(NOT APPLE)
-				if( NOT BUILT_LUA )
-					execute_process( COMMAND make -C "ta3d/src/lua/" clean )
-					execute_process( COMMAND make -C "ta3d/src/lua/" linux CC=${CMAKE_C_COMPILER} )
-					set( BUILT_LUA 1 CACHE BOOL "Lua has been built" )
-				endif()
-			endif()
-
-			set(LIBS "-llua -lz -ldl")
-			set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -rdynamic -ffast-math")
-
+			find_program(MAKE_WIN "mingw32-make.exe")
+			find_program(RANLIB_WIN "ranlib.exe")
 		endif()
-	else()			# LuaJIT 2
-		if(WIN32 OR (CMAKE_CROSSCOMPILING AND NOT UNIX))
-			if( CMAKE_CROSSCOMPILING )
-				set( target i586-mingw32msvc- )
-				set( MAKE_WIN "make")
-				set( RANLIB_WIN "${target}ranlib")
-			else()
-				find_program(MAKE_WIN "mingw32-make.exe")
-				find_program(RANLIB_WIN "ranlib.exe")
-			endif()
 
-			if( NOT BUILT_LUAJIT )
-				message(STATUS "Building LuaJIT")
-				execute_process(WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/src/luajit" COMMAND ${MAKE_WIN} clean)
-				execute_process(WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/src/luajit" COMMAND ${MAKE_WIN} CC=${CMAKE_C_COMPILER} RANLIB=${RANLIB_WIN})
-				set( BUILT_LUAJIT 1 CACHE BOOL "LuaJIT has been built" )
-			endif()
+		if( NOT BUILT_LUA )
+			message(STATUS "Building Lua")
+			execute_process(WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/src/lua" COMMAND ${MAKE_WIN} clean)
+			execute_process(WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/src/lua" COMMAND ${MAKE_WIN} mingw CC=${CMAKE_C_COMPILER} RANLIB=${RANLIB_WIN})
+			set( BUILT_LUA 1 CACHE BOOL "Lua has been built" )
+		endif()
 
-			set( LIBS "-L${CMAKE_CURRENT_SOURCE_DIR}/src/luajit/src -lluajit -luser32 -lgdi32 -lopengl32 -lglu32 -lz")
+		execute_process( COMMAND cp "${CMAKE_CURRENT_SOURCE_DIR}/src/lua/lua51.dll" "${CMAKE_CURRENT_SOURCE_DIR}/" )
 
-			if(NOT CMAKE_CROSSCOMPILING)
-				set( LIBS "${LIBS} -lSDLmain")
-			endif()
+		if( NOT BUILT_LUA )
+			execute_process( COMMAND make -C "${CMAKE_CURRENT_SOURCE_DIR}/src/lua/" clean)
+			execute_process( COMMAND make -C "${CMAKE_CURRENT_SOURCE_DIR}/src/lua/" mingw)
+			set( BUILT_LUA 1 CACHE BOOL "Lua has been built")
+		endif()
+
+		set( LIBS "-L./lua -llua -luser32 -lgdi32 -lopengl32 -lglu32 -lz")
+
+		if(NOT CMAKE_CROSSCOMPILING)
+			set( LIBS "${LIBS} -lSDLmain")
+		endif()
 
 		link_directories("${CMAKE_CURRENT_SOURCE_DIR}/src/tools/win32/mingw32/libs/")
 
-		else()
+	else()
 
-			if( NOT BUILT_LUAJIT )
-				execute_process(COMMAND lua -v RESULT_VARIABLE LUA_PROGRAM_ERROR)
-				if (LUA_PROGRAM_ERROR)
-					message(FATAL_ERROR "No Lua interpreter found! A Lua interpreter is required to build LuaJIT")
-				endif ()
-
-				execute_process( COMMAND make -C "${CMAKE_CURRENT_SOURCE_DIR}/src/luajit/" clean )
-				if(CMAKE_CROSSCOMPILING)
-					set(HOST_CC gcc)
-				else()
-					set(HOST_CC ${CMAKE_C_COMPILER})
-				endif()
-				execute_process( COMMAND make -C "${CMAKE_CURRENT_SOURCE_DIR}/src/luajit/" CC=${CMAKE_C_COMPILER} HOST_CC=${HOST_CC} )
-				set( BUILT_LUAJIT 1 CACHE BOOL "LuaJIT has been built" )
-			endif()
-
-			set(LIBS "-L${CMAKE_CURRENT_SOURCE_DIR}/src/luajit/src -lluajit -lz -ldl")
-			if(NOT APPLE)
-				set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -rdynamic -ffast-math")
-			endif()
-
+		if( NOT BUILT_LUA )
+			execute_process( COMMAND make -C "ta3d/src/lua/" clean )
+			execute_process( COMMAND make -C "ta3d/src/lua/" linux CC=${CMAKE_C_COMPILER} )
+			set( BUILT_LUA 1 CACHE BOOL "Lua has been built" )
 		endif()
+
+		set(LIBS "-llua -lz -ldl")
+		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -rdynamic -ffast-math")
+
+	endif()
+else()			# LuaJIT 2
+	if(WIN32 OR (CMAKE_CROSSCOMPILING AND NOT UNIX))
+		if( CMAKE_CROSSCOMPILING )
+			set( target i586-mingw32msvc- )
+			set( MAKE_WIN "make")
+			set( RANLIB_WIN "${target}ranlib")
+		else()
+			find_program(MAKE_WIN "mingw32-make.exe")
+			find_program(RANLIB_WIN "ranlib.exe")
+		endif()
+
+		if( NOT BUILT_LUAJIT )
+			message(STATUS "Building LuaJIT")
+			execute_process(WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/src/luajit" COMMAND ${MAKE_WIN} clean)
+			execute_process(WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/src/luajit" COMMAND ${MAKE_WIN} CC=${CMAKE_C_COMPILER} RANLIB=${RANLIB_WIN})
+			set( BUILT_LUAJIT 1 CACHE BOOL "LuaJIT has been built" )
+		endif()
+
+		set( LIBS "-L${CMAKE_CURRENT_SOURCE_DIR}/src/luajit/src -lluajit -luser32 -lgdi32 -lopengl32 -lglu32 -lz")
+
+		if(NOT CMAKE_CROSSCOMPILING)
+			set( LIBS "${LIBS} -lSDLmain")
+		endif()
+
+	link_directories("${CMAKE_CURRENT_SOURCE_DIR}/src/tools/win32/mingw32/libs/")
+
+	else()
+
+		if( NOT BUILT_LUAJIT )
+			execute_process(COMMAND lua -v RESULT_VARIABLE LUA_PROGRAM_ERROR)
+			if (LUA_PROGRAM_ERROR)
+				message(FATAL_ERROR "No Lua interpreter found! A Lua interpreter is required to build LuaJIT")
+			endif ()
+
+			execute_process( COMMAND make -C "${CMAKE_CURRENT_SOURCE_DIR}/src/luajit/" clean )
+			if(CMAKE_CROSSCOMPILING)
+				set(HOST_CC gcc)
+			else()
+				set(HOST_CC ${CMAKE_C_COMPILER})
+			endif()
+			execute_process( COMMAND make -C "${CMAKE_CURRENT_SOURCE_DIR}/src/luajit/" CC=${CMAKE_C_COMPILER} HOST_CC=${HOST_CC} )
+			set( BUILT_LUAJIT 1 CACHE BOOL "LuaJIT has been built" )
+		endif()
+
+		set(LIBS "-L${CMAKE_CURRENT_SOURCE_DIR}/src/luajit/src -lluajit -lz -ldl")
+		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -rdynamic -ffast-math")
+
 	endif()
 endif()
 
@@ -312,28 +286,21 @@ endif()
 #
 # --- GLEW ---
 #
-if(NOT APPLE)
-	if(WIN32 OR (CMAKE_CROSSCOMPILING AND NOT UNIX))
-		set(GLEW_LIB "${CMAKE_CURRENT_SOURCE_DIR}/src/tools/win32/mingw32/libs/libglew32.dll.a")
-	else()
-		find_library(GLEW_LIB GLEW)
-		if(NOT GLEW_LIB)
-			find_library(GLEW_LIB glew)
-		endif()
-		find_file(GLEW_HEADER GL/glew.h)
-		if(NOT GLEW_HEADER)
-			message(FATAL_ERROR "glew.h not found!")
-		endif()
-		message(STATUS "GLEW Header : ${GLEW_HEADER}")
-	endif()
-	message(STATUS "GLEW Library : ${GLEW_LIB}")
+if(WIN32 OR (CMAKE_CROSSCOMPILING AND NOT UNIX))
+	set(GLEW_LIB "${CMAKE_CURRENT_SOURCE_DIR}/src/tools/win32/mingw32/libs/libglew32.dll.a")
 else()
-	execute_process(COMMAND pkg-config glew --libs    OUTPUT_VARIABLE GLEW_LIB    OUTPUT_STRIP_TRAILING_WHITESPACE)
-	execute_process(COMMAND pkg-config glew --cflags  OUTPUT_VARIABLE GLEW_CFLAGS OUTPUT_STRIP_TRAILING_WHITESPACE)
-	message(STATUS "GLEW Library : ${GLEW_LIB}")
-	message(STATUS "GLEW CFLags : ${GLEW_CFLAGS}")
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GLEW_CFLAGS}")
+	find_library(GLEW_LIB GLEW)
+	if(NOT GLEW_LIB)
+		find_library(GLEW_LIB glew)
+	endif()
+	find_file(GLEW_HEADER GL/glew.h)
+	if(NOT GLEW_HEADER)
+		message(FATAL_ERROR "glew.h not found!")
+	endif()
+	message(STATUS "GLEW Header : ${GLEW_HEADER}")
 endif()
+message(STATUS "GLEW Library : ${GLEW_LIB}")
+
 if(NOT GLEW_LIB)
 	message(FATAL_ERROR "GLEW library not found!")
 endif()
@@ -342,53 +309,35 @@ set(LIBS "${LIBS} ${GLEW_LIB}")
 #
 # --- GLU ---
 #
-if(APPLE)
-	include_directories("/System/Library/Frameworks/OpenGL.framework/Headers")
-	set(LIBS "${LIBS} -L/System/Library/Frameworks/OpenGL.framework/Libraries -lGL -lGLU")
-else()
-	if(UNIX)
-		find_library(GLU_LIB GLU)
-		if(NOT GLU_LIB)
-			find_library(GLEW_LIB glu)
-		endif()
-		message(STATUS "GLU Library : ${GLU_LIB}")
-        set(LIBS "${LIBS} ${GLU_LIB} -lGL")
+if(UNIX)
+	find_library(GLU_LIB GLU)
+	if(NOT GLU_LIB)
+		find_library(GLEW_LIB glu)
 	endif()
+	message(STATUS "GLU Library : ${GLU_LIB}")
+	set(LIBS "${LIBS} ${GLU_LIB} -lGL")
 endif()
 
 
 #
 # --- FTGL ---
 #
-if(NOT APPLE)
-    if(WIN32 OR (CMAKE_CROSSCOMPILING AND NOT UNIX))
-        set( FREETYPE_INCLUDE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}/src/tools/win32/mingw32/include/freetype2/")
-        set( FREETYPE_LIBRARIES "${CMAKE_CURRENT_SOURCE_DIR}/src/tools/win32/mingw32/libs/libfreetype.dll.a")
-        message(STATUS "FreeType Library : ${FREETYPE_LIBRARIES}")
-    else()
-        find_package(Freetype)
-    endif()
-
-    include_directories( ${FREETYPE_INCLUDE_DIRS} )
-
-    set(FTGL_LIB ${CMAKE_CURRENT_SOURCE_DIR}/../libs/ftgl/lib/libftgl.a)
-    include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/../libs/ftgl/include )
-    set(__FTGL__lower__ true)
-
-    message(STATUS "FTGL Library : ${FTGL_LIB}")
-    set(LIBS "${LIBS} ${FTGL_LIB}")
-
+if(WIN32 OR (CMAKE_CROSSCOMPILING AND NOT UNIX))
+	set( FREETYPE_INCLUDE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}/src/tools/win32/mingw32/include/freetype2/")
+	set( FREETYPE_LIBRARIES "${CMAKE_CURRENT_SOURCE_DIR}/src/tools/win32/mingw32/libs/libfreetype.dll.a")
+	message(STATUS "FreeType Library : ${FREETYPE_LIBRARIES}")
 else()
-
-	execute_process(COMMAND pkg-config --libs  ftgl OUTPUT_VARIABLE FTGL_LIB OUTPUT_STRIP_TRAILING_WHITESPACE)
-	execute_process(COMMAND pkg-config --cflags  ftgl OUTPUT_VARIABLE FTGL_CFLAGS OUTPUT_STRIP_TRAILING_WHITESPACE)
-	message(STATUS "FTGL Library : ${FTGL_LIB}")
-	message(STATUS "FTGL CFLags : ${FTGL_CFLAGS}")
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${FTGL_CFLAGS}")
-	set(LIBS "${LIBS} ${FTGL_LIB}")
-	set(__FTGL__lower__ false)
-
+	find_package(Freetype)
 endif()
+
+include_directories( ${FREETYPE_INCLUDE_DIRS} )
+
+set(FTGL_LIB ${CMAKE_CURRENT_SOURCE_DIR}/../libs/ftgl/lib/libftgl.a)
+include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/../libs/ftgl/include )
+set(__FTGL__lower__ true)
+
+message(STATUS "FTGL Library : ${FTGL_LIB}")
+set(LIBS "${LIBS} ${FTGL_LIB}")
 
 
 #
@@ -411,83 +360,68 @@ endif()
 #
 # --- CPack: Installation process ---
 #
-# OS X Note : There is no need of CPake under OS X. On this platform,
-# an application is an independant bundle that embeds all needed data files.
-# A graphical application is only working if launched from its bundle.
-# So We cannot wait to install the application to be able to run it.
-#
-if(NOT APPLE)
 
-	if(NOT WIN32 AND UNIX)
-		message("-- TA3D will be installed in: ${CMAKE_INSTALL_PREFIX}")
-	endif()
-
-	set(TA3D_RESOURCES_INSTALL_PATH "share/games/ta3d")
-	set(TA3D_BINARIES_INSTALL_PATH "games")
-
-	install(DIRECTORY ../../docs DESTINATION ${TA3D_RESOURCES_INSTALL_PATH} PATTERN ".*" EXCLUDE PATTERN "*~" EXCLUDE)
-	install(DIRECTORY fonts DESTINATION ${TA3D_RESOURCES_INSTALL_PATH} PATTERN ".*" EXCLUDE PATTERN "*~" EXCLUDE)
-	install(DIRECTORY gfx DESTINATION ${TA3D_RESOURCES_INSTALL_PATH} PATTERN ".*" EXCLUDE PATTERN "*~" EXCLUDE)
-	install(DIRECTORY gui DESTINATION ${TA3D_RESOURCES_INSTALL_PATH} PATTERN ".*" EXCLUDE PATTERN "*~" EXCLUDE)
-	install(DIRECTORY resources DESTINATION ${TA3D_RESOURCES_INSTALL_PATH} PATTERN ".*" EXCLUDE PATTERN "*~" EXCLUDE)
-	install(DIRECTORY scripts DESTINATION ${TA3D_RESOURCES_INSTALL_PATH} PATTERN ".*" EXCLUDE PATTERN "*~" EXCLUDE PATTERN "__campaign_script.lua" EXCLUDE)
-	install(DIRECTORY shaders DESTINATION ${TA3D_RESOURCES_INSTALL_PATH} PATTERN ".*" EXCLUDE PATTERN "*~" EXCLUDE)
-	install(DIRECTORY sky DESTINATION ${TA3D_RESOURCES_INSTALL_PATH} PATTERN ".*" EXCLUDE PATTERN "*~" EXCLUDE)
-
-	# copy the file that will add TA3D to the desktop menu
-	install(FILES distrib/linux/ta3d DESTINATION share/menu)
-	install(FILES distrib/linux/ta3d.desktop DESTINATION share/applications)
-	install(FILES distrib/linux/ta3d_cfg.desktop DESTINATION share/applications)
-	install(FILES ota_resources_installer.sh DESTINATION ${TA3D_BINARIES_INSTALL_PATH})
-	install(FILES distrib/linux/ta3d_installer.desktop DESTINATION share/applications)
-	install(FILES ta3d.png DESTINATION ${TA3D_RESOURCES_INSTALL_PATH})
-	install(FILES ta3d_cfg.png DESTINATION ${TA3D_RESOURCES_INSTALL_PATH})
-	install(FILES readme.html DESTINATION ${TA3D_RESOURCES_INSTALL_PATH})
-	install(FILES readme_fr.html DESTINATION ${TA3D_RESOURCES_INSTALL_PATH})
-	install(FILES ../../TODO DESTINATION ${TA3D_RESOURCES_INSTALL_PATH})
-	install(FILES ../../AUTHORS DESTINATION ${TA3D_RESOURCES_INSTALL_PATH})
-	install(FILES ../../README DESTINATION ${TA3D_RESOURCES_INSTALL_PATH})
-	install(FILES ../../NEWS DESTINATION ${TA3D_RESOURCES_INSTALL_PATH})
-	install(FILES ta3d.mod DESTINATION ${TA3D_RESOURCES_INSTALL_PATH})
-	install(FILES ../../ChangeLog DESTINATION ${TA3D_RESOURCES_INSTALL_PATH})
-
-    #
-	# --- CPACK configuration ---
-	#
-	string(TOLOWER ${CMAKE_BUILD_TYPE} BTYPE)
-
-	set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "TA3D (Total Annihilation 3D), RTS Engine")
-	set(CPACK_PACKAGE_VENDOR "the TA3D team")
-	set(CPACK_PACKAGE_DESCRIPTION_FILE "${CMAKE_CURRENT_SOURCE_DIR}/../../README")
-	set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/../../COPYING")
-	set(CPACK_PACKAGE_INSTALL_DIRECTORY "${PACKAGE_STRING}")
-	set(CPACK_GENERATOR "STGZ;DEB;RPM")
-	set(CPACK_PACKAGE_CONTACT "${TA3D_MAIL_BUGREPORT}")
-	set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Roland Brochard")
-	set(CPACK_DEBIAN_PACKAGE_SECTION "games")
-	if(NOT ${BTYPE} STREQUAL "debug")
-		set(CPACK_DEBIAN_PACKAGE_DEPENDS "libsdl1.2debian, libsdl-image1.2, libsdl-mixer1.2, libsdl-net1.2, libz1, libglew1.5, libfreetype6, p7zip-full, p7zip-rar")
-	else()
-		set(CPACK_DEBIAN_PACKAGE_DEPENDS "libsdl1.2debian, libsdl-image1.2, libsdl-mixer1.2, libsdl-net1.2, libz1, libglew1.5, libfreetype6, p7zip-full, p7zip-rar, gdb")
-	endif()
-
-	if(NOT WIN32 AND UNIX)
-		if(NOT ${BTYPE} STREQUAL "debug")
-			set(CPACK_STRIP_FILES "ta3d")
-		endif()
-		set(CPACK_SOURCE_STRIP_FILES "")
-	endif()
-	set(CPACK_PACKAGE_EXECUTABLES "ta3d")
-	include(CPack)
-
-else()
-
-	# Specific Settings for the OS X Bundle
-	set(GUI_TYPE MACOSX_BUNDLE)
-	set(MACOSX_BUNDLE_BUNDLE_NAME "TA3D")
-	set(MACOSX_BUNDLE_SHORT_VERSION_STRING "ta3d")
-
+if(NOT WIN32 AND UNIX)
+	message("-- TA3D will be installed in: ${CMAKE_INSTALL_PREFIX}")
 endif()
+
+set(TA3D_RESOURCES_INSTALL_PATH "share/games/ta3d")
+set(TA3D_BINARIES_INSTALL_PATH "games")
+
+install(DIRECTORY ../../docs DESTINATION ${TA3D_RESOURCES_INSTALL_PATH} PATTERN ".*" EXCLUDE PATTERN "*~" EXCLUDE)
+install(DIRECTORY fonts DESTINATION ${TA3D_RESOURCES_INSTALL_PATH} PATTERN ".*" EXCLUDE PATTERN "*~" EXCLUDE)
+install(DIRECTORY gfx DESTINATION ${TA3D_RESOURCES_INSTALL_PATH} PATTERN ".*" EXCLUDE PATTERN "*~" EXCLUDE)
+install(DIRECTORY gui DESTINATION ${TA3D_RESOURCES_INSTALL_PATH} PATTERN ".*" EXCLUDE PATTERN "*~" EXCLUDE)
+install(DIRECTORY resources DESTINATION ${TA3D_RESOURCES_INSTALL_PATH} PATTERN ".*" EXCLUDE PATTERN "*~" EXCLUDE)
+install(DIRECTORY scripts DESTINATION ${TA3D_RESOURCES_INSTALL_PATH} PATTERN ".*" EXCLUDE PATTERN "*~" EXCLUDE PATTERN "__campaign_script.lua" EXCLUDE)
+install(DIRECTORY shaders DESTINATION ${TA3D_RESOURCES_INSTALL_PATH} PATTERN ".*" EXCLUDE PATTERN "*~" EXCLUDE)
+install(DIRECTORY sky DESTINATION ${TA3D_RESOURCES_INSTALL_PATH} PATTERN ".*" EXCLUDE PATTERN "*~" EXCLUDE)
+
+# copy the file that will add TA3D to the desktop menu
+install(FILES distrib/linux/ta3d DESTINATION share/menu)
+install(FILES distrib/linux/ta3d.desktop DESTINATION share/applications)
+install(FILES distrib/linux/ta3d_cfg.desktop DESTINATION share/applications)
+install(FILES ota_resources_installer.sh DESTINATION ${TA3D_BINARIES_INSTALL_PATH})
+install(FILES distrib/linux/ta3d_installer.desktop DESTINATION share/applications)
+install(FILES ta3d.png DESTINATION ${TA3D_RESOURCES_INSTALL_PATH})
+install(FILES ta3d_cfg.png DESTINATION ${TA3D_RESOURCES_INSTALL_PATH})
+install(FILES readme.html DESTINATION ${TA3D_RESOURCES_INSTALL_PATH})
+install(FILES readme_fr.html DESTINATION ${TA3D_RESOURCES_INSTALL_PATH})
+install(FILES ../../TODO DESTINATION ${TA3D_RESOURCES_INSTALL_PATH})
+install(FILES ../../AUTHORS DESTINATION ${TA3D_RESOURCES_INSTALL_PATH})
+install(FILES ../../README DESTINATION ${TA3D_RESOURCES_INSTALL_PATH})
+install(FILES ../../NEWS DESTINATION ${TA3D_RESOURCES_INSTALL_PATH})
+install(FILES ta3d.mod DESTINATION ${TA3D_RESOURCES_INSTALL_PATH})
+install(FILES ../../ChangeLog DESTINATION ${TA3D_RESOURCES_INSTALL_PATH})
+
+#
+# --- CPACK configuration ---
+#
+string(TOLOWER ${CMAKE_BUILD_TYPE} BTYPE)
+
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "TA3D (Total Annihilation 3D), RTS Engine")
+set(CPACK_PACKAGE_VENDOR "the TA3D team")
+set(CPACK_PACKAGE_DESCRIPTION_FILE "${CMAKE_CURRENT_SOURCE_DIR}/../../README")
+set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/../../COPYING")
+set(CPACK_PACKAGE_INSTALL_DIRECTORY "${PACKAGE_STRING}")
+set(CPACK_GENERATOR "STGZ;DEB;RPM")
+set(CPACK_PACKAGE_CONTACT "${TA3D_MAIL_BUGREPORT}")
+set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Roland Brochard")
+set(CPACK_DEBIAN_PACKAGE_SECTION "games")
+if(NOT ${BTYPE} STREQUAL "debug")
+	set(CPACK_DEBIAN_PACKAGE_DEPENDS "libsdl1.2debian, libsdl-image1.2, libsdl-mixer1.2, libsdl-net1.2, libz1, libglew1.5, libfreetype6, p7zip-full, p7zip-rar")
+else()
+	set(CPACK_DEBIAN_PACKAGE_DEPENDS "libsdl1.2debian, libsdl-image1.2, libsdl-mixer1.2, libsdl-net1.2, libz1, libglew1.5, libfreetype6, p7zip-full, p7zip-rar, gdb")
+endif()
+
+if(NOT WIN32 AND UNIX)
+	if(NOT ${BTYPE} STREQUAL "debug")
+		set(CPACK_STRIP_FILES "ta3d")
+	endif()
+	set(CPACK_SOURCE_STRIP_FILES "")
+endif()
+set(CPACK_PACKAGE_EXECUTABLES "ta3d")
+include(CPack)
 
 
 
@@ -495,10 +429,6 @@ endif()
 # --- config.h ---
 #
 configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/config.h.cmake ${CMAKE_CURRENT_SOURCE_DIR}/config.h )
-if(APPLE)
-	# Version given by Informations that CMake already has
-	configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/distrib/macos/version.cmake ${CMAKE_CURRENT_SOURCE_DIR}/distrib/macos/config.sh )
-endif()
 
 
 

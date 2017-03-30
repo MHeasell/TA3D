@@ -24,10 +24,6 @@ if (NOT CMAKE_BUILD_TYPE)
 endif()
 
 
-if (APPLE)
-	set(CMAKE_OSX_ARCHITECTURES "i386;x86_64")
-endif()
-
 # Get the current commit SHA1 from git
 execute_process(
     COMMAND "git" "rev-parse" "--verify" "HEAD"
@@ -45,9 +41,7 @@ message(STATUS " System : ${CMAKE_SYSTEM} (${CMAKE_SYSTEM_PROCESSOR})")
 
 
 # FTGL
-if(NOT APPLE)
-	add_subdirectory(libs/ftgl)
-endif()
+add_subdirectory(libs/ftgl)
 
 # SDL_sgui
 if (WIN32 OR (CMAKE_CROSSCOMPILING AND NOT UNIX))
