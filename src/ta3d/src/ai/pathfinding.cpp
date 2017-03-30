@@ -691,46 +691,36 @@ namespace TA3D
 				delete *it;
 		hBitMap.clear();
 		size_t memoryUsed = 0U;
-		Mutex mLoad;
 		const size_t end = unit_manager.unit_type.size();
-		volatile size_t i = 0;
-#pragma omp parallel
+		size_t i = 0;
+
+		while (i < end)
 		{
-			mLoad.lock();
-			while (i < end)
+			const size_t e = i++;
+			const UnitType* const pType = unit_manager.unit_type[e];
+			if (!pType || pType->canfly || !pType->BMcode || !pType->canmove)
 			{
-				const size_t e = i++;
-				mLoad.unlock();
-				const UnitType* const pType = unit_manager.unit_type[e];
-				if (!pType || pType->canfly || !pType->BMcode || !pType->canmove)
-				{
-					mLoad.lock();
-					continue;
-				}
-				const String key = pType->getMoveStringID();
-				mLoad.lock();
-				if (hBitMap.count(key)) // Already done ?
-					continue;
-				BitMap* bmap = new BitMap(the_map->bloc_w_db, the_map->bloc_h_db);
-				hBitMap[key] = bmap;
-
-				mLoad.unlock();
-
-				const int mwh = pType->FootprintX >> 1;
-				const int mhh = pType->FootprintZ >> 1;
-
-				for (int y = 0; y < the_map->bloc_h_db; ++y)
-				{
-					for (int x = 0; x < the_map->bloc_w_db; ++x)
-					{
-						bmap->set(x, y, checkRectFull(x - mwh, y - mhh, pType));
-					}
-				}
-
-				mLoad.lock();
-				memoryUsed += bmap->getMemoryUse();
+				continue;
 			}
-			mLoad.unlock();
+			const String key = pType->getMoveStringID();
+			if (hBitMap.count(key)) // Already done ?
+				continue;
+			BitMap* bmap = new BitMap(the_map->bloc_w_db, the_map->bloc_h_db);
+			hBitMap[key] = bmap;
+
+
+			const int mwh = pType->FootprintX >> 1;
+			const int mhh = pType->FootprintZ >> 1;
+
+			for (int y = 0; y < the_map->bloc_h_db; ++y)
+			{
+				for (int x = 0; x < the_map->bloc_w_db; ++x)
+				{
+					bmap->set(x, y, checkRectFull(x - mwh, y - mhh, pType));
+				}
+			}
+
+			memoryUsed += bmap->getMemoryUse();
 		}
 
 		LOG_INFO(LOG_PREFIX_PATHS << "walkable areas : " << memoryUsed / 1024U << "kb");
