@@ -1266,28 +1266,27 @@ namespace TA3D
 		size_t n = 0;
 
 		const size_t end = file_list.size();
+
+		while (n < end)
 		{
-			while (n < end)
+			if (progress != NULL && !(n & 0xF))
+				(*progress)((300.0f + float(n) * 50.0f / float(end + 1)) / 7.0f, I18N::Translate("Loading units"));
+
+			const size_t i = n;
+			const String nom = ToUpper(Paths::ExtractFileNameWithoutExtension(file_list[i])); // Vérifie si l'unité n'est pas déjà chargée
+			++n;
+
+			if (unit_manager.get_unit_index(nom) == -1)
 			{
-				if (progress != NULL && !(n & 0xF))
-					(*progress)((300.0f + float(n) * 50.0f / float(end + 1)) / 7.0f, I18N::Translate("Loading units"));
-
-				const size_t i = n;
-				const String nom = ToUpper(Paths::ExtractFileNameWithoutExtension(file_list[i])); // Vérifie si l'unité n'est pas déjà chargée
-				++n;
-
-				if (unit_manager.get_unit_index(nom) == -1)
+				LOG_DEBUG("Loading the unit `" << nom << "`...");
+				UnitType* pUnitType = unit_manager.load_unit(file_list[i]);
+				if (!pUnitType->Unitname.empty())
 				{
-					LOG_DEBUG("Loading the unit `" << nom << "`...");
-					UnitType* pUnitType = unit_manager.load_unit(file_list[i]);
-					if (!pUnitType->Unitname.empty())
-					{
-						String nom_pcx;
-						nom_pcx << "unitpics\\" << pUnitType->Unitname << ".pcx";
-						pUnitType->unitpic = gfx->load_image(nom_pcx);
-					}
-					continue;
+					String nom_pcx;
+					nom_pcx << "unitpics\\" << pUnitType->Unitname << ".pcx";
+					pUnitType->unitpic = gfx->load_image(nom_pcx);
 				}
+				continue;
 			}
 		}
 
