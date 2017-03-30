@@ -30,10 +30,6 @@
 #include <ingame/sidedata.h>
 #include "mesh.h"
 
-#ifdef _OPENMP
-#include <omp.h>
-#endif
-
 namespace TA3D
 {
 	std::vector<MeshTypeManager::MeshLoader>* MeshTypeManager::lMeshLoader = NULL;
@@ -1478,60 +1474,42 @@ namespace TA3D
 				final_file_list.push_back(*it);
 			}
 
-			Mutex mLoad;
 			const size_t __end = final_file_list.size();
-			volatile size_t e = 0;
-#pragma omp parallel
-			{
-				mLoad.lock();
-				while (e < __end)
-				{
-					const String& filename = final_file_list[e++];
-					LOG_DEBUG("[Mesh] Loading `" << filename << "`");
-#ifdef _OPENMP
-					++progressIncrement;
-					if (omp_get_thread_num() == 0)
-						if (progressIncrement >= 25 && progress != NULL)
-						{
-							// Update the progress bar
-							mLoad.unlock();
-							(*progress)((100.0f + float(n) * 50.0f / float(final_file_list.size() + 1)) / 7.0f, loading3DModelsText);
-							mLoad.lock();
-							// Reset the increment
-							progressIncrement = 0;
-						}
-#else
-					if (++progressIncrement == 25 && progress != NULL)
-					{
-						// Update the progress bar
-						(*progress)((100.0f + n * 50.0f / (final_file_list.size() + 1)) / 7.0f, loading3DModelsText);
-						// Reset the increment
-						progressIncrement = 0;
-					}
-#endif
-					++n;
-					name.push_back(filename);
+			size_t e = 0;
 
-					if (get_model(Substr(filename, 0, filename.size() - 4)) == NULL) // Check if it's not already loaded
+			while (e < __end)
+			{
+				const String& filename = final_file_list[e++];
+				LOG_DEBUG("[Mesh] Loading `" << filename << "`");
+
+				++progressIncrement;
+				if (progressIncrement >= 25 && progress != NULL)
+				{
+					// Update the progress bar
+					(*progress)((100.0f + float(n) * 50.0f / float(final_file_list.size() + 1)) / 7.0f, loading3DModelsText);
+					// Reset the increment
+					progressIncrement = 0;
+				}
+
+				++n;
+				name.push_back(filename);
+
+				if (get_model(Substr(filename, 0, filename.size() - 4)) == NULL) // Check if it's not already loaded
+				{
+					Model* pModel = MeshTypeManager::load(filename);
+					if (pModel)
 					{
-						mLoad.unlock();
-						Model* pModel = MeshTypeManager::load(filename);
-						mLoad.lock();
-						if (pModel)
-						{
-							model_hashtable[ToLower(filename)] = (int)model.size();
-							model.push_back(pModel);
-						}
-						else
-						{
-							name.pop_back();
-							LOG_ERROR("could not load model " << filename);
-						}
+						model_hashtable[ToLower(filename)] = (int)model.size();
+						model.push_back(pModel);
 					}
 					else
+					{
 						name.pop_back();
+						LOG_ERROR("could not load model " << filename);
+					}
 				}
-				mLoad.unlock();
+				else
+					name.pop_back();
 			}
 		}
 		return 0;
