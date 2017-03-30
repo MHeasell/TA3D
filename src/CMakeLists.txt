@@ -42,32 +42,6 @@ message(STATUS "Version : v${TA3D_VERSION_HI}.${TA3D_VERSION_LO}.${TA3D_VERSION_
 message(STATUS " System : ${CMAKE_SYSTEM} (${CMAKE_SYSTEM_PROCESSOR})")
 
 
-
-#
-# Yuni
-#
-# We have to copy the yuni's profile dedicated to Ta3D into the yuni sources folder.
-#
-configure_file(
-	"${CMAKE_CURRENT_SOURCE_DIR}/YuniProfileBuildTemplate.cmake"
-	"${CMAKE_CURRENT_BINARY_DIR}/libs/yuni/src/ProfileBuild.cmake" COPYONLY)
-# The sources
-add_subdirectory(libs/yuni/src)
-# At this point, the program 'yuni-config' should be available, as requested
-# by the profile.
-# We have to provide the path where the file 'FindYuni.cmake' is located
-list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/libs/yuni/packages/cmake")
-# Trying to find the Yuni framework
-find_package(Yuni COMPONENTS core)
-if(Yuni_FOUND)
-	# Infos
-	message(STATUS "The Yuni Framework : ${Yuni_INFOS}")
-else()
-	message(SEND_ERROR "The Yuni Framework could not be found.")
-endif()
-
-
-
 # FTGL
 if(NOT APPLE)
 	add_subdirectory(libs/ftgl)
