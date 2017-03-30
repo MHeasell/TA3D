@@ -5,12 +5,7 @@ then
 	exit 0
 fi
 
-uname=`uname`
-if [ "x${uname}" = "xDarwin" ]; then
-	resourcesFolder="${HOME}/Library/Application Support/ta3d/"
-else
-	resourcesFolder="${HOME}/.ta3d/resources"
-fi
+resourcesFolder="${HOME}/.ta3d/resources"
 
 
 # create the required directories
