@@ -48,7 +48,6 @@ namespace TA3D
 
 #else // ifdef TA3D_PLATFORM_WINDOWS
 
-#ifndef TA3D_PLATFORM_DARWIN
 			void initForDefaultUnixes()
 			{
 				String home = getenv("HOME");
@@ -82,29 +81,6 @@ namespace TA3D
 				}
 			}
 
-#else // ifndef TA3D_PLATFORM_DARWIN
-
-			void initForDarwin()
-			{
-				String home = getenv("HOME");
-
-				Paths::MakeDir(String(home) << "/Library/Application Support/ta3d/");
-				// Relative folder for the Application bundle
-				AddSearchPath(String(Paths::ApplicationRoot) << "/../Resources/");
-				AddSearchPath(String(home) << "/Library/Application Support/ta3d/");
-				// Unix compatibility
-				AddSearchPath(String(home) << "/.ta3d/resources/");
-				// If using MacPorts
-				AddSearchPath("/opt/local/share/ta3d/");
-				if (VARS::lp_CONFIG->bUseWorkingDirectory)
-				{
-					AddSearchPath(String(Paths::ApplicationRoot) << "/resources/");
-					AddSearchPath(Paths::ApplicationRoot);
-				}
-			}
-
-#endif // ifndef TA3D_PLATFORM_DARWIN
-
 #endif // ifdef TA3D_PLATFORM_WINDOWS
 
 		} // namespace
@@ -114,11 +90,7 @@ namespace TA3D
 #ifdef TA3D_PLATFORM_WINDOWS
 			initForWindows();
 #else
-#ifndef TA3D_PLATFORM_DARWIN
 			initForDefaultUnixes();
-#else
-			initForDarwin();
-#endif
 #endif
 		}
 

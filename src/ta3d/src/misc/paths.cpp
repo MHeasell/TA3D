@@ -105,7 +105,6 @@ namespace TA3D
 
 #else // ifdef TA3D_PLATFORM_WINDOWS
 
-#ifndef TA3D_PLATFORM_DARWIN
 			void initForDefaultUnixes()
 			{
 				String home = getenv("HOME");
@@ -119,22 +118,6 @@ namespace TA3D
 				Screenshots = String(home) << "screenshots/";
 			}
 
-#else // ifndef TA3D_PLATFORM_DARWIN
-
-			void initForDarwin()
-			{
-				String home = getenv("HOME");
-				Caches = String(home) << "/Library/Caches/ta3d/";
-				Savegames = String(home) << "/Library/Application Support/ta3d/savegames/";
-				Resources = String(home) << "/Library/Application Support/ta3d/resources/";
-				Logs = String(home) << "/Library/Logs/ta3d/";
-
-				Preferences = String(home) << "/Library/Preferences/ta3d/";
-				Screenshots = String(home) << "/Downloads/";
-			}
-
-#endif // ifndef TA3D_PLATFORM_DARWIN
-
 #endif // ifdef TA3D_PLATFORM_WINDOWS
 
 			/*!
@@ -144,15 +127,6 @@ namespace TA3D
 			void initApplicationRootPath(const char* argv0)
 			{
 				LOG_ASSERT(NULL != argv0);
-
-#ifdef TA3D_PLATFORM_DARWIN
-				if (ExtractFileExt(argv0).toLower() == ".app")
-				{
-					ApplicationRoot.clear();
-					ApplicationRoot << argv0 << "/Contents/MacOS";
-					return;
-				}
-#endif
 
 				if (IsAbsolute(argv0))
 					ApplicationRoot = ExtractFilePath(argv0);
@@ -402,11 +376,7 @@ namespace TA3D
 #ifdef TA3D_PLATFORM_WINDOWS
 			initForWindows();
 #else
-#ifndef TA3D_PLATFORM_DARWIN
 			initForDefaultUnixes();
-#else
-			initForDarwin();
-#endif
 #endif
 
 			// Initialize the logging mecanism

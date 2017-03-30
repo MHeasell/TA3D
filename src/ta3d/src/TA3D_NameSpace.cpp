@@ -17,7 +17,7 @@
 
 #include "stdafx.h"
 #include "TA3D_NameSpace.h"
-#if defined TA3D_PLATFORM_LINUX || defined TA3D_PLATFORM_DARWIN
+#ifdef TA3D_PLATFORM_LINUX
 #include <sys/stat.h>
 #endif
 #include "misc/paths.h"

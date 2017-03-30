@@ -24,11 +24,6 @@
 #include <exception>
 #include <fstream>
 
-// Signals should be disabled under OS X, since the system already produces a crash report
-// More information are available here :
-// http://developer.apple.com/technotes/tn2004/tn2123.html
-#ifndef TA3D_PLATFORM_DARWIN
-
 #include "gfx/gui/area.h"
 #include "backtrace.h"
 #include "network/socket.tcp.h"
@@ -159,8 +154,6 @@ void backtrace_handler(int signum)
 	exit(-1);
 }
 
-#endif // ifdef TA3D_PLATFORM_DARWIN
-
 class sigpipe_exception : public std::exception
 {
 public:
@@ -182,7 +175,7 @@ void init_signals(void)
 // not end the program since it's likely to happen
 // when sockets are disconnected, so let's convert
 // it to an exception
-#if defined TA3D_PLATFORM_LINUX || defined TA3D_PLATFORM_DARWIN
+#ifdef TA3D_PLATFORM_LINUX
 	signal(SIGPIPE, sigpipe_handler);
 #endif
 
@@ -200,11 +193,6 @@ void init_signals(void)
 	}
 #endif
 
-// Signals should be disabled under OS X, since the system already produces a crash report
-// More information are available here :
-// http://developer.apple.com/technotes/tn2004/tn2123.html
-#ifndef TA3D_PLATFORM_DARWIN
-
 #ifdef TA3D_PLATFORM_WINDOWS
 	int signum[] = {SIGFPE, SIGILL, SIGSEGV, SIGABRT};
 	int nb_signals = 4;
@@ -217,17 +205,10 @@ void init_signals(void)
 		if (signal(signum[i], backtrace_handler) == SIG_IGN)
 			signal(signum[i], SIG_IGN);
 	}
-
-#endif // ifdef TA3D_PLATFORM_DARWIN
 }
 
 void clear_signals(void)
 {
-// Signals should be disabled under OS X, since the system already produces a crash report
-// More information are available here :
-// http://developer.apple.com/technotes/tn2004/tn2123.html
-#ifndef TA3D_PLATFORM_DARWIN
-
 #ifdef TA3D_PLATFORM_WINDOWS
 	int signum[] = {SIGFPE, SIGILL, SIGSEGV, SIGABRT};
 	int nb_signals = 4;
@@ -237,8 +218,6 @@ void clear_signals(void)
 #endif // ifdef TA3D_PLATFORM_WINDOWS
 	for (int i = 0; i < nb_signals; ++i)
 		signal(signum[i], SIG_IGN);
-
-#endif // ifdef TA3D_PLATFORM_DARWIN
 }
 
 void criticalMessage(const TA3D::String& msg)
@@ -278,9 +257,7 @@ void bug_reporter(const TA3D::String& trace)
 
 	// System info
 	report += "\nSystem info:\n";
-#ifdef TA3D_PLATFORM_DARWIN
-	report += "OS: darwin\n";
-#elif defined TA3D_PLATFORM_LINUX
+#ifdef TA3D_PLATFORM_LINUX
 	report += "OS: linux\n";
 #elif defined TA3D_PLATFORM_WINDOWS
 	report += "OS: windows\n";

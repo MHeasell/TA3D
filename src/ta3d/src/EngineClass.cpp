@@ -606,7 +606,7 @@ namespace TA3D
 		if (tex)
 		{
 			uint32 average = 0;
-#ifndef TA3D_PLATFORM_DARWIN
+
 			switch (tex->format->BitsPerPixel)
 			{
 				case 8:
@@ -638,7 +638,7 @@ namespace TA3D
 					break;
 			};
 			average /= tex->w * tex->h * 3;
-#endif
+
 			if (!average)
 				average = 1;
 			color_factor = 255.0f / (float)average;
