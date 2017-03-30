@@ -43,10 +43,6 @@
 #include "input/mouse.h"
 #include "gfx/gui/area.h"
 
-#ifdef _OPENMP
-#include <omp.h>
-#endif
-
 namespace TA3D
 {
 
@@ -1269,28 +1265,16 @@ namespace TA3D
 		String::Vector file_list;
 		VFS::Instance()->getFilelist(String(ta3dSideData.unit_dir) << '*' << ta3dSideData.unit_ext, file_list);
 
-		volatile int n = 0, m = 0;
+		size_t n = 0;
 
 		const size_t end = file_list.size();
-#pragma omp parallel
 		{
 			mInternals.lock();
 			while (n < end)
 			{
-#ifdef _OPENMP
-				if (omp_get_thread_num() == 0)
-				{
-					if (progress != NULL && m >= 0xF)
-					{
-						(*progress)((300.0f + float(n) * 50.0f / float(end + 1)) / 7.0f, I18N::Translate("Loading units"));
-						m = 0;
-					}
-				}
-				++m;
-#else
 				if (progress != NULL && !(n & 0xF))
 					(*progress)((300.0f + float(n) * 50.0f / float(end + 1)) / 7.0f, I18N::Translate("Loading units"));
-#endif
+
 				const size_t i = n;
 				const String nom = ToUpper(Paths::ExtractFileNameWithoutExtension(file_list[i])); // Vérifie si l'unité n'est pas déjà chargée
 				++n;
