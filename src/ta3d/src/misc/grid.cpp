@@ -3,38 +3,21 @@
 #include "grid.h"
 #include "math.h"
 
-#ifdef _OPENMP
-#include <omp.h>
-#endif
-
 namespace TA3D
 {
 	void gaussianFilter(Grid<float>& grid, float sigma)
 	{
 		const int s = 1 + int(3.0f * sigma);
 
-#ifdef _OPENMP
-		const int nb_threads = omp_get_max_threads();
-		float** backups = new float*[nb_threads];
-		memset(backups, 0, sizeof(float*) * nb_threads);
-		const int maxSize = Math::Max(grid.getWidth(), grid.getHeight());
-#else
 		float* backup = new float[Math::Max(grid.getWidth(), grid.getHeight())];
-#endif
+
 		float* kernel = new float[2 * s + 1];
 		for (int i = -s; i <= s; ++i)
 			kernel[s + i] = float(exp(-i * i / (2.0 * sigma * sigma)) / (sqrt(2.0 * M_PI) * sigma * sigma));
 
-// X pass
-#pragma omp parallel for
+		// X pass
 		for (int y = 0; y < grid.getHeight(); ++y)
 		{
-#ifdef _OPENMP
-			const int id = omp_get_thread_num();
-			if (backups[id] == NULL)
-				backups[id] = new float[maxSize];
-			float* backup = backups[id];
-#endif
 			for (int x = 0; x < grid.getWidth(); ++x)
 				backup[x] = grid(x, y);
 			for (int x = 0; x < grid.getWidth(); ++x)
@@ -46,16 +29,9 @@ namespace TA3D
 			}
 		}
 
-// Y pass
-#pragma omp parallel for
+		// Y pass
 		for (int x = 0; x < grid.getWidth(); ++x)
 		{
-#ifdef _OPENMP
-			const int id = omp_get_thread_num();
-			if (backups[id] == NULL)
-				backups[id] = new float[maxSize];
-			float* backup = backups[id];
-#endif
 			for (int y = 0; y < grid.getHeight(); ++y)
 				backup[y] = grid(x, y);
 			for (int y = 0; y < grid.getHeight(); ++y)
@@ -67,14 +43,8 @@ namespace TA3D
 			}
 		}
 
-#ifdef _OPENMP
-		for (int i = 0; i < nb_threads; ++i)
-			if (backups[i])
-				delete[] backups[i];
-		delete[] backups;
-#else
 		delete[] backup;
-#endif
+
 		delete[] kernel;
 	}
 }
