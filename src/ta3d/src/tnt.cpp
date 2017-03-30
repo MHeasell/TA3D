@@ -426,7 +426,7 @@ namespace TA3D
 		}
 
 		LOG_DEBUG("MAP: computing height data (step 2)");
-#pragma omp parallel for
+
 		for (int y = 0; y < map->bloc_h_db; ++y) // Calcule les informations complémentaires sur la carte
 		{
 			for (int x = 0; x < map->bloc_w_db; ++x)
@@ -519,7 +519,7 @@ namespace TA3D
 		}
 
 		LOG_DEBUG("MAP: computing height data (step 5)");
-#pragma omp parallel for
+
 		for (int y = 0; y < (map->bloc_h << 1); ++y) // Compute slopes on the map using height map and projected datas
 		{
 			for (int x = 0; x < (map->bloc_w << 1); ++x)
@@ -609,7 +609,7 @@ namespace TA3D
 		map->low_tcoord = new float[low_nb_vtx * 2];
 		map->low_index = new GLuint[map->low_nb_idx];
 		i = 0;
-#pragma omp parallel for
+
 		for (int y = 0; y <= map->low_h; ++y) // Build the mesh
 		{
 			int i = y * (map->low_w + 1);
@@ -631,7 +631,6 @@ namespace TA3D
 		}
 		if (map->water)
 		{
-#pragma omp parallel for
 			for (int y = 1; y < map->low_h; ++y) // Make sure we'll see what is above water
 			{
 				for (int x = 1; x < map->low_w; ++x)
