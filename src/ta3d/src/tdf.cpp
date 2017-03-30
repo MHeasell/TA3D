@@ -37,10 +37,6 @@
 #include "ingame/players.h"
 #include "mesh/instancing.h"
 
-#ifdef _OPENMP
-#include <omp.h>
-#endif
-
 namespace TA3D
 {
 
@@ -332,70 +328,32 @@ namespace TA3D
 	{
 		String::Vector files;
 		VFS::Instance()->getFilelist("features\\*.tdf", files);
-		volatile int n = 0, m = 0;
+		int n = 0;
 
 		const size_t end = files.size();
 
-#ifdef _OPENMP
-		Mutex mLoad;
-#endif
-
-		volatile size_t i = 0;
-#pragma omp parallel
+		size_t i = 0;
+		while (i < end)
 		{
-#ifdef _OPENMP
-			mLoad.lock();
-#endif
-			while (i < end)
-			{
-#ifdef _OPENMP
-				const String& curFile = files[i++];
-				if (omp_get_thread_num() == 0)
-					if (progress != NULL && m >= 0xF)
-					{
-						(*progress)((200.0f + float(n) * 50.0f / float(end + 1)) / 7.0f, I18N::Translate("Loading graphical features"));
-						m = 0;
-					}
-				++m;
-				++n;
-				mLoad.unlock();
-#else
-				const String& curFile = files[i];
-				if (progress != NULL && !(n & 0xF))
-					(*progress)((200.0f + float(n) * 50.0f / float(end + 1)) / 7.0f, I18N::Translate("Loading graphical features"));
-				++n;
-#endif
+			const String& curFile = files[i++];
+			if (progress != NULL && !(n & 0xF))
+				(*progress)((200.0f + float(n) * 50.0f / float(end + 1)) / 7.0f, I18N::Translate("Loading graphical features"));
+			++n;
 
-				File* file = VFS::Instance()->readFile(curFile);
-				if (file)
-				{
-#ifdef _OPENMP
-					mLoad.lock();
-#endif
-					LOG_DEBUG(LOG_PREFIX_TDF << "Loading feature: `" << curFile << "`...");
-#ifdef _OPENMP
-					mLoad.unlock();
-#endif
-					feature_manager.load_tdf(file);
-					delete file;
-				}
-				else
-				{
-#ifdef _OPENMP
-					mLoad.lock();
-#endif
-					LOG_WARNING(LOG_PREFIX_TDF << "Loading `" << curFile << "` failed");
-#ifdef _OPENMP
-					mLoad.unlock();
-#endif
-				}
-				mLoad.lock();
+			File* file = VFS::Instance()->readFile(curFile);
+			if (file)
+			{
+				LOG_DEBUG(LOG_PREFIX_TDF << "Loading feature: `" << curFile << "`...");
+				feature_manager.load_tdf(file);
+				delete file;
 			}
-			mLoad.unlock();
+			else
+			{
+				LOG_WARNING(LOG_PREFIX_TDF << "Loading `" << curFile << "` failed");
+			}
 		}
 
-// Foreach item...
-#pragma omp parallel for
+		// Foreach item...
 		for (int i = 0; i < feature_manager.getNbFeatures(); ++i)
 		{
 			Feature* feature = feature_manager.getFeaturePointer(i);
