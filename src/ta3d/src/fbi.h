@@ -338,8 +338,6 @@ namespace TA3D
 		HashMap<int>::Dense unit_hashtable; // hashtable used to speed up operations on UnitType objects
 		volatile bool ready;
 
-		Mutex mInternals;
-
 	public:
 		HashMap<DlData*>::Dense h_dl_data; // To speed things up
 

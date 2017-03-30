@@ -303,7 +303,6 @@ namespace TA3D
 	{
 		UnitType* pUnitType = new UnitType();
 		pUnitType->load(filename);
-		mInternals.lock();
 		unit_type.push_back(pUnitType);
 		if (!pUnitType->Unitname.empty())
 			unit_hashtable[ToLower(pUnitType->Unitname)] = nb_unit;
@@ -316,7 +315,6 @@ namespace TA3D
 		if (!pUnitType->Designation_Name.empty())
 			unit_hashtable[ToLower(pUnitType->Designation_Name)] = nb_unit;
 		nb_unit++;
-		mInternals.unlock();
 		return pUnitType;
 	}
 
@@ -1269,7 +1267,6 @@ namespace TA3D
 
 		const size_t end = file_list.size();
 		{
-			mInternals.lock();
 			while (n < end)
 			{
 				if (progress != NULL && !(n & 0xF))
@@ -1282,7 +1279,6 @@ namespace TA3D
 				if (unit_manager.get_unit_index(nom) == -1)
 				{
 					LOG_DEBUG("Loading the unit `" << nom << "`...");
-					mInternals.unlock();
 					UnitType* pUnitType = unit_manager.load_unit(file_list[i]);
 					if (!pUnitType->Unitname.empty())
 					{
@@ -1290,11 +1286,9 @@ namespace TA3D
 						nom_pcx << "unitpics\\" << pUnitType->Unitname << ".pcx";
 						pUnitType->unitpic = gfx->load_image(nom_pcx);
 					}
-					mInternals.lock();
 					continue;
 				}
 			}
-			mInternals.unlock();
 		}
 
 		unit_manager.start_threaded_stuffs();
