@@ -21,11 +21,6 @@
 #include <logs/logs.h>
 #include <sdl.h>
 
-#ifdef TA3D_PLATFORM_MAC
-#include <stdio.h>
-#define TA3D_POPEN popen
-#define TA3D_PCLOSE pclose
-#endif
 #ifdef TA3D_PLATFORM_LINUX
 #define TA3D_POPEN popen
 #define TA3D_PCLOSE pclose

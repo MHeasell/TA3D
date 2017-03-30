@@ -285,110 +285,6 @@ namespace TA3D
 				lp_CONFIG->disable_GLSL = true;
 				break;
 		};
-#elif defined TA3D_PLATFORM_MAC
-		switch (glVendorID)
-		{
-			case Ati:
-				lp_CONFIG->shadow_quality = 3;
-				lp_CONFIG->water_quality = 4;
-				lp_CONFIG->fsaa = 0;
-				lp_CONFIG->anisotropy = 1;
-
-				lp_CONFIG->color_depth = 32;
-				lp_CONFIG->shadowmap_size = 2;
-
-				lp_CONFIG->particle = true;
-				lp_CONFIG->explosion_particles = true;
-				lp_CONFIG->waves = false;
-				lp_CONFIG->far_sight = true;
-
-				lp_CONFIG->detail_tex = true;
-
-				lp_CONFIG->use_texture_cache = false;
-				lp_CONFIG->use_texture_compression = false;
-
-				lp_CONFIG->render_sky = true;
-				lp_CONFIG->low_definition_map = false;
-
-				lp_CONFIG->disable_GLSL = false;
-				break;
-
-			case Nvidia:
-				lp_CONFIG->shadow_quality = 3;
-				lp_CONFIG->water_quality = 4;
-				lp_CONFIG->fsaa = 0;
-				lp_CONFIG->anisotropy = 1;
-
-				lp_CONFIG->color_depth = 32;
-				lp_CONFIG->shadowmap_size = 2;
-
-				lp_CONFIG->particle = true;
-				lp_CONFIG->explosion_particles = true;
-				lp_CONFIG->waves = false;
-				lp_CONFIG->far_sight = true;
-
-				lp_CONFIG->detail_tex = true;
-
-				lp_CONFIG->use_texture_cache = true;
-				lp_CONFIG->use_texture_compression = true;
-
-				lp_CONFIG->render_sky = true;
-				lp_CONFIG->low_definition_map = false;
-
-				lp_CONFIG->disable_GLSL = false;
-				break;
-
-			case Sis:
-			case Intel:
-				lp_CONFIG->shadow_quality = 0;
-				lp_CONFIG->water_quality = 0;
-				lp_CONFIG->fsaa = 0;
-				lp_CONFIG->anisotropy = 1;
-
-				lp_CONFIG->color_depth = 16;
-				lp_CONFIG->shadowmap_size = 0;
-
-				lp_CONFIG->particle = true;
-				lp_CONFIG->explosion_particles = false;
-				lp_CONFIG->waves = false;
-				lp_CONFIG->far_sight = false;
-
-				lp_CONFIG->detail_tex = false;
-
-				lp_CONFIG->use_texture_cache = false;
-				lp_CONFIG->use_texture_compression = true;
-
-				lp_CONFIG->render_sky = false;
-				lp_CONFIG->low_definition_map = true;
-
-				lp_CONFIG->disable_GLSL = true;
-				break;
-
-			case Unknown:
-				lp_CONFIG->shadow_quality = 0;
-				lp_CONFIG->water_quality = 0;
-				lp_CONFIG->fsaa = 0;
-				lp_CONFIG->anisotropy = 1;
-
-				lp_CONFIG->color_depth = 32;
-				lp_CONFIG->shadowmap_size = 0;
-
-				lp_CONFIG->particle = true;
-				lp_CONFIG->explosion_particles = false;
-				lp_CONFIG->waves = false;
-				lp_CONFIG->far_sight = false;
-
-				lp_CONFIG->detail_tex = false;
-
-				lp_CONFIG->use_texture_cache = false;
-				lp_CONFIG->use_texture_compression = true;
-
-				lp_CONFIG->render_sky = false;
-				lp_CONFIG->low_definition_map = true;
-
-				lp_CONFIG->disable_GLSL = true;
-				break;
-		};
 #endif
 	}
 
@@ -525,15 +421,8 @@ namespace TA3D
 			lp_CONFIG->detail_tex = false;
 			lp_CONFIG->shadow_quality = Math::Min(lp_CONFIG->shadow_quality, sint16(1));
 		}
-#ifdef TA3D_PLATFORM_MAC
-		// For some reasons, the texture compression makes ta3d completely unstable on OS X,
-		// at least with an ATI video card.
-		// Currently, we don't know if it also affects NVidia cards
-		lp_CONFIG->use_texture_compression = false;
-#else
 		if (!g_useTextureCompression)
 			lp_CONFIG->use_texture_compression = false;
-#endif
 
 		if (!glewIsSupported("GL_ARB_shadow"))
 			lp_CONFIG->shadow_quality = Math::Min(lp_CONFIG->shadow_quality, sint16(1));
@@ -2518,7 +2407,6 @@ namespace TA3D
 					case 0:
 					case 1:
 					{
-#ifndef TA3D_PLATFORM_MAC
 						if (!model_shader.isLoaded())
 							model_shader.load("shaders/3do_shadow.frag", "shaders/3do_shadow.vert");
 						if (model_shader.isLoaded())
@@ -2527,7 +2415,6 @@ namespace TA3D
 							model_shader.setvar1i("shadowMap", 7);
 							model_shader.setmat4f("light_Projection", shadowMapProjectionMatrix);
 						}
-#endif
 						break;
 					}
 					default:
