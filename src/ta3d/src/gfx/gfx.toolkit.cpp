@@ -547,7 +547,6 @@ namespace TA3D
 		switch (in->format->BitsPerPixel)
 		{
 			case 24:
-#pragma omp parallel for
 				for (int y = 0; y < in->h; ++y)
 				{
 					for (int x = 0; x < out->w; ++x)
@@ -588,7 +587,7 @@ namespace TA3D
 						}
 					}
 				}
-#pragma omp parallel for
+
 				for (int x = 0; x < out->w; ++x)
 				{
 					const int X = x * mx >> 16;
@@ -632,7 +631,6 @@ namespace TA3D
 				}
 				break;
 			case 32:
-#pragma omp parallel for
 				for (int y = 0; y < in->h; ++y)
 				{
 					for (int x = 0; x < out->w; ++x)
@@ -677,7 +675,7 @@ namespace TA3D
 						}
 					}
 				}
-#pragma omp parallel for
+
 				for (int x = 0; x < out->w; ++x)
 				{
 					const int X = x * mx >> 16;
