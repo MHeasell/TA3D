@@ -1,6 +1,3 @@
 [submodule "src/libs/SDL_sgui"]
 	path = src/libs/SDL_sgui
 	url = git@github.com:MHeasell/SDL_sgui.git
-[submodule "src/libs/yuni"]
-	path = src/libs/yuni
-	url = git@github.com:MHeasell/yuni.git
