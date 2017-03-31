@@ -19,4 +19,4 @@ before_install:
       libfreetype6-dev \
       libopenal-dev \
       libbz2-dev
-script: mkdir build && cd build && cmake ../src && make -j 2 && make test
+script: mkdir build && cd build && cmake ../src && make -j 2 && ./ta3d/src/ta3d_test
