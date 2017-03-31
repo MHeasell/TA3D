@@ -23,11 +23,7 @@
 #include "unit.script.interface.h"
 #ifndef __LUA_INCLUDES__
 #define __LUA_INCLUDES__
-#ifdef LUA_NOJIT
 #include "../lua/lua.hpp"
-#else
-#include "../luajit/src/lua.hpp"
-#endif
 #endif
 
 namespace TA3D

@@ -182,106 +182,53 @@ link_directories("${CMAKE_CURRENT_SOURCE_DIR}/src/lua/")
 
 
 #
-# --- LUA / LUAJIT ---
+# --- LUA ---
 #
-if(LUA_NOJIT)
-	if(WIN32 OR (CMAKE_CROSSCOMPILING AND NOT UNIX))
+if(WIN32 OR (CMAKE_CROSSCOMPILING AND NOT UNIX))
 
-		if( CMAKE_CROSSCOMPILING )
-			set( target i586-mingw32msvc- )
-			set( MAKE_WIN "make")
-			set( RANLIB_WIN "${target}ranlib")
-		else()
-			find_program(MAKE_WIN "mingw32-make.exe")
-			find_program(RANLIB_WIN "ranlib.exe")
-		endif()
+    if( CMAKE_CROSSCOMPILING )
+        set( target i586-mingw32msvc- )
+        set( MAKE_WIN "make")
+        set( RANLIB_WIN "${target}ranlib")
+    else()
+        find_program(MAKE_WIN "mingw32-make.exe")
+        find_program(RANLIB_WIN "ranlib.exe")
+    endif()
 
-		if( NOT BUILT_LUA )
-			message(STATUS "Building Lua")
-			execute_process(WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/src/lua" COMMAND ${MAKE_WIN} clean)
-			execute_process(WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/src/lua" COMMAND ${MAKE_WIN} mingw CC=${CMAKE_C_COMPILER} RANLIB=${RANLIB_WIN})
-			set( BUILT_LUA 1 CACHE BOOL "Lua has been built" )
-		endif()
+    if( NOT BUILT_LUA )
+        message(STATUS "Building Lua")
+        execute_process(WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/src/lua" COMMAND ${MAKE_WIN} clean)
+        execute_process(WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/src/lua" COMMAND ${MAKE_WIN} mingw CC=${CMAKE_C_COMPILER} RANLIB=${RANLIB_WIN})
+        set( BUILT_LUA 1 CACHE BOOL "Lua has been built" )
+    endif()
 
-		execute_process( COMMAND cp "${CMAKE_CURRENT_SOURCE_DIR}/src/lua/lua51.dll" "${CMAKE_CURRENT_SOURCE_DIR}/" )
+    execute_process( COMMAND cp "${CMAKE_CURRENT_SOURCE_DIR}/src/lua/lua51.dll" "${CMAKE_CURRENT_SOURCE_DIR}/" )
 
-		if( NOT BUILT_LUA )
-			execute_process( COMMAND make -C "${CMAKE_CURRENT_SOURCE_DIR}/src/lua/" clean)
-			execute_process( COMMAND make -C "${CMAKE_CURRENT_SOURCE_DIR}/src/lua/" mingw)
-			set( BUILT_LUA 1 CACHE BOOL "Lua has been built")
-		endif()
+    if( NOT BUILT_LUA )
+        execute_process( COMMAND make -C "${CMAKE_CURRENT_SOURCE_DIR}/src/lua/" clean)
+        execute_process( COMMAND make -C "${CMAKE_CURRENT_SOURCE_DIR}/src/lua/" mingw)
+        set( BUILT_LUA 1 CACHE BOOL "Lua has been built")
+    endif()
 
-		set( LIBS "-L./lua -llua -luser32 -lgdi32 -lopengl32 -lglu32 -lz")
+    set( LIBS "-llua -luser32 -lgdi32 -lopengl32 -lglu32 -lz")
 
-		if(NOT CMAKE_CROSSCOMPILING)
-			set( LIBS "${LIBS} -lSDLmain")
-		endif()
+    if(NOT CMAKE_CROSSCOMPILING)
+        set( LIBS "${LIBS} -lSDLmain")
+    endif()
 
-		link_directories("${CMAKE_CURRENT_SOURCE_DIR}/src/tools/win32/mingw32/libs/")
+    link_directories("${CMAKE_CURRENT_SOURCE_DIR}/src/tools/win32/mingw32/libs/")
 
-	else()
+else()
+    if( NOT BUILT_LUA )
+        execute_process( COMMAND make -C "${CMAKE_CURRENT_SOURCE_DIR}/src/lua/" clean )
+        execute_process( COMMAND make -C "${CMAKE_CURRENT_SOURCE_DIR}/src/lua/" linux CC=${CMAKE_C_COMPILER} )
+        set( BUILT_LUA 1 CACHE BOOL "Lua has been built" )
+    endif()
 
-		if( NOT BUILT_LUA )
-			execute_process( COMMAND make -C "ta3d/src/lua/" clean )
-			execute_process( COMMAND make -C "ta3d/src/lua/" linux CC=${CMAKE_C_COMPILER} )
-			set( BUILT_LUA 1 CACHE BOOL "Lua has been built" )
-		endif()
+    set(LIBS "-llua -lz -ldl")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -rdynamic -ffast-math")
 
-		set(LIBS "-llua -lz -ldl")
-		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -rdynamic -ffast-math")
-
-	endif()
-else()			# LuaJIT 2
-	if(WIN32 OR (CMAKE_CROSSCOMPILING AND NOT UNIX))
-		if( CMAKE_CROSSCOMPILING )
-			set( target i586-mingw32msvc- )
-			set( MAKE_WIN "make")
-			set( RANLIB_WIN "${target}ranlib")
-		else()
-			find_program(MAKE_WIN "mingw32-make.exe")
-			find_program(RANLIB_WIN "ranlib.exe")
-		endif()
-
-		if( NOT BUILT_LUAJIT )
-			message(STATUS "Building LuaJIT")
-			execute_process(WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/src/luajit" COMMAND ${MAKE_WIN} clean)
-			execute_process(WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/src/luajit" COMMAND ${MAKE_WIN} CC=${CMAKE_C_COMPILER} RANLIB=${RANLIB_WIN})
-			set( BUILT_LUAJIT 1 CACHE BOOL "LuaJIT has been built" )
-		endif()
-
-		set( LIBS "-L${CMAKE_CURRENT_SOURCE_DIR}/src/luajit/src -lluajit -luser32 -lgdi32 -lopengl32 -lglu32 -lz")
-
-		if(NOT CMAKE_CROSSCOMPILING)
-			set( LIBS "${LIBS} -lSDLmain")
-		endif()
-
-	link_directories("${CMAKE_CURRENT_SOURCE_DIR}/src/tools/win32/mingw32/libs/")
-
-	else()
-
-		if( NOT BUILT_LUAJIT )
-			execute_process(COMMAND lua -v RESULT_VARIABLE LUA_PROGRAM_ERROR)
-			if (LUA_PROGRAM_ERROR)
-				message(FATAL_ERROR "No Lua interpreter found! A Lua interpreter is required to build LuaJIT")
-			endif ()
-
-			execute_process( COMMAND make -C "${CMAKE_CURRENT_SOURCE_DIR}/src/luajit/" clean )
-			if(CMAKE_CROSSCOMPILING)
-				set(HOST_CC gcc)
-			else()
-				set(HOST_CC ${CMAKE_C_COMPILER})
-			endif()
-			execute_process( COMMAND make -C "${CMAKE_CURRENT_SOURCE_DIR}/src/luajit/" CC=${CMAKE_C_COMPILER} HOST_CC=${HOST_CC} )
-			set( BUILT_LUAJIT 1 CACHE BOOL "LuaJIT has been built" )
-		endif()
-
-		set(LIBS "-L${CMAKE_CURRENT_SOURCE_DIR}/src/luajit/src -lluajit -lz -ldl")
-		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -rdynamic -ffast-math")
-
-	endif()
 endif()
-
-
 
 #
 # --- GLEW ---
