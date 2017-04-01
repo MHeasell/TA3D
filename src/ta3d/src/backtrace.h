@@ -15,15 +15,11 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA*/
 
-// Obtain a backtrace and print it to stdout.
-
 #ifndef __TA3D_BACKTRACE_H__
 #define __TA3D_BACKTRACE_H__
 
 #include "stdafx.h"
 
-void init_signals(void);
-void clear_signals(void);
 void criticalMessage(const TA3D::String& msg);
 
 #endif // __TA3D_BACKTRACE_H__

@@ -109,8 +109,6 @@ static void InitializeTheEngine(TA3D::Engine& engine)
 
 int main(int argc, char* argv[])
 {
-	// Initialize signals
-	init_signals();
 	// Constructing config
 	TA3D::VARS::lp_CONFIG = new TA3D::TA3DCONFIG;
 
