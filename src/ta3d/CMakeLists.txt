@@ -128,7 +128,6 @@ if (WIN32 OR (CMAKE_CROSSCOMPILING AND NOT UNIX))
 	set( SDLIMAGE_FOUND included )
 	set( SDLMIXER_FOUND included )
 	set( SDLNET_FOUND included )
-	set( SMPEG_LIBRARY ${CMAKE_CURRENT_SOURCE_DIR}/src/tools/win32/mingw32/libs/libsmpeg.a )
 
 	include_DIRECTORIES( "${CMAKE_CURRENT_SOURCE_DIR}/src/tools/win32/mingw32/include" )
 
@@ -144,12 +143,10 @@ if (WIN32 OR (CMAKE_CROSSCOMPILING AND NOT UNIX))
 
 endif ()
 
-	find_library(SMPEG_LIBRARY smpeg)
 	message(STATUS "${SDL_PREFIX} SDL: ${SDL_FOUND}")
 	message(STATUS "${SDL_PREFIX} SDL_image: ${SDLIMAGE_FOUND}")
 	message(STATUS "${SDL_PREFIX} SDL_mixer: ${SDLMIXER_FOUND}")
 	message(STATUS "${SDL_PREFIX} SDL_net: ${SDLNET_FOUND}")
-	message(STATUS "${SDL_PREFIX} SMPEG: ${SMPEG_LIBRARY}")
 	message(STATUS "${SDL_PREFIX} Include dir: ${SDL_INCLUDE_DIR}")
 	message(STATUS "${SDL_PREFIX} The SDL library: ${SDL_LIBRARY}")
 	message(STATUS "${SDL_PREFIX} The SDL_image library: ${SDLIMAGE_LIBRARY}")
@@ -173,7 +170,6 @@ link_libraries(${SDL_LIBRARY})
 link_libraries(${SDLIMAGE_LIBRARY})
 link_libraries(${SDLMIXER_LIBRARY})
 link_libraries(${SDLNET_LIBRARY})
-link_libraries(${SMPEG_LIBRARY})
 
 include_DIRECTORIES(${SDL_INCLUDE_DIR})
 include_DIRECTORIES(${SDLIMAGE_include_DIR})
