@@ -27,7 +27,6 @@
 #include <misc/settings.h>
 #include <input/keyboard.h>
 #include <input/mouse.h>
-#include <gfx/video.h>
 #include "read_file_parameter.h"
 
 namespace TA3D
@@ -53,10 +52,6 @@ namespace TA3D
 
 		bool MainMenu::doInitialize()
 		{
-			// Play intro movie if any
-			if (!lp_CONFIG->quickstart)
-				Video::play("video/intro.mpg");
-
 			LOG_DEBUG(LOG_PREFIX_MENU_MAIN << "Entering...");
 
 			gfx->SetDefState();

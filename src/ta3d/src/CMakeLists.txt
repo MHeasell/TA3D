@@ -101,8 +101,6 @@ set(TA3D_LIB_SOURCES
 		gfx/sky.h
 		gfx/texture.cpp
 		gfx/texture.h
-		gfx/video.cpp
-		gfx/video.h
 		ingame/battle.cpp
 		ingame/battle.h
 		ingame/battle.init.cpp
