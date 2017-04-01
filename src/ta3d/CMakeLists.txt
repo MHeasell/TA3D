@@ -178,7 +178,8 @@ include_DIRECTORIES(${SDLIMAGE_include_DIR})
 include_DIRECTORIES(${SDLMIXER_include_DIR})
 include_DIRECTORIES(${SDLNET_include_DIR})
 
-link_directories("${CMAKE_CURRENT_SOURCE_DIR}/src/lua/")
+link_directories("${CMAKE_CURRENT_SOURCE_DIR}/../libs/lua-5.1.4/src")
+include_directories("${CMAKE_CURRENT_SOURCE_DIR}/../libs/lua-5.1.4/src")
 
 
 #
@@ -197,16 +198,16 @@ if(WIN32 OR (CMAKE_CROSSCOMPILING AND NOT UNIX))
 
     if( NOT BUILT_LUA )
         message(STATUS "Building Lua")
-        execute_process(WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/src/lua" COMMAND ${MAKE_WIN} clean)
-        execute_process(WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/src/lua" COMMAND ${MAKE_WIN} mingw CC=${CMAKE_C_COMPILER} RANLIB=${RANLIB_WIN})
+        execute_process(WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/../libs/lua-5.1.4" COMMAND ${MAKE_WIN} clean)
+        execute_process(WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/../libs/lua-5.1.4" COMMAND ${MAKE_WIN} mingw CC=${CMAKE_C_COMPILER} RANLIB=${RANLIB_WIN})
         set( BUILT_LUA 1 CACHE BOOL "Lua has been built" )
     endif()
 
-    execute_process( COMMAND cp "${CMAKE_CURRENT_SOURCE_DIR}/src/lua/lua51.dll" "${CMAKE_CURRENT_SOURCE_DIR}/" )
+    execute_process( COMMAND cp "${CMAKE_CURRENT_SOURCE_DIR}/../libs/lua-5.1.4/lua51.dll" "${CMAKE_CURRENT_SOURCE_DIR}/" )
 
     if( NOT BUILT_LUA )
-        execute_process( COMMAND make -C "${CMAKE_CURRENT_SOURCE_DIR}/src/lua/" clean)
-        execute_process( COMMAND make -C "${CMAKE_CURRENT_SOURCE_DIR}/src/lua/" mingw)
+        execute_process( COMMAND make -C "${CMAKE_CURRENT_SOURCE_DIR}/../libs/lua-5.1.4" clean)
+        execute_process( COMMAND make -C "${CMAKE_CURRENT_SOURCE_DIR}/../libs/lua-5.1.4" mingw)
         set( BUILT_LUA 1 CACHE BOOL "Lua has been built")
     endif()
 
@@ -220,8 +221,8 @@ if(WIN32 OR (CMAKE_CROSSCOMPILING AND NOT UNIX))
 
 else()
     if( NOT BUILT_LUA )
-        execute_process( COMMAND make -C "${CMAKE_CURRENT_SOURCE_DIR}/src/lua/" clean )
-        execute_process( COMMAND make -C "${CMAKE_CURRENT_SOURCE_DIR}/src/lua/" linux CC=${CMAKE_C_COMPILER} )
+        execute_process( COMMAND make -C "${CMAKE_CURRENT_SOURCE_DIR}/../libs/lua-5.1.4" clean )
+        execute_process( COMMAND make -C "${CMAKE_CURRENT_SOURCE_DIR}/../libs/lua-5.1.4" linux CC=${CMAKE_C_COMPILER} )
         set( BUILT_LUA 1 CACHE BOOL "Lua has been built" )
     endif()
 

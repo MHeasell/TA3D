@@ -16,5 +16,6 @@ before_install:
       libglew-dev \
       lua5.2 \
       libsmpeg-dev \
-      libfreetype6-dev
+      libfreetype6-dev \
+      libreadline-dev
 script: mkdir build && cd build && cmake ../src && make -j 2 && ./ta3d/src/ta3d_test
