@@ -1,6 +1,8 @@
 project(TA3D)
 cmake_minimum_required(VERSION 2.6)
 
+include(${CMAKE_ROOT}/Modules/ExternalProject.cmake)
+
 message(STATUS "")
 message(STATUS "--- TA3D ---")
 message(STATUS "")
@@ -178,58 +180,34 @@ include_DIRECTORIES(${SDLIMAGE_include_DIR})
 include_DIRECTORIES(${SDLMIXER_include_DIR})
 include_DIRECTORIES(${SDLNET_include_DIR})
 
-link_directories("${CMAKE_CURRENT_SOURCE_DIR}/../libs/lua-5.1.4/src")
-include_directories("${CMAKE_CURRENT_SOURCE_DIR}/../libs/lua-5.1.4/src")
+set(TA3D_LUA_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../libs/lua-5.1.4")
+set(TA3D_LUA_INSTALL_DIR "${CMAKE_CURRENT_BINARY_DIR}/lua")
+set(TA3D_LUA_INCLUDE_DIR "${TA3D_LUA_INSTALL_DIR}/include")
+set(TA3D_LUA_LIBRARY_DIR "${TA3D_LUA_INSTALL_DIR}/lib")
 
+link_directories(${TA3D_LUA_LIBRARY_DIR})
+include_directories(${TA3D_LUA_INCLUDE_DIR})
 
 #
 # --- LUA ---
 #
-if(WIN32 OR (CMAKE_CROSSCOMPILING AND NOT UNIX))
-
-    if( CMAKE_CROSSCOMPILING )
-        set( target i586-mingw32msvc- )
-        set( MAKE_WIN "make")
-        set( RANLIB_WIN "${target}ranlib")
-    else()
-        find_program(MAKE_WIN "mingw32-make.exe")
-        find_program(RANLIB_WIN "ranlib.exe")
-    endif()
-
-    if( NOT BUILT_LUA )
-        message(STATUS "Building Lua")
-        execute_process(WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/../libs/lua-5.1.4" COMMAND ${MAKE_WIN} clean)
-        execute_process(WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/../libs/lua-5.1.4" COMMAND ${MAKE_WIN} mingw CC=${CMAKE_C_COMPILER} RANLIB=${RANLIB_WIN})
-        set( BUILT_LUA 1 CACHE BOOL "Lua has been built" )
-    endif()
-
-    execute_process( COMMAND cp "${CMAKE_CURRENT_SOURCE_DIR}/../libs/lua-5.1.4/lua51.dll" "${CMAKE_CURRENT_SOURCE_DIR}/" )
-
-    if( NOT BUILT_LUA )
-        execute_process( COMMAND make -C "${CMAKE_CURRENT_SOURCE_DIR}/../libs/lua-5.1.4" clean)
-        execute_process( COMMAND make -C "${CMAKE_CURRENT_SOURCE_DIR}/../libs/lua-5.1.4" mingw)
-        set( BUILT_LUA 1 CACHE BOOL "Lua has been built")
-    endif()
-
-    set( LIBS "-llua -luser32 -lgdi32 -lopengl32 -lglu32 -lz")
-
-    if(NOT CMAKE_CROSSCOMPILING)
-        set( LIBS "${LIBS} -lSDLmain")
-    endif()
-
-    link_directories("${CMAKE_CURRENT_SOURCE_DIR}/src/tools/win32/mingw32/libs/")
-
+if(WIN32)
+    set(TA3D_LUA_PLATFORM mingw)
 else()
-    if( NOT BUILT_LUA )
-        execute_process( COMMAND make -C "${CMAKE_CURRENT_SOURCE_DIR}/../libs/lua-5.1.4" clean )
-        execute_process( COMMAND make -C "${CMAKE_CURRENT_SOURCE_DIR}/../libs/lua-5.1.4" linux CC=${CMAKE_C_COMPILER} )
-        set( BUILT_LUA 1 CACHE BOOL "Lua has been built" )
-    endif()
-
-    set(LIBS "-llua -lz -ldl")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -rdynamic -ffast-math")
-
+    set(TA3D_LUA_PLATFORM linux)
 endif()
+
+ExternalProject_Add(
+    lua
+    CONFIGURE_COMMAND ""
+    SOURCE_DIR ${TA3D_LUA_SOURCE_DIR}
+    BUILD_COMMAND make ${TA3D_LUA_PLATFORM}
+    BUILD_IN_SOURCE 1
+    INSTALL_COMMAND make INSTALL_TOP="<INSTALL_DIR>" install
+    INSTALL_DIR ${TA3D_LUA_INSTALL_DIR}
+)
+
+set(LIBS "-llua -lz -ldl")
 
 #
 # --- GLEW ---

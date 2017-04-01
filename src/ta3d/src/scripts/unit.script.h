@@ -23,7 +23,7 @@
 #include "unit.script.interface.h"
 #ifndef __LUA_INCLUDES__
 #define __LUA_INCLUDES__
-#include "../lua.hpp"
+#include <lua.hpp>
 #endif
 
 namespace TA3D

@@ -20,7 +20,7 @@
 
 #ifndef __LUA_INCLUDES__
 #define __LUA_INCLUDES__
-#include "../lua.hpp"
+#include <lua.hpp>
 #endif
 #include <threads/thread.h>
 #include <memory>
