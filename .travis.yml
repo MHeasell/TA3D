@@ -4,10 +4,10 @@ sudo: required
 before_install:
   - sudo apt-add-repository -y ppa:ubuntu-toolchain-r/test -y
   - sudo apt-get -qq update
-  - sudo apt-get install -y gcc-5 g++-5
+  - sudo apt-get install -q -y gcc-5 g++-5
   - export CC=gcc-5 CXX=g++-5
   - >
-    sudo apt-get install -y \
+    sudo apt-get install -q -y \
       libsdl1.2-dev \
       libsdl-image1.2-dev \
       libsdl-net1.2-dev \
