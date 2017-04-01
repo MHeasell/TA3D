@@ -173,7 +173,7 @@ set(SRC_SOUND
 #
 set(SRC_DEBUG
 		backtrace.cpp backtrace.h
-		config.cpp)
+		)
 
 
 #
