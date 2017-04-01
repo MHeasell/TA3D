@@ -14,7 +14,6 @@ before_install:
       libsdl-ttf2.0-dev \
       libsdl-mixer1.2-dev \
       libglew-dev \
-      lua5.2 \
       libsmpeg-dev \
       libfreetype6-dev \
       libreadline-dev
