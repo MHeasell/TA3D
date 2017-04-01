@@ -267,16 +267,6 @@ set(LIBS "${LIBS} ${FTGL_LIB}")
 
 
 #
-# --- SDL_sgui ---
-#
-set(SDL_SGUI_LIB ${CMAKE_CURRENT_BINARY_DIR}/../libs/SDL_sgui/libSDL_sgui.a)
-include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/../libs/SDL_sgui/include )
-
-message(STATUS "SDL_sgui Library : ${SDL_SGUI_LIB}")
-set(LIBS "${LIBS} ${SDL_SGUI_LIB}")
-
-
-#
 # --- ZLib ---
 #
 if(WIN32)

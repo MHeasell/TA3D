@@ -43,15 +43,6 @@ message(STATUS " System : ${CMAKE_SYSTEM} (${CMAKE_SYSTEM_PROCESSOR})")
 # FTGL
 add_subdirectory(libs/ftgl)
 
-# SDL_sgui
-if (WIN32 OR (CMAKE_CROSSCOMPILING AND NOT UNIX))
-	set( SDL_FOUND included )
-	set( SDL_INCLUDE_DIR  "${CMAKE_CURRENT_SOURCE_DIR}/ta3d/src/tools/win32/mingw32/include/SDL")
-	set( SDL_LIBRARY "mingw32;${CMAKE_CURRENT_SOURCE_DIR}/ta3d/src/tools/win32/mingw32/libs/libSDLmain.a;${CMAKE_CURRENT_SOURCE_DIR}/src/tools/win32/mingw32/libs/SDL.dll")
-	include_directories(${CMAKE_CURRENT_SOURCE_DIR}/ta3d/src/tools/win32/mingw32/include)
-endif ()
-add_subdirectory(libs/SDL_sgui)
-
 add_subdirectory(libs/fmt-3.0.1)
 
 # TA3D
