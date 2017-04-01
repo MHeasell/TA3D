@@ -4,10 +4,6 @@ link_libraries("${LIBS}")
 
 set(CMAKE_CXX_STANDARD 11)
 
-# Yuni Settins
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Yuni_CXXFLAGS}")
-link_libraries("${Yuni_LIBS}")
-
 include_directories("../../libs/utfcpp/source")
 include_directories("../../libs/fmt-3.0.1")
 include_directories("../../libs/catch")
