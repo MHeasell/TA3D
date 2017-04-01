@@ -332,6 +332,7 @@ set(TA3D_TEST_SOURCES
 		)
 
 add_library(${TA3D_LIB} ${TA3D_LIB_SOURCES})
+add_dependencies(${TA3D_LIB} lua)
 
 add_executable(${TA3D_BIN} ${TA3D_SOURCES})
 
