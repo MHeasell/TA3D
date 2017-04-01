@@ -14,7 +14,6 @@ before_install:
       libsdl-ttf2.0-dev \
       libsdl-mixer1.2-dev \
       libglew-dev \
-      libsmpeg-dev \
       libfreetype6-dev \
       libreadline-dev
 script: mkdir build && cd build && cmake ../src && make -j 2 && ./ta3d/src/ta3d_test
