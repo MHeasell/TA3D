@@ -193,7 +193,7 @@ namespace TA3D
 			struct PlaylistItem
 			{
 				//! Default constructor
-				PlaylistItem() : battleTune(false), disabled(false), checked(false), cdromID(-1), trackID(0), cd(NULL) {}
+				PlaylistItem() : battleTune(false), disabled(false), checked(false) {}
 				//! Filename
 				String filename;
 				//!
@@ -202,13 +202,6 @@ namespace TA3D
 				bool disabled;
 				//! Used by the playlist generator
 				bool checked;
-				//! Does it come from an audio CD ?
-				int cdromID;
-				//! What track is it ? (audio cd only)
-				int trackID;
-				//! The SDL CD handler
-				SDL_CD* cd;
-
 			}; // class PlaylistItem
 
 			//! Definition of a playlist

@@ -72,8 +72,6 @@ namespace TA3D
 			{
 				i->clear();
 				String name = pPlaylist[indx]->filename;
-				if (pPlaylist[indx]->cdromID >= 0)
-					name = String("[CD] ") << name;
 				if (pPlaylist[indx]->battleTune)
 					*i << "[B] " << name;
 				else
@@ -140,52 +138,6 @@ namespace TA3D
 					logs.debug() << LOG_PREFIX_SOUND << "Added to the playlist: `" << filename << '`';
 					pPlaylist.push_back(m_Tune);
 				}
-			}
-
-			// Check for audio tracks in cdrom drives
-			int nbDrives = SDL_CDNumDrives();
-			for (int i = 0; i < nbDrives; ++i)
-			{
-				SDL_CD* cd = SDL_CDOpen(i);
-				if (!CD_INDRIVE(SDL_CDStatus(cd)))
-				{
-					SDL_CDClose(cd);
-					continue;
-				}
-				LOG_INFO(LOG_PREFIX_SOUND << "cdrom found : " << SDL_CDName(i));
-				LOG_INFO(LOG_PREFIX_SOUND << cd->numtracks << " tracks found");
-				for (int e = 0; e < cd->numtracks; ++e)
-				{
-					LOG_INFO(LOG_PREFIX_SOUND << "track " << e << " is " << (cd->track[e].type == SDL_AUDIO_TRACK ? "audio" : "data"));
-					if (cd->track[e].type != SDL_AUDIO_TRACK)
-						continue;
-
-					String name = String(SDL_CDName(i)) << "_" << e;
-					Playlist::const_iterator it;
-					for (it = pPlaylist.begin(); it != pPlaylist.end(); ++it)
-					{
-						if ((*it)->filename == name)
-						{
-							(*it)->checked = true;
-							break;
-						}
-					}
-
-					PlaylistItem* m_Tune = (it == pPlaylist.end()) ? new PlaylistItem() : *it; // We have to update things
-					if (it == pPlaylist.end())
-					{
-						m_Tune->battleTune = false;
-						m_Tune->disabled = default_deactivation;
-						m_Tune->checked = true;
-					}
-					m_Tune->filename = name;
-					m_Tune->cdromID = i;
-					m_Tune->trackID = e;
-					if (it == pPlaylist.end()) // It's missing, add it
-						pPlaylist.push_back(m_Tune);
-				}
-
-				SDL_CDClose(cd);
 			}
 
 			int e = 0;
@@ -341,7 +293,6 @@ namespace TA3D
 				pMusic = NULL;
 			}
 
-			SDL_QuitSubSystem(SDL_INIT_CDROM);
 			SDL_QuitSubSystem(SDL_INIT_AUDIO);
 		}
 
@@ -362,14 +313,6 @@ namespace TA3D
 				if (SDL_InitSubSystem(SDL_INIT_AUDIO))
 				{
 					logs.error() << LOG_PREFIX_SOUND << "SDL_InitSubSystem( SDL_INIT_AUDIO ) failed: " << SDL_GetError();
-					return false;
-				}
-			}
-			if (!SDL_WasInit(SDL_INIT_CDROM))
-			{
-				if (SDL_InitSubSystem(SDL_INIT_CDROM))
-				{
-					logs.error() << LOG_PREFIX_SOUND << "SDL_InitSubSystem( SDL_INIT_CDROM ) failed: " << SDL_GetError();
 					return false;
 				}
 			}
@@ -430,12 +373,6 @@ namespace TA3D
 				Mix_FreeMusic(pMusic);
 				pMusic = NULL;
 			}
-			else if (m_SDLMixerRunning && pCurrentItemPlaying >= 0 && pPlaylist[pCurrentItemPlaying]->cdromID >= 0 && pPlaylist[pCurrentItemPlaying]->cd) // We're playing a track from an audio CD
-			{
-				SDL_CDStop(pPlaylist[pCurrentItemPlaying]->cd);
-				SDL_CDClose(pPlaylist[pCurrentItemPlaying]->cd);
-				pPlaylist[pCurrentItemPlaying]->cd = NULL;
-			}
 		}
 
 		void Manager::doPurgePlaylist()
@@ -466,13 +403,6 @@ namespace TA3D
 				else
 					Mix_ResumeMusic();
 			}
-			else if (m_SDLMixerRunning && pCurrentItemPlaying >= 0 && pPlaylist[pCurrentItemPlaying]->cdromID >= 0 && pPlaylist[pCurrentItemPlaying]->cd)
-			{
-				if (SDL_CDStatus(pPlaylist[pCurrentItemPlaying]->cd) == CD_PLAYING)
-					SDL_CDPause(pPlaylist[pCurrentItemPlaying]->cd);
-				else if (SDL_CDStatus(pPlaylist[pCurrentItemPlaying]->cd) == CD_PAUSED)
-					SDL_CDResume(pPlaylist[pCurrentItemPlaying]->cd);
-			}
 			pMutex.unlock();
 		}
 
@@ -487,8 +417,6 @@ namespace TA3D
 		{
 			if (m_SDLMixerRunning && pMusic != NULL)
 				Mix_PauseMusic();
-			else if (m_SDLMixerRunning && pCurrentItemPlaying >= 0 && pPlaylist[pCurrentItemPlaying]->cdromID >= 0 && pPlaylist[pCurrentItemPlaying]->cd)
-				SDL_CDPause(pPlaylist[pCurrentItemPlaying]->cd);
 		}
 
 		String Manager::doSelectNextMusic()
@@ -509,16 +437,13 @@ namespace TA3D
 				{
 					if ((*cur)->battleTune && mCount >= cIndex) // If we get one that match our needs we take it
 					{
-						if ((*cur)->cdromID >= 0)
-							szResult = (*cur)->filename;
-						else
-							szResult = VFS::Instance()->extractFile(String("music/") << (*cur)->filename);
+						szResult = VFS::Instance()->extractFile(String("music/") << (*cur)->filename);
 						break;
 					}
 					else
 					{
 						if ((*cur)->battleTune) // Take the last one that can be taken if we try to go too far
-							szResult = (*cur)->cdromID >= 0 ? (*cur)->filename : VFS::Instance()->extractFile(String("music/") << (*cur)->filename);
+							szResult = VFS::Instance()->extractFile(String("music/") << (*cur)->filename);
 					}
 				}
 				return szResult;
@@ -538,7 +463,7 @@ namespace TA3D
 
 				if (pCurrentItemToPlay <= mCount || pCurrentItemToPlay <= 0)
 				{
-					szResult = (*cur)->cdromID >= 0 ? (*cur)->filename : VFS::Instance()->extractFile(String("music/") << (*cur)->filename);
+					szResult = VFS::Instance()->extractFile(String("music/") << (*cur)->filename);
 					pCurrentItemToPlay = mCount + 1;
 					found = true;
 					break;
@@ -578,25 +503,6 @@ namespace TA3D
 					pCurrentItemPlaying = i;
 					break;
 				}
-			}
-
-			if (pCurrentItemPlaying >= 0 && pPlaylist[pCurrentItemPlaying]->cdromID >= 0)
-			{
-				SDL_CDClose(NULL);
-				SDL_ClearError();
-				pPlaylist[pCurrentItemPlaying]->cd = SDL_CDOpen(pPlaylist[pCurrentItemPlaying]->cdromID);
-				if (pPlaylist[pCurrentItemPlaying]->cd == NULL)
-					logs.error() << LOG_PREFIX_SOUND << "could not open cdrom " << pPlaylist[pCurrentItemPlaying]->cdromID << " : " << SDL_GetError();
-				else
-				{
-					SDL_CDStatus(pPlaylist[pCurrentItemPlaying]->cd);
-					if (SDL_CDPlayTracks(pPlaylist[pCurrentItemPlaying]->cd, pPlaylist[pCurrentItemPlaying]->trackID, 0, 1, 0))
-						logs.debug() << LOG_PREFIX_SOUND << "Error playing track " << pPlaylist[pCurrentItemPlaying]->trackID << " from CD " << SDL_CDName(pPlaylist[pCurrentItemPlaying]->cdromID) << " : " << SDL_GetError();
-					else
-						logs.debug() << LOG_PREFIX_SOUND << "Playing audio cd " << SDL_CDName(pPlaylist[pCurrentItemPlaying]->cdromID) << " track " << pPlaylist[pCurrentItemPlaying]->trackID;
-					setMusicVolume(lp_CONFIG->music_volume);
-				}
-				return;
 			}
 
 			if (!Paths::Exists(filename))
@@ -647,18 +553,6 @@ namespace TA3D
 					return;
 				}
 				playing = Mix_PlayingMusic();
-			}
-			else
-			{
-				if (pCurrentItemPlaying >= 0 && pPlaylist[pCurrentItemPlaying]->cdromID >= 0 && pPlaylist[pCurrentItemPlaying]->cd)
-				{
-					if (SDL_CDStatus(pPlaylist[pCurrentItemPlaying]->cd) == CD_PAUSED)
-					{
-						SDL_CDResume(pPlaylist[pCurrentItemPlaying]->cd);
-						return;
-					}
-					playing = SDL_CDStatus(pPlaylist[pCurrentItemPlaying]->cd) == CD_PLAYING;
-				}
 			}
 			if (!playing)
 				doPlayMusic(doSelectNextMusic());
@@ -717,7 +611,7 @@ namespace TA3D
 
 			fCounter = 0;
 
-			if (((pMusic == NULL || !Mix_PlayingMusic()) && (pCurrentItemPlaying == -1 || pPlaylist[pCurrentItemPlaying]->cdromID < 0)) || (pCurrentItemPlaying >= 0 && pPlaylist[pCurrentItemPlaying]->cdromID >= 0 && (pPlaylist[pCurrentItemPlaying]->cd == NULL || SDL_CDStatus(pPlaylist[pCurrentItemPlaying]->cd) != CD_PLAYING)))
+			if (((pMusic == NULL || !Mix_PlayingMusic()) && pCurrentItemPlaying == -1))
 			{
 				doPlayMusic();
 				return;
