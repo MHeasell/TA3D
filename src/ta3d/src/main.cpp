@@ -78,16 +78,6 @@ static int ParseCommandLine(int argc, char* argv[])
 				}
 				else
 				{
-					if ("--test" == arg) // Runs some tests (to help find and fix bugs)
-					{
-						GFX::runTests();
-						return 1;
-					}
-					if ("--opengl-test" == arg) // Runs some tests (to help find and fix bugs)
-					{
-						GFX::runOpenGLTests();
-						return 1;
-					}
 					if ("--no-sound" == arg) // Disable sound
 						lp_CONFIG->no_sound = true;
 				}
