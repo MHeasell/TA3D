@@ -737,7 +737,7 @@ namespace TA3D
 				{
 					case OBJ_MENU: // Choses à faire quoi qu'il arrive
 					{
-						object->Data = (unsigned int)(-1); // Pas de séléction
+						object->Data = (unsigned int)(-1); // No selection
 						if (!object->Etat)
 							object->Value = -1;
 						{
