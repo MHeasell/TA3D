@@ -50,17 +50,16 @@ namespace TA3D
 			target_format.Gmask = 0x0000FF00;
 			target_format.Bmask = 0x00FF0000;
 			target_format.Amask = 0xFF000000;
-			target_format.colorkey = 0x00FF00FF;
-			target_format.alpha = 0xFF;
 			target_format.Rshift = 0;
 			target_format.Gshift = 8;
 			target_format.Bshift = 16;
 			target_format.Ashift = 24;
 
 			if (bmp->format->BitsPerPixel == 8 && use_TA_palette)
-				SDL_SetPalette(bmp, SDL_LOGPAL | SDL_PHYSPAL, TA3D::VARS::pal, 0, 256);
+				SDL_SetPaletteColors(bmp->format->palette, TA3D::VARS::pal, 0, 256);
 
 			SDL_Surface* tmp = SDL_ConvertSurface(bmp, &target_format, SDL_SWSURFACE);
+			SDL_SetColorKey(tmp, SDL_TRUE, 0x00FF00FF);
 			SDL_FreeSurface(bmp);
 			bmp = tmp;
 		}
@@ -78,17 +77,16 @@ namespace TA3D
 		target_format.Gmask = 0x0000FF00;
 		target_format.Bmask = 0x00FF0000;
 		target_format.Amask = 0xFF000000;
-		target_format.colorkey = 0x00FF00FF;
-		target_format.alpha = 0xFF;
 		target_format.Rshift = 0;
 		target_format.Gshift = 8;
 		target_format.Bshift = 16;
 		target_format.Ashift = 24;
 
 		if (bmp->format->BitsPerPixel == 8 && use_TA_palette)
-			SDL_SetPalette(bmp, SDL_LOGPAL | SDL_PHYSPAL, TA3D::VARS::pal, 0, 256);
+			SDL_SetPaletteColors(bmp->format->palette, TA3D::VARS::pal, 0, 256);
 
 		SDL_Surface* tmp = SDL_ConvertSurface(bmp, &target_format, SDL_SWSURFACE);
+		SDL_SetColorKey(tmp, SDL_TRUE, 0x00FF00FF);
 
 		return tmp;
 	}
@@ -107,17 +105,16 @@ namespace TA3D
 			target_format.Gmask = 0x0000FF00;
 			target_format.Bmask = 0x00FF0000;
 			target_format.Amask = 0x00000000;
-			target_format.colorkey = 0x00FF00FF;
-			target_format.alpha = 0xFF;
 			target_format.Rshift = 0;
 			target_format.Gshift = 8;
 			target_format.Bshift = 16;
 			target_format.Ashift = 24;
 
 			if (bmp->format->BitsPerPixel == 8 && use_TA_palette)
-				SDL_SetPalette(bmp, SDL_LOGPAL | SDL_PHYSPAL, TA3D::VARS::pal, 0, 256);
+				SDL_SetPaletteColors(bmp->format->palette, TA3D::VARS::pal, 0, 256);
 
 			SDL_Surface* tmp = SDL_ConvertSurface(bmp, &target_format, SDL_SWSURFACE);
+			SDL_SetColorKey(tmp, SDL_TRUE, 0x00FF00FF);
 			SDL_FreeSurface(bmp);
 			bmp = tmp;
 		}
@@ -136,17 +133,18 @@ namespace TA3D
 		target_format.Gmask = 0x0000FF00;
 		target_format.Bmask = 0x00FF0000;
 		target_format.Amask = 0x00000000;
-		target_format.colorkey = 0x00FF00FF;
-		target_format.alpha = 0xFF;
 		target_format.Rshift = 0;
 		target_format.Gshift = 8;
 		target_format.Bshift = 16;
 		target_format.Ashift = 24;
 
 		if (bmp->format->BitsPerPixel == 8 && use_TA_palette)
-			SDL_SetPalette(bmp, SDL_LOGPAL | SDL_PHYSPAL, TA3D::VARS::pal, 0, 256);
+			SDL_SetPaletteColors(bmp->format->palette, TA3D::VARS::pal, 0, 256);
 
-		return SDL_ConvertSurface(bmp, &target_format, SDL_SWSURFACE);
+		SDL_Surface* tmp = SDL_ConvertSurface(bmp, &target_format, SDL_SWSURFACE);
+		SDL_SetColorKey(tmp, SDL_TRUE, 0x00FF00FF);
+
+		return tmp;
 	}
 
 	SDL_Surface* convert_format_16(SDL_Surface* bmp)
@@ -165,17 +163,16 @@ namespace TA3D
 			target_format.Gmask = 0x000007E0;
 			target_format.Bmask = 0x0000F800;
 			target_format.Amask = 0x00000000;
-			target_format.colorkey = 0x0000F81F;
-			target_format.alpha = 0xFF;
 			target_format.Rshift = 0;
 			target_format.Gshift = 5;
 			target_format.Bshift = 11;
 			target_format.Ashift = 16;
 
 			if (bmp->format->BitsPerPixel == 8 && use_TA_palette)
-				SDL_SetPalette(bmp, SDL_LOGPAL | SDL_PHYSPAL, TA3D::VARS::pal, 0, 256);
+				SDL_SetPaletteColors(bmp->format->palette, TA3D::VARS::pal, 0, 256);
 
 			SDL_Surface* tmp = SDL_ConvertSurface(bmp, &target_format, SDL_SWSURFACE);
+			SDL_SetColorKey(tmp, SDL_TRUE, 0x0000F81F);
 			SDL_FreeSurface(bmp);
 			bmp = tmp;
 		}
@@ -196,17 +193,17 @@ namespace TA3D
 		target_format.Gmask = 0x000007E0;
 		target_format.Bmask = 0x0000F800;
 		target_format.Amask = 0x00000000;
-		target_format.colorkey = 0x0000F81F;
-		target_format.alpha = 0xFF;
 		target_format.Rshift = 0;
 		target_format.Gshift = 5;
 		target_format.Bshift = 11;
 		target_format.Ashift = 16;
 
 		if (bmp->format->BitsPerPixel == 8 && use_TA_palette)
-			SDL_SetPalette(bmp, SDL_LOGPAL | SDL_PHYSPAL, TA3D::VARS::pal, 0, 256);
+			SDL_SetPaletteColors(bmp->format->palette, TA3D::VARS::pal, 0, 256);
 
-		return SDL_ConvertSurface(bmp, &target_format, SDL_SWSURFACE);
+		SDL_Surface* tmp = SDL_ConvertSurface(bmp, &target_format, SDL_SWSURFACE);
+		SDL_SetColorKey(tmp, SDL_TRUE, 0x0000F81F);
+		return tmp;
 	}
 
 	void blit(SDL_Surface* in, SDL_Surface* out, int x0, int y0, int x1, int y1, int w, int h)
@@ -215,7 +212,7 @@ namespace TA3D
 		if (in->format->BitsPerPixel != out->format->BitsPerPixel)
 		{
 			if (in->format->BitsPerPixel == 8 && use_TA_palette)
-				SDL_SetPalette(in, SDL_LOGPAL | SDL_PHYSPAL, TA3D::VARS::pal, 0, 256);
+				SDL_SetPaletteColors(in->format->palette, TA3D::VARS::pal, 0, 256);
 
 			tmp = SDL_ConvertSurface(in, out->format, SDL_SWSURFACE);
 		}

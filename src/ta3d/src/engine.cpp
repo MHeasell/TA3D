@@ -110,9 +110,6 @@ namespace TA3D
 		gfx = new GFX(); // TA3D's main window might lose focus and message may not be shown ...
 		pGFXModeActive = true;
 
-		// Title of the Window / Application
-		SDL_WM_SetCaption("Total Annihilation 3D", "TA3D");
-
 		// Display informations about OpenGL
 		displayInfosAboutOpenGL();
 	}

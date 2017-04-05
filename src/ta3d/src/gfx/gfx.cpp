@@ -35,7 +35,6 @@
 #include <input/mouse.h>
 #include "gui/base.h"
 #include <backtrace.h>
-#include <SDL_getenv.h>
 #include <fstream>
 #include <iostream>
 #include <cassert>
@@ -303,16 +302,6 @@ namespace TA3D
 				GLloaded = true;
 		}
 
-		// We want a centered window
-		SDL_putenv(const_cast<char*>("SDL_VIDEO_CENTERED=1"));
-
-		SDL_Surface* icon = load_image("gfx\\icon.png");
-		if (icon)
-		{
-			SDL_WM_SetIcon(icon, NULL);
-			SDL_FreeSurface(icon);
-		}
-
 		SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
 		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, TA3D::VARS::lp_CONFIG->fsaa > 1);
 		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, TA3D::VARS::lp_CONFIG->fsaa);
@@ -340,38 +329,30 @@ namespace TA3D
 		SDL_GL_SetAttribute(SDL_GL_ACCUM_BLUE_SIZE, 0);
 		SDL_GL_SetAttribute(SDL_GL_ACCUM_ALPHA_SIZE, 0);
 
-		uint32 flags = SDL_OPENGL | SDL_HWSURFACE;
+		uint32 flags = SDL_WINDOW_OPENGL;
 		if (TA3D::VARS::lp_CONFIG->fullscreen)
-			flags |= SDL_FULLSCREEN;
+			flags |= SDL_WINDOW_FULLSCREEN;
 
-		screen = SDL_SetVideoMode(TA3D::VARS::lp_CONFIG->screen_width, TA3D::VARS::lp_CONFIG->screen_height, TA3D::VARS::lp_CONFIG->color_depth, flags);
+		screen = SDL_CreateWindow(
+			"Total Annihilation 3D",
+			SDL_WINDOWPOS_CENTERED,
+			SDL_WINDOWPOS_CENTERED,
+			TA3D::VARS::lp_CONFIG->screen_width,
+			TA3D::VARS::lp_CONFIG->screen_height,
+			flags);
 
 		if (screen == NULL)
 		{
-			LOG_WARNING(LOG_PREFIX_GFX << "SDL_SetVideoMode failed : " << SDL_GetError());
+			LOG_WARNING(LOG_PREFIX_GFX << "SDL_CreateWindow failed : " << SDL_GetError());
 			LOG_WARNING(LOG_PREFIX_GFX << "retrying with GL_DEPTH_SIZE = 16");
 			SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 16);
-			screen = SDL_SetVideoMode(TA3D::VARS::lp_CONFIG->screen_width, TA3D::VARS::lp_CONFIG->screen_height, TA3D::VARS::lp_CONFIG->color_depth, flags);
-		}
-
-		if (screen == NULL)
-		{
-			LOG_WARNING(LOG_PREFIX_GFX << "SDL_SetVideoMode failed : " << SDL_GetError());
-			LOG_WARNING(LOG_PREFIX_GFX << "retrying with GL_DEPTH_SIZE = 24 and current color depth");
-			SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
-			screen = SDL_SetVideoMode(TA3D::VARS::lp_CONFIG->screen_width, TA3D::VARS::lp_CONFIG->screen_height, 0, flags);
-		}
-
-		if (screen == NULL)
-		{
-			LOG_WARNING(LOG_PREFIX_GFX << "SDL_SetVideoMode failed : " << SDL_GetError());
-			LOG_WARNING(LOG_PREFIX_GFX << "retrying with GL_DEPTH_SIZE = 16 and current color depth");
-			SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 16);
-			SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 5);
-			SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 6);
-			SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 5);
-			SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 0);
-			screen = SDL_SetVideoMode(TA3D::VARS::lp_CONFIG->screen_width, TA3D::VARS::lp_CONFIG->screen_height, 0, flags);
+			screen = SDL_CreateWindow(
+				"TA3D SDL Window",
+				SDL_WINDOWPOS_CENTERED,
+				SDL_WINDOWPOS_CENTERED,
+				TA3D::VARS::lp_CONFIG->screen_width,
+				TA3D::VARS::lp_CONFIG->screen_height,
+				flags);
 		}
 
 		if (screen == NULL)
@@ -383,20 +364,24 @@ namespace TA3D
 			return;
 		}
 
+		// The context is returned here but we don't store it in a variable.
+		// This is technically a leak, but the context will live
+		// until the program terminates anyway.
+		SDL_GL_CreateContext(screen);
+
+		SDL_Surface* icon = load_image("gfx\\icon.png");
+		if (icon)
+		{
+			SDL_SetWindowIcon(screen, icon);
+			SDL_FreeSurface(icon);
+		}
+
 		preCalculations();
 		// Install OpenGL extensions
 		installOpenGLExtensions();
 
-		if (screen->format->BitsPerPixel == 16)
-		{
-			defaultRGBTextureFormat = GL_RGB5;
-			defaultRGBATextureFormat = GL_RGB5_A1;
-		}
-		else
-		{
-			defaultRGBTextureFormat = GL_RGB8;
-			defaultRGBATextureFormat = GL_RGBA8;
-		}
+		defaultRGBTextureFormat = GL_RGB8;
+		defaultRGBATextureFormat = GL_RGBA8;
 
 		// Check everything is supported
 		checkConfig();
@@ -2111,9 +2096,7 @@ namespace TA3D
 
 	void GFX::preCalculations()
 	{
-		const SDL_VideoInfo* info = SDL_GetVideoInfo();
-		width = info->current_w;
-		height = info->current_h;
+		SDL_GetWindowSize(screen, &width, &height);
 		SCREEN_W_HALF = width >> 1;
 		SCREEN_H_HALF = height >> 1;
 		SCREEN_W_INV = 1.0f / float(width);
@@ -2235,8 +2218,25 @@ namespace TA3D
 
 	SDL_Surface* GFX::create_surface_ex(int bpp, int w, int h)
 	{
-		return SDL_CreateRGBSurface(SDL_SWSURFACE, w, h, bpp,
-			0x000000FF, 0x0000FF00, 0x00FF0000, 0xFF000000);
+		SDL_Surface* surface;
+
+		if (bpp == 8)
+		{
+			surface = SDL_CreateRGBSurface(0, w, h, 8, 0, 0, 0, 0);
+		}
+		else
+		{
+			surface = SDL_CreateRGBSurface(0, w, h, bpp,
+			    0x000000FF, 0x0000FF00, 0x00FF0000, 0xFF000000);
+		}
+
+
+		if (surface == NULL)
+		{
+			LOG_CRITICAL(String("Error creating SDL RGB surface: ") << SDL_GetError());
+		}
+
+		return surface;
 	}
 
 	SDL_Surface* GFX::create_surface(int w, int h)
@@ -2434,6 +2434,12 @@ namespace TA3D
 		if (g_useTextureCompression && lp_CONFIG->use_texture_compression)
 			return GL_COMPRESSED_RGBA_ARB;
 		return defaultRGBATextureFormat;
+	}
+
+	void GFX::flip() const
+	{
+		SDL_ShowCursor(SDL_DISABLE);
+		SDL_GL_SwapWindow(screen);
 	}
 
 } // namespace TA3D

@@ -200,8 +200,6 @@ namespace TA3D
 
 			gfx->set_2D_mode(); // Back to 2D mode :)
 
-			SDL_WM_SetCaption("Total Annihilation 3D", "TA3D"); // Set the window title
-
 			ta3dSideData.init();
 			ta3dSideData.loadData();
 

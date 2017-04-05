@@ -83,23 +83,24 @@ namespace TA3D
 
 			void displayScreenResolution()
 			{
-				int w, h, d;
-				if (DesktopResolution(w, h, d))
-					logs.notice() << LOG_PREFIX_SYSTEM << "Desktop: " << w << "x" << h << " (" << d << "bits)";
+				int w, h, r;
+				if (DesktopResolution(w, h, r))
+					logs.notice() << LOG_PREFIX_SYSTEM << "Desktop: " << w << "x" << h << " (" << r << "hz)";
 				else
 					logs.error() << LOG_PREFIX_SYSTEM << "Error while retrieving information about the desktop resolution";
 			}
 
 		} // anonymous namespace
 
-		bool DesktopResolution(int& width, int& height, int& colorDepth)
+		bool DesktopResolution(int& width, int& height, int& refreshRate)
 		{
-			const SDL_VideoInfo* videoInfo = SDL_GetVideoInfo();
-			if (videoInfo)
+			// assumes we are on display 0
+			SDL_DisplayMode mode;
+			if (SDL_GetDesktopDisplayMode(0, &mode) == 0)
 			{
-				width = videoInfo->current_w;
-				height = videoInfo->current_h;
-				colorDepth = videoInfo->vfmt->BitsPerPixel;
+				width = mode.w;
+				height = mode.h;
+				refreshRate = mode.refresh_rate;
 				return true;
 			}
 			return false;
@@ -121,8 +122,9 @@ namespace TA3D
 
 		void DisplayInformationsAboutSDL()
 		{
-			const SDL_version* v = SDL_Linked_Version();
-			logs.info() << LOG_PREFIX_SYSTEM << "SDL version: " << (int)v->major << "." << (int)v->minor << "." << (int)v->patch;
+			SDL_version v;
+			SDL_GetVersion(&v);
+			logs.info() << LOG_PREFIX_SYSTEM << "SDL version: " << (int)v.major << "." << (int)v.minor << "." << (int)v.patch;
 		}
 
 	} // namespace System
