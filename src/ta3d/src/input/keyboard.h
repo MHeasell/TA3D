@@ -22,6 +22,11 @@
 #include <stdafx.h>
 #include <SDL_keysym.h>
 
+/**
+ * The number after the highest valid keycode.
+ */
+#define MAX_KEYCODE SDLK_LAST
+
 namespace TA3D
 {
 	typedef SDLKey KeyCode;
@@ -29,9 +34,9 @@ namespace TA3D
 	namespace VARS
 	{
 		extern int ascii_to_scancode[256];
-		extern bool key[0x1000];
-		extern bool prevkey_down[0x1000];
-		extern bool prevkey_up[0x1000];
+		extern bool key[MAX_KEYCODE];
+		extern bool prevkey_down[MAX_KEYCODE];
+		extern bool prevkey_up[MAX_KEYCODE];
 		extern std::deque<uint32> keybuf;
 		extern int remap[0x1000];
 	}

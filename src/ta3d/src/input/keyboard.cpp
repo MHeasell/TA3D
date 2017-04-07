@@ -26,9 +26,9 @@ namespace TA3D
 	namespace VARS
 	{
 		int ascii_to_scancode[256];
-		bool key[0x1000];
-		bool prevkey_down[0x1000];
-		bool prevkey_up[0x1000];
+		bool key[MAX_KEYCODE];
+		bool prevkey_down[MAX_KEYCODE];
+		bool prevkey_up[MAX_KEYCODE];
 		std::deque<uint32> keybuf;
 		int remap[0x1000];
 	}
@@ -74,7 +74,7 @@ namespace TA3D
 		remap[231] = KEY_9;
 		remap[224] = KEY_0;
 
-		memset(VARS::key, 0, 0x1000 * sizeof(bool));
+		memset(VARS::key, 0, MAX_KEYCODE * sizeof(bool));
 		VARS::keybuf.clear();
 
 		// Initializing the ascii to scancode table
@@ -128,7 +128,7 @@ namespace TA3D
 
 	void set_key_down(KeyCode keycode)
 	{
-		if (keycode >= 0x1000)
+		if (keycode >= MAX_KEYCODE)
 			return;
 
 		if (remap[keycode])
@@ -138,7 +138,7 @@ namespace TA3D
 
 	void set_key_up(KeyCode keycode)
 	{
-		if (keycode >= 0x1000)
+		if (keycode >= MAX_KEYCODE)
 			return;
 
 		if (remap[keycode])
@@ -148,7 +148,7 @@ namespace TA3D
 
 	bool key_down_event(KeyCode keycode)
 	{
-		if (keycode >= 0x1000)
+		if (keycode >= MAX_KEYCODE)
 			return false;
 
 		if (!prevkey_down[keycode] && key[keycode])
@@ -162,7 +162,7 @@ namespace TA3D
 
 	bool key_up_event(KeyCode keycode)
 	{
-		if (keycode >= 0x1000)
+		if (keycode >= MAX_KEYCODE)
 			return false;
 
 		if (prevkey_up[keycode] && !key[keycode])
