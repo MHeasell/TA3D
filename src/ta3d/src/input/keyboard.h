@@ -38,7 +38,7 @@ namespace TA3D
 		extern bool prevkey_down[MAX_KEYCODE];
 		extern bool prevkey_up[MAX_KEYCODE];
 		extern std::deque<uint32> keybuf;
-		extern int remap[0x1000];
+		extern int remap[MAX_KEYCODE];
 	}
 
 	/**

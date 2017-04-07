@@ -30,7 +30,7 @@ namespace TA3D
 		bool prevkey_down[MAX_KEYCODE];
 		bool prevkey_up[MAX_KEYCODE];
 		std::deque<uint32> keybuf;
-		int remap[0x1000];
+		int remap[MAX_KEYCODE];
 	}
 
 	bool isKeyDown(KeyCode keycode)
@@ -70,7 +70,7 @@ namespace TA3D
 		SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
 
 		// We need some remapping hack to support some keyboards (french keyboards don't access KEY_0..9)
-		memset(remap, 0, 0x1000 * sizeof(int));
+		memset(remap, 0, MAX_KEYCODE * sizeof(int));
 
 		remap[KEY_ENTER_PAD] = KEY_ENTER;
 		remap[38] = KEY_1;
