@@ -33,7 +33,7 @@ namespace TA3D
 
 	namespace VARS
 	{
-		extern int ascii_to_scancode[256];
+		extern KeyCode ascii_to_scancode[256];
 		extern bool key[MAX_KEYCODE];
 		extern bool prevkey_down[MAX_KEYCODE];
 		extern bool prevkey_up[MAX_KEYCODE];
@@ -46,6 +46,16 @@ namespace TA3D
 	 * is currently being held down, otherwise false.
 	 */
 	bool isKeyDown(KeyCode keycode);
+
+	/**
+	 * Returns true if a key that emits the given ASCII character is down,
+	 * otherwise false.
+	 *
+	 * For letters the case is ignored, that is,
+	 * when the 'A' key is pressed, both 'a' and 'A'
+	 * are considered to be down.
+	 */
+	bool isAsciiCharacterKeyDown(byte c);
 
 	/*!
 	** \brief return true is there are key codes waiting in the buffer, false otherwise

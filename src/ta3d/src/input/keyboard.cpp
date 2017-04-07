@@ -25,7 +25,7 @@ namespace TA3D
 {
 	namespace VARS
 	{
-		int ascii_to_scancode[256];
+		KeyCode ascii_to_scancode[256];
 		bool key[MAX_KEYCODE];
 		bool prevkey_down[MAX_KEYCODE];
 		bool prevkey_up[MAX_KEYCODE];
@@ -36,6 +36,11 @@ namespace TA3D
 	bool isKeyDown(KeyCode keycode)
 	{
 		return key[keycode];
+	}
+
+	bool isAsciiCharacterKeyDown(byte c)
+	{
+		return isKeyDown(ascii_to_scancode[c]);
 	}
 
 	uint32 readkey()

@@ -1087,9 +1087,7 @@ namespace TA3D
 						&& !TA3D_CTRL_PRESSED
 						&& !TA3D_SHIFT_PRESSED
 						&& !Console::Instance()->activated()
-						&& (key[ascii_to_scancode[object->shortcut_key]]
-							   || (object->shortcut_key >= 65 && object->shortcut_key <= 90 && key[ascii_to_scancode[object->shortcut_key + 32]])
-							   || (object->shortcut_key >= 97 && object->shortcut_key <= 122 && key[ascii_to_scancode[object->shortcut_key - 32]])))
+						&& isAsciiCharacterKeyDown((byte)object->shortcut_key))
 					{
 						if (!object->Etat)
 							clicked = true;
