@@ -77,15 +77,15 @@ namespace TA3D
 	*/
 	void init_keyboard();
 
-	/*!
-	** \brief set a key up
-	*/
-	void set_key_up(KeyCode keycode);
+	/**
+	 * Sets the given keycode as up.
+	 */
+	void setKeyUp(KeyCode keycode);
 
-	/*!
-	** \brief set a key down
-	*/
-	void set_key_down(KeyCode keycode);
+	/**
+	 * Sets the given keycode as down.
+	 */
+	void setKeyDown(KeyCode keycode);
 
 	/*!
     ** \brief returns true if the given key state has changed to down since last call with the same key

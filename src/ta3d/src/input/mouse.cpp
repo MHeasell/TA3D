@@ -70,7 +70,7 @@ namespace TA3D
 			{
 				case SDL_KEYDOWN:
 				{
-					set_key_down(event.key.keysym.sym);
+					setKeyDown(event.key.keysym.sym);
 					uint32 c = event.key.keysym.unicode;
 					c |= event.key.keysym.sym << 16;
 					if (event.key.keysym.sym == KEY_ENTER_PAD)
@@ -95,7 +95,7 @@ namespace TA3D
 					};
 					break;
 				case SDL_KEYUP:
-					set_key_up(event.key.keysym.sym);
+					setKeyUp(event.key.keysym.sym);
 					break;
 			};
 		}

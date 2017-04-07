@@ -136,7 +136,7 @@ namespace TA3D
 		ascii_to_scancode[27] = KEY_ESC;
 	}
 
-	void set_key_down(KeyCode keycode)
+	void setKeyDown(KeyCode keycode)
 	{
 		if (keycode >= MAX_KEYCODE)
 			return;
@@ -146,7 +146,7 @@ namespace TA3D
 		VARS::key[keycode] = true;
 	}
 
-	void set_key_up(KeyCode keycode)
+	void setKeyUp(KeyCode keycode)
 	{
 		if (keycode >= MAX_KEYCODE)
 			return;
