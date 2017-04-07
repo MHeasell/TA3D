@@ -36,7 +36,6 @@ namespace TA3D
 		extern KeyCode ascii_to_scancode[256];
 		extern bool key[MAX_KEYCODE];
 		extern bool prevkey_down[MAX_KEYCODE];
-		extern bool prevkey_up[MAX_KEYCODE];
 		extern std::deque<uint32> keybuf;
 		extern int remap[MAX_KEYCODE];
 	}
@@ -91,16 +90,6 @@ namespace TA3D
     ** \brief returns true if the given key state has changed to down since last call with the same key
     */
 	bool key_down_event(KeyCode keycode);
-
-	/*!
-    ** \brief returns true if the given key state has changed to up since last call with the same key
-    */
-	bool key_up_event(KeyCode keycode);
-
-	/*!
-    ** \brief returns true if the given key state has changed since last call with the same key
-    */
-	bool key_event(KeyCode keycode);
 }
 
 #define KEY_ENTER SDLK_RETURN

@@ -28,7 +28,6 @@ namespace TA3D
 		KeyCode ascii_to_scancode[256];
 		bool key[MAX_KEYCODE];
 		bool prevkey_down[MAX_KEYCODE];
-		bool prevkey_up[MAX_KEYCODE];
 		std::deque<uint32> keybuf;
 		int remap[MAX_KEYCODE];
 	}
@@ -169,24 +168,4 @@ namespace TA3D
 		prevkey_down[keycode] = key[keycode];
 		return false;
 	}
-
-	bool key_up_event(KeyCode keycode)
-	{
-		if (keycode >= MAX_KEYCODE)
-			return false;
-
-		if (prevkey_up[keycode] && !key[keycode])
-		{
-			prevkey_up[keycode] = false;
-			return true;
-		}
-		prevkey_up[keycode] = key[keycode];
-		return false;
-	}
-
-	bool key_event(KeyCode keycode)
-	{
-		return key_down_event(keycode) || key_up_event(keycode);
-	}
-
 } // namespace TA3D
