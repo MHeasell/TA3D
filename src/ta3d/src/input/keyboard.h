@@ -20,9 +20,12 @@
 
 #include <deque>
 #include <stdafx.h>
+#include <SDL_keysym.h>
 
 namespace TA3D
 {
+	typedef SDLKey KeyCode;
+
 	namespace VARS
 	{
 		extern int ascii_to_scancode[256];
@@ -56,27 +59,27 @@ namespace TA3D
 	/*!
 	** \brief set a key up
 	*/
-	void set_key_up(uint16 keycode);
+	void set_key_up(KeyCode keycode);
 
 	/*!
 	** \brief set a key down
 	*/
-	void set_key_down(uint16 keycode);
+	void set_key_down(KeyCode keycode);
 
 	/*!
     ** \brief returns true if the given key state has changed to down since last call with the same key
     */
-	bool key_down_event(uint16 keycode);
+	bool key_down_event(KeyCode keycode);
 
 	/*!
     ** \brief returns true if the given key state has changed to up since last call with the same key
     */
-	bool key_up_event(uint16 keycode);
+	bool key_up_event(KeyCode keycode);
 
 	/*!
     ** \brief returns true if the given key state has changed since last call with the same key
     */
-	bool key_event(uint16 keycode);
+	bool key_event(KeyCode keycode);
 }
 
 #define KEY_ENTER SDLK_RETURN

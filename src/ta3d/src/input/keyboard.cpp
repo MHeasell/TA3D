@@ -126,7 +126,7 @@ namespace TA3D
 		ascii_to_scancode[27] = KEY_ESC;
 	}
 
-	void set_key_down(uint16 keycode)
+	void set_key_down(KeyCode keycode)
 	{
 		if (keycode >= 0x1000)
 			return;
@@ -136,7 +136,7 @@ namespace TA3D
 		VARS::key[keycode] = true;
 	}
 
-	void set_key_up(uint16 keycode)
+	void set_key_up(KeyCode keycode)
 	{
 		if (keycode >= 0x1000)
 			return;
@@ -146,7 +146,7 @@ namespace TA3D
 		VARS::key[keycode] = false;
 	}
 
-	bool key_down_event(uint16 keycode)
+	bool key_down_event(KeyCode keycode)
 	{
 		if (keycode >= 0x1000)
 			return false;
@@ -160,7 +160,7 @@ namespace TA3D
 		return false;
 	}
 
-	bool key_up_event(uint16 keycode)
+	bool key_up_event(KeyCode keycode)
 	{
 		if (keycode >= 0x1000)
 			return false;
@@ -174,7 +174,7 @@ namespace TA3D
 		return false;
 	}
 
-	bool key_event(uint16 keycode)
+	bool key_event(KeyCode keycode)
 	{
 		return key_down_event(keycode) || key_up_event(keycode);
 	}
