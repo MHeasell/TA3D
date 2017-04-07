@@ -58,7 +58,7 @@ namespace TA3D
 		void Solo::doFinalize()
 		{
 			// Wait for user to release ESC
-			while (key[KEY_ESC])
+			while (isKeyDown(KEY_ESC))
 			{
 				SuspendMilliSeconds(TA3D_MENUS_RECOMMENDED_TIME_MS_FOR_RESTING);
 				poll_inputs();
@@ -77,13 +77,13 @@ namespace TA3D
 				// Wait to reduce CPU consumption
 				wait();
 
-			} while (pMouseX == mouse_x && pMouseY == mouse_y && pMouseZ == mouse_z && pMouseB == mouse_b && mouse_b == 0 && !key[KEY_ENTER] && !key[KEY_ESC] && !key[KEY_SPACE] && !key[KEY_C] && !keyIsPressed && !pArea->scrolling);
+			} while (pMouseX == mouse_x && pMouseY == mouse_y && pMouseZ == mouse_z && pMouseB == mouse_b && mouse_b == 0 && !isKeyDown(KEY_ENTER) && !isKeyDown(KEY_ESC) && !isKeyDown(KEY_SPACE) && !isKeyDown(KEY_C) && !keyIsPressed && !pArea->scrolling);
 		}
 
 		bool Solo::maySwitchToAnotherMenu()
 		{
 			// Exit
-			if (key[KEY_ESC] || pArea->get_state("solo.b_back"))
+			if (isKeyDown(KEY_ESC) || pArea->get_state("solo.b_back"))
 				return true;
 
 			// All savegames
@@ -95,11 +95,11 @@ namespace TA3D
 				return doGoMenuLoadSingleGame();
 
 			// Campaign
-			if (pArea->get_state("solo.b_campaign") || key[KEY_C])
+			if (pArea->get_state("solo.b_campaign") || isKeyDown(KEY_C))
 				return doGoMenuCompaign();
 
 			// Skirmish
-			if (pArea->get_state("solo.b_skirmish") || key[KEY_ENTER])
+			if (pArea->get_state("solo.b_skirmish") || isKeyDown(KEY_ENTER))
 				return doGoMenuSkirmish();
 
 			return false;

@@ -122,7 +122,7 @@ namespace TA3D
 		old_mx = mouse_x;
 		old_my = mouse_y;
 
-		if (lp_CONFIG->fullscreen && key[KEY_ALT] && key[KEY_TAB] && (SDL_GetAppState() & SDL_APPACTIVE))
+		if (lp_CONFIG->fullscreen && isKeyDown(KEY_ALT) && isKeyDown(KEY_TAB) && (SDL_GetAppState() & SDL_APPACTIVE))
 			SDL_WM_IconifyWindow();
 	}
 

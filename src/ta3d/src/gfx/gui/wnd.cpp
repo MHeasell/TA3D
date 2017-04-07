@@ -638,7 +638,7 @@ namespace TA3D
 				if (object->Focus && object->Type != OBJ_TEXTEDITOR)
 					hasFocus = i;
 			}
-			if (hasFocus >= 0 && key[KEY_TAB] && !tab_was_pressed) // Select another widget with TAB key
+			if (hasFocus >= 0 && isKeyDown(KEY_TAB) && !tab_was_pressed) // Select another widget with TAB key
 			{
 				for (unsigned int e = 1; e < pObjects.size(); ++e)
 				{
@@ -652,7 +652,7 @@ namespace TA3D
 					}
 				}
 			}
-			tab_was_pressed = key[KEY_TAB];
+			tab_was_pressed = isKeyDown(KEY_TAB);
 
 			for (unsigned int i = 0; i < pObjects.size(); ++i)
 			{

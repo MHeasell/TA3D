@@ -23,8 +23,8 @@
 #include "TA3D_NameSpace.h"
 #include "ingame/gamedata.h"
 
-#define TA3D_SHIFT_PRESSED (key[KEY_LSHIFT] || key[KEY_RSHIFT])
-#define TA3D_CTRL_PRESSED (key[KEY_LCONTROL] || key[KEY_RCONTROL])
+#define TA3D_SHIFT_PRESSED (isKeyDown(KEY_LSHIFT) || isKeyDown(KEY_RSHIFT))
+#define TA3D_CTRL_PRESSED (isKeyDown(KEY_LCONTROL) || isKeyDown(KEY_RCONTROL))
 
 namespace TA3D
 {

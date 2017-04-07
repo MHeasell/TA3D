@@ -111,9 +111,9 @@ namespace TA3D
 	{
 		float old_zscroll = camera_zscroll;
 		float delta = IsOnGUI ? 0.0f : float(mouse_z - omz);
-		if (key[KEY_PAGEUP])
+		if (isKeyDown(KEY_PAGEUP))
 			delta = -10.0f * dt;
-		else if (key[KEY_PAGEDOWN])
+		else if (isKeyDown(KEY_PAGEDOWN))
 			delta = 10.0f * dt;
 		if (lp_CONFIG->ortho_camera) // 2D zoom with orthographic camera
 		{

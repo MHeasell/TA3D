@@ -157,22 +157,22 @@ namespace TA3D
 
 	void Battle::keyArrowsInFreeCam()
 	{
-		if (key[KEY_UP])
+		if (isKeyDown(KEY_UP))
 		{
 			cam.rpos += 100.0f * dt * cam_h / 151.0f * cam.dir;
 			track_mode = -1;
 		}
-		if (key[KEY_DOWN])
+		if (isKeyDown(KEY_DOWN))
 		{
 			cam.rpos += -100.0f * dt * cam_h / 151.0f * cam.dir;
 			track_mode = -1;
 		}
-		if (key[KEY_RIGHT])
+		if (isKeyDown(KEY_RIGHT))
 		{
 			cam.rpos += 100.0f * dt * cam_h / 151.0f * cam.side;
 			track_mode = -1;
 		}
-		if (key[KEY_LEFT])
+		if (isKeyDown(KEY_LEFT))
 		{
 			cam.rpos += -100.0f * dt * cam_h / 151.0f * cam.side;
 			track_mode = -1;
@@ -181,25 +181,25 @@ namespace TA3D
 
 	void Battle::keyArrowsNotInFreeCam()
 	{
-		if (key[KEY_UP])
+		if (isKeyDown(KEY_UP))
 		{
 			cam.rpos.z -= SCROLL_SPEED * dt * cam_h / 151.0f;
 			cam_has_target = false;
 			track_mode = -1;
 		}
-		if (key[KEY_DOWN])
+		if (isKeyDown(KEY_DOWN))
 		{
 			cam.rpos.z += SCROLL_SPEED * dt * cam_h / 151.0f;
 			cam_has_target = false;
 			track_mode = -1;
 		}
-		if (key[KEY_RIGHT])
+		if (isKeyDown(KEY_RIGHT))
 		{
 			cam.rpos.x += SCROLL_SPEED * dt * cam_h / 151.0f;
 			cam_has_target = false;
 			track_mode = -1;
 		}
-		if (key[KEY_LEFT])
+		if (isKeyDown(KEY_LEFT))
 		{
 			cam.rpos.x -= SCROLL_SPEED * dt * cam_h / 151.0f;
 			cam_has_target = false;
@@ -210,7 +210,7 @@ namespace TA3D
 	void Battle::handleGameStatusEvents()
 	{
 		// Enable the game status if the `space` is pressed
-		if (!pCacheShowGameStatus && key[KEY_SPACE])
+		if (!pCacheShowGameStatus && isKeyDown(KEY_SPACE))
 		{
 			pCacheShowGameStatus = true;
 			pArea.msg("gamestatus.show");  // Show it
@@ -219,7 +219,7 @@ namespace TA3D
 
 		if (pCacheShowGameStatus)
 		{
-			if (key[KEY_SPACE]) // Show gamestatus window
+			if (isKeyDown(KEY_SPACE)) // Show gamestatus window
 			{
 				if (show_gamestatus < 1.f)
 				{

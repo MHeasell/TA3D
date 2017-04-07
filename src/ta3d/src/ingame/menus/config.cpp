@@ -53,7 +53,7 @@ namespace TA3D
 		{
 			// Wait for user to release ESC
 			reset_mouse();
-			while (key[KEY_ESC])
+			while (isKeyDown(KEY_ESC))
 			{
 				SuspendMilliSeconds(TA3D_MENUS_RECOMMENDED_TIME_MS_FOR_RESTING);
 				poll_inputs();
@@ -378,14 +378,14 @@ namespace TA3D
 						}
 					}
 				}
-			} while (pMouseX == mouse_x && pMouseY == mouse_y && pMouseZ == mouse_z && pMouseB == mouse_b && mouse_b == 0 && !key[KEY_ENTER] && !key[KEY_ESC] && !key[KEY_SPACE] && !key[KEY_C] && !pArea->key_pressed && !pArea->scrolling);
+			} while (pMouseX == mouse_x && pMouseY == mouse_y && pMouseZ == mouse_z && pMouseB == mouse_b && mouse_b == 0 && !isKeyDown(KEY_ENTER) && !isKeyDown(KEY_ESC) && !isKeyDown(KEY_SPACE) && !isKeyDown(KEY_C) && !pArea->key_pressed && !pArea->scrolling);
 		}
 
 		bool Config::maySwitchToAnotherMenu()
 		{
 			if (lp_CONFIG->quickstart)
 			{
-				if (time_out || pArea->get_state("config_confirm.b_cancel_changes") || key[KEY_ESC])
+				if (time_out || pArea->get_state("config_confirm.b_cancel_changes") || isKeyDown(KEY_ESC))
 				{
 					I_Msg(TA3D::TA3D_IM_GUI_MSG, "config_confirm.hide");
 					TA3D::Settings::Restore(TA3D::Paths::ConfigFile);
@@ -624,7 +624,7 @@ namespace TA3D
 				}
 			}
 
-			if (key[KEY_ESC]) // Leave menu on ESC
+			if (isKeyDown(KEY_ESC)) // Leave menu on ESC
 				return true;
 
 			return false;

@@ -71,7 +71,7 @@ namespace TA3D
 		{
 			// Wait for user to release ESC
 			reset_mouse();
-			while (key[KEY_ESC])
+			while (isKeyDown(KEY_ESC))
 			{
 				SuspendMilliSeconds(TA3D_MENUS_RECOMMENDED_TIME_MS_FOR_RESTING);
 				poll_inputs();
@@ -126,7 +126,7 @@ namespace TA3D
 					Battle::Execute(&game_data);
 				}
 
-				while (key[KEY_ESC])
+				while (isKeyDown(KEY_ESC))
 				{
 					SuspendMilliSeconds(TA3D_MENUS_RECOMMENDED_TIME_MS_FOR_RESTING);
 					poll_inputs();
@@ -504,7 +504,7 @@ namespace TA3D
 				if (msec_timer - progress_timer >= 500 && Math::AlmostEquals(network_manager.getFileTransferProgress(), 100.0f))
 					break;
 
-			} while (pMouseX == mouse_x && pMouseY == mouse_y && pMouseZ == mouse_z && pMouseB == mouse_b && mouse_b == 0 && !key[KEY_ENTER] && !key[KEY_ESC] && !key[KEY_SPACE] && !key[KEY_C] && !pArea->key_pressed && !pArea->scrolling && broadcast_msg.empty() && chat_msg.empty() && special_msg.empty() && !playerDropped && (msec_timer - ping_timer < 2000 || host.empty() || client));
+			} while (pMouseX == mouse_x && pMouseY == mouse_y && pMouseZ == mouse_z && pMouseB == mouse_b && mouse_b == 0 && !isKeyDown(KEY_ENTER) && !isKeyDown(KEY_ESC) && !isKeyDown(KEY_SPACE) && !isKeyDown(KEY_C) && !pArea->key_pressed && !pArea->scrolling && broadcast_msg.empty() && chat_msg.empty() && special_msg.empty() && !playerDropped && (msec_timer - ping_timer < 2000 || host.empty() || client));
 		}
 
 		bool SetupGame::maySwitchToAnotherMenu()
@@ -525,7 +525,7 @@ namespace TA3D
 			if (checkNetworkMessages())
 				return true;
 
-			if (key[KEY_ENTER] && !pArea->caption("gamesetup.t_chat").empty())
+			if (isKeyDown(KEY_ENTER) && !pArea->caption("gamesetup.t_chat").empty())
 			{
 				String message;
 				message << "<" << lp_CONFIG->player_name << "> " << pArea->caption("gamesetup.t_chat");
@@ -589,7 +589,7 @@ namespace TA3D
 
 				if (ready)
 				{
-					while (key[KEY_ENTER])
+					while (isKeyDown(KEY_ENTER))
 					{
 						SuspendMilliSeconds(TA3D_MENUS_RECOMMENDED_TIME_MS_FOR_RESTING);
 						poll_inputs();
@@ -853,7 +853,7 @@ namespace TA3D
 				minimap_obj->Data = glimg; // Synchronize the picture on GUI
 			}
 
-			if (key[KEY_ESC])
+			if (isKeyDown(KEY_ESC))
 			{
 				LOG_DEBUG("leaving game room");
 				return true;

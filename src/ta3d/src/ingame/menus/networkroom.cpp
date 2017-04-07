@@ -67,7 +67,7 @@ namespace TA3D
 		{
 			// Wait for user to release ESC
 			reset_mouse();
-			while (key[KEY_ESC])
+			while (isKeyDown(KEY_ESC))
 			{
 				SuspendMilliSeconds(TA3D_MENUS_RECOMMENDED_TIME_MS_FOR_RESTING);
 				poll_inputs();
@@ -108,7 +108,7 @@ namespace TA3D
 				// Wait to reduce CPU consumption
 				wait();
 
-			} while (pMouseX == mouse_x && pMouseY == mouse_y && pMouseZ == mouse_z && pMouseB == mouse_b && mouse_b == 0 && !key[KEY_ENTER] && !key[KEY_ESC] && !key[KEY_SPACE] && !key[KEY_C] && !pArea->key_pressed && !pArea->scrolling && !network_manager.BroadcastedMessages() && msec_timer - server_list_timer < SERVER_LIST_REFRESH_DELAY);
+			} while (pMouseX == mouse_x && pMouseY == mouse_y && pMouseZ == mouse_z && pMouseB == mouse_b && mouse_b == 0 && !isKeyDown(KEY_ENTER) && !isKeyDown(KEY_ESC) && !isKeyDown(KEY_SPACE) && !isKeyDown(KEY_C) && !pArea->key_pressed && !pArea->scrolling && !network_manager.BroadcastedMessages() && msec_timer - server_list_timer < SERVER_LIST_REFRESH_DELAY);
 		}
 
 		bool NetworkRoom::maySwitchToAnotherMenu()
@@ -244,7 +244,7 @@ namespace TA3D
 				}
 			}
 
-			if (pArea->get_state("load_menu.b_load") || (key[KEY_ENTER] && pArea->get_state("load_menu"))) // Loading a game
+			if (pArea->get_state("load_menu.b_load") || (isKeyDown(KEY_ENTER) && pArea->get_state("load_menu"))) // Loading a game
 			{
 				Gui::GUIOBJ::Ptr obj = pArea->get_object("load_menu.l_file");
 				if (obj && obj->Pos < obj->Text.size())
@@ -255,7 +255,7 @@ namespace TA3D
 
 					if (!game_data.saved_file.empty() && network)
 					{
-						while (key[KEY_ENTER])
+						while (isKeyDown(KEY_ENTER))
 						{
 							SuspendMilliSeconds(TA3D_MENUS_RECOMMENDED_TIME_MS_FOR_RESTING);
 							poll_inputs();
@@ -269,9 +269,9 @@ namespace TA3D
 				}
 			}
 
-			if (pArea->get_state("hosting.b_ok") || (key[KEY_ENTER] && pArea->get_state("hosting")))
+			if (pArea->get_state("hosting.b_ok") || (isKeyDown(KEY_ENTER) && pArea->get_state("hosting")))
 			{
-				while (key[KEY_ENTER])
+				while (isKeyDown(KEY_ENTER))
 				{
 					SuspendMilliSeconds(TA3D_MENUS_RECOMMENDED_TIME_MS_FOR_RESTING);
 					poll_inputs();
@@ -292,7 +292,7 @@ namespace TA3D
 
 			if (pArea->get_state("networkgame.b_join"))
 			{
-				while (key[KEY_ENTER])
+				while (isKeyDown(KEY_ENTER))
 				{
 					SuspendMilliSeconds(TA3D_MENUS_RECOMMENDED_TIME_MS_FOR_RESTING);
 					poll_inputs();
@@ -309,9 +309,9 @@ namespace TA3D
 				return true; // If user click "OK" or hit enter then leave the window
 			}
 
-			if (pArea->get_state("networkgame.b_cancel") || key[KEY_ESC])
+			if (pArea->get_state("networkgame.b_cancel") || isKeyDown(KEY_ESC))
 			{
-				while (key[KEY_ESC])
+				while (isKeyDown(KEY_ESC))
 				{
 					SuspendMilliSeconds(TA3D_MENUS_RECOMMENDED_TIME_MS_FOR_RESTING);
 					poll_inputs();

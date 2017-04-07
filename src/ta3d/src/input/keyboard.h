@@ -41,6 +41,12 @@ namespace TA3D
 		extern int remap[0x1000];
 	}
 
+	/**
+	 * Returns true if the key for the given keycode
+	 * is currently being held down, otherwise false.
+	 */
+	bool isKeyDown(KeyCode keycode);
+
 	/*!
 	** \brief return true is there are key codes waiting in the buffer, false otherwise
 	*/

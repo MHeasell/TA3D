@@ -228,19 +228,19 @@ namespace TA3D
 				// Wait to reduce CPU consumption
 				wait();
 
-			} while (pMouseX == mouse_x && pMouseY == mouse_y && pMouseZ == mouse_z && pMouseB == mouse_b && mouse_b == 0 && !key[KEY_ENTER] && !key[KEY_ESC] && !key[KEY_SPACE] && !key[KEY_C] && !keyIsPressed && !pArea->scrolling);
+			} while (pMouseX == mouse_x && pMouseY == mouse_y && pMouseZ == mouse_z && pMouseB == mouse_b && mouse_b == 0 && !isKeyDown(KEY_ENTER) && !isKeyDown(KEY_ESC) && !isKeyDown(KEY_SPACE) && !isKeyDown(KEY_C) && !keyIsPressed && !pArea->scrolling);
 		}
 
 		bool MapSelector::maySwitchToAnotherMenu()
 		{
 			// Aborting
-			if (pArea->get_state("mapsetup.b_cancel") || key[KEY_ESC])
+			if (pArea->get_state("mapsetup.b_cancel") || isKeyDown(KEY_ESC))
 			{
 				pSelectedMap = pDefaultSelectedMap;
 				return true;
 			}
 			// Go ! Select the map !
-			if (pArea->get_state("mapsetup.b_ok") || key[KEY_ENTER])
+			if (pArea->get_state("mapsetup.b_ok") || isKeyDown(KEY_ENTER))
 				return true;
 			// Selection change
 			if (pMapListObj)

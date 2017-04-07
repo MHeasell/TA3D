@@ -107,7 +107,7 @@ namespace TA3D
 		void NetMenu::doFinalize()
 		{
 			// Wait for user to release ESC
-			while (key[KEY_ESC])
+			while (isKeyDown(KEY_ESC))
 			{
 				SuspendMilliSeconds(TA3D_MENUS_RECOMMENDED_TIME_MS_FOR_RESTING);
 				poll_inputs();
@@ -148,7 +148,7 @@ namespace TA3D
 				// Listen to server
 				NetClient::instance()->receive();
 
-			} while (pMouseX == mouse_x && pMouseY == mouse_y && pMouseZ == mouse_z && pMouseB == mouse_b && mouse_b == 0 && !key[KEY_ENTER] && !key[KEY_ESC] && !key[KEY_SPACE] && !key[KEY_C] && !pArea->key_pressed && !pArea->scrolling && !NetClient::instance()->messageWaiting());
+			} while (pMouseX == mouse_x && pMouseY == mouse_y && pMouseZ == mouse_z && pMouseB == mouse_b && mouse_b == 0 && !isKeyDown(KEY_ENTER) && !isKeyDown(KEY_ESC) && !isKeyDown(KEY_SPACE) && !isKeyDown(KEY_C) && !pArea->key_pressed && !pArea->scrolling && !NetClient::instance()->messageWaiting());
 		}
 
 		void NetMenu::parseServerMessages()
@@ -611,7 +611,7 @@ namespace TA3D
 			};
 
 			// Exit
-			if (key[KEY_ESC] || pArea->get_state("netmenu.b_back"))
+			if (isKeyDown(KEY_ESC) || pArea->get_state("netmenu.b_back"))
 				return true;
 
 			return false;

@@ -46,7 +46,7 @@ namespace TA3D
 		{
 			// Wait for user to release ESC
 			reset_mouse();
-			while (key[KEY_ESC])
+			while (isKeyDown(KEY_ESC))
 			{
 				SuspendMilliSeconds(TA3D_MENUS_RECOMMENDED_TIME_MS_FOR_RESTING);
 				poll_inputs();
@@ -127,7 +127,7 @@ namespace TA3D
 				// Wait to reduce CPU consumption
 				wait();
 
-			} while (pMouseX == mouse_x && pMouseY == mouse_y && pMouseZ == mouse_z && pMouseB == mouse_b && mouse_b == 0 && !key[KEY_ENTER] && !key[KEY_ESC] && !key[KEY_SPACE] && !key[KEY_C] && !pArea->key_pressed && !pArea->scrolling && special_msg.empty() && !playerDropped && (msec_timer - ping_timer < 2000 || !network_manager.isServer()));
+			} while (pMouseX == mouse_x && pMouseY == mouse_y && pMouseZ == mouse_z && pMouseB == mouse_b && mouse_b == 0 && !isKeyDown(KEY_ENTER) && !isKeyDown(KEY_ESC) && !isKeyDown(KEY_SPACE) && !isKeyDown(KEY_C) && !pArea->key_pressed && !pArea->scrolling && special_msg.empty() && !playerDropped && (msec_timer - ping_timer < 2000 || !network_manager.isServer()));
 		}
 
 		bool WaitRoom::maySwitchToAnotherMenu()

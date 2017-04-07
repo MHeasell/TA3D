@@ -49,7 +49,7 @@ namespace TA3D
 		{
 			// Wait for user to release ESC
 			reset_mouse();
-			while (key[KEY_ESC])
+			while (isKeyDown(KEY_ESC))
 			{
 				SuspendMilliSeconds(TA3D_MENUS_RECOMMENDED_TIME_MS_FOR_RESTING);
 				poll_inputs();
@@ -75,7 +75,7 @@ namespace TA3D
 				}
 
 				reset_mouse();
-				while (key[KEY_ESC])
+				while (isKeyDown(KEY_ESC))
 				{
 					SuspendMilliSeconds(TA3D_MENUS_RECOMMENDED_TIME_MS_FOR_RESTING);
 					poll_inputs();
@@ -141,7 +141,7 @@ namespace TA3D
 				// Wait to reduce CPU consumption
 				wait();
 
-			} while (pMouseX == mouse_x && pMouseY == mouse_y && pMouseZ == mouse_z && pMouseB == mouse_b && mouse_b == 0 && !key[KEY_ENTER] && !key[KEY_ESC] && !key[KEY_SPACE] && !key[KEY_C] && !pArea->key_pressed && !pArea->scrolling);
+			} while (pMouseX == mouse_x && pMouseY == mouse_y && pMouseZ == mouse_z && pMouseB == mouse_b && mouse_b == 0 && !isKeyDown(KEY_ENTER) && !isKeyDown(KEY_ESC) && !isKeyDown(KEY_SPACE) && !isKeyDown(KEY_C) && !pArea->key_pressed && !pArea->scrolling);
 		}
 
 		bool CampaignMainMenu::maySwitchToAnotherMenu()
@@ -195,7 +195,7 @@ namespace TA3D
 					mission_id = guiobj->Pos;
 			}
 
-			if ((pArea->get_state("campaign.b_ok") || key[KEY_ENTER]) && campaign_list.size())
+			if ((pArea->get_state("campaign.b_ok") || isKeyDown(KEY_ENTER)) && campaign_list.size())
 			{
 				start_game = true;
 				return true; // If user click "OK" or hit enter then leave the window
@@ -203,7 +203,7 @@ namespace TA3D
 			if (pArea->get_state("campaign.b_cancel")) // Leave on Cancel
 				return true;
 
-			if (key[KEY_ESC]) // Leave menu on ESC
+			if (isKeyDown(KEY_ESC)) // Leave menu on ESC
 				return true;
 
 			return false;

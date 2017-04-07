@@ -94,13 +94,13 @@ namespace TA3D
 				// Wait to reduce CPU consumption
 				wait();
 
-			} while (pMouseX == mouse_x && pMouseY == mouse_y && pMouseZ == mouse_z && pMouseB == mouse_b && mouse_b == 0 && !key[KEY_ENTER] && !key[KEY_ESC] && !key[KEY_SPACE] && !keyIsPressed && !pArea->scrolling);
+			} while (pMouseX == mouse_x && pMouseY == mouse_y && pMouseZ == mouse_z && pMouseB == mouse_b && mouse_b == 0 && !isKeyDown(KEY_ENTER) && !isKeyDown(KEY_ESC) && !isKeyDown(KEY_SPACE) && !keyIsPressed && !pArea->scrolling);
 		}
 
 		bool Statistics::maySwitchToAnotherMenu()
 		{
 			// Exit
-			return (key[KEY_SPACE] || key[KEY_ENTER] || key[KEY_ESC] || pArea->get_state("statistics.b_ok"));
+			return (isKeyDown(KEY_SPACE) || isKeyDown(KEY_ENTER) || isKeyDown(KEY_ESC) || pArea->get_state("statistics.b_ok"));
 		}
 
 	} // namespace Menus

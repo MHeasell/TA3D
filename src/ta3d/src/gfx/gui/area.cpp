@@ -639,12 +639,12 @@ namespace TA3D
 					key_is_pressed = keypressed();
 					check();
 					rest(16);
-				} while (amx == mouse_x && amy == mouse_y && amz == mouse_z && amb == mouse_b && !key[KEY_ENTER] && !key[KEY_ESC] && !done && !key_is_pressed && !scrolling);
+				} while (amx == mouse_x && amy == mouse_y && amz == mouse_z && amb == mouse_b && !isKeyDown(KEY_ENTER) && !isKeyDown(KEY_ESC) && !done && !key_is_pressed && !scrolling);
 
-				if (key[KEY_ESC])
+				if (isKeyDown(KEY_ESC))
 					done = true;
 
-				if (key[KEY_ENTER] || get_state("popup.b_ok"))
+				if (isKeyDown(KEY_ENTER) || get_state("popup.b_ok"))
 					done = true;
 
 				// Clear screen

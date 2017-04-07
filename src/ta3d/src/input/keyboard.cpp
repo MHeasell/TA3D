@@ -33,6 +33,11 @@ namespace TA3D
 		int remap[0x1000];
 	}
 
+	bool isKeyDown(KeyCode keycode)
+	{
+		return key[keycode];
+	}
+
 	uint32 readkey()
 	{
 		if (VARS::keybuf.empty())
