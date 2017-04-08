@@ -28,7 +28,7 @@ namespace TA3D
 		KeyCode ascii_to_scancode[256];
 		bool key[MAX_KEYCODE];
 		bool prevkey_down[MAX_KEYCODE];
-		std::deque<uint32> keybuf;
+		std::deque<KeyboardBufferItem> keyboardBuffer;
 		int remap[MAX_KEYCODE];
 	}
 
@@ -42,24 +42,31 @@ namespace TA3D
 		return isKeyDown(ascii_to_scancode[c]);
 	}
 
-	uint32 readkey()
+	KeyboardBufferItem getNextKeyboardBufferElement()
 	{
-		if (VARS::keybuf.empty())
-			return 0;
+		if (keyboardBuffer.empty())
+		{
+			return KeyboardBufferItem(KEY_UNKNOWN, 0);
+		}
 
-		uint32 res = VARS::keybuf.front();
-		VARS::keybuf.pop_front();
-		return res;
+		auto element = keyboardBuffer.front();
+		keyboardBuffer.pop_front();
+		return element;
 	}
 
 	bool keyboardBufferContainsElements()
 	{
-		return !VARS::keybuf.empty();
+		return !keyboardBuffer.empty();
+	}
+
+	void appendKeyboardBufferElement(KeyCode keyCode, uint16 codePoint)
+	{
+		keyboardBuffer.push_back(KeyboardBufferItem(keyCode, codePoint));
 	}
 
 	void clear_keybuf()
 	{
-		VARS::keybuf.clear();
+		keyboardBuffer.clear();
 	}
 
 	void init_keyboard()
@@ -84,7 +91,7 @@ namespace TA3D
 		remap[224] = KEY_0;
 
 		memset(VARS::key, 0, MAX_KEYCODE * sizeof(bool));
-		VARS::keybuf.clear();
+		keyboardBuffer.clear();
 
 		// Initializing the ascii to scancode table
 		memset(ascii_to_scancode, 0, 256 * sizeof(int));
@@ -167,5 +174,10 @@ namespace TA3D
 		}
 		prevkey_down[keycode] = key[keycode];
 		return false;
+	}
+
+	KeyCode sdlToKeyCode(SDLKey key)
+	{
+		return key;
 	}
 } // namespace TA3D

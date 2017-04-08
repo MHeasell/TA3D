@@ -784,9 +784,9 @@ namespace TA3D
 						object->Etat = false;
 						if (object->Focus && keyboardBufferContainsElements())
 						{
-							const uint32 keyCode = readkey();
-							Key = keyCode & 0xFFFF;
-							const uint16 scancode = uint16(keyCode >> 16);
+							const auto keyElement = getNextKeyboardBufferElement();
+							Key = keyElement.codePoint;
+							const uint16 scancode = keyElement.keyCode;
 
 							switch (scancode)
 							{
@@ -830,9 +830,9 @@ namespace TA3D
 						object->Etat = false;
 						if (object->Focus && keyboardBufferContainsElements())
 						{
-							const uint32 keyCode = readkey();
-							Key = keyCode & 0xFFFF;
-							const uint16 scancode = uint16(keyCode >> 16);
+							const auto keyElement = getNextKeyboardBufferElement();
+							Key = keyElement.codePoint;
+							const uint16 scancode = keyElement.keyCode;
 							switch (scancode)
 							{
 								case KEY_ESC:
@@ -964,7 +964,7 @@ namespace TA3D
 								int npos = object->Pos;
 								if (object->Focus)
 								{
-									int key_code = (readkey() >> 16) & 0xFFFF;
+									int key_code = getNextKeyboardBufferElement().keyCode;
 									if (key_code == KEY_UP)
 										npos--;
 									if (key_code == KEY_DOWN)

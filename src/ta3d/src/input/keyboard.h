@@ -31,12 +31,19 @@ namespace TA3D
 {
 	typedef SDLKey KeyCode;
 
+	struct KeyboardBufferItem {
+		KeyCode keyCode;
+		uint16 codePoint;
+
+		KeyboardBufferItem(KeyCode keyCode, uint16 codePoint): keyCode(keyCode), codePoint(codePoint) {}
+	};
+
 	namespace VARS
 	{
 		extern KeyCode ascii_to_scancode[256];
 		extern bool key[MAX_KEYCODE];
 		extern bool prevkey_down[MAX_KEYCODE];
-		extern std::deque<uint32> keybuf;
+		extern std::deque<KeyboardBufferItem> keyboardBuffer;
 		extern int remap[MAX_KEYCODE];
 	}
 
@@ -62,10 +69,21 @@ namespace TA3D
 	 */
 	bool keyboardBufferContainsElements();
 
+	/**
+	 * Appends an item to the global keyboard key buffer.
+	 */
+	void appendKeyboardBufferElement(KeyCode keyCode, uint16 codePoint);
+
 	/*!
 	** \brief return the next key code in the key buffer
 	*/
-	uint32 readkey();
+
+	/**
+	 * Reads the next key in the keyboard input buffer.
+	 * If there are no elements in the buffer,
+	 * the behaviour of this function is undefined.
+	 */
+	KeyboardBufferItem getNextKeyboardBufferElement();
 
 	/*!
 	** \brief clears the key code buffer
@@ -93,7 +111,14 @@ namespace TA3D
 	 * otherwise false.
 	 */
 	bool didKeyGoDown(KeyCode keycode);
+
+	/**
+	 * Converts an SDL keycode into a TA3D keycode.
+	 */
+	KeyCode sdlToKeyCode(SDLKey key);
 }
+
+#define KEY_UNKNOWN SDLK_UNKNOWN
 
 #define KEY_ENTER SDLK_RETURN
 #define KEY_SPACE SDLK_SPACE

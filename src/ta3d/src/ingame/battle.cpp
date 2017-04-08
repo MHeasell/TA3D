@@ -2510,7 +2510,7 @@ namespace TA3D
 					while (mouse_b)
 						poll_inputs();
 					while (keyboardBufferContainsElements())
-						readkey();
+						getNextKeyboardBufferElement();
 				}
 				break;
 			}

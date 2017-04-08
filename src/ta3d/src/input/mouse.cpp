@@ -71,13 +71,17 @@ namespace TA3D
 				case SDL_KEYDOWN:
 				{
 					setKeyDown(event.key.keysym.sym);
-					uint32 c = event.key.keysym.unicode;
-					c |= event.key.keysym.sym << 16;
-					if (event.key.keysym.sym == KEY_ENTER_PAD)
+
+					uint32 codePoint = event.key.keysym.unicode;
+					KeyCode keyCode = sdlToKeyCode(event.key.keysym.sym);
+
+					if (keyCode == KEY_ENTER_PAD)
 					{
-						c = int('\n') | (KEY_ENTER << 16);
+						keyCode = KEY_ENTER;
+						codePoint = '\n';
 					}
-					VARS::keybuf.push_back(c);
+
+					appendKeyboardBufferElement(keyCode, codePoint);
 				}
 				break;
 				case SDL_MOUSEBUTTONDOWN:

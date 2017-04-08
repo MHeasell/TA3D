@@ -123,9 +123,9 @@ namespace TA3D
 
 		if (keyboardBufferContainsElements())
 		{
-			keycode = readkey();
-			keyb = keycode & 0xFFFF;
-			keycode >>= 16;
+			auto item = getNextKeyboardBufferElement();
+			keycode = item.keyCode;
+			keyb = item.codePoint;
 		}
 
 		switch (keycode)
