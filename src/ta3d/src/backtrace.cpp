@@ -18,9 +18,12 @@
 #include "stdafx.h"
 #include <iostream>
 
-void criticalMessage(const TA3D::String& msg)
+namespace TA3D
 {
-	// Output error message to stderr
-	std::cerr << "--- CRITICAL MESSAGE ---" << std::endl;
-	std::cerr << msg << std::endl;
+	void criticalMessage(const TA3D::String &msg)
+	{
+		// Output error message to stderr
+		std::cerr << "--- CRITICAL MESSAGE ---" << std::endl;
+		std::cerr << msg << std::endl;
+	}
 }

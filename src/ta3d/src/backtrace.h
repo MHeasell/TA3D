@@ -20,6 +20,9 @@
 
 #include "stdafx.h"
 
-void criticalMessage(const TA3D::String& msg);
+namespace TA3D
+{
+	void criticalMessage(const TA3D::String &msg);
+}
 
 #endif // __TA3D_BACKTRACE_H__
