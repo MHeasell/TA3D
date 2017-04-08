@@ -160,7 +160,7 @@ namespace TA3D
 		uint16 AREA::check()
 		{
 			poll_inputs();
-			key_pressed = keypressed();
+			key_pressed = keyboardBufferContainsElements();
 			bool scroll = ((msec_timer - scroll_timer) >= 250);
 			if (scroll)
 			{
@@ -636,7 +636,7 @@ namespace TA3D
 					amz = mouse_z;
 					amb = mouse_b;
 
-					key_is_pressed = keypressed();
+					key_is_pressed = keyboardBufferContainsElements();
 					check();
 					rest(16);
 				} while (amx == mouse_x && amy == mouse_y && amz == mouse_z && amb == mouse_b && !isKeyDown(KEY_ENTER) && !isKeyDown(KEY_ESC) && !done && !key_is_pressed && !scrolling);

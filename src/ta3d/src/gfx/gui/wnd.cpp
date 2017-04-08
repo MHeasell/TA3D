@@ -782,7 +782,7 @@ namespace TA3D
 					case OBJ_TEXTBAR: // Permet l'entrée de texte
 					{
 						object->Etat = false;
-						if (object->Focus && keypressed())
+						if (object->Focus && keyboardBufferContainsElements())
 						{
 							const uint32 keyCode = readkey();
 							Key = keyCode & 0xFFFF;
@@ -828,7 +828,7 @@ namespace TA3D
 						if (object->Pos > object->Text[object->Data].utf8size())
 							object->Pos = object->Text[object->Pos].utf8size();
 						object->Etat = false;
-						if (object->Focus && keypressed())
+						if (object->Focus && keyboardBufferContainsElements())
 						{
 							const uint32 keyCode = readkey();
 							Key = keyCode & 0xFFFF;

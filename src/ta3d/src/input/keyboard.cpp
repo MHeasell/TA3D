@@ -52,7 +52,7 @@ namespace TA3D
 		return res;
 	}
 
-	bool keypressed()
+	bool keyboardBufferContainsElements()
 	{
 		return !VARS::keybuf.empty();
 	}

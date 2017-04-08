@@ -99,7 +99,7 @@ namespace TA3D
 					return true;
 			}
 			// Press any key to continue... :)
-			return (mouse_b || keypressed());
+			return (mouse_b || keyboardBufferContainsElements());
 		}
 
 		void Intro::reloadContent()

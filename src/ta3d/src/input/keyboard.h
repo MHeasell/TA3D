@@ -56,10 +56,11 @@ namespace TA3D
 	 */
 	bool isAsciiCharacterKeyDown(byte c);
 
-	/*!
-	** \brief return true is there are key codes waiting in the buffer, false otherwise
-	*/
-	bool keypressed();
+	/**
+	 * Returns true if there are characters waiting in the keyboard buffer,
+	 * otherwise false.
+	 */
+	bool keyboardBufferContainsElements();
 
 	/*!
 	** \brief return the next key code in the key buffer

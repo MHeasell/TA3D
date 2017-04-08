@@ -2502,14 +2502,14 @@ namespace TA3D
 					gfx->unset_2D_mode();
 					gfx->flip();
 
-					while (!keypressed() && mouse_b == 0)
+					while (!keyboardBufferContainsElements() && mouse_b == 0)
 					{
 						rest(1);
 						poll_inputs();
 					}
 					while (mouse_b)
 						poll_inputs();
-					while (keypressed())
+					while (keyboardBufferContainsElements())
 						readkey();
 				}
 				break;
