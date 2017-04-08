@@ -76,7 +76,7 @@ namespace TA3D
 		SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
 
 		// We need some remapping hack to support some keyboards (french keyboards don't access KEY_0..9)
-		memset(keyCodeMap, 0, MAX_KEYCODE * sizeof(int));
+		memset(keyCodeMap, 0, MAX_KEYCODE * sizeof(KeyCode));
 
 		keyCodeMap[KEY_ENTER_PAD] = KEY_ENTER;
 		keyCodeMap[38] = KEY_1;
@@ -94,7 +94,7 @@ namespace TA3D
 		keyboardBuffer.clear();
 
 		// Initializing the ascii to scancode table
-		memset(asciiToKeyCode, 0, 256 * sizeof(int));
+		memset(asciiToKeyCode, 0, 256 * sizeof(KeyCode));
 
 		asciiToKeyCode['a'] = KEY_A;
 		asciiToKeyCode['b'] = KEY_B;
