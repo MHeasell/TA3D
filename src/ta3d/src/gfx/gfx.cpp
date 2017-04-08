@@ -2246,7 +2246,7 @@ namespace TA3D
 
 	void reset_keyboard()
 	{
-		clear_keybuf();
+		clearKeyboardBuffer();
 	}
 	void reset_mouse()
 	{

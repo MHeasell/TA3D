@@ -20,64 +20,130 @@
 
 #include <deque>
 #include <stdafx.h>
+#include <SDL_keysym.h>
+
+/**
+ * The number after the highest valid keycode.
+ */
+#define MAX_KEYCODE SDLK_LAST
 
 namespace TA3D
 {
+	typedef SDLKey KeyCode;
+
+	struct KeyboardBufferItem {
+		KeyCode keyCode;
+		uint16 codePoint;
+
+		KeyboardBufferItem(KeyCode keyCode, uint16 codePoint): keyCode(keyCode), codePoint(codePoint) {}
+	};
+
 	namespace VARS
 	{
-		extern int ascii_to_scancode[256];
-		extern bool key[0x1000];
-		extern bool prevkey_down[0x1000];
-		extern bool prevkey_up[0x1000];
-		extern std::deque<uint32> keybuf;
-		extern int remap[0x1000];
+		/**
+		 * Mapping of ASCII characters to key codes.
+		 */
+		extern KeyCode asciiToKeyCode[256];
+
+		/**
+		 * Array recording the state of each key,
+		 * identified by its key code.
+		 * If the key is down, the value is true.
+		 * Otherwise, if the key is up, the value is false.
+		 */
+		extern bool keyState[MAX_KEYCODE];
+
+		/**
+		 * Array recording the previous state of each key.
+		 * This is used by didKeyGoDown.
+		 */
+		extern bool previousKeyState[MAX_KEYCODE];
+
+		/**
+		 * A buffer that holds the keys received from key down events.
+		 */
+		extern std::deque<KeyboardBufferItem> keyboardBuffer;
+
+		/**
+		 * A mapping of key codes to other key codes.
+		 * Key codes in this mapping will be translated
+		 * to the key code they are mapped to before processing.
+		 */
+		extern KeyCode keyCodeMap[MAX_KEYCODE];
 	}
 
-	/*!
-	** \brief return true is there are key codes waiting in the buffer, false otherwise
-	*/
-	bool keypressed();
+	/**
+	 * Returns true if the key for the given keycode
+	 * is currently being held down, otherwise false.
+	 */
+	bool isKeyDown(KeyCode keycode);
+
+	/**
+	 * Returns true if a key that emits the given ASCII character is down,
+	 * otherwise false.
+	 *
+	 * For letters the case is ignored, that is,
+	 * when the 'A' key is pressed, both 'a' and 'A'
+	 * are considered to be down.
+	 */
+	bool isAsciiCharacterKeyDown(byte c);
+
+	/**
+	 * Returns true if there are characters waiting in the keyboard buffer,
+	 * otherwise false.
+	 */
+	bool keyboardBufferContainsElements();
+
+	/**
+	 * Appends an item to the global keyboard key buffer.
+	 */
+	void appendKeyboardBufferElement(KeyCode keyCode, uint16 codePoint);
 
 	/*!
 	** \brief return the next key code in the key buffer
 	*/
-	uint32 readkey();
 
-	/*!
-	** \brief clears the key code buffer
-	*/
-	void clear_keybuf();
+	/**
+	 * Reads the next key in the keyboard input buffer.
+	 * If there are no elements in the buffer,
+	 * the behaviour of this function is undefined.
+	 */
+	KeyboardBufferItem getNextKeyboardBufferElement();
 
-	/*!
-	** \brief initialize keyboard handler
-	*/
-	void init_keyboard();
+	/**
+	 * Clears the keyboard buffer.
+	 */
+	void clearKeyboardBuffer();
 
-	/*!
-	** \brief set a key up
-	*/
-	void set_key_up(uint16 keycode);
+	/**
+	 * Initializes the keyboard handler.
+	 */
+	void initializeKeyboard();
 
-	/*!
-	** \brief set a key down
-	*/
-	void set_key_down(uint16 keycode);
+	/**
+	 * Sets the given keycode as up.
+	 */
+	void setKeyUp(KeyCode keycode);
 
-	/*!
-    ** \brief returns true if the given key state has changed to down since last call with the same key
-    */
-	bool key_down_event(uint16 keycode);
+	/**
+	 * Sets the given keycode as down.
+	 */
+	void setKeyDown(KeyCode keycode);
 
-	/*!
-    ** \brief returns true if the given key state has changed to up since last call with the same key
-    */
-	bool key_up_event(uint16 keycode);
+	/**
+	 * Returns true if the given key went down
+	 * since the key was last checked with this function,
+	 * otherwise false.
+	 */
+	bool didKeyGoDown(KeyCode keycode);
 
-	/*!
-    ** \brief returns true if the given key state has changed since last call with the same key
-    */
-	bool key_event(uint16 keycode);
+	/**
+	 * Converts an SDL keycode into a TA3D keycode.
+	 */
+	KeyCode sdlToKeyCode(SDLKey key);
 }
+
+#define KEY_UNKNOWN SDLK_UNKNOWN
 
 #define KEY_ENTER SDLK_RETURN
 #define KEY_SPACE SDLK_SPACE

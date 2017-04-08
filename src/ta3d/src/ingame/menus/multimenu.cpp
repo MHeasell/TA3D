@@ -48,12 +48,12 @@ namespace TA3D
 		void MultiMenu::doFinalize()
 		{
 			// Wait for user to release ESC
-			while (key[KEY_ESC])
+			while (isKeyDown(KEY_ESC))
 			{
 				SuspendMilliSeconds(TA3D_MENUS_RECOMMENDED_TIME_MS_FOR_RESTING);
 				poll_inputs();
 			}
-			clear_keybuf();
+			clearKeyboardBuffer();
 		}
 
 		bool MultiMenu::doInitialize()
@@ -76,7 +76,7 @@ namespace TA3D
 				// Wait to reduce CPU consumption
 				wait();
 
-			} while (pMouseX == mouse_x && pMouseY == mouse_y && pMouseZ == mouse_z && pMouseB == mouse_b && mouse_b == 0 && !key[KEY_ENTER] && !key[KEY_ESC] && !key[KEY_SPACE] && !key[KEY_C] && !pArea->key_pressed && !pArea->scrolling);
+			} while (pMouseX == mouse_x && pMouseY == mouse_y && pMouseZ == mouse_z && pMouseB == mouse_b && mouse_b == 0 && !isKeyDown(KEY_ENTER) && !isKeyDown(KEY_ESC) && !isKeyDown(KEY_SPACE) && !isKeyDown(KEY_C) && !pArea->key_pressed && !pArea->scrolling);
 		}
 
 		bool MultiMenu::maySwitchToAnotherMenu()
@@ -94,7 +94,7 @@ namespace TA3D
 			}
 
 			// Exit
-			if (key[KEY_ESC] || pArea->get_state("multimenu.b_back"))
+			if (isKeyDown(KEY_ESC) || pArea->get_state("multimenu.b_back"))
 				return true;
 
 			return false;

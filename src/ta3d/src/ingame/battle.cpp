@@ -219,11 +219,11 @@ namespace TA3D
 			if (players.local_human_id >= 0 && !Console::Instance()->activated() && !pArea.get_state("chat"))
 				handleGameStatusEvents();
 
-			if (key_down_event(KEY_HOME))
+			if (didKeyGoDown(KEY_HOME))
 				showHealthBars ^= true;
 
 			// Ctrl+D : Toggle Self-destruct
-			if (TA3D_CTRL_PRESSED && key[KEY_D])
+			if (TA3D_CTRL_PRESSED && isKeyDown(KEY_D))
 			{
 				if (!ordered_destruct)
 				{
@@ -240,7 +240,7 @@ namespace TA3D
 				ordered_destruct = false;
 
 			// + : increase game speed
-			if (key[KEY_PLUS_PAD] && !Console::Instance()->activated())
+			if (isKeyDown(KEY_PLUS_PAD) && !Console::Instance()->activated())
 			{
 				if (!speed_changed && lp_CONFIG->timefactor < 10.0f)
 				{
@@ -254,7 +254,7 @@ namespace TA3D
 			else
 			{
 				// - : reduce game speed
-				if ((key[KEY_MINUS] || key[KEY_MINUS_PAD]) && !Console::Instance()->activated())
+				if ((isKeyDown(KEY_MINUS) || isKeyDown(KEY_MINUS_PAD)) && !Console::Instance()->activated())
 				{
 					if (!speed_changed && lp_CONFIG->timefactor > 1.0f)
 					{
@@ -290,7 +290,7 @@ namespace TA3D
 			if (track_mode >= 0 && (cur_sel_index < 0 || cur_sel_index >= (int)units.max_unit || track_mode != cur_sel_index))
 				track_mode = -1;
 
-			if (key[KEY_T] && !Console::Instance()->activated() && cur_sel_index >= 0 && cur_sel_index < (int)units.max_unit)
+			if (isKeyDown(KEY_T) && !Console::Instance()->activated() && cur_sel_index >= 0 && cur_sel_index < (int)units.max_unit)
 			{
 				if (!last_time_activated_track_mode)
 					track_mode = track_mode == cur_sel_index ? -1 : cur_sel_index;
@@ -298,7 +298,7 @@ namespace TA3D
 			}
 			else
 			{
-				if (key[KEY_T] && !Console::Instance()->activated())
+				if (isKeyDown(KEY_T) && !Console::Instance()->activated())
 				{
 					track_mode = -1;
 					cam_has_target = false;
@@ -307,13 +307,13 @@ namespace TA3D
 					last_time_activated_track_mode = false;
 			}
 
-			if (key[KEY_F1] && units.last_on >= 0 && units.unit[units.last_on].type_id >= 0)
+			if (isKeyDown(KEY_F1) && units.last_on >= 0 && units.unit[units.last_on].type_id >= 0)
 			{
 				unit_info_id = units.unit[units.last_on].type_id;
 			}
 			else
 			{
-				if (key[KEY_F1] && cur_sel >= 0)
+				if (isKeyDown(KEY_F1) && cur_sel >= 0)
 				{
 					unit_info_id = cur_sel;
 				}
@@ -1135,22 +1135,22 @@ namespace TA3D
 			}
 
 			// Select CTRL_* category units
-			if (TA3D_CTRL_PRESSED && (key[KEY_C] || key[KEY_F] || key[KEY_V] || key[KEY_B]))
+			if (TA3D_CTRL_PRESSED && (isKeyDown(KEY_C) || isKeyDown(KEY_F) || isKeyDown(KEY_V) || isKeyDown(KEY_B)))
 			{
 				String check_cat = "CTRL_";
-				if (key[KEY_C])
+				if (isKeyDown(KEY_C))
 					check_cat += "C";
 				else
 				{
-					if (key[KEY_F])
+					if (isKeyDown(KEY_F))
 						check_cat += "F";
 					else
 					{
-						if (key[KEY_V])
+						if (isKeyDown(KEY_V))
 							check_cat += "V";
 						else
 						{
-							if (key[KEY_B])
+							if (isKeyDown(KEY_B))
 								check_cat += "B";
 						}
 					}
@@ -1187,7 +1187,7 @@ namespace TA3D
 						track_mode = cur_sel_index;
 				}
 			}
-			else if (TA3D_CTRL_PRESSED && key[KEY_Z]) // Sélectionne toutes les unités dont le type est déjà sélectionné / Select units of the same type
+			else if (TA3D_CTRL_PRESSED && isKeyDown(KEY_Z)) // Sélectionne toutes les unités dont le type est déjà sélectionné / Select units of the same type
 			{
 				std::vector<bool> sel_type;
 				sel_type.resize(unit_manager.nb_unit);
@@ -1223,7 +1223,7 @@ namespace TA3D
 			}
 			else
 			{
-				if (TA3D_CTRL_PRESSED && key[KEY_A]) // Select all the player's units
+				if (TA3D_CTRL_PRESSED && isKeyDown(KEY_A)) // Select all the player's units
 				{
 					for (unsigned int e = 0; e < units.index_list_size; ++e)
 					{
@@ -1252,25 +1252,25 @@ namespace TA3D
 					if (TA3D_CTRL_PRESSED) // Formation de groupes d'unitÃ©s
 					{
 						int grpe = -1;
-						if (key[KEY_0])
+						if (isKeyDown(KEY_0))
 							grpe = 0;
-						if (key[KEY_1])
+						if (isKeyDown(KEY_1))
 							grpe = 1;
-						if (key[KEY_2])
+						if (isKeyDown(KEY_2))
 							grpe = 2;
-						if (key[KEY_3])
+						if (isKeyDown(KEY_3))
 							grpe = 3;
-						if (key[KEY_4])
+						if (isKeyDown(KEY_4))
 							grpe = 4;
-						if (key[KEY_5])
+						if (isKeyDown(KEY_5))
 							grpe = 5;
-						if (key[KEY_6])
+						if (isKeyDown(KEY_6))
 							grpe = 6;
-						if (key[KEY_7])
+						if (isKeyDown(KEY_7))
 							grpe = 7;
-						if (key[KEY_8])
+						if (isKeyDown(KEY_8))
 							grpe = 8;
-						if (key[KEY_9])
+						if (isKeyDown(KEY_9))
 							grpe = 9;
 
 						if (grpe >= 0)
@@ -1291,28 +1291,28 @@ namespace TA3D
 					}
 					else
 					{
-						if (key[KEY_ALT]) // Restauration de groupes d'unitÃ©s
+						if (isKeyDown(KEY_ALT)) // Restauration de groupes d'unitÃ©s
 						{
 							int grpe = -1;
-							if (key[KEY_0])
+							if (isKeyDown(KEY_0))
 								grpe = 0;
-							if (key[KEY_1])
+							if (isKeyDown(KEY_1))
 								grpe = 1;
-							if (key[KEY_2])
+							if (isKeyDown(KEY_2))
 								grpe = 2;
-							if (key[KEY_3])
+							if (isKeyDown(KEY_3))
 								grpe = 3;
-							if (key[KEY_4])
+							if (isKeyDown(KEY_4))
 								grpe = 4;
-							if (key[KEY_5])
+							if (isKeyDown(KEY_5))
 								grpe = 5;
-							if (key[KEY_6])
+							if (isKeyDown(KEY_6))
 								grpe = 6;
-							if (key[KEY_7])
+							if (isKeyDown(KEY_7))
 								grpe = 7;
-							if (key[KEY_8])
+							if (isKeyDown(KEY_8))
 								grpe = 8;
-							if (key[KEY_9])
+							if (isKeyDown(KEY_9))
 								grpe = 9;
 
 							if (grpe >= 0)
@@ -1373,7 +1373,7 @@ namespace TA3D
 			/*----------------------------------------------------------------------------*/
 
 			bool escMenuIsVisible = pArea.get_state("esc_menu");
-			if (key[KEY_ESC] && !escMenuIsVisible) // Enter pause mode if we have to show the menu
+			if (isKeyDown(KEY_ESC) && !escMenuIsVisible) // Enter pause mode if we have to show the menu
 			{
 				if (!network_manager.isConnected()) // In single player mode we want to pause the game when opening the menu
 				{
@@ -1397,7 +1397,7 @@ namespace TA3D
 				escMenuWasVisible = escMenuIsVisible;
 			}
 
-			if (key_down_event(KEY_PAUSE)) // Toggle pause mode when pressing pause
+			if (didKeyGoDown(KEY_PAUSE)) // Toggle pause mode when pressing pause
 				lp_CONFIG->pause ^= true;
 
 			if (pArea.get_state("esc_menu.b_return"))
@@ -1465,7 +1465,7 @@ namespace TA3D
 				lp_CONFIG->pause = false;
 			}
 
-			if (key[KEY_TILDE] && !pArea.get_state("chat"))
+			if (isKeyDown(KEY_TILDE) && !pArea.get_state("chat"))
 			{
 				if (!tilde)
 					Console::Instance()->toggleShow();
@@ -2385,7 +2385,7 @@ namespace TA3D
 				players.metal[players.local_human_id] = players.c_metal[players.local_human_id] = (float)players.metal_s[players.local_human_id]; // cheat codes
 			if (cheat_energy)
 				players.energy[players.local_human_id] = players.c_energy[players.local_human_id] = (float)players.energy_s[players.local_human_id]; // cheat codes
-			if (key[KEY_F12])
+			if (isKeyDown(KEY_F12))
 				shoot = true;
 
 			/*------------ Code de gestion du dÃ©roulement de la partie -----------------------------------*/
@@ -2502,15 +2502,15 @@ namespace TA3D
 					gfx->unset_2D_mode();
 					gfx->flip();
 
-					while (!keypressed() && mouse_b == 0)
+					while (!keyboardBufferContainsElements() && mouse_b == 0)
 					{
 						rest(1);
 						poll_inputs();
 					}
 					while (mouse_b)
 						poll_inputs();
-					while (keypressed())
-						readkey();
+					while (keyboardBufferContainsElements())
+						getNextKeyboardBufferElement();
 				}
 				break;
 			}

@@ -128,7 +128,7 @@ namespace TA3D
 		void UnitSelector::doFinalize()
 		{
 			// Wait for user to release ESC
-			while (key[KEY_ESC])
+			while (isKeyDown(KEY_ESC))
 			{
 				SuspendMilliSeconds(TA3D_MENUS_RECOMMENDED_TIME_MS_FOR_RESTING);
 				poll_inputs();
@@ -148,13 +148,13 @@ namespace TA3D
 				// Wait to reduce CPU consumption
 				wait();
 
-			} while (pMouseX == mouse_x && pMouseY == mouse_y && pMouseZ == mouse_z && pMouseB == mouse_b && mouse_b == 0 && !key[KEY_ENTER] && !key[KEY_ESC] && !key[KEY_SPACE] && !key[KEY_C] && !keyIsPressed && !pArea->scrolling);
+			} while (pMouseX == mouse_x && pMouseY == mouse_y && pMouseZ == mouse_z && pMouseB == mouse_b && mouse_b == 0 && !isKeyDown(KEY_ENTER) && !isKeyDown(KEY_ESC) && !isKeyDown(KEY_SPACE) && !isKeyDown(KEY_C) && !keyIsPressed && !pArea->scrolling);
 		}
 
 		bool UnitSelector::maySwitchToAnotherMenu()
 		{
 			// Aborting
-			if (pArea->get_state("unitsetup.b_cancel") || key[KEY_ESC])
+			if (pArea->get_state("unitsetup.b_cancel") || isKeyDown(KEY_ESC))
 			{
 				pUseOnly = pDefaultUseOnly;
 				if (pUnitListObj)
@@ -163,7 +163,7 @@ namespace TA3D
 			}
 
 			// Go ! Validate selection !
-			if (pArea->get_state("unitsetup.b_ok") || key[KEY_ENTER])
+			if (pArea->get_state("unitsetup.b_ok") || isKeyDown(KEY_ENTER))
 			{
 				if (pUnitListObj)
 				{

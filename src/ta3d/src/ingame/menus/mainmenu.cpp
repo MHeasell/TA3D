@@ -138,19 +138,19 @@ namespace TA3D
 		bool MainMenu::maySwitchToAnotherMenu()
 		{
 			// Exit
-			if (key[KEY_ESC] || pArea->get_state("main.b_exit"))
+			if (isKeyDown(KEY_ESC) || pArea->get_state("main.b_exit"))
 				return true;
 
 			// Options
-			if (key[KEY_SPACE] || key[KEY_O] || pArea->get_state("main.b_options"))
+			if (isKeyDown(KEY_SPACE) || isKeyDown(KEY_O) || pArea->get_state("main.b_options"))
 				return goToMenuOptions();
 
 			// Solo
-			if (key[KEY_ENTER] || key[KEY_S] || pArea->get_state("main.b_solo"))
+			if (isKeyDown(KEY_ENTER) || isKeyDown(KEY_S) || pArea->get_state("main.b_solo"))
 				return goToMenuSolo();
 
 			// Multi player room
-			if (key[KEY_B] || key[KEY_M] || pArea->get_state("main.b_multi"))
+			if (isKeyDown(KEY_B) || isKeyDown(KEY_M) || pArea->get_state("main.b_multi"))
 				return goToMenuMultiPlayers();
 
 			return false;
@@ -267,7 +267,7 @@ namespace TA3D
 				// Wait to reduce CPU consumption
 				wait();
 
-			} while (!pDontWaitForEvent && pMouseX == mouse_x && pMouseY == mouse_y && pMouseZ == mouse_z && pMouseB == mouse_b && mouse_b == 0 && !key[KEY_ENTER] && !key[KEY_ESC] && !key[KEY_SPACE] && !key[KEY_B] && !key[KEY_O] && !key[KEY_M] && !key[KEY_S] && !keyIsPressed && !pArea->scrolling);
+			} while (!pDontWaitForEvent && pMouseX == mouse_x && pMouseY == mouse_y && pMouseZ == mouse_z && pMouseB == mouse_b && mouse_b == 0 && !isKeyDown(KEY_ENTER) && !isKeyDown(KEY_ESC) && !isKeyDown(KEY_SPACE) && !isKeyDown(KEY_B) && !isKeyDown(KEY_O) && !isKeyDown(KEY_M) && !isKeyDown(KEY_S) && !keyIsPressed && !pArea->scrolling);
 
 			// Should wait the an event the next time
 			pDontWaitForEvent = false;

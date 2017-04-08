@@ -95,7 +95,7 @@ namespace TA3D
 			return; // Only works in network mode
 		}
 
-		if (key[KEY_ENTER] && !Console::Instance()->activated())
+		if (isKeyDown(KEY_ENTER) && !Console::Instance()->activated())
 		{
 			if (!enter)
 			{

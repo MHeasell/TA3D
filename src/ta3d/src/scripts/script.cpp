@@ -1447,7 +1447,8 @@ namespace TA3D
 		if (!is_running())
 			return -1;
 
-		if (waiting && (amx != mouse_x || amy != mouse_y || amz != mouse_z || amb != mouse_b || keypressed()))
+		if (waiting && (amx != mouse_x || amy != mouse_y || amz != mouse_z || amb != mouse_b ||
+			keyboardBufferContainsElements()))
 			waiting = false;
 
 		int result = LuaThread::run(dt); // Run the thread

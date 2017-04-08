@@ -638,7 +638,7 @@ namespace TA3D
 				if (object->Focus && object->Type != OBJ_TEXTEDITOR)
 					hasFocus = i;
 			}
-			if (hasFocus >= 0 && key[KEY_TAB] && !tab_was_pressed) // Select another widget with TAB key
+			if (hasFocus >= 0 && isKeyDown(KEY_TAB) && !tab_was_pressed) // Select another widget with TAB key
 			{
 				for (unsigned int e = 1; e < pObjects.size(); ++e)
 				{
@@ -652,7 +652,7 @@ namespace TA3D
 					}
 				}
 			}
-			tab_was_pressed = key[KEY_TAB];
+			tab_was_pressed = isKeyDown(KEY_TAB);
 
 			for (unsigned int i = 0; i < pObjects.size(); ++i)
 			{
@@ -782,11 +782,11 @@ namespace TA3D
 					case OBJ_TEXTBAR: // Permet l'entrée de texte
 					{
 						object->Etat = false;
-						if (object->Focus && keypressed())
+						if (object->Focus && keyboardBufferContainsElements())
 						{
-							const uint32 keyCode = readkey();
-							Key = keyCode & 0xFFFF;
-							const uint16 scancode = uint16(keyCode >> 16);
+							const auto keyElement = getNextKeyboardBufferElement();
+							Key = keyElement.codePoint;
+							const uint16 scancode = keyElement.keyCode;
 
 							switch (scancode)
 							{
@@ -828,11 +828,11 @@ namespace TA3D
 						if (object->Pos > object->Text[object->Data].utf8size())
 							object->Pos = object->Text[object->Pos].utf8size();
 						object->Etat = false;
-						if (object->Focus && keypressed())
+						if (object->Focus && keyboardBufferContainsElements())
 						{
-							const uint32 keyCode = readkey();
-							Key = keyCode & 0xFFFF;
-							const uint16 scancode = uint16(keyCode >> 16);
+							const auto keyElement = getNextKeyboardBufferElement();
+							Key = keyElement.codePoint;
+							const uint16 scancode = keyElement.keyCode;
 							switch (scancode)
 							{
 								case KEY_ESC:
@@ -964,7 +964,7 @@ namespace TA3D
 								int npos = object->Pos;
 								if (object->Focus)
 								{
-									int key_code = (readkey() >> 16) & 0xFFFF;
+									int key_code = getNextKeyboardBufferElement().keyCode;
 									if (key_code == KEY_UP)
 										npos--;
 									if (key_code == KEY_DOWN)
@@ -1087,9 +1087,7 @@ namespace TA3D
 						&& !TA3D_CTRL_PRESSED
 						&& !TA3D_SHIFT_PRESSED
 						&& !Console::Instance()->activated()
-						&& (key[ascii_to_scancode[object->shortcut_key]]
-							   || (object->shortcut_key >= 65 && object->shortcut_key <= 90 && key[ascii_to_scancode[object->shortcut_key + 32]])
-							   || (object->shortcut_key >= 97 && object->shortcut_key <= 122 && key[ascii_to_scancode[object->shortcut_key - 32]])))
+						&& isAsciiCharacterKeyDown((byte)object->shortcut_key))
 					{
 						if (!object->Etat)
 							clicked = true;

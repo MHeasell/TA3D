@@ -25,158 +25,159 @@ namespace TA3D
 {
 	namespace VARS
 	{
-		int ascii_to_scancode[256];
-		bool key[0x1000];
-		bool prevkey_down[0x1000];
-		bool prevkey_up[0x1000];
-		std::deque<uint32> keybuf;
-		int remap[0x1000];
+		KeyCode asciiToKeyCode[256];
+		bool keyState[MAX_KEYCODE];
+		bool previousKeyState[MAX_KEYCODE];
+		std::deque<KeyboardBufferItem> keyboardBuffer;
+		KeyCode keyCodeMap[MAX_KEYCODE];
 	}
 
-	uint32 readkey()
+	bool isKeyDown(KeyCode keycode)
 	{
-		if (VARS::keybuf.empty())
-			return 0;
-
-		uint32 res = VARS::keybuf.front();
-		VARS::keybuf.pop_front();
-		return res;
+		return keyState[keycode];
 	}
 
-	bool keypressed()
+	bool isAsciiCharacterKeyDown(byte c)
 	{
-		return !VARS::keybuf.empty();
+		return isKeyDown(asciiToKeyCode[c]);
 	}
 
-	void clear_keybuf()
+	KeyboardBufferItem getNextKeyboardBufferElement()
 	{
-		VARS::keybuf.clear();
+		if (keyboardBuffer.empty())
+		{
+			return KeyboardBufferItem(KEY_UNKNOWN, 0);
+		}
+
+		auto element = keyboardBuffer.front();
+		keyboardBuffer.pop_front();
+		return element;
 	}
 
-	void init_keyboard()
+	bool keyboardBufferContainsElements()
+	{
+		return !keyboardBuffer.empty();
+	}
+
+	void appendKeyboardBufferElement(KeyCode keyCode, uint16 codePoint)
+	{
+		keyboardBuffer.push_back(KeyboardBufferItem(keyCode, codePoint));
+	}
+
+	void clearKeyboardBuffer()
+	{
+		keyboardBuffer.clear();
+	}
+
+	void initializeKeyboard()
 	{
 		// Initialize the SDL Stuff
 		SDL_EnableUNICODE(1);
 		SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
 
 		// We need some remapping hack to support some keyboards (french keyboards don't access KEY_0..9)
-		memset(remap, 0, 0x1000 * sizeof(int));
+		memset(keyCodeMap, 0, MAX_KEYCODE * sizeof(int));
 
-		remap[KEY_ENTER_PAD] = KEY_ENTER;
-		remap[38] = KEY_1;
-		remap[233] = KEY_2;
-		remap[34] = KEY_3;
-		remap[39] = KEY_4;
-		remap[40] = KEY_5;
-		remap[45] = KEY_6;
-		remap[232] = KEY_7;
-		remap[95] = KEY_8;
-		remap[231] = KEY_9;
-		remap[224] = KEY_0;
+		keyCodeMap[KEY_ENTER_PAD] = KEY_ENTER;
+		keyCodeMap[38] = KEY_1;
+		keyCodeMap[233] = KEY_2;
+		keyCodeMap[34] = KEY_3;
+		keyCodeMap[39] = KEY_4;
+		keyCodeMap[40] = KEY_5;
+		keyCodeMap[45] = KEY_6;
+		keyCodeMap[232] = KEY_7;
+		keyCodeMap[95] = KEY_8;
+		keyCodeMap[231] = KEY_9;
+		keyCodeMap[224] = KEY_0;
 
-		memset(VARS::key, 0, 0x1000 * sizeof(bool));
-		VARS::keybuf.clear();
+		memset(VARS::keyState, 0, MAX_KEYCODE * sizeof(bool));
+		keyboardBuffer.clear();
 
 		// Initializing the ascii to scancode table
-		memset(ascii_to_scancode, 0, 256 * sizeof(int));
+		memset(asciiToKeyCode, 0, 256 * sizeof(int));
 
-		ascii_to_scancode[int('a')] = KEY_A;
-		ascii_to_scancode[int('b')] = KEY_B;
-		ascii_to_scancode[int('c')] = KEY_C;
-		ascii_to_scancode[int('d')] = KEY_D;
-		ascii_to_scancode[int('e')] = KEY_E;
-		ascii_to_scancode[int('f')] = KEY_F;
-		ascii_to_scancode[int('g')] = KEY_G;
-		ascii_to_scancode[int('h')] = KEY_H;
-		ascii_to_scancode[int('i')] = KEY_I;
-		ascii_to_scancode[int('j')] = KEY_J;
-		ascii_to_scancode[int('k')] = KEY_K;
-		ascii_to_scancode[int('l')] = KEY_L;
-		ascii_to_scancode[int('m')] = KEY_M;
-		ascii_to_scancode[int('n')] = KEY_N;
-		ascii_to_scancode[int('o')] = KEY_O;
-		ascii_to_scancode[int('p')] = KEY_P;
-		ascii_to_scancode[int('q')] = KEY_Q;
-		ascii_to_scancode[int('r')] = KEY_R;
-		ascii_to_scancode[int('s')] = KEY_S;
-		ascii_to_scancode[int('t')] = KEY_T;
-		ascii_to_scancode[int('u')] = KEY_U;
-		ascii_to_scancode[int('v')] = KEY_V;
-		ascii_to_scancode[int('w')] = KEY_W;
-		ascii_to_scancode[int('x')] = KEY_X;
-		ascii_to_scancode[int('y')] = KEY_Y;
-		ascii_to_scancode[int('z')] = KEY_Z;
+		asciiToKeyCode[int('a')] = KEY_A;
+		asciiToKeyCode[int('b')] = KEY_B;
+		asciiToKeyCode[int('c')] = KEY_C;
+		asciiToKeyCode[int('d')] = KEY_D;
+		asciiToKeyCode[int('e')] = KEY_E;
+		asciiToKeyCode[int('f')] = KEY_F;
+		asciiToKeyCode[int('g')] = KEY_G;
+		asciiToKeyCode[int('h')] = KEY_H;
+		asciiToKeyCode[int('i')] = KEY_I;
+		asciiToKeyCode[int('j')] = KEY_J;
+		asciiToKeyCode[int('k')] = KEY_K;
+		asciiToKeyCode[int('l')] = KEY_L;
+		asciiToKeyCode[int('m')] = KEY_M;
+		asciiToKeyCode[int('n')] = KEY_N;
+		asciiToKeyCode[int('o')] = KEY_O;
+		asciiToKeyCode[int('p')] = KEY_P;
+		asciiToKeyCode[int('q')] = KEY_Q;
+		asciiToKeyCode[int('r')] = KEY_R;
+		asciiToKeyCode[int('s')] = KEY_S;
+		asciiToKeyCode[int('t')] = KEY_T;
+		asciiToKeyCode[int('u')] = KEY_U;
+		asciiToKeyCode[int('v')] = KEY_V;
+		asciiToKeyCode[int('w')] = KEY_W;
+		asciiToKeyCode[int('x')] = KEY_X;
+		asciiToKeyCode[int('y')] = KEY_Y;
+		asciiToKeyCode[int('z')] = KEY_Z;
 
 		for (int i = 0; i < 26; ++i)
-			ascii_to_scancode[int('A' + i)] = ascii_to_scancode[int('a' + i)];
+			asciiToKeyCode[int('A' + i)] = asciiToKeyCode[int('a' + i)];
 
-		ascii_to_scancode[int('0')] = KEY_0;
-		ascii_to_scancode[int('1')] = KEY_1;
-		ascii_to_scancode[int('2')] = KEY_2;
-		ascii_to_scancode[int('3')] = KEY_3;
-		ascii_to_scancode[int('4')] = KEY_4;
-		ascii_to_scancode[int('5')] = KEY_5;
-		ascii_to_scancode[int('6')] = KEY_6;
-		ascii_to_scancode[int('7')] = KEY_7;
-		ascii_to_scancode[int('8')] = KEY_8;
-		ascii_to_scancode[int('9')] = KEY_9;
+		asciiToKeyCode[int('0')] = KEY_0;
+		asciiToKeyCode[int('1')] = KEY_1;
+		asciiToKeyCode[int('2')] = KEY_2;
+		asciiToKeyCode[int('3')] = KEY_3;
+		asciiToKeyCode[int('4')] = KEY_4;
+		asciiToKeyCode[int('5')] = KEY_5;
+		asciiToKeyCode[int('6')] = KEY_6;
+		asciiToKeyCode[int('7')] = KEY_7;
+		asciiToKeyCode[int('8')] = KEY_8;
+		asciiToKeyCode[int('9')] = KEY_9;
 
-		ascii_to_scancode[int(' ')] = KEY_SPACE;
-		ascii_to_scancode[int('\n')] = KEY_ENTER;
-		ascii_to_scancode[27] = KEY_ESC;
+		asciiToKeyCode[int(' ')] = KEY_SPACE;
+		asciiToKeyCode[int('\n')] = KEY_ENTER;
+		asciiToKeyCode[27] = KEY_ESC;
 	}
 
-	void set_key_down(uint16 keycode)
+	void setKeyDown(KeyCode keycode)
 	{
-		if (keycode >= 0x1000)
+		if (keycode >= MAX_KEYCODE)
 			return;
 
-		if (remap[keycode])
-			VARS::key[remap[keycode]] = true;
-		VARS::key[keycode] = true;
+		if (keyCodeMap[keycode])
+			VARS::keyState[keyCodeMap[keycode]] = true;
+		VARS::keyState[keycode] = true;
 	}
 
-	void set_key_up(uint16 keycode)
+	void setKeyUp(KeyCode keycode)
 	{
-		if (keycode >= 0x1000)
+		if (keycode >= MAX_KEYCODE)
 			return;
 
-		if (remap[keycode])
-			VARS::key[remap[keycode]] = false;
-		VARS::key[keycode] = false;
+		if (keyCodeMap[keycode])
+			VARS::keyState[keyCodeMap[keycode]] = false;
+		VARS::keyState[keycode] = false;
 	}
 
-	bool key_down_event(uint16 keycode)
+	bool didKeyGoDown(KeyCode keycode)
 	{
-		if (keycode >= 0x1000)
+		if (keycode >= MAX_KEYCODE)
 			return false;
 
-		if (!prevkey_down[keycode] && key[keycode])
+		if (!previousKeyState[keycode] && keyState[keycode])
 		{
-			prevkey_down[keycode] = true;
+			previousKeyState[keycode] = true;
 			return true;
 		}
-		prevkey_down[keycode] = key[keycode];
+		previousKeyState[keycode] = keyState[keycode];
 		return false;
 	}
 
-	bool key_up_event(uint16 keycode)
+	KeyCode sdlToKeyCode(SDLKey key)
 	{
-		if (keycode >= 0x1000)
-			return false;
-
-		if (prevkey_up[keycode] && !key[keycode])
-		{
-			prevkey_up[keycode] = false;
-			return true;
-		}
-		prevkey_up[keycode] = key[keycode];
-		return false;
+		return key;
 	}
-
-	bool key_event(uint16 keycode)
-	{
-		return key_down_event(keycode) || key_up_event(keycode);
-	}
-
 } // namespace TA3D

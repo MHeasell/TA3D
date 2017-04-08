@@ -160,7 +160,7 @@ namespace TA3D
 		uint16 AREA::check()
 		{
 			poll_inputs();
-			key_pressed = keypressed();
+			key_pressed = keyboardBufferContainsElements();
 			bool scroll = ((msec_timer - scroll_timer) >= 250);
 			if (scroll)
 			{
@@ -195,7 +195,7 @@ namespace TA3D
 				amb = mouse_b;
 			}
 			if (!Console::Instance()->activated())
-				clear_keybuf();
+				clearKeyboardBuffer();
 
 			return (uint16)is_on_gui;
 		}
@@ -636,15 +636,15 @@ namespace TA3D
 					amz = mouse_z;
 					amb = mouse_b;
 
-					key_is_pressed = keypressed();
+					key_is_pressed = keyboardBufferContainsElements();
 					check();
 					rest(16);
-				} while (amx == mouse_x && amy == mouse_y && amz == mouse_z && amb == mouse_b && !key[KEY_ENTER] && !key[KEY_ESC] && !done && !key_is_pressed && !scrolling);
+				} while (amx == mouse_x && amy == mouse_y && amz == mouse_z && amb == mouse_b && !isKeyDown(KEY_ENTER) && !isKeyDown(KEY_ESC) && !done && !key_is_pressed && !scrolling);
 
-				if (key[KEY_ESC])
+				if (isKeyDown(KEY_ESC))
 					done = true;
 
-				if (key[KEY_ENTER] || get_state("popup.b_ok"))
+				if (isKeyDown(KEY_ENTER) || get_state("popup.b_ok"))
 					done = true;
 
 				// Clear screen

@@ -70,14 +70,18 @@ namespace TA3D
 			{
 				case SDL_KEYDOWN:
 				{
-					set_key_down(event.key.keysym.sym);
-					uint32 c = event.key.keysym.unicode;
-					c |= event.key.keysym.sym << 16;
-					if (event.key.keysym.sym == KEY_ENTER_PAD)
+					setKeyDown(event.key.keysym.sym);
+
+					uint32 codePoint = event.key.keysym.unicode;
+					KeyCode keyCode = sdlToKeyCode(event.key.keysym.sym);
+
+					if (keyCode == KEY_ENTER_PAD)
 					{
-						c = int('\n') | (KEY_ENTER << 16);
+						keyCode = KEY_ENTER;
+						codePoint = '\n';
 					}
-					VARS::keybuf.push_back(c);
+
+					appendKeyboardBufferElement(keyCode, codePoint);
 				}
 				break;
 				case SDL_MOUSEBUTTONDOWN:
@@ -95,7 +99,7 @@ namespace TA3D
 					};
 					break;
 				case SDL_KEYUP:
-					set_key_up(event.key.keysym.sym);
+					setKeyUp(event.key.keysym.sym);
 					break;
 			};
 		}
@@ -122,7 +126,7 @@ namespace TA3D
 		old_mx = mouse_x;
 		old_my = mouse_y;
 
-		if (lp_CONFIG->fullscreen && key[KEY_ALT] && key[KEY_TAB] && (SDL_GetAppState() & SDL_APPACTIVE))
+		if (lp_CONFIG->fullscreen && isKeyDown(KEY_ALT) && isKeyDown(KEY_TAB) && (SDL_GetAppState() & SDL_APPACTIVE))
 			SDL_WM_IconifyWindow();
 	}
 
