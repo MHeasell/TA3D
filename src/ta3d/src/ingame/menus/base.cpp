@@ -51,7 +51,7 @@ namespace TA3D
 			cursor_type = CURSOR_DEFAULT;
 			reset_keyboard();
 			reset_mouse();
-			clear_keybuf();
+			clearKeyboardBuffer();
 			bool r = doInitialize();
 			return r;
 		}
@@ -68,7 +68,7 @@ namespace TA3D
 				pArea->background = 0;
 			doFinalize();
 			reset_keyboard();
-			clear_keybuf();
+			clearKeyboardBuffer();
 			reset_mouse();
 		}
 

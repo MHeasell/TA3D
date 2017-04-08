@@ -53,7 +53,7 @@ namespace TA3D
 				SuspendMilliSeconds(TA3D_MENUS_RECOMMENDED_TIME_MS_FOR_RESTING);
 				poll_inputs();
 			}
-			clear_keybuf();
+			clearKeyboardBuffer();
 		}
 
 		bool MultiMenu::doInitialize()

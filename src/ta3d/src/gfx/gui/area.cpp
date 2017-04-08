@@ -195,7 +195,7 @@ namespace TA3D
 				amb = mouse_b;
 			}
 			if (!Console::Instance()->activated())
-				clear_keybuf();
+				clearKeyboardBuffer();
 
 			return (uint16)is_on_gui;
 		}

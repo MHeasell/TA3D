@@ -64,7 +64,7 @@ namespace TA3D
 		keyboardBuffer.push_back(KeyboardBufferItem(keyCode, codePoint));
 	}
 
-	void clear_keybuf()
+	void clearKeyboardBuffer()
 	{
 		keyboardBuffer.clear();
 	}

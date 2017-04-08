@@ -76,7 +76,7 @@ namespace TA3D
 				SuspendMilliSeconds(TA3D_MENUS_RECOMMENDED_TIME_MS_FOR_RESTING);
 				poll_inputs();
 			}
-			clear_keybuf();
+			clearKeyboardBuffer();
 
 			if (!previous_lua_port.empty() && network_manager.isConnected())
 				TA3D::network_manager.stopFileTransfer(previous_lua_port);
@@ -594,7 +594,7 @@ namespace TA3D
 						SuspendMilliSeconds(TA3D_MENUS_RECOMMENDED_TIME_MS_FOR_RESTING);
 						poll_inputs();
 					}
-					clear_keybuf();
+					clearKeyboardBuffer();
 					start_game = true;
 					network_manager.sendSpecial("NOTIFY START");
 					return true; // If user click "OK" or hit enter then leave the window
@@ -1027,7 +1027,7 @@ namespace TA3D
 							}
 							else if (params[1] == "START") // Game is starting ...
 							{
-								clear_keybuf();
+								clearKeyboardBuffer();
 								start_game = true;
 								return true; // If user click "OK" or hit enter then leave the window
 							}

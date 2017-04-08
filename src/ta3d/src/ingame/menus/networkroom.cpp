@@ -72,7 +72,7 @@ namespace TA3D
 				SuspendMilliSeconds(TA3D_MENUS_RECOMMENDED_TIME_MS_FOR_RESTING);
 				poll_inputs();
 			}
-			clear_keybuf();
+			clearKeyboardBuffer();
 
 			network_manager.Disconnect();
 
@@ -260,7 +260,7 @@ namespace TA3D
 							SuspendMilliSeconds(TA3D_MENUS_RECOMMENDED_TIME_MS_FOR_RESTING);
 							poll_inputs();
 						}
-						clear_keybuf();
+						clearKeyboardBuffer();
 						network_manager.Disconnect();
 
 						SetupGame::Execute(false, host, game_data.saved_file); // Host a game
@@ -276,7 +276,7 @@ namespace TA3D
 					SuspendMilliSeconds(TA3D_MENUS_RECOMMENDED_TIME_MS_FOR_RESTING);
 					poll_inputs();
 				}
-				clear_keybuf();
+				clearKeyboardBuffer();
 				network_manager.Disconnect();
 				String host = pArea->caption("hosting.t_hostname");
 
@@ -297,7 +297,7 @@ namespace TA3D
 					SuspendMilliSeconds(TA3D_MENUS_RECOMMENDED_TIME_MS_FOR_RESTING);
 					poll_inputs();
 				}
-				clear_keybuf();
+				clearKeyboardBuffer();
 				std::list<SERVER_DATA>::iterator i_server = servers.begin();
 				while (i_server != servers.end() && i_server->name != sel_index)
 					++i_server;
@@ -316,7 +316,7 @@ namespace TA3D
 					SuspendMilliSeconds(TA3D_MENUS_RECOMMENDED_TIME_MS_FOR_RESTING);
 					poll_inputs();
 				}
-				clear_keybuf();
+				clearKeyboardBuffer();
 				sel_index.clear();
 				return true; // If user click "Cancel" or hit ESC then leave the screen returning NULL
 			}

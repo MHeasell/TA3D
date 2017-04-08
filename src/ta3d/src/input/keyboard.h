@@ -88,7 +88,7 @@ namespace TA3D
 	/*!
 	** \brief clears the key code buffer
 	*/
-	void clear_keybuf();
+	void clearKeyboardBuffer();
 
 	/*!
 	** \brief initialize keyboard handler

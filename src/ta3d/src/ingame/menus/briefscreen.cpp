@@ -56,7 +56,7 @@ namespace TA3D
 				SuspendMilliSeconds(TA3D_MENUS_RECOMMENDED_TIME_MS_FOR_RESTING);
 				poll_inputs();
 			}
-			clear_keybuf();
+			clearKeyboardBuffer();
 
 			if (pArea->get_object("brief.planet"))
 				pArea->get_object("brief.planet")->Data = 0;
@@ -130,7 +130,7 @@ namespace TA3D
 					SuspendMilliSeconds(TA3D_MENUS_RECOMMENDED_TIME_MS_FOR_RESTING);
 					poll_inputs();
 				}
-				clear_keybuf();
+				clearKeyboardBuffer();
 
 				return;
 			}
