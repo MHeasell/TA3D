@@ -86,10 +86,12 @@ namespace TA3D
 	 */
 	void setKeyDown(KeyCode keycode);
 
-	/*!
-    ** \brief returns true if the given key state has changed to down since last call with the same key
-    */
-	bool key_down_event(KeyCode keycode);
+	/**
+	 * Returns true if the given key went down
+	 * since the key was last checked with this function,
+	 * otherwise false.
+	 */
+	bool didKeyGoDown(KeyCode keycode);
 }
 
 #define KEY_ENTER SDLK_RETURN

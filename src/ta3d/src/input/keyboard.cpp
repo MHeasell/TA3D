@@ -155,7 +155,7 @@ namespace TA3D
 		VARS::key[keycode] = false;
 	}
 
-	bool key_down_event(KeyCode keycode)
+	bool didKeyGoDown(KeyCode keycode)
 	{
 		if (keycode >= MAX_KEYCODE)
 			return false;

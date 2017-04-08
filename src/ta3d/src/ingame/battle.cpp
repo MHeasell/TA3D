@@ -219,7 +219,7 @@ namespace TA3D
 			if (players.local_human_id >= 0 && !Console::Instance()->activated() && !pArea.get_state("chat"))
 				handleGameStatusEvents();
 
-			if (key_down_event(KEY_HOME))
+			if (didKeyGoDown(KEY_HOME))
 				showHealthBars ^= true;
 
 			// Ctrl+D : Toggle Self-destruct
@@ -1397,7 +1397,7 @@ namespace TA3D
 				escMenuWasVisible = escMenuIsVisible;
 			}
 
-			if (key_down_event(KEY_PAUSE)) // Toggle pause mode when pressing pause
+			if (didKeyGoDown(KEY_PAUSE)) // Toggle pause mode when pressing pause
 				lp_CONFIG->pause ^= true;
 
 			if (pArea.get_state("esc_menu.b_return"))
