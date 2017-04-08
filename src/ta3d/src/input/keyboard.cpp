@@ -96,49 +96,49 @@ namespace TA3D
 		// Initializing the ascii to scancode table
 		memset(asciiToKeyCode, 0, 256 * sizeof(int));
 
-		asciiToKeyCode[int('a')] = KEY_A;
-		asciiToKeyCode[int('b')] = KEY_B;
-		asciiToKeyCode[int('c')] = KEY_C;
-		asciiToKeyCode[int('d')] = KEY_D;
-		asciiToKeyCode[int('e')] = KEY_E;
-		asciiToKeyCode[int('f')] = KEY_F;
-		asciiToKeyCode[int('g')] = KEY_G;
-		asciiToKeyCode[int('h')] = KEY_H;
-		asciiToKeyCode[int('i')] = KEY_I;
-		asciiToKeyCode[int('j')] = KEY_J;
-		asciiToKeyCode[int('k')] = KEY_K;
-		asciiToKeyCode[int('l')] = KEY_L;
-		asciiToKeyCode[int('m')] = KEY_M;
-		asciiToKeyCode[int('n')] = KEY_N;
-		asciiToKeyCode[int('o')] = KEY_O;
-		asciiToKeyCode[int('p')] = KEY_P;
-		asciiToKeyCode[int('q')] = KEY_Q;
-		asciiToKeyCode[int('r')] = KEY_R;
-		asciiToKeyCode[int('s')] = KEY_S;
-		asciiToKeyCode[int('t')] = KEY_T;
-		asciiToKeyCode[int('u')] = KEY_U;
-		asciiToKeyCode[int('v')] = KEY_V;
-		asciiToKeyCode[int('w')] = KEY_W;
-		asciiToKeyCode[int('x')] = KEY_X;
-		asciiToKeyCode[int('y')] = KEY_Y;
-		asciiToKeyCode[int('z')] = KEY_Z;
+		asciiToKeyCode['a'] = KEY_A;
+		asciiToKeyCode['b'] = KEY_B;
+		asciiToKeyCode['c'] = KEY_C;
+		asciiToKeyCode['d'] = KEY_D;
+		asciiToKeyCode['e'] = KEY_E;
+		asciiToKeyCode['f'] = KEY_F;
+		asciiToKeyCode['g'] = KEY_G;
+		asciiToKeyCode['h'] = KEY_H;
+		asciiToKeyCode['i'] = KEY_I;
+		asciiToKeyCode['j'] = KEY_J;
+		asciiToKeyCode['k'] = KEY_K;
+		asciiToKeyCode['l'] = KEY_L;
+		asciiToKeyCode['m'] = KEY_M;
+		asciiToKeyCode['n'] = KEY_N;
+		asciiToKeyCode['o'] = KEY_O;
+		asciiToKeyCode['p'] = KEY_P;
+		asciiToKeyCode['q'] = KEY_Q;
+		asciiToKeyCode['r'] = KEY_R;
+		asciiToKeyCode['s'] = KEY_S;
+		asciiToKeyCode['t'] = KEY_T;
+		asciiToKeyCode['u'] = KEY_U;
+		asciiToKeyCode['v'] = KEY_V;
+		asciiToKeyCode['w'] = KEY_W;
+		asciiToKeyCode['x'] = KEY_X;
+		asciiToKeyCode['y'] = KEY_Y;
+		asciiToKeyCode['z'] = KEY_Z;
 
 		for (int i = 0; i < 26; ++i)
-			asciiToKeyCode[int('A' + i)] = asciiToKeyCode[int('a' + i)];
+			asciiToKeyCode['A' + i] = asciiToKeyCode['a' + i];
 
-		asciiToKeyCode[int('0')] = KEY_0;
-		asciiToKeyCode[int('1')] = KEY_1;
-		asciiToKeyCode[int('2')] = KEY_2;
-		asciiToKeyCode[int('3')] = KEY_3;
-		asciiToKeyCode[int('4')] = KEY_4;
-		asciiToKeyCode[int('5')] = KEY_5;
-		asciiToKeyCode[int('6')] = KEY_6;
-		asciiToKeyCode[int('7')] = KEY_7;
-		asciiToKeyCode[int('8')] = KEY_8;
-		asciiToKeyCode[int('9')] = KEY_9;
+		asciiToKeyCode['0'] = KEY_0;
+		asciiToKeyCode['1'] = KEY_1;
+		asciiToKeyCode['2'] = KEY_2;
+		asciiToKeyCode['3'] = KEY_3;
+		asciiToKeyCode['4'] = KEY_4;
+		asciiToKeyCode['5'] = KEY_5;
+		asciiToKeyCode['6'] = KEY_6;
+		asciiToKeyCode['7'] = KEY_7;
+		asciiToKeyCode['8'] = KEY_8;
+		asciiToKeyCode['9'] = KEY_9;
 
-		asciiToKeyCode[int(' ')] = KEY_SPACE;
-		asciiToKeyCode[int('\n')] = KEY_ENTER;
+		asciiToKeyCode[' '] = KEY_SPACE;
+		asciiToKeyCode['\n'] = KEY_ENTER;
 		asciiToKeyCode[27] = KEY_ESC;
 	}
 
