@@ -121,28 +121,6 @@ find_package(SDL2_image)
 find_package(SDL2_mixer)
 find_package(SDL2_net)
 
-# Manual setup for mingw32 (all required files are included in source tree)
-if (WIN32 OR (CMAKE_CROSSCOMPILING AND NOT UNIX))
-
-	set( SDL_FOUND included )
-	set( SDLIMAGE_FOUND included )
-	set( SDLMIXER_FOUND included )
-	set( SDLNET_FOUND included )
-
-	include_DIRECTORIES( "${CMAKE_CURRENT_SOURCE_DIR}/src/tools/win32/mingw32/include" )
-
-	set( SDL_INCLUDE_DIR  "${CMAKE_CURRENT_SOURCE_DIR}/src/tools/win32/mingw32/include/SDL")
-	set( SDLIMAGE_include_DIR  "${CMAKE_CURRENT_SOURCE_DIR}/src/tools/win32/mingw32/include/SDL")
-	set( SDLMIXER_include_DIR  "${CMAKE_CURRENT_SOURCE_DIR}/src/tools/win32/mingw32/include/SDL")
-	set( SDLNET_include_DIR  "${CMAKE_CURRENT_SOURCE_DIR}/src/tools/win32/mingw32/include/SDL")
-
-	set( SDL_LIBRARY "mingw32;${CMAKE_CURRENT_SOURCE_DIR}/src/tools/win32/mingw32/libs/libSDLmain.a;${CMAKE_CURRENT_SOURCE_DIR}/src/tools/win32/mingw32/libs/SDL.dll")
-	set( SDLIMAGE_LIBRARY "${CMAKE_CURRENT_SOURCE_DIR}/src/tools/win32/mingw32/libs/SDL_image.dll")
-	set( SDLMIXER_LIBRARY "${CMAKE_CURRENT_SOURCE_DIR}/src/tools/win32/mingw32/libs/SDL_mixer.dll")
-	set( SDLNET_LIBRARY "${CMAKE_CURRENT_SOURCE_DIR}/src/tools/win32/mingw32/libs/SDL_net.dll")
-
-endif ()
-
 message(STATUS "${SDL_PREFIX} SDL: ${SDL2_FOUND}")
 message(STATUS "${SDL_PREFIX} SDL_image: ${SDL2_IMAGE_FOUND}")
 message(STATUS "${SDL_PREFIX} SDL_mixer: ${SDL2_MIXER_FOUND}")
@@ -208,19 +186,15 @@ set(LIBS "-llua -lz -ldl")
 #
 # --- GLEW ---
 #
-if(WIN32 OR (CMAKE_CROSSCOMPILING AND NOT UNIX))
-	set(GLEW_LIB "${CMAKE_CURRENT_SOURCE_DIR}/src/tools/win32/mingw32/libs/libglew32.dll.a")
-else()
-	find_library(GLEW_LIB GLEW)
-	if(NOT GLEW_LIB)
-		find_library(GLEW_LIB glew)
-	endif()
-	find_file(GLEW_HEADER GL/glew.h)
-	if(NOT GLEW_HEADER)
-		message(FATAL_ERROR "glew.h not found!")
-	endif()
-	message(STATUS "GLEW Header : ${GLEW_HEADER}")
+find_library(GLEW_LIB GLEW)
+if(NOT GLEW_LIB)
+	find_library(GLEW_LIB glew)
 endif()
+find_file(GLEW_HEADER GL/glew.h)
+if(NOT GLEW_HEADER)
+	message(FATAL_ERROR "glew.h not found!")
+endif()
+message(STATUS "GLEW Header : ${GLEW_HEADER}")
 message(STATUS "GLEW Library : ${GLEW_LIB}")
 
 if(NOT GLEW_LIB)
@@ -244,13 +218,7 @@ endif()
 #
 # --- FTGL ---
 #
-if(WIN32 OR (CMAKE_CROSSCOMPILING AND NOT UNIX))
-	set( FREETYPE_INCLUDE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}/src/tools/win32/mingw32/include/freetype2/")
-	set( FREETYPE_LIBRARIES "${CMAKE_CURRENT_SOURCE_DIR}/src/tools/win32/mingw32/libs/libfreetype.dll.a")
-	message(STATUS "FreeType Library : ${FREETYPE_LIBRARIES}")
-else()
-	find_package(Freetype)
-endif()
+find_package(Freetype)
 
 include_directories( ${FREETYPE_INCLUDE_DIRS} )
 
@@ -260,14 +228,6 @@ set(__FTGL__lower__ true)
 
 message(STATUS "FTGL Library : ${FTGL_LIB}")
 set(LIBS "${LIBS} ${FTGL_LIB}")
-
-
-#
-# --- ZLib ---
-#
-if(WIN32)
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -I${CMAKE_CURRENT_SOURCE_DIR}/src/tools/win32/mingw32/include/zlib")
-endif()
 
 #
 # --- CPack: Installation process ---
