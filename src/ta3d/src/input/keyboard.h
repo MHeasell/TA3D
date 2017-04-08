@@ -40,10 +40,35 @@ namespace TA3D
 
 	namespace VARS
 	{
+		/**
+		 * Mapping of ASCII characters to key codes.
+		 */
 		extern KeyCode asciiToKeyCode[256];
+
+		/**
+		 * Array recording the state of each key,
+		 * identified by its key code.
+		 * If the key is down, the value is true.
+		 * Otherwise, if the key is up, the value is false.
+		 */
 		extern bool keyState[MAX_KEYCODE];
+
+		/**
+		 * Array recording the previous state of each key.
+		 * This is used by didKeyGoDown.
+		 */
 		extern bool previousKeyState[MAX_KEYCODE];
+
+		/**
+		 * A buffer that holds the keys received from key down events.
+		 */
 		extern std::deque<KeyboardBufferItem> keyboardBuffer;
+
+		/**
+		 * A mapping of key codes to other key codes.
+		 * Key codes in this mapping will be translated
+		 * to the key code they are mapped to before processing.
+		 */
 		extern KeyCode keyCodeMap[MAX_KEYCODE];
 	}
 
