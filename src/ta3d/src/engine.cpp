@@ -151,7 +151,7 @@ namespace TA3D
 		init_mouse();
 		// Initialize the keyboard handler
 		LOG_INFO("Initializing the keyboard device handler");
-		init_keyboard();
+		initializeKeyboard();
 
 		if (!sound_manager->isRunning() && !lp_CONFIG->quickstart)
 			showWarning("FMOD WARNING");

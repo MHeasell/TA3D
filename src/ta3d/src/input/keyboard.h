@@ -115,10 +115,10 @@ namespace TA3D
 	 */
 	void clearKeyboardBuffer();
 
-	/*!
-	** \brief initialize keyboard handler
-	*/
-	void init_keyboard();
+	/**
+	 * Initializes the keyboard handler.
+	 */
+	void initializeKeyboard();
 
 	/**
 	 * Sets the given keycode as up.

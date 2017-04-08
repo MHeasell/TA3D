@@ -69,7 +69,7 @@ namespace TA3D
 		keyboardBuffer.clear();
 	}
 
-	void init_keyboard()
+	void initializeKeyboard()
 	{
 		// Initialize the SDL Stuff
 		SDL_EnableUNICODE(1);
