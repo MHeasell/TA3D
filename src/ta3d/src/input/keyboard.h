@@ -28,8 +28,6 @@ namespace TA3D
 {
 	typedef SDL_Keycode KeyCode;
 
-	typedef uint32 CodePoint;
-
 	struct KeyboardBufferItem {
 		KeyCode keyCode;
 		CodePoint codePoint;

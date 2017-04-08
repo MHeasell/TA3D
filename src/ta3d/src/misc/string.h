@@ -45,7 +45,7 @@ namespace TA3D
 
 	int ASCIItoUTF8(const byte c, byte* out);
 
-	String InttoUTF8(const uint16 c);
+	String InttoUTF8(const CodePoint c);
 
 	/*!
 	** \brief Convert a string from ASCII to UTF8

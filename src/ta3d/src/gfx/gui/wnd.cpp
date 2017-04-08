@@ -619,7 +619,7 @@ namespace TA3D
 
 			// Interactions utilisateur/objets
 			unsigned int index, e;
-			uint16 Key;
+			CodePoint Key;
 			bool was_on_floating_menu = false;
 			int on_menu = -1;
 			bool close_all = false;
@@ -786,7 +786,7 @@ namespace TA3D
 						{
 							const auto keyElement = getNextKeyboardBufferElement();
 							Key = keyElement.codePoint;
-							const uint16 scancode = keyElement.keyCode;
+							const KeyCode scancode = keyElement.keyCode;
 
 							switch (scancode)
 							{
@@ -832,7 +832,7 @@ namespace TA3D
 						{
 							const auto keyElement = getNextKeyboardBufferElement();
 							Key = keyElement.codePoint;
-							const uint16 scancode = keyElement.keyCode;
+							const KeyCode scancode = keyElement.keyCode;
 							switch (scancode)
 							{
 								case KEY_ESC:
@@ -964,7 +964,7 @@ namespace TA3D
 								int npos = object->Pos;
 								if (object->Focus)
 								{
-									int key_code = getNextKeyboardBufferElement().keyCode;
+									KeyCode key_code = getNextKeyboardBufferElement().keyCode;
 									if (key_code == KEY_UP)
 										npos--;
 									if (key_code == KEY_DOWN)

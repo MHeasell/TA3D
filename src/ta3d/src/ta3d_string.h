@@ -15,6 +15,11 @@
 
 namespace TA3D
 {
+	/**
+	 * A numeric type used to hold a Unicode code point.
+	 */
+	typedef uint32_t CodePoint;
+
 	class String
 	{
 	public:
