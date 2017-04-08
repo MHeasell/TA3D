@@ -85,9 +85,9 @@ namespace TA3D
 	 */
 	KeyboardBufferItem getNextKeyboardBufferElement();
 
-	/*!
-	** \brief clears the key code buffer
-	*/
+	/**
+	 * Clears the keyboard buffer.
+	 */
 	void clearKeyboardBuffer();
 
 	/*!
