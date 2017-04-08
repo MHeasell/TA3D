@@ -40,11 +40,11 @@ namespace TA3D
 
 	namespace VARS
 	{
-		extern KeyCode ascii_to_scancode[256];
-		extern bool key[MAX_KEYCODE];
-		extern bool prevkey_down[MAX_KEYCODE];
+		extern KeyCode asciiToKeyCode[256];
+		extern bool keyState[MAX_KEYCODE];
+		extern bool previousKeyState[MAX_KEYCODE];
 		extern std::deque<KeyboardBufferItem> keyboardBuffer;
-		extern int remap[MAX_KEYCODE];
+		extern int keyCodeMap[MAX_KEYCODE];
 	}
 
 	/**
