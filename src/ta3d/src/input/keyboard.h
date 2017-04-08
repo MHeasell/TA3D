@@ -44,7 +44,7 @@ namespace TA3D
 		extern bool keyState[MAX_KEYCODE];
 		extern bool previousKeyState[MAX_KEYCODE];
 		extern std::deque<KeyboardBufferItem> keyboardBuffer;
-		extern int keyCodeMap[MAX_KEYCODE];
+		extern KeyCode keyCodeMap[MAX_KEYCODE];
 	}
 
 	/**

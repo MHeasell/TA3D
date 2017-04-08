@@ -29,7 +29,7 @@ namespace TA3D
 		bool keyState[MAX_KEYCODE];
 		bool previousKeyState[MAX_KEYCODE];
 		std::deque<KeyboardBufferItem> keyboardBuffer;
-		int keyCodeMap[MAX_KEYCODE];
+		KeyCode keyCodeMap[MAX_KEYCODE];
 	}
 
 	bool isKeyDown(KeyCode keycode)
