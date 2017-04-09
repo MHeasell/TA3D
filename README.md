@@ -1,4 +1,4 @@
-[![AppVeyor build status](https://ci.appveyor.com/api/projects/status/wxhjxlhk1pcbum8g/branch/master?svg=true)](https://ci.appveyor.com/project/MHeasell/ta3d)
+[![AppVeyor build status](https://ci.appveyor.com/api/projects/status/wxhjxlhk1pcbum8g/branch/master?svg=true)](https://ci.appveyor.com/project/MHeasell/ta3d/branch/master)
 [![Travis CI build status](https://travis-ci.org/MHeasell/TA3D.svg?branch=master)](https://travis-ci.org/MHeasell/TA3D)
 
 This is a work-in-progress fork of TA3D.
