@@ -42,7 +42,7 @@ namespace TA3D
 		/**
 		 * Constructs an empty string.
 		 */
-		String(const nullptr_t);
+		String(const NullPtr&);
 
 		/**
 		 * Constructs a string containing only ch.
