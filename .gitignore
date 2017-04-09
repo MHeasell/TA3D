@@ -31,5 +31,8 @@
 # build cruft from lua
 /src/libs/lua-5.1.4/src/*.o
 /src/libs/lua-5.1.4/src/lua
+/src/libs/lua-5.1.4/src/lua.exe
 /src/libs/lua-5.1.4/src/luac
+/src/libs/lua-5.1.4/src/luac.exe
 /src/libs/lua-5.1.4/src/liblua.a
+/src/libs/lua-5.1.4/src/lua51.dll
