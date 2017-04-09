@@ -1,0 +1,5 @@
+build_script:
+  - '%APPVEYOR_BUILD_FOLDER%\appveyor.bat'
+
+test: off
+deploy: off
