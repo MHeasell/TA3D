@@ -243,6 +243,153 @@ endif()
 set(TA3D_RESOURCES_INSTALL_PATH "share/games/ta3d")
 set(TA3D_BINARIES_INSTALL_PATH "games")
 
+# Find and install Windows DLLs
+if(WIN32)
+	find_program(SDL2_DLL "SDL2.dll")
+	find_program(SDL2_IMAGE_DLL "SDL2_image.dll")
+	find_program(SDL2_MIXER_DLL "libSDL2_mixer-2-0-0.dll")
+	find_program(SDL2_NET_DLL "SDL2_net.dll")
+	find_program(GLEW_DLL "glew32.dll")
+	find_program(FREETYPE_DLL "libfreetype-6.dll")
+	find_program(JPEG_DLL "libjpeg-8.dll")
+	find_program(PNG_DLL "libpng16-16.dll")
+	find_program(TIFF_DLL "libtiff-5.dll")
+	find_program(WEBP_DLL "libwebp-7.dll")
+	find_program(ZLIB_DLL "zlib1.dll")
+	find_program(LZMA_DLL "liblzma-5.dll")
+	find_program(BZ2_DLL "libbz2-1.dll")
+	find_program(MAD_DLL "libmad-0.dll")
+	find_program(WINPTHREAD_DLL "libwinpthread-1.dll")
+	find_program(GCC_DLL "libgcc_s_seh-1.dll")
+	find_program(STDLIB_DLL "libstdc++-6.dll")
+	find_program(HARFBUZZ_DLL "libharfbuzz-0.dll")
+	find_program(GLIB_DLL "libglib-2.0-0.dll")
+	find_program(INTL_DLL "libintl-8.dll")
+	find_program(ICONV_DLL "libiconv-2.dll")
+	find_program(PCRE_DLL "libpcre-1.dll")
+	find_program(GRAPHITE_DLL "libgraphite2.dll")
+
+	message("SDL2 DLL: ${SDL2_DLL}")
+	message("SDL2_image DLL: ${SDL2_IMAGE_DLL}")
+	message("SDL2_mixer DLL: ${SDL2_MIXER_DLL}")
+	message("SDL2_net DLL: ${SDL2_NET_DLL}")
+	message("glew DLL: ${GLEW_DLL}")
+	message("freetype DLL: ${FREETYPE_DLL}")
+	message("JPEG DLL: ${JPEG_DLL}")
+	message("PNG DLL: ${PNG_DLL}")
+	message("TIFF DLL: ${TIFF_DLL}")
+	message("WEBP DLL: ${WEBP_DLL}")
+	message("ZLIB DLL: ${ZLIB_DLL}")
+	message("LZMA DLL: ${LZMA_DLL}")
+	message("BZ2 DLL: ${BZ2_DLL}")
+	message("MAD DLL: ${MAD_DLL}")
+	message("winpthread DLL: ${WINPTHREAD_DLL}")
+	message("libgcc DLL: ${GCC_DLL}")
+	message("stdlib DLL: ${STDLIB_DLL}")
+	message("harfbuzz DLL: ${HARFBUZZ_DLL}")
+	message("glib DLL: ${GLIB_DLL}")
+	message("intl DLL: ${INTL_DLL}")
+	message("iconv DLL: ${ICONV_DLL}")
+	message("pcre DLL: ${PCRE_DLL}")
+	message("grapite DLL: ${GRAPHITE_DLL}")
+
+	if(SDL2_DLL STREQUAL "SDL2_DLL-NOTFOUND")
+		message(FATAL_ERROR "SDL DLL not found")
+	endif()
+	if(SDL2_IMAGE_DLL STREQUAL "SDL2_DLL-NOTFOUND")
+		message(FATAL_ERROR "SDL_image DLL not found")
+	endif()
+	if(SDL2_MIXER_DLL STREQUAL "SDL2_MIXER_DLL-NOTFOUND")
+		message(FATAL_ERROR "SDL_mixer DLL not found")
+	endif()
+	if(SDL2_NET_DLL STREQUAL "SDL2_NET_DLL-NOTFOUND")
+		message(FATAL_ERROR "SDL_net DLL not found")
+	endif()
+	if(GLEW_DLL STREQUAL "GLEW_DLL-NOTFOUND")
+		message(FATAL_ERROR "glew DLL not found")
+	endif()
+	if(FREETYPE_DLL STREQUAL "FREETYPE_DLL-NOTFOUND")
+		message(FATAL_ERROR "freetype DLL not found")
+	endif()
+	if(JPEG_DLL STREQUAL "JPEG_DLL-NOTFOUND")
+		message(FATAL_ERROR "libjpeg DLL not found")
+	endif()
+	if(PNG_DLL STREQUAL "PNG_DLL-NOTFOUND")
+		message(FATAL_ERROR "libpng DLL not found")
+	endif()
+	if(TIFF_DLL STREQUAL "TIFF_DLL-NOTFOUND")
+		message(FATAL_ERROR "libtiff DLL not found")
+	endif()
+	if(WEBP_DLL STREQUAL "WEBP_DLL-NOTFOUND")
+		message(FATAL_ERROR "webp DLL not found")
+	endif()
+	if(ZLIB_DLL STREQUAL "ZLIB_DLL-NOTFOUND")
+		message(FATAL_ERROR "zlib DLL not found")
+	endif()
+	if(LZMA_DLL STREQUAL "LZMA_DLL-NOTFOUND")
+		message(FATAL_ERROR "lzma DLL not found")
+	endif()
+	if(BZ2_DLL STREQUAL "BZ2_DLL-NOTFOUND")
+		message(FATAL_ERROR "bz2 DLL not found")
+	endif()
+	if(MAD_DLL STREQUAL "MAD_DLL-NOTFOUND")
+		message(FATAL_ERROR "libmad DLL not found")
+	endif()
+	if(WINPTHREAD_DLL STREQUAL "WINPTHREAD_DLL-NOTFOUND")
+		message(FATAL_ERROR "winpthread DLL not found")
+	endif()
+	if(GCC_DLL STREQUAL "GCC_DLL-NOTFOUND")
+		message(FATAL_ERROR "libgcc DLL not found")
+	endif()
+	if(STDLIB_DLL STREQUAL "STDLIB_DLL-NOTFOUND")
+		message(FATAL_ERROR "stdlib DLL not found")
+	endif()
+	if(HARFBUZZ_DLL STREQUAL "HARFBUZZ_DLL-NOTFOUND")
+		message(FATAL_ERROR "harfbuzz DLL not found")
+	endif()
+	if(GLIB_DLL STREQUAL "GLIB_DLL-NOTFOUND")
+		message(FATAL_ERROR "glib DLL not found")
+	endif()
+	if(INTL_DLL STREQUAL "INTL_DLL-NOTFOUND")
+		message(FATAL_ERROR "intl DLL not found")
+	endif()
+	if(ICONV_DLL STREQUAL "ICONV_DLL-NOTFOUND")
+		message(FATAL_ERROR "ivonv DLL not found")
+	endif()
+	if(PCRE_DLL STREQUAL "PCRE_DLL-NOTFOUND")
+		message(FATAL_ERROR "PCRE DLL not found")
+	endif()
+	if(GRAPHITE_DLL STREQUAL "GRAPHITE_DLL-NOTFOUND")
+		message(FATAL_ERROR "graphite DLL not found")
+	endif()
+
+	install(FILES
+		${SDL2_DLL}
+		${SDL2_IMAGE_DLL}
+		${SDL2_MIXER_DLL}
+		${SDL2_NET_DLL}
+		${GLEW_DLL}
+		${FREETYPE_DLL}
+		${JPEG_DLL}
+		${PNG_DLL}
+		${TIFF_DLL}
+		${WEBP_DLL}
+		${ZLIB_DLL}
+		${LZMA_DLL}
+		${BZ2_DLL}
+		${MAD_DLL}
+		${WINPTHREAD_DLL}
+		${GCC_DLL}
+		${STDLIB_DLL}
+		${HARFBUZZ_DLL}
+		${GLIB_DLL}
+		${INTL_DLL}
+		${ICONV_DLL}
+		${PCRE_DLL}
+		${GRAPHITE_DLL}
+		DESTINATION ${TA3D_BINARIES_INSTALL_PATH})
+endif()
+
 install(DIRECTORY ../../docs DESTINATION ${TA3D_RESOURCES_INSTALL_PATH} PATTERN ".*" EXCLUDE PATTERN "*~" EXCLUDE)
 install(DIRECTORY fonts DESTINATION ${TA3D_RESOURCES_INSTALL_PATH} PATTERN ".*" EXCLUDE PATTERN "*~" EXCLUDE)
 install(DIRECTORY gfx DESTINATION ${TA3D_RESOURCES_INSTALL_PATH} PATTERN ".*" EXCLUDE PATTERN "*~" EXCLUDE)
