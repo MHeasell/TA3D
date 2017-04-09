@@ -30,6 +30,8 @@
 #include <sys/types.h>
 #include <dirent.h>
 #include <errno.h>
+#include <string>
+#include <cwchar>
 
 #ifdef TA3D_PLATFORM_WINDOWS
 #define FA_FILE 1
@@ -437,17 +439,27 @@ namespace TA3D
 
 		bool Remove(const char* path)
 		{
-			WString<true> fsource(path);
-			if (fsource.empty())
+			String pathString(path);
+			if (pathString.empty())
 				return false;
 			int cr;
+
+			std::wstring widePathString;
+			utf8::utf8to16(pathString.begin(), pathString.end(), std::back_inserter(widePathString));
+
+			// construct a double null-terminated string
+			// to pass to the Windows API.
+			wchar_t fromBuffer[widePathString.size() + 2];
+			wcscpy(fromBuffer, widePathString.c_str());
+			fromBuffer[widePathString.size()] = L'\0';
+			fromBuffer[widePathString.size() + 1] = L'\0';
 
 			SHFILEOPSTRUCTW shf;
 			shf.hwnd = NULL;
 
 			shf.wFunc = FO_DELETE;
-			shf.pFrom = fsource.c_str();
-			shf.pTo = fsource.c_str();
+			shf.pFrom = fromBuffer;
+			shf.pTo = NULL;
 			shf.fFlags = FOF_SILENT | FOF_NOCONFIRMATION | FOF_NOCONFIRMMKDIR | FOF_NOERRORUI;
 
 			cr = SHFileOperationW(&shf);
