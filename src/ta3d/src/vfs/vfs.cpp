@@ -33,9 +33,6 @@
 #include <fstream>
 
 #include <zlib.h>
-#if defined TA3D_PLATFORM_WINDOWS
-#pragma comment(lib, "tools/win32/mingw32/libs/zlib.lib")
-#endif
 
 namespace TA3D
 {
