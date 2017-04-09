@@ -26,15 +26,15 @@ namespace TA3D
 	namespace VARS
 	{
 		KeyCode asciiToKeyCode[256];
-		bool keyState[MAX_KEYCODE];
-		bool previousKeyState[MAX_KEYCODE];
+		std::unordered_set<KeyCode> keyState;
+		std::unordered_set<KeyCode> previousKeyState;
 		std::deque<KeyboardBufferItem> keyboardBuffer;
-		KeyCode keyCodeMap[MAX_KEYCODE];
+		std::unordered_map<KeyCode, KeyCode> keyCodeMap;
 	}
 
 	bool isKeyDown(KeyCode keycode)
 	{
-		return keyState[keycode];
+		return keyState.find(keycode) != keyState.end();
 	}
 
 	bool isAsciiCharacterKeyDown(byte c)
@@ -59,7 +59,7 @@ namespace TA3D
 		return !keyboardBuffer.empty();
 	}
 
-	void appendKeyboardBufferElement(KeyCode keyCode, uint16 codePoint)
+	void appendKeyboardBufferElement(KeyCode keyCode, CodePoint codePoint)
 	{
 		keyboardBuffer.push_back(KeyboardBufferItem(keyCode, codePoint));
 	}
@@ -71,13 +71,7 @@ namespace TA3D
 
 	void initializeKeyboard()
 	{
-		// Initialize the SDL Stuff
-		SDL_EnableUNICODE(1);
-		SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
-
 		// We need some remapping hack to support some keyboards (french keyboards don't access KEY_0..9)
-		memset(keyCodeMap, 0, MAX_KEYCODE * sizeof(KeyCode));
-
 		keyCodeMap[KEY_ENTER_PAD] = KEY_ENTER;
 		keyCodeMap[38] = KEY_1;
 		keyCodeMap[233] = KEY_2;
@@ -90,7 +84,6 @@ namespace TA3D
 		keyCodeMap[231] = KEY_9;
 		keyCodeMap[224] = KEY_0;
 
-		memset(VARS::keyState, 0, MAX_KEYCODE * sizeof(bool));
 		keyboardBuffer.clear();
 
 		// Initializing the ascii to scancode table
@@ -144,39 +137,46 @@ namespace TA3D
 
 	void setKeyDown(KeyCode keycode)
 	{
-		if (keycode >= MAX_KEYCODE)
-			return;
+		auto mappedKeyCode = keyCodeMap.find(keycode);
+		if (mappedKeyCode != keyCodeMap.end())
+		{
+			keyState.insert(mappedKeyCode->second);
+		}
 
-		if (keyCodeMap[keycode])
-			VARS::keyState[keyCodeMap[keycode]] = true;
-		VARS::keyState[keycode] = true;
+		keyState.insert(keycode);
 	}
 
 	void setKeyUp(KeyCode keycode)
 	{
-		if (keycode >= MAX_KEYCODE)
-			return;
+		auto mappedKeyCode = keyCodeMap.find(keycode);
+		if (mappedKeyCode != keyCodeMap.end())
+		{
+			keyState.erase(mappedKeyCode->second);
+		}
 
-		if (keyCodeMap[keycode])
-			VARS::keyState[keyCodeMap[keycode]] = false;
-		VARS::keyState[keycode] = false;
+		keyState.erase(keycode);
 	}
 
 	bool didKeyGoDown(KeyCode keycode)
 	{
-		if (keycode >= MAX_KEYCODE)
-			return false;
+		bool isDown = keyState.find(keycode) != keyState.end();
+		bool wasDown = previousKeyState.find(keycode) == previousKeyState.end();
 
-		if (!previousKeyState[keycode] && keyState[keycode])
+		if (isDown && !wasDown)
 		{
-			previousKeyState[keycode] = true;
+			previousKeyState.insert(keycode);
 			return true;
 		}
-		previousKeyState[keycode] = keyState[keycode];
+
+		if (!isDown && wasDown) {
+			previousKeyState.erase(keycode);
+			return false;
+		}
+
 		return false;
 	}
 
-	KeyCode sdlToKeyCode(SDLKey key)
+	KeyCode sdlToKeyCode(SDL_Keycode key)
 	{
 		return key;
 	}

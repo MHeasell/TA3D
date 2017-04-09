@@ -2,7 +2,7 @@
 #define __SOCKET_H__
 
 #include <misc/string.h>
-#include <SDL/SDL_net.h>
+#include "SDL_net.h"
 #include <threads/thread.h>
 
 namespace TA3D

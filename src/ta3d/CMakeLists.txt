@@ -116,65 +116,43 @@ include(CheckIncludeFile)
 # --- SDL ---
 #
 set(SDL_PREFIX "[SDL]")
-include(FindSDL)
-include(FindSDL_image)
-include(FindSDL_mixer)
-include(FindSDL_net)
+find_package(SDL2)
+find_package(SDL2_image)
+find_package(SDL2_mixer)
+find_package(SDL2_net)
 
-# Manual setup for mingw32 (all required files are included in source tree)
-if (WIN32 OR (CMAKE_CROSSCOMPILING AND NOT UNIX))
+message(STATUS "${SDL_PREFIX} SDL: ${SDL2_FOUND}")
+message(STATUS "${SDL_PREFIX} SDL_image: ${SDL2_IMAGE_FOUND}")
+message(STATUS "${SDL_PREFIX} SDL_mixer: ${SDL2_MIXER_FOUND}")
+message(STATUS "${SDL_PREFIX} SDL_net: ${SDL2_NET_FOUND}")
+message(STATUS "${SDL_PREFIX} Include dir: ${SDL2_INCLUDE_DIR}")
+message(STATUS "${SDL_PREFIX} The SDL library: ${SDL2_LIBRARY}")
+message(STATUS "${SDL_PREFIX} The SDL_image library: ${SDL2_IMAGE_LIBRARIES}")
+message(STATUS "${SDL_PREFIX} The SDL_mixer library: ${SDL2_MIXER_LIBRARIES}")
+message(STATUS "${SDL_PREFIX} The SDL_net library: ${SDL2_NET_LIBRARIES}")
 
-	set( SDL_FOUND included )
-	set( SDLIMAGE_FOUND included )
-	set( SDLMIXER_FOUND included )
-	set( SDLNET_FOUND included )
-
-	include_DIRECTORIES( "${CMAKE_CURRENT_SOURCE_DIR}/src/tools/win32/mingw32/include" )
-
-	set( SDL_INCLUDE_DIR  "${CMAKE_CURRENT_SOURCE_DIR}/src/tools/win32/mingw32/include/SDL")
-	set( SDLIMAGE_include_DIR  "${CMAKE_CURRENT_SOURCE_DIR}/src/tools/win32/mingw32/include/SDL")
-	set( SDLMIXER_include_DIR  "${CMAKE_CURRENT_SOURCE_DIR}/src/tools/win32/mingw32/include/SDL")
-	set( SDLNET_include_DIR  "${CMAKE_CURRENT_SOURCE_DIR}/src/tools/win32/mingw32/include/SDL")
-
-	set( SDL_LIBRARY "mingw32;${CMAKE_CURRENT_SOURCE_DIR}/src/tools/win32/mingw32/libs/libSDLmain.a;${CMAKE_CURRENT_SOURCE_DIR}/src/tools/win32/mingw32/libs/SDL.dll")
-	set( SDLIMAGE_LIBRARY "${CMAKE_CURRENT_SOURCE_DIR}/src/tools/win32/mingw32/libs/SDL_image.dll")
-	set( SDLMIXER_LIBRARY "${CMAKE_CURRENT_SOURCE_DIR}/src/tools/win32/mingw32/libs/SDL_mixer.dll")
-	set( SDLNET_LIBRARY "${CMAKE_CURRENT_SOURCE_DIR}/src/tools/win32/mingw32/libs/SDL_net.dll")
-
-endif ()
-
-	message(STATUS "${SDL_PREFIX} SDL: ${SDL_FOUND}")
-	message(STATUS "${SDL_PREFIX} SDL_image: ${SDLIMAGE_FOUND}")
-	message(STATUS "${SDL_PREFIX} SDL_mixer: ${SDLMIXER_FOUND}")
-	message(STATUS "${SDL_PREFIX} SDL_net: ${SDLNET_FOUND}")
-	message(STATUS "${SDL_PREFIX} Include dir: ${SDL_INCLUDE_DIR}")
-	message(STATUS "${SDL_PREFIX} The SDL library: ${SDL_LIBRARY}")
-	message(STATUS "${SDL_PREFIX} The SDL_image library: ${SDLIMAGE_LIBRARY}")
-	message(STATUS "${SDL_PREFIX} The SDL_mixer library: ${SDLMIXER_LIBRARY}")
-	message(STATUS "${SDL_PREFIX} The SDL_net library: ${SDLNET_LIBRARY}")
-
-if(NOT SDL_FOUND)
+if(NOT SDL2_FOUND)
 	message(FATAL_ERROR "SDL not found, SDL is required")
 endif()
-if(NOT SDLIMAGE_FOUND)
+if(NOT SDL2_IMAGE_FOUND)
 	message(FATAL_ERROR "SDL_image not found, SDL_image is required")
 endif()
-if(NOT SDLMIXER_FOUND)
+if(NOT SDL2_MIXER_FOUND)
 	message(FATAL_ERROR "SDL_mixer not found, SDL_mixer is required")
 endif()
-if(NOT SDLNET_FOUND)
+if(NOT SDL2_NET_FOUND)
 	message(FATAL_ERROR "SDL_net not found, SDL_net is required")
 endif()
 
-link_libraries(${SDL_LIBRARY})
-link_libraries(${SDLIMAGE_LIBRARY})
-link_libraries(${SDLMIXER_LIBRARY})
-link_libraries(${SDLNET_LIBRARY})
+link_libraries(${SDL2_LIBRARY})
+link_libraries(${SDL2_IMAGE_LIBRARIES})
+link_libraries(${SDL2_MIXER_LIBRARIES})
+link_libraries(${SDL2_NET_LIBRARIES})
 
-include_DIRECTORIES(${SDL_INCLUDE_DIR})
-include_DIRECTORIES(${SDLIMAGE_include_DIR})
-include_DIRECTORIES(${SDLMIXER_include_DIR})
-include_DIRECTORIES(${SDLNET_include_DIR})
+include_directories(${SDL2_INCLUDE_DIR})
+include_directories(${SDL2_IMAGE_INCLUDE_DIRS})
+include_directories(${SDL2_MIXER_INCLUDE_DIRS})
+include_directories(${SDL2_NET_INCLUDE_DIRS})
 
 set(TA3D_LUA_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../libs/lua-5.1.4")
 set(TA3D_LUA_INSTALL_DIR "${CMAKE_CURRENT_BINARY_DIR}/lua")
@@ -208,19 +186,18 @@ set(LIBS "-llua -lz -ldl")
 #
 # --- GLEW ---
 #
-if(WIN32 OR (CMAKE_CROSSCOMPILING AND NOT UNIX))
-	set(GLEW_LIB "${CMAKE_CURRENT_SOURCE_DIR}/src/tools/win32/mingw32/libs/libglew32.dll.a")
-else()
-	find_library(GLEW_LIB GLEW)
-	if(NOT GLEW_LIB)
-		find_library(GLEW_LIB glew)
-	endif()
-	find_file(GLEW_HEADER GL/glew.h)
-	if(NOT GLEW_HEADER)
-		message(FATAL_ERROR "glew.h not found!")
-	endif()
-	message(STATUS "GLEW Header : ${GLEW_HEADER}")
+find_library(GLEW_LIB GLEW)
+if(NOT GLEW_LIB)
+	find_library(GLEW_LIB glew)
+    if(NOT GLEW_LIB)
+        find_library(GLEW_LIB glew32)
+    endif()
 endif()
+find_file(GLEW_HEADER GL/glew.h)
+if(NOT GLEW_HEADER)
+	message(FATAL_ERROR "glew.h not found!")
+endif()
+message(STATUS "GLEW Header : ${GLEW_HEADER}")
 message(STATUS "GLEW Library : ${GLEW_LIB}")
 
 if(NOT GLEW_LIB)
@@ -244,13 +221,7 @@ endif()
 #
 # --- FTGL ---
 #
-if(WIN32 OR (CMAKE_CROSSCOMPILING AND NOT UNIX))
-	set( FREETYPE_INCLUDE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}/src/tools/win32/mingw32/include/freetype2/")
-	set( FREETYPE_LIBRARIES "${CMAKE_CURRENT_SOURCE_DIR}/src/tools/win32/mingw32/libs/libfreetype.dll.a")
-	message(STATUS "FreeType Library : ${FREETYPE_LIBRARIES}")
-else()
-	find_package(Freetype)
-endif()
+find_package(Freetype)
 
 include_directories( ${FREETYPE_INCLUDE_DIRS} )
 
@@ -260,14 +231,6 @@ set(__FTGL__lower__ true)
 
 message(STATUS "FTGL Library : ${FTGL_LIB}")
 set(LIBS "${LIBS} ${FTGL_LIB}")
-
-
-#
-# --- ZLib ---
-#
-if(WIN32)
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -I${CMAKE_CURRENT_SOURCE_DIR}/src/tools/win32/mingw32/include/zlib")
-endif()
 
 #
 # --- CPack: Installation process ---

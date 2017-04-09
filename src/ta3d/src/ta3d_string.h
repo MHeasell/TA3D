@@ -15,6 +15,11 @@
 
 namespace TA3D
 {
+	/**
+	 * A numeric type used to hold a Unicode code point.
+	 */
+	typedef uint32_t CodePoint;
+
 	class String
 	{
 	public:
@@ -37,7 +42,7 @@ namespace TA3D
 		/**
 		 * Constructs an empty string.
 		 */
-		String(const nullptr_t);
+		String(const NullPtr&);
 
 		/**
 		 * Constructs a string containing only ch.

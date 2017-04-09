@@ -20,22 +20,19 @@
 
 #include <deque>
 #include <stdafx.h>
-#include <SDL_keysym.h>
-
-/**
- * The number after the highest valid keycode.
- */
-#define MAX_KEYCODE SDLK_LAST
+#include <SDL_keycode.h>
+#include <unordered_set>
+#include <unordered_map>
 
 namespace TA3D
 {
-	typedef SDLKey KeyCode;
+	typedef SDL_Keycode KeyCode;
 
 	struct KeyboardBufferItem {
 		KeyCode keyCode;
-		uint16 codePoint;
+		CodePoint codePoint;
 
-		KeyboardBufferItem(KeyCode keyCode, uint16 codePoint): keyCode(keyCode), codePoint(codePoint) {}
+		KeyboardBufferItem(KeyCode keyCode, CodePoint codePoint): keyCode(keyCode), codePoint(codePoint) {}
 	};
 
 	namespace VARS
@@ -46,18 +43,18 @@ namespace TA3D
 		extern KeyCode asciiToKeyCode[256];
 
 		/**
-		 * Array recording the state of each key,
-		 * identified by its key code.
-		 * If the key is down, the value is true.
-		 * Otherwise, if the key is up, the value is false.
+		 * Set recording the state of each key,
+		 * identified by its keycode.
+		 * If the key is down, the keycode is in the set.
+		 * Otherwise, if the key is up, the keycode is not in the set.
 		 */
-		extern bool keyState[MAX_KEYCODE];
+		extern std::unordered_set<KeyCode> keyState;
 
 		/**
 		 * Array recording the previous state of each key.
 		 * This is used by didKeyGoDown.
 		 */
-		extern bool previousKeyState[MAX_KEYCODE];
+		extern std::unordered_set<KeyCode> previousKeyState;
 
 		/**
 		 * A buffer that holds the keys received from key down events.
@@ -69,7 +66,7 @@ namespace TA3D
 		 * Key codes in this mapping will be translated
 		 * to the key code they are mapped to before processing.
 		 */
-		extern KeyCode keyCodeMap[MAX_KEYCODE];
+		extern std::unordered_map<KeyCode, KeyCode> keyCodeMap;
 	}
 
 	/**
@@ -97,7 +94,7 @@ namespace TA3D
 	/**
 	 * Appends an item to the global keyboard key buffer.
 	 */
-	void appendKeyboardBufferElement(KeyCode keyCode, uint16 codePoint);
+	void appendKeyboardBufferElement(KeyCode keyCode, CodePoint codePoint);
 
 	/*!
 	** \brief return the next key code in the key buffer
@@ -140,7 +137,7 @@ namespace TA3D
 	/**
 	 * Converts an SDL keycode into a TA3D keycode.
 	 */
-	KeyCode sdlToKeyCode(SDLKey key);
+	KeyCode sdlToKeyCode(SDL_Keycode key);
 }
 
 #define KEY_UNKNOWN SDLK_UNKNOWN

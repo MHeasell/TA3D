@@ -5,7 +5,7 @@
 
 namespace TA3D
 {
-	String::String(const nullptr_t) {}
+	String::String(const NullPtr&) {}
 
 	String::String() {}
 

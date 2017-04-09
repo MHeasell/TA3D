@@ -142,58 +142,22 @@ namespace TA3D
 
 			nb_res = 0;
 
-			SDL_Rect** mode_list = SDL_ListModes(NULL, SDL_FULLSCREEN | SDL_OPENGL);
-
-			if (mode_list == (SDL_Rect**)0) // No resolution available (normally this shouldn't be possible if we get here)
-				nb_res = 0;
-			else if (mode_list == (SDL_Rect**)-1) // Ok, everything is possible so let's use standard sizes
+			// assumes we are on display 0
+			int number_of_display_modes = std::min(100, SDL_GetNumDisplayModes(0));
+			for (int i = 0; i < number_of_display_modes; ++i)
 			{
-#define ADD_RES(w, h)         \
-	res_bpp[nb_res++] = 16;   \
-	res_width[nb_res++] = w;  \
-	res_height[nb_res++] = h; \
-	res_bpp[nb_res++] = 32;   \
-	res_width[nb_res++] = w;  \
-	res_height[nb_res++] = h;
+				SDL_DisplayMode mode;
+				if (SDL_GetDisplayMode(0, i, &mode) != 0) {
+					LOG_ERROR(String("Couldn't get display mode") << i << ": " << SDL_GetError());
+					continue;
+				}
 
-				ADD_RES(640, 480)
-				ADD_RES(800, 480)
-				ADD_RES(800, 600)
-				ADD_RES(1024, 768)
-				ADD_RES(1024, 600)
-				ADD_RES(1280, 960)
-				ADD_RES(1280, 1024)
-				ADD_RES(1440, 900)
-				ADD_RES(1680, 1050)
-				ADD_RES(1600, 1200)
-				ADD_RES(1920, 1200)
-				ADD_RES(2560, 1600)
-			}
-			else
-			{
-				for (unsigned int i = 0; mode_list[i] != NULL; ++i)
+				if (mode.w >= 640 && mode.h >= 480)
 				{
-					// Reference to the current SDL Rect
-					const SDL_Rect& rect = *(mode_list[i]);
-
-					if (rect.w >= 640 && rect.h >= 480)
-					{
-						if (SDL_VideoModeOK(rect.w, rect.h, 16, SDL_FULLSCREEN | SDL_OPENGL) == 16)
-						{
-							res_bpp[nb_res] = 16;
-							res_width[nb_res] = rect.w;
-							res_height[nb_res] = rect.h;
-							++nb_res;
-						}
-
-						if (SDL_VideoModeOK(rect.w, rect.h, 32, SDL_FULLSCREEN | SDL_OPENGL) == 32)
-						{
-							res_bpp[nb_res] = 32;
-							res_width[nb_res] = rect.w;
-							res_height[nb_res] = rect.h;
-							++nb_res;
-						}
-					}
+					res_bpp[nb_res] = 32;
+					res_width[nb_res] = mode.w;
+					res_height[nb_res] = mode.h;
+					++nb_res;
 				}
 			}
 

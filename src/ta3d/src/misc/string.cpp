@@ -26,7 +26,7 @@ namespace TA3D
 		return ((String::npos == iFind) ? -1 : (sint32)iFind);
 	}
 
-	String InttoUTF8(const uint16 c)
+	String InttoUTF8(const CodePoint c)
 	{
 		if (c < 0x80)
 		{

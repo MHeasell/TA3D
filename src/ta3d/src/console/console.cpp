@@ -118,8 +118,8 @@ namespace TA3D
 			}
 		}
 
-		uint16 keyb = 0;
-		uint32 keycode = 0;
+		CodePoint keyb = 0;
+		KeyCode keycode = 0;
 
 		if (keyboardBufferContainsElements())
 		{

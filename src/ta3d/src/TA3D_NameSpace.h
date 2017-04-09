@@ -37,6 +37,7 @@
 #include "network/network.h"
 #include "threads/thread.h"
 #include <vector>
+#include "SDL.h"
 
 #define ZOOM_NORMAL 0x0
 #define ZOOM_FIXED_ANGLE 0x1
@@ -143,7 +144,7 @@ namespace TA3D
 
 	namespace VARS
 	{
-		extern SDL_Surface* screen;
+		extern SDL_Window* screen;
 		extern TA3D::IInterfaceManager::Ptr InterfaceManager;
 		extern TA3D::GFX::Ptr gfx;
 

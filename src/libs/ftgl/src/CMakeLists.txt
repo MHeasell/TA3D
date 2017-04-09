@@ -1,10 +1,10 @@
 # --------------------------------------------------------------------
 # --- ftgl
 # --------------------------------------------------------------------
-SET(ftgl_BIN ftgl)
+set(ftgl_BIN ftgl)
 
 
-SET(ftgl_SOURCES
+set(ftgl_SOURCES
 		FTBuffer.cpp
 		FTCharmap.cpp
 		FTContour.cpp

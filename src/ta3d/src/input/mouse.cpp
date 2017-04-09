@@ -70,10 +70,10 @@ namespace TA3D
 			{
 				case SDL_KEYDOWN:
 				{
-					setKeyDown(event.key.keysym.sym);
-
-					uint32 codePoint = event.key.keysym.unicode;
+					SDL_Keycode codePoint = event.key.keysym.sym;
 					KeyCode keyCode = sdlToKeyCode(event.key.keysym.sym);
+
+					setKeyDown(keyCode);
 
 					if (keyCode == KEY_ENTER_PAD)
 					{
@@ -81,23 +81,20 @@ namespace TA3D
 						codePoint = '\n';
 					}
 
-					appendKeyboardBufferElement(keyCode, codePoint);
+					// Keycodes for keys with printable chraacters
+					// are represented by their character byte.
+					// Other keycodes use their scancode ORed with (1 << 30).
+					// We want to filter out these non-printable keys.
+					if ((codePoint & (1 << 30)) == 0) {
+						appendKeyboardBufferElement(keyCode, CodePoint(codePoint));
+					}
 				}
 				break;
-				case SDL_MOUSEBUTTONDOWN:
-				case SDL_MOUSEBUTTONUP:
-					switch (event.button.button)
-					{
-						case SDL_BUTTON_WHEELDOWN:
-							if (event.button.state == SDL_PRESSED)
-								mouse_z--;
-							break;
-						case SDL_BUTTON_WHEELUP:
-							if (event.button.state == SDL_PRESSED)
-								mouse_z++;
-							break;
-					};
-					break;
+				case SDL_MOUSEWHEEL:
+				{
+					mouse_z += event.wheel.y;
+				}
+				break;
 				case SDL_KEYUP:
 					setKeyUp(event.key.keysym.sym);
 					break;
@@ -106,7 +103,7 @@ namespace TA3D
 		mouse_b = 0;
 		int dx(0), dy(0);
 		int rmx(0), rmy(0);
-		uint8 m_b = SDL_GetMouseState(&rmx, &rmy);
+		uint32 m_b = SDL_GetMouseState(&rmx, &rmy);
 		dx = rmx - old_mx;
 		dy = rmy - old_my;
 		fmouse_x += float(dx) * lp_CONFIG->mouse_sensivity;
@@ -122,12 +119,12 @@ namespace TA3D
 		mouse_x = (int)(fmouse_x + 0.5f);
 		mouse_y = (int)(fmouse_y + 0.5f);
 		if (rmx != mouse_x || rmy != mouse_y)
-			SDL_WarpMouse(uint16(mouse_x), uint16(mouse_y));
+			SDL_WarpMouseInWindow(screen, uint16(mouse_x), uint16(mouse_y));
 		old_mx = mouse_x;
 		old_my = mouse_y;
 
-		if (lp_CONFIG->fullscreen && isKeyDown(KEY_ALT) && isKeyDown(KEY_TAB) && (SDL_GetAppState() & SDL_APPACTIVE))
-			SDL_WM_IconifyWindow();
+		if (lp_CONFIG->fullscreen && isKeyDown(KEY_ALT) && isKeyDown(KEY_TAB) && (SDL_GetWindowFlags(screen) & SDL_WINDOW_SHOWN))
+			SDL_MinimizeWindow(screen);
 	}
 
 	int mouse_lx = 0;
@@ -145,7 +142,7 @@ namespace TA3D
 		fmouse_y = float(mouse_y);
 		old_mx = mouse_x;
 		old_my = mouse_y;
-		SDL_WarpMouse(uint16(mouse_x), uint16(mouse_y));
+		SDL_WarpMouseInWindow(screen, uint16(mouse_x), uint16(mouse_y));
 		poll_inputs();
 	}
 
@@ -243,6 +240,6 @@ namespace TA3D
 
 	void grab_mouse(bool grab)
 	{
-		SDL_WM_GrabInput(grab ? SDL_GRAB_ON : SDL_GRAB_OFF);
+		SDL_SetWindowGrab(screen, grab ? SDL_TRUE : SDL_FALSE);
 	}
 }
