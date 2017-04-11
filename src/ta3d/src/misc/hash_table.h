@@ -121,6 +121,18 @@ namespace TA3D
 			typedef zuzuf::hashset<K, TA3D::UTILS::hash<K>, 250> Sparse;
 		};
 
+		/**
+		 * Searches the keys of the given container for strings matching the pattern.
+		 * The results are pushed onto the given container (li)
+		 * and the number of results found is returned.
+		 *
+		 * @tparam T The type of the container to search.
+		 * @tparam U The type of the result container.
+		 * @param container The container to search.
+		 * @param pattern The pattern to search for. May contain a single glob (*).
+		 * @param li Container into which matches will be added via push_back.
+		 * @return The number of elements matched.
+		 */
 		template <class T, class U>
 		uint32
 		wildCardSearch(const T& container, const String& pattern, U& li)
