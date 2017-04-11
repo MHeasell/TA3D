@@ -132,7 +132,8 @@ namespace TA3D
 
 		private:
 			/**
-			 * used when looking for files in the real file system
+			 * A list of paths to search when looking for archive files
+			 * to load from the underlying file system.
 			 */
 			String::Vector pPaths;
 
@@ -150,7 +151,9 @@ namespace TA3D
 			DirMap pDirs;
 
 			/**
-			 * The cache is used to speed up things when a file is loaded multiple times
+			 * A list of cached files.
+			 * The cache is used to avoid hitting the disk
+			 * when a file is requested multiple times.
 			 */
 			std::list<CacheFileData> fileCache;
 
