@@ -44,20 +44,11 @@ namespace TA3D
 {
 	namespace UTILS
 	{
-
-		/*!
-	** \brief
-	*/
 		class VFS : public ObjectLevelLockable
 		{
 		private:
-			//! The threading policy
 			typedef VFS ThreadingPolicy;
 
-			/*! \class CacheFileData
-		**
-		** \brief
-		*/
 			struct CacheFileData
 			{
 				uint32 length;
@@ -66,9 +57,9 @@ namespace TA3D
 			}; // class CacheFileData
 
 		public:
-			/*!
-		** \brief Get the unique instance of the Virtual File system
-		*/
+			/**
+			 * Returns the global VFS instance
+			 */
 			static inline VFS* Instance()
 			{
 				static VFS instance;
@@ -76,121 +67,58 @@ namespace TA3D
 			}
 
 		public:
-			/*!
-		** \brief reload all archives
-		*/
+			/**
+			 * Reloads all archives
+			 */
 			void reload();
 
-			/*!
-		** \brief
-		** \param s
-		** \param[out] li
-		*/
 			uint32 getFilelist(String pattern, String::List& li);
 			uint32 getFilelist(String pattern, String::Vector& li);
 
-			/*!
-		** \brief
-		** \param s
-		** \param[out] li
-		*/
 			uint32 getDirlist(String pattern, String::List& li);
 			uint32 getDirlist(String pattern, String::Vector& li);
 
-			/*!
-		** \brief Get the list of all loaded archives
-		** \param[out] li
-		*/
+			/**
+			 * Gets the list of all loaded archives.
+			 */
 			uint32 getArchivelist(String::Vector& li) const;
 
-			/*!
-		** \brief
-		*/
 			File* readFile(const String& filename);
 
-			/*!
-		** \brief
-		** \param filename
-		** \param start
-		** \param length
-		** \return
-		*/
 			File* readFileRange(const String& filename, const uint32 start, const uint32 length);
 
-			/*!
-		** \brief
-		** \param filename
-		** \return
-		*/
 			bool fileExists(String filename);
 
-			/*!
-		** \brief returns the priority level of a file
-		** \param filename
-		** \return
-		*/
 			int filePriority(const String& filename);
 
-			/*!
-		** \brief extract the given file and return an absolute path to it
-		** \param filename
-		** \return
-		*/
 			String extractFile(const String& filename);
 
 		private:
-			//! \name Constructor & Destructor
-			//@{
-			// constructor:
 			VFS();
 
-			//! Destructor
 			~VFS();
-			//@}
 
-			/*!
-		** \brief load all archives
-		*/
+			/**
+			 * Loads all archives
+			 */
 			void load();
 
-			/*!
-		** \brief unload all archives
-		*/
+			/**
+			 * Unloads all archives
+			 */
 			void unload();
 
-			/*!
-		** \brief
-		**
-		** \param filename
-		** \param priority
-		*/
 			void addArchive(const String& filename, const int priority);
 
-			/*!
-		** \brief
-		**
-		** \param path
-		** \param priority
-		*/
 			void locateAndReadArchives(const String& path, const int priority);
 
-			/*!
-		** \brief
-		** \param filename
-		** \param filesize
-		** /param data
-		*/
 			void putInCache(const String& filename, File* file);
 
-			/*!
-		** \brief
-		** \param filename
-		*/
 			CacheFileData* isInCache(const String& filename);
 
-			/*!
-		** \brief build the table of all dirs from the list of all files
-		*/
+			/**
+			 * BUilds the table of all dirs from the list of all files
+			 */
 			void buildDirMap();
 
 		protected:
@@ -199,26 +127,28 @@ namespace TA3D
 
 			CacheFileData* isInCacheWL(const String& filename);
 
-			/*!
-		** \brief
-		** \param filename
-		** \param filesize
-		*/
 			File* isInDiskCacheWL(const String& filename);
 
 		private:
-			//! used when looking for files in the real file system
+			/**
+			 * used when looking for files in the real file system
+			 */
 			String::Vector pPaths;
-			//!
+
 			typedef TA3D::UTILS::HashMap<Archive::FileInfo*>::Dense FileInfoMap;
 			FileInfoMap pFiles;
-			//!
+
 			typedef TA3D::UTILS::HashMap<TA3D::UTILS::HashMap<bool>::Sparse>::Dense DirMap;
 			DirMap pDirs;
 
-			//! The cache is used to speed up things when a file is loaded multiple times
+			/**
+			 * The cache is used to speed up things when a file is loaded multiple times
+			 */
 			std::list<CacheFileData> fileCache;
-			//! A list of Archive*, needed only for cleanup.
+
+			/**
+			 * A list of Archive*, needed only for cleanup.
+			 */
 			std::vector<Archive*> archives;
 
 		}; // class VFS;
