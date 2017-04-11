@@ -236,9 +236,7 @@ set(LIBS "${LIBS} ${FTGL_LIB}")
 # --- CPack: Installation process ---
 #
 
-if(NOT WIN32 AND UNIX)
-	message("-- TA3D will be installed in: ${CMAKE_INSTALL_PREFIX}")
-endif()
+message("-- TA3D will be installed in: ${CMAKE_INSTALL_PREFIX}")
 
 if(WIN32)
 	set(TA3D_RESOURCES_INSTALL_PATH ".")
