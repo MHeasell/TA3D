@@ -319,7 +319,6 @@ set(TA3D_LIB_SOURCES
 		vfs/realfs.h
 		vfs/vfs.cpp
 		vfs/vfs.h
-		vfs/vfs.hxx
 		vfs/virtualfile.cpp
 		vfs/virtualfile.h
 		)

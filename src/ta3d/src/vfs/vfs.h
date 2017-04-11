@@ -69,7 +69,11 @@ namespace TA3D
 			/*!
 		** \brief Get the unique instance of the Virtual File system
 		*/
-			static VFS* Instance();
+			static inline VFS* Instance()
+			{
+				static VFS instance;
+				return &instance;
+			}
 
 		public:
 			/*!
@@ -226,7 +230,5 @@ namespace TA3D
 
 	} // namespace utils
 } // namespace TA3D
-
-#include "vfs.hxx"
 
 #endif // __TA3D_UTILS_VFS_H__
