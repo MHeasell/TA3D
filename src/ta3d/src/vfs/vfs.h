@@ -79,12 +79,6 @@ namespace TA3D
 
 			/*!
 		** \brief
-		** \param path
-		*/
-			void searchDirForArchives(const String& path);
-
-			/*!
-		** \brief
 		** \param s
 		** \param[out] li
 		*/
