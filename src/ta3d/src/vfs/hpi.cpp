@@ -57,7 +57,7 @@ namespace TA3D
 			if (Paths::ExtractFileName(filename).toLower() == "ta3d.hpi")
 				priority = 3;
 
-			HPIFile.open(filename.c_str());
+			HPIFile.open(filename.c_str(), std::ios::binary);
 			if (!HPIFile.is_open())
 			{
 				close();

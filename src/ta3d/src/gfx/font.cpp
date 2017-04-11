@@ -197,7 +197,7 @@ namespace TA3D
 					std::ofstream tmp_file;
 					LOG_DEBUG(LOG_PREFIX_FONT << "Creating temporary file for " << name << " (" << tmp << ")");
 
-					tmp_file.open(tmp.c_str());
+					tmp_file.open(tmp.c_str(), std::ios::binary);
 					if (tmp_file.is_open())
 					{
 						char* buf = new char[10240];

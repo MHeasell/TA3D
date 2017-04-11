@@ -39,7 +39,7 @@ namespace TA3D
 		if (file)
 		{
 			String output_filename = String(Paths::Resources) << Paths::ExtractFileName(filename);
-			std::ofstream dst(output_filename.c_str());
+			std::ofstream dst(output_filename.c_str(), std::ios::binary);
 
 			if (dst.is_open())
 			{

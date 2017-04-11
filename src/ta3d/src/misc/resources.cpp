@@ -21,6 +21,10 @@
 #include <threads/mutex.h>
 #include <TA3D_NameSpace.h>
 
+#ifdef TA3D_PLATFORM_WINDOWS
+#include <Shlobj.h>
+#endif
+
 namespace TA3D
 {
 	namespace Resources
@@ -40,8 +44,29 @@ namespace TA3D
 
 #ifdef TA3D_PLATFORM_WINDOWS
 
+			/**
+			 * Returns the full path to the user's roaming AppData folder
+			 * with no trailing slash.
+			 */
+			String getAppDataFolder()
+			{
+				wchar_t* pathBuffer = new wchar_t[MAX_PATH + 1];
+				pathBuffer[MAX_PATH] = '\0';
+
+				HRESULT status = SHGetFolderPathW(NULL, CSIDL_APPDATA, NULL, SHGFP_TYPE_CURRENT, pathBuffer);
+				if (status != S_OK) {
+					LOG_CRITICAL("Failed to locate AppData folder");
+					return String();
+				}
+				std::wstring utf16Path(pathBuffer);
+				std::string path;
+				utf8::utf16to8(utf16Path.begin(), utf16Path.end(), std::back_inserter(path));
+				return String(path);
+			}
+
 			void initForWindows()
 			{
+				AddSearchPath(getAppDataFolder() << "\\TA3D\\resources\\");
 				AddSearchPath(String(Paths::ApplicationRoot) << "resources\\");
 				AddSearchPath(Paths::ApplicationRoot);
 			}

@@ -53,7 +53,7 @@ namespace TA3D
 			{
 				if (emptyListBefore)
 					out.clear();
-				std::ifstream file(filename.c_str());
+				std::ifstream file(filename.c_str(), std::ios::binary);
 				if (!file.is_open())
 				{
 					LOG_WARNING("Impossible to open the file `" << filename << "`");
@@ -114,7 +114,7 @@ namespace TA3D
 
 			bool Exists(const String& filename)
 			{
-				std::ifstream file(filename.c_str());
+				std::ifstream file(filename.c_str(), std::ios::binary);
 				return file.good();
 			}
 

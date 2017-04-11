@@ -1515,7 +1515,7 @@ namespace TA3D
 	// Create the script that will do what the mission description .ota file tells us to do
 	void generate_script_from_mission(String Filename, TDFParser& ota_parser, int schema)
 	{
-		std::ofstream m_File(Filename.c_str());
+		std::ofstream m_File(Filename.c_str(), std::ios::binary);
 
 		if (!m_File.is_open())
 		{

@@ -55,7 +55,7 @@ namespace TA3D
 	int TA3DSock::open(const String& hostname, uint16 port)
 	{
 		if (!dump_file.is_open())
-			dump_file.open((String(TA3D::Paths::Logs) << "net.dump").c_str());
+			dump_file.open((String(TA3D::Paths::Logs) << "net.dump").c_str(), std::ios::binary);
 		tcpsock->open(hostname, port);
 		if (!tcpsock->isOpen())
 			return -1;
@@ -65,7 +65,7 @@ namespace TA3D
 	int TA3DSock::open(uint16 port)
 	{
 		if (!dump_file.is_open())
-			dump_file.open((String(TA3D::Paths::Logs) << "net.dump").c_str());
+			dump_file.open((String(TA3D::Paths::Logs) << "net.dump").c_str(), std::ios::binary);
 		tcpsock->open(port);
 		if (!tcpsock->isOpen())
 			return -1;

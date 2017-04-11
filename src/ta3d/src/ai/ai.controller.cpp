@@ -566,7 +566,7 @@ namespace TA3D
 		String filename;
 		Paths::MakeDir(String(Paths::Resources) << "ai");
 		filename << Paths::Resources << "ai" << Paths::Separator << name << TA3D_AI_FILE_EXTENSION;
-		std::ofstream file(filename.c_str());
+		std::ofstream file(filename.c_str(), std::ios::binary);
 
 		byte l = (byte)name.size();
 		file.write((const char*)&l, 1); // Name of the AI
