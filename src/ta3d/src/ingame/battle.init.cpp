@@ -780,7 +780,7 @@ namespace TA3D
 					for (int y = 0; y < simulation_h; ++y)
 						for (int x = 0; x < simulation_w; ++x)
 							data[(y * simulation_w + x) * 4 + 3] = data[(y * simulation_w + x) * 4 + 1];
-					std::ofstream file(water_cache.c_str());
+					std::ofstream file(water_cache.c_str(), std::ios::binary);
 					if (file.is_open())
 					{
 						file.write((const char*)data, sizeof(float) * water_map_size4);
@@ -789,7 +789,7 @@ namespace TA3D
 				}
 				else
 				{
-					std::ifstream file(water_cache.c_str());
+					std::ifstream file(water_cache.c_str(), std::ios::binary);
 					if (file.is_open())
 					{
 						file.read((char*)data, sizeof(float) * water_map_size4);

@@ -1706,7 +1706,7 @@ namespace TA3D
 		realFile += file;
 		if (TA3D::Paths::Exists(realFile))
 		{
-			std::ifstream cache_file(realFile.c_str());
+			std::ifstream cache_file(realFile.c_str(), std::ios::binary);
 			uint32 mod_hash;
 			cache_file.read((char*)&mod_hash, sizeof(mod_hash));
 			cache_file.close();
@@ -1725,7 +1725,7 @@ namespace TA3D
 		realFile += file;
 		if (TA3D::Paths::Exists(realFile))
 		{
-			std::ifstream cache_file(realFile.c_str());
+			std::ifstream cache_file(realFile.c_str(), std::ios::binary);
 			uint32 mod_hash;
 			cache_file.read((char*)&mod_hash, sizeof(mod_hash));
 
@@ -1852,7 +1852,7 @@ namespace TA3D
 		if (!compressed)
 			return;
 
-		std::ofstream cache_file(file.c_str());
+		std::ofstream cache_file(file.c_str(), std::ios::binary);
 
 		if (!cache_file.is_open())
 			return;

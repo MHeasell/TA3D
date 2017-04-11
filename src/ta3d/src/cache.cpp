@@ -23,7 +23,7 @@ namespace TA3D
 
 			if (Paths::Exists(cache_info_filename) && !force)
 			{
-				std::ifstream cache_info(cache_info_filename.c_str());
+				std::ifstream cache_info(cache_info_filename.c_str(), std::ios::binary);
 				if (cache_info.is_open())
 				{
 					char* buf = new char[cache_info_data.size() + 1];
@@ -53,7 +53,7 @@ namespace TA3D
 				for (String::Vector::iterator i = file_list.begin(); i != file_list.end(); ++i)
 					remove(i->c_str());
 				// Update cache date
-				std::ofstream cache_info(cache_info_filename.c_str());
+				std::ofstream cache_info(cache_info_filename.c_str(), std::ios::binary);
 				if (cache_info.is_open())
 				{
 					cache_info.write(cache_info_data.c_str(), cache_info_data.size());

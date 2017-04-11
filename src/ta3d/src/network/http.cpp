@@ -40,7 +40,7 @@ namespace TA3D
 		char buffer[4096];
 		String realFilename = filename;
 		String tmpFile = String(filename) << ".part";
-		std::ofstream f(tmpFile.c_str());
+		std::ofstream f(tmpFile.c_str(), std::ios::binary);
 		int count;
 		int crfound = 0;
 		int lffound = 0;
@@ -300,7 +300,7 @@ namespace TA3D
 	{
 		SocketTCP sock;
 		char buffer[4096];
-		std::ofstream f(filename.c_str());
+		std::ofstream f(filename.c_str(), std::ios::binary);
 		int count;
 		int crfound = 0;
 		int lffound = 0;

@@ -55,7 +55,7 @@ namespace TA3D
 	{
 		std::lock_guard<std::mutex> lock(mutex);
 		log_file_name = filename;
-		log_file = std::ofstream(filename.c_str(), std::ios::trunc);
+		log_file = std::ofstream(filename.c_str(), std::ios::trunc | std::ios::binary);
 	}
 
 	MyLogger::MyLogBuffer MyLogger::checkpoint()

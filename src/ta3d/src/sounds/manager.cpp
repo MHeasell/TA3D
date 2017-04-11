@@ -172,7 +172,7 @@ namespace TA3D
 			targetPlaylist << TA3D::Paths::Resources << "music/playlist.txt";
 			// Make sure the folder exists
 			Paths::MakeDir(Paths::ExtractFilePath(targetPlaylist, true));
-			std::ofstream play_list_file(targetPlaylist.c_str());
+			std::ofstream play_list_file(targetPlaylist.c_str(), std::ios::binary);
 			if (!play_list_file.is_open())
 			{
 				LOG_ERROR(LOG_PREFIX_SOUND << "could not open playlist file : '" << targetPlaylist << "'");
@@ -201,7 +201,7 @@ namespace TA3D
 		{
 			String filename;
 			filename << TA3D::Paths::Resources << "music/playlist.txt";
-			std::ifstream file(filename.c_str());
+			std::ifstream file(filename.c_str(), std::ios::binary);
 
 			if (!file.is_open()) // try to create the list if it doesn't exist
 			{

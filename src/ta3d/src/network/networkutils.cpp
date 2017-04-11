@@ -358,7 +358,7 @@ namespace TA3D
 		const String path = Paths::ExtractFilePath(filename);
 		if (!path.empty())
 			Paths::MakeDir(path);
-		std::ofstream file((String(filename) << ".part").c_str());
+		std::ofstream file((String(filename) << ".part").c_str(), std::ios::binary);
 
 		delete ((struct net_thread_params*)param);
 		param = NULL;

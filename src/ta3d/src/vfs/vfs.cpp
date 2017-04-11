@@ -179,7 +179,7 @@ namespace TA3D
 			{
 				String cache_filename;
 				cache_filename << TA3D::Paths::Caches << cacheable_filename << ".dat"; // Save file in disk cache
-				std::ofstream cache_file(cache_filename.c_str());
+				std::ofstream cache_file(cache_filename.c_str(), std::ios::binary);
 				if (cache_file.is_open())
 				{
 					file->seek(0);
@@ -446,7 +446,7 @@ namespace TA3D
 		{
 			ThreadingPolicy::MutexLocker locker(*this);
 			String targetName = String(Paths::Caches) << Paths::ExtractFileName(filename);
-			std::ofstream file(targetName.c_str());
+			std::ofstream file(targetName.c_str(), std::ios::binary);
 			if (!file.is_open())
 			{
 				LOG_ERROR(LOG_PREFIX_VFS << "impossible to create file '" << targetName << "'");

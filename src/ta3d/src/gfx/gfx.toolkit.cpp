@@ -966,7 +966,7 @@ namespace TA3D
 		header.bpp = bmp->format->BitsPerPixel;
 		header.description = (header.bpp == 32) ? 0x28 : 0x20;
 
-		std::ofstream file(filename.c_str());
+		std::ofstream file(filename.c_str(), std::ios::binary);
 
 		if (file.is_open())
 		{

@@ -26,7 +26,7 @@ namespace TA3D
 			if (buffer)
 				delete[] buffer;
 			buffer = NULL;
-			sFile.open(filename.c_str());
+			sFile.open(filename.c_str(), std::ios::binary);
 			realFilename = filename;
 		}
 
