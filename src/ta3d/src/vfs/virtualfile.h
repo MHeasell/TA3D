@@ -16,7 +16,7 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA*/
 
 /*
-**  File: realfile.h
+**  File: virtualfile.h
 ** Notes:
 **   Zuzuf:  This module implements a File object for memory buffers
 */
