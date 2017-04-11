@@ -78,11 +78,6 @@ namespace TA3D
 			uint32 getDirlist(String pattern, String::List& li);
 			uint32 getDirlist(String pattern, String::Vector& li);
 
-			/**
-			 * Gets the list of all loaded archives.
-			 */
-			uint32 getArchivelist(String::Vector& li) const;
-
 			File* readFile(const String& filename);
 
 			File* readFileRange(const String& filename, const uint32 start, const uint32 length);

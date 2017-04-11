@@ -475,13 +475,6 @@ namespace TA3D
 			return targetName;
 		}
 
-		uint32 VFS::getArchivelist(String::Vector& li) const
-		{
-			for (std::vector<Archive*>::const_iterator it = archives.begin(); it != archives.end(); ++it)
-				li.push_back((*it)->getName());
-			return (uint32)archives.size();
-		}
-
 		bool load_palette(SDL_Color* pal, const String& filename)
 		{
 			File* palette = VFS::Instance()->readFile(filename);
