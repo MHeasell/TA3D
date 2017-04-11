@@ -240,8 +240,13 @@ if(NOT WIN32 AND UNIX)
 	message("-- TA3D will be installed in: ${CMAKE_INSTALL_PREFIX}")
 endif()
 
-set(TA3D_RESOURCES_INSTALL_PATH "share/games/ta3d")
-set(TA3D_BINARIES_INSTALL_PATH "games")
+if(WIN32)
+	set(TA3D_RESOURCES_INSTALL_PATH ".")
+	set(TA3D_BINARIES_INSTALL_PATH ".")
+else()
+	set(TA3D_RESOURCES_INSTALL_PATH "share/games/ta3d")
+	set(TA3D_BINARIES_INSTALL_PATH "games")
+endif()
 
 # Find and install Windows DLLs
 if(WIN32)
