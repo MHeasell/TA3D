@@ -103,6 +103,12 @@ namespace TA3D
 			 */
 			void unload();
 
+			/**
+			 * Adds the files within the given archive to the VFS file table.
+			 *
+			 * @param filename The path to the archive file.
+			 * @param priority
+			 */
 			void addArchive(const String& filename, const int priority);
 
 			void locateAndReadArchives(const String& path, const int priority);
@@ -131,6 +137,13 @@ namespace TA3D
 			String::Vector pPaths;
 
 			typedef TA3D::UTILS::HashMap<Archive::FileInfo*>::Dense FileInfoMap;
+
+			/**
+			 * A map of file paths to FileInfo objects.
+			 * A file path represents a file within the VFS.
+			 * The corresponding FileInfo object indicates
+			 * where the file can be found on the underlying filesystem.
+			 */
 			FileInfoMap pFiles;
 
 			typedef TA3D::UTILS::HashMap<TA3D::UTILS::HashMap<bool>::Sparse>::Dense DirMap;
