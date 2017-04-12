@@ -123,13 +123,15 @@ namespace TA3D
 				AppData = roamingAppData();
 				AppData += Separator;
 
-				Resources = String(ApplicationRoot) << "resources\\";
-				Caches = String(ApplicationRoot) << "cache\\";
-				Savegames = String(ApplicationRoot) << "savegames\\";
-				Logs = String(ApplicationRoot) << "logs\\";
+				String userDir = String(AppData) << "TA3D\\";
 
-				Preferences = String(ApplicationRoot) << "settings\\";
-				Screenshots = String(ApplicationRoot) << "screenshots\\";
+				Resources = String(userDir) << "resources\\";
+				Caches = String(userDir) << "cache\\";
+				Savegames = String(userDir) << "savegames\\";
+				Logs = String(userDir) << "logs\\";
+
+				Preferences = String(userDir) << "settings\\";
+				Screenshots = String(userDir) << "screenshots\\";
 			}
 
 #else // ifdef TA3D_PLATFORM_WINDOWS
