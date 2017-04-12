@@ -26,12 +26,11 @@
 namespace TA3D
 {
 
-	/*
-** \brief Path manipulation functions
-*/
+	/*!
+	 * \brief Path manipulation functions
+	 */
 	namespace Paths
 	{
-
 		//! \name Relevant paths used by TA3D
 		//@{
 
@@ -41,13 +40,16 @@ namespace TA3D
 		//! Folder for Caches
 		extern String Caches;
 
-		//! Folder for Savegames
+		//! Folder for saved games
 		extern String Savegames;
 
 		//! Folder for logs
 		extern String Logs;
-		//! Current log file
-		//! \see Logs::writeToFile()
+
+		/*!
+		 * \brief Current log file
+		 * @see logs::writeToFile()
+		 */
 		extern String LogFile;
 
 		//! Folder for preferences
@@ -62,24 +64,26 @@ namespace TA3D
 		//! Folder for game resources
 		extern String Resources;
 
-//@}
+		//@}
 
-//! \name System-dependant variables
-//@{
+		//! \name System-dependent variables
+		//@{
 
-//! The path-separator character according to the platform
 #ifdef TA3D_PLATFORM_WINDOWS
+		//! The path-separator character according to the platform
 		const char Separator = '\\';
 #else
+		//! The path-separator character according to the platform
 		const char Separator = '/';
 #endif
 
 		const char AllSeparators[] = {'/', '\\'};
 
-//! The path-separator character according to the platform (stored in a string instead of a char)
 #ifdef TA3D_PLATFORM_WINDOWS
+		//! The path-separator character according to the platform (stored in a string instead of a char)
 		const String SeparatorAsString = "\\";
 #else
+		//! The path-separator character according to the platform (stored in a string instead of a char)
 		const String SeparatorAsString = "/";
 #endif
 
@@ -94,59 +98,59 @@ namespace TA3D
 		//@{
 
 		/*!
-	** \brief Test if a file/folder exists
-	** \param p The folder/filename to test
-	** \return True if it exists, false otherwise
-	*/
+		 * \brief Test if a file/folder exists
+		 * \param p The folder/filename to test
+		 * \return True if it exists, false otherwise
+		 */
 		bool Exists(const String& p);
 
 		/*!
-	** \brief Create Path Recursively
-	**
-	** \param p The path to create if it does not exist
-	** return True if the operation succeeded, false otherwise
-	*/
+		 * \brief Create Path Recursively
+		 *
+		 * \param p The path to create if it does not exist
+		 * \return True if the operation succeeded, false otherwise
+		 */
 		bool MakeDir(const String& p);
 
 		/*!
-    ** \brief Remove Folder Recursively
-    **
-    ** \param p The folder to remove
-    */
+		 * \brief Remove Folder Recursively
+		 *
+		 * \param p The folder to remove
+		 */
 		void RemoveDir(const String& p);
 
 		/*!
-	** \brief Retrieve the current directory
-	*/
+		 * \brief Retrieve the current directory
+		 */
 		String CurrentDirectory();
 
 		/*!
-	** \brief Extract the path part of a filename
-	**
-	** The path part will be extracted according the system-dependant path-separator
-	**
-	** \param systemDependant Consider only the system-dependant path-separator
-	**
-	** \code
-	**      std::cout << Paths::ExtractFilePath("/tmp/foo.txt") std::endl; // write `/tmp/`
-	**      std::cout << Paths::ExtractFilePath("/tmp/") std::endl; // write `/tmp/`
-	**      std::cout << Paths::ExtractFilePath("/tmp") std::endl; // write `/`
-	** \endcode
-	**
-	** \see Paths::Separator
-	*/
+		 * \brief Extract the path part of a filename
+		 *
+		 * The path part will be extracted according the system-dependant path-separator
+		 *
+		 * \param systemDependant Consider only the system-dependant path-separator
+		 *
+		 * \code
+		 *      std::cout << Paths::ExtractFilePath("/tmp/foo.txt") std::endl; // write `/tmp/`
+		 *      std::cout << Paths::ExtractFilePath("/tmp/") std::endl; // write `/tmp/`
+		 *      std::cout << Paths::ExtractFilePath("/tmp") std::endl; // write `/`
+		 * \endcode
+		 *
+		 * \see Paths::Separator
+		 */
 		String ExtractFilePath(const String& p, const bool systemDependant = false);
 
 		/*!
-	** \brief Extract the bare file name
-	**
-	** The file name will be extracted according the last occurence
-	** of the system-dependant path-separator (if systemDependant = true)
-	**
-	** \param systemDependant Consider only the system-dependant path-separator
-	**
-	** \see Paths::Separator
-	*/
+		 * \brief Extract the bare file name
+		 *
+		 * The file name will be extracted according the last occurence
+		 * of the system-dependant path-separator (if systemDependant = true)
+		 *
+		 * \param systemDependant Consider only the system-dependant path-separator
+		 *
+		 * \see Paths::Separator
+		 */
 		String ExtractFileName(const String& p, const bool systemDependant = false);
 		void ExtractFileName(String::List& p, const bool systemDependant = false);
 		void ExtractFileName(String::Vector& p, const bool systemDependant = false);
@@ -155,33 +159,33 @@ namespace TA3D
 		void ExtractFilePathDependent(const String& p, String& out);
 
 		/*!
-	** \brief Extract the bare file name without its extension
-	**
-	** The file name will be extracted according the last occurence
-	** of the system-dependant path-separator
-	**
-	** \see Paths::Separator
-	*/
+		 * \brief Extract the bare file name without its extension
+		 *
+		 * The file name will be extracted according the last occurence
+		 * of the system-dependant path-separator
+		 *
+		 * \see Paths::Separator
+		 */
 		String ExtractFileNameWithoutExtension(const String& p, const bool systemDependant = false);
 
 		/*!
-	** \brief Extract the extention of a file name
-	** \param s Filename
-	** \return The extenion of the filename (with the leading '.') in lowercase, empty if no extension is present
-	**
-	** \code
-	**     std::cout << Paths::Files::ExtractFileExt("foo.exe") << std::endl; // '.exe'
-	**     std::cout << Paths::Files::ExtractFileExt("/usr/folder.foo/file") << std::endl; // ''
-	** \endcode
-	*/
+		 * \brief Extract the extention of a file name
+		 * \param s Filename
+		 * \return The extenion of the filename (with the leading '.') in lowercase, empty if no extension is present
+		 *
+		 * \code
+		 *     std::cout << Paths::Files::ExtractFileExt("foo.exe") << std::endl; // '.exe'
+		 *     std::cout << Paths::Files::ExtractFileExt("/usr/folder.foo/file") << std::endl; // ''
+		 * \endcode
+		 */
 		String ExtractFileExt(const String& s);
 
 		/*!
-	** \brief Get if a path is absolute
-	**
-	** \param p The path or the filename to test
-	** \return True if the path is an absolute path or empty, false otherwise
-	*/
+		 * \brief Get if a path is absolute
+		 *
+		 * \param p The path or the filename to test
+		 * \return True if the path is an absolute path or empty, false otherwise
+		 */
 		bool IsAbsolute(const String& p);
 
 		//@}
@@ -190,90 +194,90 @@ namespace TA3D
 		//@{
 
 		/*!
-	** \brief Find pathnames matching a pattern
-	**
-	** \param[out] out The list of file that has been found
-	** \param pattern The pattern to use
-	** \param emptyListBefore True to empty the list before performing the glob function
-	** \return True if the operation succeeded and the list is not empty,
-	** false othewise
-	**
-	** \code
-	** String::Vector list;
-	** if (Paths::Glob(list, Paths::Savegames + "*.sav"))
-	** {
-	**      for (String::Vector::const_iterator i = list.begin(); i != list.end(); ++i)
-	**          std::cout << "Savegame found: `" << *i << std::endl;
-	** }
-	** else
-	** {
-	**      std::cerr << "No savegame found." << std::endl;
-	** }
-	** \endcode
-	*/
+		 * \brief Find pathnames matching a pattern
+		 *
+		 * \param[out] out The list of file that has been found
+		 * \param pattern The pattern to use
+		 * \param emptyListBefore True to empty the list before performing the glob function
+		 * \return True if the operation succeeded and the list is not empty,
+		 * false othewise
+		 *
+		 * \code
+		 * String::Vector list;
+		 * if (Paths::Glob(list, Paths::Savegames + "*.sav"))
+		 * {
+		 *      for (String::Vector::const_iterator i = list.begin(); i != list.end(); ++i)
+		 *          std::cout << "Savegame found: `" << *i << std::endl;
+		 * }
+		 * else
+		 * {
+		 *      std::cerr << "No savegame found." << std::endl;
+		 * }
+		 * \endcode
+		 */
 		bool Glob(String::Vector& out, const String& pattern, const bool emptyListBefore = true, const bool relative = false);
 		bool Glob(String::List& out, const String& pattern, const bool emptyListBefore = true, const bool relative = false);
 
 		/*!
-	** \brief Find files matching a pattern
-	**
-	** \param[out] out The list of file that has been found
-	** \param pattern The pattern to use
-	** \param emptyListBefore True to empty the list before performing the glob function
-	** \return True if the operation succeeded and the list is not empty,
-	** false othewise
-	**
-	** \code
-	** String::Vector list;
-	** if (Paths::GlobFiles(list, Paths::Savegames + "*.sav"))
-	** {
-	**      for (String::Vector::const_iterator i = list.begin(); i != list.end(); ++i)
-	**          std::cout << "Savegame found: `" << *i << std::endl;
-	** }
-	** else
-	** {
-	**      std::cerr << "No savegame found." << std::endl;
-	** }
-	** \endcode
-	*/
+		 * \brief Find files matching a pattern
+		 *
+		 * \param[out] out The list of file that has been found
+		 * \param pattern The pattern to use
+		 * \param emptyListBefore True to empty the list before performing the glob function
+		 * \return True if the operation succeeded and the list is not empty,
+		 * false othewise
+		 *
+		 * \code
+		 * String::Vector list;
+		 * if (Paths::GlobFiles(list, Paths::Savegames + "*.sav"))
+		 * {
+		 *      for (String::Vector::const_iterator i = list.begin(); i != list.end(); ++i)
+		 *          std::cout << "Savegame found: `" << *i << std::endl;
+		 * }
+		 * else
+		 * {
+		 *      std::cerr << "No savegame found." << std::endl;
+		 * }
+		 * \endcode
+		 */
 		bool GlobFiles(String::Vector& out, const String& pattern, const bool emptyListBefore = true, const bool relative = false);
 		bool GlobFiles(String::List& out, const String& pattern, const bool emptyListBefore = true, const bool relative = false);
 
 		/*!
-	** \brief Find directories matching a pattern
-	**
-	** \param[out] out The list of directory that has been found
-	** \param pattern The pattern to use
-	** \param emptyListBefore True to empty the list before performing the glob function
-	** \return True if the operation succeeded and the list is not empty,
-	** false othewise
-	**
-	** \code
-	** String::Vector list;
-	** if (Paths::GlobDirs(list, Paths::LocalData))
-	** {
-	**      for (String::Vector::const_iterator i = list.begin(); i != list.end(); ++i)
-	**          std::cout << "Sub directory found: `" << *i << std::endl;
-	** }
-	** else
-	** {
-	**      std::cerr << "No sub directory found." << std::endl;
-	** }
-	** \endcode
-	*/
+		 * \brief Find directories matching a pattern
+		 *
+		 * \param[out] out The list of directory that has been found
+		 * \param pattern The pattern to use
+		 * \param emptyListBefore True to empty the list before performing the glob function
+		 * \return True if the operation succeeded and the list is not empty,
+		 * false othewise
+		 *
+		 * \code
+		 * String::Vector list;
+		 * if (Paths::GlobDirs(list, Paths::LocalData))
+		 * {
+		 *      for (String::Vector::const_iterator i = list.begin(); i != list.end(); ++i)
+		 *          std::cout << "Sub directory found: `" << *i << std::endl;
+		 * }
+		 * else
+		 * {
+		 *      std::cerr << "No sub directory found." << std::endl;
+		 * }
+		 * \endcode
+		 */
 		bool GlobDirs(String::Vector& out, const String& pattern, const bool emptyListBefore = true, const bool relative = false);
 		bool GlobDirs(String::List& out, const String& pattern, const bool emptyListBefore = true, const bool relative = false);
 
 		//@} // Globbing
 
 		/*!
-	** \brief Load all informations about paths
-	**
-	** \param programName Arbitrary name for the program. It will be used
-	** to create the log file.
-	**
-	** return False if any error has occured
-	*/
+		 * \brief Load all informations about paths
+		 *
+		 * \param programName Arbitrary name for the program. It will be used
+		 * to create the log file.
+		 *
+		 * return False if any error has occured
+		 */
 		bool Initialize(int argc, char* argv[], const String& programName);
 
 	} // namespace Paths
