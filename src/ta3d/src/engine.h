@@ -19,6 +19,7 @@
 #define __TA3D_ENGINE_H__
 
 #include "threads/thread.h"
+#include "input/KeyboardService.h"
 
 namespace TA3D
 {
@@ -36,7 +37,7 @@ namespace TA3D
 		//! \name Constructor & Destructor
 		//@{
 		//! Default Constructor
-		Engine();
+		Engine(KeyboardService* keyboardService);
 		//! Destructor
 		virtual ~Engine();
 		//@}
@@ -61,6 +62,7 @@ namespace TA3D
 	private:
 		bool pSDLRunning;
 		bool pGFXModeActive;
+		KeyboardService* keyboardService;
 
 	private:
 		static void sync()

@@ -20,6 +20,7 @@
  ** Notes: The applications main entry point.
  */
 
+#include "input/KeyboardService.h"
 #include "stdafx.h"			// standard pch inheritance.
 #include "TA3D_NameSpace.h" // our namespace, a MUST have.
 #include "engine.h"			// The engine class.
@@ -112,8 +113,12 @@ int main(int argc, char* argv[])
 
 	try
 	{
+		// set up services
+		KeyboardService keyboardService;
+		keyboardService.initializeKeyboard();
+
 		// Initializing the TA3D Engine
-		TA3D::Engine engine;
+		TA3D::Engine engine(&keyboardService);
 		InitializeTheEngine(engine);
 
 		// ok, if we are here, our thread in engine class is running
