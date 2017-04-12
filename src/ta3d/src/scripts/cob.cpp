@@ -87,15 +87,6 @@ namespace TA3D
 		COBHeader header;
 		*file >> header;
 
-#ifdef DEBUG_MODE
-/*		printf("header.NumberOfScripts=%d\n",header.NumberOfScripts);
-				printf("header.NumberOfPieces=%d\n",header.NumberOfPieces);
-				printf("header.OffsetToScriptCodeIndexArray=%d\n",header.OffsetToScriptCodeIndexArray);
-				printf("header.header.OffsetToScriptNameOffsetArray=%d\n",header.OffsetToScriptNameOffsetArray);
-				printf("header.OffsetToPieceNameOffsetArray=%d\n",header.OffsetToPieceNameOffsetArray);
-				printf("header.OffsetToScriptCode=%d\n",header.OffsetToScriptCode);*/
-#endif
-
 		nbStaticVar = header.StaticVariableCount;
 		nb_script = header.NumberOfScripts;
 		nb_piece = header.NumberOfPieces;

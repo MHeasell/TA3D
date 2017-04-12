@@ -138,9 +138,6 @@ namespace TA3D
 		int getMaxTextureSizeAllowed() const;
 	};
 
-// TODO Must be removed
-#define DEBUG_MODE
-
 	namespace VARS
 	{
 		extern SDL_Window* screen;

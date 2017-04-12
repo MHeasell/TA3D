@@ -98,14 +98,6 @@ namespace TA3D
 		nb_prim = (short)header.NumberOfPrimitives;
 		file->seek(header.OffsetToObjectName);
 		name = file->getString();
-#ifdef DEBUG_MODE
-/*		for (i=0;i<dec;i++)
-				printf("  ");
-				printf("%s",name);
-				for (i=0;i<20-2*dec-strlen(name);i++)
-				printf(" ");
-				printf("-> nb_vtx=%d | nb_prim=%d\n",nb_vtx,nb_prim);*/
-#endif
 		if (header.OffsetToChildObject) // Charge récursivement les différents objets du modèle
 		{
 			Mesh3DO* pChild = new Mesh3DO;
@@ -181,9 +173,6 @@ namespace TA3D
 					++nb_t_index;
 			}
 		}
-#ifdef DEBUG_MODE
-//		printf("(%d,%d,%d)\n",nb_p_index,nb_l_index,nb_t_index);
-#endif
 
 		if (nb_p_index > 0) // Alloue la mémoire nécessaire pour stocker les primitives
 			p_index = new GLushort[nb_p_index];
