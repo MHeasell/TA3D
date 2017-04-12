@@ -19,8 +19,8 @@
 # define TA3D_VERSION_HI  @TA3D_VERSION_HI@
 //! The lo version for TA3D
 # define TA3D_VERSION_LO  @TA3D_VERSION_LO@
-//! Tag for this version
-# define TA3D_VERSION_TAG "@TA3D_VERSION_TAG@"
+//! The patch version for TA3D
+# define TA3D_VERSION_PATCH @TA3D_VERSION_PATCH@
 
 //! The current git commit
 # define TA3D_CURRENT_COMMIT   "@GIT_COMMIT@"
