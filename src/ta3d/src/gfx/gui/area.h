@@ -30,9 +30,9 @@ namespace TA3D
 	{
 
 		/*!
-	** \brief This class is a window handler, so it will manage windows
-	** and signals given to them
-	*/
+		** \brief This class is a window handler, so it will manage windows
+		** and signals given to them
+		*/
 		class AREA : public ObjectLevelLockable, protected IInterface
 		{
 		public:
@@ -42,207 +42,207 @@ namespace TA3D
 			//! \name Constructor && Destructor
 			//@{
 			/*!
-		** \brief Constructor
-		** \param area_name Name of the area
-		*/
+			** \brief Constructor
+			** \param area_name Name of the area
+			*/
 			AREA(const String& nm = "unnamed_area");
 			//! Destructor
 			virtual ~AREA();
 			//@}
 
 			/*!
-		** \brief Reset the object
-		*/
+			** \brief Reset the object
+			*/
 			void destroy();
 
 			/*!
-		** \brief Returns a pointer to current AREA object if one exists, otherwise returns NULL
-		*/
+			** \brief Returns a pointer to current AREA object if one exists, otherwise returns NULL
+			*/
 			static AREA* current();
 
 			/*!
-		** \brief Load a window from a TDF file
-		**
-		** \param filename TDF File to load
-        ** \param name is not empty, overrides the window name (allow having multiple copies of the same window)
-        ** \return
-		*/
+			** \brief Load a window from a TDF file
+			**
+			** \param filename TDF File to load
+			** \param name is not empty, overrides the window name (allow having multiple copies of the same window)
+			** \return
+			*/
 			uint16 load_window(const String& filename, const String& name = String());
 
 			/*!
-        ** \brief Returns the name of the idxth window
-        **
-        ** \param idx window number
-        ** \return
-        */
+			** \brief Returns the name of the idxth window
+			**
+			** \param idx window number
+			** \return
+			*/
 			String get_window_name(const int idx);
 
 			/*!
-		** \brief Check the user interface, manage events
-		*/
+			** \brief Check the user interface, manage events
+			*/
 			uint16 check();
 
 			/*!
-		** \brief Draw all windows
-		*/
+			** \brief Draw all windows
+			*/
 			void draw();
 
 			/*!
-		** \brief Load a TDF file, telling which windows to load and which skin to use
-		**
-		** \param filename TDF File to load
-		*/
+			** \brief Load a TDF file, telling which windows to load and which skin to use
+			**
+			** \param filename TDF File to load
+			*/
 			void load_tdf(const String& filename);
 
 			/*!
-		** \brief Return the specified window
-		**
-		** This method is thread-safe
-		**
-		** \param message
-		*/
+			** \brief Return the specified window
+			**
+			** This method is thread-safe
+			**
+			** \param message
+			*/
 			WND::Ptr get_wnd(const String& message);
 
 			/*!
-		** \brief Return the state of specified object in the specified window
-		**
-		** \param message
-		** \return
-		*/
+			** \brief Return the state of specified object in the specified window
+			**
+			** \param message
+			** \return
+			*/
 			bool get_state(const String& message);
 
 			/*!
-		** \brief Return true if the given object has its activated flag set (mouse is on and button pressed)
-		**
-		** \param message
-		** \return
-		*/
+			** \brief Return true if the given object has its activated flag set (mouse is on and button pressed)
+			**
+			** \param message
+			** \return
+			*/
 			bool is_activated(const String& message);
 
 			/*!
-		** \brief Return true if the cursor is over the given object
-		**
-		** \param message
-		** \return
-		*/
+			** \brief Return true if the cursor is over the given object
+			**
+			** \param message
+			** \return
+			*/
 			bool is_mouse_over(const String& message);
 
 			/*!
-		** \brief Return the value of specified object in the specified window
-		**
-		** \param message
-		** \return
-		*/
+			** \brief Return the value of specified object in the specified window
+			**
+			** \param message
+			** \return
+			*/
 			sint32 get_value(const String& message);
 
 			/*!
-		** \brief Return a pointer to the specified object
-		**
-		** \param message
-		** \return
-		*/
+			** \brief Return a pointer to the specified object
+			**
+			** \param message
+			** \return
+			*/
 			GUIOBJ::Ptr get_object(const String& message);
 
 			/*!
-		** \brief Set the state of specified object in the specified window
-		**
-		** \param message
-		** \return
-		*/
+			** \brief Set the state of specified object in the specified window
+			**
+			** \param message
+			** \return
+			*/
 			void set_state(const String& message, const bool state);
 
 			/*!
-		** \brief Set the value of specified object in the specified window
-		**
-		** \param message
-		** \return
-		*/
+			** \brief Set the value of specified object in the specified window
+			**
+			** \param message
+			** \return
+			*/
 			void set_value(const String& message, const sint32 value);
 
 			/*!
-		** \brief Set the data of specified object in the specified window
-		**
-		** \param message
-		** \return
-		*/
+			** \brief Set the data of specified object in the specified window
+			**
+			** \param message
+			** \return
+			*/
 			void set_data(const String& message, const sint32 data);
 
 			/*!
-		** \brief Set the enabled/disabled state of specified object in the specified window
-		**
-		** \param message
-		** \return
-		*/
+			** \brief Set the enabled/disabled state of specified object in the specified window
+			**
+			** \param message
+			** \return
+			*/
 			void set_enable_flag(const String& message, const bool enable);
 
 			/*!
-		** \brief Return the caption of specified object in the specified window
-		**
-		** \param message
-		** \return
-		*/
+			** \brief Return the caption of specified object in the specified window
+			**
+			** \param message
+			** \return
+			*/
 			String caption(const String& message);
 
 			/*!
-		** \brief Set the caption of specified object in the specified window
-		**
-		** \param message
-		** \return
-		*/
+			** \brief Set the caption of specified object in the specified window
+			**
+			** \param message
+			** \return
+			*/
 			void caption(const String& message, const String& caption);
 
 			/*!
-		** \brief Set the title of specified window to title
-		**
-		** \param message
-		** \return
-		*/
+			** \brief Set the title of specified window to title
+			**
+			** \param message
+			** \return
+			*/
 			void title(const String& message, const String& title);
 
 			/*!
-		** \brief Set the entry of specified object in the specified window to entry
-		**
-		** \param message
-		** \return
-		*/
+			** \brief Set the entry of specified object in the specified window to entry
+			**
+			** \param message
+			** \return
+			*/
 			void set_entry(const String& message, const std::list<String>& entry);
 			void set_entry(const String& message, const std::vector<String>& entry);
 
 			/*!
-		** \brief Append line to the entry of specified object in the specified window
-		**
-		** \param message
-		** \return
-		*/
+			** \brief Append line to the entry of specified object in the specified window
+			**
+			** \param message
+			** \return
+			*/
 			void append(const String& message, const String& line);
 
 			/*!
-		** \brief Set the function pointer of an object, it will be called when the widget is clicked
-		**
-		** \param message
-		** \return
-		*/
+			** \brief Set the function pointer of an object, it will be called when the widget is clicked
+			**
+			** \param message
+			** \return
+			*/
 			void set_action(const String& message, void (*Func)(int));
 
 			/*!
-		** \brief Send that message to the area
-		**
-		** \param message
-		** \return
-		*/
+			** \brief Send that message to the area
+			**
+			** \param message
+			** \return
+			*/
 			int msg(String message);
 
 			/*!
-		** \brief Display a popup window, locking all other GUI elements until it's closed
-		** \param Title
-		** \param Msg
-		** \return
-		*/
+			** \brief Display a popup window, locking all other GUI elements until it's closed
+			** \param Title
+			** \param Msg
+			** \return
+			*/
 			void popup(const String& Title, const String& Msg);
 
 			/*!
-		** \brief Returns a pointer to current skin
-		*/
+			** \brief Returns a pointer to current skin
+			*/
 			inline const Skin* getSkin() const { return skin; }
 
 		public:
@@ -255,28 +255,28 @@ namespace TA3D
 
 		private:
 			/*!
-		** \brief Manage signals sent through the interface to GUI
-		**
-		** \param msg
-		** \return
-		*/
+			** \brief Manage signals sent through the interface to GUI
+			**
+			** \param msg
+			** \return
+			*/
 			virtual uint32 InterfaceMsg(const uint32 MsgID, const String& msg);
 
 			/*!
-		** \brief Same as get_object, but not thread-safe
-		** \see get_object()
-		*/
+			** \brief Same as get_object, but not thread-safe
+			** \see get_object()
+			*/
 			GUIOBJ::Ptr getObjectWL(const String& message);
 
 			/*!
-		** \brief Same as get_wnd, but not thread-safe
-		** \see get_wnd()
-		*/
+			** \brief Same as get_wnd, but not thread-safe
+			** \see get_wnd()
+			*/
 			WND::Ptr getWindowWL(const String& message);
 
 			/*!
-		** \brief Same as load_tdf(), but not thread-safe
-		*/
+			** \brief Same as load_tdf(), but not thread-safe
+			*/
 			void doLoadTDF(const String& filename);
 
 		private:
