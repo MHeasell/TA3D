@@ -42,9 +42,6 @@ namespace TA3D
 		virtual ~Engine();
 		//@}
 
-		bool GFXModeActive() const { return pGFXModeActive; }
-		bool SDLRunning() const { return pSDLRunning; }
-
 		/*!
 		** \brief Make initialization (from the main thread only) after the engine was initialized from another thread
 		*/
