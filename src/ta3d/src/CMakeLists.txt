@@ -321,7 +321,7 @@ set(TA3D_LIB_SOURCES
 		vfs/vfs.h
 		vfs/virtualfile.cpp
 		vfs/virtualfile.h
-		)
+		input/KeyboardService.cpp input/KeyboardService.h)
 
 set(TA3D_SOURCES main.cpp)
 
