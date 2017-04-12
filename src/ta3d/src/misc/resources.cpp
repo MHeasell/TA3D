@@ -69,8 +69,7 @@ namespace TA3D
 			void initForWindows()
 			{
 				AddSearchPath(getAppDataFolder() << "\\TA3D\\resources\\");
-				AddSearchPath(String(Paths::ApplicationRoot) << "resources\\");
-				AddSearchPath(Paths::ApplicationRoot);
+				AddSearchPath(".");
 			}
 
 #else // ifdef TA3D_PLATFORM_WINDOWS
