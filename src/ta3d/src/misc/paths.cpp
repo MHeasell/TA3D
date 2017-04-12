@@ -59,6 +59,7 @@ namespace TA3D
 		String Resources;
 #ifdef TA3D_PLATFORM_WINDOWS
 		String LocalData;
+		String AppData;
 #endif
 
 		String CurrentDirectory()
@@ -91,10 +92,36 @@ namespace TA3D
 				return String(szPath, strlen(szPath));
 			}
 
+			/*!
+			 * \brief Returns the full path to the user's roaming AppData folder
+			 * with no trailing slash.
+			 */
+			String roamingAppData()
+			{
+				wchar_t* pathBuffer = new wchar_t[MAX_PATH + 1];
+				pathBuffer[MAX_PATH] = '\0';
+
+				HRESULT status = SHGetFolderPathW(NULL, CSIDL_APPDATA, NULL, SHGFP_TYPE_CURRENT, pathBuffer);
+				if (status != S_OK) {
+					LOG_CRITICAL("Failed to locate AppData folder");
+					return String();
+				}
+				std::wstring utf16Path(pathBuffer);
+				delete[] pathBuffer;
+
+				std::string path;
+				utf8::utf16to8(utf16Path.begin(), utf16Path.end(), std::back_inserter(path));
+				return String(path);
+			}
+
+
 			void initForWindows()
 			{
 				LocalData = localAppData();
 				LocalData += Separator;
+
+				AppData = roamingAppData();
+				AppData += Separator;
 
 				Resources = String(ApplicationRoot) << "resources\\";
 				Caches = String(ApplicationRoot) << "cache\\";
