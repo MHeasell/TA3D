@@ -13,6 +13,9 @@ C:\msys64\usr\bin\bash -lc "pacman -Sq --needed --noconfirm mingw-w64-x86_64-SDL
 rem Build the project
 C:\msys64\usr\bin\bash -lc "cd $APPVEYOR_BUILD_FOLDER && mkdir build && cd build && cmake -G 'Unix Makefiles' ../src && make -j 2 && ./ta3d/src/ta3d_test" || goto :error
 
+rem Create the build artifacts
+C:\msys64\usr\bin\bash -lc "cd $APPVEYOR_BUILD_FOLDER/build && make -j 2 package" || goto :error
+
 goto :EOF
 
 :error
