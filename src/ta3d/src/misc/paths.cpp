@@ -478,7 +478,7 @@ namespace TA3D
 
 			// construct a double null-terminated string
 			// to pass to the Windows API.
-			wchar_t fromBuffer[widePathString.size() + 2];
+			wchar_t* fromBuffer = new wchar_t[widePathString.size() + 2];
 			wcscpy(fromBuffer, widePathString.c_str());
 			fromBuffer[widePathString.size()] = L'\0';
 			fromBuffer[widePathString.size() + 1] = L'\0';
@@ -492,6 +492,9 @@ namespace TA3D
 			shf.fFlags = FOF_SILENT | FOF_NOCONFIRMATION | FOF_NOCONFIRMMKDIR | FOF_NOERRORUI;
 
 			cr = SHFileOperationW(&shf);
+
+			delete[] fromBuffer;
+
 			return (!cr);
 		}
 
