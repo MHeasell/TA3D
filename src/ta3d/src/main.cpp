@@ -20,6 +20,9 @@
  ** Notes: The applications main entry point.
  */
 
+#include <vfs/realfs.h>
+#include <vfs/hpi.h>
+#include "vfs/VfsService.h"
 #include "input/KeyboardService.h"
 #include "stdafx.h"			// standard pch inheritance.
 #include "TA3D_NameSpace.h" // our namespace, a MUST have.
@@ -113,12 +116,21 @@ int main(int argc, char* argv[])
 
 	try
 	{
+		// register archives loaders which VFS will use
+		TA3D::UTILS::Archive::registerArchiveFinder(Hpi::finder);
+		TA3D::UTILS::Archive::registerArchiveLoader(Hpi::loader);
+		TA3D::UTILS::Archive::registerArchiveFinder(RealFS::finder);
+		TA3D::UTILS::Archive::registerArchiveLoader(RealFS::loader);
+
 		// set up services
 		KeyboardService keyboardService;
 		keyboardService.initializeKeyboard();
 
+		VfsService vfsService;
+		vfsService.reload();
+
 		// Initializing the TA3D Engine
-		TA3D::Engine engine(&keyboardService);
+		TA3D::Engine engine(&keyboardService, &vfsService);
 		InitializeTheEngine(engine);
 
 		// ok, if we are here, our thread in engine class is running

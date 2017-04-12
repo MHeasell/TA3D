@@ -56,7 +56,7 @@ namespace TA3D
 		}
 	}
 
-	Engine::Engine(KeyboardService* keyboardService)
+	Engine::Engine(KeyboardService* keyboardService, TA3D::VfsService* vfsService)
 		: keyboardService(keyboardService), pSDLRunning(false), pGFXModeActive(false)
 	{
 		// How many CPU we've got ?
@@ -79,16 +79,7 @@ namespace TA3D
 		if (::SDLNet_Init() == -1)
 			throw("SDLNet_Init() failed.");
 
-		// register archives loaders which VFS will use
-		TA3D::UTILS::Archive::registerArchiveFinder(Hpi::finder);
-		TA3D::UTILS::Archive::registerArchiveLoader(Hpi::loader);
-		TA3D::UTILS::Archive::registerArchiveFinder(RealFS::finder);
-		TA3D::UTILS::Archive::registerArchiveLoader(RealFS::loader);
-
-		// Load the VFS
-		VFS::Instance()->reload();
-
-		if (!VFS::Instance()->fileExists("gamedata\\sidedata.tdf") || !VFS::Instance()->fileExists("gamedata\\allsound.tdf") || !VFS::Instance()->fileExists("gamedata\\sound.tdf"))
+		if (!vfsService->fileExists("gamedata\\sidedata.tdf") || !vfsService->fileExists("gamedata\\allsound.tdf") || !vfsService->fileExists("gamedata\\sound.tdf"))
 		{
 			showError("RESOURCES ERROR");
 			exit(1);

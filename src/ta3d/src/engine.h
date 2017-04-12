@@ -20,6 +20,7 @@
 
 #include "threads/thread.h"
 #include "input/KeyboardService.h"
+#include "vfs/VfsService.h"
 
 namespace TA3D
 {
@@ -37,7 +38,7 @@ namespace TA3D
 		//! \name Constructor & Destructor
 		//@{
 		//! Default Constructor
-		Engine(KeyboardService* keyboardService);
+		Engine(KeyboardService* keyboardService, VfsService* vfsService);
 		//! Destructor
 		virtual ~Engine();
 		//@}
