@@ -96,10 +96,6 @@ namespace TA3D
 	 */
 	void appendKeyboardBufferElement(KeyCode keyCode, CodePoint codePoint);
 
-	/*!
-	** \brief return the next key code in the key buffer
-	*/
-
 	/**
 	 * Reads the next key in the keyboard input buffer.
 	 * If there are no elements in the buffer,
