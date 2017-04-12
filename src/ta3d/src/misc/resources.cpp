@@ -59,6 +59,8 @@ namespace TA3D
 					return String();
 				}
 				std::wstring utf16Path(pathBuffer);
+				delete[] pathBuffer;
+
 				std::string path;
 				utf8::utf16to8(utf16Path.begin(), utf16Path.end(), std::back_inserter(path));
 				return String(path);
