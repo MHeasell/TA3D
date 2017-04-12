@@ -102,12 +102,6 @@ int main(int argc, char* argv[])
 	// Constructing config
 	TA3D::VARS::lp_CONFIG = new TA3D::TA3DCONFIG;
 
-	// Special command line parameter: --working-directory
-	// it enables the working directory as a path to look for resources
-	for (int i = 1; i < argc; ++i)
-		if (strcmp(argv[i], "--working-directory") == 0)
-			lp_CONFIG->bUseWorkingDirectory = true;
-
 	// Initialize all modules used by ta3d
 	TA3D::Initialize(argc, argv);
 
