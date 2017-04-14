@@ -292,8 +292,6 @@ namespace TA3D
 				m_SDLMixerRunning = false;
 				pMusic = NULL;
 			}
-
-			SDL_QuitSubSystem(SDL_INIT_AUDIO);
 		}
 
 		bool Manager::doStartUpAudio()
@@ -307,23 +305,6 @@ namespace TA3D
 
 			if (m_SDLMixerRunning)
 				return true;
-
-			if (!SDL_WasInit(SDL_INIT_AUDIO))
-			{
-				if (SDL_InitSubSystem(SDL_INIT_AUDIO))
-				{
-					logs.error() << LOG_PREFIX_SOUND << "SDL_InitSubSystem( SDL_INIT_AUDIO ) failed: " << SDL_GetError();
-					return false;
-				}
-			}
-			if (!SDL_WasInit(SDL_INIT_TIMER))
-			{
-				if (SDL_InitSubSystem(SDL_INIT_TIMER))
-				{
-					logs.error() << LOG_PREFIX_SOUND << "SDL_InitSubSystem( SDL_INIT_TIMER ) failed: " << SDL_GetError();
-					return false;
-				}
-			}
 
 			// 44.1KHz, signed 16bit, system byte order,
 			// stereo, 4096 bytes for chunks

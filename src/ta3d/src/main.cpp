@@ -44,6 +44,7 @@
 #include "sounds/manager.h"
 #include "cache.h"
 #include "ingame/menus/setupgame.h"
+#include "SdlContextManager.h"
 
 using namespace TA3D;
 
@@ -103,6 +104,9 @@ static void InitializeTheEngine(TA3D::Engine& engine)
 
 int main(int argc, char* argv[])
 {
+	// initialize SDL
+	SdlContextManager sdlContextManager;
+
 	// Constructing config
 	TA3D::VARS::lp_CONFIG = new TA3D::TA3DCONFIG;
 

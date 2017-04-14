@@ -57,7 +57,7 @@ namespace TA3D
 	}
 
 	Engine::Engine(KeyboardService* keyboardService, TA3D::VfsService* vfsService)
-		: keyboardService(keyboardService), pSDLRunning(false), pGFXModeActive(false)
+		: keyboardService(keyboardService), pGFXModeActive(false)
 	{
 		// How many CPU we've got ?
 		LOG_INFO("CPU: " << std::thread::hardware_concurrency());
@@ -69,24 +69,11 @@ namespace TA3D
 		LOG_INFO(TA3D_ENGINE_VERSION << " initializing started:");
 		LOG_INFO("Build info : " << __DATE__ << " , " << __TIME__);
 
-		// Initalizing SDL video
-		if (::SDL_Init(SDL_INIT_VIDEO))
-			throw("SDL_Init(SDL_INIT_VIDEO) yielded unexpected result.");
-		// Installing SDL timer
-		if (::SDL_InitSubSystem(SDL_INIT_TIMER) != 0)
-			throw("SDL_InitSubSystem(SDL_INIT_TIMER) yielded unexpected result.");
-		// Initializing SDL Net
-		if (::SDLNet_Init() == -1)
-			throw("SDLNet_Init() failed.");
-
 		if (!vfsService->fileExists("gamedata\\sidedata.tdf") || !vfsService->fileExists("gamedata\\allsound.tdf") || !vfsService->fileExists("gamedata\\sound.tdf"))
 		{
 			showError("RESOURCES ERROR");
 			exit(1);
 		}
-
-		// set SDL running status;
-		pSDLRunning = true;
 
 		// Outputs SDL_net version numbers
 		SDL_version compiled_version;
@@ -117,13 +104,6 @@ namespace TA3D
 		gfx = NULL;
 		pGFXModeActive = false;
 		InterfaceManager = NULL;
-
-		if (pSDLRunning)
-		{
-			pSDLRunning = false;
-			SDLNet_Quit();
-			SDL_Quit();
-		}
 	}
 
 	void Engine::initializationFromTheMainThread()

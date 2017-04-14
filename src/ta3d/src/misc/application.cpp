@@ -33,8 +33,6 @@ namespace TA3D
 	{
 		LOG_INFO("Aborting now. Releasing all resources...");
 
-		// SDL_Quit(); // Should not be needed since SDL_Quit is installed as an atexit() routine
-
 		if (TA3D::VARS::lp_CONFIG)
 			delete TA3D::VARS::lp_CONFIG;
 		TA3D::VARS::lp_CONFIG = NULL;
@@ -50,10 +48,7 @@ namespace TA3D
 			exit(1);
 		TA3D::Resources::Initialize();
 
-		// Install our atexit function before SDL
-		// Like this, SDL_Quit() will be called before Finalize()
-		atexit(Finalize);
-		SDL_Init(SDL_INIT_VIDEO);
+		// Install our atexit function
 		atexit(Finalize);
 
 		// Interface Manager

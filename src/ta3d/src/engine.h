@@ -58,7 +58,6 @@ namespace TA3D
 		void displayInfosAboutOpenGL() const;
 
 	private:
-		bool pSDLRunning;
 		bool pGFXModeActive;
 		KeyboardService* keyboardService;
 
