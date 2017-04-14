@@ -119,13 +119,5 @@ namespace TA3D
 						  << " (" << CPUCapabilities() << ")";
 			displayScreenResolution();
 		}
-
-		void DisplayInformationsAboutSDL()
-		{
-			SDL_version v;
-			SDL_GetVersion(&v);
-			logs.info() << LOG_PREFIX_SYSTEM << "SDL version: " << (int)v.major << "." << (int)v.minor << "." << (int)v.patch;
-		}
-
 	} // namespace System
 } // namespace TA3D

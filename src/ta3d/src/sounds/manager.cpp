@@ -318,13 +318,6 @@ namespace TA3D
 
 			Mix_AllocateChannels(nbChannels);
 
-			SDL_version compiled_version;
-			const SDL_version* linked_version;
-			MIX_VERSION(&compiled_version);
-			logs.debug() << LOG_PREFIX_SOUND << "compiled with SDL_mixer version: " << (int)compiled_version.major << '.' << (int)compiled_version.minor << '.' << (int)compiled_version.patch;
-			linked_version = Mix_Linked_Version();
-			logs.debug() << LOG_PREFIX_SOUND << "running with SDL_mixer version: " << (int)linked_version->major << '.' << (int)linked_version->minor << '.' << (int)linked_version->patch;
-
 			m_SDLMixerRunning = true;
 			doLoadPlaylist();
 

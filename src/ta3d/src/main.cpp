@@ -113,6 +113,8 @@ int main(int argc, char* argv[])
 	// Initialize all modules used by ta3d
 	TA3D::Initialize(argc, argv);
 
+	logSdlVersions();
+
 	TA3D::Cache::Clear();
 
 	if (ParseCommandLine(argc, argv))

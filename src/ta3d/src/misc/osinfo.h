@@ -41,11 +41,6 @@ namespace TA3D
 		void DisplayInformations();
 
 		/*!
-    ** \brief Write informations about the current version of SDL
-    */
-		void DisplayInformationsAboutSDL();
-
-		/*!
     ** \brief Desktop resolution
     **
     ** \param width  Width of the screen

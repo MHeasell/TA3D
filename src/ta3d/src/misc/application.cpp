@@ -65,7 +65,6 @@ namespace TA3D
 
 		// Display usefull infos for debugging
 		System::DisplayInformations();
-		System::DisplayInformationsAboutSDL();
 	}
 
 } // namespace TA3D
