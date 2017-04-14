@@ -74,11 +74,6 @@ namespace TA3D
 				AddSearchPath("/usr/share/games/ta3d/resources/");
 				AddSearchPath("/opt/share/games/ta3d/");
 				AddSearchPath("/opt/share/games/ta3d/resources/");
-				if (VARS::lp_CONFIG->bUseWorkingDirectory)
-				{
-					AddSearchPath(Paths::ApplicationRoot);
-					AddSearchPath(String(Paths::ApplicationRoot) << "resources/");
-				}
 			}
 
 #endif // ifdef TA3D_PLATFORM_WINDOWS
