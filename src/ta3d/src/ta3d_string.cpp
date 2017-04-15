@@ -123,22 +123,26 @@ namespace TA3D
 
 	int32_t String::to_sint32() const
 	{
-		return std::stoi(str);
+		// callers expect that too high values will wrap around
+		return (int32_t)to_uint32();
 	}
 
 	int String::to_int() const
 	{
-		return std::stoi(str);
+		// callers expect that too high values will wrap around
+		return (int)to_uint();
 	}
 
 	uint32_t String::to_uint32() const
 	{
-		return (uint32_t)std::stoul(str);
+		auto base = detectBase();
+		return (uint32_t)std::strtoul(str.c_str() + base.offset, nullptr, base.base);
 	}
 
 	unsigned int String::to_uint() const
 	{
-		return (unsigned int)std::stoul(str);
+		auto base = detectBase();
+		return (unsigned int)std::strtoul(str.c_str() + base.offset, nullptr, base.base);
 	}
 
 	float String::to_float() const
@@ -610,6 +614,37 @@ namespace TA3D
 	{
 		str.clear();
 		return *this;
+	}
+
+	String::BaseDetectionResult String::detectBase() const
+	{
+		if (size() < 1)
+		{
+			return BaseDetectionResult(0, 10);
+		}
+
+		char first = (*this)[0];
+		switch (first)
+		{
+			case '#':
+				return BaseDetectionResult(1, 16);
+			case '0':
+			{
+				if (size() >= 2)
+				{
+					// check for the full '0x' prefix for base 16
+					char second = (*this)[1];
+					if (second == 'x' || second == 'X')
+					{
+						return BaseDetectionResult(2, 16);
+					}
+				}
+
+				return BaseDetectionResult(0, 10);
+			}
+			default:
+				return BaseDetectionResult(0, 10);
+		}
 	}
 
 	std::ostream& operator<<(std::ostream& os, const String& str)

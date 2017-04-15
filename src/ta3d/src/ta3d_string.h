@@ -34,6 +34,17 @@ namespace TA3D
 
 		static const size_type npos = std::string::npos;
 
+		struct BaseDetectionResult
+		{
+			size_type offset;
+			int base;
+			BaseDetectionResult(size_type offset, int base): offset(offset), base(base) {}
+			bool operator==(const BaseDetectionResult& rhs) const
+			{
+				return base == rhs.base && offset == rhs.offset;
+			}
+		};
+
 		/**
 		 * Constructs an empty string.
 		 */
@@ -595,6 +606,16 @@ namespace TA3D
 		 * @return A reference to the string, for chaining.
 		 */
 		String& toLower();
+
+		/**
+		 * Attempts to detect the base of the numeric value
+		 * contained in the string.
+		 *
+		 * If the base could be detected, returns the base
+		 * and the offset where the numeric value starts.
+		 * If the base is not detected, base is assumed 10 and offset is 0.
+		 */
+		BaseDetectionResult detectBase() const;
 
 		bool operator==(const String& rhs) const;
 
