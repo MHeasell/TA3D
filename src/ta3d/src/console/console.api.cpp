@@ -239,14 +239,6 @@ namespace TA3D
 		return 1;
 	}
 
-	int CAPI::setWaterQuality(lua_State* L)
-	{
-		if (lua_gettop(L) > 0)
-			lp_CONFIG->water_quality = (sint16)lua_tointeger(L, -1) % 6;
-		lua_pushinteger(L, lp_CONFIG->water_quality);
-		return 1;
-	}
-
 	int CAPI::setShadowQuality(lua_State* L)
 	{
 		if (lua_gettop(L) > 0)
@@ -863,7 +855,6 @@ namespace TA3D
 		CAPI_REGISTER(exit);
 		CAPI_REGISTER(setWireframe);
 		CAPI_REGISTER(setPriority);
-		CAPI_REGISTER(setWaterQuality);
 		CAPI_REGISTER(setShadowQuality);
 		CAPI_REGISTER(setShadowMapSize);
 		CAPI_REGISTER(setDetailsTexture);

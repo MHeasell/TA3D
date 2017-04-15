@@ -65,7 +65,6 @@ namespace TA3D
 			  << "                     FSAA = " << TA3D::VARS::lp_CONFIG->fsaa << ";\n"
 			  << "               Anisotropy = " << TA3D::VARS::lp_CONFIG->anisotropy << ";\n"
 			  << "                 Language = " << TA3D::VARS::lp_CONFIG->Lang << ";\n"
-			  << "            Water Quality = " << TA3D::VARS::lp_CONFIG->water_quality << "; // 0..5\n"
 			  << "             Screen Width = " << TA3D::VARS::lp_CONFIG->screen_width << ";\n"
 			  << "            Screen Height = " << TA3D::VARS::lp_CONFIG->screen_height << ";\n"
 			  << "              Color Depth = " << (int)TA3D::VARS::lp_CONFIG->color_depth << ";\n"
@@ -153,7 +152,6 @@ namespace TA3D
 			TA3D::VARS::lp_CONFIG->fsaa = sint16(cfgFile.pullAsInt("TA3D.FSAA"));
 			TA3D::VARS::lp_CONFIG->anisotropy = sint16(cfgFile.pullAsInt("TA3D.Anisotropy", 1));
 			TA3D::VARS::lp_CONFIG->Lang = cfgFile.pullAsString("TA3D.Language").toLower();
-			TA3D::VARS::lp_CONFIG->water_quality = sint16(cfgFile.pullAsInt("TA3D.Water Quality"));
 			TA3D::VARS::lp_CONFIG->screen_width = uint16(cfgFile.pullAsInt("TA3D.Screen Width"));
 			TA3D::VARS::lp_CONFIG->screen_height = uint16(cfgFile.pullAsInt("TA3D.Screen Height"));
 			TA3D::VARS::lp_CONFIG->color_depth = uint8(cfgFile.pullAsInt("TA3D.Color Depth", 32));

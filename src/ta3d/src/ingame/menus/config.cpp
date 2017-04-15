@@ -251,11 +251,6 @@ namespace TA3D
 				default:
 					pArea->caption("*.fsaa", I18N::Translate("no fsaa"));
 			}
-			if (pArea->get_object("*.water_quality"))
-			{
-				Gui::GUIOBJ::Ptr obj = pArea->get_object("*.water_quality");
-				pArea->caption("*.water_quality", obj->Text[1 + lp_CONFIG->water_quality]);
-			}
 
 			if (pArea->get_object("*.mod"))
 			{
@@ -558,15 +553,6 @@ namespace TA3D
 				{
 					obj->Text[0] = obj->Text[1 + obj->Value];
 					lp_CONFIG->fsaa = sint16(obj->Value << 1);
-				}
-			}
-			if (pArea->get_value("*.water_quality") >= 0)
-			{
-				Gui::GUIOBJ::Ptr obj = pArea->get_object("*.water_quality");
-				if (obj && obj->Value != -1)
-				{
-					obj->Text[0] = obj->Text[1 + obj->Value];
-					lp_CONFIG->water_quality = sint16(obj->Value);
 				}
 			}
 			if (pArea->get_value("*.mod") >= 0)

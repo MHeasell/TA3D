@@ -102,7 +102,6 @@ namespace TA3D
 		shadow_quality = 2;
 		shadowmap_size = 2;
 		priority_level = 0;
-		water_quality = 1; // For now only because we have shaders issues with ati board
 		fsaa = 0;
 		Lang = "english"; // English
 		screen_width = 800;
