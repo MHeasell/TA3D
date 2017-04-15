@@ -209,7 +209,6 @@ namespace TA3D
 		//@{
 		void initRenderer();
 		void renderScene();
-		void renderReflection();
 		void renderStencilShadow();
 		void renderShadowMap();
 		void renderWorld();
@@ -439,8 +438,6 @@ namespace TA3D
 		float t;
 		//!
 		int count;
-		//!
-		bool reflection_drawn_last_time;
 		//!
 		int video_timer;
 		//!

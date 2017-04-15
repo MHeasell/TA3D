@@ -50,11 +50,6 @@ namespace TA3D
 			glUseProgramObjectARB(0);
 	}
 
-	void Battle::renderReflection()
-	{
-		reflection_drawn_last_time = false;
-	}
-
 	void Battle::renderShadowMap()
 	{
 		if (lp_CONFIG->shadow_quality > 0 && cam.rpos.y <= gfx->low_def_limit)
@@ -487,7 +482,6 @@ namespace TA3D
 			cam.znear = -512.0f;
 		else
 			cam.znear = 1.0f;
-		renderReflection();
 
 		renderShadowMap();
 
@@ -521,8 +515,6 @@ namespace TA3D
 		{
 			for (int x = 0; x < w; x += SCREEN_W / 2)
 			{
-				reflection_drawn_last_time = false; // We need to refresh everything
-
 				// Set camera to current part of the scene
 				cam.rpos = camBak.rpos + camBak.zoomFactor * (float(x - w / 2 - SCREEN_W / 4) * camBak.side + float(z - h / 2 - SCREEN_H / 4) * camBak.up);
 				if (!Math::AlmostZero(camBak.dir.y))
