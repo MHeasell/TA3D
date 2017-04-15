@@ -95,7 +95,7 @@ namespace TA3D
 	}
 
 	Battle::Battle(GameData* g)
-		: pResult(brUnknown), pGameData(g), pNetworkEnabled(false), pNetworkIsServer(false), map(nullptr), sky(), water(0), water_sim0(0), water_sim1(0), water_sim2(0), water_distortions(0), escMenuWasVisible(false), height_tex(0), transtex(0), reflectex(0), first_pass(0), second_pass(0), water_color(0), bShowPing(false)
+		: pResult(brUnknown), pGameData(g), pNetworkEnabled(false), pNetworkIsServer(false), map(nullptr), sky(), escMenuWasVisible(false), height_tex(0), transtex(0), reflectex(0), first_pass(0), second_pass(0), water_color(0), bShowPing(false)
 	{
 		LOG_INFO(LOG_PREFIX_BATTLE << "Preparing a new battle...");
 		grab_mouse(lp_CONFIG->grab_inputs);
@@ -174,10 +174,6 @@ namespace TA3D
 		arrow_texture.destroy();
 		circle_texture.destroy();
 		pause_tex.destroy();
-		water = 0;
-		water_sim0 = 0;
-		water_sim1 = 0;
-		water_sim2 = 0;
 		height_tex = 0;
 		transtex = 0;
 		reflectex = 0;
@@ -594,7 +590,6 @@ namespace TA3D
 		arrow_texture.load("gfx/arrow.tga");
 		circle_texture.load("gfx/circle.tga");
 		pause_tex.load("gfx/pause.png");
-		water = 0;
 		return true;
 	}
 
@@ -673,7 +668,6 @@ namespace TA3D
 		// TODO: replace with make_unique (upgrade to c++14 first)
 		water_obj = std::unique_ptr<WATER>(new WATER());
 		water_obj->build((float)map->map_w, (float)map->map_h, 1000.0f);
-		water_sim0 = water_sim1 = water_sim2 = 0;
 
 		// A few things required by (pseudo-)instancing code to render highlighted objects
 		INSTANCING::water = map->water;

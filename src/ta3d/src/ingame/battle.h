@@ -302,16 +302,6 @@ namespace TA3D
 		//!
 		Interfaces::GfxTexture circle_texture;
 		//!
-		GLuint water;
-		//!
-		GLuint water_sim0;
-		//!
-		GLuint water_sim1;
-		//!
-		GLuint water_sim2;
-		//!
-		GLuint water_distortions;
-		//!
 		Interfaces::GfxTexture pause_tex;
 		//@}
 
