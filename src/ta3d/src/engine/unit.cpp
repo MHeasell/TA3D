@@ -4527,18 +4527,6 @@ namespace TA3D
 				cur_px = ((int)(Pos.x) + the_map->map_w_d + 4) >> 3;
 				cur_py = ((int)(Pos.z) + the_map->map_h_d + 4) >> 3;
 			}
-			if (units.current_tick - ripple_timer >= (lp_CONFIG->water_quality >= 5 ? 1 : 7) && Pos.y <= the_map->sealvl && Pos.y + model->top >= the_map->sealvl && (pType->fastCategory & CATEGORY_NOTSUB) && cur_px >= 0 && cur_py >= 0 && cur_px < the_map->bloc_w_db && cur_py < the_map->bloc_h_db && !the_map->map_data(cur_px, cur_py).isLava() && the_map->water)
-			{
-				Vector3D Diff = OPos - Pos;
-				Diff.y = 0.0f;
-				if (Diff.sq() > 0.1f && lp_CONFIG->waves)
-				{
-					ripple_timer = units.current_tick;
-					Vector3D ripple_pos = Pos;
-					ripple_pos.y = the_map->sealvl + 1.0f;
-					fx_manager.addRipple(ripple_pos, float(((sint32)(Math::RandomTable() % 201)) - 100) * 0.0001f);
-				}
-			}
 		}
 	script_exec:
 		if (!attached && ((!jump_commands && pType->canmove) || first_move))

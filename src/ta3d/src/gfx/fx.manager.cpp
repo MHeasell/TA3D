@@ -93,16 +93,6 @@ namespace TA3D
 		// Reload the texture for flashes
 		if (!flash_tex.get())
 			flash_tex.load("gfx/flash.tga");
-		// Reload the texture for ripples
-		if (!ripple_tex.get())
-			ripple_tex.load("gfx/ripple.tga");
-		// Reload textures for waves
-		if (!wave_tex[0].get())
-			wave_tex[0].load("gfx/wave0.tga");
-		if (!wave_tex[1].get())
-			wave_tex[1].load("gfx/wave1.tga");
-		if (!wave_tex[2].get())
-			wave_tex[2].load("gfx/wave2.tga");
 		pMutex.unlock();
 	}
 
@@ -132,60 +122,6 @@ namespace TA3D
 		return idx;
 	}
 
-	int FXManager::addWave(const Vector3D& pos, float size)
-	{
-		if (Camera::inGame != NULL && (pos - Camera::inGame->pos).sq() >= Camera::inGame->zfar2)
-			return -1;
-
-		MutexLocker locker(pMutex);
-
-		if (nb_fx + 1 > max_fx)
-		{
-			max_fx++;
-			fx.resize(max_fx);
-		}
-		++nb_fx;
-		int idx = -1;
-		for (int i = 0; i < max_fx; ++i)
-		{
-			if (!fx[i].playing)
-			{
-				idx = i;
-				break;
-			}
-		}
-		fx[idx].load(-2 - (Math::RandomTable() % 3), pos, size * 4.0f);
-
-		return idx;
-	}
-
-	int FXManager::addRipple(const Vector3D& pos, float size)
-	{
-		if (Camera::inGame != NULL && (pos - Camera::inGame->pos).sq() >= Camera::inGame->zfar2)
-			return -1;
-
-		MutexLocker locker(pMutex);
-
-		if (nb_fx + 1 > max_fx)
-		{
-			max_fx++;
-			fx.resize(max_fx);
-		}
-		++nb_fx;
-		int idx = -1;
-		for (int i = 0; i < max_fx; ++i)
-		{
-			if (!fx[i].playing)
-			{
-				idx = i;
-				break;
-			}
-		}
-		fx[idx].load(-5, pos, size);
-
-		return idx;
-	}
-
 	void FXManager::doClearAllParticles()
 	{
 		pElectrics.clear();
@@ -208,10 +144,6 @@ namespace TA3D
 		use.clear();
 
 		flash_tex.destroy();
-		wave_tex[0].destroy();
-		wave_tex[1].destroy();
-		wave_tex[2].destroy();
-		ripple_tex.destroy();
 	}
 
 	void FXManager::destroy()
@@ -219,10 +151,6 @@ namespace TA3D
 		doClearAllParticles();
 
 		flash_tex.destroy();
-		ripple_tex.destroy();
-		wave_tex[0].destroy();
-		wave_tex[1].destroy();
-		wave_tex[2].destroy();
 
 		delete fx_data;
 		fx.clear();
@@ -291,73 +219,6 @@ namespace TA3D
 			for (ListOfElectrics::iterator i = pElectrics.begin(); i != pElectrics.end(); ++i)
 				(*i).draw();
 
-		pMutex.unlock();
-	}
-
-	void FXManager::drawWaterDistortions()
-	{
-		pMutex.lock();
-
-		glColor4ub(0xFF, 0xFF, 0xFF, 0xFF);
-
-		glEnable(GL_TEXTURE_2D);
-		glDisable(GL_LIGHTING);
-		glDisable(GL_CULL_FACE);
-		glDisable(GL_DEPTH_TEST);
-		glDepthMask(GL_FALSE);
-		glEnable(GL_BLEND);
-		glBlendFunc(GL_ONE, GL_ONE);
-		for (int i = 0; i < max_fx; ++i)
-			if (fx[i].playing)
-				fx[i].drawWaterDistortions();
-		glDisable(GL_BLEND);
-		glDepthMask(GL_TRUE);
-		glEnable(GL_DEPTH_TEST);
-
-		pMutex.unlock();
-	}
-
-	void FXManager::addParticle(const Vector3D& p, const Vector3D& s, const float l)
-	{
-		if (lp_CONFIG->explosion_particles)
-		{
-			pMutex.lock();
-			pParticles.push_back(FXParticle(p, s, l));
-			pMutex.unlock();
-		}
-	}
-
-	void FXManager::addExplosion(const Vector3D& p, const int n, const float power)
-	{
-		if (!lp_CONFIG->explosion_particles)
-			return;
-
-		if (the_map) // Visibility test
-		{
-			const int px = ((int)(p.x + 0.5f) + the_map->map_w_d) >> 4;
-			const int py = ((int)(p.z + 0.5f) + the_map->map_h_d) >> 4;
-			if (px < 0 || py < 0 || px >= the_map->bloc_w || py >= the_map->bloc_h)
-				return;
-			const byte player_mask = byte(1 << players.local_human_id);
-			if (the_map->view(px, py) != 1 || !(the_map->sight_map(px, py) & player_mask))
-				return;
-		}
-
-		pMutex.lock();
-		const float rev = 5.0f / (the_map->ota_data.gravity + 0.1f);
-		for (int i = 0; i < n; ++i)
-		{
-			const float a = static_cast<float>(Math::RandomTable() % 36000) * 0.01f * DEG2RAD;
-			const float b = static_cast<float>(Math::RandomTable() % 18000) * 0.01f * DEG2RAD;
-			const float s = power * (static_cast<float>(Math::RandomTable() % 9001) * 0.0001f + 0.1f);
-			const float scosb = s * cosf(b);
-			const Vector3D vs(cosf(a) * scosb,
-				s * sinf(b),
-				sinf(a) * scosb);
-			const float l = static_cast<float>(Math::RandomTable() % 1001) * 0.001f - 0.5f + Math::Min(rev * vs.y, 10.0f);
-
-			pParticles.push_back(FXParticle(p, vs, l));
-		}
 		pMutex.unlock();
 	}
 

@@ -53,7 +53,6 @@ namespace TA3D
 
 		sint16 shadow_quality; // 0 -> none, 1 -> low (shadow volumes), 2 -> normal (shadow maps)
 		sint16 priority_level; // 0, 1, 2
-		sint16 water_quality;  // 0->4
 		sint16 fsaa;		   // ?
 		String Lang;		   // english, french, german, italian, spanish, japanese, chinese, ...
 		sint16 anisotropy;	 // Level of anisotropy for textures (1->16)
@@ -67,7 +66,6 @@ namespace TA3D
 		bool wireframe;
 		bool particle;
 		bool explosion_particles;
-		bool waves;
 		bool height_line;
 		bool fullscreen;
 		bool far_sight; // Enable far sight renderer (you can see all the map)

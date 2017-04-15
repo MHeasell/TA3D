@@ -189,11 +189,6 @@ namespace TA3D
 		void preflightFreeCamera();
 
 		/*!
-		** \brief
-		*/
-		void preflightFindCursor();
-
-		/*!
 		** \brief Pre Execute
 		*/
 		bool preExecute(LuaProgram& gameScript);
@@ -209,10 +204,8 @@ namespace TA3D
 		//@{
 		void initRenderer();
 		void renderScene();
-		void renderReflection();
 		void renderStencilShadow();
 		void renderShadowMap();
-		void renderWater();
 		void renderWorld();
 		void renderInfo();
 		void renderPostEffects();
@@ -309,16 +302,6 @@ namespace TA3D
 		//!
 		Interfaces::GfxTexture circle_texture;
 		//!
-		GLuint water;
-		//!
-		GLuint water_sim0;
-		//!
-		GLuint water_sim1;
-		//!
-		GLuint water_sim2;
-		//!
-		GLuint water_distortions;
-		//!
 		Interfaces::GfxTexture pause_tex;
 		//@}
 
@@ -413,10 +396,6 @@ namespace TA3D
 		//!
 		int omb3;
 		//!
-		int amx;
-		//!
-		int amy;
-		//!
 		int cur_sel;
 		//!
 		int old_gui_sel;
@@ -440,8 +419,6 @@ namespace TA3D
 		float t;
 		//!
 		int count;
-		//!
-		bool reflection_drawn_last_time;
 		//!
 		int video_timer;
 		//!
@@ -477,28 +454,6 @@ namespace TA3D
 		//!
 		std::unique_ptr<WATER> water_obj;
 		//!
-		Shader water_shader;
-		//!
-		Shader water_shader_reflec;
-		//!
-		Shader water_pass1;
-		//!
-		Shader water_pass1_low;
-		//!
-		Shader water_pass2;
-		//!
-		Shader water_simulator_shader;
-		//!
-		Shader water_simulator_shader2;
-		//!
-		Shader water_simulator_shader3;
-		//!
-		Shader water_simulator_shader4;
-		//!
-		Shader water_distortions_shader;
-		//!
-		Shader water_simulator_reflec;
-		//!
 		GLuint height_tex;
 		//!
 		GLuint transtex;
@@ -508,12 +463,6 @@ namespace TA3D
 		GLuint first_pass;
 		//!
 		GLuint second_pass;
-		//!
-		GLuint water_color;
-		//!
-		GLuint water_FBO;
-		//!
-		uint32 last_water_refresh;
 		//@}
 
 		//! \name Interface

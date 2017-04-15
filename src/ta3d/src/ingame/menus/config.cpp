@@ -186,7 +186,7 @@ namespace TA3D
 			pArea->set_state("*.sky", lp_CONFIG->render_sky);
 			pArea->set_state("*.particle", lp_CONFIG->particle);
 			pArea->set_state("*.explosion_particles", lp_CONFIG->explosion_particles);
-			pArea->set_state("*.waves", lp_CONFIG->waves);
+			pArea->set_state("*.waves", false);
 			pArea->set_state("*.height_line", lp_CONFIG->height_line);
 			pArea->set_state("*.detail_tex", lp_CONFIG->detail_tex);
 			pArea->set_state("*.use_texture_cache", lp_CONFIG->use_texture_cache);
@@ -250,11 +250,6 @@ namespace TA3D
 					break;
 				default:
 					pArea->caption("*.fsaa", I18N::Translate("no fsaa"));
-			}
-			if (pArea->get_object("*.water_quality"))
-			{
-				Gui::GUIOBJ::Ptr obj = pArea->get_object("*.water_quality");
-				pArea->caption("*.water_quality", obj->Text[1 + lp_CONFIG->water_quality]);
 			}
 
 			if (pArea->get_object("*.mod"))
@@ -469,7 +464,6 @@ namespace TA3D
 			lp_CONFIG->render_sky = pArea->get_state("*.sky");
 			lp_CONFIG->particle = pArea->get_state("*.particle");
 			lp_CONFIG->explosion_particles = pArea->get_state("*.explosion_particles");
-			lp_CONFIG->waves = pArea->get_state("*.waves");
 			lp_CONFIG->height_line = pArea->get_state("*.height_line");
 			lp_CONFIG->detail_tex = pArea->get_state("*.detail_tex");
 			lp_CONFIG->draw_console_loading = pArea->get_state("*.draw_console_loading");
@@ -558,15 +552,6 @@ namespace TA3D
 				{
 					obj->Text[0] = obj->Text[1 + obj->Value];
 					lp_CONFIG->fsaa = sint16(obj->Value << 1);
-				}
-			}
-			if (pArea->get_value("*.water_quality") >= 0)
-			{
-				Gui::GUIOBJ::Ptr obj = pArea->get_object("*.water_quality");
-				if (obj && obj->Value != -1)
-				{
-					obj->Text[0] = obj->Text[1 + obj->Value];
-					lp_CONFIG->water_quality = sint16(obj->Value);
 				}
 			}
 			if (pArea->get_value("*.mod") >= 0)

@@ -65,7 +65,6 @@ namespace TA3D
 			  << "                     FSAA = " << TA3D::VARS::lp_CONFIG->fsaa << ";\n"
 			  << "               Anisotropy = " << TA3D::VARS::lp_CONFIG->anisotropy << ";\n"
 			  << "                 Language = " << TA3D::VARS::lp_CONFIG->Lang << ";\n"
-			  << "            Water Quality = " << TA3D::VARS::lp_CONFIG->water_quality << "; // 0..5\n"
 			  << "             Screen Width = " << TA3D::VARS::lp_CONFIG->screen_width << ";\n"
 			  << "            Screen Height = " << TA3D::VARS::lp_CONFIG->screen_height << ";\n"
 			  << "              Color Depth = " << (int)TA3D::VARS::lp_CONFIG->color_depth << ";\n"
@@ -73,7 +72,6 @@ namespace TA3D
 			  << "           Show Wireframe = " << TA3D::VARS::lp_CONFIG->wireframe << ";\n"
 			  << "           Show particles = " << TA3D::VARS::lp_CONFIG->particle << ";\n"
 			  << " Show explosion particles = " << TA3D::VARS::lp_CONFIG->explosion_particles << ";\n"
-			  << "               Show Waves = " << TA3D::VARS::lp_CONFIG->waves << ";\n"
 			  << "        Show Height Lines = " << TA3D::VARS::lp_CONFIG->height_line << ";\n"
 			  << "          Show FullScreen = " << TA3D::VARS::lp_CONFIG->fullscreen << ";\n"
 			  << "           Detail Texture = " << TA3D::VARS::lp_CONFIG->detail_tex << ";\n"
@@ -153,7 +151,6 @@ namespace TA3D
 			TA3D::VARS::lp_CONFIG->fsaa = sint16(cfgFile.pullAsInt("TA3D.FSAA"));
 			TA3D::VARS::lp_CONFIG->anisotropy = sint16(cfgFile.pullAsInt("TA3D.Anisotropy", 1));
 			TA3D::VARS::lp_CONFIG->Lang = cfgFile.pullAsString("TA3D.Language").toLower();
-			TA3D::VARS::lp_CONFIG->water_quality = sint16(cfgFile.pullAsInt("TA3D.Water Quality"));
 			TA3D::VARS::lp_CONFIG->screen_width = uint16(cfgFile.pullAsInt("TA3D.Screen Width"));
 			TA3D::VARS::lp_CONFIG->screen_height = uint16(cfgFile.pullAsInt("TA3D.Screen Height"));
 			TA3D::VARS::lp_CONFIG->color_depth = uint8(cfgFile.pullAsInt("TA3D.Color Depth", 32));
@@ -162,7 +159,6 @@ namespace TA3D
 			TA3D::VARS::lp_CONFIG->wireframe = cfgFile.pullAsBool("TA3D.Show Wireframe");
 			TA3D::VARS::lp_CONFIG->explosion_particles = cfgFile.pullAsBool("TA3D.Show explosion particles", true);
 			TA3D::VARS::lp_CONFIG->particle = cfgFile.pullAsBool("TA3D.Show particles");
-			TA3D::VARS::lp_CONFIG->waves = cfgFile.pullAsBool("TA3D.Show Waves");
 			TA3D::VARS::lp_CONFIG->height_line = cfgFile.pullAsBool("TA3D.Show Height Lines");
 			TA3D::VARS::lp_CONFIG->fullscreen = cfgFile.pullAsBool("TA3D.Show FullScreen", false);
 			TA3D::VARS::lp_CONFIG->detail_tex = cfgFile.pullAsBool("TA3D.Detail Texture");

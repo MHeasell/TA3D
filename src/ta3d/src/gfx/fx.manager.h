@@ -82,12 +82,6 @@ namespace TA3D
 		void draw(Camera& cam, float w_lvl = 0.0f, bool UW = false);
 
 		/*!
-		** \brief
-		**
-		*/
-		void drawWaterDistortions();
-
-		/*!
         ** \brief
         **
         ** \param filename
@@ -104,38 +98,6 @@ namespace TA3D
         ** \param size
         */
 		int addFlash(const Vector3D& pos, const float size);
-
-		/*!
-        ** \brief Add a wave
-        ** \param pos
-        ** \param size
-        ** \return
-        */
-		int addWave(const Vector3D& Pos, float size);
-
-		/*!
-        ** \brief Add a ripple
-        ** \param pos
-        ** \param size
-        ** \return
-        */
-		int addRipple(const Vector3D& Pos, float size);
-
-		/*!
-        ** \brief Add a particle
-        ** \param p
-        ** \param s
-        ** \param l
-        */
-		void addParticle(const Vector3D& p, const Vector3D& s, const float l);
-
-		/*!
-        ** \brief Add an explosion effect
-        ** \param p
-        ** \param n
-        ** \param power
-        */
-		void addExplosion(const Vector3D& p, const int n, const float power);
 
 		/*!
         ** \brief Add an explosion effect (with initial speed)
@@ -157,10 +119,6 @@ namespace TA3D
 		File* fx_data;
 		//!
 		Interfaces::GfxTexture flash_tex;
-		//!
-		Interfaces::GfxTexture wave_tex[3];
-		//!
-		Interfaces::GfxTexture ripple_tex;
 
 	private:
 		/*!

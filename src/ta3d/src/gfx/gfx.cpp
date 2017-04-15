@@ -81,7 +81,6 @@ namespace TA3D
 		{
 			case Ati:
 				lp_CONFIG->shadow_quality = 3;
-				lp_CONFIG->water_quality = 4;
 				lp_CONFIG->fsaa = 0;
 				lp_CONFIG->anisotropy = 1;
 
@@ -90,7 +89,6 @@ namespace TA3D
 
 				lp_CONFIG->particle = true;
 				lp_CONFIG->explosion_particles = true;
-				lp_CONFIG->waves = false;
 				lp_CONFIG->far_sight = true;
 
 				lp_CONFIG->detail_tex = true;
@@ -106,7 +104,6 @@ namespace TA3D
 
 			case Nvidia:
 				lp_CONFIG->shadow_quality = 3;
-				lp_CONFIG->water_quality = 4;
 				lp_CONFIG->fsaa = 0;
 				lp_CONFIG->anisotropy = 1;
 
@@ -115,7 +112,6 @@ namespace TA3D
 
 				lp_CONFIG->particle = true;
 				lp_CONFIG->explosion_particles = true;
-				lp_CONFIG->waves = false;
 				lp_CONFIG->far_sight = true;
 
 				lp_CONFIG->detail_tex = true;
@@ -132,7 +128,6 @@ namespace TA3D
 			case Sis:
 			case Intel:
 				lp_CONFIG->shadow_quality = 0;
-				lp_CONFIG->water_quality = 0;
 				lp_CONFIG->fsaa = 0;
 				lp_CONFIG->anisotropy = 1;
 
@@ -141,7 +136,6 @@ namespace TA3D
 
 				lp_CONFIG->particle = true;
 				lp_CONFIG->explosion_particles = false;
-				lp_CONFIG->waves = false;
 				lp_CONFIG->far_sight = false;
 
 				lp_CONFIG->detail_tex = false;
@@ -157,7 +151,6 @@ namespace TA3D
 
 			case Unknown:
 				lp_CONFIG->shadow_quality = 0;
-				lp_CONFIG->water_quality = 0;
 				lp_CONFIG->fsaa = 0;
 				lp_CONFIG->anisotropy = 1;
 
@@ -166,7 +159,6 @@ namespace TA3D
 
 				lp_CONFIG->particle = true;
 				lp_CONFIG->explosion_particles = false;
-				lp_CONFIG->waves = false;
 				lp_CONFIG->far_sight = false;
 
 				lp_CONFIG->detail_tex = false;
@@ -185,7 +177,6 @@ namespace TA3D
 		{
 			case Ati:
 				lp_CONFIG->shadow_quality = 3;
-				lp_CONFIG->water_quality = 4;
 				lp_CONFIG->fsaa = 0;
 				lp_CONFIG->anisotropy = 1;
 
@@ -194,7 +185,6 @@ namespace TA3D
 
 				lp_CONFIG->particle = true;
 				lp_CONFIG->explosion_particles = true;
-				lp_CONFIG->waves = false;
 				lp_CONFIG->far_sight = true;
 
 				lp_CONFIG->detail_tex = true;
@@ -210,7 +200,6 @@ namespace TA3D
 
 			case Nvidia:
 				lp_CONFIG->shadow_quality = 3;
-				lp_CONFIG->water_quality = 4;
 				lp_CONFIG->fsaa = 0;
 				lp_CONFIG->anisotropy = 1;
 
@@ -219,7 +208,6 @@ namespace TA3D
 
 				lp_CONFIG->particle = true;
 				lp_CONFIG->explosion_particles = true;
-				lp_CONFIG->waves = false;
 				lp_CONFIG->far_sight = true;
 
 				lp_CONFIG->detail_tex = true;
@@ -236,7 +224,6 @@ namespace TA3D
 			case Sis:
 			case Intel:
 				lp_CONFIG->shadow_quality = 0;
-				lp_CONFIG->water_quality = 0;
 				lp_CONFIG->fsaa = 0;
 				lp_CONFIG->anisotropy = 1;
 
@@ -245,7 +232,6 @@ namespace TA3D
 
 				lp_CONFIG->particle = true;
 				lp_CONFIG->explosion_particles = false;
-				lp_CONFIG->waves = false;
 				lp_CONFIG->far_sight = false;
 
 				lp_CONFIG->detail_tex = false;
@@ -261,7 +247,6 @@ namespace TA3D
 
 			case Unknown:
 				lp_CONFIG->shadow_quality = 0;
-				lp_CONFIG->water_quality = 0;
 				lp_CONFIG->fsaa = 0;
 				lp_CONFIG->anisotropy = 1;
 
@@ -270,7 +255,6 @@ namespace TA3D
 
 				lp_CONFIG->particle = true;
 				lp_CONFIG->explosion_particles = false;
-				lp_CONFIG->waves = false;
 				lp_CONFIG->far_sight = false;
 
 				lp_CONFIG->detail_tex = false;
@@ -397,11 +381,8 @@ namespace TA3D
 
 	void GFX::checkConfig() const
 	{
-		if (!g_useFBO)
-			lp_CONFIG->water_quality = Math::Min(lp_CONFIG->water_quality, sint16(1));
 		if (!g_useProgram)
 		{
-			lp_CONFIG->water_quality = Math::Min(lp_CONFIG->water_quality, sint16(1));
 			lp_CONFIG->disable_GLSL = true;
 			lp_CONFIG->detail_tex = false;
 			lp_CONFIG->shadow_quality = Math::Min(lp_CONFIG->shadow_quality, sint16(1));
