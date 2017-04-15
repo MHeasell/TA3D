@@ -692,8 +692,6 @@ namespace TA3D
 		omb = mouse_b;
 		omb2 = mouse_b;
 		omb3 = mouse_b;
-		amx = mouse_x;
-		amy = mouse_y;
 		cur_sel = -1;
 		old_gui_sel = -1;
 		old_sel = false;

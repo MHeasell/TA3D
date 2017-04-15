@@ -1083,8 +1083,6 @@ namespace TA3D
 				pMouseSelecting = false;
 
 			omb3 = mouse_b;
-			amx = mouse_x;
-			amy = mouse_y;
 
 			if (IsOnGUI && !IsOnMinimap)
 				cursor_type = CURSOR_DEFAULT;

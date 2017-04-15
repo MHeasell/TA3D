@@ -189,11 +189,6 @@ namespace TA3D
 		void preflightFreeCamera();
 
 		/*!
-		** \brief
-		*/
-		void preflightFindCursor();
-
-		/*!
 		** \brief Pre Execute
 		*/
 		bool preExecute(LuaProgram& gameScript);
@@ -410,10 +405,6 @@ namespace TA3D
 		int omb2;
 		//!
 		int omb3;
-		//!
-		int amx;
-		//!
-		int amy;
 		//!
 		int cur_sel;
 		//!
