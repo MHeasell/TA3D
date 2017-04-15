@@ -217,10 +217,10 @@ endif()
 #
 find_package(Freetype)
 
-include_directories( ${FREETYPE_INCLUDE_DIRS} )
+include_directories(${FREETYPE_INCLUDE_DIRS})
 
 set(FTGL_LIB ${CMAKE_CURRENT_SOURCE_DIR}/../libs/ftgl/lib/libftgl.a)
-include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/../libs/ftgl/include )
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../libs/ftgl/include)
 set(__FTGL__lower__ true)
 
 message(STATUS "FTGL Library : ${FTGL_LIB}")

@@ -344,7 +344,7 @@ add_test(NAME ta3d_tests COMMAND ${TA3D_TEST_BIN})
 #
 # --- Internal libraries ---
 #
-set(LIBS  "${LIBS} ${FREETYPE_LIBRARIES}")
+set(LIBS "${LIBS} ${FREETYPE_LIBRARIES}")
 if(WIN32)
 	set(LIBS "${LIBS} -llua -lgdi32 -lopengl32 -lglu32")
 endif()
