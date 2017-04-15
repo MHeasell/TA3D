@@ -1,16 +1,10 @@
-project(ftgl)
 cmake_minimum_required(VERSION 2.6)
-
-include_directories(
-			${CMAKE_CURRENT_SOURCE_DIR}/src/
-			${CMAKE_CURRENT_SOURCE_DIR}
-			${CMAKE_CURRENT_SOURCE_DIR}/include/
-			${CMAKE_CURRENT_SOURCE_DIR}/src/FTGL/)
-
-set(LIBRARY_OUTPUT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/lib)
+project(ftgl)
 
 find_package(Freetype)
-
 include_directories(${FREETYPE_INCLUDE_DIRS})
+
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}) # for config.h
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
 
 add_subdirectory(src)

@@ -216,15 +216,11 @@ endif()
 # --- FTGL ---
 #
 find_package(Freetype)
-
 include_directories(${FREETYPE_INCLUDE_DIRS})
+set(LIBS "${LIBS} ${FREETYPE_LIBRARIES}")
 
-set(FTGL_LIB ${CMAKE_CURRENT_SOURCE_DIR}/../libs/ftgl/lib/libftgl.a)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../libs/ftgl/include)
-set(__FTGL__lower__ true)
-
-message(STATUS "FTGL Library : ${FTGL_LIB}")
-set(LIBS "${LIBS} ${FTGL_LIB}")
+set(LIBS "${LIBS} ${CMAKE_CURRENT_BINARY_DIR}/../libs/ftgl/src/libftgl.a")
 
 #
 # --- CPack: Installation process ---
@@ -461,4 +457,3 @@ configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/config.h.cmake ${CMAKE_CURRENT_SOURC
 
 # The source code
 add_subdirectory(src)
-
