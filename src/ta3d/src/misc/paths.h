@@ -88,9 +88,6 @@ namespace TA3D
 #endif
 
 #ifdef TA3D_PLATFORM_WINDOWS
-		//! The folder for local data (Windows only)
-		extern String LocalData;
-
 		//! The user's Roaming AppData folder (Windows only)
 		extern String AppData;
 #endif

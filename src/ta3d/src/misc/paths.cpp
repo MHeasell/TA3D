@@ -76,23 +76,6 @@ namespace TA3D
 #ifdef TA3D_PLATFORM_WINDOWS
 
 			/*!
-			** \brief Get the absolute path to the local application data folder
-			** (from the Windows registry)
-			*/
-			String localAppData()
-			{
-				LPITEMIDLIST pidl;
-				HRESULT hr = SHGetSpecialFolderLocation(NULL, CSIDL_LOCAL_APPDATA, &pidl);
-				char szPath[_MAX_PATH];
-				BOOL f = SHGetPathFromIDList(pidl, szPath);
-				LPMALLOC pMalloc;
-				hr = SHGetMalloc(&pMalloc);
-				pMalloc->Free(pidl);
-				pMalloc->Release();
-				return String(szPath, strlen(szPath));
-			}
-
-			/*!
 			 * \brief Returns the full path to the user's roaming AppData folder
 			 * with no trailing slash.
 			 */
@@ -117,9 +100,6 @@ namespace TA3D
 
 			void initForWindows()
 			{
-				LocalData = localAppData();
-				LocalData += Separator;
-
 				AppData = roamingAppData();
 				AppData += Separator;
 
