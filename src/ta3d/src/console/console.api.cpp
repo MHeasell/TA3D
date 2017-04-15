@@ -285,14 +285,6 @@ namespace TA3D
 		return 1;
 	}
 
-	int CAPI::setWaves(lua_State* L)
-	{
-		if (lua_gettop(L) > 0)
-			lp_CONFIG->waves = lua_toboolean(L, -1);
-		lua_pushboolean(L, lp_CONFIG->waves);
-		return 1;
-	}
-
 	int CAPI::scriptDumpDebugInfo(lua_State*)
 	{
 		if (Battle::Instance()->cur_sel_index >= 0 && units.unit[Battle::Instance()->cur_sel_index].script)
@@ -860,7 +852,6 @@ namespace TA3D
 		CAPI_REGISTER(setDetailsTexture);
 		CAPI_REGISTER(setParticles);
 		CAPI_REGISTER(setExplosionParticles);
-		CAPI_REGISTER(setWaves);
 		CAPI_REGISTER(scriptDumpDebugInfo);
 		CAPI_REGISTER(setShowModel);
 		CAPI_REGISTER(setRotateLight);

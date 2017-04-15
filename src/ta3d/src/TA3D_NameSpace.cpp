@@ -111,7 +111,6 @@ namespace TA3D
 		wireframe = false;
 		particle = true;
 		explosion_particles = true;
-		waves = true;
 		height_line = false;
 		fullscreen = false; // For now, later will be true when we will reach a beta release
 

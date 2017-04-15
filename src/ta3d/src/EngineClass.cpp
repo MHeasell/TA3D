@@ -1677,36 +1677,6 @@ namespace TA3D
 							V.unit();
 							particle_engine.emit_lava(POS, V, 1, 10, float(Math::RandomTable() % 1000) * 0.01f + 30.0f);
 						}
-						else
-						{
-							if (!map_data(X, Y).isLava() && water && !ota_data.lavaworld && !ota_data.whitefog && !under_water && !lp_CONFIG->pause && // A wave
-								(h_map(X | 1, Y | 1) < sealvl || h_map(X | 1, Y) < sealvl || h_map(X, Y | 1) < sealvl || h_map(X, Y) < sealvl) && (h_map(X | 1, Y | 1) >= sealvl || h_map(X, Y | 1) >= sealvl || h_map(X | 1, Y) >= sealvl || h_map(X, Y) >= sealvl) && (Math::RandomTable() % 4000) <= lavaprob && (view_map(x, y) & player_mask) && lp_CONFIG->waves)
-							{
-								Vector3D grad;
-								for (int dz = -2; dz <= 2; ++dz)
-								{
-									if (Y + dz >= 0 && Y + dz < h_map.getHeight())
-										for (int dx = -2; dx <= 2; ++dx)
-										{
-											if (X + dx < 0 || X + dx >= h_map.getWidth())
-												continue;
-											const float v = h_map(X + dx, Y + dz) - sealvl;
-											grad.x += (float)dx * std::exp(0.125f * float(dx * dx + dz * dz)) * v;
-											grad.z += (float)dz * std::exp(0.125f * float(dx * dx + dz * dz)) * v;
-										}
-								}
-								const float grad_len = grad.sq();
-								if (grad_len > 0.0f)
-								{
-									const Vector3D pos(
-										float((x << 4) - map_w_d) + 8.0f,
-										sealvl + 0.1f,
-										float(pre_y - map_h_d) + 8.0f);
-									grad = (1.0f / sqrtf(grad_len)) * grad;
-									fx_manager.addWave(pos - 16.0f * grad, RAD2DEG * std::atan2(-grad.x, -grad.z));
-								}
-							}
-						}
 					}
 					bloc[i].point = lvl[pre_y2 + x];
 					if (bloc[i].point == NULL)
