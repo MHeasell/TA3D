@@ -119,10 +119,6 @@ namespace TA3D
 		File* fx_data;
 		//!
 		Interfaces::GfxTexture flash_tex;
-		//!
-		Interfaces::GfxTexture wave_tex[3];
-		//!
-		Interfaces::GfxTexture ripple_tex;
 
 	private:
 		/*!

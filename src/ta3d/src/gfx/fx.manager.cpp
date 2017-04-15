@@ -93,16 +93,6 @@ namespace TA3D
 		// Reload the texture for flashes
 		if (!flash_tex.get())
 			flash_tex.load("gfx/flash.tga");
-		// Reload the texture for ripples
-		if (!ripple_tex.get())
-			ripple_tex.load("gfx/ripple.tga");
-		// Reload textures for waves
-		if (!wave_tex[0].get())
-			wave_tex[0].load("gfx/wave0.tga");
-		if (!wave_tex[1].get())
-			wave_tex[1].load("gfx/wave1.tga");
-		if (!wave_tex[2].get())
-			wave_tex[2].load("gfx/wave2.tga");
 		pMutex.unlock();
 	}
 
@@ -154,10 +144,6 @@ namespace TA3D
 		use.clear();
 
 		flash_tex.destroy();
-		wave_tex[0].destroy();
-		wave_tex[1].destroy();
-		wave_tex[2].destroy();
-		ripple_tex.destroy();
 	}
 
 	void FXManager::destroy()
@@ -165,10 +151,6 @@ namespace TA3D
 		doClearAllParticles();
 
 		flash_tex.destroy();
-		ripple_tex.destroy();
-		wave_tex[0].destroy();
-		wave_tex[1].destroy();
-		wave_tex[2].destroy();
 
 		delete fx_data;
 		fx.clear();
