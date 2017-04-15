@@ -454,28 +454,6 @@ namespace TA3D
 		//!
 		std::unique_ptr<WATER> water_obj;
 		//!
-		Shader water_shader;
-		//!
-		Shader water_shader_reflec;
-		//!
-		Shader water_pass1;
-		//!
-		Shader water_pass1_low;
-		//!
-		Shader water_pass2;
-		//!
-		Shader water_simulator_shader;
-		//!
-		Shader water_simulator_shader2;
-		//!
-		Shader water_simulator_shader3;
-		//!
-		Shader water_simulator_shader4;
-		//!
-		Shader water_distortions_shader;
-		//!
-		Shader water_simulator_reflec;
-		//!
 		GLuint height_tex;
 		//!
 		GLuint transtex;
@@ -485,12 +463,6 @@ namespace TA3D
 		GLuint first_pass;
 		//!
 		GLuint second_pass;
-		//!
-		GLuint water_color;
-		//!
-		GLuint water_FBO;
-		//!
-		uint32 last_water_refresh;
 		//@}
 
 		//! \name Interface

@@ -49,41 +49,10 @@ namespace TA3D
 		if (!g_useProgram)
 			return;
 
-		water_shader.destroy();
-		if (map->ota_data.whitefog)
-			water_shader.load("shaders/water_fog.frag", "shaders/water.vert");
-		else
-			water_shader.load("shaders/water.frag", "shaders/water.vert");
-		water_shader_reflec.destroy();
-		if (map->ota_data.whitefog)
-			water_shader_reflec.load("shaders/water_fog.frag", "shaders/water.vert");
-		else
-			water_shader_reflec.load("shaders/water_reflec.frag", "shaders/water.vert");
-		water_pass1.destroy();
-		water_pass1.load("shaders/water_pass1.frag", "shaders/water_pass1.vert");
-		water_pass1_low.destroy();
-		water_pass1_low.load("shaders/water_pass1_low.frag", "shaders/water_pass1.vert");
-		water_pass2.destroy();
-		water_pass2.load("shaders/water_pass2.frag", "shaders/water_pass2.vert");
 		map->detail_shader.destroy();
 		map->detail_shader.load("shaders/details.frag", "shaders/details.vert");
 		map->shadow2_shader.destroy();
 		map->shadow2_shader.load("shaders/map_shadow.frag", "shaders/map_shadow.vert");
-		water_simulator_shader.destroy();
-		water_simulator_shader.load("shaders/water_simulator.frag", "shaders/water_simulator.vert");
-		water_simulator_shader2.destroy();
-		water_simulator_shader2.load("shaders/water_simulator2.frag", "shaders/water_simulator.vert");
-		water_simulator_shader3.destroy();
-		water_simulator_shader3.load("shaders/water_simulator3.frag", "shaders/water_simulator.vert");
-		water_simulator_shader4.destroy();
-		water_simulator_shader4.load("shaders/water_simulator4.frag", "shaders/water_simulator4.vert");
-		water_distortions_shader.destroy();
-		water_distortions_shader.load("shaders/water_distortions.frag", "shaders/water_distortions.vert");
-		water_simulator_reflec.destroy();
-		if (map->ota_data.whitefog)
-			water_simulator_reflec.load("shaders/water_sim_fog.frag", "shaders/water.vert");
-		else
-			water_simulator_reflec.load("shaders/water_sim_reflec.frag", "shaders/water.vert");
 		gfx->model_shader.destroy();
 		gfx->model_shader.load("shaders/3do_shadow.frag", "shaders/3do_shadow.vert");
 	}
@@ -95,7 +64,7 @@ namespace TA3D
 	}
 
 	Battle::Battle(GameData* g)
-		: pResult(brUnknown), pGameData(g), pNetworkEnabled(false), pNetworkIsServer(false), map(nullptr), sky(), escMenuWasVisible(false), height_tex(0), transtex(0), reflectex(0), first_pass(0), second_pass(0), water_color(0), bShowPing(false)
+		: pResult(brUnknown), pGameData(g), pNetworkEnabled(false), pNetworkIsServer(false), map(nullptr), sky(), escMenuWasVisible(false), height_tex(0), transtex(0), reflectex(0), first_pass(0), second_pass(0), bShowPing(false)
 	{
 		LOG_INFO(LOG_PREFIX_BATTLE << "Preparing a new battle...");
 		grab_mouse(lp_CONFIG->grab_inputs);
@@ -179,7 +148,6 @@ namespace TA3D
 		reflectex = 0;
 		first_pass = 0;
 		second_pass = 0;
-		water_color = 0;
 
 		// We don't want to load things we won't be able to use
 		gfx->checkConfig();

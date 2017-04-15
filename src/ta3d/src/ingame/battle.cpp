@@ -2443,28 +2443,11 @@ namespace TA3D
 
 		Camera::inGame = NULL;
 
-		if (g_useProgram && g_useFBO && map->water)
-		{
-			glDeleteFramebuffersEXT(1, &water_FBO);
-			water_pass1.destroy();
-			water_pass1_low.destroy();
-			water_pass2.destroy();
-			water_shader.destroy();
-			water_shader_reflec.destroy();
-			water_simulator_shader.destroy();
-			water_simulator_shader2.destroy();
-			water_simulator_shader3.destroy();
-			water_simulator_shader4.destroy();
-			water_simulator_reflec.destroy();
-			water_distortions_shader.destroy();
-		}
-
 		freecam_on.destroy();
 		freecam_off.destroy();
 		arrow_texture.destroy();
 		circle_texture.destroy();
 		pause_tex.destroy();
-		gfx->destroy_texture(water_color);
 		gfx->destroy_texture(first_pass);
 		gfx->destroy_texture(second_pass);
 		gfx->destroy_texture(reflectex);
