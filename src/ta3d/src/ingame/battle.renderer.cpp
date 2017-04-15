@@ -150,41 +150,6 @@ namespace TA3D
 		}
 	}
 
-	void Battle::renderWater()
-	{
-		if (map->water)
-		{
-			// Effets spéciaux sous-marins / Draw fx which are under water
-			fx_manager.draw(cam, map->sealvl, true);
-
-			glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-			gfx->ReInitAllTex(true);
-
-			gfx->set_alpha_blending();
-
-			glColor4f(1.0f, 1.0f, 1.0f, 0.5f);
-			glDisable(GL_LIGHTING);
-
-			glActiveTextureARB(GL_TEXTURE0_ARB);
-			glEnable(GL_TEXTURE_2D);
-			glBindTexture(GL_TEXTURE_2D, map->low_tex);
-
-			cam.setView(true);
-			glTranslatef(0.0f, map->sealvl, map->sea_dec);
-			water_obj->draw(t, false);
-			glColor4f(1.0f, 1.0f, 1.0f, 0.75f);
-
-			glEnable(GL_LIGHTING);
-			glActiveTextureARB(GL_TEXTURE0_ARB);
-			gfx->ReInitTexSys();
-			glEnable(GL_TEXTURE_2D);
-
-			gfx->unset_alpha_blending();
-
-			gfx->ReInitAllTex(true);
-		}
-		cam.setView();
-	}
 
 	void Battle::renderWorld()
 	{
@@ -256,8 +221,6 @@ namespace TA3D
 
 		if (lp_CONFIG->particle)
 			particle_engine.drawUW();
-
-		renderWater();
 
 		// Render map object icons (if in tactical mode)
 		if (cam.rpos.y > gfx->low_def_limit)
