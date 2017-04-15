@@ -63,12 +63,6 @@ namespace TA3D
         */
 		void draw(Camera& cam, const std::vector<Gaf::Animation*>& anims);
 
-		/*!
-		** \brief
-		**
-		*/
-		void drawWaterDistortions();
-
 	public:
 		//! Effect duration
 		float time;
@@ -90,16 +84,6 @@ namespace TA3D
         ** \brief
         */
 		void doDrawAnimFlash();
-
-		/*!
-        ** \brief
-        */
-		void doDrawAnimWave(const int animIndx);
-
-		/*!
-        ** \brief
-        */
-		void doDrawAnimRipple();
 
 		/*!
         ** \brief

@@ -82,12 +82,6 @@ namespace TA3D
 		void draw(Camera& cam, float w_lvl = 0.0f, bool UW = false);
 
 		/*!
-		** \brief
-		**
-		*/
-		void drawWaterDistortions();
-
-		/*!
         ** \brief
         **
         ** \param filename

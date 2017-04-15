@@ -120,64 +120,6 @@ namespace TA3D
 		glEnable(GL_DEPTH_TEST);
 	}
 
-	void FX::doDrawAnimWave(const int animIndx)
-	{
-		fx_manager.wave_tex[animIndx + 4].bind();
-
-		glPushMatrix();
-
-		glTranslatef(Pos.x, Pos.y, Pos.z);
-		glRotatef(size, 0.0f, 1.0f, 0.0f);
-
-		const float wsize = 0.25f * float(fx_manager.wave_tex[animIndx + 4].getWidth());
-		const float hsize = 0.25f * float(fx_manager.wave_tex[animIndx + 4].getHeight());
-		const float dec = time * 0.125f;
-
-		glColor4f(1.0f, 1.0f, 1.0f, 1.0f - 0.5f * fabsf(2.0f - time));
-
-		glBegin(GL_QUADS);
-		glTexCoord2f(0.0f, dec);
-		glVertex3f(-wsize, 4.0f, -hsize);
-		glTexCoord2f(1.0f, dec);
-		glVertex3f(wsize, 4.0f, -hsize);
-		glTexCoord2f(1.0f, dec + 1.0f);
-		glVertex3f(wsize, 0.0f, hsize);
-		glTexCoord2f(0.0f, dec + 1.0f);
-		glVertex3f(-wsize, 0.0f, hsize);
-		glEnd();
-
-		glColor4ub(0xFF, 0xFF, 0xFF, 0xFF);
-		glPopMatrix();
-	}
-
-	void FX::doDrawAnimRipple()
-	{
-		fx_manager.ripple_tex.bind();
-
-		glPushMatrix();
-
-		glTranslatef(Pos.x, Pos.y, Pos.z);
-		glRotatef(size * time + angle, 0.0f, 1.0f, 0.0f);
-
-		float rsize = 16.0f * time;
-
-		glColor4f(1.0f, 1.0f, 1.0f, 0.5f - 0.25f * time);
-
-		glBegin(GL_QUADS);
-		glTexCoord2f(0.0f, 0.0f);
-		glVertex3f(-rsize, 0.0f, -rsize);
-		glTexCoord2f(1.0f, 0.0f);
-		glVertex3f(rsize, 0.0f, -rsize);
-		glTexCoord2f(1.0f, 1.0f);
-		glVertex3f(rsize, 0.0f, rsize);
-		glTexCoord2f(0.0f, 1.0f);
-		glVertex3f(-rsize, 0.0f, rsize);
-		glEnd();
-
-		glColor4ub(0xFF, 0xFF, 0xFF, 0xFF);
-		glPopMatrix();
-	}
-
 	void FX::doDrawAnimDefault(Camera& cam, const std::vector<Gaf::Animation*>& anims)
 	{
 		if (anims.empty())
@@ -264,35 +206,9 @@ namespace TA3D
 			case -2:
 			case -3:
 			case -4:
-				if (lp_CONFIG->water_quality < 5)
-					doDrawAnimWave(anm);
-				break;
 			case -5:
-				if (lp_CONFIG->water_quality < 5)
-					doDrawAnimRipple();
-				break;
 			default:
 				doDrawAnimDefault(cam, anims);
-		}
-	}
-
-	void FX::drawWaterDistortions()
-	{
-		switch (anm)
-		{
-			// Waves
-			case -2:
-			case -3:
-			case -4:
-			{
-				doDrawAnimWave(anm);
-				break;
-			}
-			case -5:
-			{
-				doDrawAnimRipple();
-				break;
-			}
 		}
 	}
 
