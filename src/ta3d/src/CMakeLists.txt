@@ -20,6 +20,8 @@ set(TA3D_TEST_BIN ta3d_test)
 set(TA3D_LIB_SOURCES
 		EngineClass.cpp
 		EngineClass.h
+		SdlContextManager.cpp
+		SdlContextManager.h
 		TA3D_NameSpace.cpp
 		TA3D_NameSpace.h
 		UnitEngine.cpp
@@ -160,6 +162,8 @@ set(TA3D_LIB_SOURCES
 		ingame/weapons/weapons.manager.h
 		ingame/weapons/weapons.single.cpp
 		ingame/weapons/weapons.single.h
+		input/KeyboardService.cpp
+		input/KeyboardService.h
 		input/keyboard.cpp
 		input/keyboard.h
 		input/mouse.cpp
@@ -308,6 +312,8 @@ set(TA3D_LIB_SOURCES
 		threads/thread.h
 		tnt.cpp
 		tnt.h
+		vfs/VfsService.cpp
+		vfs/VfsService.h
 		vfs/archive.cpp
 		vfs/archive.h
 		vfs/file.h
@@ -321,7 +327,7 @@ set(TA3D_LIB_SOURCES
 		vfs/vfs.h
 		vfs/virtualfile.cpp
 		vfs/virtualfile.h
-		input/KeyboardService.cpp input/KeyboardService.h vfs/VfsService.cpp vfs/VfsService.h SdlContextManager.cpp SdlContextManager.h)
+		)
 
 set(TA3D_SOURCES main.cpp)
 
