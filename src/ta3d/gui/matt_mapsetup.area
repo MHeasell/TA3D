@@ -1,9 +1,0 @@
-[area]
-{
-	name=map setup area;
-	skin=gui/matty.skn;
-	windows=gui/matt_mapsetup.tdf;
-	background=gfx/matt_mapsetup.jpg;
-	width=1280;
-	height=1024;
-}

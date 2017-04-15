@@ -1,9 +1,0 @@
-[area]
-{
-	name=setup area;
-	skin=gui/matty.skn;
-	windows=gui/matt_gamesetup.tdf, gui/matt_scripts.tdf,gui/matt_popup_dialog.tdf;
-	background=gfx/matt_gamesetup.jpg;
-	width=1280;
-	height=1024;
-}
