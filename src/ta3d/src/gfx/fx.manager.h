@@ -100,38 +100,6 @@ namespace TA3D
 		int addFlash(const Vector3D& pos, const float size);
 
 		/*!
-        ** \brief Add a wave
-        ** \param pos
-        ** \param size
-        ** \return
-        */
-		int addWave(const Vector3D& Pos, float size);
-
-		/*!
-        ** \brief Add a ripple
-        ** \param pos
-        ** \param size
-        ** \return
-        */
-		int addRipple(const Vector3D& Pos, float size);
-
-		/*!
-        ** \brief Add a particle
-        ** \param p
-        ** \param s
-        ** \param l
-        */
-		void addParticle(const Vector3D& p, const Vector3D& s, const float l);
-
-		/*!
-        ** \brief Add an explosion effect
-        ** \param p
-        ** \param n
-        ** \param power
-        */
-		void addExplosion(const Vector3D& p, const int n, const float power);
-
-		/*!
         ** \brief Add an explosion effect (with initial speed)
         ** \param p
         ** \param s
