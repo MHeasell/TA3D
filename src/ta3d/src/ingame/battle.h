@@ -139,8 +139,6 @@ namespace TA3D
 		bool initGUI();
 		//! Init the map
 		bool initTheMap();
-		//! Init the Sky
-		bool initTheSky();
 		//! Init the sun
 		bool initTheSun();
 		//! Init all textures
