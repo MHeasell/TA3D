@@ -2420,8 +2420,6 @@ namespace TA3D
 
 		Engine::synchronizer.setNbThreadsToSync(4);
 
-		sky.destroy();
-
 		LuaProgram::inGame->destroyThread();
 
 		Pathfinder::instance()->destroyThread(); // Shut down Pathfinder engine

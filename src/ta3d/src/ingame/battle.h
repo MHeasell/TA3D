@@ -276,12 +276,6 @@ namespace TA3D
 		//! The map of the game
 		std::unique_ptr<MAP> map;
 
-		//! \name Sky
-		//@{
-		//!
-		Sky sky;
-		//@}
-
 		bool pMouseSelecting;
 		//! The bounding box of the current mouse selection (if pMouseSelecting == true)
 		Rect<int> pMouseRectSelection;

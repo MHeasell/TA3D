@@ -64,7 +64,7 @@ namespace TA3D
 	}
 
 	Battle::Battle(GameData* g)
-		: pResult(brUnknown), pGameData(g), pNetworkEnabled(false), pNetworkIsServer(false), map(nullptr), sky(), escMenuWasVisible(false), height_tex(0), transtex(0), reflectex(0), first_pass(0), second_pass(0), bShowPing(false)
+		: pResult(brUnknown), pGameData(g), pNetworkEnabled(false), pNetworkIsServer(false), map(nullptr), escMenuWasVisible(false), height_tex(0), transtex(0), reflectex(0), first_pass(0), second_pass(0), bShowPing(false)
 	{
 		LOG_INFO(LOG_PREFIX_BATTLE << "Preparing a new battle...");
 		grab_mouse(lp_CONFIG->grab_inputs);
@@ -518,9 +518,6 @@ namespace TA3D
 
 	bool Battle::initTheSky()
 	{
-		// The sky
-		sky.choose_a_sky(Paths::ExtractFileName(pGameData->map_filename), ToLower(map->ota_data.planet));
-
 		return true;
 	}
 
@@ -606,8 +603,6 @@ namespace TA3D
 		FogColor[1] = 0.8f;
 		FogColor[2] = 0.8f;
 		FogColor[3] = 1.0f;
-
-		memcpy(FogColor, sky.fogColor(), sizeof(float) * 4);
 
 		FogMode = GL_LINEAR;
 		glFogi(GL_FOG_MODE, FogMode);
