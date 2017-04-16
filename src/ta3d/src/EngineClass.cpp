@@ -109,9 +109,6 @@ namespace TA3D
 		sonar_map.clear();
 
 		shadow2_shader.load("shaders/map_shadow.frag", "shaders/map_shadow.vert");
-		detail_shader.load("shaders/details.frag", "shaders/details.vert");
-		details_tex = 0;
-		color_factor = 1.0f;
 
 		low_nb_idx = 0;
 		low_vtx = NULL;
@@ -528,9 +525,7 @@ namespace TA3D
 		radar_map.resize(0, 0);
 		sonar_map.resize(0, 0);
 
-		detail_shader.destroy();
 		shadow2_shader.destroy();
-		gfx->destroy_texture(details_tex);
 
 		DELETE_ARRAY(low_vtx);
 		DELETE_ARRAY(low_vtx_flat);
@@ -573,7 +568,6 @@ namespace TA3D
 			SDL_FreeSurface(mini);
 		}
 		init();
-		detail_shader.destroy(); // Because init will reload it
 
 		the_map = NULL;
 	}
@@ -597,58 +591,6 @@ namespace TA3D
 		{
 			radar_map.clear(0xFF);
 			sonar_map.clear(0xFF);
-		}
-	}
-
-	void MAP::load_details_texture(const String& filename)
-	{
-		SDL_Surface* tex = gfx->load_image(filename);
-		if (tex)
-		{
-			uint32 average = 0;
-
-			switch (tex->format->BitsPerPixel)
-			{
-				case 8:
-					for (int y = 0; y < tex->h; ++y)
-						for (int x = 0; x < tex->w; ++x)
-							average += SurfaceByte(tex, x, y) * 3;
-					break;
-				case 24:
-					for (int y = 0; y < tex->h; ++y)
-					{
-						for (int x = 0; x < tex->w; ++x)
-						{
-							average += SurfaceByte(tex, x * 3, y);
-							average += SurfaceByte(tex, x * 3 + 1, y);
-							average += SurfaceByte(tex, x * 3 + 2, y);
-						}
-					}
-					break;
-				case 32:
-					for (int y = 0; y < tex->h; ++y)
-					{
-						for (int x = 0; x < tex->w; ++x)
-						{
-							average += SurfaceByte(tex, (x << 2), y);
-							average += SurfaceByte(tex, (x << 2) + 1, y);
-							average += SurfaceByte(tex, (x << 2) + 2, y);
-						}
-					}
-					break;
-			};
-			average /= tex->w * tex->h * 3;
-
-			if (!average)
-				average = 1;
-			color_factor = 255.0f / (float)average;
-			details_tex = gfx->make_texture(tex, FILTER_TRILINEAR, false);
-			SDL_FreeSurface(tex);
-		}
-		else
-		{
-			details_tex = 0;
-			color_factor = 1.0f;
 		}
 	}
 
@@ -1974,8 +1916,6 @@ namespace TA3D
 			}
 		}
 		glDisableClientState(GL_COLOR_ARRAY); // Couleurs(pour le brouillard de guerre)
-
-		detail_shader.off();
 
 		gfx->unlock();
 

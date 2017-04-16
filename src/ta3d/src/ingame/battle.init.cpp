@@ -49,8 +49,6 @@ namespace TA3D
 		if (!g_useProgram)
 			return;
 
-		map->detail_shader.destroy();
-		map->detail_shader.load("shaders/details.frag", "shaders/details.vert");
 		map->shadow2_shader.destroy();
 		map->shadow2_shader.load("shaders/map_shadow.frag", "shaders/map_shadow.vert");
 		gfx->model_shader.destroy();
@@ -469,9 +467,6 @@ namespace TA3D
 		map.reset(load_tnt_map(map_file));
 		LOG_DEBUG(LOG_PREFIX_BATTLE << "map data loaded");
 		delete map_file;
-
-		LOG_INFO(LOG_PREFIX_BATTLE << "Loading details texture...");
-		map->load_details_texture("gfx/details.jpg"); // Load the details texture
 
 		LOG_INFO(LOG_PREFIX_BATTLE << "Initialising the Fog Of War...");
 		map->clear_FOW(pGameData->fog_of_war);
