@@ -70,7 +70,6 @@ namespace TA3D
 		bool fullscreen;
 		bool far_sight; // Enable far sight renderer (you can see all the map)
 
-		bool detail_tex;
 		bool draw_console_loading;
 
 		uint8 camera_zoom; // ZOOM_NORMAL, ZOOM_FIXED_ANGLE

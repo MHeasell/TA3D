@@ -91,8 +91,6 @@ namespace TA3D
 				lp_CONFIG->explosion_particles = true;
 				lp_CONFIG->far_sight = true;
 
-				lp_CONFIG->detail_tex = true;
-
 				lp_CONFIG->use_texture_cache = false;
 				lp_CONFIG->use_texture_compression = false;
 
@@ -112,8 +110,6 @@ namespace TA3D
 				lp_CONFIG->particle = true;
 				lp_CONFIG->explosion_particles = true;
 				lp_CONFIG->far_sight = true;
-
-				lp_CONFIG->detail_tex = true;
 
 				lp_CONFIG->use_texture_cache = true;
 				lp_CONFIG->use_texture_compression = true;
@@ -136,8 +132,6 @@ namespace TA3D
 				lp_CONFIG->explosion_particles = false;
 				lp_CONFIG->far_sight = false;
 
-				lp_CONFIG->detail_tex = false;
-
 				lp_CONFIG->use_texture_cache = false;
 				lp_CONFIG->use_texture_compression = true;
 
@@ -157,8 +151,6 @@ namespace TA3D
 				lp_CONFIG->particle = true;
 				lp_CONFIG->explosion_particles = false;
 				lp_CONFIG->far_sight = false;
-
-				lp_CONFIG->detail_tex = false;
 
 				lp_CONFIG->use_texture_cache = false;
 				lp_CONFIG->use_texture_compression = true;
@@ -183,8 +175,6 @@ namespace TA3D
 				lp_CONFIG->explosion_particles = true;
 				lp_CONFIG->far_sight = true;
 
-				lp_CONFIG->detail_tex = true;
-
 				lp_CONFIG->use_texture_cache = false;
 				lp_CONFIG->use_texture_compression = false;
 
@@ -204,8 +194,6 @@ namespace TA3D
 				lp_CONFIG->particle = true;
 				lp_CONFIG->explosion_particles = true;
 				lp_CONFIG->far_sight = true;
-
-				lp_CONFIG->detail_tex = true;
 
 				lp_CONFIG->use_texture_cache = true;
 				lp_CONFIG->use_texture_compression = true;
@@ -228,8 +216,6 @@ namespace TA3D
 				lp_CONFIG->explosion_particles = false;
 				lp_CONFIG->far_sight = false;
 
-				lp_CONFIG->detail_tex = false;
-
 				lp_CONFIG->use_texture_cache = false;
 				lp_CONFIG->use_texture_compression = true;
 
@@ -249,8 +235,6 @@ namespace TA3D
 				lp_CONFIG->particle = true;
 				lp_CONFIG->explosion_particles = false;
 				lp_CONFIG->far_sight = false;
-
-				lp_CONFIG->detail_tex = false;
 
 				lp_CONFIG->use_texture_cache = false;
 				lp_CONFIG->use_texture_compression = true;
@@ -376,7 +360,6 @@ namespace TA3D
 		if (!g_useProgram)
 		{
 			lp_CONFIG->disable_GLSL = true;
-			lp_CONFIG->detail_tex = false;
 			lp_CONFIG->shadow_quality = Math::Min(lp_CONFIG->shadow_quality, sint16(1));
 		}
 		if (!g_useTextureCompression)

@@ -188,7 +188,7 @@ namespace TA3D
 			pArea->set_state("*.explosion_particles", lp_CONFIG->explosion_particles);
 			pArea->set_state("*.waves", false);
 			pArea->set_state("*.height_line", lp_CONFIG->height_line);
-			pArea->set_state("*.detail_tex", lp_CONFIG->detail_tex);
+			pArea->set_state("*.detail_tex", false);
 			pArea->set_state("*.use_texture_cache", lp_CONFIG->use_texture_cache);
 			pArea->set_state("*.draw_console_loading", lp_CONFIG->draw_console_loading);
 			pArea->set_state("*.fullscreen", lp_CONFIG->fullscreen);
@@ -461,7 +461,6 @@ namespace TA3D
 			lp_CONFIG->particle = pArea->get_state("*.particle");
 			lp_CONFIG->explosion_particles = pArea->get_state("*.explosion_particles");
 			lp_CONFIG->height_line = pArea->get_state("*.height_line");
-			lp_CONFIG->detail_tex = pArea->get_state("*.detail_tex");
 			lp_CONFIG->draw_console_loading = pArea->get_state("*.draw_console_loading");
 			lp_CONFIG->fullscreen = pArea->get_state("*.fullscreen");
 			lp_CONFIG->use_texture_cache = pArea->get_state("*.use_texture_cache");

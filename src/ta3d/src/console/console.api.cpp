@@ -245,14 +245,6 @@ namespace TA3D
 		return 1;
 	}
 
-	int CAPI::setDetailsTexture(lua_State* L)
-	{
-		if (lua_gettop(L) > 0)
-			lp_CONFIG->detail_tex = lua_toboolean(L, -1);
-		lua_pushboolean(L, lp_CONFIG->detail_tex);
-		return 1;
-	}
-
 	int CAPI::setParticles(lua_State* L)
 	{
 		if (lua_gettop(L) > 0)
@@ -811,7 +803,6 @@ namespace TA3D
 		CAPI_REGISTER(setPriority);
 		CAPI_REGISTER(setShadowQuality);
 		CAPI_REGISTER(setShadowMapSize);
-		CAPI_REGISTER(setDetailsTexture);
 		CAPI_REGISTER(setParticles);
 		CAPI_REGISTER(setExplosionParticles);
 		CAPI_REGISTER(scriptDumpDebugInfo);

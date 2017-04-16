@@ -74,7 +74,6 @@ namespace TA3D
 			  << " Show explosion particles = " << TA3D::VARS::lp_CONFIG->explosion_particles << ";\n"
 			  << "        Show Height Lines = " << TA3D::VARS::lp_CONFIG->height_line << ";\n"
 			  << "          Show FullScreen = " << TA3D::VARS::lp_CONFIG->fullscreen << ";\n"
-			  << "           Detail Texture = " << TA3D::VARS::lp_CONFIG->detail_tex << ";\n"
 			  << "     Draw Console Loading = " << TA3D::VARS::lp_CONFIG->draw_console_loading << ";\n"
 			  << "                Game Data = " << TA3D::VARS::lp_CONFIG->serializedGameData << ";\n"
 			  << "                 Last MOD = " << TA3D::VARS::lp_CONFIG->last_MOD << ";\n"
@@ -156,7 +155,6 @@ namespace TA3D
 			TA3D::VARS::lp_CONFIG->particle = cfgFile.pullAsBool("TA3D.Show particles");
 			TA3D::VARS::lp_CONFIG->height_line = cfgFile.pullAsBool("TA3D.Show Height Lines");
 			TA3D::VARS::lp_CONFIG->fullscreen = cfgFile.pullAsBool("TA3D.Show FullScreen", false);
-			TA3D::VARS::lp_CONFIG->detail_tex = cfgFile.pullAsBool("TA3D.Detail Texture");
 			TA3D::VARS::lp_CONFIG->draw_console_loading = cfgFile.pullAsBool("TA3D.Draw Console Loading");
 
 			TA3D::VARS::lp_CONFIG->serializedGameData = cfgFile.pullAsString("TA3D.Game Data", String());

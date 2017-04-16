@@ -85,7 +85,6 @@ namespace TA3D
 		serializedGameData.clear();
 
 		draw_console_loading = false; // default set to false since it's a developer feature
-		detail_tex = false;			  // default set to false because of fragment program dependency ( and it's only an eye candy feature )
 
 		fps_limit = -1.0f;
 		timefactor = 1.0f;

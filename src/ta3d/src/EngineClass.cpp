@@ -1429,29 +1429,12 @@ namespace TA3D
 			flat[8].z = 16.0f;
 		}
 
-		const bool enable_details = lp_CONFIG->detail_tex || lp_CONFIG->shadow_quality >= 2;
-
 		if (ntex > 0 && !depth_only)
 		{
 			glActiveTextureARB(GL_TEXTURE0_ARB);
 			glEnable(GL_TEXTURE_2D);
 			glClientActiveTextureARB(GL_TEXTURE0_ARB);
 			glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-
-			if (!FLAT && enable_details)
-			{
-				glClientActiveTextureARB(GL_TEXTURE1_ARB);
-				glActiveTextureARB(GL_TEXTURE1_ARB);
-				glEnable(GL_TEXTURE_2D);
-				glBindTexture(GL_TEXTURE_2D, details_tex);
-				glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-				glDisable(GL_TEXTURE_GEN_S);
-				glDisable(GL_TEXTURE_GEN_T);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-				glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-				glActiveTextureARB(GL_TEXTURE0_ARB);
-			}
 		}
 
 		if (FLAT)
@@ -1493,25 +1476,6 @@ namespace TA3D
 		glEnableClientState(GL_COLOR_ARRAY);   // Colors(for fog of war)
 		glColorPointer(4, GL_UNSIGNED_BYTE, 0, buf_c);
 		glVertexPointer(3, GL_FLOAT, 0, buf_p);
-
-		if (!FLAT && enable_details)
-		{
-			switch (lp_CONFIG->shadow_quality)
-			{
-				case 3:
-				case 2:
-					shadow2_shader.on();
-					shadow2_shader.setvar1f("coef", color_factor);
-					shadow2_shader.setvar1i("details", 1);
-					shadow2_shader.setvar1i("shadowMap", 7);
-					shadow2_shader.setmat4f("light_Projection", gfx->shadowMapProjectionMatrix);
-					break;
-				default:
-					detail_shader.on();
-					detail_shader.setvar1f("coef", color_factor);
-					detail_shader.setvar1i("details", 1);
-			}
-		}
 
 		glClientActiveTextureARB(GL_TEXTURE0_ARB);
 		glTexCoordPointer(2, GL_FLOAT, 0, buf_t);
