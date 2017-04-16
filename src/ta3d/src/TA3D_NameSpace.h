@@ -89,7 +89,6 @@ namespace TA3D
 		bool use_texture_compression; // Use texture compression capabilities of GFX hardware ? (default : enabled because it greatly reduces video memory requirements)
 
 		String net_server;		 // The server that monitor the game server list
-		bool render_sky;		 // Render the sky ? (on low-end hardware without accelerated T&L it may help to deactivate this)
 		bool low_definition_map; // Render map in low definition mode (1 quad instead of 4 for each map bloc)
 
 		bool underwater_bright; // Render underwater objects brighter
