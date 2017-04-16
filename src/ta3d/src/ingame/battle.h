@@ -22,7 +22,6 @@
 #include "gamedata.h"
 #include <memory>
 #include <gfx/gui/area.h>
-#include <gfx/sky.h>
 #include <gfx/texture.h>
 #include <tdf.h>
 #include <EngineClass.h>
