@@ -138,8 +138,6 @@ namespace TA3D
 		loading = new Menus::Loading;
 		auto spLoading = std::unique_ptr<Menus::Loading>(loading);
 
-		freecam_on.destroy();
-		freecam_off.destroy();
 		arrow_texture.destroy();
 		circle_texture.destroy();
 		pause_tex.destroy();
@@ -537,8 +535,6 @@ namespace TA3D
 
 	bool Battle::initAllTextures()
 	{
-		freecam_on.load("gfx/freecam_on.tga");
-		freecam_off.load("gfx/freecam_off.tga");
 		arrow_texture.load("gfx/arrow.tga");
 		circle_texture.load("gfx/circle.tga");
 		pause_tex.load("gfx/pause.png");
@@ -556,7 +552,6 @@ namespace TA3D
 		cam_target_mx = gfx->SCREEN_W_HALF;
 		cam_target_my = gfx->SCREEN_H_HALF;
 		cam_has_target = false;
-		freecam = false;
 		cam_def_timer = msec_timer; // Just to see if the cam has been long enough at the default angle
 		track_mode = -1;			// Tracking a unit ? negative value => no
 		last_time_activated_track_mode = false;

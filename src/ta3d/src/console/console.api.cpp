@@ -306,18 +306,6 @@ namespace TA3D
 		return 0;
 	}
 
-	int CAPI::setFreecam(lua_State* L)
-	{
-		if (lua_gettop(L) > 0)
-		{
-			Battle::Instance()->freecam = lua_toboolean(L, -1);
-			if (!Battle::Instance()->freecam)
-				Battle::Instance()->r2 = 0.0f;
-		}
-		lua_pushboolean(L, Battle::Instance()->freecam);
-		return 1;
-	}
-
 	int CAPI::setFpsLimit(lua_State* L)
 	{
 		if (lua_gettop(L) > 0)
@@ -847,7 +835,6 @@ namespace TA3D
 		CAPI_REGISTER(setShowModel);
 		CAPI_REGISTER(setRotateLight);
 		CAPI_REGISTER(shake);
-		CAPI_REGISTER(setFreecam);
 		CAPI_REGISTER(setFpsLimit);
 		CAPI_REGISTER(spawn);
 		CAPI_REGISTER(setTimeFactor);

@@ -185,14 +185,4 @@ namespace TA3D
 		// Save the Z-coordinate
 		omz = mouse_z;
 	}
-
-	void Battle::preflightFreeCamera()
-	{
-		const int delta = IsOnGUI ? 0 : mouse_z - omz;
-		cam.rpos = cam.rpos - 0.5f * (float)delta * cam.dir;
-		cam_has_target = false;
-		// Save the Z-coordinate
-		omz = mouse_z;
-	}
-
 } // namespace TA3D

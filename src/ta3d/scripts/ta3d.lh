@@ -110,16 +110,6 @@ end
 
 local game_signal = coroutine.yield
 
-local function set_cam_mode( mode )
-    if mode == CAM_NORMAL_MODE then
-        game_signal( SIGNAL_CAM_DEF )
-    else
-        if mode == CAM_FREE_MODE then
-            game_signal( SIGNAL_FREECAM )
-        end
-    end
-end
-
 local function piece(this, ...)
     __piece_list = {...}
     if #__piece_list == 0 then

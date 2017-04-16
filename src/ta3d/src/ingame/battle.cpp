@@ -169,10 +169,7 @@ namespace TA3D
 			// Update 3D sounds
 			preflightUpdate3DSounds();
 
-			if (!freecam)
-				preflightAutomaticCamera();
-			else
-				preflightFreeCamera();
+			preflightAutomaticCamera();
 
 			bool rope_selection = pMouseSelecting && (abs(pMouseRectSelection.x1 - pMouseRectSelection.x2) >= PICK_TOLERANCE || abs(pMouseRectSelection.y1 - pMouseRectSelection.y2) >= PICK_TOLERANCE);
 			if (selected && build < 0 && (!IsOnGUI || IsOnMinimap) && !rope_selection)
@@ -367,70 +364,42 @@ namespace TA3D
 				}
 			}
 
-			if (freecam)
+			if (!TA3D_CTRL_PRESSED)
 			{
 				if (mouse_b == 4)
 				{
 					get_mouse_mickeys(&mx, &my);
 					if (omb == mouse_b)
 					{
-						r2 -= (float)mx;
-						r1 -= (float)my;
+						track_mode = -1;
+						cam.rpos.x += (float)mx * cam_h / 151.0f;
+						cam.rpos.z += (float)my * cam_h / 151.0f;
+						cam_has_target = false;
 					}
 					position_mouse(gfx->SCREEN_W_HALF, gfx->SCREEN_H_HALF);
 				}
 				else
 				{
 					if (omb == 4)
-						position_mouse(gfx->SCREEN_W_HALF, gfx->SCREEN_H_HALF);
-				}
-			}
-			else
-			{
-				if (!TA3D_CTRL_PRESSED)
-				{
-					if (mouse_b == 4)
 					{
-						get_mouse_mickeys(&mx, &my);
-						if (omb == mouse_b)
-						{
-							track_mode = -1;
-							cam.rpos.x += (float)mx * cam_h / 151.0f;
-							cam.rpos.z += (float)my * cam_h / 151.0f;
-							cam_has_target = false;
-						}
 						position_mouse(gfx->SCREEN_W_HALF, gfx->SCREEN_H_HALF);
-					}
-					else
-					{
-						if (omb == 4)
-						{
-							position_mouse(gfx->SCREEN_W_HALF, gfx->SCREEN_H_HALF);
-							cam_has_target = false;
-						}
+						cam_has_target = false;
 					}
 				}
 			}
+
 			omb = mouse_b;
 
-			if (!freecam)
-			{
-				if (!Console::Instance()->activated())
-					keyArrowsNotInFreeCam();
+			if (!Console::Instance()->activated())
+				keyArrowsNotInFreeCam();
 
-				float h = map->get_unit_h(cam.rpos.x, cam.rpos.z);
-				if (h < map->sealvl)
-					h = map->sealvl;
-				for (int i = 0; i < 20; ++i) // Increase precision
-				{
-					for (float T = 0.0f; T < dt; T += 0.1f)
-						cam.rpos.y += (h + cam_h - cam.rpos.y) * Math::Min(dt - T, 0.1f);
-				}
-			}
-			else
+			float h = map->get_unit_h(cam.rpos.x, cam.rpos.z);
+			if (h < map->sealvl)
+				h = map->sealvl;
+			for (int i = 0; i < 20; ++i) // Increase precision
 			{
-				if (!Console::Instance()->activated())
-					keyArrowsInFreeCam();
+				for (float T = 0.0f; T < dt; T += 0.1f)
+					cam.rpos.y += (h + cam_h - cam.rpos.y) * Math::Min(dt - T, 0.1f);
 			}
 
 			if (cam.rpos.x < -map->map_w_d)
@@ -1498,15 +1467,8 @@ namespace TA3D
 					pResult = brDefeat;
 					break;
 				case 4: // Set camera to normal mode
-					if (freecam)
-					{
-						freecam = false;
-						r2 = 0.0f;
-					}
 					break;
 				case 5: // Switch to free camera mode
-					if (!freecam)
-						freecam = true;
 					break;
 			}
 
@@ -2158,29 +2120,7 @@ namespace TA3D
 			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 			glEnable(GL_BLEND);
 			glEnable(GL_TEXTURE_2D);
-			if (freecam)
-				freecam_on.drawCentered(64.0f, (float)SCREEN_H - 32.0f);
-			else
-				freecam_off.drawCentered(64.0f, (float)SCREEN_H - 32.0f);
 			glDisable(GL_BLEND);
-
-			if (mouse_x >= 32 && mouse_x <= 95 && mouse_y >= SCREEN_H - 64 && omb2 == 0)
-			{
-				if (mouse_b == 1)
-				{
-					freecam ^= true;
-					if (!freecam)
-						r2 = 0.0f;
-				}
-				else
-				{
-					if (mouse_b == 2 && !freecam) // Reset default view
-					{
-						camera_zscroll = -0.00001f;
-						r1 = -lp_CONFIG->camera_def_angle - 0.00001f;
-					}
-				}
-			}
 
 			omb2 = mouse_b;
 
@@ -2190,7 +2130,7 @@ namespace TA3D
 			units.draw_mini((float)map->map_w, (float)map->map_h, map->mini_w, map->mini_h);
 			weapons.draw_mini((float)map->map_w, (float)map->map_h, map->mini_w, map->mini_h);
 
-			if (!freecam && mouse_b == 4) // Moving the cam around
+			if (mouse_b == 4) // Moving the cam around
 			{
 				gfx->set_alpha_blending();
 				gfx->set_color(0xFFFFFFFF);
@@ -2429,8 +2369,6 @@ namespace TA3D
 
 		Camera::inGame = NULL;
 
-		freecam_on.destroy();
-		freecam_off.destroy();
 		arrow_texture.destroy();
 		circle_texture.destroy();
 		pause_tex.destroy();

@@ -18,11 +18,6 @@ namespace TA3D
 		r3 = dir.z;
 	}
 
-	void Battle::setFreeCamera(bool fc)
-	{
-		freecam = fc;
-	}
-
 	void Battle::setTimeFactor(const float f)
 	{
 		lp_CONFIG->timefactor = f;
@@ -116,30 +111,6 @@ namespace TA3D
 				tmp += players.losses[i];
 				pArea.caption(String("playerstats.p") << i << "_losses", tmp);
 			}
-	}
-
-	void Battle::keyArrowsInFreeCam()
-	{
-		if (isKeyDown(KEY_UP))
-		{
-			cam.rpos += 100.0f * dt * cam_h / 151.0f * cam.dir;
-			track_mode = -1;
-		}
-		if (isKeyDown(KEY_DOWN))
-		{
-			cam.rpos += -100.0f * dt * cam_h / 151.0f * cam.dir;
-			track_mode = -1;
-		}
-		if (isKeyDown(KEY_RIGHT))
-		{
-			cam.rpos += 100.0f * dt * cam_h / 151.0f * cam.side;
-			track_mode = -1;
-		}
-		if (isKeyDown(KEY_LEFT))
-		{
-			cam.rpos += -100.0f * dt * cam_h / 151.0f * cam.side;
-			track_mode = -1;
-		}
 	}
 
 	void Battle::keyArrowsNotInFreeCam()

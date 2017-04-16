@@ -83,7 +83,6 @@ namespace TA3D
 		Result result() const { return pResult; }
 
 		void setCameraDirection(const Vector3D& dir);
-		void setFreeCamera(bool fc);
 
 		void setShowPing(bool b) { bShowPing = b; }
 		bool getShowPing() const { return bShowPing; }
@@ -173,10 +172,6 @@ namespace TA3D
 		** \brief Replace the camera automatically
 		*/
 		void preflightAutomaticCamera();
-		/*!
-		** \brief Replace the camera
-		*/
-		void preflightFreeCamera();
 
 		/*!
 		** \brief Pre Execute
@@ -216,7 +211,6 @@ namespace TA3D
 		*/
 		void showGameStatus();
 
-		void keyArrowsInFreeCam();
 		void keyArrowsNotInFreeCam();
 
 	private:
@@ -276,10 +270,6 @@ namespace TA3D
 		//! \name Textures
 		//@{
 		//!
-		Interfaces::GfxTexture freecam_on;
-		//!
-		Interfaces::GfxTexture freecam_off;
-		//!
 		Interfaces::GfxTexture arrow_texture;
 		//!
 		Interfaces::GfxTexture circle_texture;
@@ -303,8 +293,6 @@ namespace TA3D
 		bool cam_has_target;
 		//!
 		bool escMenuWasVisible;
-		//!
-		bool freecam;
 		//! Just to see if the cam has been long enough at the default angle
 		int cam_def_timer;
 		//! Tracking a unit ? negative value => no

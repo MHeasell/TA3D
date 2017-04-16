@@ -32,7 +32,7 @@ I.x, I.y, I.z = 0, 0, 1
 while true do
     yield()
     for i = 0, nb_players() - 1 do
-        local camera = { pos = vector(), dir = vector(), mode = true }
+        local camera = { pos = vector(), dir = vector() }
         camera.pos = unit_pos( player_com[i] )
         camera.dir = unit_angle( player_com[i] )
         local dir = unit_piece_dir( player_com[i], "head" )

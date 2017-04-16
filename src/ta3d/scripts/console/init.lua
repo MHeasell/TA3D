@@ -19,7 +19,6 @@ __fn_state["explosionParticles"] = setExplosionParticles;
 __fn_state["waves"] = setWaves;
 __fn_state["showModel"] = setShowModel;
 __fn_state["rotateLight"] = setRotateLight;
-__fn_state["freecam"] = setFreecam;
 __fn_state["shootall"] = setShootall;
 __fn_state["pause"] = setPause;
 __fn_state["metalCheat"] = setMetalCheat;

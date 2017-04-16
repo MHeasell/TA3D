@@ -1151,11 +1151,6 @@ namespace TA3D
 			Battle::Instance()->setCameraDirection(lua_tovector(L, -1));
 
 			lua_pop(L, 1);
-			lua_pushstring(L, "mode");
-			lua_rawget(L, -2);
-			Battle::Instance()->setFreeCamera(lua_toboolean(L, -1));
-
-			lua_pop(L, 1);
 		}
 		else
 		{
