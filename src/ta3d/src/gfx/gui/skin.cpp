@@ -425,7 +425,7 @@ namespace TA3D
 			{
 				String strtoprint;
 				String buf = Entry[y + H];
-				for (int x = 0; !buf.empty();)
+				for (unsigned int x = 0; !buf.empty();)
 				{
 					uint32 k = 0;
 					while (k < buf.size() && buf[k] == ' ') // Removes useless spaces (it's unlikely we find any other type of blank character here)
