@@ -68,7 +68,7 @@ namespace TA3D
 			void OptionButton(float x, float y, const String& Title, bool Etat) const;
 			void OptionCase(float x, float y, const String& Title, bool Etat) const;
 			void TextBar(float x1, float y1, float x2, float y2, const String& Caption, bool State) const;
-			void TextEditor(float x1, float y1, float x2, float y2, const String::Vector& Entry, int row, int col, bool State) const;
+			void TextEditor(float x1, float y1, float x2, float y2, const String::Vector& Entry, unsigned int row, unsigned int col, bool State) const;
 			void ProgressBar(float x1, float y1, float x2, float y2, int Value) const;
 			void PopupMenu(float x1, float y1, const String& msg) const;
 			void ScrollBar(float x1, float y1, float x2, float y2, float Value, bool vertical = true) const;

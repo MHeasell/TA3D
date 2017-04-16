@@ -406,7 +406,7 @@ namespace TA3D
 	  |        Draw a TEXTEDITOR widget (a large text input widget)                |
 	  \---------------------------------------------------------------------------*/
 
-		void Skin::TextEditor(float x1, float y1, float x2, float y2, const String::Vector& Entry, int row, int col, bool State) const
+		void Skin::TextEditor(float x1, float y1, float x2, float y2, const String::Vector& Entry, unsigned int row, unsigned int col, bool State) const
 		{
 			bool blink = State && (msec_timer % 1000) >= 500;
 
@@ -418,10 +418,10 @@ namespace TA3D
 
 			float maxlength = x2 - x1 + text_background.x2 - text_background.x1 - gui_font->length("_");
 			float maxheight = y2 - y1 + text_background.y2 - text_background.y1 - text_y_offset;
-			int H = Math::Max(row - (int)(0.5f * maxheight / pCacheFontHeight), 0);
-			int y = 0;
+			unsigned int H = Math::Max(row - (unsigned int)(0.5f * maxheight / pCacheFontHeight), 0u);
+			unsigned int y = 0;
 			String::size_type row_size = Entry[row].utf8size();
-			while (pCacheFontHeight * float(y + 1) <= maxheight && y + H < (int)Entry.size())
+			while (pCacheFontHeight * float(y + 1) <= maxheight && y + H < Entry.size())
 			{
 				String strtoprint;
 				String buf = Entry[y + H];
