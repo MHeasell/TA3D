@@ -1191,7 +1191,6 @@ namespace TA3D
 		const float hmetal = (float)icons[0].getHeight() / 24.0f;
 		const float wgeothermal = (float)icons[1].getWidth() / 24.0f;
 		const float hgeothermal = (float)icons[1].getHeight() / 24.0f;
-		const Vector3D camdir = 12.0f / (float)gfx->height * Camera::inGame->dir;
 		const float camzoom = Camera::inGame->zoomFactor * 9.0f;
 		pMutex.lock();
 		const uint32 player_mask = 1 << players.local_human_id;
