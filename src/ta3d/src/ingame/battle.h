@@ -429,8 +429,6 @@ namespace TA3D
 		bool IsOnMinimap;
 		//!
 		bool can_be_there;
-		//!
-		bool rope_selection;
 		//@}
 
 	private:
