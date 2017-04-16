@@ -279,8 +279,6 @@ namespace TA3D
 		//! \name Sky
 		//@{
 		//!
-		float sky_angle;
-		//!
 		Sky sky;
 		//@}
 

@@ -521,7 +521,6 @@ namespace TA3D
 		// The sky
 		sky.choose_a_sky(Paths::ExtractFileName(pGameData->map_filename), ToLower(map->ota_data.planet));
 
-		sky_angle = sky.rotationOffset();
 		return true;
 	}
 
