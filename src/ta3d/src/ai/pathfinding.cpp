@@ -341,11 +341,10 @@ namespace TA3D
 				if (zone(nx, nz) || !(*bmap)(nx, nz) || !checkRectFast(nx - mw_h, nz - mh_h, pType))
 				{
 					float dist[8];
-					float rdist[8];
 					bool zoned[8];
 					for (int e = 0; e < 8; ++e) // Gather required data
 					{
-						rdist[e] = dist[e] = -1.0f;
+						dist[e] = -1.0f;
 						nx = nodes.back().x() + order_dx[e];
 						nz = nodes.back().z() + order_dz[e];
 						zoned[e] = false;
@@ -356,7 +355,7 @@ namespace TA3D
 							continue;
 						if (!zoned[e] && !checkRectFast(nx - mw_h, nz - mh_h, pType))
 							continue;
-						rdist[e] = dist[e] = distanceCoef * sqrtf(float(sq(end_x - nx) + sq(end_z - nz))) + energy(nx, nz);
+						dist[e] = distanceCoef * sqrtf(float(sq(end_x - nx) + sq(end_z - nz))) + energy(nx, nz);
 
 						if (zoned[e])
 							dist[e] = -1.0f;
