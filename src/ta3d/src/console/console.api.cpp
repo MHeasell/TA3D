@@ -595,14 +595,6 @@ namespace TA3D
 		return 1;
 	}
 
-	int CAPI::setGUIalpha(lua_State* L)
-	{
-		if (lua_gettop(L) > 0)
-			lp_CONFIG->menuTransparency = Math::Clamp(float(lua_tonumber(L, -1)), 0.0f, 1.0f);
-		lua_pushnumber(L, lp_CONFIG->menuTransparency);
-		return 1;
-	}
-
 	// ---------------    Debug commands    ---------------
 	int CAPI::_debugSetContext(lua_State* L) // Switch debug context
 	{
@@ -841,7 +833,6 @@ namespace TA3D
 		CAPI_REGISTER(give);
 		CAPI_REGISTER(setMetalCheat);
 		CAPI_REGISTER(setEnergyCheat);
-		CAPI_REGISTER(setGUIalpha);
 		CAPI_REGISTER(setShowPing);
 
 		// ---------------    Debug commands    ---------------

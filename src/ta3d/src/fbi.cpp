@@ -1100,7 +1100,7 @@ namespace TA3D
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 		gfx->ReInitTexSys();
-		glColor4ub(0xFF, 0xFF, 0xFF, byte(0xFF - int(lp_CONFIG->menuTransparency * 0xFF)));
+		glColor4ub(0xFF, 0xFF, 0xFF, 0xFF);
 		if (GUI)
 		{
 			if (panel.tex)
@@ -1126,7 +1126,7 @@ namespace TA3D
 			}
 
 			glDisable(GL_TEXTURE_2D);
-			glColor4ub(0x0, 0x0, 0x0, byte(0xFF - int(lp_CONFIG->menuTransparency * 0xFF)));
+			glColor4ub(0x0, 0x0, 0x0, 0xFF);
 			glBegin(GL_QUADS);
 			glVertex2i(0, 0); // Barre latérale gauche
 			glVertex2i(128, 0);
@@ -1138,7 +1138,7 @@ namespace TA3D
 			glVertex2i(128, SCREEN_H);
 			glVertex2i(0, SCREEN_H);
 			glEnd();
-			glColor4ub(0xFF, 0xFF, 0xFF, byte(0xFF - int(lp_CONFIG->menuTransparency * 0xFF)));
+			glColor4ub(0xFF, 0xFF, 0xFF, 0xFF);
 			return 0;
 		}
 

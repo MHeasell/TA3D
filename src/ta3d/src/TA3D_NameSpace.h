@@ -106,8 +106,6 @@ namespace TA3D
 
 		String resourcePaths; // Alternative resource paths to use
 
-		float menuTransparency; // OTA interface transparency in game
-
 		bool developerMode; // Special mode for developers (especially mod developers)
 							// which disables file caching
 
