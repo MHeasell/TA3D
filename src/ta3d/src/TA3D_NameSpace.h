@@ -108,8 +108,6 @@ namespace TA3D
 
 		float menuTransparency; // OTA interface transparency in game
 
-		bool tooltips; // Enable build menus tool tips ?
-
 		bool developerMode; // Special mode for developers (especially mod developers)
 							// which disables file caching
 

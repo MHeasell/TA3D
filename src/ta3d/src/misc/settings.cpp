@@ -98,7 +98,6 @@ namespace TA3D
 			  << "              Grab Inputs = " << TA3D::VARS::lp_CONFIG->grab_inputs << ";\n"
 			  << "               7z command = " << TA3D::VARS::lp_CONFIG->system7zCommand << ";\n"
 			  << "           Resource Paths = " << TA3D::VARS::lp_CONFIG->resourcePaths << ";\n"
-			  << "                 Tooltips = " << TA3D::VARS::lp_CONFIG->tooltips << ";\n"
 			  << "           Developer Mode = " << TA3D::VARS::lp_CONFIG->developerMode << ";\n"
 			  << "          Texture Quality = " << TA3D::VARS::lp_CONFIG->unitTextureQuality << ";\n"
 			  << "}\n";
@@ -160,7 +159,6 @@ namespace TA3D
 			TA3D::VARS::lp_CONFIG->fullscreen = cfgFile.pullAsBool("TA3D.Show FullScreen", false);
 			TA3D::VARS::lp_CONFIG->detail_tex = cfgFile.pullAsBool("TA3D.Detail Texture");
 			TA3D::VARS::lp_CONFIG->draw_console_loading = cfgFile.pullAsBool("TA3D.Draw Console Loading");
-			TA3D::VARS::lp_CONFIG->tooltips = cfgFile.pullAsBool("TA3D.Tooltips");
 
 			TA3D::VARS::lp_CONFIG->serializedGameData = cfgFile.pullAsString("TA3D.Game Data", String());
 			TA3D::VARS::lp_CONFIG->last_MOD = cfgFile.pullAsString("TA3D.Last MOD", "");

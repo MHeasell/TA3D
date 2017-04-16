@@ -38,8 +38,6 @@ namespace TA3D
 
 		developerMode = false;
 
-		tooltips = false;
-
 		menuTransparency = 0.0f;
 
 		first_start = false;

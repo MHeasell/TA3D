@@ -1218,33 +1218,19 @@ namespace TA3D
 
 		if (sel > -1)
 		{
-			if (lp_CONFIG->tooltips)
-			{ // Tooltip code
-				String message;
-				message << unit_type[sel]->name
-						<< " M:" << unit_type[sel]->BuildCostMetal
-						<< " E:" << unit_type[sel]->BuildCostEnergy
-						<< " HP:" << unit_type[sel]->MaxDamage;
-				if (!unit_type[sel]->Description.empty())
-					message << '\n'
-							<< unit_type[sel]->Description;
-				Gui::AREA::current()->getSkin()->PopupMenu((float)mouse_x + 20.0f, (float)mouse_y + 20.0f, message);
-			}
-			else
-			{ // Print info at the bottom of the screen
-				const InterfaceData& side_data = ta3dSideData.side_int_data[players.side_view];
-				gfx->print(gfx->normal_font,
-					(float)side_data.Name.x1,
-					(float)side_data.Name.y1,
-					0.0f, 0xFFFFFFFF,
-					String(unit_type[sel]->name) << " M:" << unit_type[sel]->BuildCostMetal << " E:" << unit_type[sel]->BuildCostEnergy << " HP:" << unit_type[sel]->MaxDamage);
+			// Print info at the bottom of the screen
+			const InterfaceData& side_data = ta3dSideData.side_int_data[players.side_view];
+			gfx->print(gfx->normal_font,
+				(float)side_data.Name.x1,
+				(float)side_data.Name.y1,
+				0.0f, 0xFFFFFFFF,
+				String(unit_type[sel]->name) << " M:" << unit_type[sel]->BuildCostMetal << " E:" << unit_type[sel]->BuildCostEnergy << " HP:" << unit_type[sel]->MaxDamage);
 
-				if (!unit_type[sel]->Description.empty())
-					gfx->print(gfx->normal_font,
-						(float)side_data.Description.x1,
-						(float)side_data.Description.y1,
-						0.0f, 0xFFFFFFFF, unit_type[sel]->Description);
-			}
+			if (!unit_type[sel]->Description.empty())
+				gfx->print(gfx->normal_font,
+					(float)side_data.Description.x1,
+					(float)side_data.Description.y1,
+					0.0f, 0xFFFFFFFF, unit_type[sel]->Description);
 			glDisable(GL_BLEND);
 		}
 
