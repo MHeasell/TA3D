@@ -643,11 +643,6 @@ namespace TA3D
 					const float sinus = sinf(e->angle);
 					A = (cosinus - sinus) * cam->side + (sinus + cosinus) * cam->up;
 					B = (cosinus + sinus) * cam->side + (sinus - cosinus) * cam->up;
-					if (cam->mirror)
-					{
-						A.y = -A.y;
-						B.y = -B.y;
-					}
 				}
 				int i_bis = j << 2;
 				point[i_bis++] = e->Pos - e->size * B;

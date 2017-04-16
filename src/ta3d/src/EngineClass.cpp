@@ -1055,7 +1055,7 @@ namespace TA3D
 	std::vector<Vector3D> MAP::get_visible_volume() const
 	{
 		std::vector<Vector3D> volume;
-		const bool bFarSight = lp_CONFIG->far_sight && !Camera::inGame->mirror;
+		const bool bFarSight = lp_CONFIG->far_sight;
 		const float zfar = Camera::inGame->zfar;
 		const float cam_h = Camera::inGame->rpos.y - get_unit_h(Camera::inGame->rpos.x, Camera::inGame->rpos.z);
 		const float map_zfar = 600.0f + Math::Max((cam_h - 150.0f) * 2.0f, 0.0f);
@@ -1106,7 +1106,7 @@ namespace TA3D
 		}
 		else
 		{
-			const bool bFarSight = lp_CONFIG->far_sight && !cam->mirror;
+			const bool bFarSight = lp_CONFIG->far_sight;
 			const float zfar = cam->zfar;
 			const float cam_h = cam->rpos.y - get_unit_h(cam->rpos.x, cam->rpos.z);
 			const float map_zfar = 600.0f + Math::Max((cam_h - 150.0f) * 2.0f, 0.0f);
@@ -1429,7 +1429,7 @@ namespace TA3D
 			flat[8].z = 16.0f;
 		}
 
-		const bool enable_details = !cam->mirror && (lp_CONFIG->detail_tex || lp_CONFIG->shadow_quality >= 2);
+		const bool enable_details = lp_CONFIG->detail_tex || lp_CONFIG->shadow_quality >= 2;
 
 		if (ntex > 0 && !depth_only)
 		{
@@ -1635,8 +1635,6 @@ namespace TA3D
 						view(x, y) = 2;
 					if (view(x, y) == 2 && FLAT)
 						view(x, y) = 0;
-					if (cam->mirror && map_data(X, Y).isFlat())
-						continue;
 				}
 				// Si le joueur ne peut pas voir ce morceau, on ne le dessine pas en clair
 				T.x += float(x << 4);

@@ -86,7 +86,6 @@ namespace TA3D
 		float zfar;   // Pour le volume visible
 		float znear;
 		float zfar2; // Carré de la distance maximale
-		bool mirror; // Mirroir ??
 		float mirrorPos;
 
 		float shakeMagnitude;

@@ -51,7 +51,6 @@ namespace TA3D
 		znear = 1.0f;
 		side = dir * up;
 		zfar2 = zfar * zfar;
-		mirror = false;
 		mirrorPos = 0.0f;
 		zoomFactor = 0.5f;
 	}
@@ -164,12 +163,6 @@ namespace TA3D
 			glMatrixMode(GL_MODELVIEW);
 			glLoadIdentity();
 		}
-
-		if (mirror)
-		{
-			glScalef(1.0f, -1.0f, 1.0f);
-			glTranslatef(0.0f, mirrorPos - 2.0f * shakeVector.y, 0.0f);
-		}
 	}
 
 	Matrix Camera::getMatrix() const
@@ -184,11 +177,6 @@ namespace TA3D
 			FP.x, FP.y, FP.z,
 			up.x, up.y, up.z);
 
-		if (mirror)
-		{
-			glScalef(1.0f, -1.0f, 1.0f);
-			glTranslatef(0.0f, mirrorPos - 2.0f * shakeVector.y, 0.0f);
-		}
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
 

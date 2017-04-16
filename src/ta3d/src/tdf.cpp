@@ -513,26 +513,6 @@ namespace TA3D
 				continue;
 
 			Feature* pFeature = feature_manager.getFeaturePointer(feature[i].type);
-			if (Camera::inGame->mirror && ((pFeature->height > 5.0f && pFeature->m3d) // Perform a small visibility check
-											  || (pFeature->m3d && pFeature->model != NULL)))
-			{
-				Vector3D Pos(feature[i].Pos);
-				if (pFeature->m3d)
-					Pos.y += pFeature->model->size2;
-				else
-					Pos.y += float(pFeature->height) * 0.5f;
-
-				const float a = Camera::inGame->rpos.y - units.map->sealvl;
-				const float b = Pos.y - units.map->sealvl;
-				const float c = a + b;
-				if (Math::AlmostZero(c))
-					continue;
-				Pos = (a / c) * Pos + (b / c) * Camera::inGame->rpos;
-				Pos.y = units.map->get_unit_h(Pos.x, Pos.z);
-
-				if (Pos.y > units.map->sealvl) // If it's not visible don't draw it
-					continue;
-			}
 
 			if (pFeature->not_loaded)
 				pFeature->convert(); // Load data and convert texture
@@ -586,7 +566,7 @@ namespace TA3D
 				else
 				{
 					// no need to draw things we can't see
-					if (!Camera::inGame->mirror && !no_flat && !gfx->getShadowMapMode())
+					if (!no_flat && !gfx->getShadowMapMode())
 					{
 						dw *= 0.5f;
 						h = 0.25f * float(pFeature->anim.h[feature[i].frame]);

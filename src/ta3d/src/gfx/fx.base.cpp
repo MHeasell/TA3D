@@ -147,36 +147,21 @@ namespace TA3D
 		glPushMatrix();
 		glTranslatef(Pos.x, Pos.y, Pos.z);
 
-		if (cam.mirror)
-		{
-			glBegin(GL_QUADS);
-			glTexCoord2f(0.0f, 0.0f);
-			glVertex3f(hux - wsx, -huy + wsy, huz - wsz);
-			glTexCoord2f(1.0f, 0.0f);
-			glVertex3f(hux + wsx, -huy - wsy, huz + wsz);
-			glTexCoord2f(1.0f, 1.0f);
-			glVertex3f(-hux + wsx, huy - wsy, -huz + wsz);
-			glTexCoord2f(0.0f, 1.0f);
-			glVertex3f(-hux - wsx, huy + wsy, -huz - wsz);
-			glEnd();
-		}
-		else
-		{
-			const Vector3D vDir(-0.5f * (hsize + wsize) * cam.dir);
-			glTranslatef(vDir.x, vDir.y, vDir.z);
-			const float s = 1.0f - 0.5f * (hsize + wsize) / (cam.pos - Pos).norm();
-			glScalef(s, s, s);
-			glBegin(GL_QUADS);
-			glTexCoord2f(0.0f, 0.0f);
-			glVertex3f(hux - wsx, huy - wsy, huz - wsz);
-			glTexCoord2f(1.0f, 0.0f);
-			glVertex3f(hux + wsx, huy + wsy, huz + wsz);
-			glTexCoord2f(1.0f, 1.0f);
-			glVertex3f(-hux + wsx, -huy + wsy, -huz + wsz);
-			glTexCoord2f(0.0f, 1.0f);
-			glVertex3f(-hux - wsx, -huy - wsy, -huz - wsz);
-			glEnd();
-		}
+		const Vector3D vDir(-0.5f * (hsize + wsize) * cam.dir);
+		glTranslatef(vDir.x, vDir.y, vDir.z);
+		const float s = 1.0f - 0.5f * (hsize + wsize) / (cam.pos - Pos).norm();
+		glScalef(s, s, s);
+		glBegin(GL_QUADS);
+		glTexCoord2f(0.0f, 0.0f);
+		glVertex3f(hux - wsx, huy - wsy, huz - wsz);
+		glTexCoord2f(1.0f, 0.0f);
+		glVertex3f(hux + wsx, huy + wsy, huz + wsz);
+		glTexCoord2f(1.0f, 1.0f);
+		glVertex3f(-hux + wsx, -huy + wsy, -huz + wsz);
+		glTexCoord2f(0.0f, 1.0f);
+		glVertex3f(-hux - wsx, -huy - wsy, -huz - wsz);
+		glEnd();
+
 		glPopMatrix();
 	}
 
