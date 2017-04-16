@@ -230,7 +230,8 @@ namespace TA3D
 #define TA3D_LOADING_STATS
 #ifdef TA3D_LOADING_STATS
 		LOG_INFO(LOG_PREFIX_BATTLE << "statistics:");
-		const char* functionName[] = {"initPreflight(g)",
+		const char* functionName[] = {
+			"initPreflight(g)",
 			"initTextures()",
 			"init3DModels()",
 			"initGraphicalFeatures()",
