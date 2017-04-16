@@ -96,7 +96,6 @@ namespace TA3D
 				lp_CONFIG->use_texture_cache = false;
 				lp_CONFIG->use_texture_compression = false;
 
-				lp_CONFIG->render_sky = true;
 				lp_CONFIG->low_definition_map = false;
 
 				lp_CONFIG->disable_GLSL = false;
@@ -119,7 +118,6 @@ namespace TA3D
 				lp_CONFIG->use_texture_cache = true;
 				lp_CONFIG->use_texture_compression = true;
 
-				lp_CONFIG->render_sky = true;
 				lp_CONFIG->low_definition_map = false;
 
 				lp_CONFIG->disable_GLSL = false;
@@ -143,7 +141,6 @@ namespace TA3D
 				lp_CONFIG->use_texture_cache = false;
 				lp_CONFIG->use_texture_compression = true;
 
-				lp_CONFIG->render_sky = false;
 				lp_CONFIG->low_definition_map = true;
 
 				lp_CONFIG->disable_GLSL = true;
@@ -166,7 +163,6 @@ namespace TA3D
 				lp_CONFIG->use_texture_cache = false;
 				lp_CONFIG->use_texture_compression = true;
 
-				lp_CONFIG->render_sky = false;
 				lp_CONFIG->low_definition_map = true;
 
 				lp_CONFIG->disable_GLSL = true;
@@ -192,7 +188,6 @@ namespace TA3D
 				lp_CONFIG->use_texture_cache = false;
 				lp_CONFIG->use_texture_compression = false;
 
-				lp_CONFIG->render_sky = true;
 				lp_CONFIG->low_definition_map = false;
 
 				lp_CONFIG->disable_GLSL = false;
@@ -215,7 +210,6 @@ namespace TA3D
 				lp_CONFIG->use_texture_cache = true;
 				lp_CONFIG->use_texture_compression = true;
 
-				lp_CONFIG->render_sky = true;
 				lp_CONFIG->low_definition_map = false;
 
 				lp_CONFIG->disable_GLSL = false;
@@ -239,7 +233,6 @@ namespace TA3D
 				lp_CONFIG->use_texture_cache = false;
 				lp_CONFIG->use_texture_compression = true;
 
-				lp_CONFIG->render_sky = false;
 				lp_CONFIG->low_definition_map = true;
 
 				lp_CONFIG->disable_GLSL = true;
@@ -262,7 +255,6 @@ namespace TA3D
 				lp_CONFIG->use_texture_cache = false;
 				lp_CONFIG->use_texture_compression = true;
 
-				lp_CONFIG->render_sky = false;
 				lp_CONFIG->low_definition_map = true;
 
 				lp_CONFIG->disable_GLSL = true;
