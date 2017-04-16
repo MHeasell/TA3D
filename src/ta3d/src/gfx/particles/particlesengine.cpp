@@ -710,16 +710,11 @@ namespace TA3D
 		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 		glDisableClientState(GL_COLOR_ARRAY);
 
-		float coeffs[] = {0.000000000001f, 0.0f, 1.0f / float(SCREEN_H * SCREEN_H)};
-		if (lp_CONFIG->ortho_camera)
-		{
-			coeffs[0] = Camera::inGame->zoomFactor * Camera::inGame->zoomFactor / 2.0f;
-			coeffs[1] = 0.0f;
-			coeffs[2] = 0.0f;
-			glPointParameterfv(GL_POINT_DISTANCE_ATTENUATION, coeffs);
-		}
-		else
-			glPointParameterfv(GL_POINT_DISTANCE_ATTENUATION, coeffs);
+		float coeffs[3];
+		coeffs[0] = Camera::inGame->zoomFactor * Camera::inGame->zoomFactor / 2.0f;
+		coeffs[1] = 0.0f;
+		coeffs[2] = 0.0f;
+		glPointParameterfv(GL_POINT_DISTANCE_ATTENUATION, coeffs);
 
 		// Point size
 		glPointParameterf(GL_POINT_SIZE_MAX, 3200000.0f);
@@ -769,16 +764,11 @@ namespace TA3D
 		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 		glDisableClientState(GL_COLOR_ARRAY);
 
-		float coeffs[] = {0.000000000001f, 0.0f, 1.0f / float(SCREEN_H * SCREEN_H)};
-		if (lp_CONFIG->ortho_camera)
-		{
-			coeffs[0] = Camera::inGame->zoomFactor * Camera::inGame->zoomFactor / 2.0f;
-			coeffs[1] = 0.0f;
-			coeffs[2] = 0.0f;
-			glPointParameterfv(GL_POINT_DISTANCE_ATTENUATION, coeffs);
-		}
-		else
-			glPointParameterfv(GL_POINT_DISTANCE_ATTENUATION, coeffs);
+		float coeffs[3];
+		coeffs[0] = Camera::inGame->zoomFactor * Camera::inGame->zoomFactor / 2.0f;
+		coeffs[1] = 0.0f;
+		coeffs[2] = 0.0f;
+		glPointParameterfv(GL_POINT_DISTANCE_ATTENUATION, coeffs);
 
 		// Point size
 		glPointParameterf(GL_POINT_SIZE_MAX, 3200000.0f);

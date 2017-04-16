@@ -466,31 +466,21 @@ namespace TA3D
 
 			if (cam_has_target)
 			{
-				Vector3D cur_dir;
-				Vector3D m_pos;
-				if (lp_CONFIG->ortho_camera)
-				{
-					cur_dir = cam.dir;
-					m_pos = cam.pos + cam.zoomFactor * (float(cam_target_mx - gfx->SCREEN_W_HALF) * cam.side - float(cam_target_my - gfx->SCREEN_H_HALF) * cam.up) + cam.znear * cam.dir;
-				}
-				else
-				{
-					cur_dir = cam.dir + cam.widthFactor * 2.0f * float(cam_target_mx - gfx->SCREEN_W_HALF) * gfx->SCREEN_W_INV * cam.side - 1.5f * float(cam_target_my - gfx->SCREEN_H_HALF) * gfx->SCREEN_H_INV * cam.up;
-					m_pos = cam.rpos;
-				}
+				Vector3D cur_dir = cam.dir;
+				Vector3D m_pos = cam.pos + cam.zoomFactor * (float(cam_target_mx - gfx->SCREEN_W_HALF) * cam.side - float(cam_target_my - gfx->SCREEN_H_HALF) * cam.up) + cam.znear * cam.dir;
+
 				cur_dir.unit(); // Direction pointÃ©e par le curseur
 				Vector3D moving_target(cam_target - m_pos);
 				moving_target = moving_target - (moving_target % cur_dir) * cur_dir;
-				if (lp_CONFIG->ortho_camera)
-				{
-					const float d = moving_target.sq();
-					moving_target.y = 0.0f;
-					const float D = moving_target.sq();
-					if (Math::AlmostZero(D))
-						cam_has_target = false;
-					else
-						moving_target = d / D * moving_target;
-				}
+
+				const float d = moving_target.sq();
+				moving_target.y = 0.0f;
+				const float D = moving_target.sq();
+				if (Math::AlmostZero(D))
+					cam_has_target = false;
+				else
+					moving_target = d / D * moving_target;
+
 				cam.rpos = moving_target + cam.rpos;
 			}
 

@@ -142,10 +142,8 @@ namespace TA3D
 
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
-		if (lp_CONFIG && lp_CONFIG->ortho_camera)
-			glOrtho(-0.5f * zoomFactor * float(SCREEN_W), 0.5f * zoomFactor * float(SCREEN_W), -0.5f * zoomFactor * float(SCREEN_H), 0.5f * zoomFactor * float(SCREEN_H), znear, zfar);
-		else
-			glFrustum(-widthFactor * znear, widthFactor * znear, -0.75f * znear, 0.75f * znear, znear, zfar);
+
+		glOrtho(-0.5f * zoomFactor * float(SCREEN_W), 0.5f * zoomFactor * float(SCREEN_W), -0.5f * zoomFactor * float(SCREEN_H), 0.5f * zoomFactor * float(SCREEN_H), znear, zfar);
 
 		if (classic)
 		{
@@ -178,10 +176,8 @@ namespace TA3D
 	{
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
-		if (lp_CONFIG && lp_CONFIG->ortho_camera)
-			glOrtho(-0.5f * zoomFactor * float(SCREEN_W), 0.5f * zoomFactor * float(SCREEN_W), -0.5f * zoomFactor * float(SCREEN_H), 0.5f * zoomFactor * float(SCREEN_H), -512.0f, zfar);
-		else
-			glFrustum(-widthFactor * znear, widthFactor * znear, -0.75f * znear, 0.75f * znear, znear, zfar);
+
+		glOrtho(-0.5f * zoomFactor * float(SCREEN_W), 0.5f * zoomFactor * float(SCREEN_W), -0.5f * zoomFactor * float(SCREEN_H), 0.5f * zoomFactor * float(SCREEN_H), -512.0f, zfar);
 
 		const Vector3D FP(rpos + dir + shakeVector);
 		gluLookAt(pos.x + shakeVector.x, pos.y + shakeVector.y, pos.z + shakeVector.z,
@@ -206,32 +202,17 @@ namespace TA3D
 
 	void Camera::getFrustum(std::vector<Vector3D>& list)
 	{
-		if (lp_CONFIG && lp_CONFIG->ortho_camera)
-		{
-			const Vector3D wside = static_cast<float>(SCREEN_W) * side;
-			const Vector3D hup = static_cast<float>(SCREEN_H) * up;
-			list.push_back(rpos + znear * dir + 0.5f * zoomFactor * (-wside + hup));
-			list.push_back(rpos + znear * dir + 0.5f * zoomFactor * (wside + hup));
-			list.push_back(rpos + znear * dir + 0.5f * zoomFactor * (-wside - hup));
-			list.push_back(rpos + znear * dir + 0.5f * zoomFactor * (wside - hup));
+		const Vector3D wside = static_cast<float>(SCREEN_W) * side;
+		const Vector3D hup = static_cast<float>(SCREEN_H) * up;
+		list.push_back(rpos + znear * dir + 0.5f * zoomFactor * (-wside + hup));
+		list.push_back(rpos + znear * dir + 0.5f * zoomFactor * (wside + hup));
+		list.push_back(rpos + znear * dir + 0.5f * zoomFactor * (-wside - hup));
+		list.push_back(rpos + znear * dir + 0.5f * zoomFactor * (wside - hup));
 
-			list.push_back(rpos + zfar * dir + 0.5f * zoomFactor * (-wside + hup));
-			list.push_back(rpos + zfar * dir + 0.5f * zoomFactor * (wside + hup));
-			list.push_back(rpos + zfar * dir + 0.5f * zoomFactor * (-wside - hup));
-			list.push_back(rpos + zfar * dir + 0.5f * zoomFactor * (wside - hup));
-		}
-		else
-		{
-			list.push_back(rpos + znear * (-widthFactor * side + 0.75 * up + dir));
-			list.push_back(rpos + znear * (widthFactor * side + 0.75 * up + dir));
-			list.push_back(rpos + znear * (-widthFactor * side - 0.75 * up + dir));
-			list.push_back(rpos + znear * (widthFactor * side - 0.75 * up + dir));
-
-			list.push_back(rpos + zfar * (-widthFactor * side + 0.75 * up + dir));
-			list.push_back(rpos + zfar * (widthFactor * side + 0.75 * up + dir));
-			list.push_back(rpos + zfar * (-widthFactor * side - 0.75 * up + dir));
-			list.push_back(rpos + zfar * (widthFactor * side - 0.75 * up + dir));
-		}
+		list.push_back(rpos + zfar * dir + 0.5f * zoomFactor * (-wside + hup));
+		list.push_back(rpos + zfar * dir + 0.5f * zoomFactor * (wside + hup));
+		list.push_back(rpos + zfar * dir + 0.5f * zoomFactor * (-wside - hup));
+		list.push_back(rpos + zfar * dir + 0.5f * zoomFactor * (wside - hup));
 	}
 
 } // namespace TA3D

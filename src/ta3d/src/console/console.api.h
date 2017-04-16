@@ -35,7 +35,6 @@ namespace TA3D
 		static int setSoundVolume(lua_State* L);
 		static int setMusicVolume(lua_State* L);
 		static int setRightClickInterface(lua_State* L);
-		static int setCameraOrtho(lua_State* L);
 		static int setGrabInputs(lua_State* L);
 		static int setVideoShoot(lua_State* L);
 		static int screenshot(lua_State* L);

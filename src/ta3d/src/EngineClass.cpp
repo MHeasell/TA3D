@@ -834,22 +834,12 @@ namespace TA3D
 		Vector3D A, B, C, D;
 		Vector3D PA, PB, PC, PD;
 
-		if (lp_CONFIG->ortho_camera)
-		{
-			A = B = C = D = cam->dir;
-			PA = cam->pos + cam->zoomFactor * (-(float)gfx->SCREEN_W_HALF * cam->side - (float)gfx->SCREEN_H_HALF * cam->up);
-			PB = cam->pos + cam->zoomFactor * ((float)gfx->SCREEN_W_HALF * cam->side - (float)gfx->SCREEN_H_HALF * cam->up);
-			PC = cam->pos + cam->zoomFactor * ((float)gfx->SCREEN_W_HALF * cam->side + (float)gfx->SCREEN_H_HALF * cam->up);
-			PD = cam->pos + cam->zoomFactor * (-(float)gfx->SCREEN_W_HALF * cam->side + (float)gfx->SCREEN_H_HALF * cam->up);
-		}
-		else
-		{
-			A = cam->dir + cam->widthFactor * (-cam->side) - 0.75f * cam->up;
-			B = cam->dir + cam->widthFactor * (cam->side) - 0.75f * cam->up;
-			C = cam->dir + cam->widthFactor * (cam->side) + 0.75f * cam->up;
-			D = cam->dir + cam->widthFactor * (-cam->side) + 0.75f * cam->up;
-			PA = PB = PC = PD = cam->pos;
-		}
+		A = B = C = D = cam->dir;
+		PA = cam->pos + cam->zoomFactor * (-(float)gfx->SCREEN_W_HALF * cam->side - (float)gfx->SCREEN_H_HALF * cam->up);
+		PB = cam->pos + cam->zoomFactor * ((float)gfx->SCREEN_W_HALF * cam->side - (float)gfx->SCREEN_H_HALF * cam->up);
+		PC = cam->pos + cam->zoomFactor * ((float)gfx->SCREEN_W_HALF * cam->side + (float)gfx->SCREEN_H_HALF * cam->up);
+		PD = cam->pos + cam->zoomFactor * (-(float)gfx->SCREEN_W_HALF * cam->side + (float)gfx->SCREEN_H_HALF * cam->up);
+
 		const int nmax = 64;
 		float cx[4 * nmax + 4], cy[4 * nmax + 4];
 		if (A.y < 0.0f)

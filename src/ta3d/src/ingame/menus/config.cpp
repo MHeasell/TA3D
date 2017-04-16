@@ -177,7 +177,7 @@ namespace TA3D
 			pArea->set_state("*.far_sight", lp_CONFIG->far_sight);
 			pArea->set_value("*.anisotropy", lp_CONFIG->anisotropy);
 			pArea->set_value("*.mouse_sensitivity", (int)(lp_CONFIG->mouse_sensivity * 100.0f));
-			pArea->set_state("*.disable_perspective", lp_CONFIG->ortho_camera);
+			pArea->set_state("*.disable_perspective", true);
 			pArea->set_state("*.right_click_interface", lp_CONFIG->right_click_interface);
 			pArea->set_state("*.disable_GLSL", lp_CONFIG->disable_GLSL);
 			pArea->set_state("*.underwater_bright", lp_CONFIG->underwater_bright);
@@ -455,7 +455,6 @@ namespace TA3D
 			lp_CONFIG->far_sight = pArea->get_state("*.far_sight");
 			lp_CONFIG->anisotropy = sint16(pArea->get_value("*.anisotropy"));
 			lp_CONFIG->mouse_sensivity = float(pArea->get_value("*.mouse_sensitivity")) * 0.01f;
-			lp_CONFIG->ortho_camera = pArea->get_state("*.disable_perspective");
 			lp_CONFIG->right_click_interface = pArea->get_state("*.right_click_interface");
 			lp_CONFIG->disable_GLSL = pArea->get_state("*.disable_GLSL");
 			lp_CONFIG->underwater_bright = pArea->get_state("*.underwater_bright");

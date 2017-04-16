@@ -98,8 +98,6 @@ namespace TA3D
 
 		bool right_click_interface; // Right click interface ?
 
-		bool ortho_camera; // Do we use orthographic camera ?
-
 		float mouse_sensivity; // Mouse sensivity
 
 		int sound_volume; // Self explanatory

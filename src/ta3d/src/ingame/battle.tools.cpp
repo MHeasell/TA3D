@@ -38,11 +38,10 @@ namespace TA3D
 			const float y = map.get_unit_h(x, z);
 			return Vector3D(x, y, z);
 		}
-		if (lp_CONFIG->ortho_camera) // Orthographic camera
-		{
-			const Vector3D cur_pos = cam.pos + cam.zoomFactor * (float(mouse_x - gfx->SCREEN_W_HALF) * cam.side - float(mouse_y - gfx->SCREEN_H_HALF) * cam.up);
-			return map.hit(cur_pos, cam.dir, true, 2000000000.0f, true);
-		}
+
+		const Vector3D cur_pos = cam.pos + cam.zoomFactor * (float(mouse_x - gfx->SCREEN_W_HALF) * cam.side - float(mouse_y - gfx->SCREEN_H_HALF) * cam.up);
+		return map.hit(cur_pos, cam.dir, true, 2000000000.0f, true);
+
 		// Normal perspective code
 		Vector3D cur_dir = cam.dir + cam.widthFactor * 2.0f * float(mouse_x - gfx->SCREEN_W_HALF) * gfx->SCREEN_W_INV * cam.side - 1.5f * float(mouse_y - gfx->SCREEN_H_HALF) * gfx->SCREEN_H_INV * cam.up;
 		cur_dir.unit(); // Direction pointée par le curseur

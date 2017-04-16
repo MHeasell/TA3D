@@ -171,11 +171,10 @@ namespace TA3D
 			glDepthMask(GL_FALSE);
 			glTranslatef(cam.rpos.x, cam.rpos.y + cam.shakeVector.y, cam.rpos.z);
 			glRotatef(sky_angle, 0.0f, 1.0f, 0.0f);
-			if (lp_CONFIG->ortho_camera)
-			{
-				const float scale = cam.zoomFactor / 800.0f * std::sqrt(float(SCREEN_H * SCREEN_H + SCREEN_W * SCREEN_W));
-				glScalef(scale, scale, scale);
-			}
+
+			const float scale = cam.zoomFactor / 800.0f * std::sqrt(float(SCREEN_H * SCREEN_H + SCREEN_W * SCREEN_W));
+			glScalef(scale, scale, scale);
+
 			sky.draw();
 		}
 		else
@@ -478,10 +477,7 @@ namespace TA3D
 
 	void Battle::renderScene()
 	{
-		if (lp_CONFIG->ortho_camera)
-			cam.znear = -512.0f;
-		else
-			cam.znear = 1.0f;
+		cam.znear = -512.0f;
 
 		renderShadowMap();
 
@@ -497,9 +493,7 @@ namespace TA3D
 	void Battle::makePoster(int w, int h)
 	{
 		bool previous_pause_state = lp_CONFIG->pause;
-		bool prevCameraType = lp_CONFIG->ortho_camera;
 		lp_CONFIG->pause = true;
-		lp_CONFIG->ortho_camera = true;
 
 		while (!lp_CONFIG->paused)
 			rest(100); // Wait for the engine to enter in pause mode so we can assemble several shots
@@ -542,7 +536,6 @@ namespace TA3D
 		cam = camBak;
 
 		lp_CONFIG->pause = previous_pause_state;
-		lp_CONFIG->ortho_camera = prevCameraType;
 	}
 
 } // namespace TA3D

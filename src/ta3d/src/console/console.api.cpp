@@ -125,14 +125,6 @@ namespace TA3D
 		return 1;
 	}
 
-	int CAPI::setCameraOrtho(lua_State* L)
-	{
-		if (lua_gettop(L) > 0)
-			lp_CONFIG->ortho_camera = lua_toboolean(L, -1);
-		lua_pushboolean(L, lp_CONFIG->ortho_camera);
-		return 1;
-	}
-
 	int CAPI::setGrabInputs(lua_State* L)
 	{
 		if (lua_gettop(L) > 0)
@@ -833,7 +825,6 @@ namespace TA3D
 		CAPI_REGISTER(setSoundVolume);
 		CAPI_REGISTER(setMusicVolume);
 		CAPI_REGISTER(setRightClickInterface);
-		CAPI_REGISTER(setCameraOrtho);
 		CAPI_REGISTER(setGrabInputs);
 		CAPI_REGISTER(setVideoShoot);
 		CAPI_REGISTER(screenshot);

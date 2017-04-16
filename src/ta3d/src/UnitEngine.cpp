@@ -338,19 +338,8 @@ namespace TA3D
 		if (last_on != -1)
 			return last_on;
 
-		Vector3D Dir;
-		Vector3D CamPos;
-		if (lp_CONFIG->ortho_camera)
-		{
-			Dir = cam.dir;
-			CamPos = cam.pos + cam.zoomFactor * (float(mouse_x - gfx->SCREEN_W_HALF) * cam.side - float(mouse_y - gfx->SCREEN_H_HALF) * cam.up);
-		}
-		else
-		{
-			CamPos = cam.pos;
-			Dir = cam.dir + cam.widthFactor * 2.0f * float(mouse_x - gfx->SCREEN_W_HALF) * gfx->SCREEN_W_INV * cam.side - 1.5f * float(mouse_y - gfx->SCREEN_H_HALF) * gfx->SCREEN_H_INV * cam.up;
-			Dir.unit(); // Direction pointée par le curseur
-		}
+		Vector3D Dir = cam.dir;
+		Vector3D CamPos = cam.pos + cam.zoomFactor * (float(mouse_x - gfx->SCREEN_W_HALF) * cam.side - float(mouse_y - gfx->SCREEN_H_HALF) * cam.up);
 
 		std::vector<uint16> detectable;
 

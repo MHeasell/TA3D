@@ -1246,7 +1246,7 @@ namespace TA3D
 			if (!(the_map->view_map(pFeature->px >> 1, pFeature->py >> 1) & player_mask))
 				continue;
 			const Vector3D D(pFeature->Pos - Camera::inGame->pos);
-			const float size = lp_CONFIG->ortho_camera ? camzoom : (D % camdir);
+			const float size = camzoom;
 			if (pFeatureType->geothermal)
 			{
 				const float sizew = size * wgeothermal;
