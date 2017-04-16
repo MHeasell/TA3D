@@ -1905,7 +1905,6 @@ namespace TA3D
 		glDisable(GL_BLEND);
 		glDisable(GL_DEPTH_TEST);
 		glDisable(GL_TEXTURE_2D);
-		glDisable(GL_FOG);
 		glDepthMask(GL_FALSE);
 
 		hbars.clear();
@@ -1928,7 +1927,6 @@ namespace TA3D
 		glDisableClientState(GL_COLOR_ARRAY);
 
 		glDepthMask(GL_TRUE);
-		glEnable(GL_FOG);
 		glEnable(GL_DEPTH_TEST);
 		glEnable(GL_CULL_FACE);
 	}

@@ -99,11 +99,6 @@ namespace TA3D
 		void updateCurrentGUICacheNames();
 
 		/*!
-		** \brief update fog parameters
-		*/
-		void updateFOG();
-
-		/*!
 		** \brief update camera zfar parameter
 		*/
 		void updateZFAR();
@@ -146,8 +141,6 @@ namespace TA3D
 		bool initTheCamera();
 		//! Init the wind
 		bool initTheWind();
-		//! Init the fog
-		bool initTheFog();
 		//! Init particules
 		bool initParticules();
 		//! Init the Water
@@ -422,20 +415,6 @@ namespace TA3D
 		float wind_t;
 		//!
 		bool wind_change;
-		//@}
-
-		//! \name Fog
-		//@{
-		//!
-		float FogD;
-		//!
-		float FogNear;
-		//!
-		float FogFar;
-		//!
-		float FogColor[4];
-		//!
-		GLuint FogMode;
 		//@}
 
 		//! \name Water

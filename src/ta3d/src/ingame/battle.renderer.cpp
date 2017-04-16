@@ -34,7 +34,6 @@ namespace TA3D
 		updateZFAR();
 
 		gfx->SetDefState();
-		updateFOG();
 
 		render_time = ((float)units.current_tick) / TICKS_PER_SEC;
 
@@ -68,7 +67,6 @@ namespace TA3D
 					gfx->readShadowMapProjectionMatrix();
 
 					glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
-					glDisable(GL_FOG);
 					glShadeModel(GL_FLAT);
 
 					glEnable(GL_POLYGON_OFFSET_FILL);
@@ -149,7 +147,7 @@ namespace TA3D
 	void Battle::renderWorld()
 	{
 		gfx->SetDefState();
-		glClearColor(FogColor[0], FogColor[1], FogColor[2], FogColor[3]);
+		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 		gfx->clearDepth(); // Clear screen
 
 		cam.setView();
@@ -161,7 +159,6 @@ namespace TA3D
 
 		cam.zfar *= 100.0f;
 		cam.setView();
-		glDisable(GL_FOG);
 		glColor4ub(0xFF, 0xFF, 0xFF, 0xFF);
 		glEnable(GL_TEXTURE_2D);
 		glDisable(GL_BLEND);
@@ -171,7 +168,6 @@ namespace TA3D
 		glDepthMask(GL_TRUE);
 		glEnable(GL_CULL_FACE);
 		glEnable(GL_LIGHTING);
-		glEnable(GL_FOG);
 		updateZFAR();
 
 		if (lp_CONFIG->wireframe)
@@ -192,10 +188,7 @@ namespace TA3D
 		cam.setView(lp_CONFIG->shadow_quality < 2);
 		if (cam.rpos.y <= gfx->low_def_limit)
 		{
-			if (lp_CONFIG->shadow_quality >= 2)
-				glFogi(GL_FOG_COORD_SRC, GL_FOG_COORD);
 			units.draw(true, false, true, lp_CONFIG->height_line);
-			glFogi(GL_FOG_COORD_SRC, GL_FRAGMENT_DEPTH);
 		}
 
 		// Dessine les objets produits par les armes sous l'eau / Draw weapons which are under water
@@ -212,11 +205,8 @@ namespace TA3D
 		}
 
 		cam.setView(lp_CONFIG->shadow_quality < 2);
-		if (lp_CONFIG->shadow_quality >= 2)
-			glFogi(GL_FOG_COORD_SRC, GL_FOG_COORD);
 		// Dessine les unités non encore dessinées / Draw units which have not been drawn
 		units.draw(false, false, true, lp_CONFIG->height_line);
-		glFogi(GL_FOG_COORD_SRC, GL_FRAGMENT_DEPTH);
 
 		// Dessine les objets produits par les armes n'ayant pas été dessinés / Draw weapons which have not been drawn
 		weapons.draw(false);
@@ -226,7 +216,6 @@ namespace TA3D
 	{
 		if (build >= 0 && !IsOnGUI) // Display the building we want to build (with nice selection quads)
 		{
-			glDisable(GL_FOG);
 			Vector3D target(cursorOnMap(cam, *map));
 			pMouseRectSelection.x2 = ((int)(target.x) + map->map_w_d) >> 3;
 			pMouseRectSelection.y2 = ((int)(target.z) + map->map_h_d) >> 3;
@@ -344,12 +333,10 @@ namespace TA3D
 				glEnable(GL_LIGHTING);
 				glEnable(GL_CULL_FACE);
 			}
-			glEnable(GL_FOG);
 		}
 
 		if ((selected || units.last_on >= 0) && TA3D_SHIFT_PRESSED)
 		{
-			glDisable(GL_FOG);
 			cam.setView();
 			bool builders = false;
 			const float t = (float)msec_timer * 0.001f;
@@ -397,11 +384,9 @@ namespace TA3D
 					}
 				}
 			}
-			glEnable(GL_FOG);
 		}
 		if ((selected || units.last_on >= 0) && TA3D_CTRL_PRESSED)
 		{
-			glDisable(GL_FOG);
 			cam.setView();
 			const float t = (float)msec_timer * 0.001f;
 			const float mt = std::fmod(0.5f * t, 1.0f);
@@ -445,7 +430,6 @@ namespace TA3D
 					}
 				}
 			}
-			glEnable(GL_FOG);
 		}
 		if (showHealthBars)
 		{

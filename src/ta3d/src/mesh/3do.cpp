@@ -911,7 +911,6 @@ namespace TA3D
 				glDisableClientState(GL_NORMAL_ARRAY);
 				glDisable(GL_LIGHTING);
 				glDisable(GL_TEXTURE_2D);
-				glDisable(GL_FOG);
 				if (!set)
 					glVertexPointer(3, GL_FLOAT, 0, points);
 				glColor3ub(0, 0xFF, 0);
@@ -927,7 +926,6 @@ namespace TA3D
 					glColor3ub(0xFF, 0xFF, 0xFF);
 				alset = false;
 				gfx->enable_model_shading();
-				glEnable(GL_FOG);
 			}
 			if (chg_col)
 				glColor4fv(color_factor);

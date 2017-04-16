@@ -48,40 +48,6 @@ namespace TA3D
 		return map.hit(cam.pos, cur_dir, true, 2000000000.0f, true);
 	}
 
-	void Battle::updateFOG()
-	{
-		if (freecam && cam.rpos.y < map->sealvl)
-		{
-			FogD = 0.03f;
-			FogFar = cam.zfar;
-			FogNear = 0.0f;
-			FogMode = GL_EXP;
-
-			FogColor[0] = 0.0f;
-			FogColor[1] = 0.0f;
-			FogColor[2] = 0.3f;
-			FogColor[3] = 1.0f;
-		}
-		else
-		{
-			FogD = 0.3f;
-			FogFar = lp_CONFIG->far_sight ? std::sqrt(float(map->map_w * map->map_w + map->map_h * map->map_h)) : cam.zfar;
-			if (cam.rpos.y > gfx->low_def_limit)
-				FogFar *= 2.0f - std::exp(-0.01f * (cam.rpos.y - gfx->low_def_limit));
-			FogNear = FogFar * 0.5f;
-			FogMode = GL_LINEAR;
-		}
-
-		glClearColor(FogColor[0], FogColor[1], FogColor[2], FogColor[3]);
-
-		glFogi(GL_FOG_MODE, FogMode);
-		glFogfv(GL_FOG_COLOR, FogColor);
-		glFogf(GL_FOG_DENSITY, FogD);
-		glHint(GL_FOG_HINT, GL_NICEST);
-		glFogf(GL_FOG_START, FogNear);
-		glFogf(GL_FOG_END, FogFar);
-	}
-
 	void Battle::updateZFAR()
 	{
 		cam.zfar = (lp_CONFIG->far_sight)

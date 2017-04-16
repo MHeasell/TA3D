@@ -634,8 +634,6 @@ namespace TA3D
 				if (gfx->getShadowMapMode()) // No laser shadow :P
 					break;
 				{
-					if (lp_CONFIG->shadow_quality >= 2)
-						glFogi(GL_FOG_COORD_SRC, GL_FOG_COORD);
 					Vector3D P(Pos);
 					float length = weapon_def->duration;
 					if (weapon_def->duration > stime)
@@ -716,7 +714,6 @@ namespace TA3D
 					}
 					glDisable(GL_BLEND);
 					glEnable(GL_CULL_FACE);
-					glFogi(GL_FOG_COORD_SRC, GL_FRAGMENT_DEPTH);
 				}
 				break;
 			case RENDER_TYPE_MISSILE: // Dessine le missile
@@ -739,8 +736,6 @@ namespace TA3D
 				}
 				break;
 			case RENDER_TYPE_BITMAP:
-				if (lp_CONFIG->shadow_quality >= 2)
-					glFogi(GL_FOG_COORD_SRC, GL_FOG_COORD);
 				glDisable(GL_LIGHTING);
 				glDisable(GL_TEXTURE_2D);
 				glColor4ub(0xFF, 0xFF, 0xFF, 0xFF);
@@ -779,7 +774,6 @@ namespace TA3D
 					glEnd();
 				}
 				glEnable(GL_LIGHTING);
-				glFogi(GL_FOG_COORD_SRC, GL_FRAGMENT_DEPTH);
 				break;
 			case RENDER_TYPE_BOMB:
 				if (weapon_def->model)
@@ -802,9 +796,6 @@ namespace TA3D
 				break;
 			case RENDER_TYPE_LIGHTNING:
 			{
-				if (lp_CONFIG->shadow_quality >= 2)
-					glFogi(GL_FOG_COORD_SRC, GL_FOG_COORD);
-
 				Vector3D P = Pos;
 				float length = weapon_def->duration;
 				if (weapon_def->duration > stime)
@@ -838,7 +829,6 @@ namespace TA3D
 					glVertex3f(Pos.x + (P.x - Pos.x) * float(i) / 9.0f + x, Pos.y + (P.y - Pos.y) * float(i) / 9.0f + y, Pos.z + (P.z - Pos.z) * float(i) / 9.0f + z);
 				}
 				glEnd();
-				glFogi(GL_FOG_COORD_SRC, GL_FRAGMENT_DEPTH);
 			}
 			break;
 			case RENDER_TYPE_DGUN: // Dessine le dgun
@@ -860,19 +850,14 @@ namespace TA3D
 				}
 				break;
 			case RENDER_TYPE_GUN: // Dessine une "balle"
-				if (lp_CONFIG->shadow_quality >= 2)
-					glFogi(GL_FOG_COORD_SRC, GL_FOG_COORD);
 				glDisable(GL_LIGHTING);
 				glDisable(GL_TEXTURE_2D);
 				glBegin(GL_POINTS);
 				glColor3ub(0xBF, 0xBF, 0xBF);
 				glVertex3f(Pos.x, Pos.y, Pos.z);
 				glEnd();
-				glFogi(GL_FOG_COORD_SRC, GL_FRAGMENT_DEPTH);
 				break;
 			case RENDER_TYPE_PARTICLES: // Dessine des particules
-				if (lp_CONFIG->shadow_quality >= 2)
-					glFogi(GL_FOG_COORD_SRC, GL_FOG_COORD);
 				glDisable(GL_LIGHTING);
 				glDisable(GL_TEXTURE_2D);
 				glBegin(GL_POINTS);
@@ -885,7 +870,6 @@ namespace TA3D
 						Pos.z + float(Math::RandomTable() % 201) * 0.01f - 1.0f);
 				}
 				glEnd();
-				glFogi(GL_FOG_COORD_SRC, GL_FRAGMENT_DEPTH);
 				break;
 		}
 		glPopMatrix();

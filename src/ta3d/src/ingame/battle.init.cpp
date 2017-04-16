@@ -154,7 +154,7 @@ namespace TA3D
 
 		// Here we go
 		uint64 startTime = msec_timer;
-		uint64 timer[22];
+		uint64 timer[21];
 
 		timer[0] = msec_timer;
 		if (!initPreflight(g))
@@ -205,21 +205,18 @@ namespace TA3D
 		if (!initTheWind())
 			return false;
 		timer[16] = msec_timer;
-		if (!initTheFog())
-			return false;
-		timer[17] = msec_timer;
 		if (!initParticules())
 			return false;
-		timer[18] = msec_timer;
+		timer[17] = msec_timer;
 		if (!initTheWater())
 			return false;
-		timer[19] = msec_timer;
+		timer[18] = msec_timer;
 		if (!initPostFlight())
 			return false;
-		timer[20] = msec_timer;
+		timer[19] = msec_timer;
 
 		unit_manager.waitUntilReady();
-		timer[21] = msec_timer;
+		timer[20] = msec_timer;
 
 		// The loading has finished
 		(*loading)(100.0f, I18N::Translate("Load finished"));
@@ -244,12 +241,11 @@ namespace TA3D
 			"initAllTextures()",
 			"initTheCamera()",
 			"initTheWind()",
-			"initTheFog()",
 			"initParticules()",
 			"initTheWater()",
 			"initPostFlight()",
 			"waitUntilReady()"};
-		for (int i = 0; i < 21; ++i)
+		for (int i = 0; i < 20; ++i)
 			LOG_INFO(LOG_PREFIX_BATTLE << functionName[i] << " done in " << timer[i + 1] - timer[i] << " msec.");
 #endif
 
@@ -583,29 +579,6 @@ namespace TA3D
 		wind_change = false;
 		if (map->ota_data.maxwindspeed != map->ota_data.minwindspeed)
 			map->wind = float((TA3D_RAND() % (map->ota_data.maxwindspeed - map->ota_data.minwindspeed)) + map->ota_data.minwindspeed);
-		return true;
-	}
-
-	bool Battle::initTheFog()
-	{
-		FogD = 0.3f;
-		FogFar = cam.zfar;
-		FogNear = FogFar * 0.5f;
-		FogColor[0] = 0.8f;
-		FogColor[1] = 0.8f;
-		FogColor[2] = 0.8f;
-		FogColor[3] = 1.0f;
-
-		FogMode = GL_LINEAR;
-		glFogi(GL_FOG_MODE, FogMode);
-		glFogfv(GL_FOG_COLOR, FogColor);
-		glFogf(GL_FOG_DENSITY, FogD);
-		glHint(GL_FOG_HINT, GL_NICEST);
-		glFogf(GL_FOG_START, FogNear);
-		glFogf(GL_FOG_END, FogFar);
-		// Enable the OpenGL fog
-		glEnable(GL_FOG);
-
 		return true;
 	}
 
