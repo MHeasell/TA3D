@@ -165,20 +165,8 @@ namespace TA3D
 		glColor4ub(0xFF, 0xFF, 0xFF, 0xFF);
 		glEnable(GL_TEXTURE_2D);
 		glDisable(GL_BLEND);
-		if (lp_CONFIG->render_sky)
-		{
-			glDisable(GL_LIGHTING);
-			glDepthMask(GL_FALSE);
-			glTranslatef(cam.rpos.x, cam.rpos.y + cam.shakeVector.y, cam.rpos.z);
-			glRotatef(sky_angle, 0.0f, 1.0f, 0.0f);
 
-			const float scale = cam.zoomFactor / 800.0f * std::sqrt(float(SCREEN_H * SCREEN_H + SCREEN_W * SCREEN_W));
-			glScalef(scale, scale, scale);
-
-			sky.draw();
-		}
-		else
-			gfx->clearScreen();
+		gfx->clearScreen();
 
 		glDepthMask(GL_TRUE);
 		glEnable(GL_CULL_FACE);

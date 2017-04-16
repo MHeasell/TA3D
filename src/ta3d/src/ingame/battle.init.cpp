@@ -64,7 +64,7 @@ namespace TA3D
 	}
 
 	Battle::Battle(GameData* g)
-		: pResult(brUnknown), pGameData(g), pNetworkEnabled(false), pNetworkIsServer(false), map(nullptr), sky(), escMenuWasVisible(false), height_tex(0), transtex(0), reflectex(0), first_pass(0), second_pass(0), bShowPing(false)
+		: pResult(brUnknown), pGameData(g), pNetworkEnabled(false), pNetworkIsServer(false), map(nullptr), escMenuWasVisible(false), height_tex(0), transtex(0), reflectex(0), first_pass(0), second_pass(0), bShowPing(false)
 	{
 		LOG_INFO(LOG_PREFIX_BATTLE << "Preparing a new battle...");
 		grab_mouse(lp_CONFIG->grab_inputs);
@@ -154,7 +154,7 @@ namespace TA3D
 
 		// Here we go
 		uint64 startTime = msec_timer;
-		uint64 timer[23];
+		uint64 timer[22];
 
 		timer[0] = msec_timer;
 		if (!initPreflight(g))
@@ -193,36 +193,33 @@ namespace TA3D
 		if (!initTheMap())
 			return false;
 		timer[12] = msec_timer;
-		if (!initTheSky())
-			return false;
-		timer[13] = msec_timer;
 		if (!initTheSun())
 			return false;
-		timer[14] = msec_timer;
+		timer[13] = msec_timer;
 		if (!initAllTextures())
 			return false;
-		timer[15] = msec_timer;
+		timer[14] = msec_timer;
 		if (!initTheCamera())
 			return false;
-		timer[16] = msec_timer;
+		timer[15] = msec_timer;
 		if (!initTheWind())
 			return false;
-		timer[17] = msec_timer;
+		timer[16] = msec_timer;
 		if (!initTheFog())
 			return false;
-		timer[18] = msec_timer;
+		timer[17] = msec_timer;
 		if (!initParticules())
 			return false;
-		timer[19] = msec_timer;
+		timer[18] = msec_timer;
 		if (!initTheWater())
 			return false;
-		timer[20] = msec_timer;
+		timer[19] = msec_timer;
 		if (!initPostFlight())
 			return false;
-		timer[21] = msec_timer;
+		timer[20] = msec_timer;
 
 		unit_manager.waitUntilReady();
-		timer[22] = msec_timer;
+		timer[21] = msec_timer;
 
 		// The loading has finished
 		(*loading)(100.0f, I18N::Translate("Load finished"));
@@ -230,7 +227,8 @@ namespace TA3D
 #define TA3D_LOADING_STATS
 #ifdef TA3D_LOADING_STATS
 		LOG_INFO(LOG_PREFIX_BATTLE << "statistics:");
-		const char* functionName[] = {"initPreflight(g)",
+		const char* functionName[] = {
+			"initPreflight(g)",
 			"initTextures()",
 			"init3DModels()",
 			"initGraphicalFeatures()",
@@ -242,7 +240,6 @@ namespace TA3D
 			"initRestrictions()",
 			"initGUI()",
 			"initTheMap()",
-			"initTheSky()",
 			"initTheSun()",
 			"initAllTextures()",
 			"initTheCamera()",
@@ -252,7 +249,7 @@ namespace TA3D
 			"initTheWater()",
 			"initPostFlight()",
 			"waitUntilReady()"};
-		for (int i = 0; i < 22; ++i)
+		for (int i = 0; i < 21; ++i)
 			LOG_INFO(LOG_PREFIX_BATTLE << functionName[i] << " done in " << timer[i + 1] - timer[i] << " msec.");
 #endif
 
@@ -516,15 +513,6 @@ namespace TA3D
 		return true;
 	}
 
-	bool Battle::initTheSky()
-	{
-		// The sky
-		sky.choose_a_sky(Paths::ExtractFileName(pGameData->map_filename), ToLower(map->ota_data.planet));
-
-		sky_angle = sky.rotationOffset();
-		return true;
-	}
-
 	bool Battle::initTheSun()
 	{
 		pSun.Att = 0.0f;
@@ -607,8 +595,6 @@ namespace TA3D
 		FogColor[1] = 0.8f;
 		FogColor[2] = 0.8f;
 		FogColor[3] = 1.0f;
-
-		memcpy(FogColor, sky.fogColor(), sizeof(float) * 4);
 
 		FogMode = GL_LINEAR;
 		glFogi(GL_FOG_MODE, FogMode);

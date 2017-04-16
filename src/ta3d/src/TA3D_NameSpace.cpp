@@ -70,8 +70,6 @@ namespace TA3D
 
 		low_definition_map = false;
 
-		render_sky = true;
-
 		enable_shortcuts = true;
 
 		net_server = TA3D_DEFAULT_SERVER_HOSTNAME;

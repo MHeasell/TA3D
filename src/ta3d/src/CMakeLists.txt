@@ -99,8 +99,6 @@ set(TA3D_LIB_SOURCES
 		gfx/particles/particlessystem.h
 		gfx/shader.cpp
 		gfx/shader.h
-		gfx/sky.cpp
-		gfx/sky.h
 		gfx/texture.cpp
 		gfx/texture.h
 		ingame/battle.cpp

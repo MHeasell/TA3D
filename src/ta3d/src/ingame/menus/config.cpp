@@ -183,7 +183,7 @@ namespace TA3D
 			pArea->set_state("*.underwater_bright", lp_CONFIG->underwater_bright);
 			pArea->set_state("*.use_texture_compression", lp_CONFIG->use_texture_compression);
 			pArea->set_state("*.low_definition_map", lp_CONFIG->low_definition_map);
-			pArea->set_state("*.sky", lp_CONFIG->render_sky);
+			pArea->set_state("*.sky", false);
 			pArea->set_state("*.particle", lp_CONFIG->particle);
 			pArea->set_state("*.explosion_particles", lp_CONFIG->explosion_particles);
 			pArea->set_state("*.waves", false);
@@ -460,7 +460,6 @@ namespace TA3D
 			lp_CONFIG->underwater_bright = pArea->get_state("*.underwater_bright");
 			lp_CONFIG->use_texture_compression = pArea->get_state("*.use_texture_compression");
 			lp_CONFIG->low_definition_map = pArea->get_state("*.low_definition_map");
-			lp_CONFIG->render_sky = pArea->get_state("*.sky");
 			lp_CONFIG->particle = pArea->get_state("*.particle");
 			lp_CONFIG->explosion_particles = pArea->get_state("*.explosion_particles");
 			lp_CONFIG->height_line = pArea->get_state("*.height_line");

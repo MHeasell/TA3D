@@ -206,8 +206,6 @@ namespace TA3D
 			}
 			count = msec_timer;
 
-			sky_angle += sky.rotationSpeed() * dt * units.apparent_timefactor;
-
 			if (!lp_CONFIG->pause)
 			{
 				light_angle += dt * units.apparent_timefactor;
@@ -2421,8 +2419,6 @@ namespace TA3D
 		particle_engine.destroyThread(); // Shut down the Particle Engine
 
 		Engine::synchronizer.setNbThreadsToSync(4);
-
-		sky.destroy();
 
 		LuaProgram::inGame->destroyThread();
 

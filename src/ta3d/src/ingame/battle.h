@@ -22,7 +22,6 @@
 #include "gamedata.h"
 #include <memory>
 #include <gfx/gui/area.h>
-#include <gfx/sky.h>
 #include <gfx/texture.h>
 #include <tdf.h>
 #include <EngineClass.h>
@@ -139,8 +138,6 @@ namespace TA3D
 		bool initGUI();
 		//! Init the map
 		bool initTheMap();
-		//! Init the Sky
-		bool initTheSky();
 		//! Init the sun
 		bool initTheSun();
 		//! Init all textures
@@ -275,14 +272,6 @@ namespace TA3D
 		FPSInfos fps;
 		//! The map of the game
 		std::unique_ptr<MAP> map;
-
-		//! \name Sky
-		//@{
-		//!
-		float sky_angle;
-		//!
-		Sky sky;
-		//@}
 
 		bool pMouseSelecting;
 		//! The bounding box of the current mouse selection (if pMouseSelecting == true)
