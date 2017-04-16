@@ -33,8 +33,7 @@ set(TA3D_ENGINE_VERSION "${PACKAGE_STRING}")
 
 set(TA3D_COMMON_CPP_FLAGS  "")
 if(NOT WIN32 OR MINGW)
-	set(TA3D_COMMON_CPP_FLAGS  "${TA3D_COMMON_CPP_FLAGS} -W -Wextra -Wall -Wfloat-equal -Woverloaded-virtual")
-	set(TA3D_COMMON_CPP_FLAGS  "${TA3D_COMMON_CPP_FLAGS} -Wconversion")
+	set(TA3D_COMMON_CPP_FLAGS "${TA3D_COMMON_CPP_FLAGS} -Wall -Wextra -Woverloaded-virtual")
 endif()
 
 
