@@ -49,9 +49,6 @@ namespace TA3D
 	// Crée une matrice de mise à l'échelle
 	TA3D::Matrix Scale(const float Size);
 
-	// Crée une matrice de projection
-	TA3D::Matrix Perspective(const float w, const float h, const float zn, const float zf);
-
 	// Crée une matrice de rotation autour de l'axe X
 	TA3D::Matrix RotateX(const float Theta);
 
@@ -75,15 +72,6 @@ namespace TA3D
 
 	// Transpose une matrice
 	TA3D::Matrix Transpose(const TA3D::Matrix& A);
-
-	// Renvoie la norme ligne
-	float Norme_Ligne(const TA3D::Matrix& A);
-
-	// Renvoie la norme colonne
-	float Norme_Colonne(const TA3D::Matrix& A);
-
-	// Inversion
-	TA3D::Matrix Invert(const TA3D::Matrix& A, const int P = 15);
 
 } // namespace TA3D
 

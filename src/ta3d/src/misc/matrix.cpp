@@ -31,52 +31,6 @@ namespace TA3D
 		return B;
 	}
 
-	float Norme_Ligne(const Matrix& A)
-	{
-		float n, n2;
-		n = 0.0f;
-		for (int i = 0; i < 4; ++i)
-		{
-			n2 = 0.0f;
-			for (int j = 0; j < 4; j++)
-				n2 += fabsf(A.E[i][j]);
-			if (n2 > n)
-				n = n2;
-		}
-		return n;
-	}
-
-	float Norme_Colonne(const Matrix& A)
-	{
-		float n, n2;
-		n = 0.0f;
-		for (int i = 0; i < 4; ++i)
-		{
-			n2 = 0.0f;
-			for (int j = 0; j < 4; ++j)
-				n2 += fabsf(A.E[j][i]);
-			if (n2 > n)
-				n = n2;
-		}
-		return n;
-	}
-
-	inline Matrix Invert(const Matrix& A, const int P)
-	{
-		Matrix I, E, B;
-		I = Scale(1.0f);
-		B = 1.0f / (Norme_Ligne(A) * Norme_Colonne(A)) * Transpose(A);
-		int i;
-		for (i = 0; i < P; ++i)
-		{
-			E = I - B * A;
-			B = (I + E) * B;
-			if (Math::AlmostZero(Norme_Ligne(E)))
-				i = P;
-		}
-		return B;
-	}
-
 	TA3D::Matrix RotateZYX(const float Rz, const float Ry, const float Rx)
 	{
 		const float cx = cosf(Rx);
@@ -228,18 +182,6 @@ namespace TA3D
 		M.E[1][1] = Size;
 		M.E[2][2] = Size;
 		M.E[3][3] = 1.0f;
-		return M;
-	}
-
-	TA3D::Matrix Perspective(const float w, const float h, const float zn, const float zf)
-	{
-		TA3D::Matrix M;
-		M.E[0][0] = 2.0f * zn / w;
-		M.E[1][1] = 2.0f * zn / h;
-		M.E[2][2] = zf / (zf - zn);
-		M.E[3][2] = 1.0f;
-		M.E[2][3] = zn * zf / (zn - zf);
-
 		return M;
 	}
 
