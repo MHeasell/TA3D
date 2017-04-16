@@ -57,7 +57,7 @@ namespace TA3D
 	}
 
 	Engine::Engine(KeyboardService* keyboardService, TA3D::VfsService* vfsService)
-		: keyboardService(keyboardService), pGFXModeActive(false)
+		: pGFXModeActive(false), keyboardService(keyboardService)
 	{
 		// How many CPU we've got ?
 		LOG_INFO("CPU: " << std::thread::hardware_concurrency());
