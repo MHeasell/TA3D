@@ -92,27 +92,9 @@ namespace TA3D
 			glPopMatrix();
 			glPushMatrix();
 			glTranslatef(i->pos.x, i->pos.y, i->pos.z);
-			if (lp_CONFIG->underwater_bright && INSTANCING::water && i->pos.y < INSTANCING::sealvl)
-			{
-				double eqn[4] = {0.0f, -1.0f, 0.0f, INSTANCING::sealvl - i->pos.y};
-				glClipPlane(GL_CLIP_PLANE2, eqn);
-			}
 			glRotatef(i->angle, 0.0f, 1.0f, 0.0f);
 			glColor4ubv((GLubyte*)&i->col);
 			glCallList(model->dlist);
-			if (lp_CONFIG->underwater_bright && INSTANCING::water && i->pos.y < INSTANCING::sealvl)
-			{
-				glEnable(GL_CLIP_PLANE2);
-				glEnable(GL_BLEND);
-				glBlendFunc(GL_ONE, GL_ONE);
-				glDepthFunc(GL_EQUAL);
-				glColor4ub(0x7F, 0x7F, 0x7F, 0x7F);
-				model->draw(0.0f, NULL, false, true, false, 0, NULL, NULL, NULL, 0.0f, NULL, false, 0, false);
-				glColor4ub(0xFF, 0xFF, 0xFF, 0xFF);
-				glDepthFunc(GL_LESS);
-				glDisable(GL_BLEND);
-				glDisable(GL_CLIP_PLANE2);
-			}
 		}
 
 		if (model->from_2d)
@@ -255,52 +237,6 @@ namespace TA3D
 		}
 		glBindTexture(GL_TEXTURE_2D, texture_id);
 		glDrawArrays(GL_QUADS, 0, (GLsizei)queue.size() << 2); // draw those quads
-
-		if (lp_CONFIG->underwater_bright && INSTANCING::water)
-		{
-			p = P;
-			uint32 i = 0U;
-			for (std::vector<QUAD>::iterator e = queue.begin(); e != queue.end(); ++e)
-			{
-				if (e->pos.y >= INSTANCING::sealvl)
-					continue;
-				p->x = e->pos.x - e->size_x;
-				p->y = e->pos.y;
-				p->z = e->pos.z - e->size_z;
-				++p;
-
-				p->x = e->pos.x + e->size_x;
-				p->y = e->pos.y;
-				p->z = e->pos.z - e->size_z;
-				++p;
-
-				p->x = e->pos.x + e->size_x;
-				p->y = e->pos.y;
-				p->z = e->pos.z + e->size_z;
-				++p;
-
-				p->x = e->pos.x - e->size_x;
-				p->y = e->pos.y;
-				p->z = e->pos.z + e->size_z;
-				++p;
-				++i;
-			}
-
-			if (i > 0)
-			{
-				glColor4ub(0x7F, 0x7F, 0x7F, 0x7F);
-				glDisableClientState(GL_COLOR_ARRAY);
-				glEnable(GL_BLEND);
-				glDisable(GL_TEXTURE_2D);
-				glBlendFunc(GL_ONE, GL_ONE);
-				glDepthFunc(GL_EQUAL);
-				glDrawArrays(GL_QUADS, 0, i << 2); // draw those quads
-				glDepthFunc(GL_LESS);
-				glEnable(GL_TEXTURE_2D);
-				glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-				glEnableClientState(GL_COLOR_ARRAY);
-			}
-		}
 	}
 
 } // namespace TA3D

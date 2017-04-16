@@ -64,8 +64,6 @@ namespace TA3D
 
 		disable_GLSL = false; // By default we want shaders
 
-		underwater_bright = false;
-
 		use_texture_compression = true;
 
 		low_definition_map = false;

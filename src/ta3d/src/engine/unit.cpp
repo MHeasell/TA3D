@@ -1093,12 +1093,6 @@ namespace TA3D
 			t -= birthTime;
 			glTranslatef(render.Pos.x, render.Pos.y, render.Pos.z);
 
-			if (lp_CONFIG->underwater_bright && the_map->water && render.Pos.y < the_map->sealvl)
-			{
-				double eqn[4] = {0.0f, -1.0f, 0.0f, the_map->sealvl - render.Pos.y};
-				glClipPlane(GL_CLIP_PLANE2, eqn);
-			}
-
 			glRotatef(render.Angle.x, 1.0f, 0.0f, 0.0f);
 			glRotatef(render.Angle.z, 0.0f, 0.0f, 1.0f);
 			glRotatef(render.Angle.y, 0.0f, 1.0f, 0.0f);
@@ -1340,22 +1334,6 @@ namespace TA3D
 				}
 			}
 
-			if (lp_CONFIG->underwater_bright && the_map->water && render.Pos.y < the_map->sealvl)
-			{
-				gfx->setShadowMapMode(true);
-				glEnable(GL_CLIP_PLANE2);
-
-				glEnable(GL_BLEND);
-				glBlendFunc(GL_ONE, GL_ONE);
-				glDepthFunc(GL_EQUAL);
-				glColor4ub(0x7F, 0x7F, 0x7F, 0x7F);
-				the_model->draw(t, &render.Anim, false, true, false, 0, NULL, NULL, NULL, 0.0f, NULL, false, owner_id, false);
-				glColor4ub(0xFF, 0xFF, 0xFF, 0xFF);
-				glDepthFunc(GL_LESS);
-				glDisable(GL_BLEND);
-
-				glDisable(GL_CLIP_PLANE2);
-			}
 			gfx->setShadowMapMode(old_mode);
 
 			if (unit_target)

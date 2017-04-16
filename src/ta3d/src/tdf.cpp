@@ -596,29 +596,10 @@ namespace TA3D
 							glDisable(GL_ALPHA_TEST);
 						glPushMatrix();
 						glTranslatef(feature[i].Pos.x, feature[i].Pos.y, feature[i].Pos.z);
-						if (lp_CONFIG->underwater_bright && the_map->water && feature[i].Pos.y < the_map->sealvl)
-						{
-							double eqn[4] = {0.0f, -1.0f, 0.0f, the_map->sealvl - feature[i].Pos.y};
-							glClipPlane(GL_CLIP_PLANE2, eqn);
-						}
 						glRotatef(feature[i].angle, 0.0f, 1.0f, 0.0f);
 						glRotatef(feature[i].angle_x, 1.0f, 0.0f, 0.0f);
 						float lt = t + float(feature[i].timeRef) * ticks2sec;
 						pFeature->model->draw(lt, NULL, false, false, false, 0, NULL, NULL, NULL, 0.0f, NULL, false, 0, !feature[i].grey);
-
-						if (lp_CONFIG->underwater_bright && the_map->water && feature[i].Pos.y < the_map->sealvl)
-						{
-							glEnable(GL_CLIP_PLANE2);
-							glEnable(GL_BLEND);
-							glBlendFunc(GL_ONE, GL_ONE);
-							glDepthFunc(GL_EQUAL);
-							glColor4ub(0x7F, 0x7F, 0x7F, 0x7F);
-							pFeature->model->draw(lt, NULL, false, true, false, 0, NULL, NULL, NULL, 0.0f, NULL, false, 0, false);
-							glColor4ub(0xFF, 0xFF, 0xFF, 0xFF);
-							glDepthFunc(GL_LESS);
-							glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-							glDisable(GL_CLIP_PLANE2);
-						}
 
 						gfx->ReInitAllTex(true);
 

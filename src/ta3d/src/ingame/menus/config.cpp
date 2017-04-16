@@ -180,7 +180,7 @@ namespace TA3D
 			pArea->set_state("*.disable_perspective", true);
 			pArea->set_state("*.right_click_interface", lp_CONFIG->right_click_interface);
 			pArea->set_state("*.disable_GLSL", lp_CONFIG->disable_GLSL);
-			pArea->set_state("*.underwater_bright", lp_CONFIG->underwater_bright);
+			pArea->set_state("*.underwater_bright", false);
 			pArea->set_state("*.use_texture_compression", lp_CONFIG->use_texture_compression);
 			pArea->set_state("*.low_definition_map", lp_CONFIG->low_definition_map);
 			pArea->set_state("*.sky", false);
@@ -457,7 +457,6 @@ namespace TA3D
 			lp_CONFIG->mouse_sensivity = float(pArea->get_value("*.mouse_sensitivity")) * 0.01f;
 			lp_CONFIG->right_click_interface = pArea->get_state("*.right_click_interface");
 			lp_CONFIG->disable_GLSL = pArea->get_state("*.disable_GLSL");
-			lp_CONFIG->underwater_bright = pArea->get_state("*.underwater_bright");
 			lp_CONFIG->use_texture_compression = pArea->get_state("*.use_texture_compression");
 			lp_CONFIG->low_definition_map = pArea->get_state("*.low_definition_map");
 			lp_CONFIG->particle = pArea->get_state("*.particle");
