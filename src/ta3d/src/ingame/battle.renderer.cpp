@@ -173,7 +173,7 @@ namespace TA3D
 		if (lp_CONFIG->wireframe)
 			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
-		map->draw(&cam, byte(1 << players.local_human_id), dt * units.apparent_timefactor);
+		map->draw(&cam, byte(1 << players.local_human_id));
 
 		if (lp_CONFIG->wireframe)
 			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
