@@ -1027,7 +1027,7 @@ namespace TA3D
 
 	inline float sq(float a) { return a * a; }
 
-	void MAP::draw(Camera* cam, byte player_mask, float dt, bool draw_uw)
+	void MAP::draw(Camera* cam, byte player_mask, float dt)
 	{
 		bool low_def_view = cam->rpos.y > gfx->low_def_limit; // Low detail map for mega zoom
 
@@ -1065,7 +1065,7 @@ namespace TA3D
 			if (lp_CONFIG->far_sight)
 				cam->zfar = map_zfar;
 
-			draw_HD(cam, player_mask, dt, draw_uw);
+			draw_HD(cam, player_mask, dt);
 
 			if (lp_CONFIG->far_sight)
 				cam->zfar = zfar;
@@ -1160,7 +1160,7 @@ namespace TA3D
 		}
 	}
 
-	void MAP::draw_HD(Camera* cam, byte player_mask, float dt, bool draw_uw)
+	void MAP::draw_HD(Camera* cam, byte player_mask, float dt)
 	{
 		glPushMatrix();
 

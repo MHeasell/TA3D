@@ -280,8 +280,8 @@ namespace TA3D
 		int check_metal(int x1, int y1, int unit_idx, int* stuff_id = NULL) const;
 
 		void draw_LD(byte player_mask);
-		void draw_HD(Camera* cam, byte player_mask, float dt, bool draw_uw = true);
-		void draw(Camera* cam, byte player_mask, float dt, bool draw_uw = true);
+		void draw_HD(Camera* cam, byte player_mask, float dt);
+		void draw(Camera* cam, byte player_mask, float dt);
 
 		Vector3D hit(Vector3D Pos, Vector3D Dir, bool water = true, float length = 200000.0f, bool allow_out = false) const; // Calcule l'intersection d'un rayon avec la carte(le rayon partant du dessus de la carte)
 	};
