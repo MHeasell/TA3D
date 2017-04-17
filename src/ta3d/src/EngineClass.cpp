@@ -1422,17 +1422,6 @@ namespace TA3D
 		glClientActiveTextureARB(GL_TEXTURE0_ARB);
 		glTexCoordPointer(2, GL_FLOAT, 0, buf_t);
 
-//#define DEBUG_UNIT_POS
-//#define DEBUG_ENERGY
-
-#ifdef DEBUG_ENERGY
-		float Emax = energy(10, 10);
-		for (int y = 10; y < energy.getHeight() - 10; ++y)
-			for (int x = 10; x < energy.getWidth() - 10; ++x)
-				Emax = Math::Max(Emax, energy(x, y));
-		float IEmax = 255.0f / Emax;
-#endif
-
 		int ox = x1;
 
 		Vector3D T;
@@ -1754,7 +1743,6 @@ namespace TA3D
 					}
 				}
 
-#if !defined DEBUG_UNIT_POS && !defined DEBUG_ENERGY
 				if (FLAT || map_data(X, Y).isFlat() || lp_CONFIG->low_definition_map)
 				{
 					if (was_flat && bloc[i].tex_x == bloc[bmap(x - 1, y)].tex_x + 1 && is_clean && was_clean && (FLAT || map_data(X, Y).isFlat()))
@@ -1775,7 +1763,6 @@ namespace TA3D
 				}
 				else
 				{
-#endif
 					was_flat = false;
 					buf_i[index_size++] = GLushort(buf_pos);
 					buf_i[index_size++] = GLushort(1 + buf_pos);
@@ -1789,108 +1776,11 @@ namespace TA3D
 					buf_i[index_size++] = GLushort(5 + buf_pos);
 					buf_i[index_size++] = GLushort(1 + buf_pos);
 					buf_i[index_size++] = GLushort(2 + buf_pos);
-#if !defined DEBUG_UNIT_POS && !defined DEBUG_ENERGY
 				}
-#endif
 				was_clean = is_clean;
 				T.x -= float(x << 4);
 				memcpy(buf_t + (buf_pos << 1), bloc[i].texcoord, 72); // texture
 
-#ifdef DEBUG_UNIT_POS
-				int Z;
-				Z = Y + get_zdec_notest(X, Y);
-				if (Z >= bloc_h_db - 1)
-					Z = bloc_h_db - 2;
-				Z &= 0xFFFFFE;
-				X &= 0xFFFFFE;
-				if (map_data(X, Z).unit_idx != -1) // Shows unit's pos on map
-				{
-					color[0] = color[1] = color[2] = color[3] = color[4] = color[5] = color[6] = color[7] = color[12] = color[13] = color[14] = color[15] = color[16] = color[17] = color[18] = color[19] = 0;
-					if (map_data(X, Z).unit_idx >= 0) // Shows unit's pos on map
-						color[0] = color[4] = color[12] = color[16] = 255;
-					else // It's a feature
-						color[1] = color[5] = color[13] = color[17] = 255;
-				}
-				else if (!map_data(X, Z).air_idx.empty()) // Shows unit's pos on map
-				{
-					color[0] = color[1] = color[2] = color[3] = color[4] = color[5] = color[6] = color[7] = color[12] = color[13] = color[14] = color[15] = color[16] = color[17] = color[18] = color[19] = 0;
-					color[2] = color[6] = color[14] = color[18] = 255;
-				}
-				if (map_data(X + 1, Z).unit_idx != -1) // Shows unit's pos on map
-				{
-					color[8] = color[9] = color[10] = color[11] = color[20] = color[21] = color[22] = color[23] = 0;
-					if (map_data(X + 1, Z).unit_idx >= 0) // Shows unit's pos on map
-						color[8] = color[20] = 255;
-					else
-						color[9] = color[21] = 255;
-				}
-				else if (!map_data(X + 1, Z).air_idx.empty()) // Shows unit's pos on map
-				{
-					color[8] = color[9] = color[10] = color[11] = color[20] = color[21] = color[22] = color[23] = 0;
-					color[10] = color[22] = 255;
-				}
-				if (map_data(X, Z + 1).unit_idx != -1) // Shows unit's pos on map
-				{
-					color[24] = color[25] = color[26] = color[27] = color[28] = color[29] = color[30] = color[31] = 0;
-					if (map_data(X, Z + 1).unit_idx >= 0) // Shows unit's pos on map
-						color[24] = color[28] = 255;
-					else
-						color[25] = color[29] = 255;
-				}
-				else if (!map_data(X, Z + 1).air_idx.empty()) // Shows unit's pos on map
-				{
-					color[24] = color[25] = color[26] = color[27] = color[28] = color[29] = color[30] = color[31] = 0;
-					color[26] = color[30] = 255;
-				}
-				if (map_data(X + 1, Z + 1).unit_idx != -1) // Shows unit's pos on map
-				{
-					color[32] = color[33] = color[34] = color[35] = 0;
-					if (map_data(X + 1, Z + 1).unit_idx >= 0) // Shows unit's pos on map
-						color[32] = 255;
-					else
-						color[33] = 255;
-				}
-				else if (!map_data(X + 1, Z + 1).air_idx.empty()) // Shows unit's pos on map
-				{
-					color[32] = color[33] = color[34] = color[35] = 0;
-					color[34] = 255;
-				}
-#elif defined DEBUG_RADAR_MAP
-				int Z;
-				Z = Y + get_zdec_notest(X, Y);
-				if (Z >= bloc_h_db - 1)
-					Z = bloc_h_db - 2;
-				Z &= 0xFFFFFE;
-				X &= 0xFFFFFE;
-				if ((radar_map->line[Z >> 1][X >> 1] & player_mask)) // Shows unit's pos on map
-					for (i = 0; i < 9; i++)
-					{
-						color[i << 2] = color[(i << 2) + 1] = color[(i << 2) + 2] = color[(i << 2) + 3] = 0;
-						color[(i << 2)] = 255;
-					}
-				else
-				{
-					if ((sonar_map->line[Z >> 1][X >> 1] & player_mask)) // Shows unit's pos on map
-					{
-						for (i = 0; i < 9; ++i)
-						{
-							color[i << 2] = color[(i << 2) + 1] = color[(i << 2) + 2] = color[(i << 2) + 3] = 0;
-							color[(i << 2) + 2] = 255;
-						}
-					}
-				}
-#elif defined DEBUG_ENERGY
-				int Z;
-				Z = Y + get_zdec_notest(X, Y);
-				if (Z >= bloc_h_db - 1)
-					Z = bloc_h_db - 2;
-				Z &= 0xFFFFFE;
-				X &= 0xFFFFFE;
-				for (i = 0; i < 9; ++i)
-					color[i << 2] = color[(i << 2) + 1] = color[(i << 2) + 2] = color[(i << 2) + 3] = Math::Max(Math::Max(energy(X, Z), energy(X + 1, Z)),
-																										  Math::Max(energy(X, Z + 1), energy(X + 1, Z + 1)))
-						* IEmax;
-#endif
 				++buf_size;
 			}
 			if (buf_size > 0)
