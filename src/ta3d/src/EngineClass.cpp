@@ -1027,7 +1027,7 @@ namespace TA3D
 
 	inline float sq(float a) { return a * a; }
 
-	void MAP::draw(Camera* cam, byte player_mask, float dt, bool check_visibility, bool draw_uw)
+	void MAP::draw(Camera* cam, byte player_mask, float dt, bool draw_uw)
 	{
 		bool low_def_view = cam->rpos.y > gfx->low_def_limit; // Low detail map for mega zoom
 
@@ -1065,7 +1065,7 @@ namespace TA3D
 			if (lp_CONFIG->far_sight)
 				cam->zfar = map_zfar;
 
-			draw_HD(cam, player_mask, dt, check_visibility, draw_uw);
+			draw_HD(cam, player_mask, dt, draw_uw);
 
 			if (lp_CONFIG->far_sight)
 				cam->zfar = zfar;
@@ -1160,7 +1160,7 @@ namespace TA3D
 		}
 	}
 
-	void MAP::draw_HD(Camera* cam, byte player_mask, float dt, bool check_visibility, bool draw_uw)
+	void MAP::draw_HD(Camera* cam, byte player_mask, float dt, bool draw_uw)
 	{
 		glPushMatrix();
 
@@ -1330,28 +1330,14 @@ namespace TA3D
 		GLuint old_tex = bloc[0].tex;
 		glBindTexture(GL_TEXTURE_2D, old_tex);
 
-		if (check_visibility)
-		{
-			for (int y = oy1; y <= oy2; ++y)
-				memset(&(view(ox1, y)), 0, ox2 - ox1 + 1);
-			features.list.clear();
-			ox1 = x1;
-			ox2 = x2;
-			oy1 = y1;
-			oy2 = y2;
-		}
-		else
-		{
-			if (!check_visibility)
-			{
-				x1 = ox1;
-				x2 = ox2;
-				y1 = oy1;
-				y2 = oy2;
-				for (std::vector<int>::iterator i = features.list.begin(); i != features.list.end(); ++i)
-					features.feature[*i].draw = true;
-			}
-		}
+		for (int y = oy1; y <= oy2; ++y)
+			memset(&(view(ox1, y)), 0, ox2 - ox1 + 1);
+		features.list.clear();
+		ox1 = x1;
+		ox2 = x2;
+		oy1 = y1;
+		oy2 = y2;
+
 		Vector3D buf_p[4500]; // Tampon qui accumule les blocs pour les dessiner en chaîne
 		float buf_t[9000];
 		uint8 buf_c[18000];
@@ -1395,85 +1381,75 @@ namespace TA3D
 			for (int x = rx1; x <= rx2; ++x)
 			{
 				int X = x << 1;
-				if (check_visibility)
-				{
-					if (!(view_map(x, y) & player_mask))
-					{
-						if (water)
-						{
-							if (map_data(X, Y).isUnderwater() && map_data(X, Y | 1).isUnderwater() && map_data(X | 1, Y).isUnderwater() && map_data(X | 1, Y | 1).isUnderwater())
-								view(x, y) = 2;
-							else
-								view(x, y) = 3;
-						}
-					}
-					else
-					{
-						if (!(sight_map(x, y) & player_mask))
-						{
-							if (map_data(X, Y).isUnderwater() || map_data(X, Y | 1).isUnderwater() || map_data(X | 1, Y).isUnderwater() || map_data(X | 1, Y | 1).isUnderwater())
-								view(x, y) = 2;
-							else
-								view(x, y) = 3;
-						}
-						else
-							view(x, y) = 1;
 
-						if (map_data(X, Y).stuff >= 0 && map_data(X, Y).stuff < features.max_features) // Flag are visible objects in that bloc
-						{
-							if (features.feature[map_data(X, Y).stuff].type < 0)
-								map_data(X, Y).stuff = -1;
-							else
-							{
-								features.feature[map_data(X, Y).stuff].draw = true;
-								features.feature[map_data(X, Y).stuff].grey = (view(x, y) & 2) == 2;
-								features.list.push_back(map_data(X, Y).stuff);
-							}
-						}
-						if (map_data(X | 1, Y).stuff >= 0 && map_data(X | 1, Y).stuff < features.max_features)
-						{
-							if (features.feature[map_data(X | 1, Y).stuff].type < 0)
-								map_data(X | 1, Y).stuff = -1;
-							else
-							{
-								features.feature[map_data(X | 1, Y).stuff].draw = true;
-								features.feature[map_data(X | 1, Y).stuff].grey = (view(x, y) & 2) == 2;
-								features.list.push_back(map_data(X | 1, Y).stuff);
-							}
-						}
-						if (map_data(X, Y | 1).stuff >= 0 && map_data(X, Y | 1).stuff < features.max_features)
-						{
-							if (features.feature[map_data(X, Y | 1).stuff].type < 0)
-								map_data(X, Y | 1).stuff = -1;
-							else
-							{
-								features.feature[map_data(X, Y | 1).stuff].draw = true;
-								features.feature[map_data(X, Y | 1).stuff].grey = (view(x, y) & 2) == 2;
-								features.list.push_back(map_data(X, Y | 1).stuff);
-							}
-						}
-						if (map_data(X | 1, Y | 1).stuff >= 0 && map_data(X | 1, Y | 1).stuff < features.max_features)
-						{
-							if (features.feature[map_data(X | 1, Y | 1).stuff].type < 0)
-								map_data(X | 1, Y | 1).stuff = -1;
-							else
-							{
-								features.feature[map_data(X | 1, Y | 1).stuff].draw = true;
-								features.feature[map_data(X | 1, Y | 1).stuff].grey = (view(x, y) & 2) == 2;
-								features.list.push_back(map_data(X | 1, Y | 1).stuff);
-							}
-						}
+				if (!(view_map(x, y) & player_mask))
+				{
+					if (water)
+					{
+						if (map_data(X, Y).isUnderwater() && map_data(X, Y | 1).isUnderwater() && map_data(X | 1, Y).isUnderwater() && map_data(X | 1, Y | 1).isUnderwater())
+							view(x, y) = 2;
+						else
+							view(x, y) = 3;
 					}
 				}
 				else
 				{
-					if (view(x, y) == 0)
-						continue;
-					if (view(x, y) == 2 && !draw_uw)
-						continue; // Jump this if it is under water and don't have to be drawn
-					if (view(x, y) == 3)
-						view(x, y) = 2;
+					if (!(sight_map(x, y) & player_mask))
+					{
+						if (map_data(X, Y).isUnderwater() || map_data(X, Y | 1).isUnderwater() || map_data(X | 1, Y).isUnderwater() || map_data(X | 1, Y | 1).isUnderwater())
+							view(x, y) = 2;
+						else
+							view(x, y) = 3;
+					}
+					else
+						view(x, y) = 1;
+
+					if (map_data(X, Y).stuff >= 0 && map_data(X, Y).stuff < features.max_features) // Flag are visible objects in that bloc
+					{
+						if (features.feature[map_data(X, Y).stuff].type < 0)
+							map_data(X, Y).stuff = -1;
+						else
+						{
+							features.feature[map_data(X, Y).stuff].draw = true;
+							features.feature[map_data(X, Y).stuff].grey = (view(x, y) & 2) == 2;
+							features.list.push_back(map_data(X, Y).stuff);
+						}
+					}
+					if (map_data(X | 1, Y).stuff >= 0 && map_data(X | 1, Y).stuff < features.max_features)
+					{
+						if (features.feature[map_data(X | 1, Y).stuff].type < 0)
+							map_data(X | 1, Y).stuff = -1;
+						else
+						{
+							features.feature[map_data(X | 1, Y).stuff].draw = true;
+							features.feature[map_data(X | 1, Y).stuff].grey = (view(x, y) & 2) == 2;
+							features.list.push_back(map_data(X | 1, Y).stuff);
+						}
+					}
+					if (map_data(X, Y | 1).stuff >= 0 && map_data(X, Y | 1).stuff < features.max_features)
+					{
+						if (features.feature[map_data(X, Y | 1).stuff].type < 0)
+							map_data(X, Y | 1).stuff = -1;
+						else
+						{
+							features.feature[map_data(X, Y | 1).stuff].draw = true;
+							features.feature[map_data(X, Y | 1).stuff].grey = (view(x, y) & 2) == 2;
+							features.list.push_back(map_data(X, Y | 1).stuff);
+						}
+					}
+					if (map_data(X | 1, Y | 1).stuff >= 0 && map_data(X | 1, Y | 1).stuff < features.max_features)
+					{
+						if (features.feature[map_data(X | 1, Y | 1).stuff].type < 0)
+							map_data(X | 1, Y | 1).stuff = -1;
+						else
+						{
+							features.feature[map_data(X | 1, Y | 1).stuff].draw = true;
+							features.feature[map_data(X | 1, Y | 1).stuff].grey = (view(x, y) & 2) == 2;
+							features.list.push_back(map_data(X | 1, Y | 1).stuff);
+						}
+					}
 				}
+
 				// Si le joueur ne peut pas voir ce morceau, on ne le dessine pas en clair
 				T.x += float(x << 4);
 				const int i = bmap(x, y);
