@@ -69,8 +69,7 @@ namespace TA3D
 	void PARTICLE_ENGINE::emit_part(const Vector3D& pos, const Vector3D& Dir, int tex, int nb, float speed, float life, float psize, bool white, float trans_factor)
 	{
 		MutexLocker locker(pMutex);
-		if (!lp_CONFIG->particle) // If particles are OFF don't add particles
-			return;
+
 		if (Camera::inGame != NULL && (Camera::inGame->pos - pos).sq() >= Camera::inGame->zfar2)
 			return;
 
@@ -122,8 +121,6 @@ namespace TA3D
 
 	ParticlesSystem* PARTICLE_ENGINE::emit_part_fast(ParticlesSystem* system, const Vector3D& pos, const Vector3D& Dir, int tex, int nb, float speed, float life, float psize, bool white, float trans_factor)
 	{
-		if (!lp_CONFIG->particle) // If particles are OFF don't add particles
-			return NULL;
 		if (tex < 0 || tex >= (int)gltex.size()) // We don't have that texture !!
 			return NULL;
 		if (system) // Step by step
@@ -189,8 +186,6 @@ namespace TA3D
 
 	void PARTICLE_ENGINE::make_shockwave(const Vector3D& pos, int tex, int nb, float speed)
 	{
-		if (!lp_CONFIG->particle) // If particles are OFF don't add particles
-			return;
 		if (nb_part + nb > 20000)
 			nb = 20000 - nb_part;
 
@@ -250,8 +245,6 @@ namespace TA3D
 
 	void PARTICLE_ENGINE::make_nuke(const Vector3D& pos, int tex, int nb, float speed)
 	{
-		if (!lp_CONFIG->particle) // If particles are OFF don't add particles
-			return;
 		if (nb_part + nb > 20000)
 			nb = 20000 - nb_part;
 
@@ -301,8 +294,6 @@ namespace TA3D
 
 	void PARTICLE_ENGINE::make_smoke(const Vector3D& pos, int tex, int nb, float speed, float mass, float ddsize, float alpha)
 	{
-		if (!lp_CONFIG->particle) // If particles are OFF don't add particles
-			return;
 		if (Camera::inGame != NULL && (Camera::inGame->pos - pos).sq() >= Camera::inGame->zfar2)
 			return;
 
@@ -349,8 +340,6 @@ namespace TA3D
 
 	void PARTICLE_ENGINE::make_dark_smoke(const Vector3D& pos, int tex, int nb, float speed, float mass, float ddsize, float alpha)
 	{
-		if (!lp_CONFIG->particle) // If particles are OFF don't add particles
-			return;
 		if (Camera::inGame != NULL && (Camera::inGame->pos - pos).sq() >= Camera::inGame->zfar2)
 			return;
 
@@ -396,8 +385,6 @@ namespace TA3D
 
 	void PARTICLE_ENGINE::make_fire(const Vector3D& pos, int tex, int nb, float speed)
 	{
-		if (!lp_CONFIG->particle) // If particles are OFF don't add particles
-			return;
 		if (Camera::inGame != NULL && (Camera::inGame->pos - pos).sq() >= Camera::inGame->zfar2)
 			return;
 

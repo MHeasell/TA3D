@@ -245,14 +245,6 @@ namespace TA3D
 		return 1;
 	}
 
-	int CAPI::setParticles(lua_State* L)
-	{
-		if (lua_gettop(L) > 0)
-			lp_CONFIG->particle = lua_toboolean(L, -1);
-		lua_pushboolean(L, lp_CONFIG->particle);
-		return 1;
-	}
-
 	int CAPI::scriptDumpDebugInfo(lua_State*)
 	{
 		if (Battle::Instance()->cur_sel_index >= 0 && units.unit[Battle::Instance()->cur_sel_index].script)
@@ -795,7 +787,6 @@ namespace TA3D
 		CAPI_REGISTER(setPriority);
 		CAPI_REGISTER(setShadowQuality);
 		CAPI_REGISTER(setShadowMapSize);
-		CAPI_REGISTER(setParticles);
 		CAPI_REGISTER(scriptDumpDebugInfo);
 		CAPI_REGISTER(setShowModel);
 		CAPI_REGISTER(setRotateLight);

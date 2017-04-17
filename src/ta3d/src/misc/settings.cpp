@@ -70,7 +70,6 @@ namespace TA3D
 			  << "              Color Depth = " << (int)TA3D::VARS::lp_CONFIG->color_depth << ";\n"
 			  << "                 Show FPS = " << TA3D::VARS::lp_CONFIG->showfps << ";\n"
 			  << "           Show Wireframe = " << TA3D::VARS::lp_CONFIG->wireframe << ";\n"
-			  << "           Show particles = " << TA3D::VARS::lp_CONFIG->particle << ";\n"
 			  << "        Show Height Lines = " << TA3D::VARS::lp_CONFIG->height_line << ";\n"
 			  << "          Show FullScreen = " << TA3D::VARS::lp_CONFIG->fullscreen << ";\n"
 			  << "     Draw Console Loading = " << TA3D::VARS::lp_CONFIG->draw_console_loading << ";\n"
@@ -150,7 +149,6 @@ namespace TA3D
 
 			TA3D::VARS::lp_CONFIG->showfps = cfgFile.pullAsBool("TA3D.Show FPS");
 			TA3D::VARS::lp_CONFIG->wireframe = cfgFile.pullAsBool("TA3D.Show Wireframe");
-			TA3D::VARS::lp_CONFIG->particle = cfgFile.pullAsBool("TA3D.Show particles");
 			TA3D::VARS::lp_CONFIG->height_line = cfgFile.pullAsBool("TA3D.Show Height Lines");
 			TA3D::VARS::lp_CONFIG->fullscreen = cfgFile.pullAsBool("TA3D.Show FullScreen", false);
 			TA3D::VARS::lp_CONFIG->draw_console_loading = cfgFile.pullAsBool("TA3D.Draw Console Loading");

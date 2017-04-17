@@ -98,7 +98,6 @@ namespace TA3D
 		color_depth = 32;
 		showfps = false;
 		wireframe = false;
-		particle = true;
 		height_line = false;
 		fullscreen = false; // For now, later will be true when we will reach a beta release
 

@@ -12,7 +12,6 @@ __fn_state["AIDebug"] = setAIDebug;
 __fn_state["internalName"] = setInternalName;
 __fn_state["internalIdx"] = setInternalIdx;
 __fn_state["wireframe"] = setWireframe;
-__fn_state["particles"] = setParticles;
 __fn_state["waves"] = setWaves;
 __fn_state["showModel"] = setShowModel;
 __fn_state["rotateLight"] = setRotateLight;
