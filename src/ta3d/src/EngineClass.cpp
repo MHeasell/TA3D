@@ -1027,7 +1027,7 @@ namespace TA3D
 
 	inline float sq(float a) { return a * a; }
 
-	void MAP::draw(Camera* cam, byte player_mask, float dt, bool depth_only, bool check_visibility, bool draw_uw)
+	void MAP::draw(Camera* cam, byte player_mask, float dt, bool check_visibility, bool draw_uw)
 	{
 		bool low_def_view = cam->rpos.y > gfx->low_def_limit; // Low detail map for mega zoom
 
@@ -1065,7 +1065,7 @@ namespace TA3D
 			if (lp_CONFIG->far_sight)
 				cam->zfar = map_zfar;
 
-			draw_HD(cam, player_mask, dt, depth_only, check_visibility, draw_uw);
+			draw_HD(cam, player_mask, dt, check_visibility, draw_uw);
 
 			if (lp_CONFIG->far_sight)
 				cam->zfar = zfar;
@@ -1160,7 +1160,7 @@ namespace TA3D
 		}
 	}
 
-	void MAP::draw_HD(Camera* cam, byte player_mask, float dt, bool depth_only, bool check_visibility, bool draw_uw)
+	void MAP::draw_HD(Camera* cam, byte player_mask, float dt, bool check_visibility, bool draw_uw)
 	{
 		glPushMatrix();
 
@@ -1319,7 +1319,7 @@ namespace TA3D
 
 		glColor4ub(0xFF, 0xFF, 0xFF, 0xFF);
 
-		if (ntex > 0 && !depth_only)
+		if (ntex > 0)
 		{
 			glActiveTextureARB(GL_TEXTURE0_ARB);
 			glEnable(GL_TEXTURE_2D);
@@ -1328,8 +1328,8 @@ namespace TA3D
 		}
 
 		GLuint old_tex = bloc[0].tex;
-		if (!depth_only)
-			glBindTexture(GL_TEXTURE_2D, old_tex);
+		glBindTexture(GL_TEXTURE_2D, old_tex);
+
 		if (check_visibility)
 		{
 			for (int y = oy1; y <= oy2; ++y)
