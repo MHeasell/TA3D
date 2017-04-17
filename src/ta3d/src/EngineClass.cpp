@@ -1558,20 +1558,6 @@ namespace TA3D
 				}
 				else
 				{
-					if (check_visibility)
-					{
-						const bool under_water = (h_map(X | 1, Y | 1) < sealvl && h_map(X | 1, Y) < sealvl && h_map(X, Y | 1) < sealvl && h_map(X, Y) < sealvl);
-
-						if ((bloc[i].lava || (under_water && ota_data.lavaworld)) && !ota_data.whitefog && !lp_CONFIG->pause && (Math::RandomTable() % 1000000) <= lavaprob) // Lava emiting code moved here because of lava effect using fragment program
-						{
-							Vector3D POS(float((x << 4) - map_w_d) + 8.0f, sealvl - 5.0f, float(pre_y - map_h_d) + 8.0f);
-							V.x = float(((int)(Math::RandomTable() % 201)) - 100);
-							V.y = float(((int)(Math::RandomTable() % 51)) + 50);
-							V.z = float(((int)(Math::RandomTable() % 201)) - 100);
-							V.unit();
-							particle_engine.emit_lava(POS, V, 1, 10, float(Math::RandomTable() % 1000) * 0.01f + 30.0f);
-						}
-					}
 					bloc[i].point = lvl[pre_y2 + x];
 					if (bloc[i].point == NULL)
 					{

@@ -91,11 +91,6 @@ namespace TA3D
 		/*!
         ** \brief
         */
-		void emit_lava(const Vector3D& pos, const Vector3D& Dir, int tex, int nb, float speed, float life = 10.0f);
-
-		/*!
-        ** \brief
-        */
 		void make_smoke(const Vector3D& pos, int tex, int nb, float speed, float mass = -1.0f, float ddsize = 0.0f, float alpha = 1.0f);
 
 		/*!

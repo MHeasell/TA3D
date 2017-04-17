@@ -187,50 +187,6 @@ namespace TA3D
 		return system;
 	}
 
-	void PARTICLE_ENGINE::emit_lava(const Vector3D& pos, const Vector3D& Dir, int tex, int nb, float speed, float life)
-	{
-		if (!lp_CONFIG->particle) // If particles are OFF don't add particles
-			return;
-		if (Camera::inGame != NULL && (Camera::inGame->pos - pos).sq() >= Camera::inGame->zfar2)
-			return;
-
-		pMutex.lock();
-
-		for (int i = 0; i < nb; ++i)
-		{
-			PARTICLE new_part;
-			new_part.px = -1;
-			new_part.py = 0;
-			new_part.slow_factor = 0.0f;
-			new_part.Pos = pos;
-			float speed_mul = (float(Math::RandomTable() % 100) * 0.01f + 0.01f);
-			new_part.V = speed_mul * speed * Dir;
-			new_part.life = life;
-			new_part.mass = 1.0f;
-			new_part.smoking = -1.0f;
-			new_part.gltex = tex;
-			new_part.col[0] = 1.0f;
-			new_part.col[1] = 0.5f;
-			new_part.col[2] = 0.5f;
-			new_part.col[3] = 1.0f;
-			new_part.dcol[0] = 0.0f;
-			new_part.dcol[1] = 0.0f;
-			new_part.dcol[2] = 0.0f;
-			new_part.dcol[3] = -1.0f / life;
-			new_part.angle = 0.0f;
-			new_part.v_rot = float(Math::RandomTable() % 200) * 0.01f - 0.1f;
-			new_part.size = 10.0f * (1.0f - speed_mul * 0.9f);
-			new_part.use_wind = false;
-			new_part.dsize = 0.0f;
-			new_part.ddsize = 0.0f;
-			new_part.light_emitter = false;
-			new_part.slow_down = false;
-			part.push_back(new_part);
-			++nb_part;
-		}
-		pMutex.unlock();
-	}
-
 	void PARTICLE_ENGINE::make_shockwave(const Vector3D& pos, int tex, int nb, float speed)
 	{
 		if (!lp_CONFIG->particle) // If particles are OFF don't add particles
