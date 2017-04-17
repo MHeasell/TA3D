@@ -1,6 +1,8 @@
 language: cpp
 dist: trusty
 sudo: required
+git:
+  depth: 99999  # our build requires a full clone
 before_install:
   - sudo apt-add-repository -y ppa:ubuntu-toolchain-r/test -y
   - sudo apt-get -qq update
