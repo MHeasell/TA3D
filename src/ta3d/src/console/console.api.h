@@ -50,7 +50,6 @@ namespace TA3D
 		static int setShadowQuality(lua_State* L);
 		static int setShadowMapSize(lua_State* L);
 		static int setParticles(lua_State* L);
-		static int setExplosionParticles(lua_State* L);
 		static int scriptDumpDebugInfo(lua_State* L);
 		static int setShowModel(lua_State* L);
 		static int setRotateLight(lua_State* L);

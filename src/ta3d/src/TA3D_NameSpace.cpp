@@ -99,7 +99,6 @@ namespace TA3D
 		showfps = false;
 		wireframe = false;
 		particle = true;
-		explosion_particles = true;
 		height_line = false;
 		fullscreen = false; // For now, later will be true when we will reach a beta release
 

@@ -1505,7 +1505,6 @@ namespace TA3D
 
 		const int power = Math::Max(pType->FootprintX, pType->FootprintZ);
 		fx_manager.addFlash(Pos, float(power * 32));
-		fx_manager.addExplosion(Pos, V, power * 3, float(power * 10));
 
 		int param[] = {severity * 100 / pType->MaxDamage, 0};
 		int corpse_type = runScriptFunction(SCRIPT_killed, 2, param);

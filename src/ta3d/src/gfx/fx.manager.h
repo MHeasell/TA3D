@@ -100,15 +100,6 @@ namespace TA3D
 		int addFlash(const Vector3D& pos, const float size);
 
 		/*!
-        ** \brief Add an explosion effect (with initial speed)
-        ** \param p
-        ** \param s
-        ** \param n
-        ** \param power
-        */
-		void addExplosion(const Vector3D& p, const Vector3D& s, const int n, const float power);
-
-		/*!
         ** \brief Add an electrical effect
         ** \param p
         */

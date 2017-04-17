@@ -206,63 +206,11 @@ namespace TA3D
 		gfx->unset_alpha_blending();
 		glDepthMask(GL_TRUE);
 
-		if (!UW && lp_CONFIG->explosion_particles && FXManager::currentParticleModel != NULL)
-		{
-			RenderQueue renderQueue(FXManager::currentParticleModel->id);
-			for (ListOfParticles::iterator i = pParticles.begin(); i != pParticles.end(); ++i)
-				(*i).draw(renderQueue);
-			renderQueue.draw_queue();
-		}
-
 		glDisable(GL_TEXTURE_2D);
 		if (!UW)
 			for (ListOfElectrics::iterator i = pElectrics.begin(); i != pElectrics.end(); ++i)
 				(*i).draw();
 
-		pMutex.unlock();
-	}
-
-	void FXManager::addExplosion(const Vector3D& p, const Vector3D& s, const int n, const float power)
-	{
-		if (!lp_CONFIG->explosion_particles)
-			return;
-
-		if (the_map) // Visibility test
-		{
-			const int px = ((int)(p.x + 0.5f) + the_map->map_w_d) >> 4;
-			const int py = ((int)(p.z + 0.5f) + the_map->map_h_d) >> 4;
-			if (px < 0 || py < 0 || px >= the_map->bloc_w || py >= the_map->bloc_h)
-				return;
-			const byte player_mask = byte(1 << players.local_human_id);
-			if (the_map->view(px, py) != 1 || !(the_map->sight_map(px, py) & player_mask))
-				return;
-		}
-
-		// Temporary variables
-		float a;
-		float b;
-		float speed;
-		float l;
-		Vector3D vs;
-
-		// Locking...
-		pMutex.lock();
-
-		// Foreach particle
-		for (int i = 0; i < n; ++i)
-		{
-			a = static_cast<float>(Math::RandomTable() % 36000) * 0.01f * DEG2RAD;
-			b = static_cast<float>(Math::RandomTable() % 18000) * 0.01f * DEG2RAD;
-			speed = power * (static_cast<float>(Math::RandomTable() % 9001) * 0.0001f + 0.1f);
-			vs.x = speed * cosf(a) * cosf(b);
-			vs.y = speed * sinf(b);
-			vs.z = speed * sinf(a) * cosf(b);
-			l = Math::Min(5.0f * vs.y / (the_map->ota_data.gravity + 0.1f), 10.0f);
-
-			// Adding the new particle into the list
-			pParticles.push_back(FXParticle(p, s + vs, l));
-		}
-		// Unlokcing
 		pMutex.unlock();
 	}
 

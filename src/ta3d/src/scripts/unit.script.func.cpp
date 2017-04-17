@@ -35,9 +35,6 @@ namespace TA3D
 		{
 			compute_model_coord();
 			particle_engine.make_fire(Pos + data.data[obj].pos, 1, 10, 45.0f);
-			const int power = Math::Max(unit_manager.unit_type[type_id]->FootprintX, unit_manager.unit_type[type_id]->FootprintZ);
-			const Vector3D P = Pos + data.data[obj].pos;
-			fx_manager.addExplosion(P, V, power * 3, float(power) * 10.0f);
 		}
 		if (!(explosion_type & EXPLODE_BITMAPONLY))
 		{
