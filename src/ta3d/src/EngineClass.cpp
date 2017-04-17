@@ -1406,7 +1406,6 @@ namespace TA3D
 					features.feature[*i].draw = true;
 			}
 		}
-		const int lavaprob = (int)(1000 * dt);
 		Vector3D buf_p[4500]; // Tampon qui accumule les blocs pour les dessiner en chaîne
 		float buf_t[9000];
 		uint8 buf_c[18000];
