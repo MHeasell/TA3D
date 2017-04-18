@@ -141,7 +141,7 @@ namespace TA3D
 	{
 	public:
 		//! Array of points
-		Vector3D* point; // Points du bloc / Array of points
+		Vector3D* point;
 
 		//! Texture coordinates
 		float* texcoord;
