@@ -49,8 +49,6 @@ namespace TA3D
 		if (!g_useProgram)
 			return;
 
-		map->shadow2_shader.destroy();
-		map->shadow2_shader.load("shaders/map_shadow.frag", "shaders/map_shadow.vert");
 		gfx->model_shader.destroy();
 		gfx->model_shader.load("shaders/3do_shadow.frag", "shaders/3do_shadow.vert");
 	}

@@ -108,8 +108,6 @@ namespace TA3D
 		radar_map.clear();
 		sonar_map.clear();
 
-		shadow2_shader.load("shaders/map_shadow.frag", "shaders/map_shadow.vert");
-
 		low_nb_idx = 0;
 		low_vtx = NULL;
 		low_vtx_flat = NULL;
@@ -524,8 +522,6 @@ namespace TA3D
 		sight_map.resize(0, 0);
 		radar_map.resize(0, 0);
 		sonar_map.resize(0, 0);
-
-		shadow2_shader.destroy();
 
 		DELETE_ARRAY(low_vtx);
 		DELETE_ARRAY(low_vtx_flat);

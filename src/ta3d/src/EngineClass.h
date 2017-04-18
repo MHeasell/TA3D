@@ -199,7 +199,6 @@ namespace TA3D
 		int oy1, oy2;
 		GLushort buf_i[6500];  // Pour accélérer l'affichage
 		GLuint lava_map;	   // texture des zones de lave
-		Shader shadow2_shader; // pixel shader to use the shadow map in light equation(also add the detail texture correctly)
 
 		MAP_OTA ota_data; // Data read from the ota file
 
