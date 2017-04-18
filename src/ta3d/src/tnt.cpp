@@ -478,7 +478,6 @@ namespace TA3D
 		}
 
 		LOG_DEBUG("MAP: computing height data (step 4)");
-		map->sea_dec = map->sealvl * tnt_transform * H_DIV; // Calcule le décalage nécessaire pour restituer les océans
 		for (y = 0; y < (map->bloc_h << 1); ++y)
 		{
 			for (x = 0; x < (map->bloc_w << 1); ++x) // Lisse la carte du relief projeté

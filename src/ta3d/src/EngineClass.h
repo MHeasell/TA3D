@@ -282,9 +282,6 @@ namespace TA3D
 		//! Indicates whether the map is in tnt format (Total Annihilation format)
 		bool tnt;
 
-		//! Offset of the sea
-		float sea_dec;
-
 		// Coordinates of the last drawn map window
 		int ox1, ox2;
 		int oy1, oy2;

@@ -136,7 +136,6 @@ namespace TA3D
 		lvl = NULL;
 		water = true;
 		tnt = false; // Laisse la possibilité de créer un autre format de cartes
-		sea_dec = 0.0f;
 		view.resize(0, 0);
 		ox1 = ox2 = oy1 = oy2 = 0;
 		int buf_size = 0;
