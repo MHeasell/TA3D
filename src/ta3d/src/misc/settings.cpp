@@ -88,7 +88,6 @@ namespace TA3D
 			  << "             Disable GLSL = " << TA3D::VARS::lp_CONFIG->disable_GLSL << ";\n"
 			  << "    Right Click Interface = " << TA3D::VARS::lp_CONFIG->right_click_interface << ";\n"
 			  << "        Mouse Sensitivity = " << TA3D::VARS::lp_CONFIG->mouse_sensivity << ";\n"
-			  << "                Far Sight = " << TA3D::VARS::lp_CONFIG->far_sight << ";\n"
 			  << "             Sound Volume = " << TA3D::VARS::lp_CONFIG->sound_volume << ";\n"
 			  << "             Music Volume = " << TA3D::VARS::lp_CONFIG->music_volume << ";\n"
 			  << "              Grab Inputs = " << TA3D::VARS::lp_CONFIG->grab_inputs << ";\n"
@@ -180,8 +179,6 @@ namespace TA3D
 			TA3D::VARS::lp_CONFIG->right_click_interface = cfgFile.pullAsBool("TA3D.Right Click Interface", false);
 
 			TA3D::VARS::lp_CONFIG->mouse_sensivity = cfgFile.pullAsFloat("TA3D.Mouse Sensitivity", 1.0f);
-
-			TA3D::VARS::lp_CONFIG->far_sight = cfgFile.pullAsBool("TA3D.Far Sight", true);
 
 			TA3D::VARS::lp_CONFIG->sound_volume = cfgFile.pullAsInt("TA3D.Sound Volume", 128);
 			TA3D::VARS::lp_CONFIG->music_volume = cfgFile.pullAsInt("TA3D.Music Volume", 128);

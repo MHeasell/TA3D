@@ -997,15 +997,7 @@ namespace TA3D
 	std::vector<Vector3D> MAP::get_visible_volume() const
 	{
 		std::vector<Vector3D> volume;
-		const bool bFarSight = lp_CONFIG->far_sight;
-		const float zfar = Camera::inGame->zfar;
-		const float cam_h = Camera::inGame->rpos.y - get_unit_h(Camera::inGame->rpos.x, Camera::inGame->rpos.z);
-		const float map_zfar = 600.0f + Math::Max((cam_h - 150.0f) * 2.0f, 0.0f);
-		if (bFarSight)
-			Camera::inGame->zfar = map_zfar;
 		Camera::inGame->getFrustum(volume);
-		if (bFarSight)
-			Camera::inGame->zfar = zfar;
 		Vector3D dir;
 		for (int i = 4; i < 8; ++i)
 		{
@@ -1045,30 +1037,9 @@ namespace TA3D
 		}
 		else
 		{
-			const bool bFarSight = lp_CONFIG->far_sight;
-			const float zfar = cam->zfar;
-			const float cam_h = cam->rpos.y - get_unit_h(cam->rpos.x, cam->rpos.z);
-			const float map_zfar = 600.0f + Math::Max((cam_h - 150.0f) * 2.0f, 0.0f);
-			if (bFarSight) // Far sight mode: renders low definition map under the HD version in order to show the whole map at the horizon
-			{
-				cam->setView(true);
-				GLdouble eq[] = {cam->dir.x, cam->dir.y, cam->dir.z, -map_zfar + 64.0f - cam->rpos % cam->dir};
-				glClipPlane(GL_CLIP_PLANE3, eq);
-				glEnable(GL_CLIP_PLANE3);
-
-				draw_LD(player_mask);
-
-				glDisable(GL_CLIP_PLANE3);
-			}
-
 			cam->setView(lp_CONFIG->shadow_quality < 2);
-			if (lp_CONFIG->far_sight)
-				cam->zfar = map_zfar;
 
 			draw_HD(cam, player_mask);
-
-			if (lp_CONFIG->far_sight)
-				cam->zfar = zfar;
 		}
 	}
 

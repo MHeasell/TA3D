@@ -79,14 +79,6 @@ namespace TA3D
 		return 0;
 	}
 
-	int CAPI::setFarsight(lua_State* L)
-	{
-		if (lua_gettop(L) > 0)
-			lp_CONFIG->far_sight = lua_toboolean(L, -1);
-		lua_pushboolean(L, lp_CONFIG->far_sight);
-		return 1;
-	}
-
 	int CAPI::setSoundVolume(lua_State* L)
 	{
 		if (lua_gettop(L) > 0)
@@ -768,7 +760,6 @@ namespace TA3D
 		CAPI_REGISTER(print);
 		CAPI_REGISTER(setFps);
 		CAPI_REGISTER(zshoot);
-		CAPI_REGISTER(setFarsight);
 		CAPI_REGISTER(setSoundVolume);
 		CAPI_REGISTER(setMusicVolume);
 		CAPI_REGISTER(setRightClickInterface);

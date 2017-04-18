@@ -66,7 +66,6 @@ namespace TA3D
 		bool wireframe;
 		bool height_line;
 		bool fullscreen;
-		bool far_sight; // Enable far sight renderer (you can see all the map)
 
 		bool draw_console_loading;
 

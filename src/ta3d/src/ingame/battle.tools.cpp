@@ -45,10 +45,7 @@ namespace TA3D
 
 	void Battle::updateZFAR()
 	{
-		cam.zfar = (lp_CONFIG->far_sight)
-					   // We want to see everything
-					   ? std::sqrt(float(map->map_w * map->map_w + map->map_h * map->map_h) + cam.rpos.y * cam.rpos.y)
-					   : 600.0f + Math::Max((cam_h - 150.0f) * 2.0f, 0.0f);
+		cam.zfar = 600.0f + Math::Max((cam_h - 150.0f) * 2.0f, 0.0f);
 		// Set View
 		cam.setView();
 	}

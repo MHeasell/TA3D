@@ -87,8 +87,6 @@ namespace TA3D
 				lp_CONFIG->color_depth = 32;
 				lp_CONFIG->shadowmap_size = 2;
 
-				lp_CONFIG->far_sight = true;
-
 				lp_CONFIG->use_texture_cache = false;
 				lp_CONFIG->use_texture_compression = false;
 
@@ -104,8 +102,6 @@ namespace TA3D
 
 				lp_CONFIG->color_depth = 32;
 				lp_CONFIG->shadowmap_size = 2;
-
-				lp_CONFIG->far_sight = true;
 
 				lp_CONFIG->use_texture_cache = true;
 				lp_CONFIG->use_texture_compression = true;
@@ -124,8 +120,6 @@ namespace TA3D
 				lp_CONFIG->color_depth = 16;
 				lp_CONFIG->shadowmap_size = 0;
 
-				lp_CONFIG->far_sight = false;
-
 				lp_CONFIG->use_texture_cache = false;
 				lp_CONFIG->use_texture_compression = true;
 
@@ -141,8 +135,6 @@ namespace TA3D
 
 				lp_CONFIG->color_depth = 32;
 				lp_CONFIG->shadowmap_size = 0;
-
-				lp_CONFIG->far_sight = false;
 
 				lp_CONFIG->use_texture_cache = false;
 				lp_CONFIG->use_texture_compression = true;
@@ -163,8 +155,6 @@ namespace TA3D
 				lp_CONFIG->color_depth = 32;
 				lp_CONFIG->shadowmap_size = 2;
 
-				lp_CONFIG->far_sight = true;
-
 				lp_CONFIG->use_texture_cache = false;
 				lp_CONFIG->use_texture_compression = false;
 
@@ -180,8 +170,6 @@ namespace TA3D
 
 				lp_CONFIG->color_depth = 32;
 				lp_CONFIG->shadowmap_size = 2;
-
-				lp_CONFIG->far_sight = true;
 
 				lp_CONFIG->use_texture_cache = true;
 				lp_CONFIG->use_texture_compression = true;
@@ -200,8 +188,6 @@ namespace TA3D
 				lp_CONFIG->color_depth = 16;
 				lp_CONFIG->shadowmap_size = 0;
 
-				lp_CONFIG->far_sight = false;
-
 				lp_CONFIG->use_texture_cache = false;
 				lp_CONFIG->use_texture_compression = true;
 
@@ -217,8 +203,6 @@ namespace TA3D
 
 				lp_CONFIG->color_depth = 32;
 				lp_CONFIG->shadowmap_size = 0;
-
-				lp_CONFIG->far_sight = false;
 
 				lp_CONFIG->use_texture_cache = false;
 				lp_CONFIG->use_texture_compression = true;

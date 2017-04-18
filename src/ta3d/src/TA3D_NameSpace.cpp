@@ -50,8 +50,6 @@ namespace TA3D
 
 		sound_volume = music_volume = 128;
 
-		far_sight = true;
-
 		anisotropy = 1;
 
 		mouse_sensivity = 1.0f;

@@ -174,7 +174,7 @@ namespace TA3D
 			pArea->set_state("*.grab_inputs", lp_CONFIG->grab_inputs);
 			pArea->set_value("*.sound_volume", lp_CONFIG->sound_volume);
 			pArea->set_value("*.music_volume", lp_CONFIG->music_volume);
-			pArea->set_state("*.far_sight", lp_CONFIG->far_sight);
+			pArea->set_state("*.far_sight", false);
 			pArea->set_value("*.anisotropy", lp_CONFIG->anisotropy);
 			pArea->set_value("*.mouse_sensitivity", (int)(lp_CONFIG->mouse_sensivity * 100.0f));
 			pArea->set_state("*.disable_perspective", true);
@@ -451,7 +451,6 @@ namespace TA3D
 			}
 			lp_CONFIG->unitTextureQuality = pArea->get_value("*.texture_quality");
 			lp_CONFIG->shadowmap_size = uint8(pArea->get_value("*.shadow_map_size"));
-			lp_CONFIG->far_sight = pArea->get_state("*.far_sight");
 			lp_CONFIG->anisotropy = sint16(pArea->get_value("*.anisotropy"));
 			lp_CONFIG->mouse_sensivity = float(pArea->get_value("*.mouse_sensitivity")) * 0.01f;
 			lp_CONFIG->right_click_interface = pArea->get_state("*.right_click_interface");
