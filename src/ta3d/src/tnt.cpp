@@ -199,8 +199,6 @@ namespace TA3D
 		map->map_w = map->bloc_w << 4;
 		map->map_h_d = map->bloc_h << 3;
 		map->map_w_d = map->bloc_w << 3;
-		map->map2blocdb_w = float(map->bloc_w_db) / float(map->map_w);
-		map->map2blocdb_h = float(map->bloc_h_db) / float(map->map_h);
 
 		map->bmap.resize(map->bloc_w, map->bloc_h);
 		map->view.resize(map->bloc_w, map->bloc_h);

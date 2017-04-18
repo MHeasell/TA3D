@@ -259,9 +259,6 @@ namespace TA3D
 		// Height in blocks divided by 2
 		int bloc_h_db;
 
-		float map2blocdb_w;
-		float map2blocdb_h;
-
 		//! Minimap
 		SDL_Surface* mini;
 
