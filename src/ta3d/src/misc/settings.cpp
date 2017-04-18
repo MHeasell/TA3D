@@ -83,7 +83,6 @@ namespace TA3D
 			  << "                     Skin = " << TA3D::VARS::lp_CONFIG->skin_name << ";\n"
 			  << "        Use Texture Cache = " << TA3D::VARS::lp_CONFIG->use_texture_cache << ";\n"
 			  << "               Net Server = " << TA3D::VARS::lp_CONFIG->net_server << "; // default: " << TA3D_DEFAULT_SERVER_HOSTNAME << "\n"
-			  << "       Low Definition Map = " << TA3D::VARS::lp_CONFIG->low_definition_map << ";\n"
 			  << "  Use Texture Compression = " << TA3D::VARS::lp_CONFIG->use_texture_compression << ";\n"
 			  << "    Right Click Interface = " << TA3D::VARS::lp_CONFIG->right_click_interface << ";\n"
 			  << "        Mouse Sensitivity = " << TA3D::VARS::lp_CONFIG->mouse_sensivity << ";\n"
@@ -168,8 +167,6 @@ namespace TA3D
 			TA3D::VARS::TA3D_CURRENT_MOD = TA3D::VARS::lp_CONFIG->last_MOD;
 
 			TA3D::VARS::lp_CONFIG->player_name = cfgFile.pullAsString("TA3D.Player name", "player");
-
-			TA3D::VARS::lp_CONFIG->low_definition_map = cfgFile.pullAsBool("TA3D.Low Definition Map", false);
 
 			TA3D::VARS::lp_CONFIG->use_texture_compression = cfgFile.pullAsBool("TA3D.Use Texture Compression", true);
 

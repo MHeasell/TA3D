@@ -182,7 +182,7 @@ namespace TA3D
 			pArea->set_state("*.disable_GLSL", true);
 			pArea->set_state("*.underwater_bright", false);
 			pArea->set_state("*.use_texture_compression", lp_CONFIG->use_texture_compression);
-			pArea->set_state("*.low_definition_map", lp_CONFIG->low_definition_map);
+			pArea->set_state("*.low_definition_map", false);
 			pArea->set_state("*.sky", false);
 			pArea->set_state("*.particle", true);
 			pArea->set_state("*.explosion_particles", false);
@@ -455,7 +455,6 @@ namespace TA3D
 			lp_CONFIG->mouse_sensivity = float(pArea->get_value("*.mouse_sensitivity")) * 0.01f;
 			lp_CONFIG->right_click_interface = pArea->get_state("*.right_click_interface");
 			lp_CONFIG->use_texture_compression = pArea->get_state("*.use_texture_compression");
-			lp_CONFIG->low_definition_map = pArea->get_state("*.low_definition_map");
 			lp_CONFIG->height_line = pArea->get_state("*.height_line");
 			lp_CONFIG->draw_console_loading = pArea->get_state("*.draw_console_loading");
 			lp_CONFIG->fullscreen = pArea->get_state("*.fullscreen");

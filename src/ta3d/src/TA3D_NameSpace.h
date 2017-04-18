@@ -85,7 +85,6 @@ namespace TA3D
 		bool use_texture_compression; // Use texture compression capabilities of GFX hardware ? (default : enabled because it greatly reduces video memory requirements)
 
 		String net_server;		 // The server that monitor the game server list
-		bool low_definition_map; // Render map in low definition mode (1 quad instead of 4 for each map bloc)
 
 		bool right_click_interface; // Right click interface ?
 

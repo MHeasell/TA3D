@@ -1589,7 +1589,7 @@ namespace TA3D
 						}
 					}
 					is_clean = grey == 4 || black == 4 || (grey == 0 && black == 0);
-					if (!map_data(X, Y).isFlat() && !lp_CONFIG->low_definition_map)
+					if (!map_data(X, Y).isFlat())
 					{
 						color[4] = color[5] = color[6] = uint8((color[0] + color[8]) >> 1);
 						color[12] = color[13] = color[14] = uint8((color[0] + color[24]) >> 1);
@@ -1599,7 +1599,7 @@ namespace TA3D
 					}
 				}
 
-				if (map_data(X, Y).isFlat() || lp_CONFIG->low_definition_map)
+				if (map_data(X, Y).isFlat())
 				{
 					if (was_flat && bloc[i].tex_x == bloc[bmap(x - 1, y)].tex_x + 1 && is_clean && was_clean && map_data(X, Y).isFlat())
 					{

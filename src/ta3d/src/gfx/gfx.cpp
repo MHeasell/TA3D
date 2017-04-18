@@ -90,8 +90,6 @@ namespace TA3D
 				lp_CONFIG->use_texture_cache = false;
 				lp_CONFIG->use_texture_compression = false;
 
-				lp_CONFIG->low_definition_map = false;
-
 				break;
 
 			case Nvidia:
@@ -104,8 +102,6 @@ namespace TA3D
 
 				lp_CONFIG->use_texture_cache = true;
 				lp_CONFIG->use_texture_compression = true;
-
-				lp_CONFIG->low_definition_map = false;
 
 				break;
 
@@ -121,8 +117,6 @@ namespace TA3D
 				lp_CONFIG->use_texture_cache = false;
 				lp_CONFIG->use_texture_compression = true;
 
-				lp_CONFIG->low_definition_map = true;
-
 				break;
 
 			case Unknown:
@@ -135,8 +129,6 @@ namespace TA3D
 
 				lp_CONFIG->use_texture_cache = false;
 				lp_CONFIG->use_texture_compression = true;
-
-				lp_CONFIG->low_definition_map = true;
 
 				break;
 		};
@@ -154,8 +146,6 @@ namespace TA3D
 				lp_CONFIG->use_texture_cache = false;
 				lp_CONFIG->use_texture_compression = false;
 
-				lp_CONFIG->low_definition_map = false;
-
 				break;
 
 			case Nvidia:
@@ -168,8 +158,6 @@ namespace TA3D
 
 				lp_CONFIG->use_texture_cache = true;
 				lp_CONFIG->use_texture_compression = true;
-
-				lp_CONFIG->low_definition_map = false;
 
 				break;
 
@@ -185,8 +173,6 @@ namespace TA3D
 				lp_CONFIG->use_texture_cache = false;
 				lp_CONFIG->use_texture_compression = true;
 
-				lp_CONFIG->low_definition_map = true;
-
 				break;
 
 			case Unknown:
@@ -199,8 +185,6 @@ namespace TA3D
 
 				lp_CONFIG->use_texture_cache = false;
 				lp_CONFIG->use_texture_compression = true;
-
-				lp_CONFIG->low_definition_map = true;
 
 				break;
 		};

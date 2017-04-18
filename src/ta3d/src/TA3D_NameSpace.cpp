@@ -58,8 +58,6 @@ namespace TA3D
 
 		use_texture_compression = true;
 
-		low_definition_map = false;
-
 		enable_shortcuts = true;
 
 		net_server = TA3D_DEFAULT_SERVER_HOSTNAME;
