@@ -56,8 +56,6 @@ namespace TA3D
 
 		right_click_interface = false;
 
-		disable_GLSL = false; // By default we want shaders
-
 		use_texture_compression = true;
 
 		low_definition_map = false;

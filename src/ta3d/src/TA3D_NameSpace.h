@@ -87,8 +87,6 @@ namespace TA3D
 		String net_server;		 // The server that monitor the game server list
 		bool low_definition_map; // Render map in low definition mode (1 quad instead of 4 for each map bloc)
 
-		bool disable_GLSL; // Disable GLSL shaders (they won't even be loaded so if there is a problem with them it won't crash)
-
 		bool right_click_interface; // Right click interface ?
 
 		float mouse_sensivity; // Mouse sensivity

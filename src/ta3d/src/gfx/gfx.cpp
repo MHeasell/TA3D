@@ -92,7 +92,6 @@ namespace TA3D
 
 				lp_CONFIG->low_definition_map = false;
 
-				lp_CONFIG->disable_GLSL = false;
 				break;
 
 			case Nvidia:
@@ -108,7 +107,6 @@ namespace TA3D
 
 				lp_CONFIG->low_definition_map = false;
 
-				lp_CONFIG->disable_GLSL = false;
 				break;
 
 			case Sis:
@@ -125,7 +123,6 @@ namespace TA3D
 
 				lp_CONFIG->low_definition_map = true;
 
-				lp_CONFIG->disable_GLSL = true;
 				break;
 
 			case Unknown:
@@ -141,7 +138,6 @@ namespace TA3D
 
 				lp_CONFIG->low_definition_map = true;
 
-				lp_CONFIG->disable_GLSL = true;
 				break;
 		};
 #elif defined TA3D_PLATFORM_WINDOWS
@@ -160,7 +156,6 @@ namespace TA3D
 
 				lp_CONFIG->low_definition_map = false;
 
-				lp_CONFIG->disable_GLSL = false;
 				break;
 
 			case Nvidia:
@@ -176,7 +171,6 @@ namespace TA3D
 
 				lp_CONFIG->low_definition_map = false;
 
-				lp_CONFIG->disable_GLSL = false;
 				break;
 
 			case Sis:
@@ -193,7 +187,6 @@ namespace TA3D
 
 				lp_CONFIG->low_definition_map = true;
 
-				lp_CONFIG->disable_GLSL = true;
 				break;
 
 			case Unknown:
@@ -209,7 +202,6 @@ namespace TA3D
 
 				lp_CONFIG->low_definition_map = true;
 
-				lp_CONFIG->disable_GLSL = true;
 				break;
 		};
 #endif
@@ -325,7 +317,6 @@ namespace TA3D
 
 	void GFX::checkConfig() const
 	{
-		lp_CONFIG->disable_GLSL = true;
 		lp_CONFIG->shadow_quality = Math::Min(lp_CONFIG->shadow_quality, sint16(1));
 
 		if (!g_useTextureCompression)
