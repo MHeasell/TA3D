@@ -44,7 +44,6 @@ namespace TA3D
 		glDisable(GL_TEXTURE_2D);
 		glBindTexture(GL_TEXTURE_2D, 0);
 		glActiveTextureARB(GL_TEXTURE0_ARB);
-		gfx->setShadowMapMode(false);
 		if (g_useProgram)
 			glUseProgramObjectARB(0);
 	}
@@ -57,7 +56,6 @@ namespace TA3D
 			{
 				case 3:
 				case 2: // Render the shadow map
-					gfx->setShadowMapMode(true);
 					gfx->SetDefState();
 					gfx->renderToTextureDepth(gfx->get_shadow_map());
 					gfx->clearDepth();
@@ -101,7 +99,6 @@ namespace TA3D
 					glTexParameteri(GL_TEXTURE_2D, GL_DEPTH_TEXTURE_MODE_ARB, GL_INTENSITY);
 
 					glActiveTextureARB(GL_TEXTURE0_ARB);
-					gfx->setShadowMapMode(false);
 					break;
 			};
 		}
@@ -267,8 +264,6 @@ namespace TA3D
 					glDepthFunc(GL_LESS);
 					unit_manager.unit_type[build]->model->draw(0.0f, NULL, false, false, false, 0, NULL, NULL, NULL, 0.0f, NULL, false, players.local_human_id, false);
 
-					const bool old_mode = gfx->getShadowMapMode();
-					gfx->setShadowMapMode(true);
 					double eqn[4] = {0.0f, -1.0f, 0.0f, map->sealvl - target.y};
 					glClipPlane(GL_CLIP_PLANE2, eqn);
 
@@ -284,7 +279,6 @@ namespace TA3D
 					glDisable(GL_BLEND);
 
 					glDisable(GL_CLIP_PLANE2);
-					gfx->setShadowMapMode(old_mode);
 				}
 				cam.setView();
 				glTranslatef(target.x, Math::Max(target.y, map->sealvl), target.z);

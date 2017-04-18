@@ -44,15 +44,6 @@
 namespace TA3D
 {
 
-	void Battle::reloadShaders()
-	{
-		if (!g_useProgram)
-			return;
-
-		gfx->model_shader.destroy();
-		gfx->model_shader.load("shaders/3do_shadow.frag", "shaders/3do_shadow.vert");
-	}
-
 	Battle::Result Battle::Execute(GameData* g)
 	{
 		Battle battle(g);

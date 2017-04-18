@@ -185,15 +185,6 @@ namespace TA3D
 
 		//@} // Color management
 
-		/*!
-		** \brief enable/disable the 3DO model vertex/fragment program (the one that fits the current rendering mode, or none if not required)
-		*/
-		void enable_model_shading(int mode = 0);
-		void disable_model_shading();
-
-		void setShadowMapMode(bool mode);
-		bool getShadowMapMode();
-
 		void line(const float x1, const float y1, const float x2, const float y2); // Basic drawing routines
 		void rect(const float x1, const float y1, const float x2, const float y2);
 		void rectfill(const float x1, const float y1, const float x2, const float y2);
@@ -335,8 +326,6 @@ namespace TA3D
 		GLuint shadowMap;
 
 		GLfloat shadowMapProjectionMatrix[16];
-
-		Shader model_shader;
 
 		bool ati_workaround; // Need to use workarounds for ATI cards ?
 

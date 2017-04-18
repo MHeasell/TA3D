@@ -1253,7 +1253,6 @@ namespace TA3D
 				}
 			}
 
-			const bool old_mode = gfx->getShadowMapMode();
 			glColor4ub(0xFF, 0xFF, 0xFF, 0xFF);
 
 			if (Math::AlmostZero(build_percent_left))
@@ -1285,7 +1284,6 @@ namespace TA3D
 			}
 			else
 			{
-				gfx->setShadowMapMode(true);
 				if (build_percent_left <= 33.0f)
 				{
 					float h = model->top - model->bottom;
@@ -1333,8 +1331,6 @@ namespace TA3D
 					}
 				}
 			}
-
-			gfx->setShadowMapMode(old_mode);
 
 			if (unit_target)
 			{

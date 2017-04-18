@@ -201,8 +201,6 @@ namespace TA3D
 		//@{
 		//@}
 
-		void reloadShaders();
-
 		Vector3D cursorOnMap(const Camera& cam, MAP& map, bool on_mini_map = false);
 
 		void handleGameStatusEvents();

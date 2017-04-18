@@ -631,8 +631,6 @@ namespace TA3D
 		switch (weapon_def->rendertype)
 		{
 			case RENDER_TYPE_LASER:			 // Draw the laser
-				if (gfx->getShadowMapMode()) // No laser shadow :P
-					break;
 				{
 					Vector3D P(Pos);
 					float length = weapon_def->duration;
@@ -743,7 +741,6 @@ namespace TA3D
 				{
 					anim_sprite = short(((int)(stime * 15.0f)) % weapon_manager.cannonshell.nb_bmp);
 					gfx->set_alpha_blending();
-					gfx->enable_model_shading();
 					glEnable(GL_TEXTURE_2D);
 					glBindTexture(GL_TEXTURE_2D, weapon_manager.cannonshell.glbmp[anim_sprite]);
 					Vector3D A, B, C, D;
@@ -762,7 +759,6 @@ namespace TA3D
 					glVertex3f(C.x, C.y, C.z);
 					glEnd();
 					gfx->unset_alpha_blending();
-					gfx->disable_model_shading();
 				}
 				else
 				{

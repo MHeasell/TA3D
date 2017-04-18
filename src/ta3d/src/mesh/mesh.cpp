@@ -1565,9 +1565,6 @@ namespace TA3D
 	{
 		if (!mesh)
 			return;
-		gfx->enable_model_shading();
-
-		sel &= !gfx->getShadowMapMode(); // Don't render selection primitive while in shadow map mode !! otherwise it would cast a shadow :/
 
 		if (notex)
 			glDisable(GL_TEXTURE_2D);
@@ -1601,8 +1598,6 @@ namespace TA3D
 				}
 			}
 		}
-
-		gfx->disable_model_shading();
 
 		if (c_part) // It is safe to do this even in shadow map mode because this is done only once in a while
 		{

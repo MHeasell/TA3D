@@ -147,12 +147,6 @@ namespace TA3D
 		return 0;
 	}
 
-	int CAPI::reloadShaders(lua_State*)
-	{
-		Battle::Instance()->reloadShaders();
-		return 0;
-	}
-
 	int CAPI::setShowMissionInfo(lua_State* L)
 	{
 		if (lua_gettop(L) > 0)
@@ -767,7 +761,6 @@ namespace TA3D
 		CAPI_REGISTER(setVideoShoot);
 		CAPI_REGISTER(screenshot);
 		CAPI_REGISTER(makeposter);
-		CAPI_REGISTER(reloadShaders);
 		CAPI_REGISTER(setShowMissionInfo);
 		CAPI_REGISTER(setViewDebug);
 		CAPI_REGISTER(setAIDebug);

@@ -563,7 +563,7 @@ namespace TA3D
 				else
 				{
 					// no need to draw things we can't see
-					if (!no_flat && !gfx->getShadowMapMode())
+					if (!no_flat)
 					{
 						dw *= 0.5f;
 						h = 0.25f * float(pFeature->anim.h[feature[i].frame]);
@@ -621,36 +621,21 @@ namespace TA3D
 		glColor4ub(255, 255, 255, 255);
 
 		gfx->ReInitAllTex(true);
-		gfx->enable_model_shading();
 
-		if (!gfx->getShadowMapMode())
-		{
-			glDisableClientState(GL_NORMAL_ARRAY);
-			if (HWLight::inGame)
-				glNormal3fv((GLfloat*)&(HWLight::inGame->Dir));
-			glPolygonOffset(-1.0f, -1.0f);
-			glEnable(GL_POLYGON_OFFSET_FILL);
-			quad_table.draw_all();
-			glDisable(GL_POLYGON_OFFSET_FILL);
-		}
+		glDisableClientState(GL_NORMAL_ARRAY);
+		if (HWLight::inGame)
+			glNormal3fv((GLfloat*)&(HWLight::inGame->Dir));
+		glPolygonOffset(-1.0f, -1.0f);
+		glEnable(GL_POLYGON_OFFSET_FILL);
+		quad_table.draw_all();
+		glDisable(GL_POLYGON_OFFSET_FILL);
 
 		glDisable(GL_BLEND);
 		glDisable(GL_ALPHA_TEST);
 		glEnable(GL_LIGHTING);
 		glDisable(GL_CULL_FACE);
 
-		if (gfx->getShadowMapMode())
-		{
-			glEnable(GL_POLYGON_OFFSET_FILL);
-			glPolygonOffset(3.0f, 1.0f);
-		}
-
 		DrawingTable.draw_all();
-
-		if (gfx->getShadowMapMode())
-			glDisable(GL_POLYGON_OFFSET_FILL);
-
-		gfx->disable_model_shading();
 
 		glEnable(GL_CULL_FACE);
 		glDisable(GL_ALPHA_TEST);

@@ -37,7 +37,6 @@ namespace TA3D
 		static int setVideoShoot(lua_State* L);
 		static int screenshot(lua_State* L);
 		static int makeposter(lua_State* L);
-		static int reloadShaders(lua_State* L);
 		static int setShowMissionInfo(lua_State* L);
 		static int setViewDebug(lua_State* L);
 		static int setAIDebug(lua_State* L);

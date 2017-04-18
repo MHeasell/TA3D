@@ -906,7 +906,6 @@ namespace TA3D
 #endif
 			if (sel_primitive && selprim >= 0 && nb_vtx > 0) // && (data_s==NULL || (data_s!=NULL && !data_s->explode))) {
 			{
-				gfx->disable_model_shading();
 				glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 				glDisableClientState(GL_NORMAL_ARRAY);
 				glDisable(GL_LIGHTING);
@@ -925,7 +924,6 @@ namespace TA3D
 				else
 					glColor3ub(0xFF, 0xFF, 0xFF);
 				alset = false;
-				gfx->enable_model_shading();
 			}
 			if (chg_col)
 				glColor4fv(color_factor);
