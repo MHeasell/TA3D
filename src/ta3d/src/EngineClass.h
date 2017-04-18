@@ -49,16 +49,30 @@ namespace TA3D
 // tnt_transform_H_DIV = 1.0f / tanf(63.44f * DEG2RAD);
 #define tnt_transform_H_DIV 0.49988981f
 
-	class SECTOR // Structure pour regrouper les informations sur le terrain (variations d'altitude, submergé, teneur en metal, ...)
+	/**
+	 * Structure holding information about the terrain
+	 * (variations in altitude, underwater, amount of metal, etc.)
+	 */
+	class SECTOR
 	{
 	public:
-		sint32 stuff;	// Indique l'élément graphique présent sur ce secteur
-		sint32 unit_idx; // Indice de l'unité qui se trouve sur ce secteur
+		//! Indicates the graphical element present on this sector
+		sint32 stuff;
+
+		//! Index of the unit that is on this sector
+		sint32 unit_idx;
+
+		//! underwater, lava, flat
 		uint32 flags;	// underwater, lava, flat
 
-		inline bool isUnderwater() const { return flags & 1U; } // is the bloc under water ?
-		inline bool isLava() const { return flags & 2U; }		// is the bloc under lava ? used for pathfinding
-		inline bool isFlat() const { return flags & 4U; }		// is the bloc flat ? used in the renderer to simplify geometry
+		//! Is the sector underwater?
+		inline bool isUnderwater() const { return flags & 1U; }
+
+		//! Is the sector lava? Used for pathfinding.
+		inline bool isLava() const { return flags & 2U; }
+
+		//! Is the sector flat? Used in the renderer to simplify geometry.
+		inline bool isFlat() const { return flags & 4U; }
 
 		inline void setUnderwater() { flags |= 1U; }
 		inline void setLava() { flags |= 2U; }
@@ -120,15 +134,29 @@ namespace TA3D
 
 	}; // class MAP_OTA
 
-	class BLOC // Blocs composant la carte
+	/**
+	 * Blocks composing the map
+	 */
+	class BLOC
 	{
 	public:
+		//! Array of points
 		Vector3D* point; // Points du bloc / Array of points
-		float* texcoord; // Coordonnées de texture / Texture coordinates
-		GLuint tex;		 // Indice de texture OpenGl / OpenGL texture handle
-		byte nbindex;	// Nombre d'indices	/ Number of indexes
-		byte nbpoint;	// Nombre de points / Number of points
-		bool lava;		 // Indique si le bloc est de type lave / Is that a lava bloc ?
+
+		//! Texture coordinates
+		float* texcoord;
+
+		//! OpenGL texture handle
+		GLuint tex;
+
+		//! Number of indexes
+		byte nbindex;
+
+		//! Number of points
+		byte nbpoint;
+
+		//! Is that a lava block?
+		bool lava;
 		byte tex_x;
 
 		void init()
@@ -154,55 +182,128 @@ namespace TA3D
 		}
 	};
 
-	class MAP : public ObjectSync // Données concernant la carte
+	//! Map details
+	class MAP : public ObjectSync
 	{
 	public:
-		short ntex;			   // Indique si la texture est chargée et doit être détruite
-		GLuint* tex;		   // Texture de surface
-		int nbbloc;			   // Nombre de blocs
-		BLOC* bloc;			   // Blocs composant le terrain
-		Grid<uint16> bmap;	 // Tableau d'indice des blocs
-		Grid<float> h_map;	 // Tableau de l'élévation du terrain
-		Grid<float> ph_map;	// Tableau du relief projeté pour le calcul inverse(projection) lors de l'affichage
-		Grid<SECTOR> map_data; // Tableau d'informations sur le terrain
-		Grid<byte> view;	   // Indique quels sont les parcelles de terrain visibles à l'écran
-		Grid<int> path;		   // Tableau pour le pathfinding
-		Grid<float> slope;	 // Maximum derivative of the height map
-		Grid<float> energy;	// Energy of the map used by the pathfinder and units when following a path
-		Grid<bool> obstacles;  // A map used by the pathfinder to detect blocking objets
 
-		Grid<byte> view_map;  // Map of what has been discovered
-		Grid<byte> sight_map; // Map of who is viewing
-		Grid<byte> radar_map; // Radar map
-		Grid<byte> sonar_map; // Sonar map
+		//! Indicates whether the texture is loaded and must be destroyed
+		short ntex;
 
-		int map_w;   // Largeur de la carte en 16ème de bloc
-		int map_h;   // Hauteur de la carte en 16ème de bloc
-		int map_w_d; // Same values as above divided by 2
+		//! Surface texture
+		GLuint* tex;
+
+		//! Number of blocks
+		int nbbloc;
+
+		//! Blocks composing the terrain
+		BLOC* bloc;
+
+		// Table of indices to blocks
+		Grid<uint16> bmap;
+
+		// Table of terrain heights
+		Grid<float> h_map;
+
+		//! Table of the projected relief for the inverse computation (projection) during the display
+		Grid<float> ph_map;
+
+		//! Table of information about the terrain
+		Grid<SECTOR> map_data;
+
+		//! Indicates which plots of land are visible on the screen
+		Grid<byte> view;
+
+		//! Table for pathfinding
+		Grid<int> path;
+
+		//! Maximum derivative of the height map
+		Grid<float> slope;
+
+		//! Energy of the map used by the pathfinder and units when following a path
+		Grid<float> energy;
+
+		//! A map used by the pathfinder to detect blocking objets
+		Grid<bool> obstacles;
+
+		//! Map of what has been discovered
+		Grid<byte> view_map;
+
+		//! Map of who is viewing
+		Grid<byte> sight_map;
+
+		//! Radar map
+		Grid<byte> radar_map;
+
+		//! Sonar map
+		Grid<byte> sonar_map;
+
+		//! Width of the map in 16 pixel blocks
+		int map_w;
+
+		//! Height of the map in 16 pixel blocks
+		int map_h;
+
+		//! Width of the map in 32 pixel (graphical) blocks
+		int map_w_d;
+
+		//! Height of the map in 32 pixel (graphical) blocks
 		int map_h_d;
-		int bloc_w;	// Width in blocs
-		int bloc_h;	// Height in blocs
-		int bloc_w_db; // Same as above but multiplied by 2
+
+		//! Width in blocks
+		int bloc_w;
+
+		//! Height in blocks
+		int bloc_h;
+
+		//! Width in blocks divided by 2
+		int bloc_w_db;
+
+		// Height in blocks divided by 2
 		int bloc_h_db;
+
 		float map2blocdb_w;
 		float map2blocdb_h;
-		SDL_Surface* mini; // Minimap
-		GLuint glmini;	 // Texture OpenGl pour la minimap
+
+		//! Minimap
+		SDL_Surface* mini;
+
+		//! OpenGL texture for the minimap
+		GLuint glmini;
 		int mini_w;
 		int mini_h;
-		float sealvl;   // Niveau de la mer
-		Vector3D** lvl; // Bloc de flottants pour le relief de la carte
-		bool water;		// Indique qu'il faut dessiner la mer
-		bool tnt;		// Indique si la carte est format tnt(format de total annihilation)
-		float sea_dec;  // Décalage de la mer
-		int ox1, ox2;   // Coordonnées de la dernière fenêtre de terrain dessinée
+
+		//! Sea level
+		float sealvl;
+
+		//! Block of floats for the relief of the map
+		Vector3D** lvl;
+
+		//! Indicates to draw the sea
+		bool water;
+
+		//! Indicates whether the map is in tnt format (Total Annihilation format)
+		bool tnt;
+
+		//! Offset of the sea
+		float sea_dec;
+
+		// Coordinates of the last drawn map window
+		int ox1, ox2;
 		int oy1, oy2;
-		GLushort buf_i[6500];  // Pour accélérer l'affichage
-		GLuint lava_map;	   // texture des zones de lave
 
-		MAP_OTA ota_data; // Data read from the ota file
 
-		float wind; // To handle wind
+		//! To speed up display
+		GLushort buf_i[6500];
+
+		//! Texture of lava areas
+		GLuint lava_map;
+
+		//! Data read from the ota file
+		MAP_OTA ota_data;
+
+		//! To handle wind
+		float wind;
 		float wind_dir;
 		Vector3D wind_vec;
 
@@ -233,7 +334,8 @@ namespace TA3D
 
 		void destroy();
 
-		void clean_map(); // Used to remove all objects when loading a saved game
+		//! Used to remove all objects when loading a saved game
+		void clean_map();
 
 		~MAP() { destroy(); }
 
