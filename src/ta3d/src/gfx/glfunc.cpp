@@ -39,7 +39,6 @@ namespace TA3D
 	bool MultiTexturing;
 	bool g_useTextureCompression = false;
 	bool g_useStencilTwoSide = false;
-	bool g_useProgram = false;
 	bool g_useFBO = false;
 	bool g_useGenMipMaps = false;
 	bool g_useNonPowerOfTwoTextures = false;
@@ -70,36 +69,6 @@ namespace TA3D
 			if (!g_useStencilTwoSide)
 				LOG_WARNING(LOG_PREFIX_OPENGL << "StencilTwoSide support will be disbaled");
 		}
-		if (g_useProgram)
-		{
-			CHECK_OPENGL_FUNCTION(GLSL, glCreateShaderObjectARB, g_useProgram)
-			CHECK_OPENGL_FUNCTION(GLSL, glShaderSourceARB, g_useProgram)
-			CHECK_OPENGL_FUNCTION(GLSL, glCompileShaderARB, g_useProgram)
-			CHECK_OPENGL_FUNCTION(GLSL, glGetObjectParameterivARB, g_useProgram)
-			CHECK_OPENGL_FUNCTION(GLSL, glGetInfoLogARB, g_useProgram)
-			CHECK_OPENGL_FUNCTION(GLSL, glGenFramebuffersEXT, g_useProgram)
-			CHECK_OPENGL_FUNCTION(GLSL, glGenRenderbuffersEXT, g_useProgram)
-			CHECK_OPENGL_FUNCTION(GLSL, glBindRenderbufferEXT, g_useProgram)
-			CHECK_OPENGL_FUNCTION(GLSL, glRenderbufferStorageEXT, g_useProgram)
-			CHECK_OPENGL_FUNCTION(GLSL, glCreateProgramObjectARB, g_useProgram)
-			CHECK_OPENGL_FUNCTION(GLSL, glAttachObjectARB, g_useProgram)
-			CHECK_OPENGL_FUNCTION(GLSL, glLinkProgramARB, g_useProgram)
-			CHECK_OPENGL_FUNCTION(GLSL, glUseProgramObjectARB, g_useProgram)
-			CHECK_OPENGL_FUNCTION(GLSL, glDetachObjectARB, g_useProgram)
-			CHECK_OPENGL_FUNCTION(GLSL, glDeleteObjectARB, g_useProgram)
-			CHECK_OPENGL_FUNCTION(GLSL, glUniform1fARB, g_useProgram)
-			CHECK_OPENGL_FUNCTION(GLSL, glUniform2fARB, g_useProgram)
-			CHECK_OPENGL_FUNCTION(GLSL, glUniform3fARB, g_useProgram)
-			CHECK_OPENGL_FUNCTION(GLSL, glUniform4fARB, g_useProgram)
-			CHECK_OPENGL_FUNCTION(GLSL, glUniform1iARB, g_useProgram)
-			CHECK_OPENGL_FUNCTION(GLSL, glUniform2iARB, g_useProgram)
-			CHECK_OPENGL_FUNCTION(GLSL, glUniform3iARB, g_useProgram)
-			CHECK_OPENGL_FUNCTION(GLSL, glUniform4iARB, g_useProgram)
-			CHECK_OPENGL_FUNCTION(GLSL, glUniformMatrix4fv, g_useProgram)
-			CHECK_OPENGL_FUNCTION(GLSL, glGetUniformLocationARB, g_useProgram)
-			if (!g_useProgram)
-				LOG_WARNING(LOG_PREFIX_OPENGL << "GLSL support will be disbaled");
-		}
 	}
 
 	void installOpenGLExtensions()
@@ -118,7 +87,6 @@ namespace TA3D
 
 		g_useTextureCompression = GLEW_ARB_texture_compression;
 		g_useStencilTwoSide = GLEW_EXT_stencil_two_side;
-		g_useProgram = GLEW_ARB_shader_objects && GLEW_ARB_shading_language_100 && GLEW_ARB_vertex_program && GLEW_ARB_fragment_program;
 		g_useFBO = GLEW_EXT_framebuffer_object;
 		g_useGenMipMaps = GLEW_SGIS_generate_mipmap;
 		g_useNonPowerOfTwoTextures = GLEW_ARB_texture_non_power_of_two;

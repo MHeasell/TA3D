@@ -44,8 +44,6 @@ namespace TA3D
 		glDisable(GL_TEXTURE_2D);
 		glBindTexture(GL_TEXTURE_2D, 0);
 		glActiveTextureARB(GL_TEXTURE0_ARB);
-		if (g_useProgram)
-			glUseProgramObjectARB(0);
 	}
 
 	void Battle::renderShadowMap()

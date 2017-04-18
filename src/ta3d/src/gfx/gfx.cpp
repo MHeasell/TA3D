@@ -325,11 +325,9 @@ namespace TA3D
 
 	void GFX::checkConfig() const
 	{
-		if (!g_useProgram)
-		{
-			lp_CONFIG->disable_GLSL = true;
-			lp_CONFIG->shadow_quality = Math::Min(lp_CONFIG->shadow_quality, sint16(1));
-		}
+		lp_CONFIG->disable_GLSL = true;
+		lp_CONFIG->shadow_quality = Math::Min(lp_CONFIG->shadow_quality, sint16(1));
+
 		if (!g_useTextureCompression)
 			lp_CONFIG->use_texture_compression = false;
 
