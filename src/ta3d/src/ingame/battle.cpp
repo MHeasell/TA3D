@@ -39,7 +39,6 @@
 #include <tnt.h>
 #include <scripts/script.h>
 #include <scripts/lua.env.h>
-#include <gfx/shader.h>
 #include "players.h"
 #include <engine/mission.h>
 #include <input/keyboard.h>

@@ -29,7 +29,6 @@
 #include "gfx.toolkit.h"
 #include "font.h"
 #include "texture.h"
-#include "shader.h"
 #include <threads/thread.h>
 #include <misc/interface.h>
 #include <misc/hash_table.h>

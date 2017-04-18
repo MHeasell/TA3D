@@ -97,8 +97,6 @@ set(TA3D_LIB_SOURCES
 		gfx/particles/particlesengine.h
 		gfx/particles/particlessystem.cpp
 		gfx/particles/particlessystem.h
-		gfx/shader.cpp
-		gfx/shader.h
 		gfx/texture.cpp
 		gfx/texture.h
 		ingame/battle.cpp

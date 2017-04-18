@@ -32,7 +32,6 @@
 #include <vector>
 #include <misc/matrix.h>
 #include <gfx/glfunc.h>
-#include <gfx/shader.h>
 #include <scripts/script.data.h>
 #include <misc/progressnotifier.h>
 #include <memory>
