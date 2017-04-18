@@ -1324,7 +1324,7 @@ namespace TA3D
 
 		Vector3D T;
 		Vector3D V;
-		for (int y = y1; y <= y2; ++y) // Balaye les blocs susceptibles d'être visibles pour dessiner ceux qui le sont
+		for (int y = y1; y <= y2; ++y) // Scans blocks that can be seen to draw those that are visible
 		{
 			const int pre_y = y << 4;
 			const int Y = y << 1;
