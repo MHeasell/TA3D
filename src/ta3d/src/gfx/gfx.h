@@ -353,7 +353,6 @@ namespace TA3D
 		bool alpha_blending_set;
 		GLuint texture_format;
 		bool build_mipmaps;
-		bool shadowMapMode;
 		GLuint defaultRGBTextureFormat;
 		GLuint defaultRGBATextureFormat;
 		//! Store all texture IDs
