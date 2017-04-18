@@ -36,9 +36,6 @@
 #include "misc/string.h"
 #include "misc/grid.h"
 
-#define PARTICLE_LIMIT 100000 // pas plus de 100000 particules
-#define HMAP_RESIZE 0.04f
-
 #define H_DIV 0.5f
 
 namespace TA3D
