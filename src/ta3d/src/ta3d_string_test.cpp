@@ -3,6 +3,21 @@
 
 namespace TA3D {
 
+	TEST_CASE("String.last")
+	{
+		SECTION("gets the last character")
+		{
+			REQUIRE(String("foo").last() == 'o');
+			REQUIRE(String("asdf").last() == 'f');
+		}
+
+		SECTION("returns null if the string is empty")
+		{
+			REQUIRE(String("").last() == '\0');
+			REQUIRE(String().last() == '\0');
+		}
+	}
+
 	TEST_CASE("String.to_sint32()")
 	{
 		SECTION("converts strings to signed integers")
