@@ -306,8 +306,6 @@ namespace TA3D
 		float SCREEN_W_TO_640; // To have mouse sensibility undependent from the resolution
 		float SCREEN_H_TO_480;
 
-		float low_def_limit;
-
 		GLuint glfond;
 		GLuint textureFBO; // FBO used by renderToTexture functions
 		GLuint textureDepth;

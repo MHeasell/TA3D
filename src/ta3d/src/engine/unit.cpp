@@ -968,7 +968,6 @@ namespace TA3D
 		if (!cloaked || owner_id == players.local_human_id) // Don't show cloaked units
 		{
 			visible = true;
-			on_radar |= Camera::inGame->rpos.y > gfx->low_def_limit;
 		}
 		else
 		{
@@ -4681,28 +4680,16 @@ namespace TA3D
 			return;
 		}
 
-		bool low_def = (Camera::inGame->rpos.y > gfx->low_def_limit);
-
 		MissionStack::iterator cur = def_orders ? def_mission.begin() : mission.begin();
 		MissionStack::iterator end = def_orders ? def_mission.end() : mission.end();
-		if (low_def)
-		{
-			glEnable(GL_BLEND);
-			glDisable(GL_TEXTURE_2D);
-			glDisable(GL_LIGHTING);
-			glDisable(GL_CULL_FACE);
-			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-			glColor4ub(0xFF, 0xFF, 0xFF, 0xFF);
-		}
-		else
-		{
-			glEnable(GL_BLEND);
-			glEnable(GL_TEXTURE_2D);
-			glDisable(GL_LIGHTING);
-			glDisable(GL_CULL_FACE);
-			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-			glColor4ub(0xFF, 0xFF, 0xFF, 0xFF);
-		}
+
+		glEnable(GL_BLEND);
+		glEnable(GL_TEXTURE_2D);
+		glDisable(GL_LIGHTING);
+		glDisable(GL_CULL_FACE);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		glColor4ub(0xFF, 0xFF, 0xFF, 0xFF);
+
 		Vector3D p_target = Pos;
 		Vector3D n_target = Pos;
 		const float rab = float(msec_timer % 1000) * 0.001f;
@@ -4745,43 +4732,15 @@ namespace TA3D
 						n_target.y = Math::Max(the_map->get_unit_h(n_target.x, n_target.z), the_map->sealvl);
 						if (rec > 0)
 						{
-							if (low_def)
+							for (int i = 0; i < rec; ++i)
 							{
-								glDisable(GL_DEPTH_TEST);
-								glColor4ub(0xFF, 0xFF, 0xFF, 0x7F);
-								glBegin(GL_QUADS);
-								Vector3D D = n_target - p_target;
-								D.y = D.x;
-								D.x = D.z;
-								D.z = -D.y;
-								D.y = 0.0f;
-								D.unit();
-								D = 5.0f * D;
-								Vector3D P;
-								P = p_target - D;
-								glVertex3fv((GLfloat*)&P);
-								P = p_target + D;
-								glVertex3fv((GLfloat*)&P);
-								P = n_target + D;
-								glVertex3fv((GLfloat*)&P);
-								P = n_target - D;
-								glVertex3fv((GLfloat*)&P);
-								glEnd();
-								glColor4ub(0xFF, 0xFF, 0xFF, 0xFF);
-								glEnable(GL_DEPTH_TEST);
-							}
-							else
-							{
-								for (int i = 0; i < rec; ++i)
-								{
-									x = p_target.x + (n_target.x - p_target.x) * ((float)i + rab) / (float)rec;
-									z = p_target.z + (n_target.z - p_target.z) * ((float)i + rab) / (float)rec;
-									y = Math::Max(the_map->get_unit_h(x, z), the_map->sealvl);
-									y += 0.75f;
-									x -= dx;
-									z -= dz;
-									points.push_back(Vector3D(x, y, z));
-								}
+								x = p_target.x + (n_target.x - p_target.x) * ((float)i + rab) / (float)rec;
+								z = p_target.z + (n_target.z - p_target.z) * ((float)i + rab) / (float)rec;
+								y = Math::Max(the_map->get_unit_h(x, z), the_map->sealvl);
+								y += 0.75f;
+								x -= dx;
+								z -= dz;
+								points.push_back(Vector3D(x, y, z));
 							}
 						}
 						p_target = n_target;
@@ -4869,10 +4828,7 @@ namespace TA3D
 						glEnd();
 						glPopMatrix();
 						glEnable(GL_BLEND);
-						if (low_def)
-							glDisable(GL_TEXTURE_2D);
-						else
-							glEnable(GL_TEXTURE_2D);
+						glEnable(GL_TEXTURE_2D);
 						glDisable(GL_CULL_FACE);
 						glColor4ub(0xFF, 0xFF, 0xFF, 0xFF);
 					}
@@ -4933,8 +4889,7 @@ namespace TA3D
 						const float z = target.z - 0.5f * (float)cursor[cursor_type].ofs_y[curseur];
 						const float sx = 0.5f * float(cursor[cursor_type].bmp[curseur]->w - 1);
 						const float sy = 0.5f * float(cursor[cursor_type].bmp[curseur]->h - 1);
-						if (low_def)
-							glEnable(GL_TEXTURE_2D);
+
 						glBindTexture(GL_TEXTURE_2D, cursor[cursor_type].glbmp[curseur]);
 						glBegin(GL_QUADS);
 						glTexCoord2f(0.0f, 0.0f);
@@ -4946,8 +4901,6 @@ namespace TA3D
 						glTexCoord2f(0.0f, 1.0f);
 						glVertex3f(x, y, z + sy);
 						glEnd();
-						if (low_def)
-							glDisable(GL_TEXTURE_2D);
 					}
 					break;
 			}

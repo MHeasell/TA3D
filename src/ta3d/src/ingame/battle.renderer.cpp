@@ -48,29 +48,26 @@ namespace TA3D
 
 	void Battle::renderStencilShadow()
 	{
-		if (cam.rpos.y <= gfx->low_def_limit)
+		if (rotate_light)
 		{
-			if (rotate_light)
-			{
-				pSun.Dir.x = -1.0f;
-				pSun.Dir.y = 1.0f;
-				pSun.Dir.z = 1.0f;
-				pSun.Dir.unit();
-				Vector3D Dir(-pSun.Dir);
-				Dir.x = cosf(light_angle);
-				Dir.z = sinf(light_angle);
-				Dir.unit();
-				pSun.Dir = -Dir;
-				units.draw_shadow(render_time, Dir);
-			}
-			else
-			{
-				pSun.Dir.x = -1.0f;
-				pSun.Dir.y = 1.0f;
-				pSun.Dir.z = 1.0f;
-				pSun.Dir.unit();
-				units.draw_shadow(render_time, -pSun.Dir);
-			}
+			pSun.Dir.x = -1.0f;
+			pSun.Dir.y = 1.0f;
+			pSun.Dir.z = 1.0f;
+			pSun.Dir.unit();
+			Vector3D Dir(-pSun.Dir);
+			Dir.x = cosf(light_angle);
+			Dir.z = sinf(light_angle);
+			Dir.unit();
+			pSun.Dir = -Dir;
+			units.draw_shadow(render_time, Dir);
+		}
+		else
+		{
+			pSun.Dir.x = -1.0f;
+			pSun.Dir.y = 1.0f;
+			pSun.Dir.z = 1.0f;
+			pSun.Dir.unit();
+			units.draw_shadow(render_time, -pSun.Dir);
 		}
 	}
 
@@ -117,22 +114,12 @@ namespace TA3D
 
 		// Dessine les unités sous l'eau / Draw units which are under water
 		cam.setView(true);
-		if (cam.rpos.y <= gfx->low_def_limit)
-		{
-			units.draw(true, false, true, lp_CONFIG->height_line);
-		}
+		units.draw(true, false, true, lp_CONFIG->height_line);
 
 		// Dessine les objets produits par les armes sous l'eau / Draw weapons which are under water
 		weapons.draw(true);
 
 		particle_engine.drawUW();
-
-		// Render map object icons (if in tactical mode)
-		if (cam.rpos.y > gfx->low_def_limit)
-		{
-			cam.setView(true);
-			features.draw_icons();
-		}
 
 		cam.setView(true);
 		// Dessine les unités non encore dessinées / Draw units which have not been drawn

@@ -1539,9 +1539,6 @@ namespace TA3D
 		glColor4ub(0xFF, 0xFF, 0xFF, 0xFF);
 		const float sea_lvl = limit ? the_map->sealvl - 5.0f : the_map->sealvl;
 		const float virtual_t = ((float)current_tick) / TICKS_PER_SEC;
-		const bool low_def = Camera::inGame->rpos.y > gfx->low_def_limit;
-		if (low_def)
-			glDisable(GL_DEPTH_TEST);
 
 		for (std::vector<uint32>::const_iterator e = visible_unit.begin(); e != visible_unit.end(); ++e)
 		{
@@ -1550,14 +1547,11 @@ namespace TA3D
 			Unit* const pUnit = &(unit[i]);
 			const Model* const model = pUnit->model;
 
-			if (model && (low_def || (pUnit->render.Pos.y + model->bottom <= the_map->sealvl && underwater) || (pUnit->render.Pos.y + model->top >= sea_lvl && !underwater))) // Si il y a une unité / If there is a unit
+			if (model && ((pUnit->render.Pos.y + model->bottom <= the_map->sealvl && underwater) || (pUnit->render.Pos.y + model->top >= sea_lvl && !underwater))) // Si il y a une unité / If there is a unit
 				pUnit->draw(virtual_t, height_line);
 		}
 
 		glDisable(GL_ALPHA_TEST);
-
-		if (low_def)
-			glEnable(GL_DEPTH_TEST);
 
 		if (!cullface)
 			glEnable(GL_CULL_FACE);

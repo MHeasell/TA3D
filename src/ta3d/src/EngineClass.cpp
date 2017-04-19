@@ -1016,26 +1016,9 @@ namespace TA3D
 
 	void MAP::draw(Camera* cam, byte player_mask)
 	{
-		bool low_def_view = cam->rpos.y > gfx->low_def_limit; // Low detail map for mega zoom
+		cam->setView(true);
 
-		if (low_def_view)
-		{
-			cam->zfar = sqrtf(float(map_w * map_w + map_h * map_h) + cam->rpos.y * cam->rpos.y); // We want to see everything
-			cam->setView(true);
-			draw_LD(player_mask);
-
-			view.clear(1);
-			ox1 = 0;
-			ox2 = bloc_w - 1;
-			oy1 = 0;
-			oy2 = bloc_h - 1;
-		}
-		else
-		{
-			cam->setView(true);
-
-			draw_HD(cam, player_mask);
-		}
+		draw_HD(cam, player_mask);
 	}
 
 	void MAP::draw_LD(byte player_mask)
