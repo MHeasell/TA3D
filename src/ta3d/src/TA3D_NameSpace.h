@@ -58,7 +58,6 @@ namespace TA3D
 
 		uint16 screen_width;
 		uint16 screen_height;
-		uint8 color_depth;	// Default : 32, can be 16 or 32
 
 		bool showfps;
 		bool wireframe;

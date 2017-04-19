@@ -65,7 +65,6 @@ namespace TA3D
 			  << "                 Language = " << TA3D::VARS::lp_CONFIG->Lang << ";\n"
 			  << "             Screen Width = " << TA3D::VARS::lp_CONFIG->screen_width << ";\n"
 			  << "            Screen Height = " << TA3D::VARS::lp_CONFIG->screen_height << ";\n"
-			  << "              Color Depth = " << (int)TA3D::VARS::lp_CONFIG->color_depth << ";\n"
 			  << "                 Show FPS = " << TA3D::VARS::lp_CONFIG->showfps << ";\n"
 			  << "           Show Wireframe = " << TA3D::VARS::lp_CONFIG->wireframe << ";\n"
 			  << "        Show Height Lines = " << TA3D::VARS::lp_CONFIG->height_line << ";\n"
@@ -138,7 +137,6 @@ namespace TA3D
 			TA3D::VARS::lp_CONFIG->Lang = cfgFile.pullAsString("TA3D.Language").toLower();
 			TA3D::VARS::lp_CONFIG->screen_width = uint16(cfgFile.pullAsInt("TA3D.Screen Width"));
 			TA3D::VARS::lp_CONFIG->screen_height = uint16(cfgFile.pullAsInt("TA3D.Screen Height"));
-			TA3D::VARS::lp_CONFIG->color_depth = uint8(cfgFile.pullAsInt("TA3D.Color Depth", 32));
 
 			TA3D::VARS::lp_CONFIG->showfps = cfgFile.pullAsBool("TA3D.Show FPS");
 			TA3D::VARS::lp_CONFIG->wireframe = cfgFile.pullAsBool("TA3D.Show Wireframe");

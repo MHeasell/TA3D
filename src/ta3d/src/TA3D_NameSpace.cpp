@@ -87,7 +87,6 @@ namespace TA3D
 		Lang = "english"; // English
 		screen_width = 800;
 		screen_height = 600;
-		color_depth = 32;
 		showfps = false;
 		wireframe = false;
 		height_line = false;
