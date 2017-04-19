@@ -59,7 +59,6 @@ namespace TA3D
 		uint16 screen_width;
 		uint16 screen_height;
 		uint8 color_depth;	// Default : 32, can be 16 or 32
-		uint8 shadowmap_size; // 0 -> lower (256x256), 1 -> low (512x512), 2 -> normal (1024x1024), 3 -> high (2048x2048)
 
 		bool showfps;
 		bool wireframe;

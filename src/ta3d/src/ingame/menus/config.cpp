@@ -170,7 +170,7 @@ namespace TA3D
 			}
 			pArea->set_value("*.texture_quality", lp_CONFIG->unitTextureQuality);
 			pArea->set_value("*.interface_transparency", 0);
-			pArea->set_value("*.shadow_map_size", lp_CONFIG->shadowmap_size);
+			pArea->set_value("*.shadow_map_size", 0);
 			pArea->set_state("*.grab_inputs", lp_CONFIG->grab_inputs);
 			pArea->set_value("*.sound_volume", lp_CONFIG->sound_volume);
 			pArea->set_value("*.music_volume", lp_CONFIG->music_volume);
@@ -450,7 +450,6 @@ namespace TA3D
 				sound_manager->setMusicVolume(lp_CONFIG->music_volume);
 			}
 			lp_CONFIG->unitTextureQuality = pArea->get_value("*.texture_quality");
-			lp_CONFIG->shadowmap_size = uint8(pArea->get_value("*.shadow_map_size"));
 			lp_CONFIG->anisotropy = sint16(pArea->get_value("*.anisotropy"));
 			lp_CONFIG->mouse_sensivity = float(pArea->get_value("*.mouse_sensitivity")) * 0.01f;
 			lp_CONFIG->right_click_interface = pArea->get_state("*.right_click_interface");
