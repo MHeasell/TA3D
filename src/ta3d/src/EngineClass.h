@@ -418,8 +418,6 @@ namespace TA3D
 			map_h = m_h;
 			w = size;
 		}
-
-		void draw(float t, bool shaded = false);
 	};
 }
 
