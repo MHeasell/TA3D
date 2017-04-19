@@ -71,7 +71,7 @@ namespace TA3D
 				// Check we're not trying to crash the game :P
 				gfx->checkConfig();
 
-				if (lp_CONFIG->screen_width != saved_config->screen_width || lp_CONFIG->screen_height != saved_config->screen_height || lp_CONFIG->color_depth != saved_config->color_depth || lp_CONFIG->fsaa != saved_config->fsaa || (lp_CONFIG->fullscreen != saved_config->fullscreen)) // Need to restart
+				if (lp_CONFIG->screen_width != saved_config->screen_width || lp_CONFIG->screen_height != saved_config->screen_height || lp_CONFIG->fsaa != saved_config->fsaa || (lp_CONFIG->fullscreen != saved_config->fullscreen)) // Need to restart
 				{
 					lp_CONFIG->quickrestart = true;
 				}
@@ -154,7 +154,6 @@ namespace TA3D
 
 				if (mode.w >= 640 && mode.h >= 480)
 				{
-					res_bpp[nb_res] = 32;
 					res_width[nb_res] = mode.w;
 					res_height[nb_res] = mode.h;
 					++nb_res;
@@ -217,13 +216,13 @@ namespace TA3D
 				Gui::GUIOBJ::Ptr obj = pArea->get_object("*.screenres");
 				obj->Text.clear();
 				int current = 0;
-				while (current < nb_res && (res_width[current] != lp_CONFIG->screen_width || res_height[current] != lp_CONFIG->screen_height || res_bpp[current] != lp_CONFIG->color_depth))
+				while (current < nb_res && (res_width[current] != lp_CONFIG->screen_width || res_height[current] != lp_CONFIG->screen_height))
 					current++;
 				if (current >= nb_res)
 					current = 0;
-				obj->Text.push_back(String() << res_width[current] << "x" << res_height[current] << "x" << res_bpp[current]);
+				obj->Text.push_back(String() << res_width[current] << "x" << res_height[current]);
 				for (int i = 0; i < nb_res; i++)
-					obj->Text.push_back(String() << res_width[i] << "x" << res_height[i] << "x" << res_bpp[i]);
+					obj->Text.push_back(String() << res_width[i] << "x" << res_height[i]);
 			}
 			Gui::GUIOBJ::Ptr tmpO = pArea->get_object("*.shadow_quality");
 			if (tmpO)
@@ -512,7 +511,6 @@ namespace TA3D
 					obj->Text[0] = obj->Text[1 + obj->Value];
 					lp_CONFIG->screen_width = uint16(res_width[obj->Value]);
 					lp_CONFIG->screen_height = uint16(res_height[obj->Value]);
-					lp_CONFIG->color_depth = uint8(res_bpp[obj->Value]);
 				}
 			}
 			if (pArea->get_value("*.timefactor") >= 0)

@@ -52,7 +52,6 @@ namespace TA3D
 			int nb_res;
 			int res_width[100];
 			int res_height[100];
-			int res_bpp[100];
 			std::vector<I18N::Language> languageList;
 
 			bool save;

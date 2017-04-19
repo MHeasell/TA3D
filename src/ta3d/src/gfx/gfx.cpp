@@ -83,8 +83,6 @@ namespace TA3D
 				lp_CONFIG->fsaa = 0;
 				lp_CONFIG->anisotropy = 1;
 
-				lp_CONFIG->color_depth = 32;
-
 				lp_CONFIG->use_texture_cache = false;
 				lp_CONFIG->use_texture_compression = false;
 
@@ -93,8 +91,6 @@ namespace TA3D
 			case Nvidia:
 				lp_CONFIG->fsaa = 0;
 				lp_CONFIG->anisotropy = 1;
-
-				lp_CONFIG->color_depth = 32;
 
 				lp_CONFIG->use_texture_cache = true;
 				lp_CONFIG->use_texture_compression = true;
@@ -106,8 +102,6 @@ namespace TA3D
 				lp_CONFIG->fsaa = 0;
 				lp_CONFIG->anisotropy = 1;
 
-				lp_CONFIG->color_depth = 16;
-
 				lp_CONFIG->use_texture_cache = false;
 				lp_CONFIG->use_texture_compression = true;
 
@@ -116,8 +110,6 @@ namespace TA3D
 			case Unknown:
 				lp_CONFIG->fsaa = 0;
 				lp_CONFIG->anisotropy = 1;
-
-				lp_CONFIG->color_depth = 32;
 
 				lp_CONFIG->use_texture_cache = false;
 				lp_CONFIG->use_texture_compression = true;
@@ -131,8 +123,6 @@ namespace TA3D
 				lp_CONFIG->fsaa = 0;
 				lp_CONFIG->anisotropy = 1;
 
-				lp_CONFIG->color_depth = 32;
-
 				lp_CONFIG->use_texture_cache = false;
 				lp_CONFIG->use_texture_compression = false;
 
@@ -141,8 +131,6 @@ namespace TA3D
 			case Nvidia:
 				lp_CONFIG->fsaa = 0;
 				lp_CONFIG->anisotropy = 1;
-
-				lp_CONFIG->color_depth = 32;
 
 				lp_CONFIG->use_texture_cache = true;
 				lp_CONFIG->use_texture_compression = true;
@@ -154,8 +142,6 @@ namespace TA3D
 				lp_CONFIG->fsaa = 0;
 				lp_CONFIG->anisotropy = 1;
 
-				lp_CONFIG->color_depth = 16;
-
 				lp_CONFIG->use_texture_cache = false;
 				lp_CONFIG->use_texture_compression = true;
 
@@ -164,8 +150,6 @@ namespace TA3D
 			case Unknown:
 				lp_CONFIG->fsaa = 0;
 				lp_CONFIG->anisotropy = 1;
-
-				lp_CONFIG->color_depth = 32;
 
 				lp_CONFIG->use_texture_cache = false;
 				lp_CONFIG->use_texture_compression = true;
@@ -194,22 +178,13 @@ namespace TA3D
 		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, TA3D::VARS::lp_CONFIG->fsaa > 1);
 		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, TA3D::VARS::lp_CONFIG->fsaa);
 		SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-		if (TA3D::VARS::lp_CONFIG->color_depth == 32)
-		{
-			SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
-			SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
-			SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
-			SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8);
-			SDL_GL_SetAttribute(SDL_GL_BUFFER_SIZE, 32);
-		}
-		else
-		{
-			SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 5);
-			SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 6);
-			SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 5);
-			SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 0);
-			SDL_GL_SetAttribute(SDL_GL_BUFFER_SIZE, 16);
-		}
+
+		SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
+		SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
+		SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
+		SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8);
+		SDL_GL_SetAttribute(SDL_GL_BUFFER_SIZE, 32);
+
 		SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
 
 		SDL_GL_SetAttribute(SDL_GL_ACCUM_RED_SIZE, 0);
