@@ -46,62 +46,6 @@ namespace TA3D
 		glActiveTextureARB(GL_TEXTURE0_ARB);
 	}
 
-	void Battle::renderShadowMap()
-	{
-		if (lp_CONFIG->shadow_quality > 0 && cam.rpos.y <= gfx->low_def_limit)
-		{
-			switch (lp_CONFIG->shadow_quality)
-			{
-				case 3:
-				case 2: // Render the shadow map
-					gfx->SetDefState();
-					gfx->renderToTextureDepth(gfx->get_shadow_map());
-					gfx->clearDepth();
-					pSun.SetView(map->get_visible_volume());
-
-					// We'll need this matrix later (when rendering with shadows)
-					gfx->readShadowMapProjectionMatrix();
-
-					glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
-					glShadeModel(GL_FLAT);
-
-					glEnable(GL_POLYGON_OFFSET_FILL);
-					glPolygonOffset(3.0f, 1.0f);
-
-					// Render all visible features from light's point of view
-					for (std::vector<int>::const_iterator i = features.list.begin(); i != features.list.end(); ++i)
-						features.feature[*i].draw = true;
-					features.draw(render_time, true);
-
-					glEnable(GL_POLYGON_OFFSET_FILL);
-					glPolygonOffset(3.0f, 1.0f);
-					// Render all visible units from light's point of view
-					units.draw(true, false, true, false);
-					units.draw(false, false, true, false);
-
-					// Render all visible weapons from light's point of view
-					weapons.draw(true);
-					weapons.draw(false);
-
-					glDisable(GL_POLYGON_OFFSET_FILL);
-					glPolygonOffset(0.0f, 0.0f);
-
-					gfx->renderToTextureDepth(0);
-					glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
-
-					glActiveTextureARB(GL_TEXTURE7_ARB);
-					glEnable(GL_TEXTURE_2D);
-					glBindTexture(GL_TEXTURE_2D, gfx->get_shadow_map());
-					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE_ARB, GL_COMPARE_R_TO_TEXTURE);
-					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC_ARB, GL_LEQUAL);
-					glTexParameteri(GL_TEXTURE_2D, GL_DEPTH_TEXTURE_MODE_ARB, GL_INTENSITY);
-
-					glActiveTextureARB(GL_TEXTURE0_ARB);
-					break;
-			};
-		}
-	}
-
 	void Battle::renderStencilShadow()
 	{
 		if (lp_CONFIG->shadow_quality > 0 && cam.rpos.y <= gfx->low_def_limit)
@@ -441,8 +385,6 @@ namespace TA3D
 	void Battle::renderScene()
 	{
 		cam.znear = -512.0f;
-
-		renderShadowMap();
 
 		renderWorld();
 

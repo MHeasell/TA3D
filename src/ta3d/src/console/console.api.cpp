@@ -209,28 +209,6 @@ namespace TA3D
 		return 1;
 	}
 
-	int CAPI::setShadowQuality(lua_State* L)
-	{
-		if (lua_gettop(L) > 0)
-		{
-			lp_CONFIG->shadow_quality = (sint16)lua_tointeger(L, -1);
-			gfx->delete_shadow_map();
-		}
-		lua_pushinteger(L, lp_CONFIG->shadow_quality);
-		return 1;
-	}
-
-	int CAPI::setShadowMapSize(lua_State* L)
-	{
-		if (lua_gettop(L) > 0)
-		{
-			lp_CONFIG->shadowmap_size = (uint8)lua_tointeger(L, -1);
-			gfx->delete_shadow_map();
-		}
-		lua_pushinteger(L, lp_CONFIG->shadowmap_size);
-		return 1;
-	}
-
 	int CAPI::scriptDumpDebugInfo(lua_State*)
 	{
 		if (Battle::Instance()->cur_sel_index >= 0 && units.unit[Battle::Instance()->cur_sel_index].script)
@@ -769,8 +747,6 @@ namespace TA3D
 		CAPI_REGISTER(exit);
 		CAPI_REGISTER(setWireframe);
 		CAPI_REGISTER(setPriority);
-		CAPI_REGISTER(setShadowQuality);
-		CAPI_REGISTER(setShadowMapSize);
 		CAPI_REGISTER(scriptDumpDebugInfo);
 		CAPI_REGISTER(setShowModel);
 		CAPI_REGISTER(setRotateLight);

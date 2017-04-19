@@ -45,8 +45,6 @@ namespace TA3D
 		static int exit(lua_State* L);
 		static int setWireframe(lua_State* L);
 		static int setPriority(lua_State* L);
-		static int setShadowQuality(lua_State* L);
-		static int setShadowMapSize(lua_State* L);
 		static int scriptDumpDebugInfo(lua_State* L);
 		static int setShowModel(lua_State* L);
 		static int setRotateLight(lua_State* L);

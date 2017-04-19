@@ -190,7 +190,6 @@ namespace TA3D
 		void initRenderer();
 		void renderScene();
 		void renderStencilShadow();
-		void renderShadowMap();
 		void renderWorld();
 		void renderInfo();
 		void renderPostEffects();

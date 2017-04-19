@@ -247,13 +247,8 @@ namespace TA3D
 		GLuint create_texture_RGBA32F(int w, int h, int filter_type = FILTER_NONE, bool clamp = true);
 		GLuint create_texture_RGB16F(int w, int h, int filter_type = FILTER_NONE, bool clamp = true);
 		GLuint create_texture_RGBA16F(int w, int h, int filter_type = FILTER_NONE, bool clamp = true);
-		GLuint create_shadow_map(int w, int h);
 
 		GLuint make_texture_from_screen(int filter_type = FILTER_NONE);
-
-		GLuint get_shadow_map();
-		void delete_shadow_map();
-		void readShadowMapProjectionMatrix();
 
 		SDL_Surface* load_image(const String& filename);
 
@@ -294,11 +289,6 @@ namespace TA3D
 		GLuint defaultTextureFormat_RGB_compressed() const;
 		GLuint defaultTextureFormat_RGBA_compressed() const;
 
-		void enableShadowMapping() const;
-		void disableShadowMapping() const;
-		void storeShadowMappingState();
-		void restoreShadowMappingState() const;
-
 	public:
 		int width; // Size of this window on the screen
 		int height;
@@ -322,18 +312,12 @@ namespace TA3D
 		GLuint textureFBO; // FBO used by renderToTexture functions
 		GLuint textureDepth;
 		GLuint textureColor; // Default color texture used by FBO when rendering to depth texture
-		GLuint shadowMap;
-
-		GLfloat shadowMapProjectionMatrix[16];
 
 		bool ati_workaround; // Need to use workarounds for ATI cards ?
 
 		int max_tex_size;
 		//! A default texture, loaded at initialization, used for rendering non textured objects with some shaders
 		GLuint default_texture;
-
-		//! A bool to store shadowMap texture ID state
-		bool shadowMapWasActive;
 
 	private:
 		virtual uint32 InterfaceMsg(const uint32 MsgID, const String& msg);

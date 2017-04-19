@@ -320,7 +320,7 @@ namespace TA3D
 	}
 
 	GFX::GFX()
-		: width(0), height(0), x(0), y(0), normal_font(NULL), small_font(NULL), TA_font(NULL), ta3d_gui_font(NULL), big_font(NULL), SCREEN_W_HALF(0), SCREEN_H_HALF(0), SCREEN_W_INV(0.), SCREEN_H_INV(0.), SCREEN_W_TO_640(0.), SCREEN_H_TO_480(0.), low_def_limit(600.), glfond(0), textureFBO(0), textureDepth(0), textureColor(0), shadowMap(0), ati_workaround(false), max_tex_size(0), default_texture(0), alpha_blending_set(false), texture_format(0), build_mipmaps(false), defaultRGBTextureFormat(GL_RGB8), defaultRGBATextureFormat(GL_RGBA8)
+		: width(0), height(0), x(0), y(0), normal_font(NULL), small_font(NULL), TA_font(NULL), ta3d_gui_font(NULL), big_font(NULL), SCREEN_W_HALF(0), SCREEN_H_HALF(0), SCREEN_W_INV(0.), SCREEN_H_INV(0.), SCREEN_W_TO_640(0.), SCREEN_H_TO_480(0.), low_def_limit(600.), glfond(0), textureFBO(0), textureDepth(0), textureColor(0), ati_workaround(false), max_tex_size(0), default_texture(0), alpha_blending_set(false), texture_format(0), build_mipmaps(false), defaultRGBTextureFormat(GL_RGB8), defaultRGBATextureFormat(GL_RGBA8)
 	{
 		// Initialize the GFX Engine
 		if (lp_CONFIG->first_start)
@@ -353,7 +353,6 @@ namespace TA3D
 		if (textureDepth)
 			glDeleteRenderbuffersEXT(1, &textureDepth);
 		destroy_texture(textureColor);
-		destroy_texture(shadowMap);
 		destroy_texture(default_texture);
 
 		DELETE_ARRAY(TA3D::VARS::pal);
@@ -2166,108 +2165,6 @@ namespace TA3D
 
 		SDL_FreeSurface(alpha);
 		return bmp;
-	}
-
-	GLuint GFX::create_shadow_map(int w, int h)
-	{
-		GLuint shadowMapTexture;
-
-		glGenTextures(1, &shadowMapTexture);
-		glBindTexture(GL_TEXTURE_2D, shadowMapTexture);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT24, w, h, 0,
-			GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE, NULL);
-		if (lp_CONFIG->shadow_quality == 2)
-		{
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST); // We want fast shadows
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-		}
-		else
-		{
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR); // We want smooth shadows
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		}
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-
-		return shadowMapTexture;
-	}
-
-	void GFX::delete_shadow_map()
-	{
-		if (shadowMap)
-			destroy_texture(shadowMap);
-		shadowMap = 0;
-	}
-
-	GLuint GFX::get_shadow_map()
-	{
-		if (shadowMap == 0)
-		{
-			switch (lp_CONFIG->shadowmap_size)
-			{
-				case 0:
-					shadowMap = create_shadow_map(256, 256);
-					break;
-				case 1:
-					shadowMap = create_shadow_map(512, 512);
-					break;
-				case 2:
-					shadowMap = create_shadow_map(1024, 1024);
-					break;
-				case 3:
-					shadowMap = create_shadow_map(2048, 2048);
-					break;
-				default:
-					shadowMap = create_shadow_map(1024, 1024);
-			};
-		}
-		return shadowMap;
-	}
-
-	void GFX::readShadowMapProjectionMatrix()
-	{
-		GLfloat backup[16];
-		glGetFloatv(GL_PROJECTION_MATRIX, backup);
-
-		glMatrixMode(GL_PROJECTION);
-		glLoadIdentity();
-		glScalef(0.5f, 0.5f, 0.5f);
-		glTranslatef(1.0f, 1.0f, 1.0f);
-		glMultMatrixf(backup);
-		glGetFloatv(GL_PROJECTION_MATRIX, gfx->shadowMapProjectionMatrix);
-
-		glLoadIdentity();
-		glMultMatrixf(backup);
-		glMatrixMode(GL_MODELVIEW);
-	}
-
-	void GFX::enableShadowMapping() const
-	{
-		glActiveTexture(GL_TEXTURE7);
-		glEnable(GL_TEXTURE_2D);
-		glActiveTexture(GL_TEXTURE0);
-	}
-
-	void GFX::disableShadowMapping() const
-	{
-		glActiveTexture(GL_TEXTURE7);
-		glDisable(GL_TEXTURE_2D);
-		glActiveTexture(GL_TEXTURE0);
-	}
-
-	void GFX::storeShadowMappingState()
-	{
-		glActiveTexture(GL_TEXTURE7);
-		shadowMapWasActive = glIsEnabled(GL_TEXTURE_2D);
-		glActiveTexture(GL_TEXTURE0);
-	}
-
-	void GFX::restoreShadowMappingState() const
-	{
-		if (shadowMapWasActive)
-			enableShadowMapping();
-		else
-			disableShadowMapping();
 	}
 
 	GLuint GFX::defaultTextureFormat_RGB_compressed() const
