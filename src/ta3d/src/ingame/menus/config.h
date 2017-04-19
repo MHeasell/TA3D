@@ -26,6 +26,18 @@ namespace TA3D
 	class TA3DCONFIG;
 	namespace Menus
 	{
+		struct ScreenResolution {
+			int width;
+			int height;
+
+			ScreenResolution(int width, int height):
+				width(width), height(height) {}
+
+			bool operator==(const ScreenResolution& rhs) const
+			{
+				return width == rhs.width && height == rhs.height;
+			}
+		};
 
 		class Config : public Abstract
 		{
@@ -53,6 +65,8 @@ namespace TA3D
 			int res_width[100];
 			int res_height[100];
 			std::vector<I18N::Language> languageList;
+
+			std::vector<ScreenResolution> availableScreenResolutions;
 
 			bool save;
 			uint32 timer;

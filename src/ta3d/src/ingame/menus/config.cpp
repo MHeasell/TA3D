@@ -26,6 +26,7 @@
 #include <ingame/sidedata.h>
 #include <misc/settings.h>
 #include <misc/suspend.h>
+#include <SDL_video.h>
 
 namespace TA3D
 {
@@ -140,10 +141,14 @@ namespace TA3D
 			}
 			I18N::Translate(fps_limits);
 
-			nb_res = 0;
-
 			// assumes we are on display 0
-			int number_of_display_modes = std::min(100, SDL_GetNumDisplayModes(0));
+			int number_of_display_modes = SDL_GetNumDisplayModes(0);
+			if (number_of_display_modes < 1)
+			{
+				LOG_ERROR(String("Failed to get the number of display modes: ") << SDL_GetError());
+			}
+
+			ScreenResolution lastRes(0, 0);
 			for (int i = 0; i < number_of_display_modes; ++i)
 			{
 				SDL_DisplayMode mode;
@@ -151,13 +156,26 @@ namespace TA3D
 					LOG_ERROR(String("Couldn't get display mode") << i << ": " << SDL_GetError());
 					continue;
 				}
+				ScreenResolution res(mode.w, mode.h);
 
-				if (mode.w >= 640 && mode.h >= 480)
+				// filter out repeats of the same resolution
+				if (res == lastRes)
 				{
-					res_width[nb_res] = mode.w;
-					res_height[nb_res] = mode.h;
-					++nb_res;
+					continue;
 				}
+
+				// filter out too-small resolutions
+				if (res.width < 640 || res.height < 480)
+				{
+					continue;
+				}
+
+				availableScreenResolutions.push_back(res);
+				lastRes = res;
+			}
+			if (availableScreenResolutions.empty())
+			{
+				LOG_ERROR("No suitable resolution choices found!");
 			}
 
 			pArea->set_state("*.showfps", lp_CONFIG->showfps);
@@ -215,14 +233,13 @@ namespace TA3D
 			{
 				Gui::GUIOBJ::Ptr obj = pArea->get_object("*.screenres");
 				obj->Text.clear();
-				int current = 0;
-				while (current < nb_res && (res_width[current] != lp_CONFIG->screen_width || res_height[current] != lp_CONFIG->screen_height))
-					current++;
-				if (current >= nb_res)
-					current = 0;
-				obj->Text.push_back(String() << res_width[current] << "x" << res_height[current]);
-				for (int i = 0; i < nb_res; i++)
-					obj->Text.push_back(String() << res_width[i] << "x" << res_height[i]);
+
+				// put the current resolution first
+				obj->Text.push_back(String().format("%dx%d", lp_CONFIG->screen_width, lp_CONFIG->screen_height));
+				for (auto it = availableScreenResolutions.begin(); it != availableScreenResolutions.end(); ++it)
+				{
+					obj->Text.push_back(String().format("%dx%d", it->width, it->height));
+				}
 			}
 			Gui::GUIOBJ::Ptr tmpO = pArea->get_object("*.shadow_quality");
 			if (tmpO)
@@ -509,8 +526,8 @@ namespace TA3D
 				if (obj && obj->Value != -1)
 				{
 					obj->Text[0] = obj->Text[1 + obj->Value];
-					lp_CONFIG->screen_width = uint16(res_width[obj->Value]);
-					lp_CONFIG->screen_height = uint16(res_height[obj->Value]);
+					lp_CONFIG->screen_width = availableScreenResolutions[obj->Value].width;
+					lp_CONFIG->screen_height = availableScreenResolutions[obj->Value].height;
 				}
 			}
 			if (pArea->get_value("*.timefactor") >= 0)
