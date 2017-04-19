@@ -81,16 +81,14 @@ namespace TA3D
 			 */
 			String roamingAppData()
 			{
-				wchar_t* pathBuffer = new wchar_t[MAX_PATH + 1];
+				std::unique_ptr<wchar_t[]> pathBuffer(new wchar_t[MAX_PATH + 1]);
 				pathBuffer[MAX_PATH] = '\0';
 
-				HRESULT status = SHGetFolderPathW(NULL, CSIDL_APPDATA, NULL, SHGFP_TYPE_CURRENT, pathBuffer);
+				HRESULT status = SHGetFolderPathW(NULL, CSIDL_APPDATA, NULL, SHGFP_TYPE_CURRENT, pathBuffer.get());
 				if (status != S_OK) {
-					LOG_CRITICAL("Failed to locate AppData folder");
-					return String();
+					throw std::runtime_error("Failed to locate AppData folder");
 				}
-				std::wstring utf16Path(pathBuffer);
-				delete[] pathBuffer;
+				std::wstring utf16Path(pathBuffer.get());
 
 				std::string path;
 				utf8::utf16to8(utf16Path.begin(), utf16Path.end(), std::back_inserter(path));
