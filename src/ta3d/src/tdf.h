@@ -413,20 +413,23 @@ namespace TA3D
 		typedef HashSet<uint32>::Dense FeaturesSet;
 
 	public:
-		//!
-		int nb_features; // Nombre d'éléments �  gérer
-		//!
-		int max_features; // Quantité maximale d'éléments que l'on peut charger dans la mémoire allouée
-		//!
-		FeatureData* feature; // Eléments
+		//! Number of elements to manager
+		int nb_features;
 
-		//!
-		FeaturesList burning_features; // because it's faster that way
-		//!
-		FeaturesList sinking_features; // because it's faster that way
+		//! Maximum amount of items that can be loaded into allocated memory
+		int max_features;
 
-		//!
-		std::vector<int> list; // Liste d'objets �  afficher
+		//! Elements
+		FeatureData* feature;
+
+		//! because it's faster that way
+		FeaturesList burning_features;
+
+		//! because it's faster that way
+		FeaturesList sinking_features;
+
+		//! List of objects to show
+		std::vector<int> list;
 
 		//! features to render as icons in tactical mode
 		FeaturesSet symbolic_features;
