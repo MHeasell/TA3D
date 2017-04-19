@@ -394,11 +394,6 @@ namespace TA3D
 		void draw_shadow(float t, const Vector3D& Dir);
 
 		/*!
-		** \brief Draw icons for all features in symbolic_features
-		*/
-		void draw_icons();
-
-		/*!
 		** \brief
 		** \param idx Index of the feature
 		*/
