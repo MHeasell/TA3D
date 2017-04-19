@@ -228,7 +228,7 @@ namespace TA3D
 			Gui::GUIOBJ::Ptr tmpO = pArea->get_object("*.shadow_quality");
 			if (tmpO)
 			{
-				const unsigned int indx = 1 + Math::Max(0, Math::Min((int)lp_CONFIG->shadow_quality, 3));
+				const unsigned int indx = 0;
 				if (indx < tmpO->Text.size())
 					pArea->caption("*.shadow_quality", tmpO->Text[indx]);
 			}
@@ -514,15 +514,6 @@ namespace TA3D
 					lp_CONFIG->screen_width = uint16(res_width[obj->Value]);
 					lp_CONFIG->screen_height = uint16(res_height[obj->Value]);
 					lp_CONFIG->color_depth = uint8(res_bpp[obj->Value]);
-				}
-			}
-			if (pArea->get_value("*.shadow_quality") >= 0)
-			{
-				Gui::GUIOBJ::Ptr obj = pArea->get_object("*.shadow_quality");
-				if (obj && obj->Value != -1)
-				{
-					obj->Text[0] = obj->Text[1 + obj->Value];
-					lp_CONFIG->shadow_quality = sint16(obj->Value);
 				}
 			}
 			if (pArea->get_value("*.timefactor") >= 0)

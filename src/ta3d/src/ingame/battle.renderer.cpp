@@ -48,36 +48,28 @@ namespace TA3D
 
 	void Battle::renderStencilShadow()
 	{
-		if (lp_CONFIG->shadow_quality > 0 && cam.rpos.y <= gfx->low_def_limit)
+		if (cam.rpos.y <= gfx->low_def_limit)
 		{
-			switch (lp_CONFIG->shadow_quality)
+			if (rotate_light)
 			{
-				case 1: // Stencil Shadowing (shadow volumes)
-					if (rotate_light)
-					{
-						pSun.Dir.x = -1.0f;
-						pSun.Dir.y = 1.0f;
-						pSun.Dir.z = 1.0f;
-						pSun.Dir.unit();
-						Vector3D Dir(-pSun.Dir);
-						Dir.x = cosf(light_angle);
-						Dir.z = sinf(light_angle);
-						Dir.unit();
-						pSun.Dir = -Dir;
-						units.draw_shadow(render_time, Dir);
-					}
-					else
-					{
-						pSun.Dir.x = -1.0f;
-						pSun.Dir.y = 1.0f;
-						pSun.Dir.z = 1.0f;
-						pSun.Dir.unit();
-						units.draw_shadow(render_time, -pSun.Dir);
-					}
-					break;
-				case 2: // Shadow mapping
-				case 3:
-					break;
+				pSun.Dir.x = -1.0f;
+				pSun.Dir.y = 1.0f;
+				pSun.Dir.z = 1.0f;
+				pSun.Dir.unit();
+				Vector3D Dir(-pSun.Dir);
+				Dir.x = cosf(light_angle);
+				Dir.z = sinf(light_angle);
+				Dir.unit();
+				pSun.Dir = -Dir;
+				units.draw_shadow(render_time, Dir);
+			}
+			else
+			{
+				pSun.Dir.x = -1.0f;
+				pSun.Dir.y = 1.0f;
+				pSun.Dir.z = 1.0f;
+				pSun.Dir.unit();
+				units.draw_shadow(render_time, -pSun.Dir);
 			}
 		}
 	}
@@ -117,14 +109,14 @@ namespace TA3D
 		if (lp_CONFIG->wireframe)
 			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-		cam.setView(lp_CONFIG->shadow_quality < 2);
+		cam.setView(true);
 
 		features.draw(render_time); // Dessine les éléments "2D"
 
 		/*----------------------------------------------------------------------------------------------*/
 
 		// Dessine les unités sous l'eau / Draw units which are under water
-		cam.setView(lp_CONFIG->shadow_quality < 2);
+		cam.setView(true);
 		if (cam.rpos.y <= gfx->low_def_limit)
 		{
 			units.draw(true, false, true, lp_CONFIG->height_line);
@@ -142,7 +134,7 @@ namespace TA3D
 			features.draw_icons();
 		}
 
-		cam.setView(lp_CONFIG->shadow_quality < 2);
+		cam.setView(true);
 		// Dessine les unités non encore dessinées / Draw units which have not been drawn
 		units.draw(false, false, true, lp_CONFIG->height_line);
 

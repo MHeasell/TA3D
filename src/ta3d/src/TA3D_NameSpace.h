@@ -51,7 +51,6 @@ namespace TA3D
 		float fps_limit;
 		float timefactor; // 1.0 -> 10.0
 
-		sint16 shadow_quality; // 0 -> none, 1 -> low (shadow volumes), 2 -> normal (shadow maps)
 		sint16 priority_level; // 0, 1, 2
 		sint16 fsaa;		   // ?
 		String Lang;		   // english, french, german, italian, spanish, japanese, chinese, ...

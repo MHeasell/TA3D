@@ -80,7 +80,6 @@ namespace TA3D
 		switch (glVendorID)
 		{
 			case Ati:
-				lp_CONFIG->shadow_quality = 3;
 				lp_CONFIG->fsaa = 0;
 				lp_CONFIG->anisotropy = 1;
 
@@ -93,7 +92,6 @@ namespace TA3D
 				break;
 
 			case Nvidia:
-				lp_CONFIG->shadow_quality = 3;
 				lp_CONFIG->fsaa = 0;
 				lp_CONFIG->anisotropy = 1;
 
@@ -107,7 +105,6 @@ namespace TA3D
 
 			case Sis:
 			case Intel:
-				lp_CONFIG->shadow_quality = 0;
 				lp_CONFIG->fsaa = 0;
 				lp_CONFIG->anisotropy = 1;
 
@@ -120,7 +117,6 @@ namespace TA3D
 				break;
 
 			case Unknown:
-				lp_CONFIG->shadow_quality = 0;
 				lp_CONFIG->fsaa = 0;
 				lp_CONFIG->anisotropy = 1;
 
@@ -136,7 +132,6 @@ namespace TA3D
 		switch (glVendorID)
 		{
 			case Ati:
-				lp_CONFIG->shadow_quality = 3;
 				lp_CONFIG->fsaa = 0;
 				lp_CONFIG->anisotropy = 1;
 
@@ -149,7 +144,6 @@ namespace TA3D
 				break;
 
 			case Nvidia:
-				lp_CONFIG->shadow_quality = 3;
 				lp_CONFIG->fsaa = 0;
 				lp_CONFIG->anisotropy = 1;
 
@@ -163,7 +157,6 @@ namespace TA3D
 
 			case Sis:
 			case Intel:
-				lp_CONFIG->shadow_quality = 0;
 				lp_CONFIG->fsaa = 0;
 				lp_CONFIG->anisotropy = 1;
 
@@ -176,7 +169,6 @@ namespace TA3D
 				break;
 
 			case Unknown:
-				lp_CONFIG->shadow_quality = 0;
 				lp_CONFIG->fsaa = 0;
 				lp_CONFIG->anisotropy = 1;
 
@@ -301,13 +293,8 @@ namespace TA3D
 
 	void GFX::checkConfig() const
 	{
-		lp_CONFIG->shadow_quality = Math::Min(lp_CONFIG->shadow_quality, sint16(1));
-
 		if (!g_useTextureCompression)
 			lp_CONFIG->use_texture_compression = false;
-
-		if (!glewIsSupported("GL_ARB_shadow"))
-			lp_CONFIG->shadow_quality = Math::Min(lp_CONFIG->shadow_quality, sint16(1));
 	}
 
 	bool GFX::checkVideoCardWorkaround() const

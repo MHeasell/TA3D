@@ -82,7 +82,6 @@ namespace TA3D
 
 		fps_limit = -1.0f;
 		timefactor = 1.0f;
-		shadow_quality = 2;
 		shadowmap_size = 2;
 		priority_level = 0;
 		fsaa = 0;

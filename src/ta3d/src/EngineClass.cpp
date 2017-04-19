@@ -1032,7 +1032,7 @@ namespace TA3D
 		}
 		else
 		{
-			cam->setView(lp_CONFIG->shadow_quality < 2);
+			cam->setView(true);
 
 			draw_HD(cam, player_mask);
 		}
