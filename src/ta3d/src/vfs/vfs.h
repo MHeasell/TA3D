@@ -36,10 +36,6 @@
 #include "file.h"
 #include <threads/policy.h>
 
-#ifndef MAX_PATH
-#define MAX_PATH 260
-#endif
-
 namespace TA3D
 {
 	namespace UTILS
