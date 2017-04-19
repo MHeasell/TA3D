@@ -91,11 +91,8 @@ namespace TA3D
 		//! Square of the maximum distance
 		float zfar2;
 
-		float mirrorPos;
-
 		float shakeMagnitude;
 		float shakeDuration;
-		float shakeTotalDuration;
 		Vector3D shakeVector;
 
 		float zoomFactor;

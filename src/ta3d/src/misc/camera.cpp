@@ -42,7 +42,6 @@ namespace TA3D
 		shakeVector.reset();
 		shakeMagnitude = 0.0f;
 		shakeDuration = 0.0f;
-		shakeTotalDuration = 1.0f;
 		rpos = pos;
 		dir = up = pos;
 		dir.z = -1.0f; // direction
@@ -51,7 +50,6 @@ namespace TA3D
 		znear = 1.0f;
 		side = dir * up;
 		zfar2 = zfar * zfar;
-		mirrorPos = 0.0f;
 		zoomFactor = 0.5f;
 	}
 
@@ -78,7 +76,6 @@ namespace TA3D
 		if (shakeDuration <= 0.0f || magnitude >= shakeMagnitude)
 		{
 			shakeDuration = duration;
-			shakeTotalDuration = duration + 1.0f;
 			shakeMagnitude = magnitude;
 		}
 	}
