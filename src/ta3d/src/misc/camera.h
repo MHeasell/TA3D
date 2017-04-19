@@ -24,7 +24,8 @@
 namespace TA3D
 {
 
-	class Camera // Classe pour la gestion de la caméra
+	//! Class for managing the camera
+	class Camera
 	{
 	public:
 		static Camera* inGame;
@@ -39,14 +40,8 @@ namespace TA3D
 		*/
 		void setWidthFactor(const int w, const int h);
 
-		/*!
-		** \brief
-		*/
 		void setShake(const float duration, float magnitude);
 
-		/*!
-		** \brief
-		*/
 		void updateShake(const float dt);
 
 		/*!
@@ -75,17 +70,27 @@ namespace TA3D
 		void getFrustum(std::vector<Vector3D>& list);
 
 	public:
+		//! Top of the camera
 		Vector3D up;   // Haut de la caméra
-		Vector3D side; // Coté de la caméra(optimisation pour les particules)
+
+		//! Side of the camera (optimization for particles)
+		Vector3D side;
 
 		//! Position
 		Vector3D pos;
-		Vector3D rpos; // Position de la caméra
-		//! Direction
-		Vector3D dir; // Direction de la caméra
-		float zfar;   // Pour le volume visible
+
+		//! Position of the camera
+		Vector3D rpos;
+		//! Direction of the camera
+		Vector3D dir;
+
+		//! For the visible volume
+		float zfar;
 		float znear;
-		float zfar2; // Carré de la distance maximale
+
+		//! Square of the maximum distance
+		float zfar2;
+
 		float mirrorPos;
 
 		float shakeMagnitude;
