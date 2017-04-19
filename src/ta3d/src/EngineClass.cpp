@@ -989,29 +989,6 @@ namespace TA3D
 		gfx->unlock();
 	}
 
-	std::vector<Vector3D> MAP::get_visible_volume() const
-	{
-		std::vector<Vector3D> volume;
-		Camera::inGame->getFrustum(volume);
-		Vector3D dir;
-		for (int i = 4; i < 8; ++i)
-		{
-			dir = volume[i] - volume[i - 4];
-			const float dist_max = dir.norm();
-			dir = 1.0f / dist_max * dir;
-			;
-			if (dir.y > 0.0f) // Heading up
-			{
-				volume[i] += (512.0f * H_DIV - volume[i].y) * dir;
-				continue;
-			}
-			const Vector3D map_hit = hit(volume[i - 4], dir, false, dist_max, true) + 30.0f * dir;
-			if ((map_hit - volume[i - 4]) % dir < dist_max)
-				volume[i] = map_hit;
-		}
-		return volume;
-	}
-
 	inline float sq(float a) { return a * a; }
 
 	void MAP::draw(Camera* cam, byte player_mask)
@@ -1019,66 +996,6 @@ namespace TA3D
 		cam->setView(true);
 
 		draw_HD(cam, player_mask);
-	}
-
-	void MAP::draw_LD(byte player_mask)
-	{
-		gfx->lock();
-
-		glPushMatrix();
-
-		glDisable(GL_CULL_FACE);
-		glDisable(GL_LIGHTING);
-		if (ntex > 0)
-			gfx->ReInitAllTex(true);
-		glColor4ub(0xFF, 0xFF, 0xFF, 0xFF);
-
-		int i = 0;
-		for (int y = 0; y <= low_h; ++y)
-		{
-			int Y = y * (bloc_h_db - 2) / low_h;
-			for (int x = 0; x <= low_w; ++x)
-			{
-				int X = x * (bloc_w_db - 2) / low_w;
-				int Z = Y + get_zdec_notest(X, Y);
-				if (Z >= bloc_h_db - 1)
-					Z = bloc_h_db - 2;
-				if (!(view_map(X >> 1, Z >> 1) & player_mask))
-					low_col[i << 2] = low_col[(i << 2) + 1] = low_col[(i << 2) + 2] = low_col[(i << 2) + 3] = 0;
-				else
-				{
-					low_col[(i << 2) + 3] = 255;
-					if (!(sight_map(X >> 1, Z >> 1) & player_mask))
-						low_col[i << 2] = low_col[(i << 2) + 1] = low_col[(i << 2) + 2] = 127;
-					else
-						low_col[i << 2] = low_col[(i << 2) + 1] = low_col[(i << 2) + 2] = 255;
-				}
-				++i;
-			}
-		}
-
-		glDisableClientState(GL_NORMAL_ARRAY); // we don't need normal data
-		glEnableClientState(GL_COLOR_ARRAY);   // Colors are used to render fog of war
-		glColorPointer(4, GL_UNSIGNED_BYTE, 0, low_col);
-		glEnableClientState(GL_VERTEX_ARRAY); // vertex coordinates
-
-		glVertexPointer(3, GL_FLOAT, 0, low_vtx);
-
-		glClientActiveTextureARB(GL_TEXTURE0_ARB);
-		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-		glTexCoordPointer(2, GL_FLOAT, 0, low_tcoord);
-
-		glActiveTextureARB(GL_TEXTURE0_ARB);
-		glEnable(GL_TEXTURE_2D);
-		glBindTexture(GL_TEXTURE_2D, low_tex);
-
-		glDrawRangeElements(GL_TRIANGLE_STRIP, 0, (low_w + 1) * (low_h + 1) - 1, low_nb_idx, GL_UNSIGNED_INT, low_index); // draw this map
-
-		glDisableClientState(GL_COLOR_ARRAY);
-
-		glPopMatrix();
-
-		gfx->unlock();
 	}
 
 	void renderLine(std::vector<int>& xMin, std::vector<int>& xMax, int x0, int y0, int x1, int y1, int xmax)

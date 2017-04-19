@@ -330,8 +330,6 @@ namespace TA3D
 
 		~MAP() { destroy(); }
 
-		std::vector<Vector3D> get_visible_volume() const;
-
 		void drawCircleOnMap(const float x, const float y, const float radius, const uint32 color, const float thickness = 5.0f) const;
 
 		void update_player_visibility(int player_id, int px, int py, int r, int rd, int sn, int rd_j, int sn_j, bool jamming = false, bool black = false); // r -> sight, rd -> radar range, sn -> sonar range, j for jamming ray
@@ -371,7 +369,6 @@ namespace TA3D
 
 		int check_metal(int x1, int y1, int unit_idx, int* stuff_id = NULL) const;
 
-		void draw_LD(byte player_mask);
 		void draw_HD(Camera* cam, byte player_mask);
 		void draw(Camera* cam, byte player_mask);
 
