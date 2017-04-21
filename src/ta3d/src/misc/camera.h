@@ -60,7 +60,7 @@ namespace TA3D
 
 	public:
 		//! Top of the camera
-		Vector3D up;   // Haut de la caméra
+		Vector3D up;
 
 		//! Side of the camera (optimization for particles)
 		Vector3D side;
