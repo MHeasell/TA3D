@@ -172,6 +172,20 @@ namespace TA3D
 			}
 		}
 
+		float dot(const Vector3D& rhs) const
+		{
+			return (x * rhs.x) + (y * rhs.y) + (z * rhs.z);
+		}
+
+		Vector3D cross(const Vector3D& rhs) const
+		{
+			return Vector3D(
+				(y * rhs.z) - (z * rhs.y),
+				(z * rhs.x) - (x * rhs.z),
+				(x * rhs.y) - (y * rhs.x)
+			);
+		}
+
 		/*!
 		** \brief Get if the vector is a null vector
 		** \return True if the vector is a null vector, false otherwise

@@ -1488,4 +1488,18 @@ namespace TA3D
 		SDL_GL_SwapWindow(screen);
 	}
 
+	void GFX::multMatrix(const Matrix& m)
+	{
+		float buf[16];
+		for (int i = 0; i < 4; ++i)
+		{
+			for (int j = 0; j < 4; ++j)
+			{
+				buf[(i * 4) + j] = m.E[i][j];
+			}
+		}
+
+		glMultMatrixf(buf);
+	}
+
 } // namespace TA3D

@@ -221,4 +221,148 @@ namespace TA3D
 		return M;
 	}
 
+	Matrix CabinetProjection(float x, float y)
+	{
+		Matrix M;
+
+		M.E[0][0] = 1.0f;
+		M.E[1][0] = 0.0f;
+		M.E[2][0] = x;
+		M.E[3][0] = 0.0f;
+
+		M.E[0][1] = 0.0f;
+		M.E[1][1] = 1.0f;
+		M.E[2][1] = y;
+		M.E[3][1] = 0.0f;
+
+		M.E[0][2] = 0.0f;
+		M.E[1][2] = 0.0f;
+		M.E[2][2] = 1.0f;
+		M.E[3][2] = 0.0f;
+
+		M.E[0][3] = 0.0f;
+		M.E[1][3] = 0.0f;
+		M.E[2][3] = 0.0f;
+		M.E[3][3] = 1.0f;
+
+		return M;
+	}
+
+	Matrix OrthographicProjection(float left, float right, float bottom, float top, float nearVal, float farVal)
+	{
+		if (left == right || top == bottom || nearVal == farVal)
+		{
+			throw std::logic_error("Invalid orthographic matrix parameters");
+		}
+
+		Matrix M;
+
+		M.E[0][0] = 2.0f / (right - left);
+		M.E[1][0] = 0.0f;
+		M.E[2][0] = 0.0f;
+		M.E[3][0] = -((right + left) / (right - left));
+
+		M.E[0][1] = 0.0f;
+		M.E[1][1] = 2.0f / (top - bottom);
+		M.E[2][1] = 0.0f;
+		M.E[3][1] = -((top + bottom) / (top - bottom));
+
+		M.E[0][2] = 0.0f;
+		M.E[1][2] = 0.0f;
+		M.E[2][2] = -2.0f / (farVal - nearVal);
+		M.E[3][2] = -((farVal + nearVal) / (farVal - nearVal));
+
+		M.E[0][3] = 0.0f;
+		M.E[1][3] = 0.0f;
+		M.E[2][3] = 0.0f;
+		M.E[3][3] = 1.0f;
+
+		return M;
+	}
+
+	Matrix InverseOrthographicProjection(float left, float right, float bottom, float top, float nearVal, float farVal)
+	{
+		if (left == right || top == bottom || nearVal == farVal)
+		{
+			throw std::logic_error("Invalid orthographic matrix parameters");
+		}
+
+		Matrix M;
+
+		M.E[0][0] = (right - left) / 2.0f;
+		M.E[1][0] = 0.0f;
+		M.E[2][0] = 0.0f;
+		M.E[3][0] = (right + left) / 2.0f;
+
+		M.E[0][1] = 0.0f;
+		M.E[1][1] = (top - bottom) / 2.0f;
+		M.E[2][1] = 0.0f;
+		M.E[3][1] = (top + bottom) / 2.0f;
+
+		M.E[0][2] = 0.0f;
+		M.E[1][2] = 0.0f;
+		M.E[2][2] = (farVal - nearVal) / -2.0f;
+		M.E[3][2] = (farVal + nearVal) / -2.0f;
+
+		M.E[0][3] = 0.0f;
+		M.E[1][3] = 0.0f;
+		M.E[2][3] = 0.0f;
+		M.E[3][3] = 1.0f;
+
+		return M;
+	}
+
+	Matrix IdentityMatrix()
+	{
+		Matrix M;
+
+		M.E[0][0] = 1.0f;
+		M.E[1][0] = 0.0f;
+		M.E[2][0] = 0.0f;
+		M.E[3][0] = 0.0f;
+
+		M.E[0][1] = 0.0f;
+		M.E[1][1] = 1.0f;
+		M.E[2][1] = 0.0f;
+		M.E[3][1] = 0.0f;
+
+		M.E[0][2] = 0.0f;
+		M.E[1][2] = 0.0f;
+		M.E[2][2] = 1.0f;
+		M.E[3][2] = 0.0f;
+
+		M.E[0][3] = 0.0f;
+		M.E[1][3] = 0.0f;
+		M.E[2][3] = 0.0f;
+		M.E[3][3] = 1.0f;
+
+		return M;
+	}
+
+	Matrix RotateToAxes(const Vector3D& side, const Vector3D& up, const Vector3D& forward)
+	{
+		Matrix m;
+
+		m.E[0][0] = side.x;
+		m.E[1][0] = side.y;
+		m.E[2][0] = side.z;
+		m.E[3][0] = 0;
+
+		m.E[0][1] = up.x;
+		m.E[1][1] = up.y;
+		m.E[2][1] = up.z;
+		m.E[3][1] = 0;
+
+		m.E[0][2] = forward.x;
+		m.E[1][2] = forward.y;
+		m.E[2][2] = forward.z;
+		m.E[3][2] = 0;
+
+		m.E[0][3] = 0;
+		m.E[1][3] = 0;
+		m.E[2][3] = 0;
+		m.E[3][3] = 1;
+
+		return m;
+	}
 } // namespace TA3D

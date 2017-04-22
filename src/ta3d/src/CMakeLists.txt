@@ -317,7 +317,8 @@ set(TA3D_LIB_SOURCES
 		vfs/vfs.h
 		vfs/virtualfile.cpp
 		vfs/virtualfile.h
-		input/MouseService.cpp input/MouseService.h)
+		input/MouseService.cpp input/MouseService.h
+		misc/geometry.cpp misc/geometry.h)
 
 set(TA3D_SOURCES main.cpp)
 
@@ -325,7 +326,8 @@ set(TA3D_TEST_SOURCES
 		test_main.cpp
 		ta3d_string_test.cpp
 		SdlContextManager_test.cpp
-		)
+		misc/geometry_test.cpp
+		misc/vector_test.cpp misc/matrix_test.cpp)
 
 add_library(${TA3D_LIB} ${TA3D_LIB_SOURCES})
 add_dependencies(${TA3D_LIB} lua)
