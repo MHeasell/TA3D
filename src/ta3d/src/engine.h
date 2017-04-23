@@ -18,6 +18,7 @@
 #ifndef __TA3D_ENGINE_H__
 #define __TA3D_ENGINE_H__
 
+#include <TA3D_NameSpace.h>
 #include <languages/i18n.h>
 #include <sounds/manager.h>
 #include "threads/thread.h"
@@ -45,7 +46,8 @@ namespace TA3D
 			VfsService* vfsService,
 			I18N* i18nService,
 			GFX* graphicsService,
-			Audio::Manager* audioService
+			Audio::Manager* audioService,
+			TA3DCONFIG* config
 		);
 		//! Destructor
 		virtual ~Engine();
@@ -74,6 +76,7 @@ namespace TA3D
 		I18N* i18nService;
 		GFX* graphicsService;
 		Audio::Manager* audioService;
+		TA3DCONFIG* config;
 
 	private:
 		static void sync()

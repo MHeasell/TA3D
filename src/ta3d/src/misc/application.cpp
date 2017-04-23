@@ -33,10 +33,6 @@ namespace TA3D
 	{
 		LOG_INFO("Aborting now. Releasing all resources...");
 
-		if (TA3D::VARS::lp_CONFIG)
-			delete TA3D::VARS::lp_CONFIG;
-		TA3D::VARS::lp_CONFIG = NULL;
-
 		I18N::Destroy();
 		logs.info() << "Exiting now.";
 	}

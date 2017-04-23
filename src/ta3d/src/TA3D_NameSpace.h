@@ -46,8 +46,6 @@ namespace TA3D
 {
 	struct TA3DCONFIG
 	{
-		typedef TA3DCONFIG* Ptr;
-
 		float fps_limit;
 		float timefactor; // 1.0 -> 10.0
 
@@ -124,7 +122,7 @@ namespace TA3D
 		extern TA3D::GFX::Ptr gfx;
 
 		extern SDL_Color* pal;
-		extern TA3D::TA3DCONFIG::Ptr lp_CONFIG;
+		extern TA3D::TA3DCONFIG* lp_CONFIG;
 
 		extern String TA3D_CURRENT_MOD;
 

@@ -113,7 +113,8 @@ int main(int argc, char* argv[])
 	SdlContextManager sdlContextManager;
 
 	// Constructing config
-	TA3D::VARS::lp_CONFIG = new TA3D::TA3DCONFIG;
+	std::unique_ptr<TA3DCONFIG> config(new TA3DCONFIG);
+	TA3D::VARS::lp_CONFIG = config.get();
 
 	// Initialize all modules used by ta3d
 	TA3D::Initialize(argc, argv);
@@ -157,7 +158,8 @@ int main(int argc, char* argv[])
 			&vfsService,
 			i18nService,
 			gfx,
-			audioManager.get()
+			audioManager.get(),
+			config.get()
 		);
 		InitializeTheEngine(engine);
 

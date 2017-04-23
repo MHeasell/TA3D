@@ -44,12 +44,14 @@ namespace TA3D
 		TA3D::VfsService* vfsService,
 		I18N* i18nService,
 		GFX* graphicsService,
-		Audio::Manager* audioService
+		Audio::Manager* audioService,
+		TA3DCONFIG* config
 	)
 		: keyboardService(keyboardService),
 		  i18nService(i18nService),
 		  graphicsService(graphicsService),
-		  audioService(audioService)
+		  audioService(audioService),
+		  config(config)
 	{
 		// How many CPU we've got ?
 		LOG_INFO("CPU: " << std::thread::hardware_concurrency());
@@ -89,7 +91,7 @@ namespace TA3D
 		LOG_INFO("Initializing the keyboard device handler");
 		keyboardService->initializeKeyboard();
 
-		if (!audioService->isRunning() && !lp_CONFIG->quickstart)
+		if (!audioService->isRunning() && !config->quickstart)
 			showWarning("FMOD WARNING");
 	}
 
@@ -100,19 +102,19 @@ namespace TA3D
 		i18nService->loadFromResources();
 
 		// Apply settings for the current language (required since it failed when loading settings because languages were not loaded)
-		if (!lp_CONFIG->Lang.empty())
-			i18nService->currentLanguage(lp_CONFIG->Lang);
+		if (!config->Lang.empty())
+			i18nService->currentLanguage(config->Lang);
 		else
 		{
 			LOG_INFO(LOG_PREFIX_I18N << "language not set, guessing from system config");
 			if (!i18nService->tryToDetermineTheLanguage())
 			{
 				LOG_INFO(LOG_PREFIX_I18N << "language detection failed, language set to 'english'");
-				lp_CONFIG->Lang = "english";
-				i18nService->currentLanguage(lp_CONFIG->Lang);
+				config->Lang = "english";
+				i18nService->currentLanguage(config->Lang);
 			}
 			else
-				lp_CONFIG->Lang = i18nService->currentLanguage()->englishCaption();
+				config->Lang = i18nService->currentLanguage()->englishCaption();
 		}
 
 		audioService->loadTDFSounds(true);
