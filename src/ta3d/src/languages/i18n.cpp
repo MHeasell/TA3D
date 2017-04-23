@@ -134,12 +134,6 @@ namespace TA3D
 		return pDefaultLanguage; // should be english
 	}
 
-	const I18N::Language* I18N::defaultLanguage()
-	{
-		ThreadingPolicy::MutexLocker locker;
-		return pDefaultLanguage;
-	}
-
 	bool I18N::currentLanguage(const I18N::Language* lng)
 	{
 		if (lng)

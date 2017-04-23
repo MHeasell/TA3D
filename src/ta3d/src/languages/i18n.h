@@ -214,11 +214,6 @@ namespace TA3D
 		const Language* languageFromLocal(const String& locale);
 
 		/*!
-		** \brief Get the default language
-		*/
-		const Language* defaultLanguage();
-
-		/*!
 		** \brief Get the current language
 		*/
 		inline const Language* currentLanguage()
