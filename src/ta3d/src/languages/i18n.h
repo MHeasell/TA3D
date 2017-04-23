@@ -100,9 +100,6 @@ namespace TA3D
 		class Language
 		{
 		public:
-			typedef String::Vector Locales;
-
-		public:
 			//! \name Constructor & Destructor
 			//@{
 			/*!
