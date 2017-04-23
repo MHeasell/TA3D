@@ -150,14 +150,6 @@ namespace TA3D
 		static void Destroy();
 
 		/*!
-		** \brief Get the selected language
-		** \return The current language. Must not be NULL
-		**
-		** \see I18N::currentLanguage()
-		*/
-		static const Language* CurrentLanguage();
-
-		/*!
 		** \brief Set the current language
 		** \param l name of the language
 		** \return True if language has been changed, false otherwise
@@ -165,33 +157,6 @@ namespace TA3D
 		** \see I18N::currentLanguage(const String&)
 		*/
 		static bool CurrentLanguage(const String& l);
-
-		/*!
-		** \brief Try to find the language according the system settings
-		**
-		** \see I18N::tryToDetermineTheLanguage()
-		*/
-		static bool AutoLanguage();
-
-		/*!
-		** \brief Load translations from a file
-		**
-		** \param filename The file name to open
-		** \return True if the operation succeeded, false otherwise
-		**
-		** \see I18N::loadFromFile()
-		*/
-		static bool LoadFromFile(const String& filename);
-
-		/*!
-		** \brief Load translations from files within the resources folders (*.po)
-		**
-		** Note those .po files use the original TA format and not
-		** the GNU Gettext Portable Object format
-		**
-		** \see I18N::loadFromResources()
-		*/
-		static bool LoadFromResources();
 
 		/*!
 		** \brief Translate a keyword according the current language

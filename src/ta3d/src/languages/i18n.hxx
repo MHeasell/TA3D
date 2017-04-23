@@ -20,11 +20,6 @@
 namespace TA3D
 {
 
-	inline const I18N::Language* I18N::CurrentLanguage()
-	{
-		return I18N::Instance()->currentLanguage();
-	}
-
 	inline const I18N::Language* I18N::currentLanguage()
 	{
 		ThreadingPolicy::MutexLocker locker;
@@ -34,21 +29,6 @@ namespace TA3D
 	inline bool I18N::CurrentLanguage(const String& l)
 	{
 		return I18N::Instance()->currentLanguage(l);
-	}
-
-	inline bool I18N::AutoLanguage()
-	{
-		return I18N::Instance()->tryToDetermineTheLanguage();
-	}
-
-	inline bool I18N::LoadFromFile(const String& filename)
-	{
-		return I18N::Instance()->loadFromFile(filename);
-	}
-
-	inline bool I18N::LoadFromResources()
-	{
-		return I18N::Instance()->loadFromResources();
 	}
 
 	inline String I18N::Translate(const String& key, const String& defaultValue)
