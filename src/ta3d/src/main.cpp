@@ -135,8 +135,10 @@ int main(int argc, char* argv[])
 		VfsService vfsService;
 		vfsService.reload();
 
+		I18N* i18nService = I18N::Instance();
+
 		// Initializing the TA3D Engine
-		TA3D::Engine engine(&keyboardService, &vfsService);
+		TA3D::Engine engine(&keyboardService, &vfsService, i18nService);
 		InitializeTheEngine(engine);
 
 		// ok, if we are here, our thread in engine class is running

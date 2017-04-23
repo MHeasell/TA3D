@@ -39,25 +39,8 @@ namespace TA3D
 {
 	Synchronizer Engine::synchronizer(4);
 
-	namespace
-	{
-		void showError(const String& s, const String& additional = String())
-		{
-			LOG_ERROR(I18N::Translate(s));
-			criticalMessage(I18N::Translate(s) << additional);
-		}
-
-		void showWarning(const String& s, const String& additional = String())
-		{
-			LOG_WARNING(I18N::Translate(s));
-			auto pArea = std::unique_ptr<Gui::AREA>(new Gui::AREA());
-			pArea->load_tdf("gui/empty.area");
-			pArea->popup(I18N::Translate("Warning"), I18N::Translate(s) << additional);
-		}
-	}
-
-	Engine::Engine(KeyboardService* keyboardService, TA3D::VfsService* vfsService)
-		: pGFXModeActive(false), keyboardService(keyboardService)
+	Engine::Engine(KeyboardService* keyboardService, TA3D::VfsService* vfsService, I18N* i18nService)
+		: pGFXModeActive(false), keyboardService(keyboardService), i18nService(i18nService)
 	{
 		// How many CPU we've got ?
 		LOG_INFO("CPU: " << std::thread::hardware_concurrency());
@@ -120,23 +103,23 @@ namespace TA3D
 	void Engine::proc(void* /* param */)
 	{
 		// Creating translation manager
-		I18N::Instance()->loadFromFile("gamedata\\translate.tdf", true, true);
-		I18N::Instance()->loadFromResources();
+		i18nService->loadFromFile("gamedata\\translate.tdf", true, true);
+		i18nService->loadFromResources();
 
 		// Apply settings for the current language (required since it failed when loading settings because languages were not loaded)
 		if (!lp_CONFIG->Lang.empty())
-			I18N::Instance()->currentLanguage(lp_CONFIG->Lang);
+			i18nService->currentLanguage(lp_CONFIG->Lang);
 		else
 		{
 			LOG_INFO(LOG_PREFIX_I18N << "language not set, guessing from system config");
-			if (!I18N::Instance()->tryToDetermineTheLanguage())
+			if (!i18nService->tryToDetermineTheLanguage())
 			{
 				LOG_INFO(LOG_PREFIX_I18N << "language detection failed, language set to 'english'");
 				lp_CONFIG->Lang = "english";
-				I18N::Instance()->currentLanguage(lp_CONFIG->Lang);
+				i18nService->currentLanguage(lp_CONFIG->Lang);
 			}
 			else
-				lp_CONFIG->Lang = I18N::Instance()->currentLanguage()->englishCaption();
+				lp_CONFIG->Lang = i18nService->currentLanguage()->englishCaption();
 		}
 
 		// Creating Sound & Music Interface
@@ -174,5 +157,19 @@ namespace TA3D
 		LOG_INFO(LOG_PREFIX_OPENGL << "Stencil Two Side: " << (g_useStencilTwoSide ? "Yes" : "No"));
 		LOG_INFO(LOG_PREFIX_OPENGL << "FBO: " << (g_useFBO ? "Yes" : "No"));
 		LOG_INFO(LOG_PREFIX_OPENGL << "Multi texturing: " << (MultiTexturing ? "Yes" : "No"));
+	}
+
+	void Engine::showError(const String& s, const String& additional) const
+	{
+		LOG_ERROR(i18nService->Translate(s));
+		criticalMessage(i18nService->Translate(s) << additional);
+	}
+
+	void Engine::showWarning(const String& s, const String& additional) const
+	{
+		LOG_WARNING(i18nService->Translate(s));
+		auto pArea = std::unique_ptr<Gui::AREA>(new Gui::AREA());
+		pArea->load_tdf("gui/empty.area");
+		pArea->popup(i18nService->Translate("Warning"), i18nService->Translate(s) << additional);
 	}
 } // namespace TA3D

@@ -18,6 +18,7 @@
 #ifndef __TA3D_ENGINE_H__
 #define __TA3D_ENGINE_H__
 
+#include <languages/i18n.h>
 #include "threads/thread.h"
 #include "input/KeyboardService.h"
 #include "vfs/VfsService.h"
@@ -38,7 +39,7 @@ namespace TA3D
 		//! \name Constructor & Destructor
 		//@{
 		//! Default Constructor
-		Engine(KeyboardService* keyboardService, VfsService* vfsService);
+		Engine(KeyboardService* keyboardService, VfsService* vfsService, I18N* i18nService);
 		//! Destructor
 		virtual ~Engine();
 		//@}
@@ -57,9 +58,14 @@ namespace TA3D
 		*/
 		void displayInfosAboutOpenGL() const;
 
+		void showError(const String& s, const String& additional = String()) const;
+
+		void showWarning(const String& s, const String& additional = String()) const;
+
 	private:
 		bool pGFXModeActive;
 		KeyboardService* keyboardService;
+		I18N* i18nService;
 
 	private:
 		static void sync()
