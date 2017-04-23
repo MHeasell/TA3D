@@ -69,20 +69,6 @@ namespace TA3D
 		  sideDataService(sideDataService),
 		  mouseService(mouseService)
 	{
-		// How many CPU we've got ?
-		LOG_INFO("CPU: " << std::thread::hardware_concurrency());
-
-		LOG_INFO(TA3D_ENGINE_VERSION << " initializing started:");
-		LOG_INFO("Build info : " << __DATE__ << " , " << __TIME__);
-
-		if (!vfsService->fileExists("gamedata\\sidedata.tdf") || !vfsService->fileExists("gamedata\\allsound.tdf") || !vfsService->fileExists("gamedata\\sound.tdf"))
-		{
-			showError("RESOURCES ERROR");
-			exit(1);
-		}
-
-		// Display informations about OpenGL
-		displayInfosAboutOpenGL();
 	}
 
 	Engine::~Engine(void)
@@ -106,9 +92,6 @@ namespace TA3D
 		// Initialize the keyboard handler
 		LOG_INFO("Initializing the keyboard device handler");
 		keyboardService->initializeKeyboard();
-
-		if (!audioService->isRunning() && !config->quickstart)
-			showWarning("FMOD WARNING");
 	}
 
 	void Engine::proc(void* /* param */)
@@ -152,33 +135,5 @@ namespace TA3D
 	void rest(uint32 msec)
 	{
 		::SDL_Delay(msec);
-	}
-
-	void Engine::displayInfosAboutOpenGL() const
-	{
-		logs.checkpoint() << "OpenGL Informations :";
-		logs.info() << "Vendor: " << (const char*)glGetString(GL_VENDOR);
-		logs.info() << "Renderer: " << (const char*)glGetString(GL_RENDERER);
-		logs.info() << "Version: " << (const char*)glGetString(GL_VERSION);
-		if (graphicsService->atiWorkaround())
-			LOG_WARNING("ATI or SIS card detected ! Using workarounds for ATI/SIS cards");
-		LOG_INFO(LOG_PREFIX_OPENGL << "Texture compression: " << (g_useTextureCompression ? "Yes" : "No"));
-		LOG_INFO(LOG_PREFIX_OPENGL << "Stencil Two Side: " << (g_useStencilTwoSide ? "Yes" : "No"));
-		LOG_INFO(LOG_PREFIX_OPENGL << "FBO: " << (g_useFBO ? "Yes" : "No"));
-		LOG_INFO(LOG_PREFIX_OPENGL << "Multi texturing: " << (MultiTexturing ? "Yes" : "No"));
-	}
-
-	void Engine::showError(const String& s, const String& additional) const
-	{
-		LOG_ERROR(i18nService->Translate(s));
-		criticalMessage(i18nService->Translate(s) << additional);
-	}
-
-	void Engine::showWarning(const String& s, const String& additional) const
-	{
-		LOG_WARNING(i18nService->Translate(s));
-		auto pArea = std::unique_ptr<Gui::AREA>(new Gui::AREA());
-		pArea->load_tdf("gui/empty.area");
-		pArea->popup(i18nService->Translate("Warning"), i18nService->Translate(s) << additional);
 	}
 } // namespace TA3D

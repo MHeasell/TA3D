@@ -74,16 +74,6 @@ namespace TA3D
 		virtual void proc(void* param);
 
 	private:
-		/*!
-		** \brief Didplay informations about the current configuration of OpenGL
-		*/
-		void displayInfosAboutOpenGL() const;
-
-		void showError(const String& s, const String& additional = String()) const;
-
-		void showWarning(const String& s, const String& additional = String()) const;
-
-	private:
 		KeyboardService* keyboardService;
 		I18N* i18nService;
 		GFX* graphicsService;
