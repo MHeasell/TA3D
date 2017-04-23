@@ -161,6 +161,7 @@ int main(int argc, char* argv[])
 		WeaponManager* weaponManager = &weapon_manager;
 		FXManager* fxManager = &fx_manager;
 		Math::PreCachedRandomNumbers* randomTable = &Math::RandomTable;
+		SideData* sideDataService = &ta3dSideData;
 
 		// Initializing the TA3D Engine
 		TA3D::Engine engine(
@@ -175,7 +176,8 @@ int main(int argc, char* argv[])
 			featureManager,
 			weaponManager,
 			fxManager,
-			randomTable
+			randomTable,
+			sideDataService
 		);
 		InitializeTheEngine(engine);
 

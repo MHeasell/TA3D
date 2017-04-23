@@ -51,7 +51,8 @@ namespace TA3D
 		FeatureManager* featureManager,
 		WeaponManager* weaponManager,
 		FXManager* fxManager,
-		Math::PreCachedRandomNumbers* randomTable
+		Math::PreCachedRandomNumbers* randomTable,
+		SideData* sideDataService
 	)
 		: keyboardService(keyboardService),
 		  i18nService(i18nService),
@@ -63,7 +64,8 @@ namespace TA3D
 		  featureManager(featureManager),
 		  weaponManager(weaponManager),
 		  fxManager(fxManager),
-		  randomTable(randomTable)
+		  randomTable(randomTable),
+		  sideDataService(sideDataService)
 	{
 		// How many CPU we've got ?
 		LOG_INFO("CPU: " << std::thread::hardware_concurrency());
@@ -139,8 +141,8 @@ namespace TA3D
 		fxManager->init();
 		randomTable->reset();
 
-		ta3dSideData.init();
-		ta3dSideData.loadData();
+		sideDataService->init();
+		sideDataService->loadData();
 
 		audioService->loadTDFSounds(false);
 	}

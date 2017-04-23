@@ -56,7 +56,8 @@ namespace TA3D
 			FeatureManager* featureManager,
 			WeaponManager* weaponManager,
 			FXManager* fxManager,
-			Math::PreCachedRandomNumbers* randomTable
+			Math::PreCachedRandomNumbers* randomTable,
+			SideData* sideDataService
 		);
 		//! Destructor
 		virtual ~Engine();
@@ -92,6 +93,7 @@ namespace TA3D
 		WeaponManager* weaponManager;
 		FXManager* fxManager;
 		Math::PreCachedRandomNumbers* randomTable;
+		SideData* sideDataService;
 
 	private:
 		static void sync()
