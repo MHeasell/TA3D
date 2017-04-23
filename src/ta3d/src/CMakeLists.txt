@@ -322,7 +322,7 @@ set(TA3D_LIB_SOURCES
 		vfs/vfs.h
 		vfs/virtualfile.cpp
 		vfs/virtualfile.h
-		)
+		input/MouseService.cpp input/MouseService.h)
 
 set(TA3D_SOURCES main.cpp)
 

@@ -23,6 +23,7 @@
 #include <sounds/manager.h>
 #include <mesh/mesh.h>
 #include <gfx/fx.h>
+#include <input/MouseService.h>
 #include "threads/thread.h"
 #include "input/KeyboardService.h"
 #include "vfs/VfsService.h"
@@ -57,7 +58,8 @@ namespace TA3D
 			WeaponManager* weaponManager,
 			FXManager* fxManager,
 			Math::PreCachedRandomNumbers* randomTable,
-			SideData* sideDataService
+			SideData* sideDataService,
+			MouseService* mouseService
 		);
 		//! Destructor
 		virtual ~Engine();
@@ -94,6 +96,7 @@ namespace TA3D
 		FXManager* fxManager;
 		Math::PreCachedRandomNumbers* randomTable;
 		SideData* sideDataService;
+		MouseService* mouseService;
 
 	private:
 		static void sync()

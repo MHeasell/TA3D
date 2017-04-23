@@ -52,7 +52,8 @@ namespace TA3D
 		WeaponManager* weaponManager,
 		FXManager* fxManager,
 		Math::PreCachedRandomNumbers* randomTable,
-		SideData* sideDataService
+		SideData* sideDataService,
+		MouseService* mouseService
 	)
 		: keyboardService(keyboardService),
 		  i18nService(i18nService),
@@ -65,7 +66,8 @@ namespace TA3D
 		  weaponManager(weaponManager),
 		  fxManager(fxManager),
 		  randomTable(randomTable),
-		  sideDataService(sideDataService)
+		  sideDataService(sideDataService),
+		  mouseService(mouseService)
 	{
 		// How many CPU we've got ?
 		LOG_INFO("CPU: " << std::thread::hardware_concurrency());
@@ -100,7 +102,7 @@ namespace TA3D
 
 		// Initialize the mouse handler
 		LOG_INFO("Initializing the mouse device handler");
-		init_mouse();
+		mouseService->init_mouse();
 		// Initialize the keyboard handler
 		LOG_INFO("Initializing the keyboard device handler");
 		keyboardService->initializeKeyboard();

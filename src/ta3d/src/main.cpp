@@ -23,6 +23,7 @@
 #include <vfs/realfs.h>
 #include <vfs/hpi.h>
 #include <gfx/fx.h>
+#include <input/MouseService.h>
 #include "vfs/VfsService.h"
 #include "input/KeyboardService.h"
 #include "stdafx.h"			// standard pch inheritance.
@@ -141,6 +142,8 @@ int main(int argc, char* argv[])
 		KeyboardService keyboardService;
 		keyboardService.initializeKeyboard();
 
+		MouseService mouseService;
+
 		VfsService vfsService;
 		vfsService.reload();
 
@@ -177,7 +180,8 @@ int main(int argc, char* argv[])
 			weaponManager,
 			fxManager,
 			randomTable,
-			sideDataService
+			sideDataService,
+			&mouseService
 		);
 		InitializeTheEngine(engine);
 
