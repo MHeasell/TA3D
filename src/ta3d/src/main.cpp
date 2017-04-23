@@ -45,6 +45,7 @@
 #include "cache.h"
 #include "ingame/menus/setupgame.h"
 #include "SdlContextManager.h"
+#include "fbi.h"
 
 using namespace TA3D;
 
@@ -152,6 +153,9 @@ int main(int argc, char* argv[])
 		std::unique_ptr<Audio::Manager> audioManager(new TA3D::Audio::Manager());
 		sound_manager = audioManager.get();
 
+		ModelManager* modelManager = &model_manager;
+		UnitManager* unitManager = &unit_manager;
+
 		// Initializing the TA3D Engine
 		TA3D::Engine engine(
 			&keyboardService,
@@ -159,7 +163,9 @@ int main(int argc, char* argv[])
 			i18nService,
 			gfx,
 			audioManager.get(),
-			config.get()
+			config.get(),
+			modelManager,
+			unitManager
 		);
 		InitializeTheEngine(engine);
 

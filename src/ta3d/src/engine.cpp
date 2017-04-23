@@ -45,13 +45,17 @@ namespace TA3D
 		I18N* i18nService,
 		GFX* graphicsService,
 		Audio::Manager* audioService,
-		TA3DCONFIG* config
+		TA3DCONFIG* config,
+		ModelManager* modelManager,
+		UnitManager* unitManager
 	)
 		: keyboardService(keyboardService),
 		  i18nService(i18nService),
 		  graphicsService(graphicsService),
 		  audioService(audioService),
-		  config(config)
+		  config(config),
+		  modelManager(modelManager),
+		  unitManager(unitManager)
 	{
 		// How many CPU we've got ?
 		LOG_INFO("CPU: " << std::thread::hardware_concurrency());
@@ -120,8 +124,8 @@ namespace TA3D
 		audioService->loadTDFSounds(true);
 		audioService->loadTDFSounds(false);
 
-		model_manager.init();
-		unit_manager.init();
+		modelManager->init();
+		unitManager->init();
 		feature_manager.init();
 		weapon_manager.init();
 		fx_manager.init();

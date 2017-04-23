@@ -21,9 +21,11 @@
 #include <TA3D_NameSpace.h>
 #include <languages/i18n.h>
 #include <sounds/manager.h>
+#include <mesh/mesh.h>
 #include "threads/thread.h"
 #include "input/KeyboardService.h"
 #include "vfs/VfsService.h"
+#include "fbi.h"
 
 namespace TA3D
 {
@@ -47,7 +49,9 @@ namespace TA3D
 			I18N* i18nService,
 			GFX* graphicsService,
 			Audio::Manager* audioService,
-			TA3DCONFIG* config
+			TA3DCONFIG* config,
+			ModelManager* modelManager,
+			UnitManager* unitManager
 		);
 		//! Destructor
 		virtual ~Engine();
@@ -77,6 +81,8 @@ namespace TA3D
 		GFX* graphicsService;
 		Audio::Manager* audioService;
 		TA3DCONFIG* config;
+		ModelManager* modelManager;
+		UnitManager* unitManager;
 
 	private:
 		static void sync()
