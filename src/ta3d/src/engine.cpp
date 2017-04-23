@@ -39,15 +39,11 @@ namespace TA3D
 {
 	Synchronizer Engine::synchronizer(4);
 
-	Engine::Engine(KeyboardService* keyboardService, TA3D::VfsService* vfsService, I18N* i18nService)
-		: pGFXModeActive(false), keyboardService(keyboardService), i18nService(i18nService)
+	Engine::Engine(KeyboardService* keyboardService, TA3D::VfsService* vfsService, I18N* i18nService, GFX* graphicsService)
+		: keyboardService(keyboardService), i18nService(i18nService), graphicsService(graphicsService)
 	{
 		// How many CPU we've got ?
 		LOG_INFO("CPU: " << std::thread::hardware_concurrency());
-
-		if (gfx)
-			delete gfx;
-		gfx = NULL;
 
 		LOG_INFO(TA3D_ENGINE_VERSION << " initializing started:");
 		LOG_INFO("Build info : " << __DATE__ << " , " << __TIME__);
@@ -57,11 +53,6 @@ namespace TA3D
 			showError("RESOURCES ERROR");
 			exit(1);
 		}
-
-		// Creating GFX Interface
-		// Don't try to start sound before gfx, if we have to display the warning message while in fullscreen
-		gfx = new GFX(); // TA3D's main window might lose focus and message may not be shown ...
-		pGFXModeActive = true;
 
 		// Display informations about OpenGL
 		displayInfosAboutOpenGL();
@@ -74,20 +65,15 @@ namespace TA3D
 		ta3dSideData.destroy();
 
 		sound_manager = NULL;
-		if (gfx)
-			delete gfx;
-		gfx = NULL;
-		pGFXModeActive = false;
-		InterfaceManager = NULL;
 	}
 
 	void Engine::initializationFromTheMainThread()
 	{
 		// Load the default textures
-		gfx->loadDefaultTextures();
+		graphicsService->loadDefaultTextures();
 
 		// Load fonts (it crashes on some systems if not run from the main thread)
-		gfx->loadFonts();
+		graphicsService->loadFonts();
 
 		// Initialize the mouse handler
 		LOG_INFO("Initializing the mouse device handler");
@@ -151,7 +137,7 @@ namespace TA3D
 		logs.info() << "Vendor: " << (const char*)glGetString(GL_VENDOR);
 		logs.info() << "Renderer: " << (const char*)glGetString(GL_RENDERER);
 		logs.info() << "Version: " << (const char*)glGetString(GL_VERSION);
-		if (gfx->atiWorkaround())
+		if (graphicsService->atiWorkaround())
 			LOG_WARNING("ATI or SIS card detected ! Using workarounds for ATI/SIS cards");
 		LOG_INFO(LOG_PREFIX_OPENGL << "Texture compression: " << (g_useTextureCompression ? "Yes" : "No"));
 		LOG_INFO(LOG_PREFIX_OPENGL << "Stencil Two Side: " << (g_useStencilTwoSide ? "Yes" : "No"));

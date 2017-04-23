@@ -137,8 +137,14 @@ int main(int argc, char* argv[])
 
 		I18N* i18nService = I18N::Instance();
 
+		std::unique_ptr<GFX> graphicsService(new GFX());
+		if (gfx)
+			delete gfx;
+		gfx = NULL;
+		gfx = graphicsService.get();
+
 		// Initializing the TA3D Engine
-		TA3D::Engine engine(&keyboardService, &vfsService, i18nService);
+		TA3D::Engine engine(&keyboardService, &vfsService, i18nService, gfx);
 		InitializeTheEngine(engine);
 
 		// ok, if we are here, our thread in engine class is running

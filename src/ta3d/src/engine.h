@@ -39,7 +39,7 @@ namespace TA3D
 		//! \name Constructor & Destructor
 		//@{
 		//! Default Constructor
-		Engine(KeyboardService* keyboardService, VfsService* vfsService, I18N* i18nService);
+		Engine(KeyboardService* keyboardService, VfsService* vfsService, I18N* i18nService, GFX* graphicsService);
 		//! Destructor
 		virtual ~Engine();
 		//@}
@@ -63,9 +63,9 @@ namespace TA3D
 		void showWarning(const String& s, const String& additional = String()) const;
 
 	private:
-		bool pGFXModeActive;
 		KeyboardService* keyboardService;
 		I18N* i18nService;
+		GFX* graphicsService;
 
 	private:
 		static void sync()
