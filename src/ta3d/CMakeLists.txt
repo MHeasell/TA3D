@@ -260,6 +260,11 @@ if(WIN32)
 	find_program(ICONV_DLL "libiconv-2.dll")
 	find_program(PCRE_DLL "libpcre-1.dll")
 	find_program(GRAPHITE_DLL "libgraphite2.dll")
+	find_program(FLAC_DLL "libFLAC-8.dll")
+	find_program(OGG_DLL "libogg-0.dll")
+	find_program(VORBIS_DLL "libvorbis-0.dll")
+	find_program(VORBIS_FILE_DLL "libvorbisfile-3.dll")
+	find_program(SMPEG_DLL "smpeg2.dll")
 
 	message("SDL2 DLL: ${SDL2_DLL}")
 	message("SDL2_image DLL: ${SDL2_IMAGE_DLL}")
@@ -284,6 +289,11 @@ if(WIN32)
 	message("iconv DLL: ${ICONV_DLL}")
 	message("pcre DLL: ${PCRE_DLL}")
 	message("grapite DLL: ${GRAPHITE_DLL}")
+	message("FLAC DLL: ${FLAC_DLL}")
+	message("OGG DLL: ${OGG_DLL}")
+	message("Vorbis DLL: ${VORBIS_DLL}")
+	message("Vorbis file DLL: ${VORBIS_FILE_DLL}")
+	message("smpeg DLL: ${SMPEG_DLL}")
 
 	if(SDL2_DLL STREQUAL "SDL2_DLL-NOTFOUND")
 		message(FATAL_ERROR "SDL DLL not found")
@@ -354,6 +364,21 @@ if(WIN32)
 	if(GRAPHITE_DLL STREQUAL "GRAPHITE_DLL-NOTFOUND")
 		message(FATAL_ERROR "graphite DLL not found")
 	endif()
+	if(FLAC_DLL STREQUAL "FLAC_DLL-NOTFOUND")
+		message(FATAL_ERROR "FLAC DLL not found")
+	endif()
+	if(OGG_DLL STREQUAL "OGG_DLL-NOTFOUND")
+		message(FATAL_ERROR "OGG DLL not found")
+	endif()
+	if(VORBIS_DLL STREQUAL "VORBIS_DLL-NOTFOUND")
+		message(FATAL_ERROR "Vorbis DLL not found")
+	endif()
+	if(VORBIS_FILE_DLL STREQUAL "VORBIS_FILE_DLL-NOTFOUND")
+		message(FATAL_ERROR "Vorbis file DLL not found")
+	endif()
+	if(SMPEG_DLL STREQUAL "SMPEG_DLL-NOTFOUND")
+		message(FATAL_ERROR "smpeg DLL not found")
+	endif()
 
 	install(FILES
 		${SDL2_DLL}
@@ -379,6 +404,11 @@ if(WIN32)
 		${ICONV_DLL}
 		${PCRE_DLL}
 		${GRAPHITE_DLL}
+		${FLAC_DLL}
+		${OGG_DLL}
+		${VORBIS_DLL}
+		${VORBIS_FILE_DLL}
+		${SMPEG_DLL}
 		DESTINATION ${TA3D_BINARIES_INSTALL_PATH})
 endif()
 
