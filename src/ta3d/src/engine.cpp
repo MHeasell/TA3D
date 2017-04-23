@@ -75,7 +75,7 @@ namespace TA3D
 	{
 		join();
 		cursor.clear();
-		ta3dSideData.destroy();
+		sideDataService->destroy();
 	}
 
 	void Engine::initializationFromTheMainThread()
