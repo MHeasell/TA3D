@@ -63,7 +63,7 @@ using namespace TA3D;
 **           Remember if you throw an error, or generate one, you are responsible for
 **             cleaning up what you initialized!
 */
-static int ParseCommandLine(int argc, char* argv[])
+static int ParseCommandLine(TA3DCONFIG* config, int argc, char* argv[])
 {
 	if (argc > 1)
 	{
@@ -74,7 +74,7 @@ static int ParseCommandLine(int argc, char* argv[])
 		{
 			arg = argv[i];
 			if ("--quick-start" == arg) // Quick restart mecanism (bypass the intro screen)
-				lp_CONFIG->quickstart = true;
+				config->quickstart = true;
 			else
 			{
 				if ("--file-param" == arg) // Pass a file as parameter, used for complex things
@@ -82,13 +82,13 @@ static int ParseCommandLine(int argc, char* argv[])
 					if (i + 1 < argc)
 					{
 						++i;
-						lp_CONFIG->file_param = argv[i]; // Copy the file name
+						config->file_param = argv[i]; // Copy the file name
 					}
 				}
 				else
 				{
 					if ("--no-sound" == arg) // Disable sound
-						lp_CONFIG->no_sound = true;
+						config->no_sound = true;
 				}
 			}
 		}
@@ -127,7 +127,7 @@ int main(int argc, char* argv[])
 
 	TA3D::Cache::Clear();
 
-	if (ParseCommandLine(argc, argv))
+	if (ParseCommandLine(config.get(), argc, argv))
 		return 1;
 
 	try
@@ -194,7 +194,7 @@ int main(int argc, char* argv[])
 		engine.initializationFromTheMainThread();
 
 		// while our engine does some loading and intializing, lets show our intro.
-		if (!lp_CONFIG->quickstart && lp_CONFIG->file_param.empty())
+		if (!config->quickstart && config->file_param.empty())
 			Menus::Intro::Execute();
 
 		// The main menu call will eventually not be here, instead
