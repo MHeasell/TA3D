@@ -22,6 +22,7 @@
 
 #include <vfs/realfs.h>
 #include <vfs/hpi.h>
+#include <gfx/fx.h>
 #include "vfs/VfsService.h"
 #include "input/KeyboardService.h"
 #include "stdafx.h"			// standard pch inheritance.
@@ -156,6 +157,8 @@ int main(int argc, char* argv[])
 		ModelManager* modelManager = &model_manager;
 		UnitManager* unitManager = &unit_manager;
 		FeatureManager* featureManager = &feature_manager;
+		WeaponManager* weaponManager = &weapon_manager;
+		FXManager* fxManager = &fx_manager;
 
 		// Initializing the TA3D Engine
 		TA3D::Engine engine(
@@ -167,7 +170,9 @@ int main(int argc, char* argv[])
 			config.get(),
 			modelManager,
 			unitManager,
-			featureManager
+			featureManager,
+			weaponManager,
+			fxManager
 		);
 		InitializeTheEngine(engine);
 

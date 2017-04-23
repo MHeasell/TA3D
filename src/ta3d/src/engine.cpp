@@ -48,7 +48,9 @@ namespace TA3D
 		TA3DCONFIG* config,
 		ModelManager* modelManager,
 		UnitManager* unitManager,
-		FeatureManager* featureManager
+		FeatureManager* featureManager,
+		WeaponManager* weaponManager,
+		FXManager* fxManager
 	)
 		: keyboardService(keyboardService),
 		  i18nService(i18nService),
@@ -57,7 +59,9 @@ namespace TA3D
 		  config(config),
 		  modelManager(modelManager),
 		  unitManager(unitManager),
-		  featureManager(featureManager)
+		  featureManager(featureManager),
+		  weaponManager(weaponManager),
+		  fxManager(fxManager)
 	{
 		// How many CPU we've got ?
 		LOG_INFO("CPU: " << std::thread::hardware_concurrency());
@@ -129,8 +133,8 @@ namespace TA3D
 		modelManager->init();
 		unitManager->init();
 		featureManager->init();
-		weapon_manager.init();
-		fx_manager.init();
+		weaponManager->init();
+		fxManager->init();
 		Math::RandomTable.reset();
 
 		ta3dSideData.init();

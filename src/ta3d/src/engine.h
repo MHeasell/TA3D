@@ -22,6 +22,7 @@
 #include <languages/i18n.h>
 #include <sounds/manager.h>
 #include <mesh/mesh.h>
+#include <gfx/fx.h>
 #include "threads/thread.h"
 #include "input/KeyboardService.h"
 #include "vfs/VfsService.h"
@@ -52,7 +53,9 @@ namespace TA3D
 			TA3DCONFIG* config,
 			ModelManager* modelManager,
 			UnitManager* unitManager,
-			FeatureManager* featureManager
+			FeatureManager* featureManager,
+			WeaponManager* weaponManager,
+			FXManager* fxManager
 		);
 		//! Destructor
 		virtual ~Engine();
@@ -85,6 +88,8 @@ namespace TA3D
 		ModelManager* modelManager;
 		UnitManager* unitManager;
 		FeatureManager* featureManager;
+		WeaponManager* weaponManager;
+		FXManager* fxManager;
 
 	private:
 		static void sync()
