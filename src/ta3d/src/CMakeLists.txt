@@ -167,7 +167,6 @@ set(TA3D_LIB_SOURCES
 		install.cpp
 		languages/i18n.cpp
 		languages/i18n.h
-		languages/i18n.hxx
 		languages/table.cpp
 		languages/table.h
 		logs/logs.cpp

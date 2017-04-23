@@ -156,7 +156,10 @@ namespace TA3D
 		**
 		** \see I18N::currentLanguage(const String&)
 		*/
-		static bool CurrentLanguage(const String& l);
+		static inline bool CurrentLanguage(const String& l)
+		{
+			return Instance()->currentLanguage(l);
+		}
 
 		/*!
 		** \brief Translate a keyword according the current language
@@ -168,19 +171,28 @@ namespace TA3D
 		**
 		** \see I18N::translate()
 		*/
-		static String Translate(const String& key, const String& defaultValue = nullptr);
+		static inline String Translate(const String& key, const String& defaultValue = nullptr)
+		{
+			return Instance()->translate(key, defaultValue);
+		}
 
 		/*!
 		** \brief Translate a list of keywords
 		** \param[in,out] The list of keywords that will be translated
 		*/
-		static void Translate(String::Vector& out);
+		static inline void Translate(String::Vector& out)
+		{
+			Instance()->translate(out);
+		}
 
 		/*!
 		** \brief Translate a list of keywords
 		** \param[in,out] The list of keywords that will be translated
 		*/
-		static void Translate(String::List& out);
+		static inline void Translate(String::List& out)
+		{
+			Instance()->translate(out);
+		}
 
 	public:
 		//! Destructor
@@ -209,7 +221,11 @@ namespace TA3D
 		/*!
 		** \brief Get the current language
 		*/
-		const Language* currentLanguage();
+		inline const Language* currentLanguage()
+		{
+			ThreadingPolicy::MutexLocker locker;
+			return pCurrentLanguage;
+		}
 
 		/*!
 		** \brief Set the current language
@@ -225,7 +241,10 @@ namespace TA3D
 		** \param name Name of the language (can be the english version or the translated one)
 		** \return True if language has been changed, false otherwise
 		*/
-		bool currentLanguage(const String& n);
+		inline bool currentLanguage(const String& n)
+		{
+			return currentLanguage(language(n));
+		}
 
 		/*!
 		** \brief Try to find out the language according the system settings
@@ -290,7 +309,10 @@ namespace TA3D
 		bool loadFromResources();
 
 		//! \see translate()
-		String operator[](const String& key);
+		inline String operator[](const String& key)
+		{
+			return translate(key);
+		}
 
 	private:
 		/*!
@@ -334,7 +356,5 @@ namespace TA3D
 	}; // class I18N
 
 } // namespace TA3D
-
-#include "i18n.hxx"
 
 #endif // __TA3D_XX_I18N_H__
