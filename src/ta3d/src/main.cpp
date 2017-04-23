@@ -155,6 +155,7 @@ int main(int argc, char* argv[])
 
 		ModelManager* modelManager = &model_manager;
 		UnitManager* unitManager = &unit_manager;
+		FeatureManager* featureManager = &feature_manager;
 
 		// Initializing the TA3D Engine
 		TA3D::Engine engine(
@@ -165,7 +166,8 @@ int main(int argc, char* argv[])
 			audioManager.get(),
 			config.get(),
 			modelManager,
-			unitManager
+			unitManager,
+			featureManager
 		);
 		InitializeTheEngine(engine);
 

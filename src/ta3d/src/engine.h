@@ -51,7 +51,8 @@ namespace TA3D
 			Audio::Manager* audioService,
 			TA3DCONFIG* config,
 			ModelManager* modelManager,
-			UnitManager* unitManager
+			UnitManager* unitManager,
+			FeatureManager* featureManager
 		);
 		//! Destructor
 		virtual ~Engine();
@@ -83,6 +84,7 @@ namespace TA3D
 		TA3DCONFIG* config;
 		ModelManager* modelManager;
 		UnitManager* unitManager;
+		FeatureManager* featureManager;
 
 	private:
 		static void sync()
