@@ -71,9 +71,6 @@ namespace TA3D
 	class IInterfaceManager : public ObjectSync
 	{
 	public:
-		typedef std::shared_ptr<IInterfaceManager> Ptr;
-
-	public:
 		//! \name Constructor & destructor
 		//@{
 		//! Default constructor

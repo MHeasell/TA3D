@@ -39,8 +39,17 @@ namespace TA3D
 {
 	Synchronizer Engine::synchronizer(4);
 
-	Engine::Engine(KeyboardService* keyboardService, TA3D::VfsService* vfsService, I18N* i18nService, GFX* graphicsService)
-		: keyboardService(keyboardService), i18nService(i18nService), graphicsService(graphicsService)
+	Engine::Engine(
+		KeyboardService* keyboardService,
+		TA3D::VfsService* vfsService,
+		I18N* i18nService,
+		GFX* graphicsService,
+		Audio::Manager* audioService
+	)
+		: keyboardService(keyboardService),
+		  i18nService(i18nService),
+		  graphicsService(graphicsService),
+		  audioService(audioService)
 	{
 		// How many CPU we've got ?
 		LOG_INFO("CPU: " << std::thread::hardware_concurrency());
@@ -63,8 +72,6 @@ namespace TA3D
 		join();
 		cursor.clear();
 		ta3dSideData.destroy();
-
-		sound_manager = NULL;
 	}
 
 	void Engine::initializationFromTheMainThread()
@@ -82,7 +89,7 @@ namespace TA3D
 		LOG_INFO("Initializing the keyboard device handler");
 		initializeKeyboard();
 
-		if (!sound_manager->isRunning() && !lp_CONFIG->quickstart)
+		if (!audioService->isRunning() && !lp_CONFIG->quickstart)
 			showWarning("FMOD WARNING");
 	}
 
@@ -108,10 +115,8 @@ namespace TA3D
 				lp_CONFIG->Lang = i18nService->currentLanguage()->englishCaption();
 		}
 
-		// Creating Sound & Music Interface
-		sound_manager = TA3D::Audio::Manager::Ptr(new TA3D::Audio::Manager());
-		sound_manager->loadTDFSounds(true);
-		sound_manager->loadTDFSounds(false);
+		audioService->loadTDFSounds(true);
+		audioService->loadTDFSounds(false);
 
 		model_manager.init();
 		unit_manager.init();
@@ -123,7 +128,7 @@ namespace TA3D
 		ta3dSideData.init();
 		ta3dSideData.loadData();
 
-		sound_manager->loadTDFSounds(false);
+		audioService->loadTDFSounds(false);
 	}
 
 	void rest(uint32 msec)

@@ -41,9 +41,6 @@ namespace TA3D
 		class Manager : protected TA3D::IInterface
 		{
 		public:
-			typedef std::shared_ptr<Manager> Ptr;
-
-		public:
 			//! \name Constructor & Destructor
 			//@{
 			/*!
@@ -53,6 +50,11 @@ namespace TA3D
 			//! Destructor
 			virtual ~Manager();
 			//@}
+
+			/*!
+			 * Reinitializes the audio manager.
+			 */
+			void reset();
 
 			/*!
             ** \brief Set sound volume
@@ -345,7 +347,7 @@ namespace TA3D
 	namespace VARS
 	{
 		//! The sound manager
-		extern TA3D::Audio::Manager::Ptr sound_manager;
+		extern Audio::Manager* sound_manager;
 
 	} // namespace VARS
 

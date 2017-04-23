@@ -51,9 +51,6 @@ namespace TA3D
 		// Install our atexit function
 		atexit(Finalize);
 
-		// Interface Manager
-		InterfaceManager = IInterfaceManager::Ptr(new IInterfaceManager());
-
 		// Load settings early only to get current mod name
 		TA3D::Settings::Load();
 

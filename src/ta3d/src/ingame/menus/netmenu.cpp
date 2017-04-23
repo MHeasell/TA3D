@@ -666,8 +666,7 @@ namespace TA3D
 
 				VFS::Instance()->reload();
 				ta3dSideData.loadData(); // Refresh side data so we load the correct values
-				sound_manager = NULL;	// Proper cleaning
-				sound_manager = TA3D::Audio::Manager::Ptr(new TA3D::Audio::Manager());
+				sound_manager->reset();
 				sound_manager->loadTDFSounds(true);
 				sound_manager->loadTDFSounds(false);
 				pArea->title("popup", I18N::Translate("Success"));

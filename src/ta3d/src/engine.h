@@ -19,6 +19,7 @@
 #define __TA3D_ENGINE_H__
 
 #include <languages/i18n.h>
+#include <sounds/manager.h>
 #include "threads/thread.h"
 #include "input/KeyboardService.h"
 #include "vfs/VfsService.h"
@@ -39,7 +40,13 @@ namespace TA3D
 		//! \name Constructor & Destructor
 		//@{
 		//! Default Constructor
-		Engine(KeyboardService* keyboardService, VfsService* vfsService, I18N* i18nService, GFX* graphicsService);
+		Engine(
+			KeyboardService* keyboardService,
+			VfsService* vfsService,
+			I18N* i18nService,
+			GFX* graphicsService,
+			Audio::Manager* audioService
+		);
 		//! Destructor
 		virtual ~Engine();
 		//@}
@@ -66,6 +73,7 @@ namespace TA3D
 		KeyboardService* keyboardService;
 		I18N* i18nService;
 		GFX* graphicsService;
+		Audio::Manager* audioService;
 
 	private:
 		static void sync()

@@ -27,7 +27,7 @@
 
 using namespace TA3D::Interfaces;
 
-TA3D::Audio::Manager::Ptr TA3D::VARS::sound_manager;
+TA3D::Audio::Manager* TA3D::VARS::sound_manager;
 
 namespace TA3D
 {
@@ -41,6 +41,14 @@ namespace TA3D
 		{
 			pMinTicks = 500;
 
+			doStartUpAudio();
+			if (isRunning())
+				InitInterface();
+		}
+
+		void Manager::reset()
+		{
+			doShutdownAudio(true);
 			doStartUpAudio();
 			if (isRunning())
 				InitInterface();
@@ -916,6 +924,5 @@ namespace TA3D
 				return;
 			Mix_VolumeMusic(volume);
 		}
-
 	} // namespace Interfaces
 } // namespace TA3D

@@ -104,6 +104,11 @@ static void InitializeTheEngine(TA3D::Engine& engine)
 
 int main(int argc, char* argv[])
 {
+	// Initialise interface manager
+	// (required by implementors of IInterface for message passing)
+	std::unique_ptr<IInterfaceManager> interfaceManager(new IInterfaceManager());
+	InterfaceManager = interfaceManager.get();
+
 	// initialize SDL
 	SdlContextManager sdlContextManager;
 
@@ -143,8 +148,17 @@ int main(int argc, char* argv[])
 		gfx = NULL;
 		gfx = graphicsService.get();
 
+		std::unique_ptr<Audio::Manager> audioManager(new TA3D::Audio::Manager());
+		sound_manager = audioManager.get();
+
 		// Initializing the TA3D Engine
-		TA3D::Engine engine(&keyboardService, &vfsService, i18nService, gfx);
+		TA3D::Engine engine(
+			&keyboardService,
+			&vfsService,
+			i18nService,
+			gfx,
+			audioManager.get()
+		);
 		InitializeTheEngine(engine);
 
 		// ok, if we are here, our thread in engine class is running

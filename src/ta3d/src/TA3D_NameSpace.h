@@ -120,7 +120,7 @@ namespace TA3D
 	namespace VARS
 	{
 		extern SDL_Window* screen;
-		extern TA3D::IInterfaceManager::Ptr InterfaceManager;
+		extern IInterfaceManager* InterfaceManager;
 		extern TA3D::GFX::Ptr gfx;
 
 		extern SDL_Color* pal;
