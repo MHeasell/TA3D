@@ -47,6 +47,7 @@
 #include "ingame/menus/setupgame.h"
 #include "SdlContextManager.h"
 #include "fbi.h"
+#include "misc/math.h"
 
 using namespace TA3D;
 
@@ -159,6 +160,7 @@ int main(int argc, char* argv[])
 		FeatureManager* featureManager = &feature_manager;
 		WeaponManager* weaponManager = &weapon_manager;
 		FXManager* fxManager = &fx_manager;
+		Math::PreCachedRandomNumbers* randomTable = &Math::RandomTable;
 
 		// Initializing the TA3D Engine
 		TA3D::Engine engine(
@@ -172,7 +174,8 @@ int main(int argc, char* argv[])
 			unitManager,
 			featureManager,
 			weaponManager,
-			fxManager
+			fxManager,
+			randomTable
 		);
 		InitializeTheEngine(engine);
 
