@@ -1,26 +1,5 @@
-/CMakeFiles
-/Makefile
-/CMakeCache.txt
-/cmake_install.cmake
-/config.h
-/ta3d-bin
-/libfmodex.dylib
-/bin
-/regression-*
-/.*.swp
-/.*.swo
-/savegames
-/screenshots
-/logs
-/settings
-/*.exe
-/*.dll
-/*.hpi
-/stderr.txt
-/stdout.txt
-/*.app
-
-/src/install_manifest.txt
+# header generated from template
+/src/ta3d/config.h
 
 # build cruft from ftgl
 /src/libs/ftgl/**/CMakeFiles
