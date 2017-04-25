@@ -142,22 +142,6 @@ namespace TA3D
 			bool get_state(const String& message);
 
 			/*!
-			** \brief Return true if the given object has its activated flag set (mouse is on and button pressed)
-			**
-			** \param message
-			** \return
-			*/
-			bool is_activated(const String& message);
-
-			/*!
-			** \brief Return true if the cursor is over the given object
-			**
-			** \param message
-			** \return
-			*/
-			bool is_mouse_over(const String& message);
-
-			/*!
 			** \brief Return the value of specified object in the specified window
 			**
 			** \param message
@@ -235,7 +219,6 @@ namespace TA3D
 			** \param message
 			** \return
 			*/
-			void set_entry(const String& message, const std::list<String>& entry);
 			void set_entry(const String& message, const std::vector<String>& entry);
 
 			/*!
@@ -245,14 +228,6 @@ namespace TA3D
 			** \return
 			*/
 			void append(const String& message, const String& line);
-
-			/*!
-			** \brief Set the function pointer of an object, it will be called when the widget is clicked
-			**
-			** \param message
-			** \return
-			*/
-			void set_action(const String& message, void (*Func)(int));
 
 			/*!
 			** \brief Send that message to the area

@@ -113,26 +113,6 @@ namespace TA3D
 			}
 		}
 
-		void AREA::set_action(const String& message, void (*Func)(int))
-		{
-			ThreadingPolicy::MutexLocker locker(*this);
-			GUIOBJ::Ptr guiobj = getObjectWL(message);
-			if (guiobj)
-				guiobj->Func = Func;
-		}
-
-		void AREA::set_entry(const String& message, const std::list<String>& entry) // Set the entry of specified object in the specified window to entry (converts List to Vector)
-		{
-			ThreadingPolicy::MutexLocker locker(*this);
-			GUIOBJ::Ptr guiobj = getObjectWL(message);
-			if (guiobj)
-			{
-				guiobj->Text.clear();
-				for (std::list<String>::const_iterator i = entry.begin(); i != entry.end(); ++i)
-					guiobj->Text.push_back(*i);
-			}
-		}
-
 		void AREA::set_entry(const String& message, const std::vector<String>& entry) // Set the entry of specified object in the specified window to entry
 		{
 			ThreadingPolicy::MutexLocker locker(*this);
@@ -482,21 +462,6 @@ namespace TA3D
 					return the_wnd->get_state(nullptr);
 			}
 			return false;
-		}
-
-		bool AREA::is_activated(const String& message)
-		{
-			ThreadingPolicy::MutexLocker locker(*this);
-			GUIOBJ::Ptr obj = getObjectWL(message);
-			return (obj) ? obj->activated : false;
-		}
-
-		bool AREA::is_mouse_over(const String& message)
-		{
-			ThreadingPolicy::MutexLocker locker(*this);
-
-			GUIOBJ::Ptr obj = getObjectWL(message);
-			return (!obj) ? false : obj->MouseOn;
 		}
 
 		sint32 AREA::get_value(const String& message)
