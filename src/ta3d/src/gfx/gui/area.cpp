@@ -246,10 +246,9 @@ namespace TA3D
 
 			if (background)
 			{
-				gfx->drawtexture(background.get(), 0.0f, 0.0f, (float)gfx->width, (float)gfx->height);
-				glDisable(GL_TEXTURE_2D);
-				glBindTexture(GL_TEXTURE_2D, 0);
+				background->draw(gfx);
 			}
+
 			// Draws all the windows in focus reversed order so the focused window is drawn on top of the others
 			if (!pWindowList.empty())
 			{
@@ -326,7 +325,7 @@ namespace TA3D
 				}
 
 				if (VFS::Instance()->fileExists(background_name)) // Loads a background image
-					background = TextureHandle(gfx, gfx->load_texture(background_name));
+					background.reset(new AreaBackgroundTexture(TextureHandle(gfx, gfx->load_texture(background_name))));
 				else
 				{
 					if (skin && !skin->prefix().empty())
@@ -335,12 +334,12 @@ namespace TA3D
 						background_name = areaFile.pullAsString("area.background");
 						// Loads a background image
 						if (VFS::Instance()->fileExists(background_name))
-							background = TextureHandle(gfx, gfx->load_texture(background_name));
+							background.reset(new AreaBackgroundTexture(TextureHandle(gfx, gfx->load_texture(background_name))));
 					}
 				}
 			}
 			else
-				background = TextureHandle();
+				background.reset();
 		}
 
 		AREA::AREA(const String& nm)

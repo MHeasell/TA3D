@@ -28,6 +28,38 @@ namespace TA3D
 {
 	namespace Gui
 	{
+		class AreaBackground
+		{
+		public:
+			virtual ~AreaBackground() {}
+			virtual void draw(GFX* graphics) = 0;
+		};
+
+		class AreaBackgroundColor : public AreaBackground
+		{
+		public:
+			AreaBackgroundColor(uint32 color): color(color) {}
+			void draw(GFX* graphics) override
+			{
+				graphics->rectfill(0.0f, 0.0f, graphics->width, graphics->height, color);
+			}
+		private:
+			uint32 color;
+		};
+
+		class AreaBackgroundTexture : public AreaBackground
+		{
+		public:
+			explicit AreaBackgroundTexture(TextureHandle texture): texture(std::move(texture)) {}
+			void draw(GFX* graphics) override
+			{
+				graphics->drawtexture(texture.get(), 0.0f, 0.0f, graphics->width, graphics->height);
+				glDisable(GL_TEXTURE_2D);
+				glBindTexture(GL_TEXTURE_2D, 0);
+			}
+		private:
+			TextureHandle texture;
+		};
 
 		/*!
 		** \brief This class is a window handler, so it will manage windows
@@ -249,7 +281,7 @@ namespace TA3D
 			//!
 			bool scrolling;
 			//! Of course we need a background, not a single color :-)
-			TextureHandle background;
+			std::unique_ptr<AreaBackground> background;
 			//!
 			bool key_pressed;
 

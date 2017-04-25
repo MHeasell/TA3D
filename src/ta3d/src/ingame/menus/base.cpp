@@ -74,6 +74,10 @@ namespace TA3D
 		{
 			pArea = std::unique_ptr<Gui::AREA>(new Gui::AREA(caption));
 			pArea->load_tdf(relFilename);
+			if (!pArea->background)
+			{
+				pArea->background.reset(new Gui::AreaBackgroundColor(Black));
+			}
 		}
 
 		bool Abstract::doLoop()
