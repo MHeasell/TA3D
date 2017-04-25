@@ -289,6 +289,11 @@ namespace TA3D
 	void reset_keyboard();
 	void reset_mouse();
 
+	/**
+	 * Wraps an OpenGL texture identifier.
+	 * When this object is destroyed,
+	 * it will invoke the graphics context to release the texture.
+	 */
 	class TextureHandle
 	{
 	public:
