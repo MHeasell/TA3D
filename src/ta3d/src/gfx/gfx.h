@@ -115,11 +115,6 @@ namespace TA3D
 		*/
 		void checkConfig() const;
 
-		/*!
-		** \brief Get if we have to deal with some specific ATI workaround
-		*/
-		bool atiWorkaround() const { return ati_workaround; }
-
 		//! \name Color management
 		//@{
 		void set_color(const float r, const float g, const float b) const
@@ -223,12 +218,6 @@ namespace TA3D
 		** \brief Flip the backbuffer to the screen
 		*/
 		void flip() const;
-
-		/*!
-		** \brief set a texture as render target, goes back to normal when passing 0 (do not forget to detach the texture when you're done!)
-		*/
-		void renderToTexture(const GLuint tex = 0, bool useDepth = false);
-		void renderToTextureDepth(const GLuint tex = 0);
 
 		SDL_Surface* create_surface_ex(int bpp, int w, int h);
 		SDL_Surface* create_surface(int w, int h);
