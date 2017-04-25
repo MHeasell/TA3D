@@ -37,7 +37,7 @@ namespace TA3D
 		}
 
 		Splash::Splash(Engine& engine)
-			: Abstract(), pEngine(engine), pBackgroundTexture(0)
+			: Abstract(), pEngine(engine), pBackgroundTexture()
 		{
 		}
 
@@ -59,7 +59,6 @@ namespace TA3D
 
 		void Splash::doFinalize()
 		{
-			ResetTexture(pBackgroundTexture);
 			LOG_DEBUG(LOG_PREFIX_MENU_INTRO << "Done.");
 		}
 
@@ -83,7 +82,7 @@ namespace TA3D
 			String filename;
 			// The background
 			filename << "gfx" << Paths::SeparatorAsString << "splash" << Paths::SeparatorAsString << "loading.jpg";
-			ResetTexture(pBackgroundTexture, gfx->load_texture(filename));
+			pBackgroundTexture = TextureHandle(gfx, gfx->load_texture(filename));
 		}
 
 		void Splash::redrawTheScreen()
@@ -92,7 +91,7 @@ namespace TA3D
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 			glLoadIdentity();
 			// Background
-			gfx->drawtexture(pBackgroundTexture, 0.0f, 0.0f, gfx->width, gfx->height);
+			gfx->drawtexture(pBackgroundTexture.get(), 0.0f, 0.0f, gfx->width, gfx->height);
 			// Flip
 			gfx->flip();
 		}

@@ -305,6 +305,51 @@ namespace TA3D
 	void reset_keyboard();
 	void reset_mouse();
 
+	class TextureHandle
+	{
+	public:
+		TextureHandle(): graphics(nullptr), texture(0) {}
+		TextureHandle(GFX* graphics, GLuint texture): graphics(graphics), texture(texture) {}
+
+		TextureHandle(TextureHandle&) = delete;
+		TextureHandle& operator=(const TextureHandle&) = delete;
+
+		TextureHandle(TextureHandle&& that): graphics(that.graphics), texture(that.texture)
+		{
+			that.graphics = nullptr;
+			that.texture = 0;
+		}
+		TextureHandle& operator=(TextureHandle&& that)
+		{
+			reset(that.graphics, that.texture);
+			that.graphics = nullptr;
+			that.texture = 0;
+			return *this;
+		}
+
+		~TextureHandle() {
+			if (isValid())
+			{
+				graphics->destroy_texture(texture);
+			}
+		}
+		GLuint get() const { return texture; }
+		bool isValid() const { return graphics != nullptr && texture != 0; }
+		void reset(GFX* newGraphics, GLuint newTexture)
+		{
+			GFX* oldGraphics = graphics;
+			GLuint oldTexture = texture;
+			graphics = newGraphics;
+			texture = newTexture;
+			if (oldGraphics != nullptr && oldTexture != 0)
+			{
+				oldGraphics->destroy_texture(oldTexture);
+			}
+		}
+	private:
+		GFX* graphics;
+		GLuint texture;
+	};
 } // namespace TA3D
 
 #endif // __TA3D_GFX_H__

@@ -66,7 +66,7 @@ namespace TA3D
 			//! The Ta3D Engine
 			Engine& pEngine;
 			//! The texture of the background
-			GLuint pBackgroundTexture;
+			TextureHandle pBackgroundTexture;
 			//
 			float pLeft;
 			float pTop;
