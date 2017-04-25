@@ -333,7 +333,20 @@ namespace TA3D
 				graphics->destroy_texture(texture);
 			}
 		}
+
+		/**
+		 * Equivalent to isValid()
+		 */
+		explicit operator bool() const
+		{
+			return isValid();
+		}
+
 		GLuint get() const { return texture; }
+
+		/**
+		 * Returns true if the handle contains a valid texture, otherwise false.
+		 */
 		bool isValid() const { return graphics != nullptr && texture != 0; }
 		void reset(GFX* newGraphics, GLuint newTexture)
 		{
