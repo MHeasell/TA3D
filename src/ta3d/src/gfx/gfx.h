@@ -98,10 +98,6 @@ namespace TA3D
 		//! Set current texture format
 		void use_mipmapping(bool use);
 
-		void load_background();
-
-		void destroy_background() { destroy_texture(glfond); }
-
 		/*!
 		** \brief Load the default textures (background + default.png)
 		**
@@ -260,7 +256,6 @@ namespace TA3D
 		float SCREEN_W_TO_640; // To have mouse sensibility undependent from the resolution
 		float SCREEN_H_TO_480;
 
-		GLuint glfond;
 		GLuint textureFBO; // FBO used by renderToTexture functions
 		GLuint textureDepth;
 		GLuint textureColor; // Default color texture used by FBO when rendering to depth texture
@@ -358,6 +353,10 @@ namespace TA3D
 			{
 				oldGraphics->destroy_texture(oldTexture);
 			}
+		}
+		void reset()
+		{
+			reset(nullptr, 0);
 		}
 	private:
 		GFX* graphics;

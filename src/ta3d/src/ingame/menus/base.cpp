@@ -64,8 +64,6 @@ namespace TA3D
 
 		void Abstract::doGuardFinalize()
 		{
-			if (pArea && pArea->background == gfx->glfond)
-				pArea->background = 0;
 			doFinalize();
 			reset_keyboard();
 			clearKeyboardBuffer();
@@ -76,8 +74,6 @@ namespace TA3D
 		{
 			pArea = std::unique_ptr<Gui::AREA>(new Gui::AREA(caption));
 			pArea->load_tdf(relFilename);
-			if (!pArea->background)
-				pArea->background = gfx->glfond;
 		}
 
 		bool Abstract::doLoop()

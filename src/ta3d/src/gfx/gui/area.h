@@ -249,7 +249,7 @@ namespace TA3D
 			//!
 			bool scrolling;
 			//! Of course we need a background, not a single color :-)
-			GLuint background;
+			TextureHandle background;
 			//!
 			bool key_pressed;
 

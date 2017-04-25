@@ -246,7 +246,7 @@ namespace TA3D
 
 			if (background)
 			{
-				gfx->drawtexture(background, 0.0f, 0.0f, (float)gfx->width, (float)gfx->height);
+				gfx->drawtexture(background.get(), 0.0f, 0.0f, (float)gfx->width, (float)gfx->height);
 				glDisable(GL_TEXTURE_2D);
 				glBindTexture(GL_TEXTURE_2D, 0);
 			}
@@ -326,7 +326,7 @@ namespace TA3D
 				}
 
 				if (VFS::Instance()->fileExists(background_name)) // Loads a background image
-					background = gfx->load_texture(background_name);
+					background = TextureHandle(gfx, gfx->load_texture(background_name));
 				else
 				{
 					if (skin && !skin->prefix().empty())
@@ -335,16 +335,16 @@ namespace TA3D
 						background_name = areaFile.pullAsString("area.background");
 						// Loads a background image
 						if (VFS::Instance()->fileExists(background_name))
-							background = gfx->load_texture(background_name);
+							background = TextureHandle(gfx, gfx->load_texture(background_name));
 					}
 				}
 			}
 			else
-				background = 0;
+				background = TextureHandle();
 		}
 
 		AREA::AREA(const String& nm)
-			: scrolling(false), background(0), name(nm), skin(NULL), gui_hashtable(), wnd_hashtable()
+			: scrolling(false), background(), name(nm), skin(NULL), gui_hashtable(), wnd_hashtable()
 		{
 			amx = mouse_x;
 			amy = mouse_y;
@@ -372,7 +372,7 @@ namespace TA3D
 			pWindowList.clear(); // Empty the window vector
 			vec_z_order.clear(); // No more windows at end
 
-			gfx->destroy_texture(background); // Destroy the texture (using safe destroyer)
+			background.reset();
 
 			skin = NULL;
 		}
@@ -396,11 +396,6 @@ namespace TA3D
 
 			pWindowList.clear(); // Empty the window vector
 			vec_z_order.clear(); // No more windows at end
-
-			if (background == gfx->glfond) // Don't remove the background texture
-				background = 0;
-			else
-				gfx->destroy_texture(background); // Destroy the texture
 		}
 
 		uint32 AREA::InterfaceMsg(const uint32 MsgID, const String& msg)
