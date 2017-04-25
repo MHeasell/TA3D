@@ -38,7 +38,6 @@
 #include "misc/settings.h"
 #include "ingame/sidedata.h"
 #include "ingame/menus/splash.h"
-#include "ingame/menus/intro.h"
 #include "ingame/menus/mainmenu.h"
 #include "languages/i18n.h"
 #include "languages/table.h"
@@ -192,10 +191,6 @@ int main(int argc, char* argv[])
 
 		// Make some initialization which must be done in the main thread only
 		engine.initializationFromTheMainThread();
-
-		// while our engine does some loading and intializing, lets show our intro.
-		if (!config->quickstart && config->file_param.empty())
-			Menus::Intro::Execute();
 
 		// The main menu call will eventually not be here, instead
 		// we will turn control over to our engine, but for now we'll call the

@@ -117,8 +117,6 @@ set(TA3D_LIB_SOURCES
 		ingame/menus/campaignmainmenu.h
 		ingame/menus/config.cpp
 		ingame/menus/config.h
-		ingame/menus/intro.cpp
-		ingame/menus/intro.h
 		ingame/menus/loading.cpp
 		ingame/menus/loading.h
 		ingame/menus/mainmenu.cpp
