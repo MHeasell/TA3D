@@ -49,11 +49,6 @@ namespace TA3D
 			virtual ~Splash();
 			//@}
 
-			/*!
-		** \brief reload the content of the scrolling text
-		*/
-			void reloadContent();
-
 		protected:
 			virtual bool doInitialize();
 			virtual void doFinalize();
