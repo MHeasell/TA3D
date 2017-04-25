@@ -534,6 +534,9 @@ namespace TA3D
 		glVertexPointer(2, GL_FLOAT, 0, points);
 		glTexCoordPointer(2, GL_FLOAT, 0, tcoord);
 		glDrawArrays(GL_QUADS, 0, 4);
+
+		glDisable(GL_TEXTURE_2D);
+		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 
 	void GFX::drawtexture(const GLuint& tex, const float x1, const float y1, const float x2, const float y2)
@@ -551,6 +554,9 @@ namespace TA3D
 		glVertexPointer(2, GL_FLOAT, 0, points);
 		glTexCoordPointer(2, GL_FLOAT, 0, tcoord);
 		glDrawArrays(GL_QUADS, 0, 4);
+
+		glDisable(GL_TEXTURE_2D);
+		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 
 	void GFX::drawtexture_flip(const GLuint& tex, const float x1, const float y1, const float x2, const float y2)
@@ -568,6 +574,9 @@ namespace TA3D
 		glVertexPointer(2, GL_FLOAT, 0, points);
 		glTexCoordPointer(2, GL_FLOAT, 0, tcoord);
 		glDrawArrays(GL_QUADS, 0, 4);
+
+		glDisable(GL_TEXTURE_2D);
+		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 
 	void GFX::drawtexture(const GLuint& tex, const float x1, const float y1, const float x2, const float y2, const uint32 col)

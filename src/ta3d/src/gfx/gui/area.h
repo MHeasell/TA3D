@@ -54,8 +54,6 @@ namespace TA3D
 			void draw(GFX* graphics) override
 			{
 				graphics->drawtexture(texture.get(), 0.0f, 0.0f, graphics->width, graphics->height);
-				glDisable(GL_TEXTURE_2D);
-				glBindTexture(GL_TEXTURE_2D, 0);
 			}
 		private:
 			TextureHandle texture;
