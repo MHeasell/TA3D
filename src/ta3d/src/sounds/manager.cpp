@@ -304,9 +304,6 @@ namespace TA3D
 
 		bool Manager::doStartUpAudio()
 		{
-			if (lp_CONFIG->no_sound)
-				return false;
-
 			pMusic = NULL;
 			fCounter = 0;
 			bPlayMusic = false;
@@ -734,9 +731,6 @@ namespace TA3D
 
 		void Manager::loadTDFSounds(const bool allSounds)
 		{
-			if (lp_CONFIG->no_sound)
-				return;
-
 			MutexLocker locker(pMutex);
 			// Which file to load ?
 			String filename(ta3dSideData.gamedata_dir);

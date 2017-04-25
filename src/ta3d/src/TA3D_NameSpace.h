@@ -107,7 +107,6 @@ namespace TA3D
 		volatile bool paused;			// The engine writes its current state here, used by save/load code
 		String file_param;				// File parameter (command line parameter), used to give complex instructions
 		volatile bool enable_shortcuts; // Tell the GUI module to react to shortcuts or not (deactivated when in chat mode)
-		bool no_sound;
 		bool first_start;
 
 		TA3DCONFIG();

@@ -84,11 +84,6 @@ static int ParseCommandLine(TA3DCONFIG* config, int argc, char* argv[])
 						config->file_param = argv[i]; // Copy the file name
 					}
 				}
-				else
-				{
-					if ("--no-sound" == arg) // Disable sound
-						config->no_sound = true;
-				}
 			}
 		}
 	}

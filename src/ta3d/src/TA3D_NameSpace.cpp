@@ -40,8 +40,6 @@ namespace TA3D
 
 		first_start = false;
 
-		no_sound = false;
-
 		resourcePaths.clear();
 
 		system7zCommand = "7z";
