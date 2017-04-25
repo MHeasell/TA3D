@@ -38,8 +38,6 @@
 #define FILTER_BILINEAR 0x2
 #define FILTER_TRILINEAR 0x3
 
-#define BYTE_TO_FLOAT 0.00390625f
-
 namespace TA3D
 {
 
@@ -143,25 +141,6 @@ namespace TA3D
 			glColor4ub((GLubyte)getr(col), (GLubyte)getg(col), (GLubyte)getb(col), (GLubyte)geta(col));
 		}
 
-		void set_alpha(const float a) const;
-
-		/*!
-		** \brief
-		*/
-		float get_r(const uint32 col) const { return (float)getr(col) * BYTE_TO_FLOAT; }
-		/*!
-		**
-		*/
-		float get_g(const uint32 col) const { return (float)getg(col) * BYTE_TO_FLOAT; }
-		/*!
-		**
-		*/
-		float get_b(const uint32 col) const { return (float)getb(col) * BYTE_TO_FLOAT; }
-		/*!
-		**
-		*/
-		float get_a(const uint32 col) const { return (float)geta(col) * BYTE_TO_FLOAT; }
-
 		inline void loadVertex(const Vector3D& v) const
 		{
 			glVertex3fv((const GLfloat*)&v);
@@ -187,8 +166,6 @@ namespace TA3D
 		void line(const float x1, const float y1, const float x2, const float y2); // Basic drawing routines
 		void rect(const float x1, const float y1, const float x2, const float y2);
 		void rectfill(const float x1, const float y1, const float x2, const float y2);
-		void circle(const float x, const float y, const float r);
-		void circlefill(const float x, const float y, const float r);
 		void circle_zoned(const float x, const float y, const float r, const float mx, const float my, const float Mx, const float My);
 		void dot_circle_zoned(const float t, const float x, const float y, const float r, const float mx, const float my, const float Mx, const float My);
 		void rectdot(const float x1, const float y1, const float x2, const float y2);
@@ -199,8 +176,6 @@ namespace TA3D
 		void line(const float x1, const float y1, const float x2, const float y2, const uint32 col); // Basic drawing routines (with color arguments)
 		void rect(const float x1, const float y1, const float x2, const float y2, const uint32 col);
 		void rectfill(const float x1, const float y1, const float x2, const float y2, const uint32 col);
-		void circle(const float x, const float y, const float r, const uint32 col);
-		void circlefill(const float x, const float y, const float r, const uint32 col);
 		void circle_zoned(const float x, const float y, const float r, const float mx, const float my, const float Mx, const float My, const uint32 col);
 		void dot_circle_zoned(const float t, const float x, const float y, const float r, const float mx, const float my, const float Mx, const float My, const uint32 col);
 		void rectdot(const float x1, const float y1, const float x2, const float y2, const uint32 col);
@@ -220,13 +195,10 @@ namespace TA3D
 		//@} // Text manipilation
 
 		GLuint make_texture(SDL_Surface* bmp, int filter_type = FILTER_TRILINEAR, bool clamp = true);
-		GLuint create_color_texture(uint32 color);
 		GLuint create_texture(int w, int h, int filter_type = FILTER_TRILINEAR, bool clamp = true);
-		void blit_texture(SDL_Surface* src, GLuint dst);
 		GLuint load_texture(const String& file, int filter_type = FILTER_TRILINEAR, uint32* width = NULL, uint32* height = NULL, bool clamp = true, GLuint texFormat = 0, bool* useAlpha = NULL, bool checkSize = false);
 		GLuint load_texture_mask(const String& file, uint32 level, int filter_type = FILTER_TRILINEAR, uint32* width = NULL, uint32* height = NULL, bool clamp = true);
 		GLuint load_texture_from_cache(const String& file, int filter_type = FILTER_TRILINEAR, uint32* width = NULL, uint32* height = NULL, bool clamp = true, bool* useAlpha = NULL);
-		GLuint load_masked_texture(String file, String mask, int filter_type = FILTER_TRILINEAR);
 		void save_texture_to_cache(String file, GLuint tex, uint32 width, uint32 height, bool useAlpha);
 		uint32 texture_width(const GLuint gltex);
 		uint32 texture_height(const GLuint gltex);
@@ -234,28 +206,12 @@ namespace TA3D
 		void disable_texturing();
 		void enable_texturing();
 		bool is_texture_in_cache(const String& file);
-		int max_texture_size();
-
-		GLuint make_texture_RGB32F(int w, int h, float* data, int filter_type = FILTER_NONE, bool clamp = false);
-		GLuint make_texture_RGBA32F(int w, int h, float* data, int filter_type = FILTER_NONE, bool clamp = false);
-		GLuint make_texture_RGB16F(int w, int h, float* data, int filter_type = FILTER_NONE, bool clamp = false);
-		GLuint make_texture_RGBA16F(int w, int h, float* data, int filter_type = FILTER_NONE, bool clamp = false);
-		GLuint make_texture_A16F(int w, int h, float* data, int filter_type = FILTER_NONE, bool clamp = false);
-		GLuint make_texture_A32F(int w, int h, float* data, int filter_type = FILTER_NONE, bool clamp = false);
-
-		GLuint create_texture_RGB32F(int w, int h, int filter_type = FILTER_NONE, bool clamp = true);
-		GLuint create_texture_RGBA32F(int w, int h, int filter_type = FILTER_NONE, bool clamp = true);
-		GLuint create_texture_RGB16F(int w, int h, int filter_type = FILTER_NONE, bool clamp = true);
-		GLuint create_texture_RGBA16F(int w, int h, int filter_type = FILTER_NONE, bool clamp = true);
-
-		GLuint make_texture_from_screen(int filter_type = FILTER_NONE);
 
 		SDL_Surface* load_image(const String& filename);
 
 		void set_alpha_blending();
 		void unset_alpha_blending();
 
-		void ReInitArrays();
 		void ReInitTexSys(bool matrix_reset = true);
 		void ReInitAllTex(bool disable = false);
 		void SetDefState();
@@ -286,8 +242,6 @@ namespace TA3D
 		*/
 		GLuint defaultTextureFormat_RGB() const { return defaultRGBTextureFormat; }
 		GLuint defaultTextureFormat_RGBA() const { return defaultRGBATextureFormat; }
-		GLuint defaultTextureFormat_RGB_compressed() const;
-		GLuint defaultTextureFormat_RGBA_compressed() const;
 
 	public:
 		int width; // Size of this window on the screen
