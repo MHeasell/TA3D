@@ -70,6 +70,12 @@ namespace TA3D
 			return port[ARMORED] ? unit_manager.unit_type[type_id]->DamageModifier : 1.0f;
 		}
 
+		/**
+		 * Returns true if the unit with the given ID
+		 * is an enemy of this unit.
+		 * A unit is considered an enemy if it is not owned
+		 * by either the player or one of their allies.
+		 */
 		bool isEnemy(const int t) const;
 
 		void draw_on_map();
@@ -190,7 +196,7 @@ namespace TA3D
 		sint16* port;			  // Ports
 		MissionStack mission;	 // Orders given to the unit
 		MissionStack def_mission; // Orders given to units built by this plant
-		byte flags;				  // Pour indiquer entre autres au gestionnaire d'unités si l'unité existe
+		byte flags;				  // To indicate, among other things, to the unit manager if the unit exists
 		int kills;				  // How many kills did this unit
 		bool selfmove;			  // The unit has decided to move to a place with lower MAP::energy
 		float lastEnergy;		  // Previous energy level at the unit position (if it changes then someone is getting closer, we can decide to move)

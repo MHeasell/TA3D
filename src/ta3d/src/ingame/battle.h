@@ -257,6 +257,7 @@ namespace TA3D
 		//! The map of the game
 		std::unique_ptr<MAP> map;
 
+		//! Indicates whether the user is currently dragging out a selection box.
 		bool pMouseSelecting;
 		//! The bounding box of the current mouse selection (if pMouseSelecting == true)
 		Rect<int> pMouseRectSelection;
@@ -368,7 +369,12 @@ namespace TA3D
 		int old_gui_sel;
 		//!
 		bool old_sel;
-		//!
+
+		/**
+		 * Indicates whether any units are currently selected.
+		 * A value of true indicates that at least one unit
+		 * is currently selected.
+		 */
 		bool selected;
 		//!
 		int build; // Indique si l'utilisateur veut construire quelque chose
