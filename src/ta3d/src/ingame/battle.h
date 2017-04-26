@@ -142,8 +142,6 @@ namespace TA3D
 		bool initTheWind();
 		//! Init particules
 		bool initParticules();
-		//! Init the Water
-		bool initTheWater();
 		//! Init miscellaneous stuff
 		bool initPostFlight();
 		//@}
@@ -406,22 +404,6 @@ namespace TA3D
 		float wind_t;
 		//!
 		bool wind_change;
-		//@}
-
-		//! \name Water
-		//@{
-		//!
-		std::unique_ptr<WATER> water_obj;
-		//!
-		GLuint height_tex;
-		//!
-		GLuint transtex;
-		//!
-		GLuint reflectex;
-		//!
-		GLuint first_pass;
-		//!
-		GLuint second_pass;
 		//@}
 
 		//! \name Interface

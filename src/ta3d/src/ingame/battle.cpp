@@ -2371,11 +2371,6 @@ namespace TA3D
 		arrow_texture.destroy();
 		circle_texture.destroy();
 		pause_tex.destroy();
-		gfx->destroy_texture(first_pass);
-		gfx->destroy_texture(second_pass);
-		gfx->destroy_texture(reflectex);
-		gfx->destroy_texture(transtex);
-		gfx->destroy_texture(height_tex);
 
 		LOG_INFO("Total Models: " << model_manager.nb_models);
 		LOG_INFO("Total Units: " << unit_manager.nb_unit);

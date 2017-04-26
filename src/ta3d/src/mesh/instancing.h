@@ -6,12 +6,6 @@
 
 namespace TA3D
 {
-	namespace INSTANCING
-	{
-		extern bool water;
-		extern float sealvl;
-	}
-
 	class Instance
 	{
 	public:

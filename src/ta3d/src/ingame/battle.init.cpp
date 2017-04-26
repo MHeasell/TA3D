@@ -51,7 +51,7 @@ namespace TA3D
 	}
 
 	Battle::Battle(GameData* g)
-		: pResult(brUnknown), pGameData(g), pNetworkEnabled(false), pNetworkIsServer(false), map(nullptr), escMenuWasVisible(false), height_tex(0), transtex(0), reflectex(0), first_pass(0), second_pass(0), bShowPing(false)
+		: pResult(brUnknown), pGameData(g), pNetworkEnabled(false), pNetworkIsServer(false), map(nullptr), escMenuWasVisible(false), bShowPing(false)
 	{
 		LOG_INFO(LOG_PREFIX_BATTLE << "Preparing a new battle...");
 		grab_mouse(lp_CONFIG->grab_inputs);
@@ -63,8 +63,6 @@ namespace TA3D
 		pInstance = NULL;
 
 		LOG_INFO(LOG_PREFIX_BATTLE << "Releasing unused resources...");
-
-		water_obj = nullptr;
 
 		LOG_DEBUG(LOG_PREFIX_BATTLE << "Freeing memory used for 3d models");
 		model_manager.destroy();
@@ -126,18 +124,13 @@ namespace TA3D
 		arrow_texture.destroy();
 		circle_texture.destroy();
 		pause_tex.destroy();
-		height_tex = 0;
-		transtex = 0;
-		reflectex = 0;
-		first_pass = 0;
-		second_pass = 0;
 
 		// We don't want to load things we won't be able to use
 		gfx->checkConfig();
 
 		// Here we go
 		uint64 startTime = msec_timer;
-		uint64 timer[21];
+		uint64 timer[20];
 
 		timer[0] = msec_timer;
 		if (!initPreflight(g))
@@ -191,15 +184,12 @@ namespace TA3D
 		if (!initParticules())
 			return false;
 		timer[17] = msec_timer;
-		if (!initTheWater())
-			return false;
-		timer[18] = msec_timer;
 		if (!initPostFlight())
 			return false;
-		timer[19] = msec_timer;
+		timer[18] = msec_timer;
 
 		unit_manager.waitUntilReady();
-		timer[20] = msec_timer;
+		timer[19] = msec_timer;
 
 		// The loading has finished
 		(*loading)(100.0f, I18N::Translate("Load finished"));
@@ -228,7 +218,7 @@ namespace TA3D
 			"initTheWater()",
 			"initPostFlight()",
 			"waitUntilReady()"};
-		for (int i = 0; i < 20; ++i)
+		for (int i = 0; i < 19; ++i)
 			LOG_INFO(LOG_PREFIX_BATTLE << functionName[i] << " done in " << timer[i + 1] - timer[i] << " msec.");
 #endif
 
@@ -564,18 +554,6 @@ namespace TA3D
 		fire = particle_engine.addtex("gfx/fire.tga");
 		build_part = particle_engine.addtex("gfx/part.tga");
 		fx_manager.loadData();
-		return true;
-	}
-
-	bool Battle::initTheWater()
-	{
-		water_obj = std::make_unique<WATER>();
-		water_obj->build((float)map->map_w, (float)map->map_h, 1000.0f);
-
-		// A few things required by (pseudo-)instancing code to render highlighted objects
-		INSTANCING::water = map->water;
-		INSTANCING::sealvl = map->sealvl;
-
 		return true;
 	}
 
