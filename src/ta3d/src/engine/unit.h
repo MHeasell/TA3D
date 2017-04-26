@@ -196,14 +196,23 @@ namespace TA3D
 		sint16* port;			  // Ports
 		MissionStack mission;	 // Orders given to the unit
 		MissionStack def_mission; // Orders given to units built by this plant
-		byte flags;				  // To indicate, among other things, to the unit manager if the unit exists
+
+		/**
+		 * To indicate, among other things, to the unit manager if the unit exists.
+		 *
+		 * The following flags are valid:
+		 *
+		 * 0 -> the unit has been destroyed
+		 * 1 -> the unit exists
+		 * 2 -> unknown purpose ("unit detectable")
+		 * 4 -> the unit is being killed
+		 * 16 -> unknown purpose (seems to suppress explosion when killed, set when being reclaimed or captured)
+		 * 64 -> the unit is landed (for planes)
+		 */
+		byte flags;
 		int kills;				  // How many kills did this unit
 		bool selfmove;			  // The unit has decided to move to a place with lower MAP::energy
 		float lastEnergy;		  // Previous energy level at the unit position (if it changes then someone is getting closer, we can decide to move)
-		// 0	-> nothing
-		// 1	-> the unit exists
-		// 4	-> being killed
-		// 64	-> landed (for planes)
 		float c_time;		   // Compteur de temps entre 2 émissions de particules par une unité de construction
 		bool compute_coord;	// Indique s'il est nécessaire de recalculer les coordonnées du modèle 3d
 		uint16 idx;			   // Indice dans le tableau d'unité

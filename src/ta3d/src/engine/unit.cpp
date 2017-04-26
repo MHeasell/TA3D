@@ -144,6 +144,8 @@ namespace TA3D
 					break;
 			}
 			if (mission_type != MISSION_STOP)
+				// clear the "landed" flag (64)
+				// (191 == 1011 1111)
 				flags &= 191;
 		}
 	}
@@ -2145,6 +2147,7 @@ namespace TA3D
 				add_mission(MISSION_MOVE | MISSION_FLAG_AUTO, &target, true, 0, NULL, 0, 1); // Stay on map
 			}
 
+		// clear flag 16 (0xFF == 1110 1111)
 		flags &= 0xEF; // To fix a bug
 
 		if (build_percent_left > 0.0f) // Unit isn't finished
