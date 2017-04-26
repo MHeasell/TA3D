@@ -61,7 +61,7 @@ namespace TA3D
 	{
 		destroy();
 
-		auto thread = std::unique_ptr<LuaThread>(new LuaThread);
+		auto thread = std::make_unique<LuaThread>();
 		thread->load(filename);
 
 		auto chunk = std::unique_ptr<LuaChunk>(thread->dump());
@@ -102,7 +102,7 @@ namespace TA3D
 	{
 		if (piece_name.empty())
 		{
-			auto thread = std::unique_ptr<LuaThread>(new LuaThread());
+			auto thread = std::make_unique<LuaThread>();
 			thread->load(this);
 			thread->run(); // Initialize the thread (read functions, pieces, ...)
 			if (thread->L)

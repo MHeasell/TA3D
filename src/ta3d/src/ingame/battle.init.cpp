@@ -569,8 +569,7 @@ namespace TA3D
 
 	bool Battle::initTheWater()
 	{
-		// TODO: replace with make_unique (upgrade to c++14 first)
-		water_obj = std::unique_ptr<WATER>(new WATER());
+		water_obj = std::make_unique<WATER>();
 		water_obj->build((float)map->map_w, (float)map->map_h, 1000.0f);
 
 		// A few things required by (pseudo-)instancing code to render highlighted objects

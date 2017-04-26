@@ -104,14 +104,14 @@ int main(int argc, char* argv[])
 {
 	// Initialise interface manager
 	// (required by implementors of IInterface for message passing)
-	std::unique_ptr<IInterfaceManager> interfaceManager(new IInterfaceManager());
+	auto interfaceManager = std::make_unique<IInterfaceManager>();
 	InterfaceManager = interfaceManager.get();
 
 	// initialize SDL
 	SdlContextManager sdlContextManager;
 
 	// Constructing config
-	std::unique_ptr<TA3DCONFIG> config(new TA3DCONFIG);
+	auto config = std::make_unique<TA3DCONFIG>();
 	TA3D::VARS::lp_CONFIG = config.get();
 
 	// Initialize all modules used by ta3d
@@ -143,13 +143,13 @@ int main(int argc, char* argv[])
 
 		I18N* i18nService = I18N::Instance();
 
-		std::unique_ptr<GFX> graphicsService(new GFX());
+		auto graphicsService = std::make_unique<GFX>();
 		if (gfx)
 			delete gfx;
 		gfx = NULL;
 		gfx = graphicsService.get();
 
-		std::unique_ptr<Audio::Manager> audioManager(new TA3D::Audio::Manager());
+		auto audioManager = std::make_unique<Audio::Manager>();
 		sound_manager = audioManager.get();
 
 		ModelManager* modelManager = &model_manager;

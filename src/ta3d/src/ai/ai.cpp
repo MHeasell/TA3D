@@ -82,8 +82,7 @@ namespace TA3D
 			case AI_TYPE_BLOODY:
 				ai_script = NULL;
 				if (!ai_controller)
-					// TODO: replace with make_unique (upgrade to c++14 first)
-					ai_controller = std::unique_ptr<AiController>(new AiController());
+					ai_controller = std::make_unique<AiController>();
 				ai_controller->setPlayerID(ID);
 				break;
 			case AI_TYPE_LUA:

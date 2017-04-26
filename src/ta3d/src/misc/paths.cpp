@@ -81,7 +81,7 @@ namespace TA3D
 			 */
 			String roamingAppData()
 			{
-				std::unique_ptr<wchar_t[]> pathBuffer(new wchar_t[MAX_PATH + 1]);
+				auto pathBuffer = std::make_unique<wchar_t[]>(MAX_PATH + 1);
 				pathBuffer[MAX_PATH] = '\0';
 
 				HRESULT status = SHGetFolderPathW(NULL, CSIDL_APPDATA, NULL, SHGFP_TYPE_CURRENT, pathBuffer.get());

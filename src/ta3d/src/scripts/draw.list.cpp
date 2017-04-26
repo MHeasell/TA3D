@@ -44,7 +44,7 @@ namespace TA3D
 		LuaProgram::inGame->lock();
 		if (!next)
 		{
-			next = std::unique_ptr<DrawList>(new DrawList);
+			next = std::make_unique<DrawList>();
 			next->prim = obj;
 		}
 		else
