@@ -2,7 +2,7 @@
 string(STRIP "${LIBS}" LIBS)
 link_libraries("${LIBS}")
 
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 14)
 
 include_directories("../../libs/utfcpp/source")
 include_directories("../../libs/fmt-3.0.1")
