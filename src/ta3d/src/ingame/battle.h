@@ -426,11 +426,15 @@ namespace TA3D
 
 		//! \name Interface
 		//@{
-		//!
+		//! Indicates whether the user's cursor is over a GUI element (including the minimap)
 		bool IsOnGUI;
-		//!
+		//! Indicates whether the user's cursor is over the minimap
 		bool IsOnMinimap;
-		//!
+
+		/**
+		 * True if the user is currently attempting to build a structure
+		 * and it is legal to build the structure at the currently hovered location.
+		 */
 		bool can_be_there;
 		//@}
 
