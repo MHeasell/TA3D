@@ -429,9 +429,6 @@ namespace TA3D
 		//! features to render as icons in tactical mode
 		FeaturesSet symbolic_features;
 
-		//! icons
-		Interfaces::GfxTexture icons[2];
-
 	protected:
 		//!
 		Vector3D* p_wind_dir;

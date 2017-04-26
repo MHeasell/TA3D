@@ -70,9 +70,6 @@ namespace TA3D
 
 		if (delete_interface)
 		{
-			for (int i = 0; i < 13; ++i)
-				icons[i].destroy();
-
 			DeleteInterface(); // Shut down the interface
 		}
 
@@ -260,20 +257,6 @@ namespace TA3D
 		if (register_interface)
 		{
 			InitInterface(); // Initialization of the interface
-
-			icons[ICON_UNKNOWN].load("gfx/tactical_icons/unknown.tga");
-			icons[ICON_BUILDER].load("gfx/tactical_icons/builder.tga");
-			icons[ICON_GROUND_ASSAULT].load("gfx/tactical_icons/tank.tga");
-			icons[ICON_LANDUNIT].load("gfx/tactical_icons/landunit.tga");
-			icons[ICON_DEFENSE].load("gfx/tactical_icons/defense.tga");
-			icons[ICON_ENERGY].load("gfx/tactical_icons/energy.tga");
-			icons[ICON_METAL].load("gfx/tactical_icons/metal.tga");
-			icons[ICON_WATERUNIT].load("gfx/tactical_icons/waterunit.tga");
-			icons[ICON_COMMANDER].load("gfx/tactical_icons/commander.tga");
-			icons[ICON_SUBUNIT].load("gfx/tactical_icons/subunit.tga");
-			icons[ICON_AIRUNIT].load("gfx/tactical_icons/airunit.tga");
-			icons[ICON_FACTORY].load("gfx/tactical_icons/factory.tga");
-			icons[ICON_KAMIKAZE].load("gfx/tactical_icons/kamikaze.tga");
 		}
 
 		sound_min_ticks = 500;

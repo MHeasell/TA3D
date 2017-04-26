@@ -391,8 +391,6 @@ namespace TA3D
 		feature = NULL;
 		list.clear();
 		symbolic_features.clear();
-		icons[0].load("gfx\\tactical_icons\\metal_deposit.tga");
-		icons[1].load("gfx\\tactical_icons\\geothermal.tga");
 	}
 
 	void Features::destroy(bool bInit)

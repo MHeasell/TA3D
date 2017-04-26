@@ -170,10 +170,6 @@ namespace TA3D
 
 		uint8 page;
 
-		/*----------------------- Variables reserved to texture data -------------------------------*/
-
-		Interfaces::GfxTexture icons[13];
-
 		/*----------------------- Variables reserved to precalculations ----------------------------*/
 
 		float exp_dt_1;
