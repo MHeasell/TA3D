@@ -13,7 +13,7 @@ namespace TA3D
 {
 
 	Unit::Unit()
-		: script((UnitScriptInterface*)NULL), render(), model(NULL), owner_id(0), type_id(0), hp(0.), Pos(), V(), Angle(), V_Angle(), sel(false), data(), drawing(false), port(NULL), mission(), def_mission(), flags(0), kills(0), selfmove(false), lastEnergy(0.0f), c_time(0), compute_coord(false), idx(0), ID(0), h(0.), visible(false), on_radar(false), on_mini_radar(false), groupe(0), built(0), attacked(false), planned_weapons(0.), memory(NULL), mem_size(0), attached(false), attached_list(NULL), link_list(NULL), nb_attached(0), just_created(false), first_move(false), severity(0), cur_px(0), cur_py(0), metal_prod(0.), metal_cons(0.), energy_prod(0.), energy_cons(0.), last_time_sound(0), cur_metal_prod(0.), cur_metal_cons(0.), cur_energy_prod(0.), cur_energy_cons(0.), ripple_timer(0), weapon(), death_delay(0.), was_moving(false), last_path_refresh(0.), shadow_scale_dir(0.), hidden(false), flying(false), cloaked(false), cloaking(false), paralyzed(0.),
+		: script((UnitScriptInterface*)NULL), render(), model(NULL), owner_id(0), type_id(0), hp(0.0f), Pos(), V(), Angle(), V_Angle(), sel(false), data(), drawing(false), port(NULL), mission(), def_mission(), flags(0), kills(0), selfmove(false), lastEnergy(0.0f), c_time(0), compute_coord(false), idx(0), ID(0), h(0.0f), visible(false), on_radar(false), on_mini_radar(false), groupe(0), built(0), attacked(false), planned_weapons(0.0f), memory(NULL), mem_size(0), attached(false), attached_list(NULL), link_list(NULL), nb_attached(0), just_created(false), first_move(false), severity(0), cur_px(0), cur_py(0), metal_prod(0.0f), metal_cons(0.0f), energy_prod(0.0f), energy_cons(0.0f), last_time_sound(0), cur_metal_prod(0.0f), cur_metal_cons(0.0f), cur_energy_prod(0.0f), cur_energy_cons(0.0f), ripple_timer(0), weapon(), death_delay(0.0f), was_moving(false), last_path_refresh(0.0f), shadow_scale_dir(0.0f), hidden(false), flying(false), cloaked(false), cloaking(false), paralyzed(0.0f),
 		  //
 		  drawn_open(false),
 		  drawn_flying(false),
@@ -29,14 +29,14 @@ namespace TA3D
 		  old_px(0),
 		  old_py(0),
 		  move_target_computed(),
-		  was_locked(0.),
-		  self_destruct(0.),
-		  build_percent_left(0.),
-		  metal_extracted(0.),
+		  was_locked(0.0f),
+		  self_destruct(0.0f),
+		  build_percent_left(0.0f),
+		  metal_extracted(0.0f),
 		  requesting_pathfinder(false),
 		  pad1(0),
 		  pad2(0),
-		  pad_timer(0.),
+		  pad_timer(0.0f),
 		  command_locked(false),
 		  yardmap_timer(0),
 		  death_timer(0),
