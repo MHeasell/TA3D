@@ -143,7 +143,6 @@ set(TA3D_LIB_SOURCES
 		ingame/menus/waitroom.h
 		ingame/players.cpp
 		ingame/players.h
-		ingame/players.hxx
 		ingame/sidedata.cpp
 		ingame/sidedata.h
 		ingame/weapons/weapons.cpp

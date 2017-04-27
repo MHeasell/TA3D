@@ -98,7 +98,10 @@ namespace TA3D
 		/*!
 		** \brief Player count
 		*/
-		unsigned int count() const;
+		inline unsigned int count() const
+		{
+			return pPlayerCount;
+		}
 
 	public:
 		//! Which player is controlling from this machine?
@@ -218,7 +221,5 @@ namespace TA3D
 	extern PLAYERS players;
 
 } // namespace TA3D
-
-#include "players.hxx"
 
 #endif // __TA3D_INGAME_PLAYERS_H__
