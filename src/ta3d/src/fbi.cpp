@@ -1224,7 +1224,7 @@ namespace TA3D
 				(float)side_data.Name.x1,
 				(float)side_data.Name.y1,
 				0.0f, 0xFFFFFFFF,
-				String(unit_type[sel]->name) << " M:" << unit_type[sel]->BuildCostMetal << " E:" << unit_type[sel]->BuildCostEnergy << " HP:" << unit_type[sel]->MaxDamage);
+				String(unit_type[sel]->name) << " M:" << unit_type[sel]->BuildCostMetal << " E:" << unit_type[sel]->BuildCostEnergy);
 
 			if (!unit_type[sel]->Description.empty())
 				gfx->print(gfx->normal_font,
