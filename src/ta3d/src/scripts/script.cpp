@@ -407,7 +407,7 @@ namespace TA3D
 		{
 			const int unit_type = lua_isstring(L, 2) ? unit_manager.get_unit_index(lua_tostring(L, 2)) : (int)lua_tointeger(L, 2);
 			lua_pop(L, 2);
-			lua_pushboolean(L, (units.unit[unit_id].flags & 1) && units.unit[unit_id].type_id == unit_type);
+			lua_pushboolean(L, units.unit[unit_id].isAlive() && units.unit[unit_id].type_id == unit_type);
 		}
 		else
 		{
@@ -427,7 +427,7 @@ namespace TA3D
 			for (uint32 e = 0; e < units.index_list_size && !result; ++e)
 			{
 				const uint32 i = units.idx_list[e];
-				if ((units.unit[i].flags & 1) && units.unit[i].isOwnedBy(player_id))
+				if (units.unit[i].isAlive() && units.unit[i].isOwnedBy(player_id))
 				{
 					const int type = units.unit[i].type_id;
 					if (type >= 0 && type < unit_manager.nb_unit && unit_manager.unit_type[type]->canmove && unit_manager.unit_type[type]->BMcode)

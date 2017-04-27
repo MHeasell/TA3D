@@ -308,19 +308,19 @@ namespace TA3D
 			case MY_ID:
 				return idx;
 			case UNIT_TEAM: // returns team(player ID in TA) of unit given with parameter
-				if (v1 >= 0 && v1 < (int)units.max_unit && (units.unit[v1].flags & 1))
+				if (v1 >= 0 && v1 < (int)units.max_unit && units.unit[v1].isAlive())
 					return units.unit[v1].owner_id;
 				else
 					return -1;
 			case UNIT_BUILD_PERCENT_LEFT: // basically BUILD_PERCENT_LEFT, but comes with a unit parameter
-				if (v1 >= 0 && v1 < (int)units.max_unit && (units.unit[v1].flags & 1))
+				if (v1 >= 0 && v1 < (int)units.max_unit && units.unit[v1].isAlive())
 					return (int)units.unit[v1].build_percent_left + ((units.unit[v1].build_percent_left > (int)units.unit[v1].build_percent_left) ? 1 : 0);
 				else
 					return 0;
 			case UNIT_ALLIED: // is unit given with parameter allied to the unit of the current COB script. 0=not allied, not zero allied
 				return !isEnemy(v1);
 			case UNIT_IS_ON_THIS_COMP: // indicates if the 1st parameter(a unit ID) is local to this computer
-				if (v1 >= 0 && v1 < (int)units.max_unit && (units.unit[v1].flags & 1))
+				if (v1 >= 0 && v1 < (int)units.max_unit && units.unit[v1].isAlive())
 					return !(players.control[units.unit[v1].owner_id] & PLAYER_CONTROL_FLAG_REMOTE);
 				else
 					return 0;
@@ -343,17 +343,17 @@ namespace TA3D
 				compute_model_coord();
 				return (int)((data.data[v1].pos.y + Pos.y) * 2.0f) << 16;
 			case UNIT_XZ:
-				if (v1 >= 0 && v1 < (int)units.max_unit && (units.unit[v1].flags & 1))
+				if (v1 >= 0 && v1 < (int)units.max_unit && units.unit[v1].isAlive())
 					return PACKXZ(units.unit[v1].Pos.x * 2.0f + (float)the_map->map_w, units.unit[v1].Pos.z * 2.0f + (float)the_map->map_h);
 				else
 					return PACKXZ(Pos.x * 2.0f + (float)the_map->map_w, Pos.z * 2.0f + (float)the_map->map_h);
 			case UNIT_Y:
-				if (v1 >= 0 && v1 < (int)units.max_unit && (units.unit[v1].flags & 1))
+				if (v1 >= 0 && v1 < (int)units.max_unit && units.unit[v1].isAlive())
 					return (int)(units.unit[v1].Pos.y * 2.0f) << 16;
 				else
 					return (int)(Pos.y * 2.0f) << 16;
 			case UNIT_HEIGHT:
-				if (v1 >= 0 && v1 < (int)units.max_unit && (units.unit[v1].flags & 1))
+				if (v1 >= 0 && v1 < (int)units.max_unit && units.unit[v1].isAlive())
 					return (int)(units.unit[v1].model->top * 2.0f) << 16;
 				else
 					return (int)(model->top * 2.0f) << 16;

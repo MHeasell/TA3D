@@ -261,7 +261,7 @@ namespace TA3D
 			{
 				Unit* pUnit = &(units.unit[sync_msg.unit]);
 				pUnit->lock();
-				if (!(pUnit->flags & 1) || pUnit->exploding || pUnit->last_synctick[0] >= sync_msg.timestamp)
+				if (!pUnit->isAlive() || pUnit->exploding || pUnit->last_synctick[0] >= sync_msg.timestamp)
 				{
 					pUnit->unlock();
 					continue;
@@ -317,10 +317,10 @@ namespace TA3D
 			switch (event_msg.type)
 			{
 				case EVENT_UNIT_NANOLATHE: // Sync nanolathe effect
-					if (event_msg.opt1 < units.max_unit && (units.unit[event_msg.opt1].flags & 1))
+					if (event_msg.opt1 < units.max_unit && units.unit[event_msg.opt1].isAlive())
 					{
 						units.unit[event_msg.opt1].lock();
-						if (units.unit[event_msg.opt1].flags & 1)
+						if (units.unit[event_msg.opt1].isAlive())
 						{
 							if (event_msg.opt2 & 4) // Stop nanolathing
 								units.unit[event_msg.opt1].nanolathe_target = -1;
@@ -392,7 +392,7 @@ namespace TA3D
 						g_ta3d_network->set_signal(event_msg.opt2);
 					break;
 				case EVENT_UNIT_EXPLODE: // BOOOOM and corpse creation :)
-					if (event_msg.opt1 < units.max_unit && (units.unit[event_msg.opt1].flags & 1))
+					if (event_msg.opt1 < units.max_unit && units.unit[event_msg.opt1].isAlive())
 					{ // If it's false then game is out of sync !!
 						units.unit[event_msg.opt1].lock();
 
@@ -468,7 +468,7 @@ namespace TA3D
 					}
 					break;
 				case EVENT_UNIT_SYNCED:
-					if (event_msg.opt1 < units.max_unit && (units.unit[event_msg.opt1].flags & 1))
+					if (event_msg.opt1 < units.max_unit && units.unit[event_msg.opt1].isAlive())
 					{
 						units.unit[event_msg.opt1].lock();
 
@@ -481,7 +481,7 @@ namespace TA3D
 					}
 					break;
 				case EVENT_UNIT_PARALYZE:
-					if (event_msg.opt1 < units.max_unit && (units.unit[event_msg.opt1].flags & 1))
+					if (event_msg.opt1 < units.max_unit && units.unit[event_msg.opt1].isAlive())
 					{
 						units.unit[event_msg.opt1].lock();
 
@@ -498,7 +498,7 @@ namespace TA3D
 					}
 					break;
 				case EVENT_UNIT_DAMAGE:
-					if (event_msg.opt1 < units.max_unit && (units.unit[event_msg.opt1].flags & 1))
+					if (event_msg.opt1 < units.max_unit && units.unit[event_msg.opt1].isAlive())
 					{
 						units.unit[event_msg.opt1].lock();
 
@@ -548,7 +548,7 @@ namespace TA3D
 							if (weapon_manager.weapon[w_type].dropped || !(weapon_manager.weapon[w_type].rendertype & RENDER_TYPE_LASER))
 							{
 								units.unit[event_msg.opt1].lock();
-								if ((units.unit[event_msg.opt1].flags & 1))
+								if (units.unit[event_msg.opt1].isAlive())
 									weapons.weapon[w_idx].V = weapons.weapon[w_idx].V + units.unit[event_msg.opt1].V;
 								units.unit[event_msg.opt1].unlock();
 							}
@@ -577,7 +577,7 @@ namespace TA3D
 				}
 				break;
 				case EVENT_UNIT_SCRIPT:
-					if (event_msg.opt1 < units.max_unit && (units.unit[event_msg.opt1].flags & 1))
+					if (event_msg.opt1 < units.max_unit && units.unit[event_msg.opt1].isAlive())
 						units.unit[event_msg.opt1].launchScript(event_msg.opt2, event_msg.opt3, (int*)event_msg.str);
 					break;
 				case EVENT_UNIT_DEATH:
@@ -746,7 +746,7 @@ namespace TA3D
 
 	void TA3DNetwork::sendUnitNanolatheEvent(int idx, int target, bool feature, bool reverse)
 	{
-		if (idx < 0 || idx >= (int)units.max_unit || !(units.unit[idx].flags & 1))
+		if (idx < 0 || idx >= (int)units.max_unit || !units.unit[idx].isAlive())
 			return;
 
 		struct event event;
@@ -770,7 +770,7 @@ namespace TA3D
 		if (unit_id >= (int)units.max_unit)
 			return -1;
 		units.unit[unit_id].lock();
-		if (!(units.unit[unit_id].flags & 1))
+		if (!units.unit[unit_id].isAlive())
 		{
 			units.unit[unit_id].unlock();
 			return -1;

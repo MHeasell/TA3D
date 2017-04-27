@@ -251,7 +251,7 @@ namespace TA3D
 			SAVE(units.unit[i].flags);
 			SAVE(units.unit[i].type_id);
 
-			if (units.unit[i].type_id < 0 || !(units.unit[i].flags & 1))
+			if (units.unit[i].type_id < 0 || !units.unit[i].isAlive())
 				continue;
 
 			SAVE(units.unit[i].ID); // Store its ID so we don't lose its "name"
@@ -729,7 +729,7 @@ namespace TA3D
 			LOAD(units.unit[i].type_id);
 			const int player_id = (int)i / MAX_UNIT_PER_PLAYER;
 
-			if (units.unit[i].type_id < 0 || !(units.unit[i].flags & 1))
+			if (units.unit[i].type_id < 0 || !units.unit[i].isAlive())
 				continue;
 			units.idx_list[units.index_list_size++] = uint16(i);
 
@@ -875,7 +875,7 @@ namespace TA3D
 		for (size_t i = 0; i < units.max_unit; i++) // Build the free index list
 		{
 			const int player_id = (int)i / MAX_UNIT_PER_PLAYER;
-			if (units.unit[i].type_id < 0 || !(units.unit[i].flags & 1))
+			if (units.unit[i].type_id < 0 || !units.unit[i].isAlive())
 				units.free_idx[player_id * MAX_UNIT_PER_PLAYER + (units.free_index_size[player_id]++)] = uint16(i);
 		}
 

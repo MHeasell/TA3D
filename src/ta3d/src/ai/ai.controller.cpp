@@ -116,7 +116,7 @@ namespace TA3D
 				continue; // Error
 			units.unlock();
 			units.unit[i].lock();
-			if ((units.unit[i].flags & 1) && units.unit[i].type_id >= 0)
+			if (units.unit[i].isAlive() && units.unit[i].type_id >= 0)
 			{
 				if (units.unit[i].isOwnedBy(playerID))
 				{
@@ -270,13 +270,13 @@ namespace TA3D
 				{
 					suspend(1);
 					units.unit[*i].lock();
-					if ((units.unit[*i].flags & 1) && units.unit[*i].do_nothing_ai())
+					if (units.unit[*i].isAlive() && units.unit[*i].do_nothing_ai())
 					{
 						int target_id = -1;
 						while (!enemy_list[player_target].empty() && target_id == -1)
 						{
 							target_id = enemy_list[player_target].begin()->idx;
-							if (!(units.unit[target_id].flags & 1) || units.unit[target_id].type_id < 0 || units.unit[target_id].type_id >= unit_manager.nb_unit || units.unit[target_id].isNotOwnedBy(player_target))
+							if (!units.unit[target_id].isAlive() || units.unit[target_id].type_id < 0 || units.unit[target_id].type_id >= unit_manager.nb_unit || units.unit[target_id].isNotOwnedBy(player_target))
 							{
 								enemy_table.remove(target_id);
 								target_id = -1;
@@ -306,7 +306,7 @@ namespace TA3D
 		{
 			suspend(1);
 			units.unit[*i].lock();
-			if ((units.unit[*i].flags & 1) && units.unit[*i].do_nothing_ai() && unit_manager.unit_type[units.unit[*i].type_id]->nb_unit > 0)
+			if (units.unit[*i].isAlive() && units.unit[*i].do_nothing_ai() && unit_manager.unit_type[units.unit[*i].type_id]->nb_unit > 0)
 			{
 				const int list_size = unit_manager.unit_type[units.unit[*i].type_id]->nb_unit;
 				const std::vector<short>& BuildList = unit_manager.unit_type[units.unit[*i].type_id]->BuildList;
@@ -342,7 +342,7 @@ namespace TA3D
 			suspend(1);
 
 			units.unit[*i].lock();
-			if ((units.unit[*i].flags & 1) && units.unit[*i].do_nothing_ai() && unit_manager.unit_type[units.unit[*i].type_id]->nb_unit > 0)
+			if (units.unit[*i].isAlive() && units.unit[*i].do_nothing_ai() && unit_manager.unit_type[units.unit[*i].type_id]->nb_unit > 0)
 			{
 				const int list_size = unit_manager.unit_type[units.unit[*i].type_id]->nb_unit;
 				const std::vector<short>& BuildList = unit_manager.unit_type[units.unit[*i].type_id]->BuildList;

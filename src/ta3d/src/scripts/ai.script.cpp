@@ -726,7 +726,7 @@ namespace TA3D
 		for (uint32 i = 0; i < units.max_unit; ++i)
 		{
 			const Unit* const pUnit = &(units.unit[i]);
-			if (!(pUnit->flags & 1))
+			if (!pUnit->isAlive())
 				continue;
 			if (pUnit->cur_px < x0 || pUnit->cur_px >= x1 || pUnit->cur_py < y0 || pUnit->cur_py >= y1)
 				continue;

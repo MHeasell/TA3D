@@ -85,6 +85,15 @@ namespace TA3D
 		bool isNotOwnedBy(const PlayerId playerId) const;
 
 		/**
+		 * Returns true if the unit is alive, otherwise false.
+		 *
+		 * I believe this should always be true in general
+		 * (once a unit is dead it should be removed from play and destructed),
+		 * however this requires further investigation.
+		 */
+		bool isAlive() const;
+
+		/**
 		 * Returns true if the unit with the given ID
 		 * is an enemy of this unit.
 		 * A unit is considered an enemy if it is not owned

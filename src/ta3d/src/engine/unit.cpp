@@ -160,7 +160,7 @@ namespace TA3D
 		{
 			Unit* target_unit = mission->getUnit();
 			target_unit->lock();
-			if (target_unit->flags & 1)
+			if (target_unit->isAlive())
 			{
 				int piece_id = mission->getData() >= 0 ? mission->getData() : (-mission->getData() - 1);
 				if (target_unit->pad1 == piece_id) // tell others we've left
@@ -181,7 +181,7 @@ namespace TA3D
 			return;
 		pMutex.lock();
 		compute_coord = false;
-		if (type_id < 0 || !(flags & 1)) // The unit is dead
+		if (type_id < 0 || !isAlive()) // The unit is dead
 		{
 			pMutex.unlock();
 			return;
@@ -922,7 +922,7 @@ namespace TA3D
 	{
 		MutexLocker locker(pMutex);
 
-		if (!(flags & 1) || type_id == -1 || ID != render.UID || !visible)
+		if (!isAlive() || type_id == -1 || ID != render.UID || !visible)
 			return;
 
 		UnitType* const pType = unit_manager.unit_type[type_id];
@@ -1040,7 +1040,7 @@ namespace TA3D
 						{
 							pMutex.unlock();
 							unit_target->lock();
-							if ((unit_target->flags & 1) && unit_target->model != NULL)
+							if (unit_target->isAlive() && unit_target->model != NULL)
 							{
 								size = unit_target->model->size2;
 								center = &(unit_target->model->center);
@@ -1104,7 +1104,7 @@ namespace TA3D
 							unit_target = &(units.unit[nanolathe_target]);
 							pMutex.unlock();
 							unit_target->lock();
-							if ((unit_target->flags & 1) && unit_target->model)
+							if (unit_target->isAlive() && unit_target->model)
 							{
 								size = unit_target->model->size2;
 								center = &(unit_target->model->center);
@@ -1237,7 +1237,7 @@ namespace TA3D
 	void Unit::draw_shadow(const Vector3D& Dir)
 	{
 		pMutex.lock();
-		if (!(flags & 1) || ID != render.UID)
+		if (!isAlive() || ID != render.UID)
 		{
 			pMutex.unlock();
 			return;
@@ -1309,7 +1309,7 @@ namespace TA3D
 	void Unit::drawShadowBasic(const Vector3D& Dir)
 	{
 		pMutex.lock();
-		if (!(flags & 1) || ID != render.UID)
+		if (!isAlive() || ID != render.UID)
 		{
 			pMutex.unlock();
 			return;
@@ -2195,7 +2195,7 @@ namespace TA3D
 							{
 								const int cur_idx = the_map->map_data(x, y).unit_idx;
 
-								if (cur_idx >= 0 && cur_idx < (int)units.max_unit && (units.unit[cur_idx].flags & 1) && units.unit[cur_idx].isNotOwnedBy(owner_id) && distance >= (Pos - units.unit[cur_idx].Pos).sq())
+								if (cur_idx >= 0 && cur_idx < (int)units.max_unit && units.unit[cur_idx].isAlive() && units.unit[cur_idx].isNotOwnedBy(owner_id) && distance >= (Pos - units.unit[cur_idx].Pos).sq())
 								{
 									found = true;
 									break;
@@ -2347,7 +2347,7 @@ namespace TA3D
 						break;
 					}
 
-					if (weapon[i].target == NULL || ((weapon[i].state & WEAPON_FLAG_WEAPON) == WEAPON_FLAG_WEAPON && ((Weapon*)(weapon[i].target))->weapon_id != -1) || ((weapon[i].state & WEAPON_FLAG_WEAPON) != WEAPON_FLAG_WEAPON && (((Unit*)(weapon[i].target))->flags & 1)))
+					if (weapon[i].target == NULL || ((weapon[i].state & WEAPON_FLAG_WEAPON) == WEAPON_FLAG_WEAPON && ((Weapon*)(weapon[i].target))->weapon_id != -1) || ((weapon[i].state & WEAPON_FLAG_WEAPON) != WEAPON_FLAG_WEAPON && ((Unit*)(weapon[i].target))->isAlive()))
 					{
 						if ((weapon[i].state & WEAPON_FLAG_WEAPON) != WEAPON_FLAG_WEAPON && weapon[i].target != NULL && ((Unit*)(weapon[i].target))->cloaked && ((const Unit*)(weapon[i].target))->isNotOwnedBy(owner_id) && !((const Unit*)(weapon[i].target))->is_on_radar(byte(1 << owner_id)))
 						{
@@ -2435,7 +2435,7 @@ namespace TA3D
 								if (target_unit != NULL)
 								{
 									target_unit->lock();
-									if (target_unit->flags & 1)
+									if (target_unit->isAlive())
 									{
 										pos_of_target_unit = target_unit->Pos;
 										pModel = target_unit->model;
@@ -2444,7 +2444,7 @@ namespace TA3D
 										if (weapon[i].data >= 0)
 										{
 											target_unit->compute_model_coord();
-											if (target_unit->flags & 1)
+											if (target_unit->isAlive())
 											{
 												if (pModel && (int)target_unit->data.data.size() < weapon[i].data && pModel->mesh->random_pos(&(target_unit->data), weapon[i].data, &target_pos_on_unit))
 													target_pos_on_unit = target_unit->data.data[weapon[i].data].tpos;
@@ -2613,7 +2613,7 @@ namespace TA3D
 					}
 					break;
 				case WEAPON_FLAG_SHOOT: // Tire sur une unité / fire!
-					if (weapon[i].target == NULL || ((weapon[i].state & WEAPON_FLAG_WEAPON) == WEAPON_FLAG_WEAPON && ((Weapon*)(weapon[i].target))->weapon_id != -1) || ((weapon[i].state & WEAPON_FLAG_WEAPON) != WEAPON_FLAG_WEAPON && (((Unit*)(weapon[i].target))->flags & 1)))
+					if (weapon[i].target == NULL || ((weapon[i].state & WEAPON_FLAG_WEAPON) == WEAPON_FLAG_WEAPON && ((Weapon*)(weapon[i].target))->weapon_id != -1) || ((weapon[i].state & WEAPON_FLAG_WEAPON) != WEAPON_FLAG_WEAPON && ((Unit*)(weapon[i].target))->isAlive()))
 					{
 						if (weapon[i].burst > 0 && weapon[i].delay < pType->weapon[i]->burstrate)
 							break;
@@ -2736,7 +2736,7 @@ namespace TA3D
 						next_mission();
 					break;
 				case MISSION_WAIT_ATTACKED: // Wait until a specified unit is attacked (campaign)
-					if (mission->getData() < 0 || mission->getData() >= (int)units.max_unit || !(units.unit[mission->getData()].flags & 1))
+					if (mission->getData() < 0 || mission->getData() >= (int)units.max_unit || !units.unit[mission->getData()].isAlive())
 						next_mission();
 					else if (units.unit[mission->getData()].attacked)
 						next_mission();
@@ -2747,7 +2747,7 @@ namespace TA3D
 						next_mission();
 						break;
 					}
-					if (mission->getTarget().isUnit() && mission->getUnit() && (mission->getUnit()->flags & 1))
+					if (mission->getTarget().isUnit() && mission->getUnit() && mission->getUnit()->isAlive())
 					{
 						Unit* target_unit = mission->getUnit();
 
@@ -2861,7 +2861,7 @@ namespace TA3D
 									if (x >= 0 && x < the_map->bloc_w_db - 1)
 									{
 										const int cur_idx = the_map->map_data(x, y).unit_idx;
-										if (cur_idx >= 0 && cur_idx < (int)units.max_unit && (units.unit[cur_idx].flags & 1) && units.unit[cur_idx].isNotOwnedBy(owner_id) && unit_manager.unit_type[units.unit[cur_idx].type_id]->ShootMe) // This unit is on the sight_map since dx = sightdistance !!
+										if (cur_idx >= 0 && cur_idx < (int)units.max_unit && units.unit[cur_idx].isAlive() && units.unit[cur_idx].isNotOwnedBy(owner_id) && unit_manager.unit_type[units.unit[cur_idx].type_id]->ShootMe) // This unit is on the sight_map since dx = sightdistance !!
 										{
 											enemy_idx = cur_idx;
 											break;
@@ -2952,7 +2952,7 @@ namespace TA3D
 					if (mission->getUnit())
 					{
 						Unit* target_unit = mission->getUnit();
-						if (!(target_unit->flags & 1))
+						if (!target_unit->isAlive())
 						{
 							next_mission();
 							break;
@@ -3027,7 +3027,7 @@ namespace TA3D
 					if (mission->getUnit()) // Récupère une unité / It's a unit
 					{
 						Unit* target_unit = mission->getUnit();
-						if (target_unit->flags & 1)
+						if (target_unit->isAlive())
 						{
 							if (mission->mission() == MISSION_CAPTURE)
 							{
@@ -3259,7 +3259,7 @@ namespace TA3D
 						next_mission();
 						break;
 					}
-					if (mission->getUnit() && (mission->getUnit()->flags & 1) && mission->getUnit()->isOwnedBy(owner_id))
+					if (mission->getUnit() && mission->getUnit()->isAlive() && mission->getUnit()->isOwnedBy(owner_id))
 					{ // On ne défend pas n'importe quoi
 						if (pType->Builder)
 						{
@@ -3360,7 +3360,7 @@ namespace TA3D
 							const UnitType* const pFriendType = unit_manager.unit_type[friend_type_id];
 							if (pFriendType->BMcode && pUnit->build_percent_left > 0.0f) // Don't help factories
 								continue;
-							if ((pUnit->flags & 1) && pUnit->hp < pFriendType->MaxDamage)
+							if (pUnit->isAlive() && pUnit->hp < pFriendType->MaxDamage)
 							{
 								add_mission(MISSION_REPAIR, &(pUnit->Pos), true, 0, (void*)pUnit);
 								done = true;
@@ -3461,7 +3461,7 @@ namespace TA3D
 					{
 						Unit* target_unit = mission->getUnit();
 						Weapon* target_weapon = mission->getWeapon();
-						if ((target_unit != NULL && (target_unit->flags & 1)) || (target_weapon != NULL && target_weapon->weapon_id != -1) || mission->getTarget().isStatic())
+						if ((target_unit != NULL && target_unit->isAlive()) || (target_weapon != NULL && target_weapon->weapon_id != -1) || mission->getTarget().isStatic())
 						{
 							if (target_unit) // Check if we can target the unit
 							{
@@ -3654,7 +3654,7 @@ namespace TA3D
 					}
 					{
 						Unit* target_unit = mission->getUnit();
-						if (target_unit != NULL && (target_unit->flags & 1) && Math::AlmostZero(target_unit->build_percent_left))
+						if (target_unit != NULL && target_unit->isAlive() && Math::AlmostZero(target_unit->build_percent_left))
 						{
 							if (target_unit->hp >= unit_manager.unit_type[target_unit->type_id]->MaxDamage || !pType->BMcode)
 							{
@@ -4510,7 +4510,7 @@ namespace TA3D
 	bool Unit::hit(const Vector3D& P, const Vector3D& Dir, Vector3D* hit_vec, const float length)
 	{
 		MutexLocker mLock(pMutex);
-		if (!(flags & 1))
+		if (!isAlive())
 			return false;
 		if (model)
 		{
@@ -4537,7 +4537,7 @@ namespace TA3D
 	bool Unit::hit_fast(const Vector3D& P, const Vector3D& Dir, Vector3D* hit_vec, const float length)
 	{
 		MutexLocker mLock(pMutex);
-		if (!(flags & 1))
+		if (!isAlive())
 			return false;
 		if (model)
 		{
@@ -4568,7 +4568,7 @@ namespace TA3D
 
 		pMutex.lock();
 
-		if (!(flags & 1))
+		if (!isAlive())
 		{
 			pMutex.unlock();
 			return;
@@ -4930,7 +4930,7 @@ namespace TA3D
 	void Unit::draw_on_map()
 	{
 		const int type = type_id;
-		if (type == -1 || !(flags & 1))
+		if (type == -1 || !isAlive())
 			return;
 
 		if (drawn)
@@ -5028,7 +5028,7 @@ namespace TA3D
 
 		const int type = type_id;
 
-		if (type == -1 || !(flags & 1))
+		if (type == -1 || !isAlive())
 			return;
 
 		const UnitType* const pType = unit_manager.unit_type[type];
@@ -5206,5 +5206,10 @@ namespace TA3D
 	bool Unit::isNotOwnedBy(const PlayerId playerId) const
 	{
 		return playerId != owner_id;
+	}
+
+	bool Unit::isAlive() const
+	{
+		return (flags & 1) != 0;
 	}
 } // namespace TA3D

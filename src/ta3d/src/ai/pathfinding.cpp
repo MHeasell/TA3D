@@ -205,7 +205,7 @@ namespace TA3D
 
 			// Here we are free to compute this path
 			const uint32 start_timer = msec_timer;
-			if (cur.idx >= 0 && units.unit[cur.idx].ID == cur.UID && (units.unit[cur.idx].flags & 1))
+			if (cur.idx >= 0 && units.unit[cur.idx].ID == cur.UID && units.unit[cur.idx].isAlive())
 			{
 				AI::Path path;
 #ifdef DEBUG_PATH
@@ -220,7 +220,7 @@ namespace TA3D
 
 				Unit* pUnit = &(units.unit[cur.idx]);
 				pUnit->lock();
-				if (pUnit->ID == cur.UID && (pUnit->flags & 1) && !pUnit->mission.empty() && pUnit->requesting_pathfinder && (pUnit->mission->getFlags() & MISSION_FLAG_MOVE))
+				if (pUnit->ID == cur.UID && pUnit->isAlive() && !pUnit->mission.empty() && pUnit->requesting_pathfinder && (pUnit->mission->getFlags() & MISSION_FLAG_MOVE))
 				{
 					pUnit->mission->Path().replaceWith(path);
 					pUnit->requesting_pathfinder = false;

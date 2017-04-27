@@ -124,7 +124,7 @@ namespace TA3D
 						target_pos = weapons.weapon[target].Pos;
 						target_V = weapons.weapon[target].V;
 					}
-					else if (!weapon_def->interceptor && (uint32)target < units.max_unit && (units.unit[target].flags & 1)) // Met à jour les coordonnées de la cible
+					else if (!weapon_def->interceptor && (uint32)target < units.max_unit && units.unit[target].isAlive()) // Met à jour les coordonnées de la cible
 					{
 						target_pos = units.unit[target].Pos;
 						target_V = units.unit[target].V;
@@ -242,7 +242,7 @@ namespace TA3D
 				const int t_idx = it->first->idx;
 				if (t_idx == shooter_idx)
 					continue;
-				if ((it->first->isNotOwnedBy(owner) || target == t_idx) && (it->first->flags & 1)) // No Friendly Fire
+				if ((it->first->isNotOwnedBy(owner) || target == t_idx) && it->first->isAlive()) // No Friendly Fire
 				{
 					Vector3D t_vec;
 					u_hit = const_cast<Unit*>(it->first)->hit_fast(OPos, Dir, &t_vec, length);
@@ -286,7 +286,7 @@ namespace TA3D
 			{
 				Unit* const pUnit = &(units.unit[hit_idx]);
 				pUnit->lock();
-				if ((pUnit->flags & 1) && pUnit->local)
+				if (pUnit->isAlive() && pUnit->local)
 				{
 					const bool ok = pUnit->hp > 0.0f; // Juste pour identifier l'assassin...
 					damage = float(weapon_def->get_damage_for_unit(unit_manager.unit_type[pUnit->type_id]->Unitname)) * pUnit->damage_modifier();
@@ -393,7 +393,7 @@ namespace TA3D
 				if (pUnit->idx == shooter_idx)
 					continue;
 				pUnit->lock();
-				if ((pUnit->flags & 1) && pUnit->local && ((Vector3D)(pUnit->Pos - Pos)).sq() <= d)
+				if (pUnit->isAlive() && pUnit->local && ((Vector3D)(pUnit->Pos - Pos)).sq() <= d)
 				{
 					const bool ok = pUnit->hp > 0.0f;
 					damage = float(weapon_def->get_damage_for_unit(unit_manager.unit_type[pUnit->type_id]->Unitname));
@@ -515,7 +515,7 @@ namespace TA3D
 		if (hit && weapon_def->interceptor)
 		{
 			units.unit[shooter_idx].lock();
-			if (units.unit[shooter_idx].flags & 1)
+			if (units.unit[shooter_idx].isAlive())
 			{
 				int e = 0;
 				for (int i = 0; i + e < units.unit[shooter_idx].mem_size; ++i)

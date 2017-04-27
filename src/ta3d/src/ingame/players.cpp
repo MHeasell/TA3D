@@ -238,7 +238,7 @@ namespace TA3D
 				units.unlock();
 
 				units.unit[i].lock();
-				if (!(units.unit[i].flags & 1))
+				if (!units.unit[i].isAlive())
 				{
 					units.unit[i].unlock();
 					units.lock();

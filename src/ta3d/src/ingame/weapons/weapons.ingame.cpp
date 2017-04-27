@@ -121,7 +121,7 @@ namespace TA3D
 		for (uint32 i = 0U; i < units.max_unit; ++i) // Compte les stocks de ressources et les productions
 		{
 			const Unit* const pUnit = &(units.unit[i]);
-			if (!(pUnit->flags & 1))
+			if (!pUnit->isAlive())
 				continue;
 			const int type = pUnit->type_id;
 			const UnitType* const pUnitType = (type >= 0) ? unit_manager.unit_type[type] : NULL;
