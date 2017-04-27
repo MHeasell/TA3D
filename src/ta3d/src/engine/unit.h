@@ -214,7 +214,9 @@ namespace TA3D
 		Vector3D V;						 // Vitesse de l'unité
 		Vector3D Angle;					 // Orientation dans l'espace
 		Vector3D V_Angle;				 // Variation de l'orientation dans l'espace
-		bool sel;						 // Unité sélectionnée?
+
+		//! Indicates whether the unit is currently selected
+		bool isSelected;
 		AnimationData data;				 // Données pour l'animation de l'unité par le script
 		volatile bool drawing;
 		bool movingAnimation;

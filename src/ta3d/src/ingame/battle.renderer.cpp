@@ -258,7 +258,7 @@ namespace TA3D
 			for (unsigned int e = 0; e < units.index_list_size; ++e)
 			{
 				const int i = units.idx_list[e];
-				if (units.unit[i].isAlive() && units.unit[i].isOwnedBy(players.local_human_id) && (units.unit[i].sel || i == units.last_on))
+				if (units.unit[i].isAlive() && units.unit[i].isOwnedBy(players.local_human_id) && (units.unit[i].isSelected || i == units.last_on))
 				{
 					const int type_id = units.unit[i].type_id;
 					if (type_id >= 0)
@@ -279,7 +279,7 @@ namespace TA3D
 						if (pType->mincloakdistance && units.unit[i].cloaked)
 							the_map->drawCircleOnMap(x, z, (float)pType->mincloakdistance, makeacol(0xFF, 0xFF, 0xFF, 0xFF), 1.0f);
 					}
-					if (units.unit[i].sel)
+					if (units.unit[i].isSelected)
 						units.unit[i].show_orders(); // Dessine les ordres reçus par l'unité / Draw given orders
 				}
 			}
@@ -292,7 +292,7 @@ namespace TA3D
 					const int type_id = units.unit[i].type_id;
 					if (type_id < 0)
 						continue;
-					if (units.unit[i].isAlive() && units.unit[i].isOwnedBy(players.local_human_id) && !units.unit[i].sel && unit_manager.unit_type[type_id]->Builder && unit_manager.unit_type[type_id]->BMcode)
+					if (units.unit[i].isAlive() && units.unit[i].isOwnedBy(players.local_human_id) && !units.unit[i].isSelected && unit_manager.unit_type[type_id]->Builder && unit_manager.unit_type[type_id]->BMcode)
 					{
 						units.unit[i].show_orders(true); // Dessine les ordres reçus par l'unité / Draw given orders
 					}
@@ -308,7 +308,7 @@ namespace TA3D
 			for (unsigned int e = 0; e < units.index_list_size; ++e)
 			{
 				const int i = units.idx_list[e];
-				if (units.unit[i].isAlive() && units.unit[i].isOwnedBy(players.local_human_id) && (units.unit[i].sel || i == units.last_on))
+				if (units.unit[i].isAlive() && units.unit[i].isOwnedBy(players.local_human_id) && (units.unit[i].isSelected || i == units.last_on))
 				{
 					const int type_id = units.unit[i].type_id;
 					if (type_id >= 0)
