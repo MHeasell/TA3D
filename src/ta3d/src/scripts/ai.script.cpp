@@ -152,7 +152,7 @@ namespace TA3D
 		const int unit_type_id = lua_isstring(L, 5) ? unit_manager.get_unit_index(lua_tostring(L, 5)) : (int)lua_tointeger(L, 5);
 		lua_pop(L, 5);
 
-		if (unit_id >= 0 && unit_id < (int)units.max_unit && units.unit[unit_id].owner_id == lua_currentPlayerID(L) && unit_type_id >= 0 && unit_manager.unit_type[unit_type_id]->Builder)
+		if (unit_id >= 0 && unit_id < (int)units.max_unit && units.unit[unit_id].isOwnedBy(lua_currentPlayerID(L)) && unit_type_id >= 0 && unit_manager.unit_type[unit_type_id]->Builder)
 		{
 			Vector3D target(pos_x, 0.0f, pos_z);
 			const bool ok = AiController::findBuildPlace(target, unit_type_id, lua_currentPlayerID(L), 5, (int)radius);
@@ -180,7 +180,7 @@ namespace TA3D
 		const int unit_type_id = lua_isstring(L, 4) ? unit_manager.get_unit_index(lua_tostring(L, 4)) : (int)lua_tointeger(L, 4);
 		lua_pop(L, 4);
 
-		if (unit_id >= 0 && unit_id < (int)units.max_unit && units.unit[unit_id].owner_id == lua_currentPlayerID(L) && unit_type_id >= 0 && unit_manager.unit_type[unit_type_id]->Builder)
+		if (unit_id >= 0 && unit_id < (int)units.max_unit && units.unit[unit_id].isOwnedBy(lua_currentPlayerID(L)) && unit_type_id >= 0 && unit_manager.unit_type[unit_type_id]->Builder)
 		{
 			Vector3D target;
 			target.x = float(((int)(pos_x) + the_map->map_w_d) >> 3);
@@ -205,7 +205,7 @@ namespace TA3D
 		const float pos_z = (float)lua_tonumber(L, 3);
 		lua_pop(L, 3);
 
-		if (unit_id >= 0 && unit_id < (int)units.max_unit && units.unit[unit_id].owner_id == lua_currentPlayerID(L))
+		if (unit_id >= 0 && unit_id < (int)units.max_unit && units.unit[unit_id].isOwnedBy(lua_currentPlayerID(L)))
 		{
 			Vector3D target;
 			target.x = pos_x;
@@ -227,7 +227,7 @@ namespace TA3D
 		const int target_id = (int)lua_tointeger(L, 2);
 		lua_pop(L, 2);
 
-		if (unit_id >= 0 && unit_id < (int)units.max_unit && units.unit[unit_id].owner_id == lua_currentPlayerID(L) && target_id >= 0 && target_id < (int)units.max_unit)
+		if (unit_id >= 0 && unit_id < (int)units.max_unit && units.unit[unit_id].isOwnedBy(lua_currentPlayerID(L)) && target_id >= 0 && target_id < (int)units.max_unit)
 		{
 			Vector3D target(units.unit[target_id].Pos);
 
@@ -247,7 +247,7 @@ namespace TA3D
 		const float pos_z = (float)lua_tonumber(L, 3);
 		lua_pop(L, 3);
 
-		if (unit_id >= 0 && unit_id < (int)units.max_unit && units.unit[unit_id].owner_id == lua_currentPlayerID(L))
+		if (unit_id >= 0 && unit_id < (int)units.max_unit && units.unit[unit_id].isOwnedBy(lua_currentPlayerID(L)))
 		{
 			Vector3D target;
 			target.x = pos_x;
@@ -269,7 +269,7 @@ namespace TA3D
 		const float time = (float)lua_tonumber(L, 2);
 		lua_pop(L, 2);
 
-		if (unit_id >= 0 && unit_id < (int)units.max_unit && units.unit[unit_id].owner_id == lua_currentPlayerID(L))
+		if (unit_id >= 0 && unit_id < (int)units.max_unit && units.unit[unit_id].isOwnedBy(lua_currentPlayerID(L)))
 		{
 			units.unit[unit_id].lock();
 			if (units.unit[unit_id].flags)
@@ -286,7 +286,7 @@ namespace TA3D
 		const int target_id = (int)lua_tointeger(L, 2);
 		lua_pop(L, 2);
 
-		if (unit_id >= 0 && unit_id < (int)units.max_unit && units.unit[unit_id].owner_id == lua_currentPlayerID(L) && target_id >= 0 && target_id < (int)units.max_unit)
+		if (unit_id >= 0 && unit_id < (int)units.max_unit && units.unit[unit_id].isOwnedBy(lua_currentPlayerID(L)) && target_id >= 0 && target_id < (int)units.max_unit)
 		{
 			units.unit[unit_id].lock();
 			if (units.unit[unit_id].flags)
@@ -304,7 +304,7 @@ namespace TA3D
 		const int fire_order = (int)lua_tointeger(L, 3);
 		lua_pop(L, 3);
 
-		if (unit_id >= 0 && unit_id < (int)units.max_unit && units.unit[unit_id].owner_id == lua_currentPlayerID(L))
+		if (unit_id >= 0 && unit_id < (int)units.max_unit && units.unit[unit_id].isOwnedBy(lua_currentPlayerID(L)))
 		{
 			units.unit[unit_id].lock();
 			if (units.unit[unit_id].flags)
@@ -323,7 +323,7 @@ namespace TA3D
 		const int unit_id = (int)lua_tointeger(L, 1);
 		lua_pop(L, 1);
 
-		if (unit_id >= 0 && unit_id < (int)units.max_unit && units.unit[unit_id].owner_id == lua_currentPlayerID(L))
+		if (unit_id >= 0 && unit_id < (int)units.max_unit && units.unit[unit_id].isOwnedBy(lua_currentPlayerID(L)))
 		{
 			units.unit[unit_id].lock();
 			if (units.unit[unit_id].flags)
@@ -414,7 +414,7 @@ namespace TA3D
 		const int target_idx = (int)lua_tointeger(L, 2);
 		lua_pop(L, 2);
 
-		if (attacker_idx >= 0 && attacker_idx < (int)units.max_unit && units.unit[attacker_idx].owner_id == lua_currentPlayerID(L) && units.unit[attacker_idx].flags) // make sure we have an attacker and a target
+		if (attacker_idx >= 0 && attacker_idx < (int)units.max_unit && units.unit[attacker_idx].isOwnedBy(lua_currentPlayerID(L)) && units.unit[attacker_idx].flags) // make sure we have an attacker and a target
 			if (target_idx >= 0 && target_idx < (int)units.max_unit && units.unit[target_idx].flags)
 			{
 				units.unit[attacker_idx].lock();
@@ -591,7 +591,7 @@ namespace TA3D
 
 			Unit* pUnit = &(units.unit[e]);
 			pUnit->lock();
-			if (pUnit->owner_id == player_id || player_id == -1)
+			if (pUnit->isOwnedBy(player_id) || player_id == -1)
 			{
 				lua_pushinteger(L, e);
 				ai_get_unit_data(L);
@@ -731,7 +731,7 @@ namespace TA3D
 			if (pUnit->cur_px < x0 || pUnit->cur_px >= x1 || pUnit->cur_py < y0 || pUnit->cur_py >= y1)
 				continue;
 			const int type_id = pUnit->type_id;
-			if ((pUnit->owner_id == player_id || player_id == -1) && type_id >= 0 && (unit_type_id == -1 || type_id == unit_type_id || (unit_type_id == -2 && unit_manager.unit_type[type_id]->canattack) || (unit_type_id == -3 && unit_manager.unit_type[type_id]->Builder)) && !seen.contains(pUnit->idx))
+			if ((pUnit->isOwnedBy(player_id) || player_id == -1) && type_id >= 0 && (unit_type_id == -1 || type_id == unit_type_id || (unit_type_id == -2 && unit_manager.unit_type[type_id]->canattack) || (unit_type_id == -3 && unit_manager.unit_type[type_id]->Builder)) && !seen.contains(pUnit->idx))
 			{
 				seen.insert(pUnit->idx);
 				lua_pushinteger(L, pUnit->idx);

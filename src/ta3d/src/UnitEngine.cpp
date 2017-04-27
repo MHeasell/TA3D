@@ -93,7 +93,7 @@ namespace TA3D
 		for (uint32 e = 0U; e < index_list_size; ++e)
 		{
 			uint32 i = idx_list[e];
-			if ((unit[i].flags & 1) && unit[i].owner_id == player_id && unit[i].sel && Math::AlmostZero(unit[i].build_percent_left) && unit_manager.unit_type[unit[i].type_id]->canmove)
+			if ((unit[i].flags & 1) && unit[i].isOwnedBy(player_id) && unit[i].sel && Math::AlmostZero(unit[i].build_percent_left) && unit_manager.unit_type[unit[i].type_id]->canmove)
 			{
 				if (set)
 					unit[i].set_mission(MISSION_MOVE, &target, false, 0, true, NULL, flags);
@@ -112,7 +112,7 @@ namespace TA3D
 		for (uint16 e = 0; e < index_list_size; ++e)
 		{
 			uint16 i = idx_list[e];
-			if ((unit[i].flags & 1) && unit[i].owner_id == player_id && unit[i].sel && Math::AlmostZero(unit[i].build_percent_left) && unit_manager.unit_type[unit[i].type_id]->canpatrol)
+			if ((unit[i].flags & 1) && unit[i].isOwnedBy(player_id) && unit[i].sel && Math::AlmostZero(unit[i].build_percent_left) && unit_manager.unit_type[unit[i].type_id]->canpatrol)
 			{
 				if (set)
 					unit[i].set_mission(MISSION_PATROL, &target, false, 0, true, NULL);
@@ -131,7 +131,7 @@ namespace TA3D
 		for (uint16 e = 0; e < index_list_size; ++e)
 		{
 			uint16 i = idx_list[e];
-			if ((unit[i].flags & 1) && unit[i].owner_id == player_id && unit[i].sel && Math::AlmostZero(unit[i].build_percent_left) && unit_manager.unit_type[unit[i].type_id]->canguard)
+			if ((unit[i].flags & 1) && unit[i].isOwnedBy(player_id) && unit[i].sel && Math::AlmostZero(unit[i].build_percent_left) && unit_manager.unit_type[unit[i].type_id]->canguard)
 			{
 				if (set)
 					unit[i].set_mission(MISSION_GUARD, &unit[target].Pos, false, 0, true, &(unit[target]));
@@ -150,7 +150,7 @@ namespace TA3D
 		for (uint32 e = 0; e < index_list_size; ++e)
 		{
 			const uint32 i = idx_list[e];
-			if ((unit[i].flags & 1) && unit[i].owner_id == player_id && unit[i].sel && Math::AlmostZero(unit[i].build_percent_left) && unit_manager.unit_type[unit[i].type_id]->canload && unit_manager.unit_type[unit[i].type_id]->BMcode && unit[i].nb_attached > 0)
+			if ((unit[i].flags & 1) && unit[i].isOwnedBy(player_id) && unit[i].sel && Math::AlmostZero(unit[i].build_percent_left) && unit_manager.unit_type[unit[i].type_id]->canload && unit_manager.unit_type[unit[i].type_id]->BMcode && unit[i].nb_attached > 0)
 			{
 				if (set)
 				{
@@ -187,7 +187,7 @@ namespace TA3D
 		for (uint32 e = 0; e < index_list_size; ++e)
 		{
 			const uint32 i = idx_list[e];
-			if ((unit[i].flags & 1) && unit[i].owner_id == player_id && unit[i].sel && Math::AlmostZero(unit[i].build_percent_left) && unit_manager.unit_type[unit[i].type_id]->canload && unit_manager.unit_type[unit[i].type_id]->BMcode)
+			if ((unit[i].flags & 1) && unit[i].isOwnedBy(player_id) && unit[i].sel && Math::AlmostZero(unit[i].build_percent_left) && unit_manager.unit_type[unit[i].type_id]->canload && unit_manager.unit_type[unit[i].type_id]->BMcode)
 			{
 				if (set)
 				{
@@ -220,7 +220,7 @@ namespace TA3D
 		for (uint32 e = 0; e < index_list_size; ++e)
 		{
 			const uint32 i = idx_list[e];
-			if ((unit[i].flags & 1) && unit[i].owner_id == player_id && unit[i].sel && Math::AlmostZero(unit[i].build_percent_left) && unit_manager.unit_type[unit[i].type_id]->Builder)
+			if ((unit[i].flags & 1) && unit[i].isOwnedBy(player_id) && unit[i].sel && Math::AlmostZero(unit[i].build_percent_left) && unit_manager.unit_type[unit[i].type_id]->Builder)
 			{
 				if (set)
 					unit[i].set_mission(MISSION_BUILD, &t, false, unit_type_id);
@@ -287,7 +287,7 @@ namespace TA3D
 			unit[*e].lock();
 
 			// Select only units completely built and visible
-			if (unit[*e].owner_id == players.local_human_id && (unit[*e].flags & 1) && Math::AlmostZero(unit[*e].build_percent_left) && unit[*e].visible)
+			if (unit[*e].isOwnedBy(players.local_human_id) && (unit[*e].flags & 1) && Math::AlmostZero(unit[*e].build_percent_left) && unit[*e].visible)
 			{
 				if (TA3D_SHIFT_PRESSED && unit[*e].sel)
 				{
@@ -717,7 +717,7 @@ namespace TA3D
 		{
 			index = last_on;
 			unit[index].lock();
-			if (unit[index].owner_id == players.local_human_id)
+			if (unit[index].isOwnedBy(players.local_human_id))
 			{
 				target = !unit[index].mission.empty() ? unit[index].mission->getTarget().getUnit() : NULL;
 				if (target && target->flags == 0)
@@ -754,7 +754,7 @@ namespace TA3D
 					target->unlock();
 					unit[index].lock();
 				}
-				else if (unit[index].planned_weapons > 0.0f && unit[index].owner_id == players.local_human_id)
+				else if (unit[index].planned_weapons > 0.0f && unit[index].isOwnedBy(players.local_human_id))
 				{
 					glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 					gfx->print_center(gfx->normal_font,
@@ -766,7 +766,7 @@ namespace TA3D
 				glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_COLOR);
 				glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 
-				if (unit[index].owner_id == players.local_human_id)
+				if (unit[index].isOwnedBy(players.local_human_id))
 				{
 					gfx->set_color(ta3dSideData.side_int_data[players.side_view].metal_color);
 					gfx->print_center(gfx->small_font,
@@ -798,7 +798,7 @@ namespace TA3D
 				glBegin(GL_QUADS);
 				glColor4ub(0xFF, 0, 0, 0xFF);
 
-				if (unit[index].owner_id == players.local_human_id || !unit_manager.unit_type[unit[index].type_id]->HideDamage)
+				if (unit[index].isOwnedBy(players.local_human_id) || !unit_manager.unit_type[unit[index].type_id]->HideDamage)
 				{
 					glVertex2i(ta3dSideData.side_int_data[players.side_view].DamageBar.x1, ta3dSideData.side_int_data[players.side_view].DamageBar.y1);
 					glVertex2i(ta3dSideData.side_int_data[players.side_view].DamageBar.x2, ta3dSideData.side_int_data[players.side_view].DamageBar.y1);
@@ -806,7 +806,7 @@ namespace TA3D
 					glVertex2i(ta3dSideData.side_int_data[players.side_view].DamageBar.x1, ta3dSideData.side_int_data[players.side_view].DamageBar.y2);
 				}
 
-				if (unit[index].owner_id == players.local_human_id)
+				if (unit[index].isOwnedBy(players.local_human_id))
 				{
 					if (target && (unit[index].mission->getFlags() & MISSION_FLAG_TARGET_WEAPON) != MISSION_FLAG_TARGET_WEAPON)
 					{
@@ -833,7 +833,7 @@ namespace TA3D
 
 				glColor3ub(0, 0xFF, 0);
 
-				if (unit[index].hp > 0 && (unit[index].owner_id == players.local_human_id || !unit_manager.unit_type[unit[index].type_id]->HideDamage))
+				if (unit[index].hp > 0 && (unit[index].isOwnedBy(players.local_human_id) || !unit_manager.unit_type[unit[index].type_id]->HideDamage))
 				{
 					const UnitType* const pType = unit_manager.unit_type[unit[index].type_id];
 					const InterfaceData& side_data = ta3dSideData.side_int_data[players.side_view];
@@ -847,7 +847,7 @@ namespace TA3D
 						(float)side_data.DamageBar.y2);
 				}
 
-				if (unit[index].owner_id == players.local_human_id)
+				if (unit[index].isOwnedBy(players.local_human_id))
 				{
 					if (target && (unit[index].mission->getFlags() & MISSION_FLAG_TARGET_WEAPON) != MISSION_FLAG_TARGET_WEAPON)
 					{
@@ -918,7 +918,7 @@ namespace TA3D
 			const Unit* const pUnit = &(unit[i]);
 			if (!(pUnit->flags & 1))
 				continue;
-			const unsigned int owner = pUnit->owner_id;
+			const int owner = pUnit->owner_id;
 			const int type = pUnit->type_id;
 			const UnitType* const pUnitType = (type >= 0) ? unit_manager.unit_type[type] : NULL;
 			if (type >= 0 && owner < 10)
@@ -1059,7 +1059,7 @@ namespace TA3D
 				continue;
 			}
 
-			if (unit[i].owner_id == players.local_human_id)
+			if (unit[i].isOwnedBy(players.local_human_id))
 			{
 				if (unit[i].attacked || (!unit[i].mission.empty() && unit[i].mission->mission() == MISSION_ATTACK))
 					nb_attacked += 100;
@@ -1276,7 +1276,7 @@ namespace TA3D
 					pMutex.lock();
 					continue;
 				}
-				if ((!(map->view_map(px >> 1, py >> 1) & mask) || !(map->sight_map(px >> 1, py >> 1) & mask) || (unit[i].cloaked && unit[i].owner_id != players.local_human_id)) && !unit[i].is_on_radar(player_mask))
+				if ((!(map->view_map(px >> 1, py >> 1) & mask) || !(map->sight_map(px >> 1, py >> 1) & mask) || (unit[i].cloaked && unit[i].isNotOwnedBy(players.local_human_id))) && !unit[i].is_on_radar(player_mask))
 				{
 					units.unit[i].unlock();
 					pMutex.lock();
@@ -1345,7 +1345,7 @@ namespace TA3D
 				continue;
 			}
 
-			if ((unit[i].flags & 1) && ((unit[i].owner_id == players.local_human_id && unit[i].sel) || (i == last_on && (players.team[unit[i].owner_id] & players.team[players.local_human_id]))))
+			if ((unit[i].flags & 1) && ((unit[i].isOwnedBy(players.local_human_id) && unit[i].sel) || (i == last_on && (players.team[unit[i].owner_id] & players.team[players.local_human_id]))))
 			{
 				cur_id = unit[i].owner_id;
 				float pos_x = unit[i].Pos.x * rw + 64.0f;
@@ -1637,7 +1637,7 @@ namespace TA3D
 			uint16 i = idx_list[e];
 			pMutex.unlock();
 			unit[i].lock();
-			if ((unit[i].flags & 1) && !unit[i].command_locked && unit[i].owner_id == player_id && unit[i].sel && Math::AlmostZero(unit[i].build_percent_left))
+			if ((unit[i].flags & 1) && !unit[i].command_locked && unit[i].isOwnedBy(player_id) && unit[i].sel && Math::AlmostZero(unit[i].build_percent_left))
 			{
 				MissionStack& mission = unit_manager.unit_type[unit[i].type_id]->BMcode ? unit[i].mission : unit[i].def_mission;
 				MissionStack::iterator cur = mission.begin();

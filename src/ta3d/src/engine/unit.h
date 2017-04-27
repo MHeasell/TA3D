@@ -32,6 +32,8 @@ namespace TA3D
 		};
 
 	public:
+		typedef int PlayerId;
+
 		//! \name Constructor & Destructor
 		//@{
 		//! Default constructor
@@ -69,6 +71,18 @@ namespace TA3D
 		{
 			return port[ARMORED] ? unit_manager.unit_type[type_id]->DamageModifier : 1.0f;
 		}
+
+		/**
+		 * Returns true if this unit is owned by the given player,
+		 * otherwise false.
+		 */
+		bool isOwnedBy(const PlayerId playerId) const;
+
+		/**
+		 * Returns true if this unit is not owned by the given player,
+		 * otherwise false.
+		 */
+		bool isNotOwnedBy(const PlayerId playerId) const;
 
 		/**
 		 * Returns true if the unit with the given ID
@@ -181,7 +195,10 @@ namespace TA3D
 		UnitScriptInterface::Ptr script; // Scripts concernant l'unité
 		RenderData render;				 // Store render data in a sub object
 		Model* model;					 // Modèle représentant l'objet
-		byte owner_id;					 // Numéro du propriétaire de l'unité
+
+		//! ID of the player that owns this unit
+		PlayerId owner_id;
+
 		int type_id;					 // Type d'unité
 		float hp;						 // Points de vie restant à l'unité
 		Vector3D Pos;					 // Vecteur position

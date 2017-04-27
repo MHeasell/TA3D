@@ -339,7 +339,7 @@ namespace TA3D
 			for (unsigned int e = 0; e < units.index_list_size; ++e)
 			{
 				const int i = units.idx_list[e];
-				if ((units.unit[i].flags & 1) && units.unit[i].owner_id == players.local_human_id && units.unit[i].sel)
+				if ((units.unit[i].flags & 1) && units.unit[i].isOwnedBy(players.local_human_id) && units.unit[i].sel)
 				{
 					units.unit[i].hp += (float)value;
 					if (units.unit[i].hp < 0)
@@ -364,7 +364,7 @@ namespace TA3D
 			for (unsigned int e = 0; e < units.index_list_size; ++e)
 			{
 				const int i = units.idx_list[e];
-				if ((units.unit[i].flags & 1) && units.unit[i].owner_id == players.local_human_id && units.unit[i].sel)
+				if ((units.unit[i].flags & 1) && units.unit[i].isOwnedBy(players.local_human_id) && units.unit[i].sel)
 					units.unit[i].deactivate();
 			}
 			units.unlock();
@@ -380,7 +380,7 @@ namespace TA3D
 			for (unsigned int e = 0; e < units.index_list_size; ++e)
 			{
 				const int i = units.idx_list[e];
-				if ((units.unit[i].flags & 1) && units.unit[i].owner_id == players.local_human_id && units.unit[i].sel)
+				if ((units.unit[i].flags & 1) && units.unit[i].isOwnedBy(players.local_human_id) && units.unit[i].sel)
 					units.unit[i].activate();
 			}
 			units.unlock();
@@ -397,7 +397,7 @@ namespace TA3D
 			{
 				const int i = units.idx_list[e];
 				units.unlock();
-				if ((units.unit[i].flags & 1) && units.unit[i].owner_id == players.local_human_id && units.unit[i].sel)
+				if ((units.unit[i].flags & 1) && units.unit[i].isOwnedBy(players.local_human_id) && units.unit[i].sel)
 					units.unit[i].resetScript();
 				units.lock();
 			}
@@ -420,7 +420,7 @@ namespace TA3D
 			for (unsigned int e = 0; e < units.index_list_size; ++e)
 			{
 				const int i = units.idx_list[e];
-				if ((units.unit[i].flags & 1) && units.unit[i].owner_id == players.local_human_id && units.unit[i].sel)
+				if ((units.unit[i].flags & 1) && units.unit[i].isOwnedBy(players.local_human_id) && units.unit[i].sel)
 				{
 					Console::Instance()->addEntry(String("flags=") << int(units.unit[i].flags));
 					String tmp;
@@ -444,7 +444,7 @@ namespace TA3D
 			{
 				const int i = units.idx_list[e];
 				units.unlock();
-				if ((units.unit[i].flags & 1) && units.unit[i].owner_id == players.local_human_id && units.unit[i].sel)
+				if ((units.unit[i].flags & 1) && units.unit[i].isOwnedBy(players.local_human_id) && units.unit[i].sel)
 				{
 					units.kill(i, e);
 					--e;
@@ -476,7 +476,7 @@ namespace TA3D
 			for (uint32 e = 0; e < units.index_list_size; ++e)
 			{
 				const int i = units.idx_list[e];
-				if ((units.unit[i].flags & 1) && units.unit[i].owner_id == players.local_human_id && units.unit[i].sel)
+				if ((units.unit[i].flags & 1) && units.unit[i].isOwnedBy(players.local_human_id) && units.unit[i].sel)
 					units.unit[i].launchScript(UnitScriptInterface::get_script_id(lua_tostring(L, 1)));
 			}
 			units.unlock();

@@ -304,7 +304,7 @@ namespace TA3D
 			for (uint32 e = 0; e < units.index_list_size; e++)
 			{
 				const uint32 i = units.idx_list[e];
-				if (units.unit[i].flags != 0 && units.unit[i].owner_id == player_id)
+				if (units.unit[i].flags != 0 && units.unit[i].isOwnedBy(player_id))
 					n++;
 			}
 			lua_pushinteger(L, n);
@@ -362,7 +362,7 @@ namespace TA3D
 			bool has = false;
 			const uint32 last_possible_idx = Math::Min((int)units.max_unit, (player_id + 1) * MAX_UNIT_PER_PLAYER);
 			for (uint32 i = player_id * MAX_UNIT_PER_PLAYER; i < last_possible_idx; ++i)
-				if (units.unit[i].flags && units.unit[i].owner_id == player_id && units.unit[i].type_id == unit_type)
+				if (units.unit[i].flags && units.unit[i].isOwnedBy(player_id) && units.unit[i].type_id == unit_type)
 				{
 					has = true;
 					break;
@@ -387,7 +387,7 @@ namespace TA3D
 			int nb = 0;
 			const uint32 last_possible_idx = Math::Min((int)units.max_unit, (player_id + 1) * MAX_UNIT_PER_PLAYER);
 			for (uint32 i = player_id * MAX_UNIT_PER_PLAYER; i < last_possible_idx; ++i)
-				if (units.unit[i].flags && units.unit[i].owner_id == player_id && units.unit[i].type_id == unit_type)
+				if (units.unit[i].flags && units.unit[i].isOwnedBy(player_id) && units.unit[i].type_id == unit_type)
 					nb++;
 			lua_pop(L, 2);
 			lua_pushinteger(L, nb);
@@ -427,7 +427,7 @@ namespace TA3D
 			for (uint32 e = 0; e < units.index_list_size && !result; ++e)
 			{
 				const uint32 i = units.idx_list[e];
-				if ((units.unit[i].flags & 1) && units.unit[i].owner_id == player_id)
+				if ((units.unit[i].flags & 1) && units.unit[i].isOwnedBy(player_id))
 				{
 					const int type = units.unit[i].type_id;
 					if (type >= 0 && type < unit_manager.nb_unit && unit_manager.unit_type[type]->canmove && unit_manager.unit_type[type]->BMcode)

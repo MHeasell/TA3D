@@ -118,7 +118,7 @@ namespace TA3D
 			units.unit[i].lock();
 			if ((units.unit[i].flags & 1) && units.unit[i].type_id >= 0)
 			{
-				if (units.unit[i].owner_id == playerID)
+				if (units.unit[i].isOwnedBy(playerID))
 				{
 					weights[units.unit[i].type_id].nb++;
 					if (weights[units.unit[i].type_id].type & AI_FLAG_ARMY)
@@ -276,7 +276,7 @@ namespace TA3D
 						while (!enemy_list[player_target].empty() && target_id == -1)
 						{
 							target_id = enemy_list[player_target].begin()->idx;
-							if (!(units.unit[target_id].flags & 1) || units.unit[target_id].type_id < 0 || units.unit[target_id].type_id >= unit_manager.nb_unit || units.unit[target_id].owner_id != player_target)
+							if (!(units.unit[target_id].flags & 1) || units.unit[target_id].type_id < 0 || units.unit[target_id].type_id >= unit_manager.nb_unit || units.unit[target_id].isNotOwnedBy(player_target))
 							{
 								enemy_table.remove(target_id);
 								target_id = -1;

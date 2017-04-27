@@ -967,7 +967,7 @@ namespace TA3D
 		if (p > Camera::inGame->zfar2)
 			return; // Si l'objet est hors champ on ne le dessine pas
 
-		if (!cloaked || owner_id == players.local_human_id) // Don't show cloaked units
+		if (!cloaked || isOwnedBy(players.local_human_id)) // Don't show cloaked units
 		{
 			visible = true;
 		}
@@ -1151,12 +1151,12 @@ namespace TA3D
 			{
 				if (pType->onoffable && !port[ACTIVATION])
 					t = 0.0f;
-				if (cloaked || (cloaking && owner_id != players.local_human_id))
+				if (cloaked || (cloaking && isNotOwnedBy(players.local_human_id)))
 					glColor4ub(0xFF, 0xFF, 0xFF, 0x7F);
 				glDisable(GL_CULL_FACE);
-				the_model->draw(t, &render.Anim, owner_id == players.local_human_id && sel, false, c_part, build_part, target, &upos, &M, size, center, reverse, owner_id, cloaked, src, src_data);
+				the_model->draw(t, &render.Anim, isOwnedBy(players.local_human_id) && sel, false, c_part, build_part, target, &upos, &M, size, center, reverse, owner_id, cloaked, src, src_data);
 				glEnable(GL_CULL_FACE);
-				if (cloaked || (cloaking && owner_id != players.local_human_id))
+				if (cloaked || (cloaking && isNotOwnedBy(players.local_human_id)))
 					gfx->set_color(0xFFFFFFFF);
 				if (height_line && h > 1.0f && pType->canfly) // For flying units, draw a line that shows how high is the unit
 				{
@@ -1183,16 +1183,16 @@ namespace TA3D
 
 					glClipPlane(GL_CLIP_PLANE0, eqn);
 					glEnable(GL_CLIP_PLANE0);
-					the_model->draw(t, &render.Anim, owner_id == players.local_human_id && sel, true, c_part, build_part, target, &upos, &M, size, center, reverse, owner_id, true, src, src_data);
+					the_model->draw(t, &render.Anim, isOwnedBy(players.local_human_id) && sel, true, c_part, build_part, target, &upos, &M, size, center, reverse, owner_id, true, src, src_data);
 
 					eqn[1] = -eqn[1];
 					eqn[3] = -eqn[3];
 					glClipPlane(GL_CLIP_PLANE0, eqn);
-					the_model->draw(t, &render.Anim, owner_id == players.local_human_id && sel, false, false, build_part, target, &upos, &M, size, center, reverse, owner_id);
+					the_model->draw(t, &render.Anim, isOwnedBy(players.local_human_id) && sel, false, false, build_part, target, &upos, &M, size, center, reverse, owner_id);
 					glDisable(GL_CLIP_PLANE0);
 
 					glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-					the_model->draw(t, &render.Anim, owner_id == players.local_human_id && sel, true, false, build_part, target, &upos, &M, size, center, reverse, owner_id);
+					the_model->draw(t, &render.Anim, isOwnedBy(players.local_human_id) && sel, true, false, build_part, target, &upos, &M, size, center, reverse, owner_id);
 					glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 				}
 				else
@@ -1206,19 +1206,19 @@ namespace TA3D
 						glClipPlane(GL_CLIP_PLANE0, eqn);
 						glEnable(GL_CLIP_PLANE0);
 						glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-						the_model->draw(t, &render.Anim, owner_id == players.local_human_id && sel, true, c_part, build_part, target, &upos, &M, size, center, reverse, owner_id, true, src, src_data);
+						the_model->draw(t, &render.Anim, isOwnedBy(players.local_human_id) && sel, true, c_part, build_part, target, &upos, &M, size, center, reverse, owner_id, true, src, src_data);
 						glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
 						eqn[1] = -eqn[1];
 						eqn[3] = -eqn[3];
 						glClipPlane(GL_CLIP_PLANE0, eqn);
-						the_model->draw(t, &render.Anim, owner_id == players.local_human_id && sel, true, false, build_part, target, &upos, &M, size, center, reverse, owner_id);
+						the_model->draw(t, &render.Anim, isOwnedBy(players.local_human_id) && sel, true, false, build_part, target, &upos, &M, size, center, reverse, owner_id);
 						glDisable(GL_CLIP_PLANE0);
 					}
 					else
 					{
 						glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-						the_model->draw(t, &render.Anim, owner_id == players.local_human_id && sel, true, false, build_part, target, &upos, &M, size, center, reverse, owner_id);
+						the_model->draw(t, &render.Anim, isOwnedBy(players.local_human_id) && sel, true, false, build_part, target, &upos, &M, size, center, reverse, owner_id);
 						glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 					}
 				}
@@ -1256,7 +1256,7 @@ namespace TA3D
 			return;
 		}
 
-		if (cloaked && owner_id != players.local_human_id) // Unit is cloaked
+		if (cloaked && isNotOwnedBy(players.local_human_id)) // Unit is cloaked
 		{
 			pMutex.unlock();
 			return;
@@ -1327,7 +1327,7 @@ namespace TA3D
 			return;
 		}
 
-		if (cloaked && owner_id != players.local_human_id) // Unit is cloaked
+		if (cloaked && isNotOwnedBy(players.local_human_id)) // Unit is cloaked
 		{
 			pMutex.unlock();
 			return;
@@ -2195,7 +2195,7 @@ namespace TA3D
 							{
 								const int cur_idx = the_map->map_data(x, y).unit_idx;
 
-								if (cur_idx >= 0 && cur_idx < (int)units.max_unit && (units.unit[cur_idx].flags & 1) && units.unit[cur_idx].owner_id != owner_id && distance >= (Pos - units.unit[cur_idx].Pos).sq())
+								if (cur_idx >= 0 && cur_idx < (int)units.max_unit && (units.unit[cur_idx].flags & 1) && units.unit[cur_idx].isNotOwnedBy(owner_id) && distance >= (Pos - units.unit[cur_idx].Pos).sq())
 								{
 									found = true;
 									break;
@@ -2349,7 +2349,7 @@ namespace TA3D
 
 					if (weapon[i].target == NULL || ((weapon[i].state & WEAPON_FLAG_WEAPON) == WEAPON_FLAG_WEAPON && ((Weapon*)(weapon[i].target))->weapon_id != -1) || ((weapon[i].state & WEAPON_FLAG_WEAPON) != WEAPON_FLAG_WEAPON && (((Unit*)(weapon[i].target))->flags & 1)))
 					{
-						if ((weapon[i].state & WEAPON_FLAG_WEAPON) != WEAPON_FLAG_WEAPON && weapon[i].target != NULL && ((Unit*)(weapon[i].target))->cloaked && ((const Unit*)(weapon[i].target))->owner_id != owner_id && !((const Unit*)(weapon[i].target))->is_on_radar(byte(1 << owner_id)))
+						if ((weapon[i].state & WEAPON_FLAG_WEAPON) != WEAPON_FLAG_WEAPON && weapon[i].target != NULL && ((Unit*)(weapon[i].target))->cloaked && ((const Unit*)(weapon[i].target))->isNotOwnedBy(owner_id) && !((const Unit*)(weapon[i].target))->is_on_radar(byte(1 << owner_id)))
 						{
 							weapon[i].data = -1;
 							weapon[i].state = WEAPON_FLAG_IDLE;
@@ -2861,7 +2861,7 @@ namespace TA3D
 									if (x >= 0 && x < the_map->bloc_w_db - 1)
 									{
 										const int cur_idx = the_map->map_data(x, y).unit_idx;
-										if (cur_idx >= 0 && cur_idx < (int)units.max_unit && (units.unit[cur_idx].flags & 1) && units.unit[cur_idx].owner_id != owner_id && unit_manager.unit_type[units.unit[cur_idx].type_id]->ShootMe) // This unit is on the sight_map since dx = sightdistance !!
+										if (cur_idx >= 0 && cur_idx < (int)units.max_unit && (units.unit[cur_idx].flags & 1) && units.unit[cur_idx].isNotOwnedBy(owner_id) && unit_manager.unit_type[units.unit[cur_idx].type_id]->ShootMe) // This unit is on the sight_map since dx = sightdistance !!
 										{
 											enemy_idx = cur_idx;
 											break;
@@ -3031,7 +3031,7 @@ namespace TA3D
 						{
 							if (mission->mission() == MISSION_CAPTURE)
 							{
-								if (unit_manager.unit_type[target_unit->type_id]->commander || target_unit->owner_id == owner_id)
+								if (unit_manager.unit_type[target_unit->type_id]->commander || target_unit->isOwnedBy(owner_id))
 								{
 									playSound("cant1");
 									next_mission();
@@ -3259,7 +3259,7 @@ namespace TA3D
 						next_mission();
 						break;
 					}
-					if (mission->getUnit() && (mission->getUnit()->flags & 1) && mission->getUnit()->owner_id == owner_id)
+					if (mission->getUnit() && (mission->getUnit()->flags & 1) && mission->getUnit()->isOwnedBy(owner_id))
 					{ // On ne défend pas n'importe quoi
 						if (pType->Builder)
 						{
@@ -5087,7 +5087,7 @@ namespace TA3D
 	{
 		bool bPlayed = false;
 		pMutex.lock();
-		if (owner_id == players.local_human_id && int(msec_timer - last_time_sound) >= units.sound_min_ticks)
+		if (isOwnedBy(players.local_human_id) && int(msec_timer - last_time_sound) >= units.sound_min_ticks)
 		{
 			last_time_sound = msec_timer;
 			const UnitType* pType = unit_manager.unit_type[type_id];
@@ -5147,7 +5147,7 @@ namespace TA3D
 
 	void Unit::drawHealthBar() const
 	{
-		if (render.type_id < 0 || owner_id != players.local_human_id || render.UID != ID)
+		if (render.type_id < 0 || isNotOwnedBy(players.local_human_id) || render.UID != ID)
 			return;
 
 		const int maxdmg = unit_manager.unit_type[render.type_id]->MaxDamage;
@@ -5198,4 +5198,13 @@ namespace TA3D
 		render.type_id = type_id;
 	}
 
+	bool Unit::isOwnedBy(const PlayerId playerId) const
+	{
+		return playerId == owner_id;
+	}
+
+	bool Unit::isNotOwnedBy(const PlayerId playerId) const
+	{
+		return playerId != owner_id;
+	}
 } // namespace TA3D

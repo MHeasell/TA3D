@@ -242,7 +242,7 @@ namespace TA3D
 				const int t_idx = it->first->idx;
 				if (t_idx == shooter_idx)
 					continue;
-				if ((it->first->owner_id != owner || target == t_idx) && (it->first->flags & 1)) // No Friendly Fire
+				if ((it->first->isNotOwnedBy(owner) || target == t_idx) && (it->first->flags & 1)) // No Friendly Fire
 				{
 					Vector3D t_vec;
 					u_hit = const_cast<Unit*>(it->first)->hit_fast(OPos, Dir, &t_vec, length);
