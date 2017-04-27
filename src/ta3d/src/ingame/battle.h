@@ -166,9 +166,9 @@ namespace TA3D
 		*/
 		void preflightUpdate3DSounds();
 
-		/*!
-		** \brief Replace the camera automatically
-		*/
+		/**
+		 * Processes inputs for the camera and updates the camera state.
+		 */
 		void preflightAutomaticCamera();
 
 		/*!
@@ -295,7 +295,8 @@ namespace TA3D
 		int track_mode;
 		//!
 		bool last_time_activated_track_mode;
-		//!
+
+		//! Indicates whether unit health bars should be shown on the screen
 		bool showHealthBars;
 		//!
 		float r1;

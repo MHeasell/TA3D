@@ -109,14 +109,14 @@ namespace TA3D
 		unsigned int count() const;
 
 	public:
-		//!
-		int local_human_id; // Quel est le joueur qui commande depuis cette machine??
-		//!
-		byte control[TA3D_PLAYERS_HARD_LIMIT]; // Qui controle ce joueur??
-		//!
-		String::Vector nom; // Noms des joueurs
-		//!
-		String::Vector side; // Camp des joueurs
+		//! Which player is controlling from this machine?
+		int local_human_id;
+		//! Who controls this player? (local, remote or AI?)
+		byte control[TA3D_PLAYERS_HARD_LIMIT];
+		//! Names of the players
+		String::Vector nom;
+		//! Which side each player is on (ARM or CORE)
+		String::Vector side;
 		//!
 		float r_energy[TA3D_PLAYERS_HARD_LIMIT]; // Energy required
 		//!
@@ -222,7 +222,8 @@ namespace TA3D
 
 	// TODO SHould be removed
 	extern int NB_PLAYERS;
-	extern PLAYERS players; // Objet contenant les données sur les joueurs
+	//! Object containing player data
+	extern PLAYERS players;
 
 } // namespace TA3D
 
