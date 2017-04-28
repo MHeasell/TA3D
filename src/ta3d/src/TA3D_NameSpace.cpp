@@ -78,7 +78,6 @@ namespace TA3D
 
 		fps_limit = -1.0f;
 		timefactor = 1.0f;
-		priority_level = 0;
 		fsaa = 0;
 		Lang = "english"; // English
 		screen_width = 800;

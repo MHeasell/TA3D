@@ -201,14 +201,6 @@ namespace TA3D
 		return 1;
 	}
 
-	int CAPI::setPriority(lua_State* L)
-	{
-		if (lua_gettop(L) > 0)
-			lp_CONFIG->priority_level = (sint16)lua_tointeger(L, -1);
-		lua_pushinteger(L, lp_CONFIG->priority_level);
-		return 1;
-	}
-
 	int CAPI::scriptDumpDebugInfo(lua_State*)
 	{
 		if (Battle::Instance()->cur_sel_index >= 0 && units.unit[Battle::Instance()->cur_sel_index].script)
@@ -746,7 +738,6 @@ namespace TA3D
 		CAPI_REGISTER(setInternalIdx);
 		CAPI_REGISTER(exit);
 		CAPI_REGISTER(setWireframe);
-		CAPI_REGISTER(setPriority);
 		CAPI_REGISTER(scriptDumpDebugInfo);
 		CAPI_REGISTER(setShowModel);
 		CAPI_REGISTER(setRotateLight);

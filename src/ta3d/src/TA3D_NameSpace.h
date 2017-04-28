@@ -49,7 +49,6 @@ namespace TA3D
 		float fps_limit;
 		float timefactor; // 1.0 -> 10.0
 
-		sint16 priority_level; // 0, 1, 2
 		sint16 fsaa;		   // ?
 		String Lang;		   // english, french, german, italian, spanish, japanese, chinese, ...
 		sint16 anisotropy;	 // Level of anisotropy for textures (1->16)

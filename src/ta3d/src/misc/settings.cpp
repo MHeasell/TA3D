@@ -59,7 +59,6 @@ namespace TA3D
 			  << "                  Version = " << TA3D_VERSION_HI << "." << TA3D_VERSION_LO << ";\n"
 			  << "                FPS Limit = " << TA3D::VARS::lp_CONFIG->fps_limit << "; // <= 0 means `unlimited`\n"
 			  << "              Time Factor = " << TA3D::VARS::lp_CONFIG->timefactor << ";\n"
-			  << "           Priority Level = " << TA3D::VARS::lp_CONFIG->priority_level << "; // 0, 1, 2\n"
 			  << "                     FSAA = " << TA3D::VARS::lp_CONFIG->fsaa << ";\n"
 			  << "               Anisotropy = " << TA3D::VARS::lp_CONFIG->anisotropy << ";\n"
 			  << "                 Language = " << TA3D::VARS::lp_CONFIG->Lang << ";\n"
@@ -130,7 +129,6 @@ namespace TA3D
 			TA3D::VARS::lp_CONFIG->fps_limit = cfgFile.pullAsFloat("TA3D.FPS Limit");
 			TA3D::VARS::lp_CONFIG->timefactor = cfgFile.pullAsFloat("TA3D.Time Factor");
 
-			TA3D::VARS::lp_CONFIG->priority_level = sint16(cfgFile.pullAsInt("TA3D.Priority Level"));
 			TA3D::VARS::lp_CONFIG->fsaa = sint16(cfgFile.pullAsInt("TA3D.FSAA"));
 			TA3D::VARS::lp_CONFIG->anisotropy = sint16(cfgFile.pullAsInt("TA3D.Anisotropy", 1));
 			TA3D::VARS::lp_CONFIG->Lang = cfgFile.pullAsString("TA3D.Language").toLower();
