@@ -38,11 +38,6 @@ namespace TA3D
 	extern const float player_color[30];
 	extern unsigned int player_color_map[10];
 
-#ifndef TA3D_MSEC_TIMER
-#define TA3D_MSEC_TIMER
-#define msec_timer (SDL_GetTicks())
-#endif
-
 	extern int start;
 
 	extern int fire;
