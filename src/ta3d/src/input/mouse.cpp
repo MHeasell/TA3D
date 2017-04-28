@@ -119,35 +119,6 @@ namespace TA3D
 			SDL_MinimizeWindow(screen);
 	}
 
-	int mouse_lx = 0;
-	int mouse_ly = 0;
-
-	void position_mouse(int x, int y)
-	{
-		int deltaX = x - mouse_x;
-		int deltaY = y - mouse_y;
-
-		mouse_lx += deltaX;
-		mouse_ly += deltaY;
-
-		mouse_x = Math::Clamp(x, 0, SCREEN_W);
-		mouse_y = Math::Clamp(y, 0, SCREEN_H);
-
-		SDL_WarpMouseInWindow(screen, mouse_x, mouse_y);
-	}
-
-	void get_mouse_mickeys(int* mx, int* my)
-	{
-		int deltaX = mouse_x - mouse_lx;
-		int deltaY = mouse_y - mouse_ly;
-		mouse_lx = mouse_x;
-		mouse_ly = mouse_y;
-		if (mx)
-			*mx = deltaX;
-		if (my)
-			*my = deltaY;
-	}
-
 	static uint32 start = 0;
 
 	int anim_cursor(const int type)
@@ -184,7 +155,6 @@ namespace TA3D
 		grab_mouse(lp_CONFIG->grab_inputs);
 
 		mouse_b = 0;
-		position_mouse(SCREEN_W >> 1, SCREEN_H >> 1);
 
 		SDL_ShowCursor(SDL_DISABLE);
 

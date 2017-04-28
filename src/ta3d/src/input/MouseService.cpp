@@ -9,16 +9,6 @@ namespace TA3D
 		TA3D::poll_inputs();
 	}
 
-	void MouseService::position_mouse(int x, int y)
-	{
-		TA3D::position_mouse(x, y);
-	}
-
-	void MouseService::get_mouse_mickeys(int* mx, int* my)
-	{
-		TA3D::get_mouse_mickeys(mx, my);
-	}
-
 	void MouseService::draw_cursor()
 	{
 		TA3D::draw_cursor();

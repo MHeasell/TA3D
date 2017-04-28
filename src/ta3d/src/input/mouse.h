@@ -53,16 +53,6 @@ namespace TA3D
 	void poll_inputs();
 
 	/*!
-	** \brief set mouse position
-	*/
-	void position_mouse(int x, int y);
-
-	/*!
-	** \brief return mouse move since last call
-	*/
-	void get_mouse_mickeys(int* mx, int* my);
-
-	/*!
 	** \brief draw mouse cursor at mouse position
 	*/
 	void draw_cursor();
