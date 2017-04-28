@@ -56,10 +56,6 @@ using namespace TA3D::VARS;
 
 namespace TA3D
 {
-
-	int old_mx = 0;
-	int old_my = 0;
-
 	void poll_inputs()
 	{
 		SDL_Event event;
@@ -100,29 +96,25 @@ namespace TA3D
 					break;
 			};
 		}
-		mouse_b = 0;
-		int dx(0), dy(0);
-		int rmx(0), rmy(0);
-		uint32 m_b = SDL_GetMouseState(&rmx, &rmy);
-		dx = rmx - old_mx;
-		dy = rmy - old_my;
-		fmouse_x += float(dx);
-		fmouse_y += float(dy);
-		if (m_b & SDL_BUTTON(SDL_BUTTON_LEFT))  // left mouse button
-			mouse_b |= LeftMouseButton;
-		if (m_b & SDL_BUTTON(SDL_BUTTON_RIGHT))  // right mouse button
-			mouse_b |= RightMouseButton;
-		if (m_b & SDL_BUTTON(SDL_BUTTON_MIDDLE))  // middle mouse button
-			mouse_b |= MiddleMouseButton;
-		fmouse_x = Math::Clamp(fmouse_x, 0.f, (float)(SCREEN_W));
-		fmouse_y = Math::Clamp(fmouse_y, 0.f, (float)SCREEN_H);
-		mouse_x = (int)(fmouse_x + 0.5f);
-		mouse_y = (int)(fmouse_y + 0.5f);
-		if (rmx != mouse_x || rmy != mouse_y)
-			SDL_WarpMouseInWindow(screen, uint16(mouse_x), uint16(mouse_y));
-		old_mx = mouse_x;
-		old_my = mouse_y;
 
+		int newMouseX;
+		int newMouseY;
+		uint32 mouseButtonState = SDL_GetMouseState(&newMouseX, &newMouseY);
+
+		// update mouse button state
+		mouse_b = 0;
+		if (mouseButtonState & SDL_BUTTON(SDL_BUTTON_LEFT))  // left mouse button
+			mouse_b |= LeftMouseButton;
+		if (mouseButtonState & SDL_BUTTON(SDL_BUTTON_RIGHT))  // right mouse button
+			mouse_b |= RightMouseButton;
+		if (mouseButtonState & SDL_BUTTON(SDL_BUTTON_MIDDLE))  // middle mouse button
+			mouse_b |= MiddleMouseButton;
+
+		// update mouse position
+		mouse_x = newMouseX;
+		mouse_y = newMouseY;
+
+		// handle ALT-TAB
 		if (lp_CONFIG->fullscreen && isKeyDown(KEY_ALT) && isKeyDown(KEY_TAB) && (SDL_GetWindowFlags(screen) & SDL_WINDOW_SHOWN))
 			SDL_MinimizeWindow(screen);
 	}
@@ -132,31 +124,28 @@ namespace TA3D
 
 	void position_mouse(int x, int y)
 	{
-		mouse_lx += x - mouse_x;
-		mouse_ly += y - mouse_y;
-		mouse_x = x;
-		mouse_y = y;
-		mouse_x = Math::Clamp(mouse_x, 0, SCREEN_W);
-		mouse_y = Math::Clamp(mouse_y, 0, SCREEN_H);
-		fmouse_x = float(mouse_x);
-		fmouse_y = float(mouse_y);
-		old_mx = mouse_x;
-		old_my = mouse_y;
-		SDL_WarpMouseInWindow(screen, uint16(mouse_x), uint16(mouse_y));
-		poll_inputs();
+		int deltaX = x - mouse_x;
+		int deltaY = y - mouse_y;
+
+		mouse_lx += deltaX;
+		mouse_ly += deltaY;
+
+		mouse_x = Math::Clamp(x, 0, SCREEN_W);
+		mouse_y = Math::Clamp(y, 0, SCREEN_H);
+
+		SDL_WarpMouseInWindow(screen, mouse_x, mouse_y);
 	}
 
 	void get_mouse_mickeys(int* mx, int* my)
 	{
-		poll_inputs();
-		int dx = mouse_x - mouse_lx;
-		int dy = mouse_y - mouse_ly;
+		int deltaX = mouse_x - mouse_lx;
+		int deltaY = mouse_y - mouse_ly;
 		mouse_lx = mouse_x;
 		mouse_ly = mouse_y;
 		if (mx)
-			*mx = dx;
+			*mx = deltaX;
 		if (my)
-			*my = dy;
+			*my = deltaY;
 	}
 
 	static uint32 start = 0;
