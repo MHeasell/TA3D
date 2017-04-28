@@ -313,7 +313,7 @@ namespace TA3D
 				}
 			}
 
-			if (mouse_x < 128.0f && mouse_y < 128.0f && mouse_x >= 0.0f && mouse_y >= 0.0f && ((mouse_b == RightMouseButton && !lp_CONFIG->right_click_interface) || (mouse_b == LeftMouseButton && lp_CONFIG->right_click_interface)))
+			if (mouse_x < 128.0f && mouse_y < 128.0f && mouse_x >= 0.0f && mouse_y >= 0.0f && ((mouseButtonIsDown(RightMouseButton) && !lp_CONFIG->right_click_interface) || (mouseButtonIsDown(LeftMouseButton) && lp_CONFIG->right_click_interface)))
 			{
 				cam.rpos.x = float((mouse_x - 64) * map->map_w) / 128.0f * 252.0f / (float)map->mini_w;
 				cam.rpos.z = float((mouse_y - 64) * map->map_h) / 128.0f * 252.0f / (float)map->mini_h;
@@ -942,7 +942,7 @@ namespace TA3D
 
 			if (build == -1 && (!IsOnGUI || (pMouseSelecting && (mouse_y < 32 || mouse_y > SCREEN_H - 32)) || IsOnMinimap)) // Si le curseur est dans la zone de jeu
 			{
-				if ((mouse_b != LeftMouseButton && pMouseSelecting) || (IsOnMinimap && mouseButtonWentDown(LeftMouseButton))) // RÃ©cupÃ¨re les unitÃ©s prÃ©sentes dans la sÃ©lection
+				if ((mouseButtonIsUp(LeftMouseButton) && pMouseSelecting) || (IsOnMinimap && mouseButtonWentDown(LeftMouseButton))) // RÃ©cupÃ¨re les unitÃ©s prÃ©sentes dans la sÃ©lection
 				{
 					bool skip = false;
 					if ((abs(pMouseRectSelection.x1 - pMouseRectSelection.x2) < PICK_TOLERANCE && abs(pMouseRectSelection.y1 - pMouseRectSelection.y2) < PICK_TOLERANCE) || IsOnMinimap)
@@ -997,7 +997,7 @@ namespace TA3D
 					}
 				}
 				pMouseSelecting = false;
-				if (mouse_b == LeftMouseButton && !IsOnMinimap)
+				if (mouseButtonIsDown(LeftMouseButton) && !IsOnMinimap)
 				{
 					if (mouseButtonWentDown(LeftMouseButton))
 					{

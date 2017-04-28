@@ -948,7 +948,7 @@ namespace TA3D
 							if (TotalScroll < 0)
 								TotalScroll = 0;
 
-							if (mouse_b == LeftMouseButton && !onDeco && mouse_x - x >= object->x2 + skin->text_background.x2 - skin->scroll[0].sw && mouse_x - x <= object->x2 + skin->text_background.x2 && mouse_y - y >= object->y1 + skin->text_background.y1 && mouse_y - y <= object->y2 + skin->text_background.y2) // We're on the scroll bar!
+							if (mouseButtonIsDown(LeftMouseButton) && !onDeco && mouse_x - x >= object->x2 + skin->text_background.x2 - skin->scroll[0].sw && mouse_x - x <= object->x2 + skin->text_background.x2 && mouse_y - y >= object->y1 + skin->text_background.y1 && mouse_y - y <= object->y2 + skin->text_background.y2) // We're on the scroll bar!
 							{
 
 								if (mouse_y - y > object->y1 + skin->text_background.y1 + skin->scroll[0].y1 && mouse_y - y < object->y2 + skin->text_background.y2 + skin->scroll[0].y2) // Set scrolling position
@@ -1003,7 +1003,7 @@ namespace TA3D
 							else if (mouse_y - y >= object->y2 + skin->scroll[0].y2) // Increase
 							{
 							}
-							else if (mouse_b == LeftMouseButton) // Set
+							else if (mouseButtonIsDown(LeftMouseButton)) // Set
 							{
 								const int s = (int)skin->scroll[2].sh;
 								const int nValue = (int)(((float)mouse_y - (float)y - object->y1 - skin->scroll[0].y1 - (float)(s / 2)) * (float)(object->Pos - object->Data + 1) / (object->y2 - object->y1 - skin->scroll[0].y1 + skin->scroll[0].y2 - (float)s)) + object->Data;
@@ -1031,7 +1031,7 @@ namespace TA3D
 							else if (mouse_x - x >= object->x2 + skin->scroll[1].x2) // Increase
 							{
 							}
-							else if (mouse_b == LeftMouseButton) // Set
+							else if (mouseButtonIsDown(LeftMouseButton)) // Set
 							{
 								const int s = (int)skin->scroll[2].sw;
 								const int nValue = (int)(((float)mouse_x - (float)x - object->x1 - skin->scroll[1].x1 - (float)(s / 2)) * (float)(object->Pos - object->Data + 1) / (object->x2 - object->x1 - skin->scroll[1].x1 + skin->scroll[1].x2 - (float)s)) + object->Data;
@@ -1057,13 +1057,13 @@ namespace TA3D
 				}
 				else
 				{
-					if ((mouse_b != LeftMouseButton || !object->MouseOn || mouse_b == AMb) && (object->Flag & FLAG_CAN_BE_CLICKED) && !(object->Flag & FLAG_SWITCH) && !(object->Etat ^ previous_state) && object->Etat && !was_on_floating_menu)
+					if ((mouseButtonIsUp(LeftMouseButton) || !object->MouseOn || mouse_b == AMb) && (object->Flag & FLAG_CAN_BE_CLICKED) && !(object->Flag & FLAG_SWITCH) && !(object->Etat ^ previous_state) && object->Etat && !was_on_floating_menu)
 					{
 						if (object->Func != NULL)
 							(*object->Func)(0); // Lance la fonction associée
 						object->Etat = false;
 					}
-					if (!object->activated && mouse_b == LeftMouseButton && object->MouseOn && ((object->Flag & FLAG_CAN_BE_CLICKED) || (object->Flag & FLAG_SWITCH)))
+					if (!object->activated && mouseButtonIsDown(LeftMouseButton) && object->MouseOn && ((object->Flag & FLAG_CAN_BE_CLICKED) || (object->Flag & FLAG_SWITCH)))
 					{
 						switch (object->Type)
 						{
@@ -1077,7 +1077,7 @@ namespace TA3D
 									sound_manager->playTDFSoundNow("SPECIALORDERS.sound");
 						}
 					}
-					object->activated = mouse_b == LeftMouseButton && object->MouseOn;
+					object->activated = mouseButtonIsDown(LeftMouseButton) && object->MouseOn;
 
 					bool clicked = false;
 					if (
@@ -1094,7 +1094,7 @@ namespace TA3D
 						object->activated = object->Etat = true;
 					}
 
-					if (((mouse_b != LeftMouseButton && AMb == 1) || clicked) && object->MouseOn && MouseWasOn && ((object->Flag & FLAG_CAN_BE_CLICKED) || (object->Flag & FLAG_SWITCH)) && !already_clicked) // Click sur l'objet
+					if (((mouseButtonIsUp(LeftMouseButton) && AMb == 1) || clicked) && object->MouseOn && MouseWasOn && ((object->Flag & FLAG_CAN_BE_CLICKED) || (object->Flag & FLAG_SWITCH)) && !already_clicked) // Click sur l'objet
 					{
 						already_clicked = true;
 						switch (object->Type)
