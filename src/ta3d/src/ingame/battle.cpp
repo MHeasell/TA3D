@@ -50,8 +50,6 @@
 
 namespace TA3D
 {
-	int expected_players;
-
 	int fire;
 	int build_part;
 

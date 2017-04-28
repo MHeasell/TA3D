@@ -237,8 +237,6 @@ namespace TA3D
 		// To have mouse sensibility undependent from the resolution
 		gfx->SCREEN_W_TO_640 = 1.0f;
 		gfx->SCREEN_H_TO_480 = 1.0f;
-		// How many players ?
-		expected_players = pGameData->nb_players;
 
 		// The GUI
 		pCurrentGUI.clear();
