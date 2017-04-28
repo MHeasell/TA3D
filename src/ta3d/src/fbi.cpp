@@ -1234,7 +1234,7 @@ namespace TA3D
 			glDisable(GL_BLEND);
 		}
 
-		if (sel != -1 && mouse_b == 1 && omb != 1) // Click !!
+		if (sel != -1 && mouse_b == LeftMouseButton && omb != LeftMouseButton) // Click !!
 		{
 			unit_type[index]->last_click = sint16(sel);
 			unit_type[index]->click_time = 0.5f; // One sec animation;

@@ -313,7 +313,7 @@ namespace TA3D
 				}
 			}
 
-			if (mouse_x < 128.0f && mouse_y < 128.0f && mouse_x >= 0.0f && mouse_y >= 0.0f && ((mouse_b == 2 && !lp_CONFIG->right_click_interface) || (mouse_b == 1 && lp_CONFIG->right_click_interface)))
+			if (mouse_x < 128.0f && mouse_y < 128.0f && mouse_x >= 0.0f && mouse_y >= 0.0f && ((mouse_b == RightMouseButton && !lp_CONFIG->right_click_interface) || (mouse_b == LeftMouseButton && lp_CONFIG->right_click_interface)))
 			{
 				cam.rpos.x = float((mouse_x - 64) * map->map_w) / 128.0f * 252.0f / (float)map->mini_w;
 				cam.rpos.z = float((mouse_y - 64) * map->map_h) / 128.0f * 252.0f / (float)map->mini_h;
@@ -365,7 +365,7 @@ namespace TA3D
 
 			if (!TA3D_CTRL_PRESSED)
 			{
-				if (mouse_b == 4)
+				if (mouse_b == MiddleMouseButton)
 				{
 					get_mouse_mickeys(&mx, &my);
 					if (omb == mouse_b)
@@ -379,7 +379,7 @@ namespace TA3D
 				}
 				else
 				{
-					if (omb == 4)
+					if (omb == MiddleMouseButton)
 					{
 						position_mouse(gfx->SCREEN_W_HALF, gfx->SCREEN_H_HALF);
 						cam_has_target = false;
@@ -460,8 +460,8 @@ namespace TA3D
 
 			bool order_removed = false;
 
-			bool right_click_activation = lp_CONFIG->right_click_interface && mouse_b != 2 && omb3 == 2 && current_order == SIGNAL_ORDER_NONE;
-			bool left_click_activation = mouse_b != 1 && omb3 == 1 && ((!lp_CONFIG->right_click_interface && current_order == SIGNAL_ORDER_NONE) || current_order != SIGNAL_ORDER_NONE);
+			bool right_click_activation = lp_CONFIG->right_click_interface && mouse_b != RightMouseButton && omb3 == RightMouseButton && current_order == SIGNAL_ORDER_NONE;
+			bool left_click_activation = mouse_b != LeftMouseButton && omb3 == LeftMouseButton && ((!lp_CONFIG->right_click_interface && current_order == SIGNAL_ORDER_NONE) || current_order != SIGNAL_ORDER_NONE);
 			bool click_activation = right_click_activation || left_click_activation;
 			bool click_activated = false;
 
@@ -869,7 +869,7 @@ namespace TA3D
 			}
 
 			// The cursor orders to build something
-			if (build >= 0 && cursor_type == CURSOR_DEFAULT && mouse_b != 1 && omb3 == 1 && !IsOnGUI)
+			if (build >= 0 && cursor_type == CURSOR_DEFAULT && mouse_b != LeftMouseButton && omb3 == LeftMouseButton && !IsOnGUI)
 			{
 				Vector3D target(cursorOnMap(cam, *map));
 				pMouseRectSelection.x2 = ((int)(target.x) + map->map_w_d) >> 3;
@@ -916,7 +916,7 @@ namespace TA3D
 			}
 			else
 			{
-				if (build >= 0 && cursor_type == CURSOR_DEFAULT && mouse_b == 1 && omb3 != 1 && !IsOnGUI) // Giving the order to build a row
+				if (build >= 0 && cursor_type == CURSOR_DEFAULT && mouse_b == LeftMouseButton && omb3 != LeftMouseButton && !IsOnGUI) // Giving the order to build a row
 				{
 					Vector3D target(cursorOnMap(cam, *map));
 					pMouseRectSelection.x1 = ((int)(target.x) + map->map_w_d) >> 3;
@@ -931,14 +931,14 @@ namespace TA3D
 			if (build == -1)
 				build_order_given = false;
 
-			if (mouse_b != 1 && omb3 == 1 && !TA3D_SHIFT_PRESSED && (!IsOnGUI || IsOnMinimap))
+			if (mouse_b != LeftMouseButton && omb3 == LeftMouseButton && !TA3D_SHIFT_PRESSED && (!IsOnGUI || IsOnMinimap))
 				current_order = SIGNAL_ORDER_NONE;
 
 			//---------------------------------	Code de sÃ©lection d'unitÃ©s
 
 			if (!IsOnGUI)
 			{
-				if ((mouse_b == 2 && omb3 != 2 && !lp_CONFIG->right_click_interface) || (!click_activated && mouse_b == 1 && omb3 != 1 && current_order == SIGNAL_ORDER_NONE && lp_CONFIG->right_click_interface)) // Secondary mouse button cancels/deselects
+				if ((mouse_b == RightMouseButton && omb3 != RightMouseButton && !lp_CONFIG->right_click_interface) || (!click_activated && mouse_b == LeftMouseButton && omb3 != LeftMouseButton && current_order == SIGNAL_ORDER_NONE && lp_CONFIG->right_click_interface)) // Secondary mouse button cancels/deselects
 				{
 					if (current_order != SIGNAL_ORDER_NONE && current_order != SIGNAL_ORDER_MOVE)
 						current_order = SIGNAL_ORDER_NONE;
@@ -968,7 +968,7 @@ namespace TA3D
 
 			if (build == -1 && (!IsOnGUI || (pMouseSelecting && (mouse_y < 32 || mouse_y > SCREEN_H - 32)) || IsOnMinimap)) // Si le curseur est dans la zone de jeu
 			{
-				if ((mouse_b != 1 && pMouseSelecting) || (IsOnMinimap && mouse_b == 1 && omb3 != 1)) // RÃ©cupÃ¨re les unitÃ©s prÃ©sentes dans la sÃ©lection
+				if ((mouse_b != LeftMouseButton && pMouseSelecting) || (IsOnMinimap && mouse_b == LeftMouseButton && omb3 != LeftMouseButton)) // RÃ©cupÃ¨re les unitÃ©s prÃ©sentes dans la sÃ©lection
 				{
 					bool skip = false;
 					if ((abs(pMouseRectSelection.x1 - pMouseRectSelection.x2) < PICK_TOLERANCE && abs(pMouseRectSelection.y1 - pMouseRectSelection.y2) < PICK_TOLERANCE) || IsOnMinimap)
@@ -1023,9 +1023,9 @@ namespace TA3D
 					}
 				}
 				pMouseSelecting = false;
-				if (mouse_b == 1 && !IsOnMinimap)
+				if (mouse_b == LeftMouseButton && !IsOnMinimap)
 				{
-					if (omb3 != 1)
+					if (omb3 != LeftMouseButton)
 					{
 						pMouseRectSelection.x1 = mouse_x;
 						pMouseRectSelection.y1 = mouse_y;
@@ -1512,7 +1512,7 @@ namespace TA3D
 				sel = unit_manager.unit_build_menu(-1, omb2, dt, scrolling, false); // Unit's menu
 			if (sel == -2)															// build weapons
 			{
-				if (mouse_b == 1 && omb2 != 1)
+				if (mouse_b == LeftMouseButton && omb2 != LeftMouseButton)
 				{
 					if (TA3D_SHIFT_PRESSED)
 						units.unit[cur_sel_index].planned_weapons += 5.0f;
@@ -1521,7 +1521,7 @@ namespace TA3D
 				}
 				else
 				{
-					if (mouse_b == 2 && omb2 != 2)
+					if (mouse_b == RightMouseButton && omb2 != RightMouseButton)
 					{
 						units.unit[cur_sel_index].planned_weapons -= (TA3D_SHIFT_PRESSED) ? 5.0f : 1.0f;
 						if (units.unit[cur_sel_index].planned_weapons < 0.0f)
@@ -2050,7 +2050,7 @@ namespace TA3D
 			if (sel >= 0 || (mouse_b & 2))
 				current_order = SIGNAL_ORDER_NONE;
 
-			if (sel >= 0 && mouse_b == 2 && omb2 != 2)
+			if (sel >= 0 && mouse_b == RightMouseButton && omb2 != RightMouseButton)
 			{
 				units.unit[cur_sel_index].lock();
 				MissionStack::iterator cur = units.unit[cur_sel_index].mission.begin();
@@ -2101,7 +2101,7 @@ namespace TA3D
 				units.unit[cur_sel_index].unlock();
 			}
 
-			if (sel >= 0 && mouse_b == 1 && omb2 != 1)
+			if (sel >= 0 && mouse_b == LeftMouseButton && omb2 != LeftMouseButton)
 			{
 				build = sel;
 				sound_manager->playTDFSound("ADDBUILD", "sound", NULL);
@@ -2129,7 +2129,7 @@ namespace TA3D
 			units.draw_mini((float)map->map_w, (float)map->map_h, map->mini_w, map->mini_h);
 			weapons.draw_mini((float)map->map_w, (float)map->map_h, map->mini_w, map->mini_h);
 
-			if (mouse_b == 4) // Moving the cam around
+			if (mouse_b == MiddleMouseButton) // Moving the cam around
 			{
 				gfx->set_alpha_blending();
 				gfx->set_color(0xFFFFFFFF);
@@ -2286,7 +2286,7 @@ namespace TA3D
 				fps.draw();
 			}
 
-			if (mouse_b != 4 || TA3D_CTRL_PRESSED)
+			if (mouse_b != MiddleMouseButton || TA3D_CTRL_PRESSED)
 				draw_cursor();
 
 			if (shoot)
