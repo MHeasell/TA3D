@@ -78,7 +78,7 @@ namespace TA3D
 						*i = Substr(*i, s);
 				}
 
-				if (i->find("/.svn/") != String::npos || i->find("\\.svn\\") != String::npos || (i->size() >= 5 && Substr(*i, 0, 5) == ".svn/") || (i->size() >= 5 && Substr(*i, 0, 5) == ".svn\\") || i->find("cache") != String::npos) // Don't include SVN and cache folders (they are huge and useless to us here)
+				if (i->find("cache") != String::npos) // Don't include cache folders (they are huge and useless to us here)
 					continue;
 
 				RealFile* file = new RealFile;
