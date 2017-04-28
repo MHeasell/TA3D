@@ -90,7 +90,7 @@ namespace TA3D
 	** \return The content of the file, null terminated , NULL if size > hardlimit or if any errors has occured.
 	** If not NULL, this value must be deleted with the keyword `delete[]`
 	*/
-			UTILS::File* LoadContentInMemory(const String& filename, const uint64 hardlimit = TA3D_FILES_HARD_LIMIT_FOR_SIZE);
+			File* LoadContentInMemory(const String& filename, const uint64 hardlimit = TA3D_FILES_HARD_LIMIT_FOR_SIZE);
 
 			/*!
 	** \brief Save the content of a string iinto a file

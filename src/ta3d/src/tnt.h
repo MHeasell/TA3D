@@ -23,8 +23,8 @@
 |                                                                                    |
 \-----------------------------------------------------------------------------------*/
 
-#ifndef __TA3D_UTILS_TNT_H__
-#define __TA3D_UTILS_TNT_H__
+#ifndef __TA3D_TNT_H__
+#define __TA3D_TNT_H__
 
 #include "misc/string.h"
 #include "EngineClass.h"
@@ -83,4 +83,4 @@ namespace TA3D
 
 } // namespace TA3D
 
-#endif // __TA3D_UTILS_TNT_H__
+#endif // __TA3D_TNT_H__

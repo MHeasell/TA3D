@@ -755,7 +755,7 @@ namespace TA3D
 
 			Mix_HaltChannel(-1);
 
-			for (TA3D::UTILS::HashMap<SoundItemList*>::Dense::iterator it = pSoundList.begin(); it != pSoundList.end(); ++it)
+			for (TA3D::HashMap<SoundItemList*>::Dense::iterator it = pSoundList.begin(); it != pSoundList.end(); ++it)
 				delete *it;
 			pSoundList.clear();
 			pTable.clear();

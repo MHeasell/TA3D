@@ -99,8 +99,8 @@ namespace TA3D
 		int myMode;			//0 off, 1 'server', 2 client
 		int myID;			//your id in everyone elses socklist
 
-		UTILS::HashMap<std::deque<uint32>, int>::Dense ping_timer;
-		UTILS::HashMap<uint32, int>::Dense ping_delay;
+		HashMap<std::deque<uint32>, int>::Dense ping_timer;
+		HashMap<uint32, int>::Dense ping_delay;
 
 		//these 5 things need to be syncronized with a mutex
 		SockList players;

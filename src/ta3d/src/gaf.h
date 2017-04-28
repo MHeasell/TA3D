@@ -41,10 +41,7 @@
 
 namespace TA3D
 {
-	namespace UTILS
-	{
-		class File;
-	}
+	class File;
 
 	/*!
 	** \brief Toolkit for the GAF file format
@@ -70,7 +67,7 @@ namespace TA3D
 			/*!
 			** \brief Constructor with RAW data from file
 			*/
-			Header(UTILS::File* file);
+			Header(File* file);
 			/*!
 			** \brief Constructor
 			*/
@@ -132,7 +129,7 @@ namespace TA3D
 				//! Default constructor
 				Data();
 				//! Constructor from RAW file data
-				Data(UTILS::File* file);
+				Data(File* file);
 				//@}
 
 				//! Width of the frame
@@ -183,19 +180,19 @@ namespace TA3D
 		/*!
 		** \brief Load a GAF image into a SDL_Surface
 		*/
-		static SDL_Surface* RawDataToBitmap(UTILS::File* file, const sint32 entry_idx, const sint32 img_idx, short* ofs_x = NULL, short* ofs_y = NULL, const bool truecolor = true); // Lit une image d'un fichier gaf en mémoire
+		static SDL_Surface* RawDataToBitmap(File* file, const sint32 entry_idx, const sint32 img_idx, short* ofs_x = NULL, short* ofs_y = NULL, const bool truecolor = true); // Lit une image d'un fichier gaf en mémoire
 
 		/*!
 		** \brief Get the number of entries from raw data
 		** \see Gaf::Header
 		*/
-		static sint32 RawDataEntriesCount(UTILS::File* file);
+		static sint32 RawDataEntriesCount(File* file);
 
-		static String RawDataGetEntryName(UTILS::File* file, int entry_idx);
+		static String RawDataGetEntryName(File* file, int entry_idx);
 
-		static sint32 RawDataGetEntryIndex(UTILS::File* file, const String& name);
+		static sint32 RawDataGetEntryIndex(File* file, const String& name);
 
-		static sint32 RawDataImageCount(UTILS::File* file, const int entry_idx);
+		static sint32 RawDataImageCount(File* file, const int entry_idx);
 
 	public:
 		/*!
@@ -215,7 +212,7 @@ namespace TA3D
 			void init();
 			void destroy();
 
-			void loadGAFFromRawData(UTILS::File* file, const int entry_idx = 0, const bool truecolor = true, const String& fname = String());
+			void loadGAFFromRawData(File* file, const int entry_idx = 0, const bool truecolor = true, const String& fname = String());
 
 			void loadGAFFromDirectory(const String& folderName, const String& entryName);
 
@@ -280,7 +277,7 @@ namespace TA3D
 			** \param fname
 			** \return The number of animation found
 			*/
-			sint32 loadGAFFromRawData(UTILS::File* file, const bool doConvert = false, const String& fname = "");
+			sint32 loadGAFFromRawData(File* file, const bool doConvert = false, const String& fname = "");
 
 			/*!
 			** \brief Load all animation from a GAF-like directory

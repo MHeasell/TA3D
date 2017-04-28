@@ -12,9 +12,9 @@ namespace TA3D
 		if (mesh == NULL)
 			return NULL;
 
-		typedef UTILS::HashMap<Mesh*>::Dense ObjectMap;
-		typedef UTILS::HashSet<Mesh*>::Sparse ObjectSet;
-		typedef UTILS::HashMap<Vector3D, Mesh*>::Dense ObjectPos;
+		typedef HashMap<Mesh*>::Dense ObjectMap;
+		typedef HashSet<Mesh*>::Sparse ObjectSet;
+		typedef HashMap<Vector3D, Mesh*>::Dense ObjectPos;
 		ObjectMap objects;
 		ObjectSet rootObjects;
 		ObjectPos objectPos;

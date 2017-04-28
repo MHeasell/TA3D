@@ -15,8 +15,8 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA*/
 
-#ifndef __TA3D_NET_NETWORK_UTILS_H__
-#define __TA3D_NET_NETWORK_UTILS_H__
+#ifndef __TA3D_NET_NETWORKUTILS_H__
+#define __TA3D_NET_NETWORKUTILS_H__
 
 #include <stdafx.h>
 #include <misc/string.h>
@@ -134,4 +134,4 @@ namespace TA3D
 
 } // namespaceTA3D
 
-#endif // __TA3D_NET_NETWORK_UTILS_H__
+#endif // __TA3D_NET_NETWORKUTILS_H__

@@ -276,13 +276,13 @@ namespace TA3D
 		GLuint defaultRGBTextureFormat;
 		GLuint defaultRGBATextureFormat;
 		//! Store all texture IDs
-		UTILS::HashMap<Interfaces::GfxTexture>::Sparse textureIDs;
+		HashMap<Interfaces::GfxTexture>::Sparse textureIDs;
 		//! And for each texture ID, how many times it is used
-		UTILS::HashMap<int, GLuint>::Sparse textureLoad;
+		HashMap<int, GLuint>::Sparse textureLoad;
 		//! And for each texture ID, if there is alpga
-		UTILS::HashSet<GLuint>::Sparse textureAlpha;
+		HashSet<GLuint>::Sparse textureAlpha;
 		//! And for each texture ID the file which contains the original texture
-		UTILS::HashMap<String, GLuint>::Sparse textureFile;
+		HashMap<String, GLuint>::Sparse textureFile;
 	}; // class GFX
 
 	// Those function should be removed

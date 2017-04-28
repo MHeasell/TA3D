@@ -21,8 +21,6 @@
 #include <vfs/realfile.h>
 #include <fstream>
 
-using namespace TA3D::UTILS;
-
 namespace TA3D
 {
 	namespace Paths
@@ -131,7 +129,7 @@ namespace TA3D
 																  << hardlimit / 1204 << "Ko");
 						return NULL;
 					}
-					return new UTILS::RealFile(filename);
+					return new RealFile(filename);
 				}
 				return NULL;
 			}

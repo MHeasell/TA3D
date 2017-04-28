@@ -291,7 +291,7 @@ namespace TA3D
 		TA3D::VARS::pal = new SDL_Color[256]; // Allocate a new palette
 
 		LOG_DEBUG("Loading TA's palette...");
-		bool palette = TA3D::UTILS::load_palette(pal);
+		bool palette = TA3D::load_palette(pal);
 		if (!palette)
 			LOG_WARNING("Failed to load the palette");
 

@@ -144,6 +144,5 @@ namespace TA3D
 
 // TODO Must be removed
 using namespace TA3D::VARS;
-using namespace TA3D::UTILS;
 
 #endif // __TA3D_NAMESPACE_H__

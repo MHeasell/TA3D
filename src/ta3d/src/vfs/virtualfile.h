@@ -21,63 +21,60 @@
 **   Zuzuf:  This module implements a File object for memory buffers
 */
 
-#ifndef __TA3D_UTILS_VIRTUALFILE_H__
-#define __TA3D_UTILS_VIRTUALFILE_H__
+#ifndef __TA3D_VFS_VIRTUALFILE_H__
+#define __TA3D_VFS_VIRTUALFILE_H__
 
 #include "file.h"
 
 namespace TA3D
 {
-	namespace UTILS
+	class VirtualFile : public File
 	{
-		class VirtualFile : public File
-		{
-		public:
-			VirtualFile();
-			VirtualFile(byte* buf, int s, int start = 0, int end = -1);
-			//! This is an abstract class, its destructor must be virtual
-			virtual ~VirtualFile();
+	public:
+		VirtualFile();
+		VirtualFile(byte* buf, int s, int start = 0, int end = -1);
+		//! This is an abstract class, its destructor must be virtual
+		virtual ~VirtualFile();
 
-			//! Read s bytes and write them in memory pointed by p
-			virtual int read(void* p, int s);
-			//! Returns the size of the file
-			virtual int size();
-			//! Returns true if end of file has been reached
-			virtual bool eof();
-			//! Returns current position in file
-			virtual int tell();
-			//! Set absolute position in file
-			virtual void seek(int pos);
-			//! Read a single line from the file, returns true while end of file has not been reached
-			virtual bool readLine(String& line);
-			//! Returns true if the file is opened
-			virtual bool isOpen();
-			//! Returns a pointer to a memory buffer containing the file
-			virtual const char* data();
-			//! Close the file
-			virtual void close();
-			//! Tell if this is a real file (useful for use with external libraries)
-			virtual bool isReal() const;
-			//! Returns the real filename (if it's a real file)
-			virtual const String& getRealFilename() const;
+		//! Read s bytes and write them in memory pointed by p
+		virtual int read(void* p, int s);
+		//! Returns the size of the file
+		virtual int size();
+		//! Returns true if end of file has been reached
+		virtual bool eof();
+		//! Returns current position in file
+		virtual int tell();
+		//! Set absolute position in file
+		virtual void seek(int pos);
+		//! Read a single line from the file, returns true while end of file has not been reached
+		virtual bool readLine(String& line);
+		//! Returns true if the file is opened
+		virtual bool isOpen();
+		//! Returns a pointer to a memory buffer containing the file
+		virtual const char* data();
+		//! Close the file
+		virtual void close();
+		//! Tell if this is a real file (useful for use with external libraries)
+		virtual bool isReal() const;
+		//! Returns the real filename (if it's a real file)
+		virtual const String& getRealFilename() const;
 
-			//! Replace current buffer with the one given as parameter (it takes ownership of the new buffer which will be automatically deleted)
-			void setBuffer(byte* buf, int s, int start = 0, int end = -1);
+		//! Replace current buffer with the one given as parameter (it takes ownership of the new buffer which will be automatically deleted)
+		void setBuffer(byte* buf, int s, int start = 0, int end = -1);
 
-			//! Replace current buffer with the one given as parameter (it takes ownership of the new buffer which will be automatically deleted)
-			void copyBuffer(byte* buf, int s, int start = 0, int end = -1);
+		//! Replace current buffer with the one given as parameter (it takes ownership of the new buffer which will be automatically deleted)
+		void copyBuffer(byte* buf, int s, int start = 0, int end = -1);
 
-		private:
-			// Copying this kind of objects if forbidden!
-			virtual File& operator=(const File&) { return *this; }
+	private:
+		// Copying this kind of objects if forbidden!
+		virtual File& operator=(const File&) { return *this; }
 
-		private:
-			byte* buffer;
-			int bufferSize;
-			int pos;
-			int offset;
-			int streamSize;
-		};
-	}
+	private:
+		byte* buffer;
+		int bufferSize;
+		int pos;
+		int offset;
+		int streamSize;
+	};
 }
 #endif

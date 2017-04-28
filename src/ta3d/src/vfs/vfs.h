@@ -23,8 +23,8 @@
 **           it only maps a path/filename to the corresponding data.
 */
 
-#ifndef __TA3D_UTILS_VFS_H__
-#define __TA3D_UTILS_VFS_H__
+#ifndef __TA3D_VFS_VFS_H__
+#define __TA3D_VFS_VFS_H__
 
 #include <list>
 #include <vector>
@@ -38,134 +38,130 @@
 
 namespace TA3D
 {
-	namespace UTILS
+	class VFS : public ObjectLevelLockable
 	{
-		class VFS : public ObjectLevelLockable
+	private:
+		typedef VFS ThreadingPolicy;
+
+		struct CacheFileData
 		{
-		private:
-			typedef VFS ThreadingPolicy;
+			uint32 length;
+			byte* data;
+			String name;
+		}; // class CacheFileData
 
-			struct CacheFileData
-			{
-				uint32 length;
-				byte* data;
-				String name;
-			}; // class CacheFileData
+	public:
+		/**
+		 * Returns the global VFS instance
+		 */
+		static inline VFS* Instance()
+		{
+			static VFS instance;
+			return &instance;
+		}
 
-		public:
-			/**
-			 * Returns the global VFS instance
-			 */
-			static inline VFS* Instance()
-			{
-				static VFS instance;
-				return &instance;
-			}
+	public:
+		/**
+		 * Reloads all archives
+		 */
+		void reload();
 
-		public:
-			/**
-			 * Reloads all archives
-			 */
-			void reload();
+		uint32 getFilelist(String pattern, String::List& li);
+		uint32 getFilelist(String pattern, String::Vector& li);
 
-			uint32 getFilelist(String pattern, String::List& li);
-			uint32 getFilelist(String pattern, String::Vector& li);
+		uint32 getDirlist(String pattern, String::List& li);
+		uint32 getDirlist(String pattern, String::Vector& li);
 
-			uint32 getDirlist(String pattern, String::List& li);
-			uint32 getDirlist(String pattern, String::Vector& li);
+		File* readFile(const String& filename);
 
-			File* readFile(const String& filename);
+		File* readFileRange(const String& filename, const uint32 start, const uint32 length);
 
-			File* readFileRange(const String& filename, const uint32 start, const uint32 length);
+		bool fileExists(String filename);
 
-			bool fileExists(String filename);
+		int filePriority(const String& filename);
 
-			int filePriority(const String& filename);
+		String extractFile(const String& filename);
 
-			String extractFile(const String& filename);
+	private:
+		VFS();
 
-		private:
-			VFS();
+		~VFS();
 
-			~VFS();
+		/**
+		 * Loads all archives
+		 */
+		void load();
 
-			/**
-			 * Loads all archives
-			 */
-			void load();
+		/**
+		 * Unloads all archives
+		 */
+		void unload();
 
-			/**
-			 * Unloads all archives
-			 */
-			void unload();
+		/**
+		 * Adds the files within the given archive to the VFS file table.
+		 *
+		 * @param filename The path to the archive file.
+		 * @param priority
+		 */
+		void addArchive(const String& filename, const int priority);
 
-			/**
-			 * Adds the files within the given archive to the VFS file table.
-			 *
-			 * @param filename The path to the archive file.
-			 * @param priority
-			 */
-			void addArchive(const String& filename, const int priority);
+		void locateAndReadArchives(const String& path, const int priority);
 
-			void locateAndReadArchives(const String& path, const int priority);
+		void putInCache(const String& filename, File* file);
 
-			void putInCache(const String& filename, File* file);
+		CacheFileData* isInCache(const String& filename);
 
-			CacheFileData* isInCache(const String& filename);
+		/**
+		 * BUilds the table of all dirs from the list of all files
+		 */
+		void buildDirMap();
 
-			/**
-			 * BUilds the table of all dirs from the list of all files
-			 */
-			void buildDirMap();
+	protected:
+		void loadWL();
+		void unloadWL();
 
-		protected:
-			void loadWL();
-			void unloadWL();
+		CacheFileData* isInCacheWL(const String& filename);
 
-			CacheFileData* isInCacheWL(const String& filename);
+		File* isInDiskCacheWL(const String& filename);
 
-			File* isInDiskCacheWL(const String& filename);
+	private:
+		/**
+		 * A list of paths to search when looking for archive files
+		 * to load from the underlying file system.
+		 */
+		String::Vector pPaths;
 
-		private:
-			/**
-			 * A list of paths to search when looking for archive files
-			 * to load from the underlying file system.
-			 */
-			String::Vector pPaths;
+		typedef TA3D::HashMap<Archive::FileInfo*>::Dense FileInfoMap;
 
-			typedef TA3D::UTILS::HashMap<Archive::FileInfo*>::Dense FileInfoMap;
+		/**
+		 * A map of file paths to FileInfo objects.
+		 * A file path represents a file within the VFS.
+		 * The corresponding FileInfo object indicates
+		 * where the file can be found on the underlying filesystem.
+		 */
+		FileInfoMap pFiles;
 
-			/**
-			 * A map of file paths to FileInfo objects.
-			 * A file path represents a file within the VFS.
-			 * The corresponding FileInfo object indicates
-			 * where the file can be found on the underlying filesystem.
-			 */
-			FileInfoMap pFiles;
+		typedef TA3D::HashMap<TA3D::HashMap<bool>::Sparse>::Dense DirMap;
+		DirMap pDirs;
 
-			typedef TA3D::UTILS::HashMap<TA3D::UTILS::HashMap<bool>::Sparse>::Dense DirMap;
-			DirMap pDirs;
+		/**
+		 * A list of cached files.
+		 * The cache is used to avoid hitting the disk
+		 * when a file is requested multiple times.
+		 */
+		std::list<CacheFileData> fileCache;
 
-			/**
-			 * A list of cached files.
-			 * The cache is used to avoid hitting the disk
-			 * when a file is requested multiple times.
-			 */
-			std::list<CacheFileData> fileCache;
+		/**
+		 * A list of Archive*, needed only for cleanup.
+		 */
+		std::vector<Archive*> archives;
 
-			/**
-			 * A list of Archive*, needed only for cleanup.
-			 */
-			std::vector<Archive*> archives;
+	}; // class VFS;
 
-		}; // class VFS;
+	bool load_palette(SDL_Color* pal, const String& filename = "palettes\\palette.pal");
 
-		bool load_palette(SDL_Color* pal, const String& filename = "palettes\\palette.pal");
-
-		bool loadFromFile(String::List& out, const String& filename, const uint32 sizeLimit, const bool emptyListBefore);
-		bool loadFromFile(String::Vector& out, const String& filename, const uint32 sizeLimit, const bool emptyListBefore);
-
-	} // namespace utils
+	bool loadFromFile(String::List& out, const String& filename, const uint32 sizeLimit, const bool emptyListBefore);
+	bool loadFromFile(String::Vector& out, const String& filename, const uint32 sizeLimit, const bool emptyListBefore);
 } // namespace TA3D
 
-#endif // __TA3D_UTILS_VFS_H__
+#endif // __TA3D_VFS_VFS_H__

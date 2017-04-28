@@ -127,10 +127,10 @@ int main(int argc, char* argv[])
 	try
 	{
 		// register archives loaders which VFS will use
-		TA3D::UTILS::Archive::registerArchiveFinder(Hpi::finder);
-		TA3D::UTILS::Archive::registerArchiveLoader(Hpi::loader);
-		TA3D::UTILS::Archive::registerArchiveFinder(RealFS::finder);
-		TA3D::UTILS::Archive::registerArchiveLoader(RealFS::loader);
+		TA3D::Archive::registerArchiveFinder(Hpi::finder);
+		TA3D::Archive::registerArchiveLoader(Hpi::loader);
+		TA3D::Archive::registerArchiveFinder(RealFS::finder);
+		TA3D::Archive::registerArchiveLoader(RealFS::loader);
 
 		// set up services
 		KeyboardService keyboardService;

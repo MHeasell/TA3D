@@ -1422,7 +1422,7 @@ namespace TA3D
 			return (e >= 0) ? pObjects[e] : GUIOBJ::Ptr();
 		}
 
-		void WND::load_gui(const String& filename, TA3D::UTILS::HashMap<std::vector<TA3D::Interfaces::GfxTexture>*>::Dense& gui_hashtable)
+		void WND::load_gui(const String& filename, TA3D::HashMap<std::vector<TA3D::Interfaces::GfxTexture>*>::Dense& gui_hashtable)
 		{
 			ingame_window = true;
 

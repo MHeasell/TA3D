@@ -188,7 +188,7 @@ namespace TA3D
 		template <typename C>
 		void forEach(C callback)
 		{
-			for (TA3D::UTILS::HashMap<String>::Dense::iterator it = pTable.begin(); it != pTable.end(); ++it)
+			for (TA3D::HashMap<String>::Dense::iterator it = pTable.begin(); it != pTable.end(); ++it)
 				callback(it.key(), it.value());
 		}
 
@@ -196,7 +196,7 @@ namespace TA3D
 
 	private:
 		//! The hash table
-		TA3D::UTILS::HashMap<String>::Dense pTable;
+		TA3D::HashMap<String>::Dense pTable;
 
 		//! CharCase
 		bool pIgnoreCase;

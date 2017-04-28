@@ -3,151 +3,148 @@
 
 namespace TA3D
 {
-	namespace UTILS
+	void VirtualFile::setBuffer(byte* buf, int s, int start, int end)
 	{
-		void VirtualFile::setBuffer(byte* buf, int s, int start, int end)
-		{
-			pos = 0;
-			bufferSize = s;
-			if (buffer)
-				delete[] buffer;
-			buffer = buf;
-			if (buffer == NULL)
-				bufferSize = 0;
-			offset = Math::Max(start, 0);
-			if (end == -1)
-				streamSize = bufferSize + offset;
-			else
-				streamSize = Math::Max(end, offset + bufferSize);
-		}
+		pos = 0;
+		bufferSize = s;
+		if (buffer)
+			delete[] buffer;
+		buffer = buf;
+		if (buffer == NULL)
+			bufferSize = 0;
+		offset = Math::Max(start, 0);
+		if (end == -1)
+			streamSize = bufferSize + offset;
+		else
+			streamSize = Math::Max(end, offset + bufferSize);
+	}
 
-		void VirtualFile::copyBuffer(byte* buf, int s, int start, int end)
+	void VirtualFile::copyBuffer(byte* buf, int s, int start, int end)
+	{
+		pos = 0;
+		bufferSize = s;
+		if (buffer)
+			delete[] buffer;
+		if (s)
 		{
-			pos = 0;
-			bufferSize = s;
-			if (buffer)
-				delete[] buffer;
-			if (s)
-			{
-				buffer = new byte[s + 1];
-				memcpy(buffer, buf, s);
-				buffer[s] = 0;
-			}
-			else
-				buffer = NULL;
-			if (buffer == NULL)
-				bufferSize = 0;
-			offset = Math::Max(start, 0);
-			if (end == -1)
-				streamSize = bufferSize + offset;
-			else
-				streamSize = Math::Max(end, offset + bufferSize);
+			buffer = new byte[s + 1];
+			memcpy(buffer, buf, s);
+			buffer[s] = 0;
 		}
+		else
+			buffer = NULL;
+		if (buffer == NULL)
+			bufferSize = 0;
+		offset = Math::Max(start, 0);
+		if (end == -1)
+			streamSize = bufferSize + offset;
+		else
+			streamSize = Math::Max(end, offset + bufferSize);
+	}
 
-		VirtualFile::VirtualFile() : buffer(NULL), bufferSize(0), pos(0), offset(0), streamSize(0)
-		{
-		}
+	VirtualFile::VirtualFile() : buffer(NULL), bufferSize(0), pos(0), offset(0), streamSize(0)
+	{
+	}
 
-		VirtualFile::VirtualFile(byte* buf, int s, int start, int end) : buffer(NULL), bufferSize(0), pos(0), offset(0), streamSize(0)
-		{
-			setBuffer(buf, s, start, end);
-		}
+	VirtualFile::VirtualFile(byte* buf, int s, int start, int end) : buffer(NULL), bufferSize(0), pos(0), offset(0), streamSize(0)
+	{
+		setBuffer(buf, s, start, end);
+	}
 
-		VirtualFile::~VirtualFile()
-		{
-			setBuffer(NULL, 0);
-		}
+	VirtualFile::~VirtualFile()
+	{
+		setBuffer(NULL, 0);
+	}
 
-		bool VirtualFile::eof()
-		{
-			return pos == streamSize;
-		}
+	bool VirtualFile::eof()
+	{
+		return pos == streamSize;
+	}
 
-		bool VirtualFile::isOpen()
-		{
-			return buffer != NULL;
-		}
+	bool VirtualFile::isOpen()
+	{
+		return buffer != NULL;
+	}
 
-		int VirtualFile::size()
-		{
-			return streamSize;
-		}
+	int VirtualFile::size()
+	{
+		return streamSize;
+	}
 
-		int VirtualFile::tell()
-		{
-			return pos;
-		}
+	int VirtualFile::tell()
+	{
+		return pos;
+	}
 
-		void VirtualFile::seek(int pos)
-		{
-			this->pos = Math::Clamp(pos, 0, streamSize);
-		}
+	void VirtualFile::seek(int pos)
+	{
+		this->pos = Math::Clamp(pos, 0, streamSize);
+	}
 
-		int VirtualFile::read(void* q, int s)
+	int VirtualFile::read(void* q, int s)
+	{
+		char* p = (char*)q;
+		int k = 0;
+		for (; s && pos < offset && pos < streamSize; ++pos, --s, ++p, ++k)
+			*p = 0;
+		if (pos == streamSize || s <= 0)
+			return k;
+		int n = Math::Min(s, offset + bufferSize - pos);
+		memcpy(p, buffer + pos, n);
+		pos += n;
+		s -= n;
+		if (s)
 		{
-			char* p = (char*)q;
-			int k = 0;
-			for (; s && pos < offset && pos < streamSize; ++pos, --s, ++p, ++k)
+			p += n;
+			for (; s && pos < streamSize; ++pos, --s, ++p, ++k)
 				*p = 0;
-			if (pos == streamSize || s <= 0)
-				return k;
-			int n = Math::Min(s, offset + bufferSize - pos);
-			memcpy(p, buffer + pos, n);
-			pos += n;
-			s -= n;
-			if (s)
-			{
-				p += n;
-				for (; s && pos < streamSize; ++pos, --s, ++p, ++k)
-					*p = 0;
-			}
-			return k + n;
 		}
+		return k + n;
+	}
 
-		bool VirtualFile::readLine(String& line)
+	bool VirtualFile::readLine(String& line)
+	{
+		if (pos == streamSize)
+			return false;
+
+		line.clear();
+		if (pos < offset || pos >= offset + bufferSize)
 		{
-			if (pos == streamSize)
-				return false;
-
-			line.clear();
-			if (pos < offset || pos >= offset + bufferSize)
-			{
-				++pos;
-				return true;
-			}
-
-			char* end = (char*)buffer + offset + bufferSize;
-			for (char *p = (char *)buffer + pos; p != end && *p != 0 && *p != 13 && *p != 10; ++pos, ++p)
-				line << *p;
-
+			++pos;
 			return true;
 		}
 
-		const char* VirtualFile::data()
-		{
-			return (const char*)buffer;
-		}
+		char* end = (char*)buffer + offset + bufferSize;
+		for (char *p = (char *)buffer + pos; p != end && *p != 0 && *p != 13 && *p != 10; ++pos, ++p)
+			line << *p;
 
-		void VirtualFile::close()
-		{
-			if (buffer)
-				delete[] buffer;
-			buffer = NULL;
-			bufferSize = 0;
-			pos = 0;
-			offset = 0;
-			streamSize = 0;
-		}
+		return true;
+	}
 
-		bool VirtualFile::isReal() const
-		{
-			return false;
-		}
+	const char* VirtualFile::data()
+	{
+		return (const char*)buffer;
+	}
 
-		const String& VirtualFile::getRealFilename() const
-		{
-			static String empty;
-			return empty;
-		}
+	void VirtualFile::close()
+	{
+		if (buffer)
+			delete[] buffer;
+		buffer = NULL;
+		bufferSize = 0;
+		pos = 0;
+		offset = 0;
+		streamSize = 0;
+	}
+
+	bool VirtualFile::isReal() const
+	{
+		return false;
+	}
+
+	const String& VirtualFile::getRealFilename() const
+	{
+		static String empty;
+		return empty;
 	}
 }

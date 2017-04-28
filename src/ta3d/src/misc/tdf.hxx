@@ -11,10 +11,10 @@ namespace TA3D
 		{
 			String keyToFind(key);
 			keyToFind.toLower();
-			TA3D::UTILS::HashMap<String>::Dense::iterator entry = pTable.find(keyToFind);
+			TA3D::HashMap<String>::Dense::iterator entry = pTable.find(keyToFind);
 			return (entry == pTable.end() || entry->empty() ? def : entry->to_sint32());
 		}
-		TA3D::UTILS::HashMap<String>::Dense::iterator entry = pTable.find(key);
+		TA3D::HashMap<String>::Dense::iterator entry = pTable.find(key);
 		return (entry == pTable.end() || entry->empty() ? def : entry->to_sint32());
 	}
 
@@ -25,10 +25,10 @@ namespace TA3D
 		{
 			String keyToFind(key);
 			keyToFind.toLower();
-			TA3D::UTILS::HashMap<String>::Dense::iterator entry = pTable.find(keyToFind);
+			TA3D::HashMap<String>::Dense::iterator entry = pTable.find(keyToFind);
 			return (entry == pTable.end() || entry->empty() ? 0 : entry->to_sint32());
 		}
-		TA3D::UTILS::HashMap<String>::Dense::iterator entry = pTable.find(key);
+		TA3D::HashMap<String>::Dense::iterator entry = pTable.find(key);
 		return (entry == pTable.end() || entry->empty() ? 0 : entry->to_sint32());
 	}
 
@@ -39,10 +39,10 @@ namespace TA3D
 		{
 			String keyToFind(key);
 			keyToFind.toLower();
-			TA3D::UTILS::HashMap<String>::Dense::iterator entry = pTable.find(keyToFind);
+			TA3D::HashMap<String>::Dense::iterator entry = pTable.find(keyToFind);
 			return entry == pTable.end() ? def : entry.value();
 		}
-		TA3D::UTILS::HashMap<String>::Dense::iterator entry = pTable.find(key);
+		TA3D::HashMap<String>::Dense::iterator entry = pTable.find(key);
 		return (entry != pTable.end()) ? entry.value() : def;
 	}
 
@@ -53,10 +53,10 @@ namespace TA3D
 		{
 			String keyToFind(key);
 			keyToFind.toLower();
-			TA3D::UTILS::HashMap<String>::Dense::iterator entry = pTable.find(keyToFind);
+			TA3D::HashMap<String>::Dense::iterator entry = pTable.find(keyToFind);
 			return entry == pTable.end() ? nullptr : entry.value();
 		}
-		TA3D::UTILS::HashMap<String>::Dense::iterator entry = pTable.find(key);
+		TA3D::HashMap<String>::Dense::iterator entry = pTable.find(key);
 		return (entry != pTable.end()) ? entry.value() : nullptr;
 	}
 

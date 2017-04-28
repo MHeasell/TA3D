@@ -26,9 +26,9 @@ namespace TA3D
 		uint32 getDirlist(String pattern, String::List& li);
 		uint32 getDirlist(String pattern, String::Vector& li);
 
-		UTILS::File* readFile(const String& filename);
+		File* readFile(const String& filename);
 
-		UTILS::File* readFileRange(const String& filename, const uint32 start, const uint32 length);
+		File* readFileRange(const String& filename, const uint32 start, const uint32 length);
 
 		bool fileExists(String filename);
 

@@ -41,7 +41,7 @@ namespace TA3D
 
 	protected:
 		uint32 unitID;
-		UTILS::HashMap<int>::Dense return_value;
+		HashMap<int>::Dense return_value;
 
 	public:
 		inline UnitScriptInterface() {}

@@ -60,7 +60,7 @@ namespace TA3D
 
 		private:
 			std::vector<Skin*> skins;
-			UTILS::HashMap<Skin*>::Dense hash_skin;
+			HashMap<Skin*>::Dense hash_skin;
 		}; // class SKIN_MANAGER
 
 		extern SKIN_MANAGER skin_manager;

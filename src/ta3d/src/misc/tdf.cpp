@@ -311,12 +311,12 @@ namespace TA3D
 		{
 			String keyToFind(key);
 			keyToFind.toLower();
-			TA3D::UTILS::HashMap<String>::Dense::iterator entry = pTable.find(keyToFind);
+			TA3D::HashMap<String>::Dense::iterator entry = pTable.find(keyToFind);
 			if (entry == pTable.end() || entry->empty())
 				return def;
 			return entry->to_float(f) ? f : def;
 		}
-		TA3D::UTILS::HashMap<String>::Dense::iterator entry = pTable.find(key);
+		TA3D::HashMap<String>::Dense::iterator entry = pTable.find(key);
 		if (entry == pTable.end() || entry->empty())
 			return def;
 		return entry->to_float(f) ? f : def;
@@ -328,12 +328,12 @@ namespace TA3D
 		{
 			String keyToFind(key);
 			keyToFind.toLower();
-			TA3D::UTILS::HashMap<String>::Dense::iterator entry = pTable.find(keyToFind);
+			TA3D::HashMap<String>::Dense::iterator entry = pTable.find(keyToFind);
 			if (entry == pTable.end() || entry->empty())
 				return def;
 			return entry->to_bool();
 		}
-		TA3D::UTILS::HashMap<String>::Dense::iterator entry = pTable.find(key);
+		TA3D::HashMap<String>::Dense::iterator entry = pTable.find(key);
 		if (entry == pTable.end() || entry->empty())
 			return def;
 		return entry->to_bool();

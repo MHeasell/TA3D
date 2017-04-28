@@ -311,9 +311,9 @@ namespace TA3D
 			Skin* skin;
 
 			//! hashtable used to speed up loading of *.gui files and save memory
-			TA3D::UTILS::HashMap<std::vector<TA3D::Interfaces::GfxTexture>*>::Dense gui_hashtable;
+			TA3D::HashMap<std::vector<TA3D::Interfaces::GfxTexture>*>::Dense gui_hashtable;
 			//! hashtable used to speed up operations on WND objects
-			TA3D::UTILS::HashMap<int>::Dense wnd_hashtable;
+			TA3D::HashMap<int>::Dense wnd_hashtable;
 
 			//!
 			String cached_key;

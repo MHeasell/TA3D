@@ -109,7 +109,7 @@ namespace TA3D
 		** \param filename
 		** \param gui_hashtable
 		*/
-			void load_gui(const String& filename, TA3D::UTILS::HashMap<std::vector<TA3D::Interfaces::GfxTexture>*>::Dense& gui_hashtable);
+			void load_gui(const String& filename, TA3D::HashMap<std::vector<TA3D::Interfaces::GfxTexture>*>::Dense& gui_hashtable);
 
 			/*!
 		** \brief Respond to Interface message
@@ -184,7 +184,7 @@ namespace TA3D
 			String Name;
 
 			//! hashtable used to speed up operations on GUIOBJ objects
-			TA3D::UTILS::HashMap<int>::Dense obj_hashtable;
+			TA3D::HashMap<int>::Dense obj_hashtable;
 
 			//! The texture background
 			GLuint background;

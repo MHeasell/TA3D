@@ -164,7 +164,7 @@ namespace TA3D
 		typedef std::deque<Font*> FontList;
 
 		FontList pFontList;
-		UTILS::HashMap<Font*>::Dense font_table;
+		HashMap<Font*>::Dense font_table;
 	}; // class FontManager
 
 	//! Font manager

@@ -32,7 +32,7 @@ namespace TA3D
 		};
 
 	private:
-		typedef UTILS::HashMap<SocketNode*, int>::Dense SockType;
+		typedef HashMap<SocketNode*, int>::Dense SockType;
 		SockType sockets;
 		int maxid;
 
