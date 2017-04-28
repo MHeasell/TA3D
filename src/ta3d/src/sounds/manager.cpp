@@ -916,5 +916,5 @@ namespace TA3D
 				return;
 			Mix_VolumeMusic(volume);
 		}
-	} // namespace Interfaces
+	} // namespace Audio
 } // namespace TA3D
