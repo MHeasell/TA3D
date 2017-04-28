@@ -21,9 +21,29 @@
 
 namespace TA3D
 {
+	enum MouseButtonFlag
+	{
+		LeftMouseButton = 1,
+		RightMouseButton = 2,
+		MiddleMouseButton = 4,
+	};
+
 	namespace VARS
 	{
-		extern int mouse_x, mouse_y, mouse_z, mouse_b;
+		extern int mouse_x;
+		extern int mouse_y;
+		extern int mouse_z;
+
+		/**
+		 * Indicates which mouse buttons are currently held down.
+		 * This is a bitmask with the following flags:
+		 *
+		 * 1: left mouse button
+		 * 2: right mouse button
+		 * 4: middle mouse button
+		 */
+		extern int mouse_b;
+
 		extern float fmouse_x, fmouse_y;
 	}
 

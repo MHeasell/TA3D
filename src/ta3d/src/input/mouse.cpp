@@ -108,12 +108,12 @@ namespace TA3D
 		dy = rmy - old_my;
 		fmouse_x += float(dx) * lp_CONFIG->mouse_sensivity;
 		fmouse_y += float(dy) * lp_CONFIG->mouse_sensivity;
-		if (m_b & SDL_BUTTON(1))
-			mouse_b |= 1;
-		if (m_b & SDL_BUTTON(3))
-			mouse_b |= 2;
-		if (m_b & SDL_BUTTON(2))
-			mouse_b |= 4;
+		if (m_b & SDL_BUTTON(SDL_BUTTON_LEFT))  // left mouse button
+			mouse_b |= LeftMouseButton;
+		if (m_b & SDL_BUTTON(SDL_BUTTON_RIGHT))  // right mouse button
+			mouse_b |= RightMouseButton;
+		if (m_b & SDL_BUTTON(SDL_BUTTON_MIDDLE))  // middle mouse button
+			mouse_b |= MiddleMouseButton;
 		fmouse_x = Math::Clamp(fmouse_x, 0.f, (float)(SCREEN_W));
 		fmouse_y = Math::Clamp(fmouse_y, 0.f, (float)SCREEN_H);
 		mouse_x = (int)(fmouse_x + 0.5f);
