@@ -43,8 +43,6 @@ namespace TA3D
 		 * 4: middle mouse button
 		 */
 		extern int mouse_b;
-
-		extern float fmouse_x, fmouse_y;
 	}
 
 	/*!

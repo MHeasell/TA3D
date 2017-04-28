@@ -21,8 +21,6 @@
 #include "keyboard.h"
 #include "../misc/math.h"
 
-float TA3D::VARS::fmouse_x = 0.0f;
-float TA3D::VARS::fmouse_y = 0.0f;
 int TA3D::VARS::mouse_x = 0;
 int TA3D::VARS::mouse_y = 0;
 int TA3D::VARS::mouse_z = 0;
