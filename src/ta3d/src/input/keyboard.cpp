@@ -19,18 +19,13 @@
 #include "keyboard.h"
 #include "mouse.h"
 
-using namespace TA3D::VARS;
-
 namespace TA3D
 {
-	namespace VARS
-	{
-		KeyCode asciiToKeyCode[256];
-		std::unordered_set<KeyCode> keyState;
-		std::unordered_set<KeyCode> previousKeyState;
-		std::deque<KeyboardBufferItem> keyboardBuffer;
-		std::unordered_map<KeyCode, KeyCode> keyCodeMap;
-	}
+	KeyCode asciiToKeyCode[256];
+	std::unordered_set<KeyCode> keyState;
+	std::unordered_set<KeyCode> previousKeyState;
+	std::deque<KeyboardBufferItem> keyboardBuffer;
+	std::unordered_map<KeyCode, KeyCode> keyCodeMap;
 
 	bool isKeyDown(KeyCode keycode)
 	{

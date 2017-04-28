@@ -111,20 +111,17 @@ namespace TA3D
 		int getMaxTextureSizeAllowed() const;
 	};
 
-	namespace VARS
-	{
-		extern SDL_Window* screen;
-		extern IInterfaceManager* InterfaceManager;
-		extern TA3D::GFX::Ptr gfx;
+	extern SDL_Window* screen;
+	extern IInterfaceManager* InterfaceManager;
+	extern TA3D::GFX::Ptr gfx;
 
-		extern SDL_Color* pal;
-		extern TA3D::TA3DCONFIG* lp_CONFIG;
+	extern SDL_Color* pal;
+	extern TA3D::TA3DCONFIG* lp_CONFIG;
 
-		extern String TA3D_CURRENT_MOD;
+	extern String TA3D_CURRENT_MOD;
 
 // Some constant data needed by the engine ( like number of ticks/sec. to simulate )
 #define TICKS_PER_SEC 30
-	}
 
 	template <class T>
 	inline void setFlag(T& out, const int flag) { out = T(out | flag); }
@@ -136,12 +133,9 @@ namespace TA3D
 	inline bool isFlagSet(const T& in, const int flag) { return (in & flag) != 0; }
 } // namespace TA3D
 
-#define SCREEN_W (TA3D::VARS::gfx->width)
-#define SCREEN_H (TA3D::VARS::gfx->height)
+#define SCREEN_W (TA3D::gfx->width)
+#define SCREEN_H (TA3D::gfx->height)
 
 #define MILLISECONDS_SINCE_INIT SDL_GetTicks()
-
-// TODO Must be removed
-using namespace TA3D::VARS;
 
 #endif // __TA3D_NAMESPACE_H__

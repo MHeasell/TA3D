@@ -21,11 +21,11 @@
 #include "keyboard.h"
 #include "../misc/math.h"
 
-int TA3D::VARS::mouse_x = 0;
-int TA3D::VARS::mouse_y = 0;
-int TA3D::VARS::mouse_z = 0;
-int TA3D::VARS::mouse_b = 0;
-int TA3D::VARS::previousMouseState = 0;
+int TA3D::mouse_x = 0;
+int TA3D::mouse_y = 0;
+int TA3D::mouse_z = 0;
+int TA3D::mouse_b = 0;
+int TA3D::previousMouseState = 0;
 int CURSOR_MOVE;
 int CURSOR_GREEN;
 int CURSOR_CROSS;
@@ -50,8 +50,6 @@ int CURSOR_REVIVE;
 TA3D::Gaf::AnimationList cursor;
 
 int cursor_type = CURSOR_DEFAULT;
-
-using namespace TA3D::VARS;
 
 namespace TA3D
 {

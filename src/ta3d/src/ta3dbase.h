@@ -28,12 +28,7 @@
 
 namespace TA3D
 {
-	namespace VARS
-	{
-		extern SDL_Color* pal;
-	}
-
-	using namespace TA3D::VARS;
+	extern SDL_Color* pal;
 
 	extern const float player_color[30];
 	extern unsigned int player_color_map[10];

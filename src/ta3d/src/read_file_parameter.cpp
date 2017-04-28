@@ -17,19 +17,19 @@ namespace TA3D
 	*/
 	void ReadFileParameter()
 	{
-		if (!TA3D::VARS::lp_CONFIG || TA3D::VARS::lp_CONFIG->file_param.empty())
+		if (!TA3D::lp_CONFIG || TA3D::lp_CONFIG->file_param.empty())
 			return;
 
-		LOG_DEBUG("Reading file parameter `" << TA3D::VARS::lp_CONFIG->file_param << "`...");
+		LOG_DEBUG("Reading file parameter `" << TA3D::lp_CONFIG->file_param << "`...");
 
-		TDFParser parser(TA3D::VARS::lp_CONFIG->file_param);
+		TDFParser parser(TA3D::lp_CONFIG->file_param);
 
-		String current_mod = TA3D::VARS::TA3D_CURRENT_MOD;
+		String current_mod = TA3D::TA3D_CURRENT_MOD;
 
-		VARS::TA3D_CURRENT_MOD = TA3D::VARS::lp_CONFIG->last_MOD = parser.pullAsString("TA3D.MOD", current_mod);
-		VARS::lp_CONFIG->serializedGameData = parser.pullAsString("TA3D.Game Data", TA3D::VARS::lp_CONFIG->serializedGameData);
+		TA3D_CURRENT_MOD = TA3D::lp_CONFIG->last_MOD = parser.pullAsString("TA3D.MOD", current_mod);
+		lp_CONFIG->serializedGameData = parser.pullAsString("TA3D.Game Data", TA3D::lp_CONFIG->serializedGameData);
 
-		if (current_mod != TA3D::VARS::TA3D_CURRENT_MOD) // Refresh file structure
+		if (current_mod != TA3D::TA3D_CURRENT_MOD) // Refresh file structure
 		{
 			Cache::Clear();
 
@@ -45,7 +45,7 @@ namespace TA3D
 		{
 			if (parser.pullAsBool("TA3D.Server")) // Server code
 			{
-				const String& host_name = parser.pullAsString("TA3D.Server name", TA3D::VARS::lp_CONFIG->player_name);
+				const String& host_name = parser.pullAsString("TA3D.Server name", TA3D::lp_CONFIG->player_name);
 				Menus::SetupGame::Execute(false, host_name); // Start the game in networking mode as server
 			}
 			else // Client code
@@ -57,9 +57,9 @@ namespace TA3D
 		else if (parser.pullAsBool("TA3D.Local game"))
 			Menus::SetupGame::Execute(false, String(), String(), false, parser.pullAsBool("TA3D.Instant start")); // Start the game in local mode
 
-		TA3D::VARS::TA3D_CURRENT_MOD = TA3D::VARS::lp_CONFIG->last_MOD = current_mod;
+		TA3D::TA3D_CURRENT_MOD = TA3D::lp_CONFIG->last_MOD = current_mod;
 
-		if (current_mod != TA3D::VARS::TA3D_CURRENT_MOD) // Refresh file structure
+		if (current_mod != TA3D::TA3D_CURRENT_MOD) // Refresh file structure
 		{
 			Cache::Clear(); // Clear the cache
 

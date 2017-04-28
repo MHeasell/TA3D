@@ -28,28 +28,25 @@ namespace TA3D
 		MiddleMouseButton = 4,
 	};
 
-	namespace VARS
-	{
-		extern int mouse_x;
-		extern int mouse_y;
-		extern int mouse_z;
+	extern int mouse_x;
+	extern int mouse_y;
+	extern int mouse_z;
 
-		/**
-		 * Indicates which mouse buttons are currently held down.
-		 * This is a bitmask with the following flags:
-		 *
-		 * 1: left mouse button
-		 * 2: right mouse button
-		 * 4: middle mouse button
-		 */
-		extern int mouse_b;
+	/**
+	 * Indicates which mouse buttons are currently held down.
+	 * This is a bitmask with the following flags:
+	 *
+	 * 1: left mouse button
+	 * 2: right mouse button
+	 * 4: middle mouse button
+	 */
+	extern int mouse_b;
 
-		/**
-		 * As mouse_b, but holds the previous state.
-		 * This is useful to detect state changes e.g. clicks.
-		 */
-		extern int previousMouseState;
-	}
+	/**
+	 * As mouse_b, but holds the previous state.
+	 * This is useful to detect state changes e.g. clicks.
+	 */
+	extern int previousMouseState;
 
 	/*!
 	** \brief poll mouse/keyboard events

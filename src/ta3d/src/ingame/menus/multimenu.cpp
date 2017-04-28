@@ -23,8 +23,6 @@
 #include <input/mouse.h>
 #include <misc/suspend.h>
 
-using namespace TA3D::VARS;
-
 namespace TA3D
 {
 	namespace Menus

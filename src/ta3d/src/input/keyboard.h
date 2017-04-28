@@ -35,39 +35,36 @@ namespace TA3D
 		KeyboardBufferItem(KeyCode keyCode, CodePoint codePoint): keyCode(keyCode), codePoint(codePoint) {}
 	};
 
-	namespace VARS
-	{
-		/**
-		 * Mapping of ASCII characters to key codes.
-		 */
-		extern KeyCode asciiToKeyCode[256];
+	/**
+	 * Mapping of ASCII characters to key codes.
+	 */
+	extern KeyCode asciiToKeyCode[256];
 
-		/**
-		 * Set recording the state of each key,
-		 * identified by its keycode.
-		 * If the key is down, the keycode is in the set.
-		 * Otherwise, if the key is up, the keycode is not in the set.
-		 */
-		extern std::unordered_set<KeyCode> keyState;
+	/**
+	 * Set recording the state of each key,
+	 * identified by its keycode.
+	 * If the key is down, the keycode is in the set.
+	 * Otherwise, if the key is up, the keycode is not in the set.
+	 */
+	extern std::unordered_set<KeyCode> keyState;
 
-		/**
-		 * Array recording the previous state of each key.
-		 * This is used by didKeyGoDown.
-		 */
-		extern std::unordered_set<KeyCode> previousKeyState;
+	/**
+	 * Array recording the previous state of each key.
+	 * This is used by didKeyGoDown.
+	 */
+	extern std::unordered_set<KeyCode> previousKeyState;
 
-		/**
-		 * A buffer that holds the keys received from key down events.
-		 */
-		extern std::deque<KeyboardBufferItem> keyboardBuffer;
+	/**
+	 * A buffer that holds the keys received from key down events.
+	 */
+	extern std::deque<KeyboardBufferItem> keyboardBuffer;
 
-		/**
-		 * A mapping of key codes to other key codes.
-		 * Key codes in this mapping will be translated
-		 * to the key code they are mapped to before processing.
-		 */
-		extern std::unordered_map<KeyCode, KeyCode> keyCodeMap;
-	}
+	/**
+	 * A mapping of key codes to other key codes.
+	 * Key codes in this mapping will be translated
+	 * to the key code they are mapped to before processing.
+	 */
+	extern std::unordered_map<KeyCode, KeyCode> keyCodeMap;
 
 	/**
 	 * Returns true if the key for the given keycode

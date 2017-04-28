@@ -344,12 +344,8 @@ namespace TA3D
 
 	} // namespace AUDIO
 
-	namespace VARS
-	{
-		//! The sound manager
-		extern Audio::Manager* sound_manager;
-
-	} // namespace VARS
+	//! The sound manager
+	extern Audio::Manager* sound_manager;
 
 } // namespace TA3D
 

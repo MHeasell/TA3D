@@ -43,13 +43,13 @@ namespace TA3D
 
 		bool Save()
 		{
-			if (!TA3D::VARS::lp_CONFIG)
+			if (!TA3D::lp_CONFIG)
 				return false;
 
 			// Make a copy that can be restored if TA3D does not start any more
 			TA3D::Settings::Backup(TA3D::Paths::ConfigFile);
 
-			TA3D::VARS::lp_CONFIG->last_MOD = TA3D::VARS::TA3D_CURRENT_MOD;
+			TA3D::lp_CONFIG->last_MOD = TA3D::TA3D_CURRENT_MOD;
 
 			String s;
 			s << "// TA3D Settings\n"
@@ -57,37 +57,37 @@ namespace TA3D
 			  << "[TA3D]\n"
 			  << "{\n"
 			  << "                  Version = " << TA3D_VERSION_HI << "." << TA3D_VERSION_LO << ";\n"
-			  << "                FPS Limit = " << TA3D::VARS::lp_CONFIG->fps_limit << "; // <= 0 means `unlimited`\n"
-			  << "              Time Factor = " << TA3D::VARS::lp_CONFIG->timefactor << ";\n"
-			  << "                     FSAA = " << TA3D::VARS::lp_CONFIG->fsaa << ";\n"
-			  << "               Anisotropy = " << TA3D::VARS::lp_CONFIG->anisotropy << ";\n"
-			  << "                 Language = " << TA3D::VARS::lp_CONFIG->Lang << ";\n"
-			  << "             Screen Width = " << TA3D::VARS::lp_CONFIG->screen_width << ";\n"
-			  << "            Screen Height = " << TA3D::VARS::lp_CONFIG->screen_height << ";\n"
-			  << "                 Show FPS = " << TA3D::VARS::lp_CONFIG->showfps << ";\n"
-			  << "           Show Wireframe = " << TA3D::VARS::lp_CONFIG->wireframe << ";\n"
-			  << "        Show Height Lines = " << TA3D::VARS::lp_CONFIG->height_line << ";\n"
-			  << "          Show FullScreen = " << TA3D::VARS::lp_CONFIG->fullscreen << ";\n"
-			  << "     Draw Console Loading = " << TA3D::VARS::lp_CONFIG->draw_console_loading << ";\n"
-			  << "                Game Data = " << TA3D::VARS::lp_CONFIG->serializedGameData << ";\n"
-			  << "                 Last MOD = " << TA3D::VARS::lp_CONFIG->last_MOD << ";\n"
-			  << "              Player name = " << TA3D::VARS::lp_CONFIG->player_name << ";\n"
-			  << "         Camera Zoom Mode = " << (int)TA3D::VARS::lp_CONFIG->camera_zoom << ";\n"
-			  << "     Camera Default Angle = " << TA3D::VARS::lp_CONFIG->camera_def_angle << ";\n"
-			  << "    Camera Default Height = " << TA3D::VARS::lp_CONFIG->camera_def_h << ";\n"
-			  << "        Camera Zoom Speed = " << TA3D::VARS::lp_CONFIG->camera_zoom_speed << ";\n"
-			  << "                     Skin = " << TA3D::VARS::lp_CONFIG->skin_name << ";\n"
-			  << "        Use Texture Cache = " << TA3D::VARS::lp_CONFIG->use_texture_cache << ";\n"
-			  << "               Net Server = " << TA3D::VARS::lp_CONFIG->net_server << "; // default: " << TA3D_DEFAULT_SERVER_HOSTNAME << "\n"
-			  << "  Use Texture Compression = " << TA3D::VARS::lp_CONFIG->use_texture_compression << ";\n"
-			  << "    Right Click Interface = " << TA3D::VARS::lp_CONFIG->right_click_interface << ";\n"
-			  << "             Sound Volume = " << TA3D::VARS::lp_CONFIG->sound_volume << ";\n"
-			  << "             Music Volume = " << TA3D::VARS::lp_CONFIG->music_volume << ";\n"
-			  << "              Grab Inputs = " << TA3D::VARS::lp_CONFIG->grab_inputs << ";\n"
-			  << "               7z command = " << TA3D::VARS::lp_CONFIG->system7zCommand << ";\n"
-			  << "           Resource Paths = " << TA3D::VARS::lp_CONFIG->resourcePaths << ";\n"
-			  << "           Developer Mode = " << TA3D::VARS::lp_CONFIG->developerMode << ";\n"
-			  << "          Texture Quality = " << TA3D::VARS::lp_CONFIG->unitTextureQuality << ";\n"
+			  << "                FPS Limit = " << TA3D::lp_CONFIG->fps_limit << "; // <= 0 means `unlimited`\n"
+			  << "              Time Factor = " << TA3D::lp_CONFIG->timefactor << ";\n"
+			  << "                     FSAA = " << TA3D::lp_CONFIG->fsaa << ";\n"
+			  << "               Anisotropy = " << TA3D::lp_CONFIG->anisotropy << ";\n"
+			  << "                 Language = " << TA3D::lp_CONFIG->Lang << ";\n"
+			  << "             Screen Width = " << TA3D::lp_CONFIG->screen_width << ";\n"
+			  << "            Screen Height = " << TA3D::lp_CONFIG->screen_height << ";\n"
+			  << "                 Show FPS = " << TA3D::lp_CONFIG->showfps << ";\n"
+			  << "           Show Wireframe = " << TA3D::lp_CONFIG->wireframe << ";\n"
+			  << "        Show Height Lines = " << TA3D::lp_CONFIG->height_line << ";\n"
+			  << "          Show FullScreen = " << TA3D::lp_CONFIG->fullscreen << ";\n"
+			  << "     Draw Console Loading = " << TA3D::lp_CONFIG->draw_console_loading << ";\n"
+			  << "                Game Data = " << TA3D::lp_CONFIG->serializedGameData << ";\n"
+			  << "                 Last MOD = " << TA3D::lp_CONFIG->last_MOD << ";\n"
+			  << "              Player name = " << TA3D::lp_CONFIG->player_name << ";\n"
+			  << "         Camera Zoom Mode = " << (int)TA3D::lp_CONFIG->camera_zoom << ";\n"
+			  << "     Camera Default Angle = " << TA3D::lp_CONFIG->camera_def_angle << ";\n"
+			  << "    Camera Default Height = " << TA3D::lp_CONFIG->camera_def_h << ";\n"
+			  << "        Camera Zoom Speed = " << TA3D::lp_CONFIG->camera_zoom_speed << ";\n"
+			  << "                     Skin = " << TA3D::lp_CONFIG->skin_name << ";\n"
+			  << "        Use Texture Cache = " << TA3D::lp_CONFIG->use_texture_cache << ";\n"
+			  << "               Net Server = " << TA3D::lp_CONFIG->net_server << "; // default: " << TA3D_DEFAULT_SERVER_HOSTNAME << "\n"
+			  << "  Use Texture Compression = " << TA3D::lp_CONFIG->use_texture_compression << ";\n"
+			  << "    Right Click Interface = " << TA3D::lp_CONFIG->right_click_interface << ";\n"
+			  << "             Sound Volume = " << TA3D::lp_CONFIG->sound_volume << ";\n"
+			  << "             Music Volume = " << TA3D::lp_CONFIG->music_volume << ";\n"
+			  << "              Grab Inputs = " << TA3D::lp_CONFIG->grab_inputs << ";\n"
+			  << "               7z command = " << TA3D::lp_CONFIG->system7zCommand << ";\n"
+			  << "           Resource Paths = " << TA3D::lp_CONFIG->resourcePaths << ";\n"
+			  << "           Developer Mode = " << TA3D::lp_CONFIG->developerMode << ";\n"
+			  << "          Texture Quality = " << TA3D::lp_CONFIG->unitTextureQuality << ";\n"
 			  << "}\n";
 
 			if (Paths::Files::SaveToFile(TA3D::Paths::ConfigFile, s))
@@ -126,54 +126,54 @@ namespace TA3D
 				return false;
 			}
 
-			TA3D::VARS::lp_CONFIG->fps_limit = cfgFile.pullAsFloat("TA3D.FPS Limit");
-			TA3D::VARS::lp_CONFIG->timefactor = cfgFile.pullAsFloat("TA3D.Time Factor");
+			TA3D::lp_CONFIG->fps_limit = cfgFile.pullAsFloat("TA3D.FPS Limit");
+			TA3D::lp_CONFIG->timefactor = cfgFile.pullAsFloat("TA3D.Time Factor");
 
-			TA3D::VARS::lp_CONFIG->fsaa = sint16(cfgFile.pullAsInt("TA3D.FSAA"));
-			TA3D::VARS::lp_CONFIG->anisotropy = sint16(cfgFile.pullAsInt("TA3D.Anisotropy", 1));
-			TA3D::VARS::lp_CONFIG->Lang = cfgFile.pullAsString("TA3D.Language").toLower();
-			TA3D::VARS::lp_CONFIG->screen_width = uint16(cfgFile.pullAsInt("TA3D.Screen Width"));
-			TA3D::VARS::lp_CONFIG->screen_height = uint16(cfgFile.pullAsInt("TA3D.Screen Height"));
+			TA3D::lp_CONFIG->fsaa = sint16(cfgFile.pullAsInt("TA3D.FSAA"));
+			TA3D::lp_CONFIG->anisotropy = sint16(cfgFile.pullAsInt("TA3D.Anisotropy", 1));
+			TA3D::lp_CONFIG->Lang = cfgFile.pullAsString("TA3D.Language").toLower();
+			TA3D::lp_CONFIG->screen_width = uint16(cfgFile.pullAsInt("TA3D.Screen Width"));
+			TA3D::lp_CONFIG->screen_height = uint16(cfgFile.pullAsInt("TA3D.Screen Height"));
 
-			TA3D::VARS::lp_CONFIG->showfps = cfgFile.pullAsBool("TA3D.Show FPS");
-			TA3D::VARS::lp_CONFIG->wireframe = cfgFile.pullAsBool("TA3D.Show Wireframe");
-			TA3D::VARS::lp_CONFIG->height_line = cfgFile.pullAsBool("TA3D.Show Height Lines");
-			TA3D::VARS::lp_CONFIG->fullscreen = cfgFile.pullAsBool("TA3D.Show FullScreen", false);
-			TA3D::VARS::lp_CONFIG->draw_console_loading = cfgFile.pullAsBool("TA3D.Draw Console Loading");
+			TA3D::lp_CONFIG->showfps = cfgFile.pullAsBool("TA3D.Show FPS");
+			TA3D::lp_CONFIG->wireframe = cfgFile.pullAsBool("TA3D.Show Wireframe");
+			TA3D::lp_CONFIG->height_line = cfgFile.pullAsBool("TA3D.Show Height Lines");
+			TA3D::lp_CONFIG->fullscreen = cfgFile.pullAsBool("TA3D.Show FullScreen", false);
+			TA3D::lp_CONFIG->draw_console_loading = cfgFile.pullAsBool("TA3D.Draw Console Loading");
 
-			TA3D::VARS::lp_CONFIG->serializedGameData = cfgFile.pullAsString("TA3D.Game Data", String());
-			TA3D::VARS::lp_CONFIG->last_MOD = cfgFile.pullAsString("TA3D.Last MOD", "");
+			TA3D::lp_CONFIG->serializedGameData = cfgFile.pullAsString("TA3D.Game Data", String());
+			TA3D::lp_CONFIG->last_MOD = cfgFile.pullAsString("TA3D.Last MOD", "");
 
-			TA3D::VARS::lp_CONFIG->camera_zoom = uint8(cfgFile.pullAsInt("TA3D.Camera Zoom Mode", ZOOM_NORMAL));
-			TA3D::VARS::lp_CONFIG->camera_def_angle = cfgFile.pullAsFloat("TA3D.Camera Default Angle", 63.44f);
-			TA3D::VARS::lp_CONFIG->camera_def_h = cfgFile.pullAsFloat("TA3D.Camera Default Height", 200.0f);
-			TA3D::VARS::lp_CONFIG->camera_zoom_speed = cfgFile.pullAsFloat("TA3D.Camera Zoom Speed", 1.0f);
+			TA3D::lp_CONFIG->camera_zoom = uint8(cfgFile.pullAsInt("TA3D.Camera Zoom Mode", ZOOM_NORMAL));
+			TA3D::lp_CONFIG->camera_def_angle = cfgFile.pullAsFloat("TA3D.Camera Default Angle", 63.44f);
+			TA3D::lp_CONFIG->camera_def_h = cfgFile.pullAsFloat("TA3D.Camera Default Height", 200.0f);
+			TA3D::lp_CONFIG->camera_zoom_speed = cfgFile.pullAsFloat("TA3D.Camera Zoom Speed", 1.0f);
 
-			TA3D::VARS::lp_CONFIG->use_texture_cache = cfgFile.pullAsBool("TA3D.Use Texture Cache", false);
+			TA3D::lp_CONFIG->use_texture_cache = cfgFile.pullAsBool("TA3D.Use Texture Cache", false);
 
-			TA3D::VARS::lp_CONFIG->skin_name = cfgFile.pullAsString("TA3D.Skin", "");
+			TA3D::lp_CONFIG->skin_name = cfgFile.pullAsString("TA3D.Skin", "");
 
-			TA3D::VARS::lp_CONFIG->net_server = cfgFile.pullAsString("TA3D.Net Server", TA3D_DEFAULT_SERVER_HOSTNAME);
+			TA3D::lp_CONFIG->net_server = cfgFile.pullAsString("TA3D.Net Server", TA3D_DEFAULT_SERVER_HOSTNAME);
 
-			TA3D::VARS::TA3D_CURRENT_MOD = TA3D::VARS::lp_CONFIG->last_MOD;
+			TA3D::TA3D_CURRENT_MOD = TA3D::lp_CONFIG->last_MOD;
 
-			TA3D::VARS::lp_CONFIG->player_name = cfgFile.pullAsString("TA3D.Player name", "player");
+			TA3D::lp_CONFIG->player_name = cfgFile.pullAsString("TA3D.Player name", "player");
 
-			TA3D::VARS::lp_CONFIG->use_texture_compression = cfgFile.pullAsBool("TA3D.Use Texture Compression", true);
+			TA3D::lp_CONFIG->use_texture_compression = cfgFile.pullAsBool("TA3D.Use Texture Compression", true);
 
-			TA3D::VARS::lp_CONFIG->right_click_interface = cfgFile.pullAsBool("TA3D.Right Click Interface", false);
+			TA3D::lp_CONFIG->right_click_interface = cfgFile.pullAsBool("TA3D.Right Click Interface", false);
 
-			TA3D::VARS::lp_CONFIG->sound_volume = cfgFile.pullAsInt("TA3D.Sound Volume", 128);
-			TA3D::VARS::lp_CONFIG->music_volume = cfgFile.pullAsInt("TA3D.Music Volume", 128);
+			TA3D::lp_CONFIG->sound_volume = cfgFile.pullAsInt("TA3D.Sound Volume", 128);
+			TA3D::lp_CONFIG->music_volume = cfgFile.pullAsInt("TA3D.Music Volume", 128);
 
-			TA3D::VARS::lp_CONFIG->grab_inputs = cfgFile.pullAsBool("TA3D.Grab Inputs", false);
+			TA3D::lp_CONFIG->grab_inputs = cfgFile.pullAsBool("TA3D.Grab Inputs", false);
 
-			TA3D::VARS::lp_CONFIG->system7zCommand = cfgFile.pullAsString("TA3D.7z command", "7z");
-			TA3D::VARS::lp_CONFIG->resourcePaths = cfgFile.pullAsString("TA3D.Resource Paths");
+			TA3D::lp_CONFIG->system7zCommand = cfgFile.pullAsString("TA3D.7z command", "7z");
+			TA3D::lp_CONFIG->resourcePaths = cfgFile.pullAsString("TA3D.Resource Paths");
 
-			TA3D::VARS::lp_CONFIG->developerMode = cfgFile.pullAsBool("TA3D.Developer Mode");
+			TA3D::lp_CONFIG->developerMode = cfgFile.pullAsBool("TA3D.Developer Mode");
 
-			TA3D::VARS::lp_CONFIG->unitTextureQuality = cfgFile.pullAsInt("TA3D.Texture Quality", 3);
+			TA3D::lp_CONFIG->unitTextureQuality = cfgFile.pullAsInt("TA3D.Texture Quality", 3);
 
 			String cfg_version = cfgFile.pullAsString("TA3D.Version");
 			String ref_version;

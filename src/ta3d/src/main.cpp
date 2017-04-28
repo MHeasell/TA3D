@@ -112,7 +112,7 @@ int main(int argc, char* argv[])
 
 	// Constructing config
 	auto config = std::make_unique<TA3DCONFIG>();
-	TA3D::VARS::lp_CONFIG = config.get();
+	TA3D::lp_CONFIG = config.get();
 
 	// Initialize all modules used by ta3d
 	TA3D::Initialize(argc, argv);

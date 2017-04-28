@@ -175,8 +175,8 @@ namespace TA3D
 		}
 
 		SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
-		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, TA3D::VARS::lp_CONFIG->fsaa > 1);
-		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, TA3D::VARS::lp_CONFIG->fsaa);
+		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, TA3D::lp_CONFIG->fsaa > 1);
+		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, TA3D::lp_CONFIG->fsaa);
 		SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 
 		SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
@@ -193,15 +193,15 @@ namespace TA3D
 		SDL_GL_SetAttribute(SDL_GL_ACCUM_ALPHA_SIZE, 0);
 
 		uint32 flags = SDL_WINDOW_OPENGL;
-		if (TA3D::VARS::lp_CONFIG->fullscreen)
+		if (TA3D::lp_CONFIG->fullscreen)
 			flags |= SDL_WINDOW_FULLSCREEN;
 
 		screen = SDL_CreateWindow(
 			"Total Annihilation 3D",
 			SDL_WINDOWPOS_CENTERED,
 			SDL_WINDOWPOS_CENTERED,
-			TA3D::VARS::lp_CONFIG->screen_width,
-			TA3D::VARS::lp_CONFIG->screen_height,
+			TA3D::lp_CONFIG->screen_width,
+			TA3D::lp_CONFIG->screen_height,
 			flags);
 
 		if (screen == NULL)
@@ -213,8 +213,8 @@ namespace TA3D
 				"TA3D SDL Window",
 				SDL_WINDOWPOS_CENTERED,
 				SDL_WINDOWPOS_CENTERED,
-				TA3D::VARS::lp_CONFIG->screen_width,
-				TA3D::VARS::lp_CONFIG->screen_height,
+				TA3D::lp_CONFIG->screen_width,
+				TA3D::lp_CONFIG->screen_height,
 				flags);
 		}
 
@@ -288,7 +288,7 @@ namespace TA3D
 		ati_workaround = checkVideoCardWorkaround();
 
 		LOG_DEBUG("Allocating palette memory...");
-		TA3D::VARS::pal = new SDL_Color[256]; // Allocate a new palette
+		TA3D::pal = new SDL_Color[256]; // Allocate a new palette
 
 		LOG_DEBUG("Loading TA's palette...");
 		bool palette = TA3D::load_palette(pal);
@@ -309,7 +309,7 @@ namespace TA3D
 		destroy_texture(textureColor);
 		destroy_texture(default_texture);
 
-		DELETE_ARRAY(TA3D::VARS::pal);
+		DELETE_ARRAY(TA3D::pal);
 
 		normal_font = NULL;
 		small_font = NULL;

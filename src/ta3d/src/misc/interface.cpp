@@ -23,7 +23,7 @@
 namespace TA3D
 {
 
-	IInterfaceManager* TA3D::VARS::InterfaceManager;
+	IInterfaceManager* InterfaceManager;
 
 	void IInterface::InitInterface()
 	{

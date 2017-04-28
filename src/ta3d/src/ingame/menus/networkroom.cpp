@@ -26,8 +26,6 @@
 #include <TA3D_NameSpace.h>
 #include <misc/suspend.h>
 
-using namespace TA3D::VARS;
-
 #define SERVER_LIST_REFRESH_DELAY 5000
 
 namespace TA3D
