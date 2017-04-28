@@ -25,8 +25,6 @@
 #include <misc/paths.h>
 #include <fstream>
 
-using namespace TA3D::Interfaces;
-
 TA3D::Audio::Manager* TA3D::sound_manager;
 
 namespace TA3D
