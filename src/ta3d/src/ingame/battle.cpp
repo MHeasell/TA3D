@@ -363,32 +363,6 @@ namespace TA3D
 				}
 			}
 
-			if (!TA3D_CTRL_PRESSED)
-			{
-				if (mouse_b == MiddleMouseButton)
-				{
-					get_mouse_mickeys(&mx, &my);
-					if (omb == mouse_b)
-					{
-						track_mode = -1;
-						cam.rpos.x += (float)mx * cam_h / 151.0f;
-						cam.rpos.z += (float)my * cam_h / 151.0f;
-						cam_has_target = false;
-					}
-					position_mouse(gfx->SCREEN_W_HALF, gfx->SCREEN_H_HALF);
-				}
-				else
-				{
-					if (omb == MiddleMouseButton)
-					{
-						position_mouse(gfx->SCREEN_W_HALF, gfx->SCREEN_H_HALF);
-						cam_has_target = false;
-					}
-				}
-			}
-
-			omb = mouse_b;
-
 			if (!Console::Instance()->activated())
 				keyArrowsNotInFreeCam();
 
@@ -2129,18 +2103,6 @@ namespace TA3D
 			units.draw_mini((float)map->map_w, (float)map->map_h, map->mini_w, map->mini_h);
 			weapons.draw_mini((float)map->map_w, (float)map->map_h, map->mini_w, map->mini_h);
 
-			if (mouse_b == MiddleMouseButton) // Moving the cam around
-			{
-				gfx->set_alpha_blending();
-				gfx->set_color(0xFFFFFFFF);
-				circle_texture.drawCentered(0.5f * (float)gfx->width, 0.5f * (float)gfx->height);
-				arrow_texture.drawRotated(0.5f * (float)gfx->width, 0.5f * (float)arrow_texture.getHeight(), 0.0f);
-				arrow_texture.drawRotated(0.5f * (float)gfx->width, (float)gfx->height - 0.5f * (float)arrow_texture.getHeight(), 180.0f);
-				arrow_texture.drawRotated(0.5f * (float)arrow_texture.getHeight(), 0.5f * (float)gfx->height, -90.0f);
-				arrow_texture.drawRotated((float)gfx->width - 0.5f * (float)arrow_texture.getHeight(), 0.5f * (float)gfx->height, 90.0f);
-				gfx->unset_alpha_blending();
-			}
-
 			if (view_dbg)
 			{
 				glDisable(GL_TEXTURE_2D);
@@ -2286,8 +2248,7 @@ namespace TA3D
 				fps.draw();
 			}
 
-			if (mouse_b != MiddleMouseButton || TA3D_CTRL_PRESSED)
-				draw_cursor();
+			draw_cursor();
 
 			if (shoot)
 			{
@@ -2368,8 +2329,6 @@ namespace TA3D
 
 		Camera::inGame = NULL;
 
-		arrow_texture.destroy();
-		circle_texture.destroy();
 		pause_tex.destroy();
 
 		LOG_INFO("Total Models: " << model_manager.nb_models);

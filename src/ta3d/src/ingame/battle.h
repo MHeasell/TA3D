@@ -266,10 +266,6 @@ namespace TA3D
 		//! \name Textures
 		//@{
 		//!
-		Interfaces::GfxTexture arrow_texture;
-		//!
-		Interfaces::GfxTexture circle_texture;
-		//!
 		Interfaces::GfxTexture pause_tex;
 		//@}
 
@@ -356,8 +352,6 @@ namespace TA3D
 		int mx;
 		//!
 		int my;
-		//!
-		int omb;
 		//!
 		int omb2;
 		//!

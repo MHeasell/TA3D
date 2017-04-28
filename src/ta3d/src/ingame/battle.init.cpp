@@ -121,8 +121,6 @@ namespace TA3D
 		loading = new Menus::Loading;
 		auto spLoading = std::unique_ptr<Menus::Loading>(loading);
 
-		arrow_texture.destroy();
-		circle_texture.destroy();
 		pause_tex.destroy();
 
 		// We don't want to load things we won't be able to use
@@ -507,8 +505,6 @@ namespace TA3D
 
 	bool Battle::initAllTextures()
 	{
-		arrow_texture.load("gfx/arrow.tga");
-		circle_texture.load("gfx/circle.tga");
 		pause_tex.load("gfx/pause.png");
 		return true;
 	}
@@ -564,7 +560,6 @@ namespace TA3D
 		count = msec_timer;
 
 		mx = my = 0;
-		omb = mouse_b;
 		omb2 = mouse_b;
 		omb3 = mouse_b;
 		cur_sel = -1;
