@@ -253,7 +253,7 @@ namespace TA3D
 		{
 			cam.setView();
 			bool builders = false;
-			const float t = (float)msec_timer * 0.001f;
+			const float t = (float)MILLISECONDS_SINCE_INIT * 0.001f;
 			const float mt = std::fmod(0.5f * t, 1.0f);
 			for (unsigned int e = 0; e < units.index_list_size; ++e)
 			{
@@ -302,7 +302,7 @@ namespace TA3D
 		if ((selected || units.last_on >= 0) && TA3D_CTRL_PRESSED)
 		{
 			cam.setView();
-			const float t = (float)msec_timer * 0.001f;
+			const float t = (float)MILLISECONDS_SINCE_INIT * 0.001f;
 			const float mt = std::fmod(0.5f * t, 1.0f);
 			const float mt2 = std::fmod(0.5f * t + 0.5f, 1.0f);
 			for (unsigned int e = 0; e < units.index_list_size; ++e)

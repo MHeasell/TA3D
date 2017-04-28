@@ -151,7 +151,7 @@ namespace TA3D
 		// Here we go Commander !
 		LOG_INFO(LOG_PREFIX_BATTLE << "*** The game has started - Good luck Commander ! ***");
 		// Reinit the counter for FPS
-		fps.lastTime = msec_timer;
+		fps.lastTime = MILLISECONDS_SINCE_INIT;
 		showHealthBars = false;
 
 		do
@@ -184,7 +184,7 @@ namespace TA3D
 			else
 				cursor_type = CURSOR_DEFAULT;
 
-			dt = float(msec_timer - count) * 0.001f; // Regulate frame rate
+			dt = float(MILLISECONDS_SINCE_INIT - count) * 0.001f; // Regulate frame rate
 			while (dt < delay)
 			{
 				switch (lp_CONFIG->priority_level)
@@ -196,9 +196,9 @@ namespace TA3D
 						rest(0);
 						break;
 				}
-				dt = float(msec_timer - count) * 0.001f;
+				dt = float(MILLISECONDS_SINCE_INIT - count) * 0.001f;
 			}
-			count = msec_timer;
+			count = MILLISECONDS_SINCE_INIT;
 
 			if (!lp_CONFIG->pause)
 			{

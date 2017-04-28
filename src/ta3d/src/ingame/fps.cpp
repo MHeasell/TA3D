@@ -14,11 +14,11 @@ namespace TA3D
 	void FPSInfos::statisticsAddFrame()
 	{
 		++countSinceLastTime;
-		if (msec_timer - lastTime >= 1000 /* 1s */)
+		if (MILLISECONDS_SINCE_INIT - lastTime >= 1000 /* 1s */)
 		{
-			average = countSinceLastTime * 1000 / (msec_timer - lastTime);
+			average = countSinceLastTime * 1000 / (MILLISECONDS_SINCE_INIT - lastTime);
 			countSinceLastTime = 0;
-			lastTime = msec_timer;
+			lastTime = MILLISECONDS_SINCE_INIT;
 			toStr.clear();
 			toStr << "fps: " << average;
 		}

@@ -124,8 +124,8 @@ namespace TA3D
 	int anim_cursor(const int type)
 	{
 		return (type < 0)
-			? ((msec_timer - start) / 100) % cursor[cursor_type].nb_bmp
-			: ((msec_timer - start) / 100) % cursor[type].nb_bmp;
+			? ((MILLISECONDS_SINCE_INIT - start) / 100) % cursor[cursor_type].nb_bmp
+			: ((MILLISECONDS_SINCE_INIT - start) / 100) % cursor[type].nb_bmp;
 	}
 
 	void draw_cursor()
@@ -134,7 +134,7 @@ namespace TA3D
 		if (curseur < 0 || curseur >= cursor[cursor_type].nb_bmp)
 		{
 			curseur = 0;
-			start = msec_timer;
+			start = MILLISECONDS_SINCE_INIT;
 		}
 		int dx = cursor[cursor_type].ofs_x[curseur];
 		int dy = cursor[cursor_type].ofs_y[curseur];

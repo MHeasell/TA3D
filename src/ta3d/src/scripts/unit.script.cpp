@@ -856,7 +856,7 @@ namespace TA3D
 
 		n_args = 0;
 
-		last = msec_timer;
+		last = MILLISECONDS_SINCE_INIT;
 	}
 
 	void UnitScript::destroy()

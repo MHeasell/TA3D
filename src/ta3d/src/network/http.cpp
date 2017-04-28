@@ -66,7 +66,7 @@ namespace TA3D
 		String tmpBuf;
 		tmpBuf << "GET " << _request << " HTTP/1.0\r\nHost:" << servername << "\nAccept: */*\r\nUser-Agent: TA3D\r\nConnection: close\r\n\r\n";
 
-		uint32 timer(msec_timer);
+		uint32 timer(MILLISECONDS_SINCE_INIT);
 		sock.send(tmpBuf.data(), tmpBuf.size());
 		if (!sock.isOpen())
 		{
@@ -82,7 +82,7 @@ namespace TA3D
 
 		while (!bStop)
 		{
-			timer = msec_timer;
+			timer = MILLISECONDS_SINCE_INIT;
 			do
 			{
 				count = sock.recv(buffer, sizeof(buffer) - 1);
@@ -96,8 +96,8 @@ namespace TA3D
 						return;
 					}
 				}
-			} while (count == 0 && msec_timer - timer < 60000 && !bStop);
-			if (msec_timer - timer >= 60000 || bStop)
+			} while (count == 0 && MILLISECONDS_SINCE_INIT - timer < 60000 && !bStop);
+			if (MILLISECONDS_SINCE_INIT - timer >= 60000 || bStop)
 				sock.close();
 			if (count < 0)
 			{
@@ -233,7 +233,7 @@ namespace TA3D
 		String tmpBuf;
 		tmpBuf << "GET " << _request << " HTTP/1.0\r\nHost:" << servername << "\nAccept: */*\r\nUser-Agent: TA3D\r\n\r\n";
 
-		uint32 timer(msec_timer);
+		uint32 timer(MILLISECONDS_SINCE_INIT);
 		sock.send(tmpBuf.data(), tmpBuf.size());
 		if (!sock.isOpen())
 		{
@@ -243,13 +243,13 @@ namespace TA3D
 
 		while (true)
 		{
-			timer = msec_timer;
+			timer = MILLISECONDS_SINCE_INIT;
 			do
 			{
 				count = sock.recv(buffer, sizeof(buffer) - 1);
 				rest(1);
-			} while (count == 0 && msec_timer - timer < 1000);
-			if (msec_timer - timer >= 1000)
+			} while (count == 0 && MILLISECONDS_SINCE_INIT - timer < 1000);
+			if (MILLISECONDS_SINCE_INIT - timer >= 1000)
 				sock.close();
 			if (count < 0)
 			{
@@ -325,7 +325,7 @@ namespace TA3D
 		String tmpBuf;
 		tmpBuf << "GET " << _request << " HTTP/1.0\r\nHost:" << servername << "\nAccept: */*\r\nUser-Agent: TA3D\r\nConnection: close\r\n\r\n";
 
-		uint32 timer(msec_timer);
+		uint32 timer(MILLISECONDS_SINCE_INIT);
 		sock.send(tmpBuf.data(), tmpBuf.size());
 		if (!sock.isOpen())
 		{
@@ -336,13 +336,13 @@ namespace TA3D
 
 		while (true)
 		{
-			timer = msec_timer;
+			timer = MILLISECONDS_SINCE_INIT;
 			do
 			{
 				count = sock.recv(buffer, sizeof(buffer) - 1);
 				rest(1);
-			} while (count == 0 && msec_timer - timer < 1000);
-			if (msec_timer - timer >= 1000)
+			} while (count == 0 && MILLISECONDS_SINCE_INIT - timer < 1000);
+			if (MILLISECONDS_SINCE_INIT - timer >= 1000)
 				sock.close();
 			if (count < 0)
 			{

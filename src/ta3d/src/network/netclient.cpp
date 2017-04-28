@@ -101,9 +101,9 @@ namespace TA3D
 				sendMessage(String("REGISTER ") << login << ' ' << password);
 			else
 				sendMessage(String("LOGIN ") << login << ' ' << password);
-			uint32 timer = msec_timer;
+			uint32 timer = MILLISECONDS_SINCE_INIT;
 			bool done = false;
-			while (msec_timer - timer < 10000 && !done) // 10s timeout
+			while (MILLISECONDS_SINCE_INIT - timer < 10000 && !done) // 10s timeout
 			{
 				rest(1);
 				receive();

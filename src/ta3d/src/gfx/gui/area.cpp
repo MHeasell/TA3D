@@ -141,10 +141,10 @@ namespace TA3D
 		{
 			poll_inputs();
 			key_pressed = keyboardBufferContainsElements();
-			bool scroll = ((msec_timer - scroll_timer) >= 250);
+			bool scroll = ((MILLISECONDS_SINCE_INIT - scroll_timer) >= 250);
 			if (scroll)
 			{
-				while (msec_timer - scroll_timer >= 250)
+				while (MILLISECONDS_SINCE_INIT - scroll_timer >= 250)
 					scroll_timer += 250;
 			}
 
@@ -330,7 +330,7 @@ namespace TA3D
 			amz = mouse_z;
 			amb = mouse_b;
 
-			scroll_timer = msec_timer;
+			scroll_timer = MILLISECONDS_SINCE_INIT;
 
 			InitInterface(); // Initialization of the interface
 		}

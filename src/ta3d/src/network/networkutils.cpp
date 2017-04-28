@@ -279,7 +279,7 @@ namespace TA3D
 
 		length = file->size();
 
-		uint32 timer = msec_timer;
+		uint32 timer = MILLISECONDS_SINCE_INIT;
 
 		int real_length = length;
 
@@ -298,10 +298,10 @@ namespace TA3D
 				pos += n;
 				network->updateFileTransferInformation(String(filename) << sockid, real_length, pos);
 
-				const uint32 timer = msec_timer;
-				while (progress < pos - 10 * FILE_TRANSFER_BUFFER_SIZE && !pDead && msec_timer - timer < 60000)
+				const uint32 timer = MILLISECONDS_SINCE_INIT;
+				while (progress < pos - 10 * FILE_TRANSFER_BUFFER_SIZE && !pDead && MILLISECONDS_SINCE_INIT - timer < 60000)
 					suspend(0);
-				if (msec_timer - timer >= 60000)
+				if (MILLISECONDS_SINCE_INIT - timer >= 60000)
 				{
 					DELETE_ARRAY(buffer);
 					LOG_DEBUG(LOG_PREFIX_NET_FILE << "file transfert timed out");
@@ -319,8 +319,8 @@ namespace TA3D
 			suspend(1);
 		}
 
-		timer = msec_timer;
-		while (progress < pos - FILE_TRANSFER_BUFFER_SIZE && !pDead && msec_timer - timer < 60000)
+		timer = MILLISECONDS_SINCE_INIT;
+		while (progress < pos - FILE_TRANSFER_BUFFER_SIZE && !pDead && MILLISECONDS_SINCE_INIT - timer < 60000)
 			suspend(1); // Wait for client to say ok
 
 		LOG_INFO(LOG_PREFIX_NET_FILE << "Done.");
@@ -374,10 +374,10 @@ namespace TA3D
 
 		LOG_INFO(LOG_PREFIX_NET_FILE << "Starting...");
 
-		int timer = msec_timer;
+		int timer = MILLISECONDS_SINCE_INIT;
 
 		ready = true;
-		while (!pDead && ready && msec_timer - timer < 60000)
+		while (!pDead && ready && MILLISECONDS_SINCE_INIT - timer < 60000)
 			suspend(0);
 		memcpy(&length, buffer, 4);
 
@@ -399,8 +399,8 @@ namespace TA3D
 		while (!pDead)
 		{
 			ready = true;
-			timer = msec_timer;
-			while (!pDead && ready && msec_timer - timer < 60000)
+			timer = MILLISECONDS_SINCE_INIT;
+			while (!pDead && ready && MILLISECONDS_SINCE_INIT - timer < 60000)
 				suspend(0); // Get paquet data
 			n = buffer_size;
 

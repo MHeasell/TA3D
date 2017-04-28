@@ -145,7 +145,7 @@ namespace TA3D
 		map->sealvl = float(header.sealevel) * H_DIV;
 		// Lit la minimap
 		LOG_DEBUG("MAP: reading mini map");
-		int event_timer = msec_timer;
+		int event_timer = MILLISECONDS_SINCE_INIT;
 		int w, h;
 		file->seek(header.PTRminimap);
 		*file >> w;
@@ -171,11 +171,11 @@ namespace TA3D
 			gfx->set_texture_format(gfx->defaultTextureFormat_RGB());
 		map->glmini = gfx->make_texture(map->mini, FILTER_LINEAR, true);
 
-		LOG_INFO("minimap read in " << float(msec_timer - event_timer) * 0.001f << "s.");
+		LOG_INFO("minimap read in " << float(MILLISECONDS_SINCE_INIT - event_timer) * 0.001f << "s.");
 
 		// Lit les différents morceaux
 		LOG_DEBUG("MAP: reading blocs data");
-		event_timer = msec_timer;
+		event_timer = MILLISECONDS_SINCE_INIT;
 		int n_bmp = (header.tiles + 0x3F) >> 5; // Nombre de textures 1024x32 nécessaires pour mémoriser tout les morceaux
 		SDL_Surface** bmp_tex = new SDL_Surface*[n_bmp];
 		for (i = 0; i < n_bmp; ++i)
@@ -255,8 +255,8 @@ namespace TA3D
 			map->bloc[i].tex_x = byte(tx >> 5);
 		}
 
-		LOG_INFO("Blocs read in " << float(msec_timer - event_timer) * 0.001f << "s.");
-		event_timer = msec_timer;
+		LOG_INFO("Blocs read in " << float(MILLISECONDS_SINCE_INIT - event_timer) * 0.001f << "s.");
+		event_timer = MILLISECONDS_SINCE_INIT;
 
 		LOG_DEBUG("MAP: creating textures");
 
@@ -270,9 +270,9 @@ namespace TA3D
 			map->tex[i] = gfx->make_texture(tmp);
 			SDL_FreeSurface(tmp);
 		}
-		LOG_INFO("Textures for blocks in " << float(msec_timer - event_timer) * 0.001f << "s.");
+		LOG_INFO("Textures for blocks in " << float(MILLISECONDS_SINCE_INIT - event_timer) * 0.001f << "s.");
 
-		event_timer = msec_timer;
+		event_timer = MILLISECONDS_SINCE_INIT;
 
 		map->lvl = new Vector3D*[map->bloc_w * map->bloc_h];
 		for (i = 0; i < map->bloc_w * map->bloc_h; ++i)
@@ -372,8 +372,8 @@ namespace TA3D
 				/*--------------------------------------------------------------------*/
 			}
 		}
-		LOG_INFO("Low definition map image built in " << float(msec_timer - event_timer) * 0.001f << "s.");
-		event_timer = msec_timer;
+		LOG_INFO("Low definition map image built in " << float(MILLISECONDS_SINCE_INIT - event_timer) * 0.001f << "s.");
+		event_timer = MILLISECONDS_SINCE_INIT;
 
 		for (i = 0; i < n_bmp; ++i) // Delete SDL_Surface textures
 			SDL_FreeSurface(bmp_tex[i]);
@@ -382,8 +382,8 @@ namespace TA3D
 		map->low_tex = gfx->make_texture(low_def); // Build the low details texture map
 		SDL_FreeSurface(low_def);
 
-		LOG_INFO("Low definition texture uploaded in " << float(msec_timer - event_timer) * 0.001f << "s.");
-		event_timer = msec_timer;
+		LOG_INFO("Low definition texture uploaded in " << float(MILLISECONDS_SINCE_INIT - event_timer) * 0.001f << "s.");
+		event_timer = MILLISECONDS_SINCE_INIT;
 
 		SDL_Surface* lava_map = gfx->create_surface_ex(8, Math::Min(map->bloc_w, 1024), Math::Min(map->bloc_h, 1024));
 		SDL_FillRect(lava_map, NULL, 0x0);
@@ -391,14 +391,14 @@ namespace TA3D
 			for (x = 0; x < map->bloc_w; ++x)
 				if (map->bloc[map->bmap(x, y)].lava)
 					circlefill(lava_map, x * lava_map->w / map->bloc_w, y * lava_map->h / map->bloc_h, 3, 0xFF);
-		LOG_INFO("Lava image built in " << float(msec_timer - event_timer) * 0.001f << "s.");
-		event_timer = msec_timer;
+		LOG_INFO("Lava image built in " << float(MILLISECONDS_SINCE_INIT - event_timer) * 0.001f << "s.");
+		event_timer = MILLISECONDS_SINCE_INIT;
 
 		map->lava_map = gfx->make_texture(lava_map, FILTER_LINEAR, true); // Build the lava texture map
 		SDL_FreeSurface(lava_map);
 
-		LOG_INFO("Lava texture uploaded in " << float(msec_timer - event_timer) * 0.001f << "s.");
-		event_timer = msec_timer;
+		LOG_INFO("Lava texture uploaded in " << float(MILLISECONDS_SINCE_INIT - event_timer) * 0.001f << "s.");
+		event_timer = MILLISECONDS_SINCE_INIT;
 
 		if (g_useTextureCompression && lp_CONFIG->use_texture_compression)
 			gfx->set_texture_format(GL_COMPRESSED_RGB_ARB);
@@ -455,8 +455,8 @@ namespace TA3D
 			}
 		}
 
-		LOG_INFO("Env created in " << float(msec_timer - event_timer) * 0.001f << "s.");
-		event_timer = msec_timer;
+		LOG_INFO("Env created in " << float(MILLISECONDS_SINCE_INIT - event_timer) * 0.001f << "s.");
+		event_timer = MILLISECONDS_SINCE_INIT;
 
 		LOG_DEBUG("MAP: computing height data (step 3)");
 		for (y = 0; y < (map->bloc_h << 1); ++y)
@@ -548,8 +548,8 @@ namespace TA3D
 		LOG_DEBUG("MAP: computing height data (step 6)");
 		gaussianFilter(map->energy, 3.0f);
 
-		LOG_INFO("relief : " << float(msec_timer - event_timer) * 0.001f << "s.");
-		event_timer = msec_timer;
+		LOG_INFO("relief : " << float(MILLISECONDS_SINCE_INIT - event_timer) * 0.001f << "s.");
+		event_timer = MILLISECONDS_SINCE_INIT;
 
 		LOG_DEBUG("MAP: reading map features data");
 		// Ajoute divers éléments(végétation,...)
@@ -590,7 +590,7 @@ namespace TA3D
 				*file >> type;
 			}
 		}
-		LOG_INFO("Decors : " << float(msec_timer - event_timer) * 0.001f << "s.");
+		LOG_INFO("Decors : " << float(MILLISECONDS_SINCE_INIT - event_timer) * 0.001f << "s.");
 
 		/*--------------- code for low definition map (mega zoom) -------------------*/
 

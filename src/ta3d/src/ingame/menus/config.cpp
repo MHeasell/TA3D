@@ -321,7 +321,7 @@ namespace TA3D
 				I_Msg(TA3D::TA3D_IM_GUI_MSG, "config_confirm.show");
 
 			save = false;
-			timer = msec_timer;
+			timer = MILLISECONDS_SINCE_INIT;
 
 			return true;
 		}
@@ -342,7 +342,7 @@ namespace TA3D
 					Gui::GUIOBJ::Ptr pbar = pArea->get_object("config_confirm.p_wait");
 					if (pbar)
 					{
-						const uint32 new_value = (msec_timer - timer) / 50;
+						const uint32 new_value = (MILLISECONDS_SINCE_INIT - timer) / 50;
 						if (new_value != pbar->Data)
 						{
 							pbar->Data = new_value;

@@ -802,10 +802,10 @@ namespace TA3D
 				return;
 			}
 
-			if (msec_timer - sound->lastTimePlayed < pMinTicks)
+			if (MILLISECONDS_SINCE_INIT - sound->lastTimePlayed < pMinTicks)
 				return; // Make sure it doesn't play too often, so it doesn't play too loud!
 
-			sound->lastTimePlayed = msec_timer;
+			sound->lastTimePlayed = MILLISECONDS_SINCE_INIT;
 
 			if (!sound->sampleHandle || (sound->is3DSound && !vec))
 			{
@@ -842,7 +842,7 @@ namespace TA3D
 			SoundItemList* it = pSoundList[szWav];
 			if (it)
 			{
-				it->lastTimePlayed = msec_timer - 1000 - pMinTicks; // Make sure it'll be played
+				it->lastTimePlayed = MILLISECONDS_SINCE_INIT - 1000 - pMinTicks; // Make sure it'll be played
 				doPlayTDFSound(Key, vec);
 			}
 			doUpdate3DSound();

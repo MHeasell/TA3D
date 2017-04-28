@@ -36,7 +36,7 @@ namespace TA3D
 			  pCacheScreenRatioHeight(0.f)
 		{
 			LOG_DEBUG(LOG_PREFIX_MENU_LOADING << "Starting...");
-			pStartTime = msec_timer;
+			pStartTime = MILLISECONDS_SINCE_INIT;
 			loadTheBackgroundTexture();
 			initializeDrawing();
 		}
@@ -48,7 +48,7 @@ namespace TA3D
 
 			// Loading time
 			LOG_DEBUG(LOG_PREFIX_MENU_LOADING << "Done.");
-			LOG_INFO("Time of loading :" << float(msec_timer - pStartTime) * 0.001f << "s");
+			LOG_INFO("Time of loading :" << float(MILLISECONDS_SINCE_INIT - pStartTime) * 0.001f << "s");
 		}
 
 		void Loading::initializeDrawing()

@@ -243,7 +243,7 @@ namespace TA3D
 	{
 		thread_running = true;
 		float dt = 1.0f / TICKS_PER_SEC;
-		int weapon_timer = msec_timer;
+		int weapon_timer = MILLISECONDS_SINCE_INIT;
 		int counter = 0;
 
 		while (!thread_ask_to_stop)
@@ -256,7 +256,7 @@ namespace TA3D
 		}
 		thread_running = false;
 		thread_ask_to_stop = false;
-		LOG_INFO("Weapon engine: " << (float)(counter * 1000) / float(msec_timer - weapon_timer) << " ticks/sec");
+		LOG_INFO("Weapon engine: " << (float)(counter * 1000) / float(MILLISECONDS_SINCE_INIT - weapon_timer) << " ticks/sec");
 	}
 
 	void InGameWeapons::signalExitThread()

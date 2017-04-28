@@ -104,7 +104,7 @@ namespace TA3D
 				for (int i = 0; i < unit_manager.nb_unit; ++i) // Clients disable all units and wait for server to enable the ones we're going to use
 					unit_manager.unit_type[i]->not_used = true;
 
-			ping_timer = msec_timer; // Used to send simple PING requests in order to detect when a connection fails
+			ping_timer = MILLISECONDS_SINCE_INIT; // Used to send simple PING requests in order to detect when a connection fails
 
 			return true;
 		}
@@ -127,7 +127,7 @@ namespace TA3D
 				// Wait to reduce CPU consumption
 				wait();
 
-			} while (pMouseX == mouse_x && pMouseY == mouse_y && pMouseZ == mouse_z && pMouseB == mouse_b && mouse_b == 0 && !isKeyDown(KEY_ENTER) && !isKeyDown(KEY_ESC) && !isKeyDown(KEY_SPACE) && !isKeyDown(KEY_C) && !pArea->key_pressed && !pArea->scrolling && special_msg.empty() && !playerDropped && (msec_timer - ping_timer < 2000 || !network_manager.isServer()));
+			} while (pMouseX == mouse_x && pMouseY == mouse_y && pMouseZ == mouse_z && pMouseB == mouse_b && mouse_b == 0 && !isKeyDown(KEY_ENTER) && !isKeyDown(KEY_ESC) && !isKeyDown(KEY_SPACE) && !isKeyDown(KEY_C) && !pArea->key_pressed && !pArea->scrolling && special_msg.empty() && !playerDropped && (MILLISECONDS_SINCE_INIT - ping_timer < 2000 || !network_manager.isServer()));
 		}
 
 		bool WaitRoom::maySwitchToAnotherMenu()
@@ -139,10 +139,10 @@ namespace TA3D
 
 			bool check_ready = false;
 
-			if (network_manager.isServer() && msec_timer - ping_timer >= 2000) // Send a ping request
+			if (network_manager.isServer() && MILLISECONDS_SINCE_INIT - ping_timer >= 2000) // Send a ping request
 			{
 				network_manager.sendPing();
-				ping_timer = msec_timer;
+				ping_timer = MILLISECONDS_SINCE_INIT;
 				check_ready = true;
 
 				if (network_manager.isServer())

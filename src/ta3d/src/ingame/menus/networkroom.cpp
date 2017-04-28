@@ -93,7 +93,7 @@ namespace TA3D
 
 			network_manager.InitBroadcast(1234); // broadcast mode
 
-			server_list_timer = msec_timer - SERVER_LIST_REFRESH_DELAY;
+			server_list_timer = MILLISECONDS_SINCE_INIT - SERVER_LIST_REFRESH_DELAY;
 
 			return true;
 		}
@@ -108,7 +108,7 @@ namespace TA3D
 				// Wait to reduce CPU consumption
 				wait();
 
-			} while (pMouseX == mouse_x && pMouseY == mouse_y && pMouseZ == mouse_z && pMouseB == mouse_b && mouse_b == 0 && !isKeyDown(KEY_ENTER) && !isKeyDown(KEY_ESC) && !isKeyDown(KEY_SPACE) && !isKeyDown(KEY_C) && !pArea->key_pressed && !pArea->scrolling && !network_manager.BroadcastedMessages() && msec_timer - server_list_timer < SERVER_LIST_REFRESH_DELAY);
+			} while (pMouseX == mouse_x && pMouseY == mouse_y && pMouseZ == mouse_z && pMouseB == mouse_b && mouse_b == 0 && !isKeyDown(KEY_ENTER) && !isKeyDown(KEY_ESC) && !isKeyDown(KEY_SPACE) && !isKeyDown(KEY_C) && !pArea->key_pressed && !pArea->scrolling && !network_manager.BroadcastedMessages() && MILLISECONDS_SINCE_INIT - server_list_timer < SERVER_LIST_REFRESH_DELAY);
 		}
 
 		bool NetworkRoom::maySwitchToAnotherMenu()
@@ -138,7 +138,7 @@ namespace TA3D
 								if (server_i->name == name)
 								{
 									updated = true;
-									server_i->timer = msec_timer;
+									server_i->timer = MILLISECONDS_SINCE_INIT;
 									server_i->nb_open = nb_open;
 									server_i->host = host_address;
 									if (name == o_sel)
@@ -151,7 +151,7 @@ namespace TA3D
 								SERVER_DATA new_server;
 								new_server.internet = false;
 								new_server.name = name;
-								new_server.timer = msec_timer;
+								new_server.timer = MILLISECONDS_SINCE_INIT;
 								new_server.nb_open = nb_open;
 								new_server.host = host_address;
 								servers.push_back(new_server);
@@ -163,7 +163,7 @@ namespace TA3D
 				}
 
 				for (std::list<SERVER_DATA>::iterator server_i = servers.begin(); server_i != servers.end();) // Remove those who timeout
-					if (!server_i->internet && msec_timer - server_i->timer >= 30000)
+					if (!server_i->internet && MILLISECONDS_SINCE_INIT - server_i->timer >= 30000)
 						servers.erase(server_i++);
 					else
 						server_i++;
@@ -192,11 +192,11 @@ namespace TA3D
 				servers.clear();
 			}
 
-			if (msec_timer - server_list_timer >= SERVER_LIST_REFRESH_DELAY || refresh_all) // Refresh server list
+			if (MILLISECONDS_SINCE_INIT - server_list_timer >= SERVER_LIST_REFRESH_DELAY || refresh_all) // Refresh server list
 			{
 				for (std::list<SERVER_DATA>::iterator server_i = servers.begin(); server_i != servers.end();) // Remove those who timeout
 				{
-					if (!server_i->internet && msec_timer - server_i->timer >= 30000)
+					if (!server_i->internet && MILLISECONDS_SINCE_INIT - server_i->timer >= 30000)
 						servers.erase(server_i++);
 					else
 						server_i++;
@@ -217,7 +217,7 @@ namespace TA3D
 						obj->Text.push_back(I18N::Translate("No server found"));
 				}
 
-				server_list_timer = msec_timer;
+				server_list_timer = MILLISECONDS_SINCE_INIT;
 				if (network_manager.broadcastMessage("PING SERVER LIST"))
 					printf("error : could not broadcast packet to refresh server list!!\n");
 			}

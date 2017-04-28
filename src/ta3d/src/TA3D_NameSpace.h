@@ -140,7 +140,7 @@ namespace TA3D
 #define SCREEN_W (TA3D::VARS::gfx->width)
 #define SCREEN_H (TA3D::VARS::gfx->height)
 
-#define msec_timer SDL_GetTicks()
+#define MILLISECONDS_SINCE_INIT SDL_GetTicks()
 
 // TODO Must be removed
 using namespace TA3D::VARS;

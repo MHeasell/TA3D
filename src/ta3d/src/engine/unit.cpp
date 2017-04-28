@@ -437,8 +437,8 @@ namespace TA3D
 		shadow_scale_dir = -1.0f;
 		last_path_refresh = 0.0f;
 		metal_prod = metal_cons = energy_prod = energy_cons = cur_metal_prod = cur_metal_cons = cur_energy_prod = cur_energy_cons = 0.0f;
-		last_time_sound = msec_timer;
-		ripple_timer = msec_timer;
+		last_time_sound = MILLISECONDS_SINCE_INIT;
+		ripple_timer = MILLISECONDS_SINCE_INIT;
 		was_moving = false;
 		cur_px = 0;
 		cur_py = 0;
@@ -4648,7 +4648,7 @@ namespace TA3D
 
 		Vector3D p_target = Pos;
 		Vector3D n_target = Pos;
-		const float rab = float(msec_timer % 1000) * 0.001f;
+		const float rab = float(MILLISECONDS_SINCE_INIT % 1000) * 0.001f;
 		const UnitType* pType = unit_manager.unit_type[type_id];
 		uint32 remaining_build_commands = !(pType->BMcode) ? 0 : 0xFFFFFFF;
 
@@ -5149,9 +5149,9 @@ namespace TA3D
 	{
 		bool bPlayed = false;
 		pMutex.lock();
-		if (isOwnedBy(players.local_human_id) && int(msec_timer - last_time_sound) >= units.sound_min_ticks)
+		if (isOwnedBy(players.local_human_id) && int(MILLISECONDS_SINCE_INIT - last_time_sound) >= units.sound_min_ticks)
 		{
-			last_time_sound = msec_timer;
+			last_time_sound = MILLISECONDS_SINCE_INIT;
 			const UnitType* pType = unit_manager.unit_type[type_id];
 			sound_manager->playTDFSound(pType->soundcategory, key, &Pos);
 			bPlayed = true;

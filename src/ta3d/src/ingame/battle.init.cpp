@@ -127,71 +127,71 @@ namespace TA3D
 		gfx->checkConfig();
 
 		// Here we go
-		uint64 startTime = msec_timer;
+		uint64 startTime = MILLISECONDS_SINCE_INIT;
 		uint64 timer[20];
 
-		timer[0] = msec_timer;
+		timer[0] = MILLISECONDS_SINCE_INIT;
 		if (!initPreflight(g))
 			return false;
-		timer[1] = msec_timer;
+		timer[1] = MILLISECONDS_SINCE_INIT;
 		if (!initTextures())
 			return false;
-		timer[2] = msec_timer;
+		timer[2] = MILLISECONDS_SINCE_INIT;
 		if (!init3DModels())
 			return false;
-		timer[3] = msec_timer;
+		timer[3] = MILLISECONDS_SINCE_INIT;
 		if (!initGraphicalFeatures())
 			return false;
-		timer[4] = msec_timer;
+		timer[4] = MILLISECONDS_SINCE_INIT;
 		if (!initWeapons())
 			return false;
-		timer[5] = msec_timer;
+		timer[5] = MILLISECONDS_SINCE_INIT;
 		if (!initUnits())
 			return false;
-		timer[6] = msec_timer;
+		timer[6] = MILLISECONDS_SINCE_INIT;
 		if (!initIntermediateCleanup())
 			return false;
-		timer[7] = msec_timer;
+		timer[7] = MILLISECONDS_SINCE_INIT;
 		if (!initEngine())
 			return false;
-		timer[8] = msec_timer;
+		timer[8] = MILLISECONDS_SINCE_INIT;
 		if (!initPlayers())
 			return false;
-		timer[9] = msec_timer;
+		timer[9] = MILLISECONDS_SINCE_INIT;
 		if (!initRestrictions())
 			return false;
-		timer[10] = msec_timer;
+		timer[10] = MILLISECONDS_SINCE_INIT;
 		if (!initGUI())
 			return false;
-		timer[11] = msec_timer;
+		timer[11] = MILLISECONDS_SINCE_INIT;
 		if (!initTheMap())
 			return false;
-		timer[12] = msec_timer;
+		timer[12] = MILLISECONDS_SINCE_INIT;
 		if (!initTheSun())
 			return false;
-		timer[13] = msec_timer;
+		timer[13] = MILLISECONDS_SINCE_INIT;
 		if (!initAllTextures())
 			return false;
-		timer[14] = msec_timer;
+		timer[14] = MILLISECONDS_SINCE_INIT;
 		if (!initTheCamera())
 			return false;
-		timer[15] = msec_timer;
+		timer[15] = MILLISECONDS_SINCE_INIT;
 		if (!initTheWind())
 			return false;
-		timer[16] = msec_timer;
+		timer[16] = MILLISECONDS_SINCE_INIT;
 		if (!initParticules())
 			return false;
-		timer[17] = msec_timer;
+		timer[17] = MILLISECONDS_SINCE_INIT;
 		if (!initPostFlight())
 			return false;
-		timer[18] = msec_timer;
+		timer[18] = MILLISECONDS_SINCE_INIT;
 
 		unit_manager.waitUntilReady();
-		timer[19] = msec_timer;
+		timer[19] = MILLISECONDS_SINCE_INIT;
 
 		// The loading has finished
 		(*loading)(100.0f, I18N::Translate("Load finished"));
-		LOG_INFO(LOG_PREFIX_BATTLE << "Loading time: " << ((float)(msec_timer - startTime) * 0.001f) << " sec.");
+		LOG_INFO(LOG_PREFIX_BATTLE << "Loading time: " << ((float)(MILLISECONDS_SINCE_INIT - startTime) * 0.001f) << " sec.");
 #define TA3D_LOADING_STATS
 #ifdef TA3D_LOADING_STATS
 		LOG_INFO(LOG_PREFIX_BATTLE << "statistics:");
@@ -245,7 +245,7 @@ namespace TA3D
 		// FPS
 		fps.countSinceLastTime = 0;
 		fps.average = 0;
-		fps.lastTime = msec_timer;
+		fps.lastTime = MILLISECONDS_SINCE_INIT;
 		fps.toStr.clear();
 
 		// Misc
@@ -518,7 +518,7 @@ namespace TA3D
 		cam_target_mx = gfx->SCREEN_W_HALF;
 		cam_target_my = gfx->SCREEN_H_HALF;
 		cam_has_target = false;
-		cam_def_timer = msec_timer; // Just to see if the cam has been long enough at the default angle
+		cam_def_timer = MILLISECONDS_SINCE_INIT; // Just to see if the cam has been long enough at the default angle
 		track_mode = -1;			// Tracking a unit ? negative value => no
 		last_time_activated_track_mode = false;
 		Camera::inGame = &cam;
@@ -555,7 +555,7 @@ namespace TA3D
 	{
 		dt = 0.0f;
 		t = 0.0f;
-		count = msec_timer;
+		count = MILLISECONDS_SINCE_INIT;
 
 		mx = my = 0;
 		cur_sel = -1;
@@ -590,7 +590,7 @@ namespace TA3D
 		unit_info_id = -1;
 
 		lp_CONFIG->pause = false;
-		video_timer = msec_timer; // To handle video
+		video_timer = MILLISECONDS_SINCE_INIT; // To handle video
 		video_shoot = false;
 		current_order = SIGNAL_ORDER_NONE;
 

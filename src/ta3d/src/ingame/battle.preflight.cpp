@@ -54,9 +54,9 @@ namespace TA3D
 
 		if (video_shoot)
 		{
-			if (msec_timer - video_timer >= 1000 / 15)
+			if (MILLISECONDS_SINCE_INIT - video_timer >= 1000 / 15)
 			{
-				video_timer = msec_timer;
+				video_timer = MILLISECONDS_SINCE_INIT;
 				shoot = true;
 			}
 		}
@@ -123,9 +123,9 @@ namespace TA3D
 		else if (camera_zscroll > 50.0f)
 			camera_zscroll = 50.0f;
 
-		if (msec_timer - cam_def_timer >= 1000 && !Math::AlmostZero(delta) && ((camera_zscroll > 0.0f && old_zscroll <= 0.0f) || (camera_zscroll < 0.0f && old_zscroll >= 0.0f))) // Just to make it lock near def position
+		if (MILLISECONDS_SINCE_INIT - cam_def_timer >= 1000 && !Math::AlmostZero(delta) && ((camera_zscroll > 0.0f && old_zscroll <= 0.0f) || (camera_zscroll < 0.0f && old_zscroll >= 0.0f))) // Just to make it lock near def position
 		{
-			cam_def_timer = msec_timer;
+			cam_def_timer = MILLISECONDS_SINCE_INIT;
 			old_zscroll = 0.0f;
 			if (camera_zscroll > -lp_CONFIG->camera_def_angle)
 				old_zscroll += 0.00001f;
@@ -133,7 +133,7 @@ namespace TA3D
 				old_zscroll -= 0.00001f;
 		}
 
-		if (msec_timer - cam_def_timer < 500)
+		if (MILLISECONDS_SINCE_INIT - cam_def_timer < 500)
 			camera_zscroll = old_zscroll;
 
 		// 2D zoom with orthographic camera

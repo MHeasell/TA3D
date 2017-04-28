@@ -224,7 +224,7 @@ namespace TA3D
 
 	void AiController::think() // La vrai fonction qui simule l'Intelligence Artificielle / The function that makes Artificial Intelligence work
 	{
-		srand(msec_timer);
+		srand(MILLISECONDS_SINCE_INIT);
 
 		order_weight[ORDER_METAL_P] = Math::Max(0.0f, players.metal_u[playerID] - players.metal_t[playerID]) * 10.0f + Math::Max(0.0f, players.metal[playerID] - float(players.metal_s[playerID] >> 1)) * 0.01f;
 		order_weight[ORDER_ENERGY_P] = Math::Max(0.0f, players.energy_u[playerID] * 2 - players.energy_t[playerID]) * 10.0f + Math::Max(0.0f, float(players.energy_s[playerID] >> 1) - players.energy[playerID]) * 0.1f;
@@ -246,7 +246,7 @@ namespace TA3D
 		}
 
 #ifdef AI_DEBUG
-		LOG_DEBUG(LOG_PREFIX_AI << "AI(" << (int)playerID << "," << msec_timer << ") thinking...");
+		LOG_DEBUG(LOG_PREFIX_AI << "AI(" << (int)playerID << "," << MILLISECONDS_SINCE_INIT << ") thinking...");
 #endif
 
 		float sw[10000]; // Used to compute the units that are built
@@ -325,7 +325,7 @@ namespace TA3D
 					}
 #ifdef AI_DEBUG
 				LOG_DEBUG(LOG_PREFIX_AI << "AI(" << (int)playerID
-										<< "," << msec_timer << ") -> factory " << *i << "building " << selected_idx);
+										<< "," << MILLISECONDS_SINCE_INIT << ") -> factory " << *i << "building " << selected_idx);
 #endif
 				if (selected_idx >= 0)
 				{
@@ -369,14 +369,14 @@ namespace TA3D
 						else
 							units.unit[*i].add_mission(MISSION_BUILD, &target, false, selected_idx);
 #ifdef AI_DEBUG
-						LOG_DEBUG(LOG_PREFIX_AI << "AI(" << (int)playerID << "," << msec_timer
+						LOG_DEBUG(LOG_PREFIX_AI << "AI(" << (int)playerID << "," << MILLISECONDS_SINCE_INIT
 												<< ") -> builder " << *i << " building " << selected_idx);
 #endif
 						weights[selected_idx].w *= 0.8f;
 					}
 #ifdef AI_DEBUG
 					else
-						LOG_WARNING(LOG_PREFIX_AI << "AI(" << (int)playerID << "," << msec_timer
+						LOG_WARNING(LOG_PREFIX_AI << "AI(" << (int)playerID << "," << MILLISECONDS_SINCE_INIT
 												  << ") -> builder " << *i << " building " << selected_idx << ": No build place found");
 #endif
 				}
@@ -440,7 +440,7 @@ namespace TA3D
 		thread_running = true;
 		thread_ask_to_stop = false;
 		uint32 speed = 10000U;
-		uint32 timer = msec_timer;
+		uint32 timer = MILLISECONDS_SINCE_INIT;
 		switch (AI_type)
 		{
 			case AI_TYPE_EASY:
@@ -464,15 +464,15 @@ namespace TA3D
 			if (unit_id == 0) // When unit scanning is done
 			{
 				refresh_unit_weights(); // Refresh unit weights
-				timer = msec_timer;
+				timer = MILLISECONDS_SINCE_INIT;
 				think();
 			}
 			else
 			{
 				// Periodically think :) (gives orders to units)
-				if (msec_timer - timer >= speed)
+				if (MILLISECONDS_SINCE_INIT - timer >= speed)
 				{
-					timer = msec_timer;
+					timer = MILLISECONDS_SINCE_INIT;
 					think();
 				}
 			}

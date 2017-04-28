@@ -204,7 +204,7 @@ namespace TA3D
 			unlock();
 
 			// Here we are free to compute this path
-			const uint32 start_timer = msec_timer;
+			const uint32 start_timer = MILLISECONDS_SINCE_INIT;
 			if (cur.idx >= 0 && units.unit[cur.idx].ID == cur.UID && units.unit[cur.idx].isAlive())
 			{
 				AI::Path path;
@@ -231,7 +231,7 @@ namespace TA3D
 			}
 
 			// We don't want to use more than 25% of the CPU here
-			if (suspend((nbCores == 1) ? ((msec_timer - start_timer) << 2) : 0))
+			if (suspend((nbCores == 1) ? ((MILLISECONDS_SINCE_INIT - start_timer) << 2) : 0))
 			{
 				// The thread should stop as soon as possible
 				bRunning = false;

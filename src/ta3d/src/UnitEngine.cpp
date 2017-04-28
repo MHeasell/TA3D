@@ -1365,7 +1365,7 @@ namespace TA3D
 				if (unit[i].sonar_jam_range > 0)
 					gfx->circle_zoned(pos_x, pos_y, float(unit[i].sonar_jam_range << 4) * rw, 0.0f, 0.0f, 127.0f, 127.0f, makeacol(192, 192, 0, 255));
 				if (anti_missile)
-					gfx->dot_circle_zoned(float(msec_timer) * 0.001f, pos_x, pos_y, (float)unit_manager.unit_type[unit[i].type_id]->weapon[0]->coverage * rw, 0.0f, 0.0f, 127.0f, 127.0f, 0xFFFFFFFF);
+					gfx->dot_circle_zoned(float(MILLISECONDS_SINCE_INIT) * 0.001f, pos_x, pos_y, (float)unit_manager.unit_type[unit[i].type_id]->weapon[0]->coverage * rw, 0.0f, 0.0f, 127.0f, 127.0f, 0xFFFFFFFF);
 				if (unit[i].radar_range > 0 || unit[i].radar_jam_range > 0 || unit[i].sonar_jam_range || unit[i].sonar_range > 0 || anti_missile)
 				{
 					glPointSize(3.0f);
@@ -1708,12 +1708,12 @@ namespace TA3D
 	{
 		thread_running = true;
 		float dt = 1.0f / TICKS_PER_SEC;
-		uint32 unit_timer = msec_timer;
+		uint32 unit_timer = MILLISECONDS_SINCE_INIT;
 		uint32 tick_timer;
 		float counter = 0.0f;
 		int tick = 1000 / TICKS_PER_SEC;
-		tick_timer = msec_timer;
-		uint32 net_timer = msec_timer;
+		tick_timer = MILLISECONDS_SINCE_INIT;
+		uint32 net_timer = MILLISECONDS_SINCE_INIT;
 		float step = 1.0f;
 		if (lp_CONFIG->timefactor > 0.0f)
 			step = 1.0f / lp_CONFIG->timefactor;
@@ -1770,10 +1770,10 @@ namespace TA3D
 				tick += delay;
 			}
 
-			while (msec_timer - tick_timer + 1 < (uint32)tick)
+			while (MILLISECONDS_SINCE_INIT - tick_timer + 1 < (uint32)tick)
 				suspend(1);
 
-			while (msec_timer - tick_timer >= (uint32)tick + 200U) // Prevent the game from running too fast for too long, we don't have to speed up to compute what we hadn't time to
+			while (MILLISECONDS_SINCE_INIT - tick_timer >= (uint32)tick + 200U) // Prevent the game from running too fast for too long, we don't have to speed up to compute what we hadn't time to
 			{
 				counter += 1.0f;
 				tick = (int)(((counter + step) * 1000) / TICKS_PER_SEC); // For perfect sync with tick clock
@@ -1794,7 +1794,7 @@ namespace TA3D
 
 			if (network_manager.isConnected())
 			{
-				net_timer = msec_timer - net_timer;
+				net_timer = MILLISECONDS_SINCE_INIT - net_timer;
 				if (network_manager.isServer())
 					for (unsigned int i = 0; i < players.count(); ++i)
 					{
@@ -1804,7 +1804,7 @@ namespace TA3D
 				else
 					client_tick[0] += client_speed[0] * net_timer / (1000 * TICKS_PER_SEC);
 
-				net_timer = msec_timer;
+				net_timer = MILLISECONDS_SINCE_INIT;
 
 				network_manager.sendTick(current_tick + 1, (uint16)(1000.0f * apparent_timefactor)); // + 1 to prevent it from running too slow
 				network_manager.sendPing();
@@ -1854,7 +1854,7 @@ namespace TA3D
 			last_tick[1] = last_tick[2];
 			last_tick[2] = last_tick[3];
 			last_tick[3] = last_tick[4];
-			last_tick[4] = msec_timer;
+			last_tick[4] = MILLISECONDS_SINCE_INIT;
 
 			if (last_tick[0] != 0 && last_tick[4] != last_tick[0])
 				apparent_timefactor = 4000.0f / float((last_tick[4] - last_tick[0]) * TICKS_PER_SEC);
@@ -1862,7 +1862,7 @@ namespace TA3D
 
 		thread_running = false;
 		thread_ask_to_stop = false;
-		LOG_INFO("Unit engine: " << (float)(current_tick * 1000) / float(msec_timer - unit_timer) << " ticks/sec");
+		LOG_INFO("Unit engine: " << (float)(current_tick * 1000) / float(MILLISECONDS_SINCE_INIT - unit_timer) << " ticks/sec");
 	}
 
 	void INGAME_UNITS::signalExitThread()

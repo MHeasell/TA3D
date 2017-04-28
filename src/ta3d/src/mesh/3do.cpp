@@ -918,7 +918,7 @@ namespace TA3D
 				glTranslatef(0.0f, -2.0f, 0.0f);
 				if (notex)
 				{
-					const int var = abs(0xFF - (msec_timer % 1000) * 0x200 / 1000);
+					const int var = abs(0xFF - (MILLISECONDS_SINCE_INIT % 1000) * 0x200 / 1000);
 					glColor3ub(0, GLubyte(var), 0);
 				}
 				else

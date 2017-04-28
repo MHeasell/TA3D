@@ -147,7 +147,7 @@ namespace TA3D
 
 		crashed = false;
 
-		last = msec_timer;
+		last = MILLISECONDS_SINCE_INIT;
 	}
 
 	void LuaThread::destroy()
@@ -297,7 +297,7 @@ namespace TA3D
 
 				running = true;
 				setThreadID();
-				last = msec_timer;
+				last = MILLISECONDS_SINCE_INIT;
 			}
 		}
 		else
@@ -387,7 +387,7 @@ namespace TA3D
 
 	int thread_time(lua_State *L) // time()
 	{
-		lua_pushnumber(L, msec_timer * 0.001);
+		lua_pushnumber(L, MILLISECONDS_SINCE_INIT * 0.001);
 		return 1;
 	}
 
@@ -530,7 +530,7 @@ namespace TA3D
 
 	int LuaThread::run() // Run the script, using default delay
 	{
-		const uint32 timer = msec_timer;
+		const uint32 timer = MILLISECONDS_SINCE_INIT;
 		const float dt = (float)(timer - last);
 		last = timer;
 		return run(dt);

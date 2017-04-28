@@ -420,8 +420,8 @@ namespace TA3D
 				}
 			}
 
-			progress_timer = msec_timer;
-			ping_timer = msec_timer; // Used to send simple PING requests in order to detect when a connection fails
+			progress_timer = MILLISECONDS_SINCE_INIT;
+			ping_timer = MILLISECONDS_SINCE_INIT; // Used to send simple PING requests in order to detect when a connection fails
 
 			statusUpdateRequired = true;
 
@@ -501,10 +501,10 @@ namespace TA3D
 				// Wait to reduce CPU consumption
 				wait();
 
-				if (msec_timer - progress_timer >= 500 && Math::AlmostEquals(network_manager.getFileTransferProgress(), 100.0f))
+				if (MILLISECONDS_SINCE_INIT - progress_timer >= 500 && Math::AlmostEquals(network_manager.getFileTransferProgress(), 100.0f))
 					break;
 
-			} while (pMouseX == mouse_x && pMouseY == mouse_y && pMouseZ == mouse_z && pMouseB == mouse_b && mouse_b == 0 && !isKeyDown(KEY_ENTER) && !isKeyDown(KEY_ESC) && !isKeyDown(KEY_SPACE) && !isKeyDown(KEY_C) && !pArea->key_pressed && !pArea->scrolling && broadcast_msg.empty() && chat_msg.empty() && special_msg.empty() && !playerDropped && (msec_timer - ping_timer < 2000 || host.empty() || client));
+			} while (pMouseX == mouse_x && pMouseY == mouse_y && pMouseZ == mouse_z && pMouseB == mouse_b && mouse_b == 0 && !isKeyDown(KEY_ENTER) && !isKeyDown(KEY_ESC) && !isKeyDown(KEY_SPACE) && !isKeyDown(KEY_C) && !pArea->key_pressed && !pArea->scrolling && broadcast_msg.empty() && chat_msg.empty() && special_msg.empty() && !playerDropped && (MILLISECONDS_SINCE_INIT - ping_timer < 2000 || host.empty() || client));
 		}
 
 		bool SetupGame::maySwitchToAnotherMenu()
@@ -866,11 +866,11 @@ namespace TA3D
 		{
 			//-------------------------------------------------------------- Network Code : syncing information --------------------------------------------------------------
 
-			if (host.notEmpty() && !client && msec_timer - ping_timer >= 2000) // Send a ping request
+			if (host.notEmpty() && !client && MILLISECONDS_SINCE_INIT - ping_timer >= 2000) // Send a ping request
 			{
 				statusUpdateRequired = true;
 				network_manager.sendPing();
-				ping_timer = msec_timer;
+				ping_timer = MILLISECONDS_SINCE_INIT;
 
 				for (int i = 0; i < TA3D_PLAYERS_HARD_LIMIT; ++i) // ping time out
 				{
@@ -885,7 +885,7 @@ namespace TA3D
 
 			if (network_manager.getFileTransferProgress() < 100.0f)
 			{
-				progress_timer = msec_timer;
+				progress_timer = MILLISECONDS_SINCE_INIT;
 				Gui::GUIOBJ::Ptr obj = pArea->get_object("gamesetup.p_transfer");
 				if (obj)
 				{

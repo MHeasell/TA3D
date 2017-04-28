@@ -252,7 +252,7 @@ namespace TA3D
 				pan_x2 = pArea->get_object("brief.panning0")->x2;
 			}
 
-			time_ref = msec_timer;
+			time_ref = MILLISECONDS_SINCE_INIT;
 
 			return true;
 		}
@@ -267,8 +267,8 @@ namespace TA3D
 				// Wait to reduce CPU consumption
 				wait();
 
-			} while (pMouseX == mouse_x && pMouseY == mouse_y && pMouseZ == mouse_z && pMouseB == mouse_b && mouse_b == 0 && !isKeyDown(KEY_ENTER) && !isKeyDown(KEY_ESC) && !isKeyDown(KEY_SPACE) && !isKeyDown(KEY_C) && !pArea->key_pressed && !pArea->scrolling && (int)planet_frame == (int)(float(msec_timer - time_ref) * 0.01f));
-			planet_frame = float(msec_timer - time_ref) * 0.01f;
+			} while (pMouseX == mouse_x && pMouseY == mouse_y && pMouseZ == mouse_z && pMouseB == mouse_b && mouse_b == 0 && !isKeyDown(KEY_ENTER) && !isKeyDown(KEY_ESC) && !isKeyDown(KEY_SPACE) && !isKeyDown(KEY_C) && !pArea->key_pressed && !pArea->scrolling && (int)planet_frame == (int)(float(MILLISECONDS_SINCE_INIT - time_ref) * 0.01f));
+			planet_frame = float(MILLISECONDS_SINCE_INIT - time_ref) * 0.01f;
 		}
 
 		bool BriefScreen::maySwitchToAnotherMenu()
