@@ -402,7 +402,7 @@ namespace TA3D
 		 * (e.g. it is a buildable weapon)
 		 * the return value is -2.
 		 */
-		int unit_build_menu(int index, int omb, float& dt, int scrolling, bool GUI);
+		int unit_build_menu(int index, float& dt, int scrolling, bool GUI);
 
 		void Identify(); // Identifie les pièces aux quelles les scripts font référence
 

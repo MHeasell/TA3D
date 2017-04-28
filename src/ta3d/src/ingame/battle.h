@@ -355,8 +355,6 @@ namespace TA3D
 		//!
 		int omb2;
 		//!
-		int omb3;
-		//!
 		int cur_sel;
 		//!
 		int old_gui_sel;

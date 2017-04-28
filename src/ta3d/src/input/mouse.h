@@ -43,6 +43,12 @@ namespace TA3D
 		 * 4: middle mouse button
 		 */
 		extern int mouse_b;
+
+		/**
+		 * As mouse_b, but holds the previous state.
+		 * This is useful to detect state changes e.g. clicks.
+		 */
+		extern int previousMouseState;
 	}
 
 	/*!
@@ -69,6 +75,10 @@ namespace TA3D
 	** \brief enable grabing mouse inside the window when in windowed mode
 	*/
 	void grab_mouse(bool);
+
+	bool mouseButtonWentDown(MouseButtonFlag button);
+
+	bool mouseButtonWentUp(MouseButtonFlag button);
 }
 
 extern int CURSOR_MOVE;

@@ -25,6 +25,7 @@ int TA3D::VARS::mouse_x = 0;
 int TA3D::VARS::mouse_y = 0;
 int TA3D::VARS::mouse_z = 0;
 int TA3D::VARS::mouse_b = 0;
+int TA3D::VARS::previousMouseState = 0;
 int CURSOR_MOVE;
 int CURSOR_GREEN;
 int CURSOR_CROSS;
@@ -100,6 +101,7 @@ namespace TA3D
 		uint32 mouseButtonState = SDL_GetMouseState(&newMouseX, &newMouseY);
 
 		// update mouse button state
+		previousMouseState = mouse_b;
 		mouse_b = 0;
 		if (mouseButtonState & SDL_BUTTON(SDL_BUTTON_LEFT))  // left mouse button
 			mouse_b |= LeftMouseButton;
@@ -153,6 +155,7 @@ namespace TA3D
 		grab_mouse(lp_CONFIG->grab_inputs);
 
 		mouse_b = 0;
+		previousMouseState = 0;
 
 		SDL_ShowCursor(SDL_DISABLE);
 
@@ -198,5 +201,15 @@ namespace TA3D
 	void grab_mouse(bool grab)
 	{
 		SDL_SetWindowGrab(screen, grab ? SDL_TRUE : SDL_FALSE);
+	}
+
+	bool mouseButtonWentDown(MouseButtonFlag button)
+	{
+		return (mouse_b & button) && !(previousMouseState & button);
+	}
+
+	bool mouseButtonWentUp(MouseButtonFlag button)
+	{
+		return (previousMouseState & button) && !(mouse_b & button);
 	}
 }

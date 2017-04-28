@@ -1094,7 +1094,7 @@ namespace TA3D
 		panelbottom.height = h;
 	}
 
-	int UnitManager::unit_build_menu(int index, int omb, float& dt, int scrolling, bool GUI)
+	int UnitManager::unit_build_menu(int index, float& dt, int scrolling, bool GUI)
 	{
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -1234,7 +1234,7 @@ namespace TA3D
 			glDisable(GL_BLEND);
 		}
 
-		if (sel != -1 && mouse_b == LeftMouseButton && omb != LeftMouseButton) // Click !!
+		if (sel != -1 && mouseButtonWentDown(LeftMouseButton)) // Click !!
 		{
 			unit_type[index]->last_click = sint16(sel);
 			unit_type[index]->click_time = 0.5f; // One sec animation;

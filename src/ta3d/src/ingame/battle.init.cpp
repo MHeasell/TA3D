@@ -560,8 +560,6 @@ namespace TA3D
 		count = msec_timer;
 
 		mx = my = 0;
-		omb2 = mouse_b;
-		omb3 = mouse_b;
 		cur_sel = -1;
 		old_gui_sel = -1;
 		old_sel = false;
