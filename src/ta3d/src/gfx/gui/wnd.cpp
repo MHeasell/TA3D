@@ -603,9 +603,9 @@ namespace TA3D
 			}
 			was_hidden = false;
 			int IsOnGUI;
-			// Vérifie si la souris est sur la fenêtre et/ou si elle la déplace
+			// Checks whether the mouse is on the window and/or moves it
 			IsOnGUI = WinMov(AMx, AMy, AMb, mouse_x, mouse_y, mouse_b, skin);
-			// S'il n'y a pas d'objets, on arrête
+			// If there are no objects, we stop
 			if (pObjects.empty())
 				return IsOnGUI;
 
@@ -617,7 +617,7 @@ namespace TA3D
 				scrolling = Math::Max(0, scrolling);
 			}
 
-			// Interactions utilisateur/objets
+			// User/Object interactions
 			unsigned int index, e;
 			CodePoint Key;
 			bool was_on_floating_menu = false;
@@ -674,7 +674,7 @@ namespace TA3D
 				if (on_menu == (int)i)
 					was_on_floating_menu = false;
 
-				// Vérifie si la souris est sur l'objet
+				// Checks whether the mouse is on the object
 				if ((float)mouse_x >= (float)x + object->x1 && (float)mouse_x <= (float)x + object->x2 && (float)mouse_y >= (float)y + object->y1 && (float)mouse_y <= (float)y + object->y2 && !was_on_floating_menu)
 				{
 					object->MouseOn = true;
@@ -698,7 +698,7 @@ namespace TA3D
 				if (object->MouseOn)
 					IsOnGUI |= 2;
 
-				if (mouse_b != 0 && object->MouseOn && !was_on_floating_menu) // Obtient le focus
+				if (mouse_b != 0 && object->MouseOn && !was_on_floating_menu) // Gets focus
 				{
 					for (e = 0; e < pObjects.size(); ++e)
 						pObjects[e]->Focus = false;
@@ -735,7 +735,7 @@ namespace TA3D
 
 				switch (object->Type)
 				{
-					case OBJ_MENU: // Choses à faire quoi qu'il arrive
+					case OBJ_MENU: // Things to do whatever happens
 					{
 						object->Data = (unsigned int)(-1); // No selection
 						if (!object->Etat)
@@ -770,7 +770,7 @@ namespace TA3D
 					}
 					case OBJ_FMENU:
 					{
-						object->Data = (unsigned int)(-1); // Pas de séléction
+						object->Data = (unsigned int)(-1); // No selection
 						if (object->MouseOn && (float)mouse_y >= (float)y + object->y1 + 4.0f && (float)mouse_y <= (float)y + object->y2 - 4.0f)
 						{
 							object->Data = (int)(((float)mouse_y - (float)y - object->y1 - 4.0f) / float(pCacheFontHeight));
@@ -779,7 +779,7 @@ namespace TA3D
 						}
 						break;
 					}
-					case OBJ_TEXTBAR: // Permet l'entrée de texte
+					case OBJ_TEXTBAR: // Allows inputting text
 					{
 						object->Etat = false;
 						if (object->Focus && keyboardBufferContainsElements())
@@ -818,7 +818,7 @@ namespace TA3D
 						break;
 					}
 
-					case OBJ_TEXTEDITOR: // Permet l'entrée de texte / Enable text input
+					case OBJ_TEXTEDITOR: // Enable text input
 					{
 						if (object->Text.empty())
 							object->Text.push_back(nullptr);
