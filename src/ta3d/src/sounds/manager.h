@@ -38,7 +38,7 @@ namespace TA3D
 		**
 		** \brief The Audio Engine
 		*/
-		class Manager : protected TA3D::IInterface
+		class AudioManager : protected TA3D::IInterface
 		{
 		public:
 			//! \name Constructor & Destructor
@@ -46,9 +46,9 @@ namespace TA3D
 			/*!
 			** \brief Constructor
 			*/
-			Manager();
+			AudioManager();
 			//! Destructor
-			virtual ~Manager();
+			virtual ~AudioManager();
 			//@}
 
 			/*!
@@ -252,7 +252,7 @@ namespace TA3D
 			class LoadAllTDFSound
 			{
 			public:
-				LoadAllTDFSound(Manager& a) : pAudio(a) {}
+				LoadAllTDFSound(AudioManager& a) : pAudio(a) {}
 				bool operator()(const String&, const String& value)
 				{
 					pAudio.doLoadSound(value, false);
@@ -261,7 +261,7 @@ namespace TA3D
 
 			private:
 				//! Self reference
-				Manager& pAudio;
+				AudioManager& pAudio;
 			}; // class LoadAllTDFSound
 
 		private:
@@ -340,12 +340,12 @@ namespace TA3D
 			WorkList pWorkList; // List to store work to do when entering main thread
 			//!
 			sint32 fCounter;
-		}; // class Manager
+		}; // class AudioManager
 
 	} // namespace AUDIO
 
 	//! The sound manager
-	extern Audio::Manager* sound_manager;
+	extern Audio::AudioManager* sound_manager;
 
 } // namespace TA3D
 

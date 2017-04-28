@@ -25,7 +25,7 @@
 #include <misc/paths.h>
 #include <fstream>
 
-TA3D::Audio::Manager* TA3D::sound_manager;
+TA3D::Audio::AudioManager* TA3D::sound_manager;
 
 namespace TA3D
 {
@@ -34,7 +34,7 @@ namespace TA3D
 
 		const int nbChannels = 16;
 
-		Manager::Manager()
+		AudioManager::AudioManager()
 			: m_SDLMixerRunning(false), m_InBattle(false), pBattleTunesCount(0), pMusic(NULL), bPlayMusic(false), pBasicSound(NULL), pCurrentItemToPlay(-1), pCurrentItemPlaying(-1)
 		{
 			pMinTicks = 500;
@@ -44,7 +44,7 @@ namespace TA3D
 				InitInterface();
 		}
 
-		void Manager::reset()
+		void AudioManager::reset()
 		{
 			doShutdownAudio(true);
 			doStartUpAudio();
@@ -52,7 +52,7 @@ namespace TA3D
 				InitInterface();
 		}
 
-		void Manager::setPlayListFileMode(const int idx, bool inBattle, bool disabled)
+		void AudioManager::setPlayListFileMode(const int idx, bool inBattle, bool disabled)
 		{
 			if (idx < 0 || idx >= (int)pPlaylist.size())
 				return;
@@ -70,7 +70,7 @@ namespace TA3D
 			pPlaylist[idx]->disabled = disabled;
 		}
 
-		bool Manager::getPlayListFiles(String::Vector& out)
+		bool AudioManager::getPlayListFiles(String::Vector& out)
 		{
 			out.resize(pPlaylist.size());
 			int indx(0);
@@ -91,14 +91,14 @@ namespace TA3D
 			return !out.empty();
 		}
 
-		void Manager::updatePlayListFiles()
+		void AudioManager::updatePlayListFiles()
 		{
 			pMutex.lock();
 			doUpdatePlayListFiles();
 			pMutex.unlock();
 		}
 
-		void Manager::doUpdatePlayListFiles()
+		void AudioManager::doUpdatePlayListFiles()
 		{
 			MutexLocker locker(pMutex);
 
@@ -165,14 +165,14 @@ namespace TA3D
 			doSavePlaylist();
 		}
 
-		void Manager::savePlaylist()
+		void AudioManager::savePlaylist()
 		{
 			pMutex.lock();
 			doSavePlaylist();
 			pMutex.unlock();
 		}
 
-		void Manager::doSavePlaylist()
+		void AudioManager::doSavePlaylist()
 		{
 			String targetPlaylist;
 			targetPlaylist << TA3D::Paths::Resources << "music/playlist.txt";
@@ -203,7 +203,7 @@ namespace TA3D
 			LOG_INFO(LOG_PREFIX_SOUND << "playlist saved");
 		}
 
-		void Manager::doLoadPlaylist()
+		void AudioManager::doLoadPlaylist()
 		{
 			String filename;
 			filename << TA3D::Paths::Resources << "music/playlist.txt";
@@ -278,7 +278,7 @@ namespace TA3D
 			doUpdatePlayListFiles();
 		}
 
-		void Manager::doShutdownAudio(const bool purgeLoadedData)
+		void AudioManager::doShutdownAudio(const bool purgeLoadedData)
 		{
 			if (m_SDLMixerRunning) // only execute stop if we are running.
 				doStopMusic();
@@ -300,7 +300,7 @@ namespace TA3D
 			}
 		}
 
-		bool Manager::doStartUpAudio()
+		bool AudioManager::doStartUpAudio()
 		{
 			pMusic = NULL;
 			fCounter = 0;
@@ -329,12 +329,12 @@ namespace TA3D
 			return true;
 		}
 
-		Manager::~Manager()
+		AudioManager::~AudioManager()
 		{
 			doShutdownAudio(true);
 		}
 
-		void Manager::stopMusic()
+		void AudioManager::stopMusic()
 		{
 			pMutex.lock();
 			bPlayMusic = false;
@@ -342,7 +342,7 @@ namespace TA3D
 			pMutex.unlock();
 		}
 
-		void Manager::doStopMusic()
+		void AudioManager::doStopMusic()
 		{
 			if (m_SDLMixerRunning && pMusic != NULL)
 			{
@@ -352,7 +352,7 @@ namespace TA3D
 			}
 		}
 
-		void Manager::doPurgePlaylist()
+		void AudioManager::doPurgePlaylist()
 		{
 			pMutex.lock();
 			doStopMusic();
@@ -370,7 +370,7 @@ namespace TA3D
 			pMutex.unlock();
 		}
 
-		void Manager::togglePauseMusic()
+		void AudioManager::togglePauseMusic()
 		{
 			pMutex.lock();
 			if (m_SDLMixerRunning && pMusic != NULL)
@@ -383,20 +383,20 @@ namespace TA3D
 			pMutex.unlock();
 		}
 
-		void Manager::pauseMusic()
+		void AudioManager::pauseMusic()
 		{
 			pMutex.lock();
 			doPauseMusic();
 			pMutex.unlock();
 		}
 
-		void Manager::doPauseMusic()
+		void AudioManager::doPauseMusic()
 		{
 			if (m_SDLMixerRunning && pMusic != NULL)
 				Mix_PauseMusic();
 		}
 
-		String Manager::doSelectNextMusic()
+		String AudioManager::doSelectNextMusic()
 		{
 			if (pPlaylist.empty())
 				return nullptr;
@@ -454,7 +454,7 @@ namespace TA3D
 			return szResult;
 		}
 
-		void Manager::setMusicMode(const bool battleMode)
+		void AudioManager::setMusicMode(const bool battleMode)
 		{
 			pMutex.lock();
 			if (m_InBattle != battleMode)
@@ -465,7 +465,7 @@ namespace TA3D
 			pMutex.unlock();
 		}
 
-		void Manager::doPlayMusic(const String& filename)
+		void AudioManager::doPlayMusic(const String& filename)
 		{
 			doStopMusic();
 
@@ -507,7 +507,7 @@ namespace TA3D
 			setMusicVolume(lp_CONFIG->music_volume);
 		}
 
-		void Manager::playMusic()
+		void AudioManager::playMusic()
 		{
 			pMutex.lock();
 			bPlayMusic = true;
@@ -515,7 +515,7 @@ namespace TA3D
 			pMutex.unlock();
 		}
 
-		void Manager::doPlayMusic()
+		void AudioManager::doPlayMusic()
 		{
 			if (!m_SDLMixerRunning || !bPlayMusic)
 				return;
@@ -536,7 +536,7 @@ namespace TA3D
 		}
 
 		// Begin sound managing routines.
-		void Manager::setListenerPos(const Vector3D&)
+		void AudioManager::setListenerPos(const Vector3D&)
 		{
 			// disabled because not used pMutex.unlock();
 			// if (m_SDLMixerRunning)
@@ -551,13 +551,13 @@ namespace TA3D
 			}
 		}
 
-		void Manager::update3DSound()
+		void AudioManager::update3DSound()
 		{
 			MutexLocker locker(pMutex);
 			doUpdate3DSound();
 		}
 
-		void Manager::doUpdate3DSound()
+		void AudioManager::doUpdate3DSound()
 		{
 			if (!m_SDLMixerRunning)
 			{
@@ -595,7 +595,7 @@ namespace TA3D
 			}
 		}
 
-		uint32 Manager::InterfaceMsg(const uint32 MsgID, const String& msg)
+		uint32 AudioManager::InterfaceMsg(const uint32 MsgID, const String& msg)
 		{
 			if (MsgID == TA3D_IM_GUI_MSG) // for GUI messages, test if it's a message for us
 			{
@@ -624,7 +624,7 @@ namespace TA3D
 			return INTERFACE_RESULT_CONTINUE;
 		}
 
-		void Manager::playSoundFileNow(const String& filename)
+		void AudioManager::playSoundFileNow(const String& filename)
 		{
 			stopSoundFileNow();
 
@@ -642,7 +642,7 @@ namespace TA3D
 			}
 		}
 
-		void Manager::stopSoundFileNow()
+		void AudioManager::stopSoundFileNow()
 		{
 			MutexLocker locker(pMutex);
 			if (pBasicSound)
@@ -657,13 +657,13 @@ namespace TA3D
 			pBasicSound = NULL;
 		}
 
-		bool Manager::loadSound(const String& filename, const bool LoadAs3D, const float MinDistance, const float MaxDistance)
+		bool AudioManager::loadSound(const String& filename, const bool LoadAs3D, const float MinDistance, const float MaxDistance)
 		{
 			MutexLocker locker(pMutex);
 			return doLoadSound(filename, LoadAs3D, MinDistance, MaxDistance);
 		}
 
-		bool Manager::doLoadSound(String filename, const bool LoadAs3D, const float /*MinDistance*/, const float /*MaxDistance*/)
+		bool AudioManager::doLoadSound(String filename, const bool LoadAs3D, const float /*MinDistance*/, const float /*MaxDistance*/)
 		{
 			if (filename.empty()) // We can't load a file with an empty name
 				return false;
@@ -697,7 +697,7 @@ namespace TA3D
 			File* file = VFS::Instance()->readFile(theSound);
 			if (!file) // if no data, log a message and return false.
 			{
-				// logs.debug() <<  LOG_PREFIX_SOUND << "Manager: LoadSound(" << filename << "), no such sound found in HPI.");
+				// logs.debug() <<  LOG_PREFIX_SOUND << "AudioManager: LoadSound(" << filename << "), no such sound found in HPI.");
 				return false;
 			}
 
@@ -713,7 +713,7 @@ namespace TA3D
 				delete it; // delete the sound.
 				// log a message and return false;
 				if (m_SDLMixerRunning)
-					logs.debug() << LOG_PREFIX_SOUND << "Manager: LoadSound(" << filename << "), Failed to construct sample.";
+					logs.debug() << LOG_PREFIX_SOUND << "AudioManager: LoadSound(" << filename << "), Failed to construct sample.";
 				return false;
 			}
 
@@ -727,7 +727,7 @@ namespace TA3D
 			return true;
 		}
 
-		void Manager::loadTDFSounds(const bool allSounds)
+		void AudioManager::loadTDFSounds(const bool allSounds)
 		{
 			MutexLocker locker(pMutex);
 			// Which file to load ?
@@ -747,7 +747,7 @@ namespace TA3D
 				logs.debug() << LOG_PREFIX_SOUND << "Reading: Aborted.";
 		}
 
-		void Manager::purgeSounds()
+		void AudioManager::purgeSounds()
 		{
 			pMutex.lock();
 
@@ -762,7 +762,7 @@ namespace TA3D
 		}
 
 		// Play sound directly from our sound pool
-		void Manager::playSound(const String& filename, const Vector3D* vec)
+		void AudioManager::playSound(const String& filename, const Vector3D* vec)
 		{
 			if (filename.empty())
 				return;
@@ -817,7 +817,7 @@ namespace TA3D
 			pWorkList.push_back(WorkListItem(sound, vec));
 		}
 
-		void Manager::playTDFSoundNow(const String& Key, const Vector3D* vec)
+		void AudioManager::playTDFSoundNow(const String& Key, const Vector3D* vec)
 		{
 			pMutex.lock();
 			String szWav = pTable.pullAsString(ToLower(Key)); // copy string to szWav so we can work with it.
@@ -847,14 +847,14 @@ namespace TA3D
 			pMutex.unlock();
 		}
 
-		void Manager::playTDFSound(const String& key, const Vector3D* vec)
+		void AudioManager::playTDFSound(const String& key, const Vector3D* vec)
 		{
 			pMutex.lock();
 			doPlayTDFSound(key, vec);
 			pMutex.unlock();
 		}
 
-		void Manager::doPlayTDFSound(String key, const Vector3D* vec)
+		void AudioManager::doPlayTDFSound(String key, const Vector3D* vec)
 		{
 			if (!key.empty())
 			{
@@ -871,7 +871,7 @@ namespace TA3D
 			}
 		}
 
-		void Manager::doPlayTDFSound(const String& keyA, const String& keyB, const Vector3D* vec)
+		void AudioManager::doPlayTDFSound(const String& keyA, const String& keyB, const Vector3D* vec)
 		{
 			if (!keyA.empty() && !keyB.empty())
 			{
@@ -881,7 +881,7 @@ namespace TA3D
 			}
 		}
 
-		void Manager::playTDFSound(const String& keyA, const String& keyB, const Vector3D* vec)
+		void AudioManager::playTDFSound(const String& keyA, const String& keyB, const Vector3D* vec)
 		{
 			if (!keyA.empty() && !keyB.empty())
 			{
@@ -891,7 +891,7 @@ namespace TA3D
 			}
 		}
 
-		Manager::SoundItemList::~SoundItemList()
+		AudioManager::SoundItemList::~SoundItemList()
 		{
 			if (sampleHandle)
 			{
@@ -903,14 +903,14 @@ namespace TA3D
 			sampleHandle = NULL;
 		}
 
-		void Manager::setVolume(int volume)
+		void AudioManager::setVolume(int volume)
 		{
 			if (!isRunning())
 				return;
 			Mix_Volume(-1, volume);
 		}
 
-		void Manager::setMusicVolume(int volume)
+		void AudioManager::setMusicVolume(int volume)
 		{
 			if (!isRunning())
 				return;
