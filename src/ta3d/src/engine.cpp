@@ -44,7 +44,7 @@ namespace TA3D
 		TA3D::VfsService* vfsService,
 		I18N* i18nService,
 		GFX* graphicsService,
-		Audio::AudioManager* audioService,
+		AudioManager* audioService,
 		TA3DCONFIG* config,
 		ModelManager* modelManager,
 		UnitManager* unitManager,

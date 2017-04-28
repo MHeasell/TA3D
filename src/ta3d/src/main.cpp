@@ -148,7 +148,7 @@ int main(int argc, char* argv[])
 		gfx = NULL;
 		gfx = graphicsService.get();
 
-		auto audioManager = std::make_unique<Audio::AudioManager>();
+		auto audioManager = std::make_unique<AudioManager>();
 		sound_manager = audioManager.get();
 
 		ModelManager* modelManager = &model_manager;
