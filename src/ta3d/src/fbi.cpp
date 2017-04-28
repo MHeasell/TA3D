@@ -1094,7 +1094,7 @@ namespace TA3D
 		panelbottom.height = h;
 	}
 
-	int UnitManager::unit_build_menu(int index, int omb, float& dt, int scrolling, bool GUI) // Affiche et gère le menu des unités
+	int UnitManager::unit_build_menu(int index, int omb, float& dt, int scrolling, bool GUI)
 	{
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -1128,12 +1128,12 @@ namespace TA3D
 			glDisable(GL_TEXTURE_2D);
 			glColor4ub(0x0, 0x0, 0x0, 0xFF);
 			glBegin(GL_QUADS);
-			glVertex2i(0, 0); // Barre latérale gauche
+			glVertex2i(0, 0); // Left side bar
 			glVertex2i(128, 0);
 			glVertex2i(128, 128);
 			glVertex2i(0, 128);
 
-			glVertex2i(0, 128 + panel.height); // Barre latérale gauche
+			glVertex2i(0, 128 + panel.height); // Left side bar
 			glVertex2i(128, 128 + panel.height);
 			glVertex2i(128, SCREEN_H);
 			glVertex2i(0, SCREEN_H);
@@ -1145,7 +1145,7 @@ namespace TA3D
 		glEnable(GL_TEXTURE_2D);
 
 		if (index < 0 || index >= nb_unit)
-			return -1; // L'indice est incorrect
+			return -1; // The index is incorrect
 
 		int page = unit_type[index]->page;
 
@@ -1154,7 +1154,7 @@ namespace TA3D
 		gfx->set_2D_clip_rectangle(0, 128, 128, SCREEN_H - 128);
 
 		glDisable(GL_BLEND);
-		for (int i = 0; i < unit_type[index]->nb_unit; ++i) // Affiche les différentes images d'unités constructibles
+		for (int i = 0; i < unit_type[index]->nb_unit; ++i) // Displays the various images of constructable units
 		{
 			if (unit_type[index]->Pic_p[i] != page)
 				continue;

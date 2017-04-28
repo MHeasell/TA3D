@@ -571,7 +571,7 @@ namespace TA3D
 		old_gui_sel = -1;
 		old_sel = false;
 		selected = false;
-		build = -1; // Indique si l'utilisateur veut construire quelque chose
+		build = -1;
 		build_order_given = false;
 		cur_sel_index = -1;
 		omz = mouse_z;

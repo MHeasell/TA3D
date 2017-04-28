@@ -375,8 +375,14 @@ namespace TA3D
 		 * is currently selected.
 		 */
 		bool selected;
-		//!
-		int build; // Indique si l'utilisateur veut construire quelque chose
+
+		/**
+		 * Indicates the type of unit (structure)
+		 * that the user is currently attempting to build.
+		 * If set, the user is in build mode trying to place the structure.
+		 * A value of -1 indicates that the user is not in build mode.
+		 */
+		int build;
 		//!
 		bool build_order_given;
 		//!

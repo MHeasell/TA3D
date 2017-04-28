@@ -1507,10 +1507,10 @@ namespace TA3D
 			/*------------------- End of GUI drawings -------------------------------------------------------*/
 
 			if (pCurrentGUI != String(ta3dSideData.side_pref[players.side_view]) << "gen")
-				sel = unit_manager.unit_build_menu(n, omb2, dt, scrolling, false); // Menu correspondant à l'unité / Unit's menu
+				sel = unit_manager.unit_build_menu(n, omb2, dt, scrolling, false); // Unit's menu
 			else
-				sel = unit_manager.unit_build_menu(-1, omb2, dt, scrolling, false); // Menu correspondant à l'unité / Unit's menu
-			if (sel == -2)															// Crée des armes / build weapons
+				sel = unit_manager.unit_build_menu(-1, omb2, dt, scrolling, false); // Unit's menu
+			if (sel == -2)															// build weapons
 			{
 				if (mouse_b == 1 && omb2 != 1)
 				{
@@ -2105,7 +2105,7 @@ namespace TA3D
 			{
 				build = sel;
 				sound_manager->playTDFSound("ADDBUILD", "sound", NULL);
-				if (!unit_manager.unit_type[cur_sel]->BMcode) // S'il s'agit d'un bÃ¢timent
+				if (!unit_manager.unit_type[cur_sel]->BMcode) // if it is a building
 				{
 					if (TA3D_SHIFT_PRESSED)
 						for (int i = 0; i < 5; ++i)

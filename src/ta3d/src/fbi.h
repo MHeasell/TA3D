@@ -214,8 +214,11 @@ namespace TA3D
 
 		/*-----------------------------------------------------------------------*/
 
-		short nb_unit;				  // Nombre d'unités que cette unité peut construire
-		std::vector<short> BuildList; // Liste des unités que cette unité peut construire
+		//! Number of units this unit can build
+		short nb_unit;
+
+		//! List of units that this unit can build
+		std::vector<short> BuildList;
 		std::vector<short> Pic_x;	 // Coordinates
 		std::vector<short> Pic_y;
 		std::vector<short> Pic_w; // Size
@@ -381,7 +384,25 @@ namespace TA3D
 
 		void waitUntilReady() const;
 
-		int unit_build_menu(int index, int omb, float& dt, int scrolling, bool GUI); // Affiche et gère le menu des unités
+		/**
+		 * Displays and manages the unit build menu.
+		 *
+		 * If GUI is set to true, this method draws the background panels
+		 * and returns 0.
+		 *
+		 * if GUI is set to false,
+		 * this method draws the unit build pictures themselves
+		 * (and associated info in the bottom status bar)
+		 * and updates state in response to inputs (e.g. mouse clicks).
+		 * The return value of this method is the unit type
+		 * that the user's cursor is currently hovering over.
+		 * If the cursor is not hovering over a build picture,
+		 * the return value is -1.
+		 * if the cursor is hovering over a build picture, but it is not for a unit
+		 * (e.g. it is a buildable weapon)
+		 * the return value is -2.
+		 */
+		int unit_build_menu(int index, int omb, float& dt, int scrolling, bool GUI);
 
 		void Identify(); // Identifie les pièces aux quelles les scripts font référence
 
