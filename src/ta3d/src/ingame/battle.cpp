@@ -303,7 +303,9 @@ namespace TA3D
 				}
 			}
 
-			if (mouse_x < 128.0f && mouse_y < 128.0f && mouse_x >= 0.0f && mouse_y >= 0.0f && ((mouseButtonIsDown(RightMouseButton) && !lp_CONFIG->right_click_interface) || (mouseButtonIsDown(LeftMouseButton) && lp_CONFIG->right_click_interface)))
+			if (mouse_x < 128.0f && mouse_y < 128.0f && mouse_x >= 0.0f && mouse_y >= 0.0f && ((isMouseButtonDown(
+				RightMouseButton) && !lp_CONFIG->right_click_interface) || (isMouseButtonDown(
+				LeftMouseButton) && lp_CONFIG->right_click_interface)))
 			{
 				cam.rpos.x = float((mouse_x - 64) * map->map_w) / 128.0f * 252.0f / (float)map->mini_w;
 				cam.rpos.z = float((mouse_y - 64) * map->map_h) / 128.0f * 252.0f / (float)map->mini_h;
@@ -424,8 +426,8 @@ namespace TA3D
 
 			bool order_removed = false;
 
-			bool right_click_activation = lp_CONFIG->right_click_interface && mouseButtonWentUp(RightMouseButton) && current_order == SIGNAL_ORDER_NONE;
-			bool left_click_activation = mouseButtonWentUp(LeftMouseButton) && ((!lp_CONFIG->right_click_interface && current_order == SIGNAL_ORDER_NONE) || current_order != SIGNAL_ORDER_NONE);
+			bool right_click_activation = lp_CONFIG->right_click_interface && didMouseButtonGoUp(RightMouseButton) && current_order == SIGNAL_ORDER_NONE;
+			bool left_click_activation = didMouseButtonGoUp(LeftMouseButton) && ((!lp_CONFIG->right_click_interface && current_order == SIGNAL_ORDER_NONE) || current_order != SIGNAL_ORDER_NONE);
 			bool click_activation = right_click_activation || left_click_activation;
 			bool click_activated = false;
 
@@ -833,7 +835,7 @@ namespace TA3D
 			}
 
 			// The cursor orders to build something
-			if (build >= 0 && cursor_type == CURSOR_DEFAULT && mouseButtonWentUp(LeftMouseButton) && !IsOnGUI)
+			if (build >= 0 && cursor_type == CURSOR_DEFAULT && didMouseButtonGoUp(LeftMouseButton) && !IsOnGUI)
 			{
 				Vector3D target(cursorOnMap(cam, *map));
 				pMouseRectSelection.x2 = ((int)(target.x) + map->map_w_d) >> 3;
@@ -880,7 +882,7 @@ namespace TA3D
 			}
 			else
 			{
-				if (build >= 0 && cursor_type == CURSOR_DEFAULT && mouseButtonWentDown(LeftMouseButton) && !IsOnGUI) // Giving the order to build a row
+				if (build >= 0 && cursor_type == CURSOR_DEFAULT && didMouseButtonGoDown(LeftMouseButton) && !IsOnGUI) // Giving the order to build a row
 				{
 					Vector3D target(cursorOnMap(cam, *map));
 					pMouseRectSelection.x1 = ((int)(target.x) + map->map_w_d) >> 3;
@@ -895,14 +897,15 @@ namespace TA3D
 			if (build == -1)
 				build_order_given = false;
 
-			if (mouseButtonWentUp(LeftMouseButton) && !TA3D_SHIFT_PRESSED && (!IsOnGUI || IsOnMinimap))
+			if (didMouseButtonGoUp(LeftMouseButton) && !TA3D_SHIFT_PRESSED && (!IsOnGUI || IsOnMinimap))
 				current_order = SIGNAL_ORDER_NONE;
 
 			//---------------------------------	Code de sÃ©lection d'unitÃ©s
 
 			if (!IsOnGUI)
 			{
-				if ((mouseButtonWentDown(RightMouseButton) && !lp_CONFIG->right_click_interface) || (!click_activated && mouseButtonWentDown(LeftMouseButton) && current_order == SIGNAL_ORDER_NONE && lp_CONFIG->right_click_interface)) // Secondary mouse button cancels/deselects
+				if ((didMouseButtonGoDown(RightMouseButton) && !lp_CONFIG->right_click_interface) || (!click_activated &&
+					didMouseButtonGoDown(LeftMouseButton) && current_order == SIGNAL_ORDER_NONE && lp_CONFIG->right_click_interface)) // Secondary mouse button cancels/deselects
 				{
 					if (current_order != SIGNAL_ORDER_NONE && current_order != SIGNAL_ORDER_MOVE)
 						current_order = SIGNAL_ORDER_NONE;
@@ -932,7 +935,8 @@ namespace TA3D
 
 			if (build == -1 && (!IsOnGUI || (pMouseSelecting && (mouse_y < 32 || mouse_y > SCREEN_H - 32)) || IsOnMinimap)) // Si le curseur est dans la zone de jeu
 			{
-				if ((mouseButtonIsUp(LeftMouseButton) && pMouseSelecting) || (IsOnMinimap && mouseButtonWentDown(LeftMouseButton))) // RÃ©cupÃ¨re les unitÃ©s prÃ©sentes dans la sÃ©lection
+				if ((isMouseButtonUp(LeftMouseButton) && pMouseSelecting) || (IsOnMinimap &&
+					didMouseButtonGoDown(LeftMouseButton))) // RÃ©cupÃ¨re les unitÃ©s prÃ©sentes dans la sÃ©lection
 				{
 					bool skip = false;
 					if ((abs(pMouseRectSelection.x1 - pMouseRectSelection.x2) < PICK_TOLERANCE && abs(pMouseRectSelection.y1 - pMouseRectSelection.y2) < PICK_TOLERANCE) || IsOnMinimap)
@@ -987,9 +991,9 @@ namespace TA3D
 					}
 				}
 				pMouseSelecting = false;
-				if (mouseButtonIsDown(LeftMouseButton) && !IsOnMinimap)
+				if (isMouseButtonDown(LeftMouseButton) && !IsOnMinimap)
 				{
-					if (mouseButtonWentDown(LeftMouseButton))
+					if (didMouseButtonGoDown(LeftMouseButton))
 					{
 						pMouseRectSelection.x1 = mouse_x;
 						pMouseRectSelection.y1 = mouse_y;
@@ -1474,7 +1478,7 @@ namespace TA3D
 				sel = unit_manager.unit_build_menu(-1, dt, scrolling, false); // Unit's menu
 			if (sel == -2)															// build weapons
 			{
-				if (mouseButtonWentDown(LeftMouseButton))
+				if (didMouseButtonGoDown(LeftMouseButton))
 				{
 					if (TA3D_SHIFT_PRESSED)
 						units.unit[cur_sel_index].planned_weapons += 5.0f;
@@ -1483,7 +1487,7 @@ namespace TA3D
 				}
 				else
 				{
-					if (mouseButtonWentDown(RightMouseButton))
+					if (didMouseButtonGoDown(RightMouseButton))
 					{
 						units.unit[cur_sel_index].planned_weapons -= (TA3D_SHIFT_PRESSED) ? 5.0f : 1.0f;
 						if (units.unit[cur_sel_index].planned_weapons < 0.0f)
@@ -2009,10 +2013,10 @@ namespace TA3D
 					current_order = SIGNAL_ORDER_NONE;
 					break;
 			}
-			if (sel >= 0 || mouseButtonIsDown(RightMouseButton))
+			if (sel >= 0 || isMouseButtonDown(RightMouseButton))
 				current_order = SIGNAL_ORDER_NONE;
 
-			if (sel >= 0 && mouseButtonWentDown(RightMouseButton))
+			if (sel >= 0 && didMouseButtonGoDown(RightMouseButton))
 			{
 				units.unit[cur_sel_index].lock();
 				MissionStack::iterator cur = units.unit[cur_sel_index].mission.begin();
@@ -2063,7 +2067,7 @@ namespace TA3D
 				units.unit[cur_sel_index].unlock();
 			}
 
-			if (sel >= 0 && mouseButtonWentDown(LeftMouseButton))
+			if (sel >= 0 && didMouseButtonGoDown(LeftMouseButton))
 			{
 				build = sel;
 				sound_manager->playTDFSound("ADDBUILD", "sound", NULL);

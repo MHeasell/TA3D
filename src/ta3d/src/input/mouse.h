@@ -73,13 +73,13 @@ namespace TA3D
 	*/
 	void grab_mouse(bool);
 
-	bool mouseButtonIsDown(MouseButtonFlag button);
+	bool isMouseButtonDown(MouseButtonFlag button);
 
-	bool mouseButtonIsUp(MouseButtonFlag button);
+	bool isMouseButtonUp(MouseButtonFlag button);
 
-	bool mouseButtonWentDown(MouseButtonFlag button);
+	bool didMouseButtonGoDown(MouseButtonFlag button);
 
-	bool mouseButtonWentUp(MouseButtonFlag button);
+	bool didMouseButtonGoUp(MouseButtonFlag button);
 }
 
 extern int CURSOR_MOVE;

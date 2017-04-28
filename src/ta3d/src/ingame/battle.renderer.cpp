@@ -137,7 +137,7 @@ namespace TA3D
 			pMouseRectSelection.x2 = ((int)(target.x) + map->map_w_d) >> 3;
 			pMouseRectSelection.y2 = ((int)(target.z) + map->map_h_d) >> 3;
 
-			if (mouseButtonIsUp(LeftMouseButton))
+			if (isMouseButtonUp(LeftMouseButton))
 			{
 				pMouseRectSelection.x1 = pMouseRectSelection.x2;
 				pMouseRectSelection.y1 = pMouseRectSelection.y2;

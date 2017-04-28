@@ -201,22 +201,22 @@ namespace TA3D
 		SDL_SetWindowGrab(screen, grab ? SDL_TRUE : SDL_FALSE);
 	}
 
-	bool mouseButtonIsDown(MouseButtonFlag button)
+	bool isMouseButtonDown(MouseButtonFlag button)
 	{
 		return (mouse_b & button) != 0;
 	}
 
-	bool mouseButtonIsUp(MouseButtonFlag button)
+	bool isMouseButtonUp(MouseButtonFlag button)
 	{
 		return (mouse_b & button) == 0;
 	}
 
-	bool mouseButtonWentDown(MouseButtonFlag button)
+	bool didMouseButtonGoDown(MouseButtonFlag button)
 	{
 		return (mouse_b & button) && !(previousMouseState & button);
 	}
 
-	bool mouseButtonWentUp(MouseButtonFlag button)
+	bool didMouseButtonGoUp(MouseButtonFlag button)
 	{
 		return (previousMouseState & button) && !(mouse_b & button);
 	}
