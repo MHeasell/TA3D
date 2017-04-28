@@ -83,8 +83,6 @@ namespace TA3D
 
 		bool right_click_interface; // Right click interface ?
 
-		float mouse_sensivity; // Mouse sensivity
-
 		int sound_volume; // Self explanatory
 		int music_volume; // 0 - 128
 

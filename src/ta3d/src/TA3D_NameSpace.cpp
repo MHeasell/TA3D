@@ -50,8 +50,6 @@ namespace TA3D
 
 		anisotropy = 1;
 
-		mouse_sensivity = 1.0f;
-
 		right_click_interface = false;
 
 		use_texture_compression = true;

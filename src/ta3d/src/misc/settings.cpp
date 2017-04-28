@@ -82,7 +82,6 @@ namespace TA3D
 			  << "               Net Server = " << TA3D::VARS::lp_CONFIG->net_server << "; // default: " << TA3D_DEFAULT_SERVER_HOSTNAME << "\n"
 			  << "  Use Texture Compression = " << TA3D::VARS::lp_CONFIG->use_texture_compression << ";\n"
 			  << "    Right Click Interface = " << TA3D::VARS::lp_CONFIG->right_click_interface << ";\n"
-			  << "        Mouse Sensitivity = " << TA3D::VARS::lp_CONFIG->mouse_sensivity << ";\n"
 			  << "             Sound Volume = " << TA3D::VARS::lp_CONFIG->sound_volume << ";\n"
 			  << "             Music Volume = " << TA3D::VARS::lp_CONFIG->music_volume << ";\n"
 			  << "              Grab Inputs = " << TA3D::VARS::lp_CONFIG->grab_inputs << ";\n"
@@ -165,8 +164,6 @@ namespace TA3D
 			TA3D::VARS::lp_CONFIG->use_texture_compression = cfgFile.pullAsBool("TA3D.Use Texture Compression", true);
 
 			TA3D::VARS::lp_CONFIG->right_click_interface = cfgFile.pullAsBool("TA3D.Right Click Interface", false);
-
-			TA3D::VARS::lp_CONFIG->mouse_sensivity = cfgFile.pullAsFloat("TA3D.Mouse Sensitivity", 1.0f);
 
 			TA3D::VARS::lp_CONFIG->sound_volume = cfgFile.pullAsInt("TA3D.Sound Volume", 128);
 			TA3D::VARS::lp_CONFIG->music_volume = cfgFile.pullAsInt("TA3D.Music Volume", 128);

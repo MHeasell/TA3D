@@ -106,8 +106,8 @@ namespace TA3D
 		uint32 m_b = SDL_GetMouseState(&rmx, &rmy);
 		dx = rmx - old_mx;
 		dy = rmy - old_my;
-		fmouse_x += float(dx) * lp_CONFIG->mouse_sensivity;
-		fmouse_y += float(dy) * lp_CONFIG->mouse_sensivity;
+		fmouse_x += float(dx);
+		fmouse_y += float(dy);
 		if (m_b & SDL_BUTTON(SDL_BUTTON_LEFT))  // left mouse button
 			mouse_b |= LeftMouseButton;
 		if (m_b & SDL_BUTTON(SDL_BUTTON_RIGHT))  // right mouse button
