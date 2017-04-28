@@ -22,8 +22,6 @@
 #include <memory>
 #include <fstream>
 
-using namespace std;
-
 namespace TA3D
 {
 
@@ -77,7 +75,7 @@ namespace TA3D
 		if (buffer == NULL || size == 0)
 			return;
 
-		ofstream file(filename.c_str());
+		std::ofstream file(filename.c_str());
 		if (file.is_open())
 		{
 			file.write((char *)buffer, size);

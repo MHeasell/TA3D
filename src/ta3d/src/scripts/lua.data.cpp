@@ -21,8 +21,6 @@
 #include "unit.script.h"
 #include "lua.thread.h"
 
-using namespace std;
-
 namespace TA3D
 {
     LuaData::LuaData()

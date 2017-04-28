@@ -3,8 +3,6 @@
 #include "mesh.h"
 #include "joins.h"
 
-using namespace std;
-
 namespace TA3D
 {
 	Mesh* Joins::computeStructure(Mesh* mesh, const String& filename)
@@ -140,8 +138,8 @@ namespace TA3D
 		if (model == NULL || model->mesh == NULL)
 			return;
 		float s = 0.0f;
-		vector<Mesh*> queue;
-		vector<Vector3D> pqueue;
+		std::vector<Mesh*> queue;
+		std::vector<Vector3D> pqueue;
 		queue.push_back(model->mesh);
 		pqueue.push_back(Vector3D());
 		while (!queue.empty())
