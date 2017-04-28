@@ -303,10 +303,10 @@ namespace TA3D
 			void clean();
 
 			/*!
-			** \brief Find the first animation wit hthe given name
+			** \brief Finds the first animation with the given name
 			**
 			** \param name The name of the animation to find
-			** \return The index of the animation. -1 if not found
+			** \return The index of the animation, or -1 if not found.
 			*/
 			sint32 findByName(const String& name) const;
 
