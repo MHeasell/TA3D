@@ -336,8 +336,8 @@ namespace TA3D
 		int unit_info_id;
 		//!
 		float speed_limit;
-		//!
-		float delay;
+		//! The time in (fractional) seconds that should elapse between frames.
+		float delayBetweenFrames;
 		//!
 		int nb_shoot;
 		//!
@@ -387,8 +387,11 @@ namespace TA3D
 		float dt;
 		//!
 		float t;
-		//!
-		int count;
+		/**
+		 * The time in milliseconds when the last frame was processed,
+		 * relative to program initialization.
+		 */
+		int lastFrameTime;
 		//!
 		int video_timer;
 		//!

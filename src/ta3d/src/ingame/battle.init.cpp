@@ -555,7 +555,7 @@ namespace TA3D
 	{
 		dt = 0.0f;
 		t = 0.0f;
-		count = MILLISECONDS_SINCE_INIT;
+		lastFrameTime = MILLISECONDS_SINCE_INIT;
 
 		mx = my = 0;
 		cur_sel = -1;
@@ -569,7 +569,7 @@ namespace TA3D
 		cam_h = lp_CONFIG->camera_def_h;
 
 		speed_limit = lp_CONFIG->fps_limit;
-		delay = (speed_limit < 1.0f) ? 0.0f : (1.0f / speed_limit);
+		delayBetweenFrames = (speed_limit < 1.0f) ? 0.0f : (1.0f / speed_limit);
 		ordered_destruct = false;
 		tilde = false;
 		done = false;

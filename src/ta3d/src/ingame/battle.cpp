@@ -184,8 +184,8 @@ namespace TA3D
 			else
 				cursor_type = CURSOR_DEFAULT;
 
-			dt = float(MILLISECONDS_SINCE_INIT - count) * 0.001f; // Regulate frame rate
-			while (dt < delay)
+			dt = float(MILLISECONDS_SINCE_INIT - lastFrameTime) * 0.001f; // Regulate frame rate
+			while (dt < delayBetweenFrames)
 			{
 				switch (lp_CONFIG->priority_level)
 				{
@@ -196,9 +196,9 @@ namespace TA3D
 						rest(0);
 						break;
 				}
-				dt = float(MILLISECONDS_SINCE_INIT - count) * 0.001f;
+				dt = float(MILLISECONDS_SINCE_INIT - lastFrameTime) * 0.001f;
 			}
-			count = MILLISECONDS_SINCE_INIT;
+			lastFrameTime = MILLISECONDS_SINCE_INIT;
 
 			if (!lp_CONFIG->pause)
 			{

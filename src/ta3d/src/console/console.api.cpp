@@ -245,7 +245,7 @@ namespace TA3D
 			Battle::Instance()->speed_limit = (float)lua_tonumber(L, -1);
 			if (Math::AlmostZero(Battle::Instance()->speed_limit))
 				Battle::Instance()->speed_limit = -1.0f;
-			Battle::Instance()->delay = 1.0f / Battle::Instance()->speed_limit;
+			Battle::Instance()->delayBetweenFrames = 1.0f / Battle::Instance()->speed_limit;
 		}
 		lua_pushnumber(L, Battle::Instance()->speed_limit);
 		return 1;
