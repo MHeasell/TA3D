@@ -2019,7 +2019,7 @@ namespace TA3D
 					current_order = SIGNAL_ORDER_NONE;
 					break;
 			}
-			if (sel >= 0 || (mouse_b & 2))
+			if (sel >= 0 || mouseButtonIsDown(RightMouseButton))
 				current_order = SIGNAL_ORDER_NONE;
 
 			if (sel >= 0 && mouseButtonWentDown(RightMouseButton))
