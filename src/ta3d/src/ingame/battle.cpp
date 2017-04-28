@@ -185,18 +185,10 @@ namespace TA3D
 				cursor_type = CURSOR_DEFAULT;
 
 			dt = float(MILLISECONDS_SINCE_INIT - lastFrameTime) * 0.001f; // Regulate frame rate
-			while (dt < delayBetweenFrames)
+			if (dt < delayBetweenFrames)
 			{
-				switch (lp_CONFIG->priority_level)
-				{
-					case 0:
-						rest(1);
-						break;
-					case 1:
-						rest(0);
-						break;
-				}
-				dt = float(MILLISECONDS_SINCE_INIT - lastFrameTime) * 0.001f;
+				float secondsToWait = delayBetweenFrames - dt;
+				rest(static_cast<uint32>(secondsToWait * 1000.0f));
 			}
 			lastFrameTime = MILLISECONDS_SINCE_INIT;
 
