@@ -287,8 +287,11 @@ namespace TA3D
 		bool escMenuWasVisible;
 		//! Just to see if the cam has been long enough at the default angle
 		int cam_def_timer;
-		//! Tracking a unit ? negative value => no
-		int track_mode;
+		/**
+		 * The unit ID of the unit currently being tracked by the camera.
+		 * If no unit is currently being tracked, this value is -1.
+		 */
+		int unitBeingTracked;
 		//!
 		bool last_time_activated_track_mode;
 

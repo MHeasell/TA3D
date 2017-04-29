@@ -227,38 +227,38 @@ namespace TA3D
 				}
 			}
 
-			if (track_mode >= 0 && track_mode <= (int)units.max_unit)
+			if (unitBeingTracked >= 0 && unitBeingTracked <= (int)units.max_unit)
 			{
-				if (!units.unit[track_mode].isAlive()) // Leave tracking mode
+				if (!units.unit[unitBeingTracked].isAlive()) // Leave tracking mode
 				{
-					track_mode = -1;
+					unitBeingTracked = -1;
 					cam_has_target = false;
 				}
 				else
 				{
 					cam_has_target = true;
-					cam_target = units.unit[track_mode].Pos;
+					cam_target = units.unit[unitBeingTracked].Pos;
 					cam_target_mx = gfx->SCREEN_W_HALF;
 					cam_target_my = gfx->SCREEN_H_HALF;
 				}
 			}
 			else
-				track_mode = -1;
+				unitBeingTracked = -1;
 
-			if (track_mode >= 0 && (cur_sel_index < 0 || cur_sel_index >= (int)units.max_unit || track_mode != cur_sel_index))
-				track_mode = -1;
+			if (unitBeingTracked >= 0 && (cur_sel_index < 0 || cur_sel_index >= (int)units.max_unit || unitBeingTracked != cur_sel_index))
+				unitBeingTracked = -1;
 
 			if (isKeyDown(KEY_T) && !Console::Instance()->activated() && cur_sel_index >= 0 && cur_sel_index < (int)units.max_unit)
 			{
 				if (!last_time_activated_track_mode)
-					track_mode = track_mode == cur_sel_index ? -1 : cur_sel_index;
+					unitBeingTracked = unitBeingTracked == cur_sel_index ? -1 : cur_sel_index;
 				last_time_activated_track_mode = true;
 			}
 			else
 			{
 				if (isKeyDown(KEY_T) && !Console::Instance()->activated())
 				{
-					track_mode = -1;
+					unitBeingTracked = -1;
 					cam_has_target = false;
 				}
 				else
@@ -1074,7 +1074,7 @@ namespace TA3D
 					cur_sel_index = cur_sel;
 					cur_sel = units.unit[cur_sel].type_id;
 					if (check_cat == "CTRL_C")
-						track_mode = cur_sel_index;
+						unitBeingTracked = cur_sel_index;
 				}
 			}
 			else if (isControlKeyDown() && isKeyDown(KEY_Z)) // Sélectionne toutes les unités dont le type est déjà sélectionné / Select units of the same type

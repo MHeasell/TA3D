@@ -111,25 +111,25 @@ namespace TA3D
 		{
 			cam.rpos.z -= SCROLL_SPEED * dt * cam_h / 151.0f;
 			cam_has_target = false;
-			track_mode = -1;
+			unitBeingTracked = -1;
 		}
 		if (isKeyDown(KEY_DOWN))
 		{
 			cam.rpos.z += SCROLL_SPEED * dt * cam_h / 151.0f;
 			cam_has_target = false;
-			track_mode = -1;
+			unitBeingTracked = -1;
 		}
 		if (isKeyDown(KEY_RIGHT))
 		{
 			cam.rpos.x += SCROLL_SPEED * dt * cam_h / 151.0f;
 			cam_has_target = false;
-			track_mode = -1;
+			unitBeingTracked = -1;
 		}
 		if (isKeyDown(KEY_LEFT))
 		{
 			cam.rpos.x -= SCROLL_SPEED * dt * cam_h / 151.0f;
 			cam_has_target = false;
-			track_mode = -1;
+			unitBeingTracked = -1;
 		}
 	}
 
