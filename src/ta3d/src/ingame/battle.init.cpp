@@ -482,7 +482,7 @@ namespace TA3D
 		pSun.Dir.x = -1.0f;
 		pSun.Dir.y = 2.0f;
 		pSun.Dir.z = 1.0f;
-		pSun.Dir.unit();
+		pSun.Dir.normalize();
 		// Lights
 		pSun.LightAmbient[0] = 0.25f;
 		pSun.LightAmbient[1] = 0.25f;

@@ -203,7 +203,7 @@ namespace TA3D
 			new_part.V.y = 0.0f;
 			new_part.V.x = float(((sint32)(Math::RandomTable() % 2001)) - 1000);
 			new_part.V.z = float(((sint32)(Math::RandomTable() % 2001)) - 1000);
-			new_part.V.unit();
+			new_part.V.normalize();
 			new_part.V = (powf(float(Math::RandomTable() % 100), 2.0f) * 0.0050f * (((Math::RandomTable() % 2) == 0) ? -1.0f : 1.0f) + 50.0f) * pre * new_part.V;
 			if (tex == 0)
 				new_part.life = 3.0f + float(Math::RandomTable() % 200) * 0.01f;
@@ -263,7 +263,7 @@ namespace TA3D
 			new_part.V.y = float(Math::RandomTable() % 9001) + 1000.0f;
 			new_part.V.x = float(((sint32)(Math::RandomTable() % 2001)) - 1000);
 			new_part.V.z = float(((sint32)(Math::RandomTable() % 2001)) - 1000);
-			new_part.V.unit();
+			new_part.V.normalize();
 			new_part.V = (100.0f - powf(float(Math::RandomTable() % 100), 2.0f) * 0.01f) * pre * new_part.V;
 			new_part.life = 3.0f + new_part.V.lengthSquared() * 0.0001f;
 			new_part.mass = 1.0f;
@@ -309,7 +309,7 @@ namespace TA3D
 			new_part.V.y = float((Math::RandomTable() % 1000) + 1) * 0.001f;
 			new_part.V.x = float(((sint32)(Math::RandomTable() % 2001)) - 1000) * 0.001f;
 			new_part.V.z = float(((sint32)(Math::RandomTable() % 2001)) - 1000) * 0.001f;
-			new_part.V.unit();
+			new_part.V.normalize();
 			new_part.V = float((Math::RandomTable() % 100) + 1) * pre * new_part.V;
 
 			new_part.life = 3.0f;
@@ -355,7 +355,7 @@ namespace TA3D
 			new_part.V.y = float((Math::RandomTable() % 1000) + 1) * 0.001f;
 			new_part.V.x = float(((sint32)(Math::RandomTable() % 2001)) - 1000) * 0.001f;
 			new_part.V.z = float(((sint32)(Math::RandomTable() % 2001)) - 1000) * 0.001f;
-			new_part.V.unit();
+			new_part.V.normalize();
 			new_part.V = float((Math::RandomTable() % 100) + 1) * pre * new_part.V;
 			new_part.life = 1.0f;
 			new_part.mass = mass;
@@ -399,7 +399,7 @@ namespace TA3D
 			new_part.V.y = float((Math::RandomTable() % 1000) + 5000) * 0.001f;
 			new_part.V.x = float(((sint32)(Math::RandomTable() % 2001)) - 1000) * 0.001f;
 			new_part.V.z = float(((sint32)(Math::RandomTable() % 2001)) - 1000) * 0.001f;
-			new_part.V.unit();
+			new_part.V.normalize();
 			new_part.V = float((Math::RandomTable() % 50) + 51) * 0.01f * speed * new_part.V;
 			new_part.life = 1.5f;
 			new_part.mass = -1.0f;

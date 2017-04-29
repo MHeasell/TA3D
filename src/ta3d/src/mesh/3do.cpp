@@ -557,13 +557,13 @@ namespace TA3D
 				AB = points[t_index[i + 1]] - points[t_index[i]];
 				AC = points[t_index[i + 2]] - points[t_index[i]];
 				Normal = AB * AC;
-				Normal.unit();
+				Normal.normalize();
 				F_N[e++] = Normal;
 				for (int e = 0; e < 3; ++e)
 					N[t_index[i + e]] = N[t_index[i + e]] + Normal;
 			}
 			for (i = 0; i < nb_vtx; ++i)
-				N[i].unit();
+				N[i].normalize();
 			for (i = nb_vtx; i < (nb_vtx << 1); ++i)
 				N[i] = N[i - nb_vtx];
 		}
@@ -763,14 +763,14 @@ namespace TA3D
 			Vector3D AC = points[t_index[i + 2]] - points[t_index[i]];
 			Vector3D Normal;
 			Normal = AB * AC;
-			Normal.unit();
+			Normal.normalize();
 			if (Normal.y < 0.0f)
 				Normal = -Normal;
 			for (int e = 0; e < 3; ++e)
 				N[t_index[i + e]] = N[t_index[i + e]] + Normal;
 		}
 		for (i = 0; i < nb_vtx; ++i)
-			N[i].unit();
+			N[i].normalize();
 	}
 
 	bool Mesh3DO::draw(float t, AnimationData* data_s, bool sel_primitive, bool alset, bool notex, int side, bool chg_col, bool exploding_parts)

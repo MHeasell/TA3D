@@ -543,7 +543,7 @@ namespace TA3D
 				if (nb_l_index == 2)
 				{
 					data.dir = (points[l_index[1]] - points[l_index[0]]) * (*M);
-					data.dir.unit();
+					data.dir.normalize();
 				}
 				else
 					data.dir.reset();
@@ -582,7 +582,7 @@ namespace TA3D
 					t_mod.x = float(((int)(Math::RandomTable() % 2001)) - 1000) * 0.001f;
 					t_mod.y = float(((int)(Math::RandomTable() % 2001)) - 1000) * 0.001f;
 					t_mod.z = float(((int)(Math::RandomTable() % 2001)) - 1000) * 0.001f;
-					t_mod.unit();
+					t_mod.normalize();
 					t_mod = float(Math::RandomTable() % 1001) * 0.001f * size * t_mod;
 					if (center)
 						t_mod = t_mod + (*center);
@@ -969,7 +969,7 @@ namespace TA3D
 			if ((nb_t_index > 0 || selprim >= 0) && !hide)
 			{
 				Dir = Dir * M_Dir;
-				Dir.unit();
+				Dir.normalize();
 				//-----------------Code de calcul d'intersection--------------------------
 				for (int i = 0; i < nb_t_index; i += 3)
 				{

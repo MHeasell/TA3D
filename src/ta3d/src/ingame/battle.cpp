@@ -289,7 +289,7 @@ namespace TA3D
 			{
 				Vector3D move_dir(cam.side);
 				move_dir.y = 0.0f;
-				move_dir.unit();
+				move_dir.normalize();
 				cam.rpos = cam.rpos - (SCROLL_SPEED * dt * cam_h / 151.0f) * move_dir;
 				cam_has_target = false;
 			}
@@ -299,7 +299,7 @@ namespace TA3D
 				{
 					Vector3D move_dir(cam.side);
 					move_dir.y = 0.0f;
-					move_dir.unit();
+					move_dir.normalize();
 					cam.rpos = cam.rpos + (SCROLL_SPEED * dt * cam_h / 151.0f) * move_dir;
 					cam_has_target = false;
 				}
@@ -310,7 +310,7 @@ namespace TA3D
 				if (Math::AlmostZero(move_dir.x) && Math::AlmostZero(move_dir.z))
 					move_dir = cam.dir;
 				move_dir.y = 0.f;
-				move_dir.unit();
+				move_dir.normalize();
 				cam.rpos = cam.rpos + (SCROLL_SPEED * dt * cam_h / 151.0f) * move_dir;
 				cam_has_target = false;
 			}
@@ -323,7 +323,7 @@ namespace TA3D
 						move_dir = cam.dir;
 
 					move_dir.y = 0.f;
-					move_dir.unit();
+					move_dir.normalize();
 					cam.rpos = cam.rpos - (SCROLL_SPEED * dt * cam_h / 151.0f) * move_dir;
 					cam_has_target = false;
 				}
@@ -371,7 +371,7 @@ namespace TA3D
 				Vector3D cur_dir = cam.dir;
 				Vector3D m_pos = cam.pos + cam.zoomFactor * (float(cam_target_mx - gfx->SCREEN_W_HALF) * cam.side - float(cam_target_my - gfx->SCREEN_H_HALF) * cam.up) + cam.znear * cam.dir;
 
-				cur_dir.unit(); // Direction pointed by the cursor
+				cur_dir.normalize(); // Direction pointed by the cursor
 				Vector3D moving_target(cam_target - m_pos);
 				moving_target = moving_target - (moving_target % cur_dir) * cur_dir;
 

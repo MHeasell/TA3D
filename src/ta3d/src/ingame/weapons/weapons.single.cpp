@@ -142,9 +142,9 @@ namespace TA3D
 				if (target_pos.y < the_map->sealvl && !weapon_def->waterweapon)
 					target_pos.y = the_map->sealvl;
 				Vector3D Dir = target_pos - Pos;
-				Dir.unit();
+				Dir.normalize();
 				Vector3D I(V), J, K; // Crée un trièdre
-				I.unit();
+				I.normalize();
 				J = I * Dir;
 				K = J * I;
 				if (speed < weapon_def->weaponvelocity)
@@ -234,7 +234,7 @@ namespace TA3D
 			const int py = ((int)(OPos.z) + the_map->map_h_d) >> 3;
 			const int px = ((int)(OPos.x) + the_map->map_w_d) >> 3;
 			Vector3D Dir(V);
-			Dir.unit();
+			Dir.normalize();
 			std::deque<BVH_UnitTKit::T> neighbors;
 			weapons.bvhUnits->boxCollisionQuery(neighbors, 0.5f * (Pos + OPos), (OPos - Pos).length());
 			for (std::deque<BVH_UnitTKit::T>::const_iterator it = neighbors.begin(); it != neighbors.end(); ++it)
@@ -316,7 +316,7 @@ namespace TA3D
 					}
 
 					Vector3D D = V * RotateY(-pUnit->Angle.y * DEG2RAD);
-					D.unit();
+					D.normalize();
 					int param[] = {(int)(10.0f * DEG2TA * D.z), (int)(10.0f * DEG2TA * D.x)};
 					pUnit->launchScript(SCRIPT_HitByWeapon, 2, param);
 
@@ -424,7 +424,7 @@ namespace TA3D
 					}
 
 					Vector3D D = (pUnit->Pos - Pos) * RotateY(-pUnit->Angle.y * DEG2RAD);
-					D.unit();
+					D.normalize();
 					int param[] = {(int)(10.0f * DEG2TA * D.z), (int)(10.0f * DEG2TA * D.x)};
 					pUnit->launchScript(SCRIPT_HitByWeapon, 2, param);
 
@@ -649,7 +649,7 @@ namespace TA3D
 					GLubyte b = (GLubyte)(coef * float(getb(color0)) + (1.0f - coef) * float(getb(color1)));
 					Vector3D D(Pos - Camera::inGame->pos);
 					Vector3D Up(D * V);
-					Up.unit();
+					Up.normalize();
 					if (damage < 0.0f)
 						damage = float(weapon_def->damage);
 					Up = Math::Min(damage / 60.0f + float(weapon_def->firestarter) / 200.0f + float(weapon_def->areaofeffect) / 40.0f, 1.0f) * Up; // Variable width!!
@@ -721,9 +721,9 @@ namespace TA3D
 					glTranslatef(Pos.x, Pos.y, Pos.z);
 
 					Vector3D I(0.0f, 0.0f, 1.0f), Dir(V);
-					Dir.unit();
+					Dir.normalize();
 					Vector3D J(V * I);
-					J.unit();
+					J.normalize();
 					float theta = -acosf(Dir.z) * RAD2DEG;
 					glRotatef(theta, J.x, J.y, J.z);
 
@@ -778,9 +778,9 @@ namespace TA3D
 					glTranslatef(Pos.x, Pos.y, Pos.z);
 
 					Vector3D I(0.0f, 0.0f, 1.0f), Dir(V);
-					Dir.unit();
+					Dir.normalize();
 					Vector3D J(V * I);
-					J.unit();
+					J.normalize();
 					float theta = -acosf(Dir.z) * RAD2DEG;
 					glRotatef(theta, J.x, J.y, J.z);
 
@@ -834,9 +834,9 @@ namespace TA3D
 					glTranslatef(Pos.x, Pos.y, Pos.z);
 
 					Vector3D I(0.0f, 0.0f, 1.0f), Dir(V);
-					Dir.unit();
+					Dir.normalize();
 					Vector3D J(V * I);
-					J.unit();
+					J.normalize();
 					glRotatef((float)(-acosf(Dir.z) * RAD2DEG), J.x, J.y, J.z);
 
 					glEnable(GL_LIGHTING);

@@ -32,10 +32,10 @@ namespace TA3D
 		V.y = 0.0f;
 		V.z = 0.0f;
 		V = V * U;
-		V.unit();
+		V.normalize();
 
 		U = V * U;
-		U.unit();
+		U.normalize();
 	}
 
 	bool FXElectric::move(const float dt)

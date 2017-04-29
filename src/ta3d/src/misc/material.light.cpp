@@ -86,9 +86,9 @@ namespace TA3D
 		{
 			Vector3D Side(0.0f, 1.0f, 0.0f);
 			Vector3D Up(Side * Dir);
-			Up.unit();
+			Up.normalize();
 			Side = Dir * Up;
-			Side.unit();
+			Side.normalize();
 
 			float mx = 0.0f, Mx = 0.0f;
 			float my = 0.0f, My = 0.0f;
@@ -143,7 +143,7 @@ namespace TA3D
 			glFrustum(-widthFactor * znear, widthFactor * znear, -0.75f * znear, 0.75f * znear, znear, zfar);
 
 			Vector3D Up(Pos * Dir);
-			Up.unit();
+			Up.normalize();
 			gluLookAt(Pos.x, Pos.y, Pos.z, Dir.x, Dir.y, Dir.z, Up.x, Up.y, Up.z);
 
 			glMatrixMode(GL_MODELVIEW);

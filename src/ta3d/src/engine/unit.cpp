@@ -1599,7 +1599,7 @@ namespace TA3D
 		else
 		{
 			dir = Vector3D((float)order_dx[b], 0.0f, (float)order_dz[b]);
-			dir.unit();
+			dir.normalize();
 		}
 	}
 
@@ -1664,7 +1664,7 @@ namespace TA3D
 									else
 									{
 										Vector3D Dir = mission->getTarget().getPos() - Pos;
-										Dir.unit();
+										Dir.normalize();
 										mission->Path() = Pathfinder::directPath(mission->getTarget().getPos() - float(mission->getMoveData() << 3) * Dir);
 									}
 								}
@@ -1807,7 +1807,7 @@ namespace TA3D
 				V = (V % K) * K + (V % J) * J;
 
 				Vector3D D(Target.z - Pos.z, 0.0f, Pos.x - Target.x);
-				D.unit();
+				D.normalize();
 				float speed = sqrtf(V.x * V.x + V.z * V.z);
 				const float vsin = fabsf(D % V);
 				const float deltaX = 8.0f * vsin / (pType->TurnRate * DEG2RAD);
@@ -2545,7 +2545,7 @@ namespace TA3D
 									IJ(0.0f, 1.0f, 0.0f);
 								Vector3D RT = target;
 								RT.y = 0.0f;
-								RT.unit();
+								RT.normalize();
 								float angle = acosf(RT.z) * RAD2DEG;
 								if (RT.x < 0.0f)
 									angle = -angle;
@@ -2614,7 +2614,7 @@ namespace TA3D
 										else
 											weapon[i].aim_dir = ((Unit*)(weapon[i].target))->Pos + target_pos_on_unit - (Pos + data.data[start_piece].tpos);
 										weapon[i].aim_dir += target_translation;
-										weapon[i].aim_dir.unit();
+										weapon[i].aim_dir.normalize();
 									}
 									else
 										weapon[i].aim_dir = cosf((float)aiming[1] * TA2RAD) * (cosf((float)aiming[0] * TA2RAD + Angle.y * DEG2RAD) * I + sinf((float)aiming[0] * TA2RAD + Angle.y * DEG2RAD) * J) + sinf((float)aiming[1] * TA2RAD) * IJ;
@@ -2658,7 +2658,7 @@ namespace TA3D
 										weapon[i].aim_dir = ((Unit*)(weapon[i].target))->Pos + target_pos_on_unit - (Pos + data.data[start_piece].tpos);
 									}
 									weapon[i].aim_dir += target_translation;
-									weapon[i].aim_dir.unit();
+									weapon[i].aim_dir.normalize();
 								}
 								weapon[i].data = -1;
 							}
@@ -4168,7 +4168,7 @@ namespace TA3D
 							acc = pType->Acceleration * (10.0f * (dist - ideal_dist) * J + Vector3D(J.z, 0.0f, -J.x));
 							if (acc.lengthSquared() >= pType->Acceleration * pType->Acceleration)
 							{
-								acc.unit();
+								acc.normalize();
 								acc *= pType->Acceleration;
 							}
 						}
@@ -4205,7 +4205,7 @@ namespace TA3D
 					Vector3D D = (B - A) * (B - C);
 					if (D.y >= 0.0f) // On ne met pas une unité à l'envers!!
 					{
-						D.unit();
+						D.normalize();
 						const float dist_sq = sqrtf(D.y * D.y + D.z * D.z);
 						float angle_1 = !Math::AlmostZero(dist_sq) ? acosf(D.y / dist_sq) * RAD2DEG : 0.0f;
 						if (D.z < 0.0f)

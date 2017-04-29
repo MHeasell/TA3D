@@ -153,8 +153,14 @@ namespace TA3D
 		//! Returns the length of the vector
 		inline float length() const { return sqrtf(x * x + y * y + z * z); }
 
-		// Rend le vecteur unitaire si possible(de norme 1)
-		inline void unit()
+		/**
+		 * Normalizes the vector in place.
+		 * After this operation, the length of the vector
+		 * will be approximately 1.
+		 * If the vector's length is close to zero,
+		 * does nothing rather than attempting division by zero.
+		 */
+		inline void normalize()
 		{
 			float n = length(); // Inverse de la norme du vecteur
 			if (!TA3D::Math::AlmostZero(n))

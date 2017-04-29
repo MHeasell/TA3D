@@ -1478,7 +1478,7 @@ namespace TA3D
 				if (rel.lengthSquared() > pUnitType->model->size2)
 				{
 					Vector3D D = rel - (rel % Camera::inGame->dir) * Camera::inGame->dir;
-					D.unit();
+					D.normalize();
 					const Vector3D pos2 = pos - 1.42f * pUnitType->model->size2 * D;
 					const Vector3D pPos2 = glNMult(pos2, mCam);
 					if (std::fabs(pPos2.x) > 1.0f || std::fabs(pPos2.y) > 1.0f || std::fabs(pPos2.z) > 1.0f)

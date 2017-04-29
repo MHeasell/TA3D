@@ -46,7 +46,7 @@ namespace TA3D
 			float dx = the_map->get_unit_h(Pos.x + 16.0f, Pos.z) - min_h;
 			float dz = the_map->get_unit_h(Pos.x, Pos.z + 16.0f) - min_h;
 			Vector3D Normal(-dx, 16.0f, -dz);
-			Normal.unit();
+			Normal.normalize();
 
 			float cross = Speed % Normal;
 			if (cross < 0.0f)
