@@ -165,7 +165,7 @@ namespace TA3D
 	bool didKeyGoDown(KeyCode keycode)
 	{
 		bool isDown = keyState.find(keycode) != keyState.end();
-		bool wasDown = previousKeyState.find(keycode) == previousKeyState.end();
+		bool wasDown = previousKeyState.find(keycode) != previousKeyState.end();
 
 		if (isDown && !wasDown)
 		{
