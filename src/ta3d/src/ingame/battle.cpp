@@ -198,7 +198,7 @@ namespace TA3D
 				t += dt * units.apparent_timefactor;
 			}
 
-			/*------------bloc regroupant ce qui est relatif aux commandes----------------*/
+			/*------------Block grouping together what is relative to the commands----------------*/
 
 			if (players.local_human_id >= 0 && !Console::Instance()->activated() && !pArea.get_state("chat"))
 				handleGameStatusEvents();
