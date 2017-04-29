@@ -485,6 +485,14 @@ namespace TA3D
 		void nudgeCameraLeft();
 
 		void putCameraAt(float x, float y);
+
+		/**
+		 * Converts a screen-space position to a normalized minimap position.
+		 * The input coordinates are expected to be in terms of screen pixels.
+		 * The output minimap position x and y values range between 0 and 1,
+		 * where 0 is the top-left corner.
+		 */
+		Vector2D screenToMinimapCoordinates(const Vector2D& coordinates) const;
 	}; // class Battle
 
 } // namespace TA3D

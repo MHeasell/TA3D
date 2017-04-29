@@ -282,9 +282,10 @@ namespace TA3D
 				&& ((isMouseButtonDown(RightMouseButton) && !lp_CONFIG->right_click_interface)
 					|| (isMouseButtonDown(LeftMouseButton) && lp_CONFIG->right_click_interface)))
 			{
+				Vector2D minimapCoordinates = screenToMinimapCoordinates(Vector2D(mouse_x, mouse_y));
 				putCameraAt(
-					float((mouse_x - 64) * map->map_w) / 128.0f * 252.0f / (float)map->mini_w,
-					float((mouse_y - 64) * map->map_h) / 128.0f * 252.0f / (float)map->mini_h
+					(minimapCoordinates.x - 0.5f) * map->map_w,
+					(minimapCoordinates.y - 0.5f) * map->map_h
 				);
 			}
 

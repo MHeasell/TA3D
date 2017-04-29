@@ -161,6 +161,15 @@ namespace TA3D
 		unitBeingTracked = -1;
 	}
 
+	Vector2D Battle::screenToMinimapCoordinates(const Vector2D& coordinates) const
+	{
+		float minimapWidthFactor = 252.0f / map->mini_w;
+		float minimapHeightFactor = 252.0f / map->mini_h;
+		return Vector2D(
+			(coordinates.x / 128.0f) * minimapWidthFactor,
+			(coordinates.y / 128.0f) * minimapHeightFactor);
+	}
+
 	void Battle::handleGameStatusEvents()
 	{
 		// Enable the game status if the `space` is pressed
