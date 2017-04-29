@@ -340,7 +340,10 @@ namespace TA3D
 		int unit_info_id;
 		//!
 		float speed_limit;
-		//! The time in (fractional) seconds that should elapse between frames.
+		/**
+		 * The time in (fractional) seconds that should elapse between frames.
+		 * This is used to limit the number of frames rendered per second.
+		 */
 		float delayBetweenFrames;
 		//!
 		int nb_shoot;
