@@ -375,9 +375,9 @@ namespace TA3D
 				Vector3D moving_target(cam_target - m_pos);
 				moving_target = moving_target - (moving_target % cur_dir) * cur_dir;
 
-				const float d = moving_target.sq();
+				const float d = moving_target.lengthSquared();
 				moving_target.y = 0.0f;
-				const float D = moving_target.sq();
+				const float D = moving_target.lengthSquared();
 				if (Math::AlmostZero(D))
 					cam_has_target = false;
 				else

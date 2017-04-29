@@ -50,7 +50,7 @@ namespace TA3D
 	bool RectTest::contains(const Vector3D& point) const
 	{
 		Vector3D Vec(point - cam.pos);
-		float d = Vec.sq();
+		float d = Vec.lengthSquared();
 
 		if (d > 16384.0f && (Vec % cam.dir) <= 0.0f)
 			return false;

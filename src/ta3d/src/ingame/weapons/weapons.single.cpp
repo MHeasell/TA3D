@@ -115,7 +115,7 @@ namespace TA3D
 
 			if (weapon_def->guidance && ((weapon_def->twophase && phase == 2) || !weapon_def->twophase) && ((weapon_def->waterweapon && Pos.y < the_map->sealvl) || !weapon_def->waterweapon)) // Traque sa cible
 			{
-				float speed = V.norm();
+				float speed = V.length();
 				if (weapon_def->tracks && target >= 0)
 				{
 					Vector3D target_V;
@@ -131,11 +131,11 @@ namespace TA3D
 					}
 					else
 						target = -1;
-					const float speed = V.sq();
-					const float target_speed = target_V.sq();
+					const float speed = V.lengthSquared();
+					const float target_speed = target_V.lengthSquared();
 					if (speed > 0.0f && target_speed > 0.0f) // Make it aim better
 					{
-						const float time_to_hit = (target_pos - Pos).sq() / speed;
+						const float time_to_hit = (target_pos - Pos).lengthSquared() / speed;
 						target_pos = target_pos + sqrtf(time_to_hit / target_speed) * target_V;
 					}
 				}
@@ -176,7 +176,7 @@ namespace TA3D
 		if (weapon_def->waterweapon && Pos.y <= the_map->sealvl && OPos.y > the_map->sealvl) // A weapon that gets into water slows down
 			V = 0.5f * V;
 
-		const float length = ((Vector3D)(OPos - Pos)).norm();
+		const float length = ((Vector3D) (OPos - Pos)).length();
 		if (!dying)
 		{
 			if (weapon_def->waterweapon && Pos.y > the_map->sealvl && OPos.y <= the_map->sealvl) // An aquatic weapon does not come out of the water
@@ -201,7 +201,7 @@ namespace TA3D
 
 		if (!dying && weapon_def->cruise && ((weapon_def->twophase && phase == 2) || phase == 1))
 		{
-			if (((Vector3D)(target_pos - Pos)).norm() > 2.0f * fabsf(Pos.y - h) && V.y < 0.0f)
+			if (((Vector3D) (target_pos - Pos)).length() > 2.0f * fabsf(Pos.y - h) && V.y < 0.0f)
 				V.y = 0.0f;
 		}
 
@@ -217,7 +217,7 @@ namespace TA3D
 			just_explode = false;
 		}
 
-		if (weapon_def->interceptor && ((Vector3D)(Pos - target_pos)).sq() < 1024.0f)
+		if (weapon_def->interceptor && ((Vector3D) (Pos - target_pos)).lengthSquared() < 1024.0f)
 		{
 			hit = true;
 			hit_vec = Pos;
@@ -236,7 +236,7 @@ namespace TA3D
 			Vector3D Dir(V);
 			Dir.unit();
 			std::deque<BVH_UnitTKit::T> neighbors;
-			weapons.bvhUnits->boxCollisionQuery(neighbors, 0.5f * (Pos + OPos), (OPos - Pos).norm());
+			weapons.bvhUnits->boxCollisionQuery(neighbors, 0.5f * (Pos + OPos), (OPos - Pos).length());
 			for (std::deque<BVH_UnitTKit::T>::const_iterator it = neighbors.begin(); it != neighbors.end(); ++it)
 			{
 				const int t_idx = it->first->idx;
@@ -393,7 +393,7 @@ namespace TA3D
 				if (pUnit->idx == shooter_idx)
 					continue;
 				pUnit->lock();
-				if (pUnit->isAlive() && pUnit->local && ((Vector3D)(pUnit->Pos - Pos)).sq() <= d)
+				if (pUnit->isAlive() && pUnit->local && ((Vector3D) (pUnit->Pos - Pos)).lengthSquared() <= d)
 				{
 					const bool ok = pUnit->hp > 0.0f;
 					damage = float(weapon_def->get_damage_for_unit(unit_manager.unit_type[pUnit->type_id]->Unitname));
@@ -450,7 +450,8 @@ namespace TA3D
 						continue;
 					features.lock();
 					FeatureData* const pFeature = &(features.feature[-t_idx - 2]);
-					if (!weapon_def->unitsonly && pFeature->type >= 0 && ((Vector3D)(pFeature->Pos - Pos)).sq() <= d)
+					if (!weapon_def->unitsonly && pFeature->type >= 0 &&
+						((Vector3D) (pFeature->Pos - Pos)).lengthSquared() <= d)
 					{
 						Feature* feature = feature_manager.getFeaturePointer(pFeature->type);
 						// Start a fire ?
@@ -533,7 +534,7 @@ namespace TA3D
 			units.unit[shooter_idx].unlock();
 		}
 
-		const float travelled = (Pos - start_pos).sq();
+		const float travelled = (Pos - start_pos).lengthSquared();
 		const bool rangeReached = travelled >= (float(weapon_def->range * weapon_def->range) * 0.25f);
 
 		if ((((stime > 0.5f * weapon_def->time_to_range || rangeReached) && (!weapon_def->noautorange || weapon_def->burnblow)) || hit) && !dying)

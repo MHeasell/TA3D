@@ -155,7 +155,7 @@ namespace TA3D
 		Vector3D Dir(dir * RotateXZY(-Angle.x * DEG2RAD, -Angle.z * DEG2RAD, -Angle.y * DEG2RAD));
 		Vector3D P(Dir);
 		P.y = 0.0f;
-		float angle = acosf(P.z / P.norm()) * RAD2DEG;
+		float angle = acosf(P.z / P.length()) * RAD2DEG;
 		if (P.x < 0.0f)
 			angle = -angle;
 		if (angle > 180)
@@ -166,7 +166,7 @@ namespace TA3D
 				angle += 360;
 		}
 
-		float angleX = asinf(Dir.y / Dir.norm()) * RAD2DEG;
+		float angleX = asinf(Dir.y / Dir.length()) * RAD2DEG;
 		if (angleX > 180)
 			angleX -= 360;
 		else if (angleX < -180)
@@ -1022,7 +1022,7 @@ namespace TA3D
 
 		Vector3D D(render.Pos - Camera::inGame->pos); // Vecteur "viseur unité" partant de la caméra vers l'unité
 
-		const float dist = D.sq();
+		const float dist = D.lengthSquared();
 		const float p = D % Camera::inGame->dir;
 		if (dist >= 16384.0f && p <= 0.0f)
 			return;
@@ -1359,7 +1359,7 @@ namespace TA3D
 			Vector3D H = render.Pos;
 			H.y += 2.0f * model->size2 + 1.0f;
 			const Vector3D D = the_map->hit(H, Dir, true, 2000.0f);
-			shadow_scale_dir = (D - H).norm();
+			shadow_scale_dir = (D - H).length();
 		}
 		model->draw_shadow(shadow_scale_dir * Dir * RotateXZY(-render.Angle.x * DEG2RAD, -render.Angle.z * DEG2RAD, -render.Angle.y * DEG2RAD), 0.0f, &render.Anim);
 
@@ -1428,7 +1428,7 @@ namespace TA3D
 			Vector3D H = render.Pos;
 			H.y += 2.0f * model->size2 + 1.0f;
 			const Vector3D D = the_map->hit(H, Dir, true, 2000.0f);
-			shadow_scale_dir = (D - H).norm();
+			shadow_scale_dir = (D - H).length();
 		}
 		model->draw_shadow_basic(shadow_scale_dir * Dir * RotateXZY(-render.Angle.x * DEG2RAD, -render.Angle.z * DEG2RAD, -render.Angle.y * DEG2RAD), 0.0f, &render.Anim);
 
@@ -1647,7 +1647,7 @@ namespace TA3D
 							Target = mission->getTarget().getPos();
 							mission->Path().clear();
 						}
-						const float dist = (Target - Pos).sq();
+						const float dist = (Target - Pos).lengthSquared();
 						if ((mission->getMoveData() <= 0 && dist > 100.0f) || ((SQUARE(mission->getMoveData()) << 6) < dist))
 						{
 							if ((last_path_refresh >= 5.0f && !requesting_pathfinder) || pType->canfly)
@@ -1692,11 +1692,11 @@ namespace TA3D
 				}
 				if (!mission->Path().empty()) // If we have a path, follow it
 				{
-					if ((mission->getTarget().getPos() - move_target_computed).sq() >= 10000.0f) // Follow the target above all...
+					if ((mission->getTarget().getPos() - move_target_computed).lengthSquared() >= 10000.0f) // Follow the target above all...
 						mission->Flags() |= MISSION_FLAG_REFRESH_PATH;
 					J = Target - Pos;
 					J.y = 0.0f;
-					const float dist = J.sq();
+					const float dist = J.lengthSquared();
 					if (dist > mission->getLastD() && (dist < 256.0f || (dist < 225.0f && mission->Path().length() <= 1)))
 					{
 						mission->Path().next();
@@ -1706,7 +1706,7 @@ namespace TA3D
 							requesting_pathfinder = false;
 							J = move_target_computed - Pos;
 							J.y = 0.0f;
-							if (J.sq() <= 256.0f || flying)
+							if (J.lengthSquared() <= 256.0f || flying)
 							{
 								if (!(mission->getFlags() & MISSION_FLAG_DONT_STOP_MOVE) && (!mission.empty() || mission->mission() != MISSION_PATROL))
 									playSound("arrived1");
@@ -1765,7 +1765,7 @@ namespace TA3D
 						case MISSION_STOP:
 							J = Target;
 							computeHeadingBasedOnEnergy(J, false);
-							selfmove = J.sq() > 0.1f;
+							selfmove = J.lengthSquared() > 0.1f;
 							break;
 						default:
 							J.reset();
@@ -1776,14 +1776,15 @@ namespace TA3D
 				lastEnergy = energy;
 			}
 
-			if (((mission->getFlags() & MISSION_FLAG_MOVE) && !mission->Path().empty()) || (!(mission->getFlags() & MISSION_FLAG_MOVE) && J.sq() > 0.1f)) // Are we still moving ??
+			if (((mission->getFlags() & MISSION_FLAG_MOVE) && !mission->Path().empty()) || (!(mission->getFlags() & MISSION_FLAG_MOVE) &&
+				J.lengthSquared() > 0.1f)) // Are we still moving ??
 			{
 				if (!was_moving)
 				{
 					startMovingAnimation();
 					was_moving = true;
 				}
-				const float dist = (mission->getFlags() & MISSION_FLAG_MOVE) ? (Target - Pos).norm() : 999999.9f;
+				const float dist = (mission->getFlags() & MISSION_FLAG_MOVE) ? (Target - Pos).length() : 999999.9f;
 				if (dist > 0.0f && pType->canfly)
 					J = 1.0f / dist * J;
 
@@ -1824,7 +1825,7 @@ namespace TA3D
 				else if (speed < pType->MaxVelocity)
 				{
 					V = V + pType->Acceleration * dt * J;
-					speed = V.norm();
+					speed = V.length();
 					if (speed > pType->MaxVelocity)
 						V = pType->MaxVelocity / speed * V;
 				}
@@ -1832,12 +1833,12 @@ namespace TA3D
 				//				{
 				//					if (fabsf( Angle.y - f_TargetAngle ) >= 45.0f)
 				//					{
-				//						if (J % V > 0.0f && V.norm() > pType->BrakeRate * dt)
+				//						if (J % V > 0.0f && V.length() > pType->BrakeRate * dt)
 				//							V = V - ((( fabsf( Angle.y - f_TargetAngle ) - 35.0f ) / 135.0f + 1.0f) * 0.5f * pType->BrakeRate * dt) * J;
 				//					}
 				//					else
 				//					{
-				//						float speed = V.norm();
+				//						float speed = V.length();
 				//						float time_to_stop = speed / pType->BrakeRate;
 				//						float min_dist = time_to_stop * (speed-pType->BrakeRate*0.5f*time_to_stop);
 				//						if (min_dist >= dist
@@ -1855,7 +1856,7 @@ namespace TA3D
 				//				}
 				//				else
 				//				{
-				//					float speed = V.norm();
+				//					float speed = V.length();
 				//					if (speed > pType->MaxVelocity)
 				//						V = pType->MaxVelocity / speed * V;
 				//				}
@@ -2015,7 +2016,7 @@ namespace TA3D
 					V.z += dt * (-(float)the_map->map_h_d - Pos.z) * 0.1f;
 				else if (Pos.z > the_map->map_h_d)
 					V.z -= dt * (Pos.z - (float)the_map->map_h_d) * 0.1f;
-				float speed = V.norm();
+				float speed = V.length();
 				if (speed > pType->MaxVelocity && speed > 0.0f)
 				{
 					V = pType->MaxVelocity / speed * V;
@@ -2257,7 +2258,9 @@ namespace TA3D
 							{
 								const int cur_idx = the_map->map_data(x, y).unit_idx;
 
-								if (cur_idx >= 0 && cur_idx < (int)units.max_unit && units.unit[cur_idx].isAlive() && units.unit[cur_idx].isNotOwnedBy(owner_id) && distance >= (Pos - units.unit[cur_idx].Pos).sq())
+								if (cur_idx >= 0 && cur_idx < (int)units.max_unit && units.unit[cur_idx].isAlive() && units.unit[cur_idx].isNotOwnedBy(owner_id) && distance >=
+																																										(Pos -
+																																										 units.unit[cur_idx].Pos).lengthSquared())
 								{
 									found = true;
 									break;
@@ -2433,7 +2436,7 @@ namespace TA3D
 							const Weapon* const target_weapon = (weapon[i].state & WEAPON_FLAG_WEAPON) == WEAPON_FLAG_WEAPON ? (Weapon*)weapon[i].target : NULL;
 
 							Vector3D target = target_unit == NULL ? (target_weapon == NULL ? weapon[i].target_pos - Pos : target_weapon->Pos - Pos) : target_unit->Pos - Pos;
-							float dist = target.sq();
+							float dist = target.lengthSquared();
 							int maxdist = 0;
 							int mindist = 0;
 
@@ -2446,7 +2449,7 @@ namespace TA3D
 									break; // We're not shooting at the target
 								}
 								const float t = 2.0f / the_map->ota_data.gravity * fabsf(target.y);
-								mindist = (int)sqrtf(t * V.sq()) - ((pType->attackrunlength + 1) >> 1);
+								mindist = (int)sqrtf(t * V.lengthSquared()) - ((pType->attackrunlength + 1) >> 1);
 								maxdist = mindist + (pType->attackrunlength);
 							}
 							else
@@ -2460,7 +2463,7 @@ namespace TA3D
 										break; // We're not shooting at the target
 									}
 									const float t = 2.0f / the_map->ota_data.gravity * fabsf(target.y);
-									mindist = (int)sqrtf(t * V.sq());
+									mindist = (int)sqrtf(t * V.lengthSquared());
 									maxdist = mindist + (pType->weapon[i]->range >> 1);
 								}
 								else
@@ -2477,7 +2480,7 @@ namespace TA3D
 							Vector3D target_translation;
 							if (target_unit != NULL)
 								for (int k = 0; k < 3; ++k) // Iterate to get a better approximation
-									target_translation = ((target + target_translation).norm() / pType->weapon[i]->weaponvelocity) * (target_unit->V - V);
+									target_translation = ((target + target_translation).length() / pType->weapon[i]->weaponvelocity) * (target_unit->V - V);
 
 							if (pType->weapon[i]->turret) // Si l'unité doit viser, on la fait viser / if it must aim, we make it aim
 							{
@@ -2535,7 +2538,7 @@ namespace TA3D
 									}
 								}
 
-								dist = target.norm();
+								dist = target.length();
 								target = (1.0f / dist) * target;
 								const Vector3D I(0.0f, 0.0f, 1.0f),
 									J(1.0f, 0.0f, 0.0f),
@@ -2569,12 +2572,12 @@ namespace TA3D
 									if (target_unit == NULL)
 									{
 										if (target_weapon == NULL)
-											aiming[1] = (int)(ballistic_angle(v, the_map->ota_data.gravity, D.norm(), (Pos + data.data[start_piece].tpos).y, weapon[i].target_pos.y) * DEG2TA);
+											aiming[1] = (int)(ballistic_angle(v, the_map->ota_data.gravity, D.length(), (Pos + data.data[start_piece].tpos).y, weapon[i].target_pos.y) * DEG2TA);
 										else
-											aiming[1] = (int)(ballistic_angle(v, the_map->ota_data.gravity, D.norm(), (Pos + data.data[start_piece].tpos).y, target_weapon->Pos.y) * DEG2TA);
+											aiming[1] = (int)(ballistic_angle(v, the_map->ota_data.gravity, D.length(), (Pos + data.data[start_piece].tpos).y, target_weapon->Pos.y) * DEG2TA);
 									}
 									else if (pModel)
-										aiming[1] = (int)(ballistic_angle(v, the_map->ota_data.gravity, D.norm(),
+										aiming[1] = (int)(ballistic_angle(v, the_map->ota_data.gravity, D.length(),
 															  (Pos + data.data[start_piece].tpos).y,
 															  pos_of_target_unit.y + pModel->center.y * 0.5f)
 											* DEG2TA);
@@ -2827,7 +2830,7 @@ namespace TA3D
 
 						Vector3D Dir = target - Pos;
 						Dir.y = 0.0f;
-						const float dist = Dir.sq();
+						const float dist = Dir.lengthSquared();
 						const int maxdist = 6;
 						if (dist > maxdist * maxdist && pType->BMcode) // Si l'unité est trop loin du chantier
 						{
@@ -2849,7 +2852,7 @@ namespace TA3D
 								Pos = Pos + 3.0f * dt * Dir;
 								Pos.x = target.x;
 								Pos.z = target.z;
-								if (Dir.sq() < 3.0f)
+								if (Dir.lengthSquared() < 3.0f)
 								{
 									target_unit->lock();
 									if (target_unit->pad1 != 0xFFFF && target_unit->pad2 != 0xFFFF) // We can't land here
@@ -2942,7 +2945,7 @@ namespace TA3D
 					{
 						Vector3D Dir = mission->getTarget().getPos() - Pos;
 						Dir.y = 0.0f;
-						float dist = Dir.sq();
+						float dist = Dir.lengthSquared();
 						int maxdist = 0;
 						if (pType->TransportMaxUnits == 1) // Code for units like the arm atlas
 							maxdist = 3;
@@ -3021,7 +3024,7 @@ namespace TA3D
 						}
 						Vector3D Dir = target_unit->Pos - Pos;
 						Dir.y = 0.0f;
-						float dist = Dir.sq();
+						float dist = Dir.lengthSquared();
 						int maxdist = 0;
 						if (pType->TransportMaxUnits == 1) // Code for units like the arm atlas
 							maxdist = 3;
@@ -3107,7 +3110,7 @@ namespace TA3D
 							}
 							Vector3D Dir = target_unit->Pos - Pos;
 							Dir.y = 0.0f;
-							float dist = Dir.sq();
+							float dist = Dir.lengthSquared();
 							UnitType* tType = target_unit->type_id == -1 ? NULL : unit_manager.unit_type[target_unit->type_id];
 							int tsize = (tType == NULL) ? 0 : ((tType->FootprintX + tType->FootprintZ) << 2);
 							int maxdist = (mission->mission() == MISSION_CAPTURE ? (int)(pType->SightDistance) : (int)(pType->BuildDistance)) + tsize;
@@ -3206,7 +3209,7 @@ namespace TA3D
 						Vector3D Dir = features.feature[mission->getData()].Pos - Pos;
 						Dir.y = 0.0f;
 						mission->getTarget().setPos(features.feature[mission->getData()].Pos);
-						float dist = Dir.sq();
+						float dist = Dir.lengthSquared();
 						Feature* pFeature = feature_manager.getFeaturePointer(features.feature[mission->getData()].type);
 						int tsize = pFeature == NULL ? 0 : ((pFeature->footprintx + pFeature->footprintz) << 2);
 						int maxdist = (mission->mission() == MISSION_REVIVE ? (int)(pType->SightDistance) : (int)(pType->BuildDistance)) + tsize;
@@ -3346,7 +3349,7 @@ namespace TA3D
 						}
 						if (!pType->canfly)
 						{
-							if (((Vector3D)(Pos - mission->getUnit()->Pos)).sq() >= 25600.0f) // On reste assez près
+							if (((Vector3D) (Pos - mission->getUnit()->Pos)).lengthSquared() >= 25600.0f) // On reste assez près
 							{
 								mission->Flags() |= MISSION_FLAG_MOVE; // | MISSION_FLAG_REFRESH_PATH;
 								mission->setMoveData(10);
@@ -3549,7 +3552,7 @@ namespace TA3D
 
 							Vector3D Dir = mission->getTarget().getPos() - Pos;
 							Dir.y = 0.0f;
-							float dist = Dir.sq();
+							float dist = Dir.lengthSquared();
 							int maxdist = 0;
 							int mindist = 0xFFFFF;
 
@@ -3572,7 +3575,7 @@ namespace TA3D
 									if (Dir % V < 0.0f)
 										allowed_to_fire = false;
 									const float t = 2.0f / the_map->ota_data.gravity * fabsf(Pos.y - mission->getTarget().getPos().y);
-									cur_mindist = (int)sqrtf(t * V.sq()) - ((pType->attackrunlength + 1) >> 1);
+									cur_mindist = (int)sqrtf(t * V.lengthSquared()) - ((pType->attackrunlength + 1) >> 1);
 									cur_maxdist = cur_mindist + pType->attackrunlength;
 								}
 								else if (pType->weapon[i]->waterweapon && Pos.y > the_map->sealvl)
@@ -3580,7 +3583,7 @@ namespace TA3D
 									if (Dir % V < 0.0f)
 										allowed_to_fire = false;
 									const float t = 2.0f / the_map->ota_data.gravity * fabsf(Pos.y - mission->getTarget().getPos().y);
-									cur_maxdist = (int)sqrtf(t * V.sq()) + (pType->weapon[i]->range >> 1);
+									cur_maxdist = (int)sqrtf(t * V.lengthSquared()) + (pType->weapon[i]->range >> 1);
 									cur_mindist = 0;
 								}
 								else
@@ -3728,7 +3731,7 @@ namespace TA3D
 							{
 								Vector3D Dir = target_unit->Pos - Pos;
 								Dir.y = 0.0f;
-								const float dist = Dir.sq();
+								const float dist = Dir.lengthSquared();
 								const int maxdist = (int)pType->BuildDistance + ((unit_manager.unit_type[target_unit->type_id]->FootprintX + unit_manager.unit_type[target_unit->type_id]->FootprintZ) << 1);
 								if (dist > maxdist * maxdist && pType->BMcode) // Si l'unité est trop loin du chantier
 								{
@@ -3777,7 +3780,7 @@ namespace TA3D
 						{
 							Vector3D Dir = target_unit->Pos - Pos;
 							Dir.y = 0.0f;
-							const float dist = Dir.sq();
+							const float dist = Dir.lengthSquared();
 							const int maxdist = (int)pType->BuildDistance + ((unit_manager.unit_type[target_unit->type_id]->FootprintX + unit_manager.unit_type[target_unit->type_id]->FootprintZ) << 1);
 							if (dist > maxdist * maxdist && pType->BMcode) // Si l'unité est trop loin du chantier
 							{
@@ -3867,7 +3870,7 @@ namespace TA3D
 										target_unit->Pos = Pos + data.data[buildinfo].pos;
 										if (unit_manager.unit_type[target_unit->type_id]->Floater || (unit_manager.unit_type[target_unit->type_id]->canhover && old_pos.y <= the_map->sealvl))
 											target_unit->Pos.y = old_pos.y;
-										if (((Vector3D)(old_pos - target_unit->Pos)).sq() > 1000000.0f) // It must be continuous
+										if (((Vector3D) (old_pos - target_unit->Pos)).lengthSquared() > 1000000.0f) // It must be continuous
 										{
 											target_unit->Pos.x = old_pos.x;
 											target_unit->Pos.z = old_pos.z;
@@ -3907,7 +3910,7 @@ namespace TA3D
 					{
 						Vector3D Dir = mission->getTarget().getPos() - Pos;
 						Dir.y = 0.0f;
-						const float dist = Dir.sq();
+						const float dist = Dir.lengthSquared();
 						const int maxdist = (int)pType->BuildDistance + ((unit_manager.unit_type[mission->getData()]->FootprintX + unit_manager.unit_type[mission->getData()]->FootprintZ) << 1);
 						if (dist > maxdist * maxdist && pType->BMcode) // Si l'unité est trop loin du chantier
 						{
@@ -4062,7 +4065,7 @@ namespace TA3D
 						Vector3D Target = mission->getTarget().getPos();
 						J = Target - Pos;
 						J.y = 0.0f;
-						const float dist = J.norm();
+						const float dist = J.length();
 						mission->setLastD(dist);
 						if (dist > 0.0f)
 							J = 1.0f / dist * J;
@@ -4081,7 +4084,7 @@ namespace TA3D
 						I.x = J.z;
 						I.y = 0.0f;
 						V = (V % K) * K + (V % J) * J + units.exp_dt_4 * (V % I) * I;
-						const float speed = V.sq();
+						const float speed = V.lengthSquared();
 						if (speed < pType->MaxVelocity * pType->MaxVelocity)
 							V = V + pType->Acceleration * dt * J;
 					}
@@ -4099,7 +4102,7 @@ namespace TA3D
 						Vector3D K(0.0f, 1.0f, 0.0f);
 						Vector3D J = mission->getTarget().getPos() - Pos;
 						J.y = 0.0f;
-						const float dist = J.norm();
+						const float dist = J.length();
 						if (dist > 0.0f)
 							J = 1.0f / dist * J;
 						b_TargetAngle = true;
@@ -4135,9 +4138,9 @@ namespace TA3D
 							J = (J % V) * J;
 							V = (V - J) + units.exp_dt_4 * J;
 						}
-						const float speed = V.sq();
+						const float speed = V.lengthSquared();
 						if (speed > pType->MaxVelocity * pType->MaxVelocity)
-							V = pType->MaxVelocity / V.norm() * V;
+							V = pType->MaxVelocity / V.length() * V;
 					}
 					break;
 				case MISSION_GUARD:
@@ -4147,7 +4150,7 @@ namespace TA3D
 						unsetFlag(mission->Flags(), MISSION_FLAG_MOVE); // We're doing it here, so no need to do it twice
 						Vector3D J = mission->getTarget().getPos() - Pos;
 						J.y = 0.0f;
-						const float dist = J.norm();
+						const float dist = J.length();
 						if (dist > 0.0f)
 							J = 1.0f / dist * J;
 						b_TargetAngle = true;
@@ -4163,7 +4166,7 @@ namespace TA3D
 						{
 							f_TargetAngle += 90.0f;
 							acc = pType->Acceleration * (10.0f * (dist - ideal_dist) * J + Vector3D(J.z, 0.0f, -J.x));
-							if (acc.sq() >= pType->Acceleration * pType->Acceleration)
+							if (acc.lengthSquared() >= pType->Acceleration * pType->Acceleration)
 							{
 								acc.unit();
 								acc *= pType->Acceleration;
@@ -4177,7 +4180,7 @@ namespace TA3D
 						J = (J % V) * J;
 						V = (V - J) + units.exp_dt_4 * J;
 
-						const float speed = V.sq();
+						const float speed = V.lengthSquared();
 						if (speed > pType->MaxVelocity * pType->MaxVelocity)
 							V = pType->MaxVelocity / sqrtf(speed) * V;
 					}
@@ -4332,7 +4335,8 @@ namespace TA3D
 						// Yes we don't defend against allies :D, can lead to funny situations :P
 						if (weapons.weapon[i].weapon_id != -1 && !(players.team[units.unit[weapons.weapon[i].shooter_idx].owner_id] & players.team[owner_id]) && weapon_manager.weapon[weapons.weapon[i].weapon_id].targetable)
 						{
-							if (((Vector3D)(weapons.weapon[i].target_pos - Pos)).sq() <= coverage && ((Vector3D)(weapons.weapon[i].Pos - Pos)).sq() <= range)
+							if (((Vector3D) (weapons.weapon[i].target_pos - Pos)).lengthSquared() <= coverage &&
+								((Vector3D) (weapons.weapon[i].Pos - Pos)).lengthSquared() <= range)
 							{
 								int idx = -1;
 								for (e = 0; e < mem_size; ++e)
@@ -4374,11 +4378,11 @@ namespace TA3D
 			Vector3D virtual_G;				  // Compute the apparent gravity force ( seen from the plane )
 			virtual_G.x = virtual_G.z = 0.0f; // Standard gravity vector
 			virtual_G.y = -4.0f * units.g_dt;
-			float d = J.sq();
+			float d = J.lengthSquared();
 			if (!Math::AlmostZero(d))
 				virtual_G = virtual_G + (((old_V - V) % J) / d) * J; // Add the opposite of the speed derivative projected on the side of the unit
 
-			d = virtual_G.norm();
+			d = virtual_G.length();
 			if (!Math::AlmostZero(d))
 			{
 				virtual_G = -1.0f / d * virtual_G;
@@ -4577,7 +4581,7 @@ namespace TA3D
 		if (model)
 		{
 			const Vector3D c_dir = model->center + Pos - P;
-			if (c_dir.norm() - length <= model->size2)
+			if (c_dir.length() - length <= model->size2)
 			{
 				const UnitType* pType = unit_manager.unit_type[type_id];
 				const float scale = pType->Scale;
@@ -4604,7 +4608,7 @@ namespace TA3D
 		if (model)
 		{
 			const Vector3D c_dir = model->center + Pos - P;
-			if (c_dir.sq() <= (model->size2 + length) * (model->size2 + length))
+			if (c_dir.lengthSquared() <= (model->size2 + length) * (model->size2 + length))
 			{
 				const UnitType* pType = unit_manager.unit_type[type_id];
 				const float scale = pType->Scale;
@@ -4663,7 +4667,7 @@ namespace TA3D
 				const float dx = 0.5f * (float)cursor[CURSOR_CROSS_LINK].ofs_x[curseur];
 				const float dz = 0.5f * (float)cursor[CURSOR_CROSS_LINK].ofs_y[curseur];
 				float x, y, z;
-				const float dist = ((Vector3D)(cur->lastStep().getTarget().getPos() - p_target)).norm();
+				const float dist = ((Vector3D) (cur->lastStep().getTarget().getPos() - p_target)).length();
 				const int rec = (int)(dist / 30.0f);
 				switch (cur->lastMission())
 				{

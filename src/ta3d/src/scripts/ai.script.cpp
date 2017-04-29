@@ -640,7 +640,7 @@ namespace TA3D
 				float best = 0.0f;
 				for (int l = 0; l < k; ++l)
 				{
-					const float dist = (points[j] - centroids[l]).sq();
+					const float dist = (points[j] - centroids[l]).lengthSquared();
 					if (dist < best || clusterID == -1)
 					{
 						best = dist;

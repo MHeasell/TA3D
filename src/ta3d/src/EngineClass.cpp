@@ -1585,7 +1585,7 @@ namespace TA3D
 		const float dwm = (float)map_w_d;
 		const float dhm = (float)map_h_d;
 		Dir = (1.0f * step) * Dir;
-		float len_step = Dir.norm();
+		float len_step = Dir.length();
 		while (((sealvl < Pos.y && water) || !water) && get_max_h((int)(Pos.x + (float)map_w_d) >> 3, (int)(Pos.z + (float)map_h_d) >> 3) < Pos.y)
 		{
 			if (nb >= nb_limit || length < 0.0f)

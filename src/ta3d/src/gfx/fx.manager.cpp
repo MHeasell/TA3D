@@ -29,7 +29,7 @@ namespace TA3D
 
 	int FXManager::add(const String& filename, const String& entryName, const Vector3D& pos, const float size)
 	{
-		if (Camera::inGame != NULL && (pos - Camera::inGame->pos).sq() >= Camera::inGame->zfar2)
+		if (Camera::inGame != NULL && (pos - Camera::inGame->pos).lengthSquared() >= Camera::inGame->zfar2)
 			return -1;
 
 		MutexLocker locker(pMutex);
@@ -98,7 +98,7 @@ namespace TA3D
 
 	int FXManager::addFlash(const Vector3D& pos, const float size)
 	{
-		if (Camera::inGame != NULL && (pos - Camera::inGame->pos).sq() >= Camera::inGame->zfar2)
+		if (Camera::inGame != NULL && (pos - Camera::inGame->pos).lengthSquared() >= Camera::inGame->zfar2)
 			return -1;
 
 		MutexLocker locker(pMutex);

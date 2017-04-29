@@ -296,7 +296,7 @@ namespace TA3D
 		switch (type)
 		{
 			case CURRENT_SPEED:
-				return int(V.norm());
+				return int(V.length());
 			case HEADING:
 				return int(Angle.y * DEG2TA);
 			case VETERAN_LEVEL:

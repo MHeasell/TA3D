@@ -147,16 +147,16 @@ namespace TA3D
 			z = 0.0f;
 		}
 
-		// Fonction qui renvoie le carré scalaire du vecteur
-		inline float sq() const { return (x * x + y * y + z * z); }
+		//! Returns the vector's length squared
+		inline float lengthSquared() const { return (x * x + y * y + z * z); }
 
-		// Fonction qui renvoie la norme du vecteur
-		inline float norm() const { return sqrtf(x * x + y * y + z * z); }
+		//! Returns the length of the vector
+		inline float length() const { return sqrtf(x * x + y * y + z * z); }
 
 		// Rend le vecteur unitaire si possible(de norme 1)
 		inline void unit()
 		{
-			float n = norm(); // Inverse de la norme du vecteur
+			float n = length(); // Inverse de la norme du vecteur
 			if (!TA3D::Math::AlmostZero(n))
 			{
 				n = 1.0f / n;
@@ -360,7 +360,7 @@ namespace TA3D
 */
 inline float VAngle(const TA3D::Vector3D& A, const TA3D::Vector3D& B)
 {
-	float a = sqrtf(A.sq() * B.sq());
+	float a = sqrtf(A.lengthSquared() * B.lengthSquared());
 	a = (TA3D::Math::AlmostZero(a)) ? 0.0f : acosf((A % B) / a);
 	return isNaN(a) ? 0.0f : a;
 }

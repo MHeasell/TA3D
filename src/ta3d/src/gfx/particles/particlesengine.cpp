@@ -70,7 +70,7 @@ namespace TA3D
 	{
 		MutexLocker locker(pMutex);
 
-		if (Camera::inGame != NULL && (Camera::inGame->pos - pos).sq() >= Camera::inGame->zfar2)
+		if (Camera::inGame != NULL && (Camera::inGame->pos - pos).lengthSquared() >= Camera::inGame->zfar2)
 			return;
 
 		for (int i = 0; i < nb; ++i)
@@ -131,7 +131,7 @@ namespace TA3D
 		}
 		else
 		{
-			if (Camera::inGame != NULL && (Camera::inGame->pos - pos).sq() >= Camera::inGame->zfar2)
+			if (Camera::inGame != NULL && (Camera::inGame->pos - pos).lengthSquared() >= Camera::inGame->zfar2)
 				return NULL;
 
 			system = new ParticlesSystem;
@@ -265,7 +265,7 @@ namespace TA3D
 			new_part.V.z = float(((sint32)(Math::RandomTable() % 2001)) - 1000);
 			new_part.V.unit();
 			new_part.V = (100.0f - powf(float(Math::RandomTable() % 100), 2.0f) * 0.01f) * pre * new_part.V;
-			new_part.life = 3.0f + new_part.V.sq() * 0.0001f;
+			new_part.life = 3.0f + new_part.V.lengthSquared() * 0.0001f;
 			new_part.mass = 1.0f;
 			new_part.smoking = -1.0f;
 			new_part.gltex = tex;
@@ -278,7 +278,7 @@ namespace TA3D
 			new_part.dcol[2] = 0.0f;
 			new_part.dcol[3] = -1.0f / new_part.life;
 			new_part.angle = 0.0f;
-			new_part.v_rot = (float(Math::RandomTable() % 200) * 0.01f - 0.1f) * new_part.V.norm() * 0.015f / pre;
+			new_part.v_rot = (float(Math::RandomTable() % 200) * 0.01f - 0.1f) * new_part.V.length() * 0.015f / pre;
 			new_part.size = 4.0f;
 			new_part.use_wind = true;
 			new_part.dsize = 10.0f;
@@ -294,7 +294,7 @@ namespace TA3D
 
 	void PARTICLE_ENGINE::make_smoke(const Vector3D& pos, int tex, int nb, float speed, float mass, float ddsize, float alpha)
 	{
-		if (Camera::inGame != NULL && (Camera::inGame->pos - pos).sq() >= Camera::inGame->zfar2)
+		if (Camera::inGame != NULL && (Camera::inGame->pos - pos).lengthSquared() >= Camera::inGame->zfar2)
 			return;
 
 		pMutex.lock();
@@ -340,7 +340,7 @@ namespace TA3D
 
 	void PARTICLE_ENGINE::make_dark_smoke(const Vector3D& pos, int tex, int nb, float speed, float mass, float ddsize, float alpha)
 	{
-		if (Camera::inGame != NULL && (Camera::inGame->pos - pos).sq() >= Camera::inGame->zfar2)
+		if (Camera::inGame != NULL && (Camera::inGame->pos - pos).lengthSquared() >= Camera::inGame->zfar2)
 			return;
 
 		pMutex.lock();
@@ -385,7 +385,7 @@ namespace TA3D
 
 	void PARTICLE_ENGINE::make_fire(const Vector3D& pos, int tex, int nb, float speed)
 	{
-		if (Camera::inGame != NULL && (Camera::inGame->pos - pos).sq() >= Camera::inGame->zfar2)
+		if (Camera::inGame != NULL && (Camera::inGame->pos - pos).lengthSquared() >= Camera::inGame->zfar2)
 			return;
 
 		pMutex.lock();

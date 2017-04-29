@@ -765,7 +765,7 @@ namespace TA3D
 			return;
 
 		MutexLocker locker(pMutex);
-		if (vec && Camera::inGame && ((Vector3D)(*vec - Camera::inGame->rpos)).sq() > 360000.0f) // If the source is too far, does not even think about playing it!
+		if (vec && Camera::inGame && ((Vector3D) (*vec - Camera::inGame->rpos)).lengthSquared() > 360000.0f) // If the source is too far, does not even think about playing it!
 			return;
 		if (!m_SDLMixerRunning)
 			return;

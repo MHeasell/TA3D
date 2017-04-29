@@ -417,7 +417,7 @@ namespace TA3D
 		float size = 0.0f;
 		for (int i = 0; i < nb_vtx; ++i)
 		{
-			const float dist = (points[i] - center).sq();
+			const float dist = (points[i] - center).lengthSquared();
 			if (size < dist)
 				size = dist;
 		}

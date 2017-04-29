@@ -340,7 +340,7 @@ namespace TA3D
 			Vector3D center(unit[*e].model->center + unit[*e].Pos - CamPos);
 			float size = unit[*e].model->size * unit_manager.unit_type[unit[*e].type_id]->Scale * unit_manager.unit_type[unit[*e].type_id]->Scale;
 			center = Dir * center;
-			float dist = center.sq();
+			float dist = center.lengthSquared();
 			if (dist < size)
 			{
 				detectable.push_back(uint16(*e));
@@ -373,7 +373,7 @@ namespace TA3D
 				Vector3D D;
 				if (unit[*e].hit(CamPos, Dir, &D, 1000000.0f)) // Vecteur "viseur unité" partant de la caméra vers l'unité
 				{
-					float dist = (D - CamPos).sq();
+					float dist = (D - CamPos).lengthSquared();
 					if (dist < best_dist || index == -1)
 					{
 						best_dist = dist;
@@ -1475,7 +1475,7 @@ namespace TA3D
 			if (std::fabs(pPos.x) > 1.0f || std::fabs(pPos.y) > 1.0f || std::fabs(pPos.z) > 1.0f)
 			{
 				const Vector3D rel = pos - Camera::inGame->pos;
-				if (rel.sq() > pUnitType->model->size2)
+				if (rel.lengthSquared() > pUnitType->model->size2)
 				{
 					Vector3D D = rel - (rel % Camera::inGame->dir) * Camera::inGame->dir;
 					D.unit();
@@ -1650,7 +1650,7 @@ namespace TA3D
 						++cur;
 					else
 					{
-						if ((cur->lastStep().getTarget().getPos() - target).sq() < 256.0f) // Remove it
+						if ((cur->lastStep().getTarget().getPos() - target).lengthSquared() < 256.0f) // Remove it
 						{
 							// Path is a std::list so it'll be cleared automatically
 							cur = mission.erase(cur);

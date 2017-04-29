@@ -149,7 +149,7 @@ namespace TA3D
 
 		const Vector3D vDir(-0.5f * (hsize + wsize) * cam.dir);
 		glTranslatef(vDir.x, vDir.y, vDir.z);
-		const float s = 1.0f - 0.5f * (hsize + wsize) / (cam.pos - Pos).norm();
+		const float s = 1.0f - 0.5f * (hsize + wsize) / (cam.pos - Pos).length();
 		glScalef(s, s, s);
 		glBegin(GL_QUADS);
 		glTexCoord2f(0.0f, 0.0f);
