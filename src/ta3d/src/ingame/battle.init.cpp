@@ -583,7 +583,6 @@ namespace TA3D
 		ia_debug = false;
 		view_dbg = false;
 		show_mission_info = false;
-		speed_changed = false;
 		show_timefactor = 0.0f;
 		show_gamestatus = 0.0f;
 		unit_info_id = -1;

@@ -214,34 +214,17 @@ namespace TA3D
 				selfDestructSelectedUnits();
 			}
 
-			// + : increase game speed
-			if (isKeyDown(KEY_PLUS_PAD) && !Console::Instance()->activated())
+			// +/-: increase/decrease game speed
+			if (!Console::Instance()->activated())
 			{
-				if (!speed_changed && lp_CONFIG->timefactor < 10.0f)
+				if (didKeyGoDown(KEY_PLUS_PAD))
 				{
-					lp_CONFIG->timefactor++;
-					show_timefactor = 1.0f;
-					if (network_manager.isConnected())
-						network_manager.sendAll(String("TIMEFACTOR ") << lp_CONFIG->timefactor);
+					increaseGameSpeed();
 				}
-				speed_changed = true;
-			}
-			else
-			{
-				// - : reduce game speed
-				if ((isKeyDown(KEY_MINUS) || isKeyDown(KEY_MINUS_PAD)) && !Console::Instance()->activated())
+				else if (didKeyGoDown(KEY_MINUS) || didKeyGoDown(KEY_MINUS_PAD))
 				{
-					if (!speed_changed && lp_CONFIG->timefactor > 1.0f)
-					{
-						lp_CONFIG->timefactor--;
-						if (network_manager.isConnected())
-							network_manager.sendAll(String("TIMEFACTOR ") << lp_CONFIG->timefactor);
-						show_timefactor = 1.0f;
-					}
-					speed_changed = true;
+					decreaseGameSpeed();
 				}
-				else
-					speed_changed = false;
 			}
 
 			if (track_mode >= 0 && track_mode <= (int)units.max_unit)
@@ -2351,6 +2334,28 @@ namespace TA3D
 			Menus::Statistics::Execute();
 
 		return pResult;
+	}
+
+	void Battle::decreaseGameSpeed()
+	{
+		if (lp_CONFIG->timefactor > 1.0f)
+		{
+			lp_CONFIG->timefactor--;
+			if (network_manager.isConnected())
+				network_manager.sendAll(String("TIMEFACTOR ") << lp_CONFIG->timefactor);
+			show_timefactor = 1.0f;
+		}
+	}
+
+	void Battle::increaseGameSpeed()
+	{
+		if (lp_CONFIG->timefactor < 10.0f)
+		{
+			lp_CONFIG->timefactor++;
+			show_timefactor = 1.0f;
+			if (network_manager.isConnected())
+				network_manager.sendAll(String("TIMEFACTOR ") << lp_CONFIG->timefactor);
+		}
 	}
 
 	void Battle::toggleHealthBars()

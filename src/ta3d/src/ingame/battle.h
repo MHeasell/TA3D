@@ -327,8 +327,6 @@ namespace TA3D
 		//!
 		bool show_mission_info;
 		//!
-		bool speed_changed;
-		//!
 		float show_timefactor;
 		//!
 		float show_gamestatus;
@@ -451,6 +449,18 @@ namespace TA3D
 		 * Triggered by the user when they press the toggle key.
 		 */
 		void toggleHealthBars();
+
+		/**
+		 * If the game is running below maximum speed, increases it.
+		 * Triggered by the user when they press the "increase speed" key.
+		 */
+		void increaseGameSpeed();
+
+		/**
+		 * If the game is running above the minimum speed, decreases it.
+		 * Triggered by the user when they press the "decrease speed" key.
+		 */
+		void decreaseGameSpeed();
 	}; // class Battle
 
 } // namespace TA3D
