@@ -168,7 +168,7 @@
 	{
 		name=camera_zoom;
 		type=MENU;
-		entry=,Normal,Fixed Angle;
+		entry=Normal;
 		x1=600;
 		y1=290;
 		x2=730;

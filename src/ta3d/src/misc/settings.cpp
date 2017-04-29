@@ -72,7 +72,6 @@ namespace TA3D
 			  << "                Game Data = " << TA3D::lp_CONFIG->serializedGameData << ";\n"
 			  << "                 Last MOD = " << TA3D::lp_CONFIG->last_MOD << ";\n"
 			  << "              Player name = " << TA3D::lp_CONFIG->player_name << ";\n"
-			  << "         Camera Zoom Mode = " << (int)TA3D::lp_CONFIG->camera_zoom << ";\n"
 			  << "     Camera Default Angle = " << TA3D::lp_CONFIG->camera_def_angle << ";\n"
 			  << "    Camera Default Height = " << TA3D::lp_CONFIG->camera_def_h << ";\n"
 			  << "        Camera Zoom Speed = " << TA3D::lp_CONFIG->camera_zoom_speed << ";\n"
@@ -144,7 +143,6 @@ namespace TA3D
 			TA3D::lp_CONFIG->serializedGameData = cfgFile.pullAsString("TA3D.Game Data", String());
 			TA3D::lp_CONFIG->last_MOD = cfgFile.pullAsString("TA3D.Last MOD", "");
 
-			TA3D::lp_CONFIG->camera_zoom = uint8(cfgFile.pullAsInt("TA3D.Camera Zoom Mode", ZOOM_NORMAL));
 			TA3D::lp_CONFIG->camera_def_angle = cfgFile.pullAsFloat("TA3D.Camera Default Angle", 63.44f);
 			TA3D::lp_CONFIG->camera_def_h = cfgFile.pullAsFloat("TA3D.Camera Default Height", 200.0f);
 			TA3D::lp_CONFIG->camera_zoom_speed = cfgFile.pullAsFloat("TA3D.Camera Zoom Speed", 1.0f);

@@ -39,9 +39,6 @@
 #include <vector>
 #include "SDL.h"
 
-#define ZOOM_NORMAL 0x0
-#define ZOOM_FIXED_ANGLE 0x1
-
 namespace TA3D
 {
 	struct TA3DCONFIG
@@ -63,7 +60,6 @@ namespace TA3D
 
 		bool draw_console_loading;
 
-		uint8 camera_zoom; // ZOOM_NORMAL, ZOOM_FIXED_ANGLE
 		float camera_def_angle;
 		float camera_def_h;
 		float camera_zoom_speed;

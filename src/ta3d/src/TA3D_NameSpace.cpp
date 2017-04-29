@@ -66,7 +66,6 @@ namespace TA3D
 
 		skin_name = "";
 
-		camera_zoom = ZOOM_NORMAL;
 		camera_def_angle = 63.44f; // TA angle
 		camera_def_h = 200.0f;
 		camera_zoom_speed = 1.0f;

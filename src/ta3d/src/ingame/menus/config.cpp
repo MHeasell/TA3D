@@ -224,7 +224,7 @@ namespace TA3D
 					objLang->Text.push_back(languageList[i].caption());
 			}
 			if (pArea->get_object("*.camera_zoom"))
-				pArea->caption("*.camera_zoom", pArea->get_object("*.camera_zoom")->Text[1 + lp_CONFIG->camera_zoom]);
+				pArea->caption("*.camera_zoom", pArea->get_object("*.camera_zoom")->Text[0]);
 			pArea->caption("*.camera_def_angle", String() << lp_CONFIG->camera_def_angle);
 			pArea->caption("*.camera_def_h", String() << lp_CONFIG->camera_def_h);
 			pArea->caption("*.camera_zoom_speed", String() << lp_CONFIG->camera_zoom_speed);
@@ -473,15 +473,6 @@ namespace TA3D
 			lp_CONFIG->fullscreen = pArea->get_state("*.fullscreen");
 			lp_CONFIG->use_texture_cache = pArea->get_state("*.use_texture_cache");
 			lp_CONFIG->developerMode = pArea->get_state("*.developer_mode");
-			if (pArea->get_value("*.camera_zoom") >= 0)
-			{
-				Gui::GUIOBJ::Ptr obj = pArea->get_object("*.camera_zoom");
-				if (obj && obj->Value >= -1)
-				{
-					obj->Text[0] = obj->Text[1 + obj->Value];
-					lp_CONFIG->camera_zoom = uint8(obj->Value);
-				}
-			}
 			if (pArea->get_value("*.camera_def_angle") >= 0)
 			{
 				Gui::GUIOBJ::Ptr obj = pArea->get_object("*.camera_def_angle");
