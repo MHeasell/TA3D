@@ -150,7 +150,6 @@ namespace TA3D
 		float x2 = 50.0f;
 		float sm = 0.01f;
 		float x1 = x0 + std::log((zoom_med - zoom_min) / (zoom_max - zoom_min) * (std::exp(sm * (x2 - x0)) - 1.0f) + 1.0f) / sm;
-		//			cam.zoomFactor = 0.5f * expf(-camera_zscroll * 0.05f * logf(Math::Max(map->map_w / SCREEN_W, map->map_h / SCREEN_H)));
 		float x = camera_zscroll;
 		float xt = (x2 + x0) * 0.5f;
 		float z(0.0f);
@@ -158,9 +157,6 @@ namespace TA3D
 			z = x0 + (x1 - x0) * (x - x0) / (xt - x0);
 		else
 			z = x1 + (x2 - x1) * (x - xt) / (x2 - xt);
-		//            z = x;//Math::Max(Math::Min(x2, xt + x), x0);
-		//            = x0 + (x1 - x0) * (x - x0) * (x - x2) / ((x1 - x0) * (x1 - x2))
-		//                               + (x2 - x0) * (x - x0) * (x - x1) / ((x2 - x0) * (x2 - x1));
 		cam.zoomFactor = zoom_min + (zoom_max - zoom_min) * (std::exp(sm * (z - x0)) - 1.0f) / (std::exp(sm * (x2 - x0)) - 1.0f);
 		cam_h = lp_CONFIG->camera_def_h * 2.0f * cam.zoomFactor;
 
