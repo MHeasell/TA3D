@@ -109,28 +109,48 @@ namespace TA3D
 	{
 		if (isKeyDown(KEY_UP))
 		{
-			cam.rpos.z -= SCROLL_SPEED * deltaTime * cam_h / 151.0f;
-			cam_has_target = false;
-			unitBeingTracked = -1;
+			nudgeCameraUp();
 		}
 		if (isKeyDown(KEY_DOWN))
 		{
-			cam.rpos.z += SCROLL_SPEED * deltaTime * cam_h / 151.0f;
-			cam_has_target = false;
-			unitBeingTracked = -1;
+			nudgeCameraDown();
 		}
 		if (isKeyDown(KEY_RIGHT))
 		{
-			cam.rpos.x += SCROLL_SPEED * deltaTime * cam_h / 151.0f;
-			cam_has_target = false;
-			unitBeingTracked = -1;
+			nudgeCameraRight();
 		}
 		if (isKeyDown(KEY_LEFT))
 		{
-			cam.rpos.x -= SCROLL_SPEED * deltaTime * cam_h / 151.0f;
-			cam_has_target = false;
-			unitBeingTracked = -1;
+			nudgeCameraLeft();
 		}
+	}
+
+	void Battle::nudgeCameraLeft()
+	{
+		cam.rpos.x -= SCROLL_SPEED * deltaTime * cam_h / 151.0f;
+		cam_has_target = false;
+		unitBeingTracked = -1;
+	}
+
+	void Battle::nudgeCameraRight()
+	{
+		cam.rpos.x += SCROLL_SPEED * deltaTime * cam_h / 151.0f;
+		cam_has_target = false;
+		unitBeingTracked = -1;
+	}
+
+	void Battle::nudgeCameraDown()
+	{
+		cam.rpos.z += SCROLL_SPEED * deltaTime * cam_h / 151.0f;
+		cam_has_target = false;
+		unitBeingTracked = -1;
+	}
+
+	void Battle::nudgeCameraUp()
+	{
+		cam.rpos.z -= SCROLL_SPEED * deltaTime * cam_h / 151.0f;
+		cam_has_target = false;
+		unitBeingTracked = -1;
 	}
 
 	void Battle::handleGameStatusEvents()

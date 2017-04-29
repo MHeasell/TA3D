@@ -475,6 +475,14 @@ namespace TA3D
 		 * Triggered by the user when they press the "decrease speed" key.
 		 */
 		void decreaseGameSpeed();
+
+		void nudgeCameraUp();
+
+		void nudgeCameraDown();
+
+		void nudgeCameraRight();
+
+		void nudgeCameraLeft();
 	}; // class Battle
 
 } // namespace TA3D
