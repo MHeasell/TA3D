@@ -285,9 +285,10 @@ namespace TA3D
 				&& ((isMouseButtonDown(RightMouseButton) && !lp_CONFIG->right_click_interface)
 					|| (isMouseButtonDown(LeftMouseButton) && lp_CONFIG->right_click_interface)))
 			{
-				cam.rpos.x = float((mouse_x - 64) * map->map_w) / 128.0f * 252.0f / (float)map->mini_w;
-				cam.rpos.z = float((mouse_y - 64) * map->map_h) / 128.0f * 252.0f / (float)map->mini_h;
-				cam_has_target = false;
+				putCameraAt(
+					float((mouse_x - 64) * map->map_w) / 128.0f * 252.0f / (float)map->mini_w,
+					float((mouse_y - 64) * map->map_h) / 128.0f * 252.0f / (float)map->mini_h
+				);
 			}
 
 			// nudge the camera in the appropriate direction

@@ -483,6 +483,8 @@ namespace TA3D
 		void nudgeCameraRight();
 
 		void nudgeCameraLeft();
+
+		void putCameraAt(float x, float y);
 	}; // class Battle
 
 } // namespace TA3D

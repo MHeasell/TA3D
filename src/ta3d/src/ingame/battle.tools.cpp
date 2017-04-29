@@ -153,6 +153,14 @@ namespace TA3D
 		unitBeingTracked = -1;
 	}
 
+	void Battle::putCameraAt(float x, float z)
+	{
+		cam.rpos.x = x;
+		cam.rpos.z = z;
+		cam_has_target = false;
+		unitBeingTracked = -1;
+	}
+
 	void Battle::handleGameStatusEvents()
 	{
 		// Enable the game status if the `space` is pressed
