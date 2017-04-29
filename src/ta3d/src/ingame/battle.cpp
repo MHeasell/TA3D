@@ -278,10 +278,7 @@ namespace TA3D
 
 			// if the user clicks on the minimap,
 			// move the camera to that point on the map
-			if (mouse_x < 128.0f
-				&& mouse_y < 128.0f
-				&& mouse_x >= 0.0f
-				&& mouse_y >= 0.0f
+			if (IsOnMinimap
 				&& ((isMouseButtonDown(RightMouseButton) && !lp_CONFIG->right_click_interface)
 					|| (isMouseButtonDown(LeftMouseButton) && lp_CONFIG->right_click_interface)))
 			{
