@@ -400,7 +400,7 @@ namespace TA3D
 
 	int CAPI::dumpUnitInfo(lua_State*)
 	{
-		if (Battle::Instance()->selected && Battle::Instance()->cur_sel != -1) // Sur les unités sélectionnées
+		if (Battle::Instance()->selected && Battle::Instance()->cur_sel != -1) // On selected units
 		{
 			static const char* unit_info[] = {
 				"ACTIVATION", "STANDINGMOVEORDERS", "STANDINGFIREORDERS",
