@@ -173,8 +173,6 @@ set(TA3D_LIB_SOURCES
 		mesh/3do.h
 		mesh/instancing.cpp
 		mesh/instancing.h
-		mesh/joins.cpp
-		mesh/joins.h
 		mesh/mesh.cpp
 		mesh/mesh.h
 		mesh/textures.cpp
