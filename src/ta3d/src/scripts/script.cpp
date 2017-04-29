@@ -283,8 +283,8 @@ namespace TA3D
 
 	int program_get_screen_size(lua_State* L)
 	{
-		lua_pushinteger(L, SCREEN_W);
-		lua_pushinteger(L, SCREEN_H);
+		lua_pushinteger(L, gfx->width);
+		lua_pushinteger(L, gfx->height);
 		return 2;
 	}
 

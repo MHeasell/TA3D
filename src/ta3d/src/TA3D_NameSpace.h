@@ -129,9 +129,6 @@ namespace TA3D
 // number of ticks/sec. to simulate
 #define TICKS_PER_SEC 30
 
-#define SCREEN_W (TA3D::gfx->width)
-#define SCREEN_H (TA3D::gfx->height)
-
 #define MILLISECONDS_SINCE_INIT SDL_GetTicks()
 
 #endif // __TA3D_NAMESPACE_H__

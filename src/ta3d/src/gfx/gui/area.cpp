@@ -280,9 +280,9 @@ namespace TA3D
 
 			if (VFS::Instance()->fileExists(skin_name)) // Loads a skin
 			{
-				const int area_width = areaFile.pullAsInt("area.width", SCREEN_W);
-				const int area_height = areaFile.pullAsInt("area.height", SCREEN_W);
-				const float skin_scale = Math::Min((float)SCREEN_H / (float)area_height, (float)SCREEN_W / (float)area_width);
+				const int area_width = areaFile.pullAsInt("area.width", gfx->width);
+				const int area_height = areaFile.pullAsInt("area.height", gfx->width);
+				const float skin_scale = Math::Min((float) gfx->height / (float)area_height, (float) gfx->width / (float)area_width);
 				skin = skin_manager.load(skin_name, skin_scale);
 			}
 

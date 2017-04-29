@@ -321,7 +321,7 @@ namespace TA3D
 			}
 			else
 			{
-				if (mouse_x >= SCREEN_W - 2)
+				if (mouse_x >= gfx->width - 2)
 				{
 					Vector3D move_dir(cam.side);
 					move_dir.y = 0.0f;
@@ -342,7 +342,7 @@ namespace TA3D
 			}
 			else
 			{
-				if (mouse_y >= SCREEN_H - 2)
+				if (mouse_y >= gfx->height - 2)
 				{
 					Vector3D move_dir(cam.up);
 					if (Math::AlmostZero(move_dir.x) && Math::AlmostZero(move_dir.z))
@@ -929,7 +929,7 @@ namespace TA3D
 				}
 			}
 
-			if (build == -1 && (!IsOnGUI || (pMouseSelecting && (mouse_y < 32 || mouse_y > SCREEN_H - 32)) || IsOnMinimap)) // Si le curseur est dans la zone de jeu
+			if (build == -1 && (!IsOnGUI || (pMouseSelecting && (mouse_y < 32 || mouse_y > gfx->height - 32)) || IsOnMinimap)) // Si le curseur est dans la zone de jeu
 			{
 				if ((isMouseButtonUp(LeftMouseButton) && pMouseSelecting) || (IsOnMinimap &&
 					didMouseButtonGoDown(LeftMouseButton))) // RÃ©cupÃ¨re les unitÃ©s prÃ©sentes dans la sÃ©lection
@@ -1451,7 +1451,7 @@ namespace TA3D
 			if (lp_CONFIG->paused)
 			{
 				gfx->set_alpha_blending();
-				pause_tex.drawCentered(0.5f * (float)SCREEN_W, 0.5f * (float)SCREEN_H, 0xFFFFFFFFU, 1.0f);
+				pause_tex.drawCentered(0.5f * (float) gfx->width, 0.5f * (float) gfx->height, 0xFFFFFFFFU, 1.0f);
 				gfx->unset_alpha_blending();
 			}
 
@@ -2207,14 +2207,14 @@ namespace TA3D
 				const String value = String().format("x %.1f", lp_CONFIG->timefactor);
 				if (show_timefactor > 0.5f)
 				{
-					gfx->print(gfx->TA_font, float((gfx->width - (int)gfx->TA_font->length(value) + 2) >> 1), (float)SCREEN_H - 79.0f, 0.0f, makeacol32(0, 0, 0, 0xFF), value);
-					gfx->print(gfx->TA_font, float((gfx->width - (int)gfx->TA_font->length(value)) >> 1), (float)SCREEN_H - 80.0f, 0.0f, 0xFFFFFFFF, value);
+					gfx->print(gfx->TA_font, float((gfx->width - (int)gfx->TA_font->length(value) + 2) >> 1), (float) gfx->height - 79.0f, 0.0f, makeacol32(0, 0, 0, 0xFF), value);
+					gfx->print(gfx->TA_font, float((gfx->width - (int)gfx->TA_font->length(value)) >> 1), (float) gfx->height - 80.0f, 0.0f, 0xFFFFFFFF, value);
 				}
 				else
 				{
 					const uint32 c = (uint32)(511.0f * show_timefactor) * 0x01010101;
-					gfx->print(gfx->TA_font, float((gfx->width - (int)gfx->TA_font->length(value) + 2) >> 1), (float)SCREEN_H - 79.0f, 0.0f, c & makeacol32(0, 0, 0, 0xFF), value);
-					gfx->print(gfx->TA_font, float((gfx->width - (int)gfx->TA_font->length(value)) >> 1), (float)SCREEN_H - 80.0f, 0.0f, c, value);
+					gfx->print(gfx->TA_font, float((gfx->width - (int)gfx->TA_font->length(value) + 2) >> 1), (float) gfx->height - 79.0f, 0.0f, c & makeacol32(0, 0, 0, 0xFF), value);
+					gfx->print(gfx->TA_font, float((gfx->width - (int)gfx->TA_font->length(value)) >> 1), (float) gfx->height - 80.0f, 0.0f, c, value);
 				}
 				show_timefactor -= dt;
 			}
@@ -2238,9 +2238,9 @@ namespace TA3D
 
 			if (shoot)
 			{
-				SDL_Surface* shoot_bmp = gfx->create_surface_ex(24, SCREEN_W, SCREEN_H);
+				SDL_Surface* shoot_bmp = gfx->create_surface_ex(24, gfx->width, gfx->height);
 				glReadBuffer(GL_BACK);
-				glReadPixels(0, 0, SCREEN_W, SCREEN_H, GL_BGR, GL_UNSIGNED_BYTE, shoot_bmp->pixels);
+				glReadPixels(0, 0, gfx->width, gfx->height, GL_BGR, GL_UNSIGNED_BYTE, shoot_bmp->pixels);
 				vflip_bitmap(shoot_bmp);
 				String nom;
 				nom.format("ta3d-shoot%.6d.tga", nb_shoot);
@@ -2336,7 +2336,7 @@ namespace TA3D
 					GLuint glamour_tex = gfx->load_texture(String("bitmaps\\glamour\\") << map->ota_data.glamour << ".pcx");
 					enable_TA_palette();
 					gfx->set_2D_mode();
-					gfx->drawtexture(glamour_tex, 0, 0, (float)SCREEN_W, (float)SCREEN_H);
+					gfx->drawtexture(glamour_tex, 0, 0, (float) gfx->width, (float) gfx->height);
 					gfx->destroy_texture(glamour_tex);
 					gfx->unset_2D_mode();
 					gfx->flip();

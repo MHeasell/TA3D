@@ -309,8 +309,8 @@ namespace TA3D
 
 			x2 += menu_background.x1 - menu_background.x2;
 			float y2 = y1 + menu_background.y1 - menu_background.y2 + pCacheFontHeight * (float)Entry.size();
-			const float screen_w = static_cast<float>(SCREEN_W);
-			const float screen_h = static_cast<float>(SCREEN_H);
+			const float screen_w = static_cast<float>(gfx->width);
+			const float screen_h = static_cast<float>(gfx->height);
 			if (x2 >= screen_w)
 			{
 				x1 += screen_w - x2 - 1;
@@ -719,9 +719,9 @@ namespace TA3D
 		void Skin::ObjectShadow(float x1, float y1, float x2, float y2, float dx, float dy, float alpha, float fuzzy) const
 		{
 			// Normalize shadow offsets
-			dx *= float(SCREEN_W) / 800.0f;
-			dy *= float(SCREEN_H) / 800.0f;
-			fuzzy *= float(SCREEN_H) / 800.0f;
+			dx *= float(gfx->width) / 800.0f;
+			dy *= float(gfx->height) / 800.0f;
+			fuzzy *= float(gfx->height) / 800.0f;
 
 			x1 += dx;
 			y1 += dy;

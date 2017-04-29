@@ -35,7 +35,7 @@ namespace TA3D
 	{
 
 		WND::WND()
-			: x(SCREEN_W >> 2), y(SCREEN_H >> 2), width(SCREEN_W >> 1), height(SCREEN_H >> 1), title_h(0), Title(), Name(), obj_hashtable(), background(0), repeat_bkg(false), bkg_w(1), bkg_h(1), Lock(false), show_title(true), draw_borders(true), hidden(false), was_hidden(false), tab_was_pressed(false), background_wnd(false), get_focus(false), delete_gltex(false), size_factor(1.), ingame_window(false)
+			: x(gfx->width >> 2), y(gfx->height >> 2), width(gfx->width >> 1), height(gfx->height >> 1), title_h(0), Title(), Name(), obj_hashtable(), background(0), repeat_bkg(false), bkg_w(1), bkg_h(1), Lock(false), show_title(true), draw_borders(true), hidden(false), was_hidden(false), tab_was_pressed(false), background_wnd(false), get_focus(false), delete_gltex(false), size_factor(1.), ingame_window(false)
 		{
 			color = makeacol(0x7F, 0x7F, 0x7F, 0xFF); // Default : grey
 			pCacheFontHeight = gui_font->height();
@@ -47,7 +47,7 @@ namespace TA3D
 		}
 
 		WND::WND(const String& filename)
-			: x(SCREEN_W >> 2), y(SCREEN_H >> 2), width(SCREEN_W >> 1), height(SCREEN_H >> 1), title_h(0), Title(), Name(), obj_hashtable(), background(0), repeat_bkg(false), bkg_w(1), bkg_h(1), Lock(false), show_title(true), draw_borders(true), hidden(false), was_hidden(false), tab_was_pressed(false), background_wnd(false), get_focus(false), delete_gltex(false), size_factor(1.), ingame_window(false)
+			: x(gfx->width >> 2), y(gfx->height >> 2), width(gfx->width >> 1), height(gfx->height >> 1), title_h(0), Title(), Name(), obj_hashtable(), background(0), repeat_bkg(false), bkg_w(1), bkg_h(1), Lock(false), show_title(true), draw_borders(true), hidden(false), was_hidden(false), tab_was_pressed(false), background_wnd(false), get_focus(false), delete_gltex(false), size_factor(1.), ingame_window(false)
 
 		{
 			scrolling = 0;
@@ -613,7 +613,7 @@ namespace TA3D
 			if (scrollable && IsOnGUI)
 			{
 				scrolling += 10 * (AMz - mouse_z);
-				scrolling = Math::Min(scrolling, y + height - SCREEN_H);
+				scrolling = Math::Min(scrolling, y + height - gfx->height);
 				scrolling = Math::Max(0, scrolling);
 			}
 
@@ -758,7 +758,7 @@ namespace TA3D
 								{
 									if ((float)mouse_y < (float)y + object->y2 + 12.0f && object->Pos > 0)
 										object->Pos--;
-									if (mouse_y > SCREEN_H - 8 && (float)y + object->y2 + 1.0f + pCacheFontHeight * float(object->Text.size() - object->Pos) > (float)SCREEN_H)
+									if (mouse_y > gfx->height - 8 && (float)y + object->y2 + 1.0f + pCacheFontHeight * float(object->Text.size() - object->Pos) > (float) gfx->height)
 										object->Pos++;
 								}
 								object->Data = (int)(((float)mouse_y - (float)y - object->y2 - 5.0f) / float(pCacheFontHeight) + (float)object->Pos);
@@ -1509,9 +1509,9 @@ namespace TA3D
 				uint32 obj_flags = 0;
 
 				if (X1 < 0)
-					X1 += SCREEN_W;
+					X1 += gfx->width;
 				if (Y1 < 0)
-					Y1 += SCREEN_H;
+					Y1 += gfx->height;
 
 				if (!wndFile.pullAsBool(String(obj_key) << "common.active"))
 					obj_flags |= FLAG_HIDDEN;
@@ -1671,18 +1671,18 @@ namespace TA3D
 			}
 
 			if (x < 0)
-				x += SCREEN_W;
+				x += gfx->width;
 			if (y < 0)
-				y += SCREEN_H;
+				y += gfx->height;
 			if (width < 0)
-				width += SCREEN_W;
+				width += gfx->width;
 			if (height < 0)
-				height += SCREEN_H;
+				height += gfx->height;
 
 			if (wndFile.pullAsBool("window.centered"))
 			{
-				x = (SCREEN_W - width) >> 1;
-				y = (SCREEN_H - height) >> 1;
+				x = (gfx->width - width) >> 1;
+				y = (gfx->height - height) >> 1;
 			}
 
 			size_factor = (float)gfx->height / 600.0f; // For title bar

@@ -273,10 +273,10 @@ namespace TA3D
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glColor4f(0.75f, 0.75f, 0.608f, 0.5f);
 
-		gfx->rectfill(0.0f, 0.0f, static_cast<float>(SCREEN_W), maxh);
+		gfx->rectfill(0.0f, 0.0f, static_cast<float>(gfx->width), maxh);
 
 		glColor4f(0.75f, 0.75f, 0.608f, 0.75f);
-		gfx->line(static_cast<float>(SCREEN_W), maxh, 0.0f, maxh);
+		gfx->line(static_cast<float>(gfx->width), maxh, 0.0f, maxh);
 
 		glColor4ub(0xFF, 0xFF, 0xFF, 0xFF);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);

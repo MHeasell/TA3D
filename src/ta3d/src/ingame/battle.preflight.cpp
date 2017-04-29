@@ -32,7 +32,8 @@ namespace TA3D
 		// Used to handle on mini map commands
 		IsOnMinimap = mouse_x < 128 && mouse_y < 128;
 		// Priority given to game interface
-		IsOnGUI = (mouse_x < 128 && (mouse_y >= SCREEN_H - 64 || mouse_y < 128)) || mouse_y < 32 || mouse_y >= SCREEN_H - 32;
+		IsOnGUI = (mouse_x < 128 && (mouse_y >= gfx->height - 64 || mouse_y < 128)) || mouse_y < 32 || mouse_y >=
+																										gfx->height - 32;
 
 		IsOnGUI |= (pArea.check() != 0);
 
@@ -142,7 +143,7 @@ namespace TA3D
 			r1 = -45.0f;
 		else if (r1 < -90.0f)
 			r1 = -90.0f;
-		float zoom_min = Math::Max(((float)map->map_w) / (float)SCREEN_W, ((float)map->map_h) / (float)SCREEN_H); // ==> x2
+		float zoom_min = Math::Max(((float)map->map_w) / (float) gfx->width, ((float)map->map_h) / (float) gfx->height); // ==> x2
 		float zoom_max = 0.02f;																					  // ==> x0
 		float zoom_med = 0.5f;
 		float x0 = -50.0f;

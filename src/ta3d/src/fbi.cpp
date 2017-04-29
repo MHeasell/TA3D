@@ -1109,7 +1109,7 @@ namespace TA3D
 			if (paneltop.tex)
 			{
 				gfx->drawtexture(paneltop.tex, 128.0f, 0.0f, 128.0f + float(paneltop.width), float(paneltop.height));
-				for (int k = 0; 128 + paneltop.width + panelbottom.width * k < uint32(SCREEN_W); ++k)
+				for (int k = 0; 128 + paneltop.width + panelbottom.width * k < uint32(gfx->width); ++k)
 				{
 					gfx->drawtexture(panelbottom.tex, 128.0f + float(paneltop.width + k * panelbottom.width), 0.0f,
 						128.0f + float(paneltop.width + panelbottom.width * (k + 1)), float(panelbottom.height));
@@ -1118,10 +1118,11 @@ namespace TA3D
 
 			if (panelbottom.tex)
 			{
-				for (int k = 0; 128 + panelbottom.width * k < uint32(SCREEN_W); ++k)
+				for (int k = 0; 128 + panelbottom.width * k < uint32(gfx->width); ++k)
 				{
 					gfx->drawtexture(panelbottom.tex, 128.0f + float(k * panelbottom.width),
-						float(SCREEN_H - panelbottom.height), 128.0f + float(panelbottom.width * (k + 1)), float(SCREEN_H));
+						float(gfx->height - panelbottom.height), 128.0f + float(panelbottom.width * (k + 1)), float(
+							gfx->height));
 				}
 			}
 
@@ -1135,8 +1136,8 @@ namespace TA3D
 
 			glVertex2i(0, 128 + panel.height); // Left side bar
 			glVertex2i(128, 128 + panel.height);
-			glVertex2i(128, SCREEN_H);
-			glVertex2i(0, SCREEN_H);
+			glVertex2i(128, gfx->height);
+			glVertex2i(0, gfx->height);
 			glEnd();
 			glColor4ub(0xFF, 0xFF, 0xFF, 0xFF);
 			return 0;
@@ -1151,7 +1152,7 @@ namespace TA3D
 
 		int sel = -1;
 
-		gfx->set_2D_clip_rectangle(0, 128, 128, SCREEN_H - 128);
+		gfx->set_2D_clip_rectangle(0, 128, 128, gfx->height - 128);
 
 		glDisable(GL_BLEND);
 		for (int i = 0; i < unit_type[index]->nb_unit; ++i) // Displays the various images of constructable units

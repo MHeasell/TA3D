@@ -1601,7 +1601,7 @@ namespace TA3D
 
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
-		glOrtho(0, SCREEN_W, SCREEN_H, 0, -1.0, 1.0);
+		glOrtho(0, gfx->width, gfx->height, 0, -1.0, 1.0);
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
 
@@ -1613,11 +1613,11 @@ namespace TA3D
 		glTexCoord2f(0.0f, 1.0f);
 		glVertex3f(0, 0, 0);
 		glTexCoord2f(1.0f, 1.0f);
-		glVertex3f(float(SCREEN_W), 0, 0);
+		glVertex3f(float(gfx->width), 0, 0);
 		glTexCoord2f(1.0f, 0.0f);
-		glVertex3f(float(SCREEN_W), float(SCREEN_H), 0);
+		glVertex3f(float(gfx->width), float(gfx->height), 0);
 		glTexCoord2f(0.0f, 0.0f);
-		glVertex3f(0, float(SCREEN_H), 0);
+		glVertex3f(0, float(gfx->height), 0);
 		glEnd();
 		glDepthMask(GL_TRUE);
 		glEnable(GL_DEPTH_TEST);

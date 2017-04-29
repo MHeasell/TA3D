@@ -49,7 +49,7 @@ namespace TA3D
 	{
 		Gui::WND::Ptr statuswnd = pArea.get_wnd("gamestatus");
 		if (statuswnd)
-			statuswnd->y = (int)((float)SCREEN_H - float(statuswnd->height + 32) * show_gamestatus);
+			statuswnd->y = (int)((float) gfx->height - float(statuswnd->height + 32) * show_gamestatus);
 
 		uint32 game_time = units.current_tick / TICKS_PER_SEC;
 
@@ -79,7 +79,7 @@ namespace TA3D
 
 		statuswnd = pArea.get_wnd("playerstats");
 		if (statuswnd)
-			statuswnd->x = (int)((float)SCREEN_W - float(statuswnd->width + 10) * show_gamestatus);
+			statuswnd->x = (int)((float) gfx->width - float(statuswnd->width + 10) * show_gamestatus);
 
 		if (pArea.get_state("playerstats")) // Don't update things if we don't display them
 			for (unsigned int i = 0; i < players.count(); ++i)

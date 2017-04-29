@@ -159,8 +159,8 @@ namespace TA3D
 		gui_element.y2 = parser->pullAsInt(String(element) << ".y2");
 		if (bottom)
 		{
-			gui_element.y1 += SCREEN_H - 480;
-			gui_element.y2 += SCREEN_H - 480;
+			gui_element.y1 += gfx->height - 480;
+			gui_element.y2 += gfx->height - 480;
 		}
 		return gui_element;
 	}

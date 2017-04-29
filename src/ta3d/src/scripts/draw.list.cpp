@@ -55,8 +55,8 @@ namespace TA3D
 	void DrawList::draw(Font* fnt)
 	{
 		glPushMatrix();
-		const float screen_w = float(SCREEN_W);
-		const float screen_h = float(SCREEN_H);
+		const float screen_w = float(gfx->width);
+		const float screen_h = float(gfx->height);
 		switch (prim.type)
 		{
 			case DRAW_TYPE_POINT:

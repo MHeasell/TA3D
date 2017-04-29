@@ -58,8 +58,8 @@ namespace TA3D
 			gfx->set_2D_mode();
 			pCurrentFontHeight = Gui::gui_font->height();
 
-			pCacheScreenRatioWidth = float(SCREEN_W) / 1280.0f;
-			pCacheScreenRatioHeight = float(SCREEN_H) / 1024.0f;
+			pCacheScreenRatioWidth = float(gfx->width) / 1280.0f;
+			pCacheScreenRatioHeight = float(gfx->height) / 1024.0f;
 		}
 
 		void Loading::finalizeDrawing()
@@ -119,7 +119,7 @@ namespace TA3D
 			// Clear the screen
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 			// Draw the texture
-			gfx->drawtexture(pBackgroundTexture, 0.0f, 0.0f, float(SCREEN_W), float(SCREEN_H));
+			gfx->drawtexture(pBackgroundTexture, 0.0f, 0.0f, float(gfx->width), float(gfx->height));
 
 			// Draw all previous messages
 			int indx(0);

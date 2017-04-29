@@ -387,14 +387,15 @@ namespace TA3D
 
 		cam.znear = -255.0f;
 		SDL_Surface* poster = gfx->create_surface_ex(24, w, h);
-		SDL_Surface* buf = gfx->create_surface_ex(24, SCREEN_W, SCREEN_H);
+		SDL_Surface* buf = gfx->create_surface_ex(24, gfx->width, gfx->height);
 
-		for (int z = 0; z < h; z += SCREEN_H / 2)
+		for (int z = 0; z < h; z += gfx->height / 2)
 		{
-			for (int x = 0; x < w; x += SCREEN_W / 2)
+			for (int x = 0; x < w; x += gfx->width / 2)
 			{
 				// Set camera to current part of the scene
-				cam.rpos = camBak.rpos + camBak.zoomFactor * (float(x - w / 2 - SCREEN_W / 4) * camBak.side + float(z - h / 2 - SCREEN_H / 4) * camBak.up);
+				cam.rpos = camBak.rpos + camBak.zoomFactor * (float(x - w / 2 - gfx->width / 4) * camBak.side + float(z - h / 2 -
+																														  gfx->height / 4) * camBak.up);
 				if (!Math::AlmostZero(camBak.dir.y))
 					cam.rpos = cam.rpos + ((camBak.rpos - cam.rpos).y / camBak.dir.y) * camBak.dir;
 
@@ -404,10 +405,11 @@ namespace TA3D
 				renderScene();
 
 				// Read the pixels
-				glReadPixels(0, 0, SCREEN_W, SCREEN_H, GL_BGR, GL_UNSIGNED_BYTE, buf->pixels);
+				glReadPixels(0, 0, gfx->width, gfx->height, GL_BGR, GL_UNSIGNED_BYTE, buf->pixels);
 
 				// Fill current part of the poster
-				blit(buf, poster, SCREEN_W / 4, SCREEN_H / 4, x, z, Math::Min(SCREEN_W / 2, poster->w - x), Math::Min(SCREEN_H / 2, poster->h - z));
+				blit(buf, poster, gfx->width / 4, gfx->height / 4, x, z, Math::Min(gfx->width / 2, poster->w - x), Math::Min(
+					gfx->height / 2, poster->h - z));
 			}
 		}
 

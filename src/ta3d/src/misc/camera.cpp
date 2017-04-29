@@ -139,7 +139,9 @@ namespace TA3D
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
 
-		glOrtho(-0.5f * zoomFactor * float(SCREEN_W), 0.5f * zoomFactor * float(SCREEN_W), -0.5f * zoomFactor * float(SCREEN_H), 0.5f * zoomFactor * float(SCREEN_H), znear, zfar);
+		glOrtho(-0.5f * zoomFactor * float(gfx->width), 0.5f * zoomFactor * float(gfx->width), -0.5f * zoomFactor * float(
+			gfx->height), 0.5f * zoomFactor * float(
+			gfx->height), znear, zfar);
 
 		if (classic)
 		{
@@ -167,7 +169,9 @@ namespace TA3D
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
 
-		glOrtho(-0.5f * zoomFactor * float(SCREEN_W), 0.5f * zoomFactor * float(SCREEN_W), -0.5f * zoomFactor * float(SCREEN_H), 0.5f * zoomFactor * float(SCREEN_H), -512.0f, zfar);
+		glOrtho(-0.5f * zoomFactor * float(gfx->width), 0.5f * zoomFactor * float(gfx->width), -0.5f * zoomFactor * float(
+			gfx->height), 0.5f * zoomFactor * float(
+			gfx->height), -512.0f, zfar);
 
 		const Vector3D FP(rpos + dir + shakeVector);
 		gluLookAt(pos.x + shakeVector.x, pos.y + shakeVector.y, pos.z + shakeVector.z,
@@ -187,8 +191,8 @@ namespace TA3D
 
 	void Camera::getFrustum(std::vector<Vector3D>& list)
 	{
-		const Vector3D wside = static_cast<float>(SCREEN_W) * side;
-		const Vector3D hup = static_cast<float>(SCREEN_H) * up;
+		const Vector3D wside = static_cast<float>(gfx->width) * side;
+		const Vector3D hup = static_cast<float>(gfx->height) * up;
 		list.push_back(rpos + znear * dir + 0.5f * zoomFactor * (-wside + hup));
 		list.push_back(rpos + znear * dir + 0.5f * zoomFactor * (wside + hup));
 		list.push_back(rpos + znear * dir + 0.5f * zoomFactor * (-wside - hup));
