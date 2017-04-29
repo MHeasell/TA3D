@@ -289,48 +289,25 @@ namespace TA3D
 				cam.rpos.z = float((mouse_y - 64) * map->map_h) / 128.0f * 252.0f / (float)map->mini_h;
 				cam_has_target = false;
 			}
+
+			// nudge the camera in the appropriate direction
+			// when the user move the cursor to the edge of the screen
 			if (mouse_x < 2)
 			{
-				Vector3D move_dir(cam.side);
-				move_dir.y = 0.0f;
-				move_dir.normalize();
-				cam.rpos = cam.rpos - (SCROLL_SPEED * deltaTime * cam_h / 151.0f) * move_dir;
-				cam_has_target = false;
+				nudgeCameraLeft();
 			}
-			else
+			else if (mouse_x >= gfx->width - 2)
 			{
-				if (mouse_x >= gfx->width - 2)
-				{
-					Vector3D move_dir(cam.side);
-					move_dir.y = 0.0f;
-					move_dir.normalize();
-					cam.rpos = cam.rpos + (SCROLL_SPEED * deltaTime * cam_h / 151.0f) * move_dir;
-					cam_has_target = false;
-				}
+				nudgeCameraRight();
 			}
+
 			if (mouse_y < 2)
 			{
-				Vector3D move_dir(cam.up);
-				if (Math::AlmostZero(move_dir.x) && Math::AlmostZero(move_dir.z))
-					move_dir = cam.dir;
-				move_dir.y = 0.f;
-				move_dir.normalize();
-				cam.rpos = cam.rpos + (SCROLL_SPEED * deltaTime * cam_h / 151.0f) * move_dir;
-				cam_has_target = false;
+				nudgeCameraUp();
 			}
-			else
+			else if (mouse_y >= gfx->height - 2)
 			{
-				if (mouse_y >= gfx->height - 2)
-				{
-					Vector3D move_dir(cam.up);
-					if (Math::AlmostZero(move_dir.x) && Math::AlmostZero(move_dir.z))
-						move_dir = cam.dir;
-
-					move_dir.y = 0.f;
-					move_dir.normalize();
-					cam.rpos = cam.rpos - (SCROLL_SPEED * deltaTime * cam_h / 151.0f) * move_dir;
-					cam_has_target = false;
-				}
+				nudgeCameraDown();
 			}
 
 			if (!Console::Instance()->activated())
