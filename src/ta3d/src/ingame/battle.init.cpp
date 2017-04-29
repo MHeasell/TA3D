@@ -553,8 +553,8 @@ namespace TA3D
 
 	bool Battle::initPostFlight()
 	{
-		dt = 0.0f;
-		t = 0.0f;
+		deltaTime = 0.0f;
+		gameTime = 0.0f;
 		lastFrameTime = MILLISECONDS_SINCE_INIT;
 
 		mx = my = 0;

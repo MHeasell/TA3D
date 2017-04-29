@@ -109,25 +109,25 @@ namespace TA3D
 	{
 		if (isKeyDown(KEY_UP))
 		{
-			cam.rpos.z -= SCROLL_SPEED * dt * cam_h / 151.0f;
+			cam.rpos.z -= SCROLL_SPEED * deltaTime * cam_h / 151.0f;
 			cam_has_target = false;
 			unitBeingTracked = -1;
 		}
 		if (isKeyDown(KEY_DOWN))
 		{
-			cam.rpos.z += SCROLL_SPEED * dt * cam_h / 151.0f;
+			cam.rpos.z += SCROLL_SPEED * deltaTime * cam_h / 151.0f;
 			cam_has_target = false;
 			unitBeingTracked = -1;
 		}
 		if (isKeyDown(KEY_RIGHT))
 		{
-			cam.rpos.x += SCROLL_SPEED * dt * cam_h / 151.0f;
+			cam.rpos.x += SCROLL_SPEED * deltaTime * cam_h / 151.0f;
 			cam_has_target = false;
 			unitBeingTracked = -1;
 		}
 		if (isKeyDown(KEY_LEFT))
 		{
-			cam.rpos.x -= SCROLL_SPEED * dt * cam_h / 151.0f;
+			cam.rpos.x -= SCROLL_SPEED * deltaTime * cam_h / 151.0f;
 			cam_has_target = false;
 			unitBeingTracked = -1;
 		}
@@ -149,14 +149,14 @@ namespace TA3D
 			{
 				if (show_gamestatus < 1.f)
 				{
-					show_gamestatus += 10.f * dt;
+					show_gamestatus += 10.f * deltaTime;
 					if (show_gamestatus > 1.f)
 						show_gamestatus = 1.f;
 				}
 			}
 			else
 			{ // Hide gamestatus window
-				show_gamestatus -= 10.f * dt;
+				show_gamestatus -= 10.f * deltaTime;
 
 				if (show_gamestatus < 0.f)
 				{

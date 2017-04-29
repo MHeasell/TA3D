@@ -386,10 +386,17 @@ namespace TA3D
 		int omz;
 		//!
 		float cam_h;
-		//!
-		float dt;
-		//!
-		float t;
+
+		//! Elapsed time since the last frame in (fractional) seconds.
+		float deltaTime;
+
+		/**
+		 * The current time in the game world since the simulation started, in seconds.
+		 * This is the time from the perspective of units within the game world,
+		 * so it doesn't include time spent with the game paused.
+		 */
+		float gameTime;
+
 		/**
 		 * The time in milliseconds when the last frame was processed,
 		 * relative to program initialization.

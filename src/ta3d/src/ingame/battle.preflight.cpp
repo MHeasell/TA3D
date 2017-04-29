@@ -68,7 +68,7 @@ namespace TA3D
 
 	void Battle::preflightChangeWindSpeedAndDirection()
 	{
-		wind_t = t;
+		wind_t = gameTime;
 		map->wind += float((Math::RandomTable() % 2001) - 1000);
 
 		if (map->wind < map->ota_data.minwindspeed)
@@ -113,9 +113,9 @@ namespace TA3D
 		float old_zscroll = camera_zscroll;
 		float delta = IsOnGUI ? 0.0f : float(mouse_z - omz);
 		if (isKeyDown(KEY_PAGEUP))
-			delta = -10.0f * dt;
+			delta = -10.0f * deltaTime;
 		else if (isKeyDown(KEY_PAGEDOWN))
-			delta = 10.0f * dt;
+			delta = 10.0f * deltaTime;
 
 		// 2D zoom with orthographic camera
 		camera_zscroll += delta * lp_CONFIG->camera_zoom_speed;

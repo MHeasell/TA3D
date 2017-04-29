@@ -160,7 +160,7 @@ namespace TA3D
 			preflightVars();
 
 			// Wind - Make a change every 10 sec. (simulation time)
-			if ((wind_change = (t - wind_t >= 10.0f)))
+			if ((wind_change = (gameTime - wind_t >= 10.0f)))
 				preflightChangeWindSpeedAndDirection();
 
 			// Update 3D sounds
@@ -184,17 +184,17 @@ namespace TA3D
 			else
 				cursor_type = CURSOR_DEFAULT;
 
-			dt = float(MILLISECONDS_SINCE_INIT - lastFrameTime) * 0.001f; // Regulate frame rate
-			if (dt < delayBetweenFrames)
+			deltaTime = float(MILLISECONDS_SINCE_INIT - lastFrameTime) * 0.001f; // Regulate frame rate
+			if (deltaTime < delayBetweenFrames)
 			{
-				float secondsToWait = delayBetweenFrames - dt;
+				float secondsToWait = delayBetweenFrames - deltaTime;
 				rest(static_cast<uint32>(secondsToWait * 1000.0f));
 			}
 			lastFrameTime = MILLISECONDS_SINCE_INIT;
 
 			if (!lp_CONFIG->pause)
 			{
-				t += dt * units.apparent_timefactor;
+				gameTime += deltaTime * units.apparent_timefactor;
 			}
 
 			/*------------Block grouping together what is relative to the commands----------------*/
@@ -289,7 +289,7 @@ namespace TA3D
 				Vector3D move_dir(cam.side);
 				move_dir.y = 0.0f;
 				move_dir.normalize();
-				cam.rpos = cam.rpos - (SCROLL_SPEED * dt * cam_h / 151.0f) * move_dir;
+				cam.rpos = cam.rpos - (SCROLL_SPEED * deltaTime * cam_h / 151.0f) * move_dir;
 				cam_has_target = false;
 			}
 			else
@@ -299,7 +299,7 @@ namespace TA3D
 					Vector3D move_dir(cam.side);
 					move_dir.y = 0.0f;
 					move_dir.normalize();
-					cam.rpos = cam.rpos + (SCROLL_SPEED * dt * cam_h / 151.0f) * move_dir;
+					cam.rpos = cam.rpos + (SCROLL_SPEED * deltaTime * cam_h / 151.0f) * move_dir;
 					cam_has_target = false;
 				}
 			}
@@ -310,7 +310,7 @@ namespace TA3D
 					move_dir = cam.dir;
 				move_dir.y = 0.f;
 				move_dir.normalize();
-				cam.rpos = cam.rpos + (SCROLL_SPEED * dt * cam_h / 151.0f) * move_dir;
+				cam.rpos = cam.rpos + (SCROLL_SPEED * deltaTime * cam_h / 151.0f) * move_dir;
 				cam_has_target = false;
 			}
 			else
@@ -323,7 +323,7 @@ namespace TA3D
 
 					move_dir.y = 0.f;
 					move_dir.normalize();
-					cam.rpos = cam.rpos - (SCROLL_SPEED * dt * cam_h / 151.0f) * move_dir;
+					cam.rpos = cam.rpos - (SCROLL_SPEED * deltaTime * cam_h / 151.0f) * move_dir;
 					cam_has_target = false;
 				}
 			}
@@ -336,8 +336,8 @@ namespace TA3D
 				h = map->sealvl;
 			for (int i = 0; i < 20; ++i) // Increase precision
 			{
-				for (float T = 0.0f; T < dt; T += 0.1f)
-					cam.rpos.y += (h + cam_h - cam.rpos.y) * Math::Min(dt - T, 0.1f);
+				for (float T = 0.0f; T < deltaTime; T += 0.1f)
+					cam.rpos.y += (h + cam_h - cam.rpos.y) * Math::Min(deltaTime - T, 0.1f);
 			}
 
 			if (cam.rpos.x < -map->map_w_d)
@@ -363,7 +363,7 @@ namespace TA3D
 			Matrix Rotation = RotateX(r1 * DEG2RAD) * RotateY(r2 * DEG2RAD) * RotateZ(r3 * DEG2RAD);
 
 			cam.setMatrix(Rotation);
-			cam.updateShake(dt);
+			cam.updateShake(deltaTime);
 
 			if (cam_has_target)
 			{
@@ -1245,7 +1245,7 @@ namespace TA3D
 			// That code was rewritten multithreaded
 			if (!lp_CONFIG->pause)
 			{
-				const float timetosimulate = dt * units.apparent_timefactor; // Visual animation takes place here
+				const float timetosimulate = deltaTime * units.apparent_timefactor; // Visual animation takes place here
 				wind_change = false;										 // Don't try to run following code in separate thread
 				features.move(timetosimulate);								 // Animate objects
 				fx_manager.move(timetosimulate);
@@ -1433,18 +1433,18 @@ namespace TA3D
 			Gui::WND::Ptr pWnd = pArea.get_wnd(pCurrentGUI);
 			int scrolling = pWnd != NULL ? pWnd->scrolling : 0;
 			if (pCurrentGUI != String(ta3dSideData.side_pref[players.side_view]) << "gen")
-				unit_manager.unit_build_menu(n, dt, scrolling, true); // Draw GUI background
+				unit_manager.unit_build_menu(n, deltaTime, scrolling, true); // Draw GUI background
 			else
-				unit_manager.unit_build_menu(-1, dt, scrolling, true); // Draw GUI background
+				unit_manager.unit_build_menu(-1, deltaTime, scrolling, true); // Draw GUI background
 
 			pArea.draw();
 
 			/*------------------- End of GUI drawings -------------------------------------------------------*/
 
 			if (pCurrentGUI != String(ta3dSideData.side_pref[players.side_view]) << "gen")
-				sel = unit_manager.unit_build_menu(n, dt, scrolling, false); // Unit's menu
+				sel = unit_manager.unit_build_menu(n, deltaTime, scrolling, false); // Unit's menu
 			else
-				sel = unit_manager.unit_build_menu(-1, dt, scrolling, false); // Unit's menu
+				sel = unit_manager.unit_build_menu(-1, deltaTime, scrolling, false); // Unit's menu
 			if (sel == -2)															// build weapons
 			{
 				if (didMouseButtonGoDown(LeftMouseButton))
@@ -2189,14 +2189,14 @@ namespace TA3D
 					gfx->print(gfx->TA_font, float((gfx->width - (int)gfx->TA_font->length(value) + 2) >> 1), (float) gfx->height - 79.0f, 0.0f, c & makeacol32(0, 0, 0, 0xFF), value);
 					gfx->print(gfx->TA_font, float((gfx->width - (int)gfx->TA_font->length(value)) >> 1), (float) gfx->height - 80.0f, 0.0f, c, value);
 				}
-				show_timefactor -= dt;
+				show_timefactor -= deltaTime;
 			}
 
 			g_ta3d_network->draw(); // Draw network related stuffs (ie: chat messages, ...)
 
 			// Draw the console
 			if (!shoot || video_shoot)
-				Console::Instance()->draw(Gui::gui_font, dt);
+				Console::Instance()->draw(Gui::gui_font, deltaTime);
 
 			// Informations about FPS
 			if (lp_CONFIG->showfps)
