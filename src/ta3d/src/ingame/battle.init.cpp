@@ -574,7 +574,6 @@ namespace TA3D
 		done = false;
 
 		show_model = false; // Affichage les noms des sous objets du modèle 3D de l'unité sélectionnée
-		light_angle = 0.0f;
 		cheat_metal = false;
 		cheat_energy = false;
 		internal_name = false;

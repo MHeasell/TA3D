@@ -194,7 +194,6 @@ namespace TA3D
 
 			if (!lp_CONFIG->pause)
 			{
-				light_angle += dt * units.apparent_timefactor;
 				t += dt * units.apparent_timefactor;
 			}
 
