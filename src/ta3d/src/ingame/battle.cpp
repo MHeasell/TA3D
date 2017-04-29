@@ -276,9 +276,14 @@ namespace TA3D
 				}
 			}
 
-			if (mouse_x < 128.0f && mouse_y < 128.0f && mouse_x >= 0.0f && mouse_y >= 0.0f && ((isMouseButtonDown(
-				RightMouseButton) && !lp_CONFIG->right_click_interface) || (isMouseButtonDown(
-				LeftMouseButton) && lp_CONFIG->right_click_interface)))
+			// if the user clicks on the minimap,
+			// move the camera to that point on the map
+			if (mouse_x < 128.0f
+				&& mouse_y < 128.0f
+				&& mouse_x >= 0.0f
+				&& mouse_y >= 0.0f
+				&& ((isMouseButtonDown(RightMouseButton) && !lp_CONFIG->right_click_interface)
+					|| (isMouseButtonDown(LeftMouseButton) && lp_CONFIG->right_click_interface)))
 			{
 				cam.rpos.x = float((mouse_x - 64) * map->map_w) / 128.0f * 252.0f / (float)map->mini_w;
 				cam.rpos.z = float((mouse_y - 64) * map->map_h) / 128.0f * 252.0f / (float)map->mini_h;
