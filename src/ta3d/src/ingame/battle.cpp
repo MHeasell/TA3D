@@ -204,7 +204,9 @@ namespace TA3D
 				handleGameStatusEvents();
 
 			if (didKeyGoDown(KEY_HOME))
-				showHealthBars ^= true;
+			{
+				toggleHealthBars();
+			}
 
 			// Ctrl+D : Toggle Self-destruct
 			if (isControlKeyDown() && didKeyGoDown(KEY_D))
@@ -2349,6 +2351,11 @@ namespace TA3D
 			Menus::Statistics::Execute();
 
 		return pResult;
+	}
+
+	void Battle::toggleHealthBars()
+	{
+		showHealthBars ^= true;
 	}
 
 	void Battle::selfDestructSelectedUnits()

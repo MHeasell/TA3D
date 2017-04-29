@@ -445,6 +445,12 @@ namespace TA3D
 		 * Triggered by the user when they issue the self-destruct command.
 		 */
 		void selfDestructSelectedUnits();
+
+		/**
+		 * Toggles the display of unit health bars on the screen.
+		 * Triggered by the user when they press the toggle key.
+		 */
+		void toggleHealthBars();
 	}; // class Battle
 
 } // namespace TA3D
