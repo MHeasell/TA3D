@@ -116,9 +116,6 @@ namespace TA3D
 
 	extern String TA3D_CURRENT_MOD;
 
-// Some constant data needed by the engine ( like number of ticks/sec. to simulate )
-#define TICKS_PER_SEC 30
-
 	template <class T>
 	inline void setFlag(T& out, const int flag) { out = T(out | flag); }
 
@@ -128,6 +125,9 @@ namespace TA3D
 	template <class T>
 	inline bool isFlagSet(const T& in, const int flag) { return (in & flag) != 0; }
 } // namespace TA3D
+
+// number of ticks/sec. to simulate
+#define TICKS_PER_SEC 30
 
 #define SCREEN_W (TA3D::gfx->width)
 #define SCREEN_H (TA3D::gfx->height)
