@@ -44,6 +44,12 @@ namespace TA3D
 	struct TA3DCONFIG
 	{
 		float fps_limit;
+
+		/**
+		 * The speed at which the game simulation runs.
+		 * A value of 1 is normal speed, but the user can adjust this
+		 * to make the game progress faster.
+		 */
 		float timefactor; // 1.0 -> 10.0
 
 		sint16 fsaa;		   // ?
