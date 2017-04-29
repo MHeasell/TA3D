@@ -319,8 +319,6 @@ namespace TA3D
 		//!
 		bool show_model;
 		//!
-		bool rotate_light;
-		//!
 		float light_angle;
 		//!
 		bool cheat_metal;

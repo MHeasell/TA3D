@@ -216,14 +216,6 @@ namespace TA3D
 		return 1;
 	}
 
-	int CAPI::setRotateLight(lua_State* L)
-	{
-		if (lua_gettop(L) > 0)
-			Battle::Instance()->rotate_light = lua_toboolean(L, -1);
-		lua_pushboolean(L, Battle::Instance()->rotate_light);
-		return 1;
-	}
-
 	int CAPI::shake(lua_State*)
 	{
 		Battle::Instance()->cam.setShake(1.0f, 32.0f);
@@ -740,7 +732,6 @@ namespace TA3D
 		CAPI_REGISTER(setWireframe);
 		CAPI_REGISTER(scriptDumpDebugInfo);
 		CAPI_REGISTER(setShowModel);
-		CAPI_REGISTER(setRotateLight);
 		CAPI_REGISTER(shake);
 		CAPI_REGISTER(setFpsLimit);
 		CAPI_REGISTER(spawn);

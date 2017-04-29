@@ -48,27 +48,11 @@ namespace TA3D
 
 	void Battle::renderStencilShadow()
 	{
-		if (rotate_light)
-		{
-			pSun.Dir.x = -1.0f;
-			pSun.Dir.y = 1.0f;
-			pSun.Dir.z = 1.0f;
-			pSun.Dir.normalize();
-			Vector3D Dir(-pSun.Dir);
-			Dir.x = cosf(light_angle);
-			Dir.z = sinf(light_angle);
-			Dir.normalize();
-			pSun.Dir = -Dir;
-			units.draw_shadow(render_time, Dir);
-		}
-		else
-		{
-			pSun.Dir.x = -1.0f;
-			pSun.Dir.y = 1.0f;
-			pSun.Dir.z = 1.0f;
-			pSun.Dir.normalize();
-			units.draw_shadow(render_time, -pSun.Dir);
-		}
+		pSun.Dir.x = -1.0f;
+		pSun.Dir.y = 1.0f;
+		pSun.Dir.z = 1.0f;
+		pSun.Dir.normalize();
+		units.draw_shadow(render_time, -pSun.Dir);
 	}
 
 

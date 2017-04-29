@@ -46,7 +46,6 @@ namespace TA3D
 		static int setWireframe(lua_State* L);
 		static int scriptDumpDebugInfo(lua_State* L);
 		static int setShowModel(lua_State* L);
-		static int setRotateLight(lua_State* L);
 		static int shake(lua_State* L);
 		static int setFpsLimit(lua_State* L);
 		static int spawn(lua_State* L);
