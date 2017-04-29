@@ -52,7 +52,7 @@ namespace TA3D
 		if (rChild == NULL && lChild == NULL)
 		{
 			for (typename std::vector<T>::const_iterator i = elements_begin; i != elements_end; ++i)
-				if ((TKit::pos(*i) - center).norm() <= maxDist + TKit::radius(*i))
+				if ((TKit::pos(*i) - center).length() <= maxDist + TKit::radius(*i))
 					result.push_back(*i);
 			return;
 		}

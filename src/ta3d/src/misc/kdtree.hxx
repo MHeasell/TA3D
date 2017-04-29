@@ -50,7 +50,7 @@ namespace TA3D
 		{
 			const float dist2 = maxDist * maxDist;
 			for (typename std::vector<T>::const_iterator i = elements_begin; i != elements_end; ++i)
-				if ((TKit::pos(*i) - center).sq() <= dist2)
+				if ((TKit::pos(*i) - center).lengthSquared() <= dist2)
 					result.push_back(*i);
 			return;
 		}
