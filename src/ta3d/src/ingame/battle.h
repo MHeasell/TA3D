@@ -343,8 +343,6 @@ namespace TA3D
 		//!
 		bool shoot;
 		//!
-		bool ordered_destruct;
-		//!
 		bool tilde;
 		//!
 		bool done;
@@ -440,6 +438,13 @@ namespace TA3D
 	public:
 		static Battle* Instance();
 
+	private:
+
+		/**
+		 * Toggles the self-destruct order on the selected units.
+		 * Triggered by the user when they issue the self-destruct command.
+		 */
+		void selfDestructSelectedUnits();
 	}; // class Battle
 
 } // namespace TA3D

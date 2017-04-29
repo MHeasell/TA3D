@@ -570,7 +570,6 @@ namespace TA3D
 
 		speed_limit = lp_CONFIG->fps_limit;
 		delayBetweenFrames = (speed_limit < 1.0f) ? 0.0f : (1.0f / speed_limit);
-		ordered_destruct = false;
 		tilde = false;
 		done = false;
 

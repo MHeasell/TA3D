@@ -207,21 +207,10 @@ namespace TA3D
 				showHealthBars ^= true;
 
 			// Ctrl+D : Toggle Self-destruct
-			if (isControlKeyDown() && isKeyDown(KEY_D))
+			if (isControlKeyDown() && didKeyGoDown(KEY_D))
 			{
-				if (!ordered_destruct)
-				{
-					for (unsigned int e = 0; e < units.index_list_size; ++e)
-					{
-						int i = units.idx_list[e];
-						if (units.unit[i].isAlive() && units.unit[i].isOwnedBy(players.local_human_id) && units.unit[i].isSelected)
-							units.unit[i].toggle_self_destruct();
-					}
-					ordered_destruct = true;
-				}
+				selfDestructSelectedUnits();
 			}
-			else
-				ordered_destruct = false;
 
 			// + : increase game speed
 			if (isKeyDown(KEY_PLUS_PAD) && !Console::Instance()->activated())
@@ -2360,6 +2349,16 @@ namespace TA3D
 			Menus::Statistics::Execute();
 
 		return pResult;
+	}
+
+	void Battle::selfDestructSelectedUnits()
+	{
+		for (unsigned int e = 0; e < units.index_list_size; ++e)
+		{
+			int i = units.idx_list[e];
+			if (units.unit[i].isAlive() && units.unit[i].isOwnedBy(players.local_human_id) && units.unit[i].isSelected)
+				units.unit[i].toggle_self_destruct();
+		}
 	}
 
 	void Battle::draw2DObjects()
