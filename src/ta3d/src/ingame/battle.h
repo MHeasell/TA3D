@@ -198,6 +198,13 @@ namespace TA3D
 		//@{
 		//@}
 
+		/**
+		 * Returns the point on the map terrain that the user's cursor is hovering over.
+		 *
+		 * If on_mini_map is set to true,
+		 * the user's cursor is assumed to be on the minimap area of the screen
+		 * and the corresponding point on terrain is calculated from that.
+		 */
 		Vector3D cursorOnMap(const Camera& cam, MAP& map, bool on_mini_map = false);
 
 		void handleGameStatusEvents();
