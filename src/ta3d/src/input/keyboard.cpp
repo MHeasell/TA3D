@@ -32,6 +32,16 @@ namespace TA3D
 		return keyState.find(keycode) != keyState.end();
 	}
 
+	bool isShiftKeyDown()
+	{
+		return isKeyDown(KEY_LSHIFT) || isKeyDown(KEY_RSHIFT);
+	}
+
+	bool isControlKeyDown()
+	{
+		return isKeyDown(KEY_LCONTROL) || isKeyDown(KEY_RCONTROL);
+	}
+
 	bool isAsciiCharacterKeyDown(byte c)
 	{
 		return isKeyDown(asciiToKeyCode[c]);

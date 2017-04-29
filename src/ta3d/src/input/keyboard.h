@@ -73,6 +73,18 @@ namespace TA3D
 	bool isKeyDown(KeyCode keycode);
 
 	/**
+	 * Returns true if either of the left or right shift keys are down,
+	 * otherwise false.
+	 */
+	bool isShiftKeyDown();
+
+	/**
+	 * Returns true if either of the left or right control keys are down,
+	 * otherwise false.
+	 */
+	bool isControlKeyDown();
+
+	/**
 	 * Returns true if a key that emits the given ASCII character is down,
 	 * otherwise false.
 	 *

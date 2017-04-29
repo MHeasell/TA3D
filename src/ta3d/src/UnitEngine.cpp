@@ -289,13 +289,13 @@ namespace TA3D
 			// Select only units completely built and visible
 			if (unit[*e].isOwnedBy(players.local_human_id) && unit[*e].isAlive() && Math::AlmostZero(unit[*e].build_percent_left) && unit[*e].visible)
 			{
-				if (TA3D_SHIFT_PRESSED && unit[*e].isSelected)
+				if (isShiftKeyDown() && unit[*e].isSelected)
 				{
 					selected = true;
 				}
 				else
 				{
-					if (!TA3D_SHIFT_PRESSED)
+					if (!isShiftKeyDown())
 						unit[*e].isSelected = false;
 
 					if (reigon.contains(unit[*e].Pos))

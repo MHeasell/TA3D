@@ -249,7 +249,7 @@ namespace TA3D
 			}
 		}
 
-		if ((selected || units.last_on >= 0) && TA3D_SHIFT_PRESSED)
+		if ((selected || units.last_on >= 0) && isShiftKeyDown())
 		{
 			cam.setView();
 			bool builders = false;
@@ -299,7 +299,7 @@ namespace TA3D
 				}
 			}
 		}
-		if ((selected || units.last_on >= 0) && TA3D_CTRL_PRESSED)
+		if ((selected || units.last_on >= 0) && isControlKeyDown())
 		{
 			cam.setView();
 			const float t = (float)MILLISECONDS_SINCE_INIT * 0.001f;
@@ -317,7 +317,7 @@ namespace TA3D
 
 						const float x = units.unit[i].render.Pos.x;
 						const float z = units.unit[i].render.Pos.z;
-						if (!TA3D_SHIFT_PRESSED)
+						if (!isShiftKeyDown())
 						{
 							if (pType->kamikaze)
 							{

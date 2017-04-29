@@ -207,7 +207,7 @@ namespace TA3D
 				showHealthBars ^= true;
 
 			// Ctrl+D : Toggle Self-destruct
-			if (TA3D_CTRL_PRESSED && isKeyDown(KEY_D))
+			if (isControlKeyDown() && isKeyDown(KEY_D))
 			{
 				if (!ordered_destruct)
 				{
@@ -559,7 +559,7 @@ namespace TA3D
 						cursor_type = CURSOR_BOMB_ATTACK;
 					}
 
-					if (cursor_type != CURSOR_DEFAULT && click_activation && !IsOnGUI && TA3D_SHIFT_PRESSED) // Remove commands from queue
+					if (cursor_type != CURSOR_DEFAULT && click_activation && !IsOnGUI && isShiftKeyDown()) // Remove commands from queue
 					{
 						Vector3D target(cursorOnMap(cam, *map));
 						target.x = float(((int)(target.x) + map->map_w_d) >> 3);
@@ -593,14 +593,14 @@ namespace TA3D
 											commandfire = MISSION_FLAG_COMMAND_FIRE;
 											break;
 										}
-									if (TA3D_SHIFT_PRESSED)
+									if (isShiftKeyDown())
 										units.unit[i].add_mission(MISSION_ATTACK, &(units.unit[pointing].Pos), false, 0, &(units.unit[pointing]), (byte)commandfire);
 									else
 										units.unit[i].set_mission(MISSION_ATTACK, &(units.unit[pointing].Pos), false, 0, true, &(units.unit[pointing]), (byte)commandfire);
 								}
 								units.unit[i].unlock();
 							}
-							if (!TA3D_SHIFT_PRESSED)
+							if (!isShiftKeyDown())
 								current_order = SIGNAL_ORDER_NONE;
 							click_activated = true;
 						}
@@ -614,14 +614,14 @@ namespace TA3D
 								units.unit[i].lock();
 								if (units.unit[i].isAlive() && units.unit[i].isOwnedBy(players.local_human_id) && units.unit[i].isSelected && unit_manager.unit_type[units.unit[i].type_id]->CanCapture)
 								{
-									if (TA3D_SHIFT_PRESSED)
+									if (isShiftKeyDown())
 										units.unit[i].add_mission(MISSION_CAPTURE, &(units.unit[pointing].Pos), false, 0, &(units.unit[pointing]));
 									else
 										units.unit[i].set_mission(MISSION_CAPTURE, &(units.unit[pointing].Pos), false, 0, true, &(units.unit[pointing]));
 								}
 								units.unit[i].unlock();
 							}
-							if (!TA3D_SHIFT_PRESSED)
+							if (!isShiftKeyDown())
 								current_order = SIGNAL_ORDER_NONE;
 							click_activated = true;
 						}
@@ -637,16 +637,16 @@ namespace TA3D
 									units.unit[i].lock();
 									if (units.unit[i].isAlive() && units.unit[i].isOwnedBy(players.local_human_id) && units.unit[i].isSelected && unit_manager.unit_type[units.unit[i].type_id]->Builder && unit_manager.unit_type[units.unit[i].type_id]->BMcode)
 									{
-										if (!TA3D_SHIFT_PRESSED)
+										if (!isShiftKeyDown())
 											units.unit[i].playSound("repair");
-										if (TA3D_SHIFT_PRESSED)
+										if (isShiftKeyDown())
 											units.unit[i].add_mission(MISSION_REPAIR, &(units.unit[pointing].Pos), false, 0, &(units.unit[pointing]));
 										else
 											units.unit[i].set_mission(MISSION_REPAIR, &(units.unit[pointing].Pos), false, 0, true, &(units.unit[pointing]));
 									}
 									units.unit[i].unlock();
 								}
-								if (!TA3D_SHIFT_PRESSED)
+								if (!isShiftKeyDown())
 									current_order = SIGNAL_ORDER_NONE;
 								click_activated = true;
 							}
@@ -662,14 +662,14 @@ namespace TA3D
 										units.unit[i].lock();
 										if (units.unit[i].isAlive() && units.unit[i].isOwnedBy(players.local_human_id) && units.unit[i].isSelected && unit_manager.unit_type[units.unit[i].type_id]->CanReclamate && unit_manager.unit_type[units.unit[i].type_id]->BMcode)
 										{
-											if (TA3D_SHIFT_PRESSED)
+											if (isShiftKeyDown())
 												units.unit[i].add_mission(MISSION_RECLAIM, &(units.unit[pointing].Pos), false, 0, &(units.unit[pointing]));
 											else
 												units.unit[i].set_mission(MISSION_RECLAIM, &(units.unit[pointing].Pos), false, 0, true, &(units.unit[pointing]));
 										}
 										units.unit[i].unlock();
 									}
-									if (!TA3D_SHIFT_PRESSED)
+									if (!isShiftKeyDown())
 										current_order = SIGNAL_ORDER_NONE;
 									click_activated = true;
 								}
@@ -677,8 +677,8 @@ namespace TA3D
 								{
 									if (cursor_type == CURSOR_GUARD) // Le curseur donne un ordre
 									{
-										units.give_order_guard(players.local_human_id, pointing, !TA3D_SHIFT_PRESSED);
-										if (!TA3D_SHIFT_PRESSED)
+										units.give_order_guard(players.local_human_id, pointing, !isShiftKeyDown());
+										if (!isShiftKeyDown())
 											current_order = SIGNAL_ORDER_NONE;
 										click_activated = true;
 									}
@@ -686,8 +686,8 @@ namespace TA3D
 									{
 										if (cursor_type == CURSOR_LOAD) // Le curseur donne un ordre
 										{
-											units.give_order_load(players.local_human_id, pointing, !TA3D_SHIFT_PRESSED);
-											if (!TA3D_SHIFT_PRESSED)
+											units.give_order_load(players.local_human_id, pointing, !isShiftKeyDown());
+											if (!isShiftKeyDown())
 												current_order = SIGNAL_ORDER_NONE;
 											click_activated = true;
 										}
@@ -723,14 +723,14 @@ namespace TA3D
 												commandfire = MISSION_FLAG_COMMAND_FIRE;
 												break;
 											}
-										if (TA3D_SHIFT_PRESSED)
+										if (isShiftKeyDown())
 											units.unit[i].add_mission(MISSION_ATTACK, &(cursor_pos), false, 0, NULL, (byte)commandfire);
 										else
 											units.unit[i].set_mission(MISSION_ATTACK, &(cursor_pos), false, 0, true, NULL, (byte)commandfire);
 									}
 									units.unit[i].unlock();
 								}
-								if (!TA3D_SHIFT_PRESSED)
+								if (!isShiftKeyDown())
 									current_order = SIGNAL_ORDER_NONE;
 								click_activated = true;
 							}
@@ -739,7 +739,7 @@ namespace TA3D
 				}
 			}
 
-			if (cursor_type != CURSOR_DEFAULT && click_activation && !IsOnGUI && TA3D_SHIFT_PRESSED && !order_removed) // Remove commands from queue
+			if (cursor_type != CURSOR_DEFAULT && click_activation && !IsOnGUI && isShiftKeyDown() && !order_removed) // Remove commands from queue
 			{
 				Vector3D target(cursorOnMap(cam, *map));
 				target.x = float(((int)(target.x) + map->map_w_d) >> 3);
@@ -764,7 +764,7 @@ namespace TA3D
 						units.unit[i].lock();
 						if (units.unit[i].isAlive() && units.unit[i].isOwnedBy(players.local_human_id) && units.unit[i].isSelected && unit_manager.unit_type[units.unit[i].type_id]->canresurrect && unit_manager.unit_type[units.unit[i].type_id]->BMcode)
 						{
-							if (TA3D_SHIFT_PRESSED)
+							if (isShiftKeyDown())
 								units.unit[i].add_mission(MISSION_REVIVE, &cur_pos, false, idx, NULL);
 							else
 								units.unit[i].set_mission(MISSION_REVIVE, &cur_pos, false, idx, true, NULL);
@@ -772,7 +772,7 @@ namespace TA3D
 						units.unit[i].unlock();
 					}
 				}
-				if (!TA3D_SHIFT_PRESSED)
+				if (!isShiftKeyDown())
 					current_order = SIGNAL_ORDER_NONE;
 				click_activated = true;
 			}
@@ -792,7 +792,7 @@ namespace TA3D
 						units.unit[i].lock();
 						if (units.unit[i].isAlive() && units.unit[i].isOwnedBy(players.local_human_id) && units.unit[i].isSelected && unit_manager.unit_type[units.unit[i].type_id]->CanReclamate && unit_manager.unit_type[units.unit[i].type_id]->BMcode)
 						{
-							if (TA3D_SHIFT_PRESSED)
+							if (isShiftKeyDown())
 								units.unit[i].add_mission(MISSION_RECLAIM, &cur_pos, false, idx, NULL);
 							else
 								units.unit[i].set_mission(MISSION_RECLAIM, &cur_pos, false, idx, true, NULL);
@@ -800,23 +800,23 @@ namespace TA3D
 						units.unit[i].unlock();
 					}
 				}
-				if (!TA3D_SHIFT_PRESSED)
+				if (!isShiftKeyDown())
 					current_order = SIGNAL_ORDER_NONE;
 				click_activated = true;
 			}
 
 			if (cursor_type == CURSOR_UNLOAD && !rope_selection && click_activation && (!IsOnGUI || IsOnMinimap) && !order_removed) // The cursor orders to unload units
 			{
-				units.give_order_unload(players.local_human_id, cursorOnMap(cam, *map, IsOnMinimap), !TA3D_SHIFT_PRESSED);
-				if (!TA3D_SHIFT_PRESSED)
+				units.give_order_unload(players.local_human_id, cursorOnMap(cam, *map, IsOnMinimap), !isShiftKeyDown());
+				if (!isShiftKeyDown())
 					current_order = SIGNAL_ORDER_NONE;
 				click_activated = true;
 			}
 
 			if (cursor_type == CURSOR_MOVE && !rope_selection && click_activation && (!IsOnGUI || IsOnMinimap) && !order_removed) // The cursor orders to move
 			{
-				units.give_order_move(players.local_human_id, cursorOnMap(cam, *map, IsOnMinimap), !TA3D_SHIFT_PRESSED);
-				if (!TA3D_SHIFT_PRESSED)
+				units.give_order_move(players.local_human_id, cursorOnMap(cam, *map, IsOnMinimap), !isShiftKeyDown());
+				if (!isShiftKeyDown())
 					current_order = SIGNAL_ORDER_NONE;
 				click_activated = true;
 			}
@@ -824,8 +824,8 @@ namespace TA3D
 			// The cursor orders to patrol
 			if (cursor_type == CURSOR_PATROL && !rope_selection && click_activation && (!IsOnGUI || IsOnMinimap) && !order_removed)
 			{
-				units.give_order_patrol(players.local_human_id, cursorOnMap(cam, *map, IsOnMinimap), !TA3D_SHIFT_PRESSED);
-				if (!TA3D_SHIFT_PRESSED)
+				units.give_order_patrol(players.local_human_id, cursorOnMap(cam, *map, IsOnMinimap), !isShiftKeyDown());
+				if (!isShiftKeyDown())
 					current_order = SIGNAL_ORDER_NONE;
 				click_activated = true;
 			}
@@ -862,13 +862,13 @@ namespace TA3D
 
 					if (can_be_there)
 					{
-						units.give_order_build(players.local_human_id, build, target, !(TA3D_SHIFT_PRESSED || c != 0));
+						units.give_order_build(players.local_human_id, build, target, !(isShiftKeyDown() || c != 0));
 						build_order_given = true;
 					}
 				}
 				if (build_order_given)
 				{
-					if (!TA3D_SHIFT_PRESSED)
+					if (!isShiftKeyDown())
 						build = -1;
 					sound_manager->playTDFSound("OKTOBUILD", "sound", NULL);
 				}
@@ -887,13 +887,13 @@ namespace TA3D
 				}
 			}
 
-			if (!TA3D_SHIFT_PRESSED && build_order_given)
+			if (!isShiftKeyDown() && build_order_given)
 				build = -1;
 
 			if (build == -1)
 				build_order_given = false;
 
-			if (didMouseButtonGoUp(LeftMouseButton) && !TA3D_SHIFT_PRESSED && (!IsOnGUI || IsOnMinimap))
+			if (didMouseButtonGoUp(LeftMouseButton) && !isShiftKeyDown() && (!IsOnGUI || IsOnMinimap))
 				current_order = SIGNAL_ORDER_NONE;
 
 			//---------------------------------	Code de sÃ©lection d'unitÃ©s
@@ -940,7 +940,7 @@ namespace TA3D
 						if (cursor_type == CURSOR_DEFAULT || cursor_type == CURSOR_CROSS)
 						{
 							int pointing = IsOnMinimap ? units.pick_minimap() : units.pick(cam); // Select a unit from a single click
-							if (!TA3D_SHIFT_PRESSED)
+							if (!isShiftKeyDown())
 							{
 								for (unsigned int e = 0; e < units.index_list_size; ++e)
 								{
@@ -1051,7 +1051,7 @@ namespace TA3D
 			}
 
 			// Select CTRL_* category units
-			if (TA3D_CTRL_PRESSED && (isKeyDown(KEY_C) || isKeyDown(KEY_F) || isKeyDown(KEY_V) || isKeyDown(KEY_B)))
+			if (isControlKeyDown() && (isKeyDown(KEY_C) || isKeyDown(KEY_F) || isKeyDown(KEY_V) || isKeyDown(KEY_B)))
 			{
 				String check_cat = "CTRL_";
 				if (isKeyDown(KEY_C))
@@ -1080,7 +1080,7 @@ namespace TA3D
 							units.unit[i].isSelected = true;
 						else
 						{
-							if (!TA3D_SHIFT_PRESSED)
+							if (!isShiftKeyDown())
 								units.unit[i].isSelected = false;
 						}
 					}
@@ -1103,7 +1103,7 @@ namespace TA3D
 						track_mode = cur_sel_index;
 				}
 			}
-			else if (TA3D_CTRL_PRESSED && isKeyDown(KEY_Z)) // Sélectionne toutes les unités dont le type est déjà sélectionné / Select units of the same type
+			else if (isControlKeyDown() && isKeyDown(KEY_Z)) // Sélectionne toutes les unités dont le type est déjà sélectionné / Select units of the same type
 			{
 				std::vector<bool> sel_type;
 				sel_type.resize(unit_manager.nb_unit);
@@ -1139,7 +1139,7 @@ namespace TA3D
 			}
 			else
 			{
-				if (TA3D_CTRL_PRESSED && isKeyDown(KEY_A)) // Select all the player's units
+				if (isControlKeyDown() && isKeyDown(KEY_A)) // Select all the player's units
 				{
 					for (unsigned int e = 0; e < units.index_list_size; ++e)
 					{
@@ -1165,7 +1165,7 @@ namespace TA3D
 				}
 				else
 				{
-					if (TA3D_CTRL_PRESSED) // Formation de groupes d'unitÃ©s
+					if (isControlKeyDown()) // Formation de groupes d'unitÃ©s
 					{
 						int grpe = -1;
 						if (isKeyDown(KEY_0))
@@ -1199,7 +1199,7 @@ namespace TA3D
 								{
 									if (units.unit[i].isSelected)
 										setFlag(units.unit[i].groupe, grpe);
-									else if (!TA3D_SHIFT_PRESSED)
+									else if (!isShiftKeyDown())
 										unsetFlag(units.unit[i].groupe, grpe);
 								}
 							}
@@ -1242,7 +1242,7 @@ namespace TA3D
 									{
 										if (units.unit[i].groupe & grpe)
 											units.unit[i].isSelected = true;
-										else if (!TA3D_SHIFT_PRESSED)
+										else if (!isShiftKeyDown())
 											units.unit[i].isSelected = false;
 									}
 								}
@@ -1476,7 +1476,7 @@ namespace TA3D
 			{
 				if (didMouseButtonGoDown(LeftMouseButton))
 				{
-					if (TA3D_SHIFT_PRESSED)
+					if (isShiftKeyDown())
 						units.unit[cur_sel_index].planned_weapons += 5.0f;
 					else
 						units.unit[cur_sel_index].planned_weapons += 1.0f;
@@ -1485,7 +1485,7 @@ namespace TA3D
 				{
 					if (didMouseButtonGoDown(RightMouseButton))
 					{
-						units.unit[cur_sel_index].planned_weapons -= (TA3D_SHIFT_PRESSED) ? 5.0f : 1.0f;
+						units.unit[cur_sel_index].planned_weapons -= (isShiftKeyDown()) ? 5.0f : 1.0f;
 						if (units.unit[cur_sel_index].planned_weapons < 0.0f)
 							units.unit[cur_sel_index].planned_weapons = 0.0f;
 					}
@@ -2018,7 +2018,7 @@ namespace TA3D
 				MissionStack::iterator cur = units.unit[cur_sel_index].mission.begin();
 				MissionStack::iterator end = units.unit[cur_sel_index].mission.end();
 				int nb(1);
-				if (TA3D_SHIFT_PRESSED)
+				if (isShiftKeyDown())
 					nb = 5;
 				if (cur != end)
 					++cur;
@@ -2069,7 +2069,7 @@ namespace TA3D
 				sound_manager->playTDFSound("ADDBUILD", "sound", NULL);
 				if (!unit_manager.unit_type[cur_sel]->BMcode) // if it is a building
 				{
-					if (TA3D_SHIFT_PRESSED)
+					if (isShiftKeyDown())
 						for (int i = 0; i < 5; ++i)
 							units.give_order_build(players.local_human_id, build, units.unit[cur_sel_index].Pos, false);
 					else

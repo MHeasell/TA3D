@@ -1084,8 +1084,8 @@ namespace TA3D
 						object->shortcut_key >= 0
 						&& object->shortcut_key <= 255
 						&& lp_CONFIG->enable_shortcuts
-						&& !TA3D_CTRL_PRESSED
-						&& !TA3D_SHIFT_PRESSED
+						&& !isControlKeyDown()
+						&& !isShiftKeyDown()
 						&& !Console::Instance()->activated()
 						&& isAsciiCharacterKeyDown((byte)object->shortcut_key))
 					{
