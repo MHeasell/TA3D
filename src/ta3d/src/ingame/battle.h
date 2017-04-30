@@ -500,6 +500,8 @@ namespace TA3D
 		 * Converts a normalized minimap position to a world-space position.
 		 */
 		Vector2D minimapToWorldCoordinates(const Vector2D& coordinates) const;
+
+		void setCameraFixedMode();
 	}; // class Battle
 
 } // namespace TA3D

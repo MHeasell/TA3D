@@ -230,8 +230,7 @@ namespace TA3D
 			{
 				if (!units.unit[unitBeingTracked].isAlive()) // Leave tracking mode
 				{
-					unitBeingTracked = -1;
-					cam_has_target = false;
+					setCameraFixedMode();
 				}
 				else
 				{
@@ -2312,6 +2311,12 @@ namespace TA3D
 			Menus::Statistics::Execute();
 
 		return pResult;
+	}
+
+	void Battle::setCameraFixedMode()
+	{
+		unitBeingTracked = -1;
+		cam_has_target = false;
 	}
 
 	void Battle::decreaseGameSpeed()
