@@ -367,7 +367,7 @@ namespace TA3D
 				unit[*e].unlock();
 				continue; // Si l'unité n'existe pas on la zappe
 			}
-			if ((unit[*e].flags & 0x2) == 0x2) // Si l'unité existe et est sélectionnable
+			if ((unit[*e].flags & 0x2) == 0x2) // If the unit exists and is selectable
 			{
 				unit[*e].flags &= 0xFD;
 				Vector3D D;
