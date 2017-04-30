@@ -252,27 +252,21 @@ namespace TA3D
 					unitBeingTracked = unitBeingTracked == cur_sel_index ? -1 : cur_sel_index;
 				last_time_activated_track_mode = true;
 			}
-			else
+			else if (isKeyDown(KEY_T) && !Console::Instance()->activated())
 			{
-				if (isKeyDown(KEY_T) && !Console::Instance()->activated())
-				{
-					unitBeingTracked = -1;
-					cam_has_target = false;
-				}
-				else
-					last_time_activated_track_mode = false;
+				unitBeingTracked = -1;
+				cam_has_target = false;
 			}
+			else
+				last_time_activated_track_mode = false;
 
 			if (isKeyDown(KEY_F1) && units.last_on >= 0 && units.unit[units.last_on].type_id >= 0)
 			{
 				unit_info_id = units.unit[units.last_on].type_id;
 			}
-			else
+			else if (isKeyDown(KEY_F1) && cur_sel >= 0)
 			{
-				if (isKeyDown(KEY_F1) && cur_sel >= 0)
-				{
-					unit_info_id = cur_sel;
-				}
+				unit_info_id = cur_sel;
 			}
 
 			// if the user clicks on the minimap,
