@@ -388,7 +388,7 @@ namespace TA3D
 				int pointing = 0;
 				if (!IsOnGUI)
 				{
-					pointing = units.pick(cam); // Sur quoi le curseur est-il pointÃ©??
+					pointing = units.pick(cam); // Where is the cursor pointed?
 					if (pointing == -1)			// Is the cursor on a rock, tree, ...?
 					{
 						Vector3D cur_pos(cursorOnMap(cam, *map, IsOnMinimap));
