@@ -134,19 +134,6 @@ namespace TA3D
 		return 0;
 	}
 
-	int CAPI::makeposter(lua_State* L)
-	{
-		int w = gfx->width;
-		int h = gfx->height;
-		if (lua_gettop(L) >= 2)
-		{
-			w = (int)lua_tointeger(L, 1);
-			h = (int)lua_tointeger(L, 2);
-		}
-		Battle::Instance()->makePoster(w, h);
-		return 0;
-	}
-
 	int CAPI::setShowMissionInfo(lua_State* L)
 	{
 		if (lua_gettop(L) > 0)
@@ -716,7 +703,6 @@ namespace TA3D
 		CAPI_REGISTER(setGrabInputs);
 		CAPI_REGISTER(setVideoShoot);
 		CAPI_REGISTER(screenshot);
-		CAPI_REGISTER(makeposter);
 		CAPI_REGISTER(setShowMissionInfo);
 		CAPI_REGISTER(setViewDebug);
 		CAPI_REGISTER(setAIDebug);

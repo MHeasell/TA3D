@@ -179,7 +179,6 @@ namespace TA3D
 		void renderWorld();
 		void renderInfo();
 		void renderPostEffects();
-		void makePoster(int w, int h);
 		//@}
 
 		//! \name Evens in Game
