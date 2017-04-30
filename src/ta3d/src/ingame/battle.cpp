@@ -241,24 +241,12 @@ namespace TA3D
 				}
 			}
 			else
-				unitBeingTracked = -1;
+				setCameraFixedMode();
 
-			if (unitBeingTracked >= 0 && (cur_sel_index < 0 || cur_sel_index >= (int)units.max_unit || unitBeingTracked != cur_sel_index))
-				unitBeingTracked = -1;
-
-			if (isKeyDown(KEY_T) && !Console::Instance()->activated() && cur_sel_index >= 0 && cur_sel_index < (int)units.max_unit)
+			if (!Console::Instance()->activated() && didKeyGoDown(KEY_T))
 			{
-				if (!last_time_activated_track_mode)
-					unitBeingTracked = unitBeingTracked == cur_sel_index ? -1 : cur_sel_index;
-				last_time_activated_track_mode = true;
+				toggleCameraTrackingMode();
 			}
-			else if (isKeyDown(KEY_T) && !Console::Instance()->activated())
-			{
-				unitBeingTracked = -1;
-				cam_has_target = false;
-			}
-			else
-				last_time_activated_track_mode = false;
 
 			if (isKeyDown(KEY_F1) && units.last_on >= 0 && units.unit[units.last_on].type_id >= 0)
 			{
@@ -2307,10 +2295,16 @@ namespace TA3D
 		return pResult;
 	}
 
-	void Battle::setCameraFixedMode()
+	void Battle::toggleCameraTrackingMode()
 	{
-		unitBeingTracked = -1;
-		cam_has_target = false;
+		if (cur_sel_index >= 0 && cur_sel_index < (int)units.max_unit)
+		{
+			setCameraTrackingMode(cur_sel_index);
+		}
+		else
+		{
+			setCameraFixedMode();
+		}
 	}
 
 	void Battle::decreaseGameSpeed()

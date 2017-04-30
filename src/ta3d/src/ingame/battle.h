@@ -299,8 +299,6 @@ namespace TA3D
 		 * If no unit is currently being tracked, this value is -1.
 		 */
 		int unitBeingTracked;
-		//!
-		bool last_time_activated_track_mode;
 
 		//! Indicates whether unit health bars should be shown on the screen
 		bool showHealthBars;
@@ -502,6 +500,10 @@ namespace TA3D
 		Vector2D minimapToWorldCoordinates(const Vector2D& coordinates) const;
 
 		void setCameraFixedMode();
+
+		void setCameraTrackingMode(int unitId);
+
+		void toggleCameraTrackingMode();
 	}; // class Battle
 
 } // namespace TA3D

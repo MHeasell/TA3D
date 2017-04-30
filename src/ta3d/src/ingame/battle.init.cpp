@@ -520,7 +520,6 @@ namespace TA3D
 		cam_has_target = false;
 		cam_def_timer = MILLISECONDS_SINCE_INIT; // Just to see if the cam has been long enough at the default angle
 		unitBeingTracked = -1;			// Tracking a unit ? negative value => no
-		last_time_activated_track_mode = false;
 		Camera::inGame = &cam;
 
 		cam.rpos.x = cam.rpos.y = cam.rpos.z = 0.f;

@@ -166,6 +166,17 @@ namespace TA3D
 		unitBeingTracked = -1;
 	}
 
+	void Battle::setCameraFixedMode()
+	{
+		unitBeingTracked = -1;
+		cam_has_target = false;
+	}
+
+	void Battle::setCameraTrackingMode(int unitId)
+	{
+		unitBeingTracked = unitId;
+	}
+
 	Vector2D Battle::screenToMinimapCoordinates(const Vector2D& coordinates) const
 	{
 		float minimapWidthFactor = 252.0f / map->mini_w;
