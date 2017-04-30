@@ -274,7 +274,7 @@ namespace TA3D
 	}
 
 	GFX::GFX()
-		: width(0), height(0), x(0), y(0), normal_font(NULL), small_font(NULL), TA_font(NULL), ta3d_gui_font(NULL), big_font(NULL), SCREEN_W_HALF(0), SCREEN_H_HALF(0), SCREEN_W_INV(0.), SCREEN_H_INV(0.), SCREEN_W_TO_640(0.), SCREEN_H_TO_480(0.), textureFBO(0), textureDepth(0), textureColor(0), ati_workaround(false), max_tex_size(0), default_texture(0), alpha_blending_set(false), texture_format(0), build_mipmaps(false), defaultRGBTextureFormat(GL_RGB8), defaultRGBATextureFormat(GL_RGBA8)
+		: width(0), height(0), normal_font(NULL), small_font(NULL), TA_font(NULL), ta3d_gui_font(NULL), big_font(NULL), SCREEN_W_HALF(0), SCREEN_H_HALF(0), SCREEN_W_INV(0.), SCREEN_H_INV(0.), SCREEN_W_TO_640(0.), SCREEN_H_TO_480(0.), textureFBO(0), textureDepth(0), textureColor(0), ati_workaround(false), max_tex_size(0), default_texture(0), alpha_blending_set(false), texture_format(0), build_mipmaps(false), defaultRGBTextureFormat(GL_RGB8), defaultRGBATextureFormat(GL_RGBA8)
 	{
 		// Initialize the GFX Engine
 		if (lp_CONFIG->first_start)

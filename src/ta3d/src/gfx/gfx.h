@@ -231,7 +231,6 @@ namespace TA3D
 	public:
 		int width; // Size of this window on the screen
 		int height;
-		int x, y;		   // Position on the screen
 		Font* normal_font; // Fonts
 		Font* small_font;
 		Font* TA_font;
