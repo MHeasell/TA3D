@@ -216,12 +216,6 @@ namespace TA3D
 		return 1;
 	}
 
-	int CAPI::shake(lua_State*)
-	{
-		Battle::Instance()->cam.setShake(1.0f, 32.0f);
-		return 0;
-	}
-
 	int CAPI::setFpsLimit(lua_State* L)
 	{
 		if (lua_gettop(L) > 0)
@@ -732,7 +726,6 @@ namespace TA3D
 		CAPI_REGISTER(setWireframe);
 		CAPI_REGISTER(scriptDumpDebugInfo);
 		CAPI_REGISTER(setShowModel);
-		CAPI_REGISTER(shake);
 		CAPI_REGISTER(setFpsLimit);
 		CAPI_REGISTER(spawn);
 		CAPI_REGISTER(setTimeFactor);

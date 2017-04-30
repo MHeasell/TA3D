@@ -542,8 +542,6 @@ namespace TA3D
 			if (hit)
 			{
 				Pos = hit_vec;
-				if (visible)
-					Camera::inGame->setShake(weapon_def->shakeduration, weapon_def->shakemagnitude);
 			}
 			if (Math::AlmostEquals(Pos.y, the_map->sealvl))
 			{

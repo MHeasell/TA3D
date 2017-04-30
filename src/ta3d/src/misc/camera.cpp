@@ -36,9 +36,6 @@ namespace TA3D
 		pos.y = 0.0f;
 		pos.z = 30.0f;
 
-		shakeVector.reset();
-		shakeMagnitude = 0.0f;
-		shakeDuration = 0.0f;
 		rpos = pos;
 		dir = up = pos;
 		dir.z = -1.0f; // direction
@@ -61,68 +58,6 @@ namespace TA3D
 		side = dir * up;
 	}
 
-	void Camera::setShake(const float duration, float magnitude)
-	{
-		magnitude *= 0.1f;
-		if (shakeDuration <= 0.0f || magnitude >= shakeMagnitude)
-		{
-			shakeDuration = duration;
-			shakeMagnitude = magnitude;
-		}
-	}
-
-	void Camera::updateShake(const float dt)
-	{
-		if (shakeDuration > 0.0f)
-		{
-			shakeDuration -= dt;
-			float dt_step = 0.03f;
-			for (float c_dt = 0.0f; c_dt < dt; c_dt += dt_step)
-			{
-				float rdt = Math::Min(dt_step, dt - c_dt);
-				Vector3D rand_vec(float((TA3D_RAND() % 2001) - 1000) * 0.001f * shakeMagnitude,
-					float((TA3D_RAND() % 2001) - 1000) * 0.001f * shakeMagnitude,
-					float((TA3D_RAND() % 2001) - 1000) * 0.001f * shakeMagnitude);
-				shakeVector += -rdt * 10.0f * shakeVector;
-				shakeVector += rand_vec;
-				if (shakeVector.x < -20.0f)
-					shakeVector.x = -20.0f;
-				else if (shakeVector.x > 20.0f)
-					shakeVector.x = 20.0f;
-				if (shakeVector.y < -20.0f)
-					shakeVector.y = -20.0f;
-				else if (shakeVector.y > 20.0f)
-					shakeVector.y = 20.0f;
-				if (shakeVector.z < -20.0f)
-					shakeVector.z = -20.0f;
-				else if (shakeVector.z > 20.0f)
-					shakeVector.z = 20.0f;
-			}
-		}
-		else
-		{
-			float dt_step = 0.03f;
-			for (float c_dt = 0.0f; c_dt < dt; c_dt += dt_step)
-			{
-				float rdt = Math::Min(dt_step, dt - c_dt);
-				shakeVector += -rdt * 10.0f * shakeVector;
-
-				if (shakeVector.x < -20.0f)
-					shakeVector.x = -20.0f;
-				else if (shakeVector.x > 20.0f)
-					shakeVector.x = 20.0f;
-				if (shakeVector.y < -20.0f)
-					shakeVector.y = -20.0f;
-				else if (shakeVector.y > 20.0f)
-					shakeVector.y = 20.0f;
-				if (shakeVector.z < -20.0f)
-					shakeVector.z = -20.0f;
-				else if (shakeVector.z > 20.0f)
-					shakeVector.z = 20.0f;
-			}
-		}
-	}
-
 	void Camera::setView(bool classic)
 	{
 		zfar2 = zfar * zfar;
@@ -143,8 +78,7 @@ namespace TA3D
 		pos = rpos;
 		Vector3D FP(pos);
 		FP += dir;
-		FP += shakeVector;
-		gluLookAt(pos.x + shakeVector.x, pos.y + shakeVector.y, pos.z + shakeVector.z,
+		gluLookAt(pos.x, pos.y, pos.z,
 			FP.x, FP.y, FP.z,
 			up.x, up.y, up.z);
 
@@ -164,8 +98,8 @@ namespace TA3D
 			gfx->height), 0.5f * zoomFactor * float(
 			gfx->height), -512.0f, zfar);
 
-		const Vector3D FP(rpos + dir + shakeVector);
-		gluLookAt(pos.x + shakeVector.x, pos.y + shakeVector.y, pos.z + shakeVector.z,
+		const Vector3D FP(rpos + dir);
+		gluLookAt(pos.x, pos.y, pos.z,
 			FP.x, FP.y, FP.z,
 			up.x, up.y, up.z);
 

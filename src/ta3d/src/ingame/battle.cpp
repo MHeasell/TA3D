@@ -313,7 +313,6 @@ namespace TA3D
 			Matrix Rotation = RotateX(r1 * DEG2RAD) * RotateY(r2 * DEG2RAD) * RotateZ(r3 * DEG2RAD);
 
 			cam.setMatrix(Rotation);
-			cam.updateShake(deltaTime);
 
 			if (!selected)
 				current_order = SIGNAL_ORDER_NONE;

@@ -33,10 +33,6 @@ namespace TA3D
 	public:
 		Camera();
 
-		void setShake(const float duration, float magnitude);
-
-		void updateShake(const float dt);
-
 		/*!
 		** \brief Set the matrix
 		*/
@@ -83,10 +79,6 @@ namespace TA3D
 
 		//! Square of the maximum distance
 		float zfar2;
-
-		float shakeMagnitude;
-		float shakeDuration;
-		Vector3D shakeVector;
 
 		float zoomFactor;
 	}; // class Camera
