@@ -36,9 +36,6 @@ namespace TA3D
 		pos.y = 0.0f;
 		pos.z = 30.0f;
 
-		// Factor
-		widthFactor = 1.0f;
-
 		shakeVector.reset();
 		shakeMagnitude = 0.0f;
 		shakeDuration = 0.0f;
@@ -51,12 +48,6 @@ namespace TA3D
 		side = dir * up;
 		zfar2 = zfar * zfar;
 		zoomFactor = 0.5f;
-	}
-
-	void Camera::setWidthFactor(const int w, const int h)
-	{
-		// 1280x1024 is a 4/3 mode
-		widthFactor = (w * 4 == h * 5) ? (1.0f) : (float(w) * 0.75f / float(h));
 	}
 
 	void Camera::setMatrix(const Matrix& v)

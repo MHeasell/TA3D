@@ -519,7 +519,6 @@ namespace TA3D
 		cam.rpos.z += 150.0f;
 		cam.rpos.y = lp_CONFIG->camera_def_h;
 		cam.zfar = 500.0f;
-		cam.setWidthFactor(gfx->width, gfx->height);
 
 		r1 = -lp_CONFIG->camera_def_angle - 0.00001f;
 

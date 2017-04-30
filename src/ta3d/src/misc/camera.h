@@ -33,13 +33,6 @@ namespace TA3D
 	public:
 		Camera();
 
-		/*!
-		** \brief Set the width ratio from the screen resolution
-		** \param w Width of the screen
-		** \param h Height of the screen
-		*/
-		void setWidthFactor(const int w, const int h);
-
 		void setShake(const float duration, float magnitude);
 
 		void updateShake(const float dt);
@@ -96,10 +89,6 @@ namespace TA3D
 		Vector3D shakeVector;
 
 		float zoomFactor;
-
-		//! To support wide screen modes correctly
-		float widthFactor;
-
 	}; // class Camera
 
 } // namespace TA3D
