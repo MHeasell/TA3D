@@ -31,13 +31,6 @@ namespace TA3D
 		return map.hit(cur_pos, cam.dir, true, 2000000000.0f, true);
 	}
 
-	void Battle::updateZFAR()
-	{
-		cam.zfar = 600.0f + Math::Max((cam_h - 150.0f) * 2.0f, 0.0f);
-		// Set View
-		cam.setView();
-	}
-
 	void Battle::showGameStatus()
 	{
 		Gui::WND::Ptr statuswnd = pArea.get_wnd("gamestatus");
@@ -100,22 +93,22 @@ namespace TA3D
 
 	void Battle::nudgeCameraLeft()
 	{
-		cam.rpos.x -= SCROLL_SPEED * deltaTime * cam_h / 151.0f;
+		cam.rpos.x -= SCROLL_SPEED * deltaTime;
 	}
 
 	void Battle::nudgeCameraRight()
 	{
-		cam.rpos.x += SCROLL_SPEED * deltaTime * cam_h / 151.0f;
+		cam.rpos.x += SCROLL_SPEED * deltaTime;
 	}
 
 	void Battle::nudgeCameraDown()
 	{
-		cam.rpos.z += SCROLL_SPEED * deltaTime * cam_h / 151.0f;
+		cam.rpos.z += SCROLL_SPEED * deltaTime;
 	}
 
 	void Battle::nudgeCameraUp()
 	{
-		cam.rpos.z -= SCROLL_SPEED * deltaTime * cam_h / 151.0f;
+		cam.rpos.z -= SCROLL_SPEED * deltaTime;
 	}
 
 	void Battle::putCameraAt(const Vector2D& position)

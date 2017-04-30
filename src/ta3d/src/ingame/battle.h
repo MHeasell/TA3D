@@ -31,7 +31,7 @@
 #include "fps.h"
 
 #ifndef SCROLL_SPEED
-#define SCROLL_SPEED 400.0f
+#define SCROLL_SPEED 500.0f
 #endif
 
 namespace TA3D
@@ -94,11 +94,6 @@ namespace TA3D
 		** To avoid multiple and expensive string manipulations
 		*/
 		void updateCurrentGUICacheNames();
-
-		/*!
-		** \brief update camera zfar parameter
-		*/
-		void updateZFAR();
 
 		//! \name Preparing all data about a battle
 		//@{
@@ -354,8 +349,6 @@ namespace TA3D
 		bool build_order_given;
 		//!
 		int cur_sel_index;
-		//!
-		float cam_h;
 
 		//! Elapsed time since the last frame in (fractional) seconds.
 		float deltaTime;

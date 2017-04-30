@@ -556,7 +556,6 @@ namespace TA3D
 		build = -1;
 		build_order_given = false;
 		cur_sel_index = -1;
-		cam_h = lp_CONFIG->camera_def_h;
 
 		speed_limit = lp_CONFIG->fps_limit;
 		delayBetweenFrames = (speed_limit < 1.0f) ? 0.0f : (1.0f / speed_limit);

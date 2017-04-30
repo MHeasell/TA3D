@@ -284,15 +284,6 @@ namespace TA3D
 				}
 			}
 
-			float h = map->get_unit_h(cam.rpos.x, cam.rpos.z);
-			if (h < map->sealvl)
-				h = map->sealvl;
-			for (int i = 0; i < 20; ++i) // Increase precision
-			{
-				for (float T = 0.0f; T < deltaTime; T += 0.1f)
-					cam.rpos.y += (h + cam_h - cam.rpos.y) * Math::Min(deltaTime - T, 0.1f);
-			}
-
 			if (cam.rpos.x < -map->map_w_d)
 			{
 				cam.rpos.x = (float)-map->map_w_d;

@@ -29,10 +29,6 @@ namespace TA3D
 
 	void Battle::initRenderer()
 	{
-		cam_h = cam.rpos.y - map->get_unit_h(cam.rpos.x, cam.rpos.z);
-
-		updateZFAR();
-
 		gfx->SetDefState();
 
 		render_time = ((float)units.current_tick) / TICKS_PER_SEC;
@@ -69,8 +65,6 @@ namespace TA3D
 
 		cam.setView();
 
-		cam.zfar *= 100.0f;
-		cam.setView();
 		glColor4ub(0xFF, 0xFF, 0xFF, 0xFF);
 		glEnable(GL_TEXTURE_2D);
 		glDisable(GL_BLEND);
@@ -80,7 +74,6 @@ namespace TA3D
 		glDepthMask(GL_TRUE);
 		glEnable(GL_CULL_FACE);
 		glEnable(GL_LIGHTING);
-		updateZFAR();
 
 		if (lp_CONFIG->wireframe)
 			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
