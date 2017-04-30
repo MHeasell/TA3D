@@ -486,6 +486,8 @@ namespace TA3D
 
 		void putCameraAt(float x, float y);
 
+		void putCameraAt(const Vector2D& position);
+
 		/**
 		 * Converts a screen-space position to a normalized minimap position.
 		 * The input coordinates are expected to be in terms of screen pixels.
@@ -493,6 +495,11 @@ namespace TA3D
 		 * where 0 is the top-left corner.
 		 */
 		Vector2D screenToMinimapCoordinates(const Vector2D& coordinates) const;
+
+		/**
+		 * Converts a normalized minimap position to a world-space position.
+		 */
+		Vector2D minimapToWorldCoordinates(const Vector2D& coordinates) const;
 	}; // class Battle
 
 } // namespace TA3D

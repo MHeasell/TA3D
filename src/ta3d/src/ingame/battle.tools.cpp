@@ -153,6 +153,11 @@ namespace TA3D
 		unitBeingTracked = -1;
 	}
 
+	void Battle::putCameraAt(const Vector2D& position)
+	{
+		putCameraAt(position.x, position.y);
+	}
+
 	void Battle::putCameraAt(float x, float z)
 	{
 		cam.rpos.x = x;
@@ -168,6 +173,14 @@ namespace TA3D
 		return Vector2D(
 			(coordinates.x / 128.0f) * minimapWidthFactor,
 			(coordinates.y / 128.0f) * minimapHeightFactor);
+	}
+
+	Vector2D Battle::minimapToWorldCoordinates(const Vector2D& coordinates) const
+	{
+		return Vector2D(
+			(coordinates.x - 0.5f) * map->map_w,
+			(coordinates.y - 0.5f) * map->map_h
+		);
 	}
 
 	void Battle::handleGameStatusEvents()

@@ -283,10 +283,8 @@ namespace TA3D
 					|| (isMouseButtonDown(LeftMouseButton) && lp_CONFIG->right_click_interface)))
 			{
 				Vector2D minimapCoordinates = screenToMinimapCoordinates(Vector2D(mouse_x, mouse_y));
-				putCameraAt(
-					(minimapCoordinates.x - 0.5f) * map->map_w,
-					(minimapCoordinates.y - 0.5f) * map->map_h
-				);
+				Vector2D worldCoordinates = minimapToWorldCoordinates(minimapCoordinates);
+				putCameraAt(worldCoordinates);
 			}
 
 			// nudge the camera in the appropriate direction
