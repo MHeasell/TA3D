@@ -283,11 +283,6 @@ namespace TA3D
 		bool escMenuWasVisible;
 		//! Just to see if the cam has been long enough at the default angle
 		int cam_def_timer;
-		/**
-		 * The unit ID of the unit currently being tracked by the camera.
-		 * If no unit is currently being tracked, this value is -1.
-		 */
-		int unitBeingTracked;
 
 		//! Indicates whether unit health bars should be shown on the screen
 		bool showHealthBars;
@@ -507,27 +502,6 @@ namespace TA3D
 		 * Converts a normalized minimap position to a world-space position.
 		 */
 		Vector2D minimapToWorldCoordinates(const Vector2D& coordinates) const;
-
-		/**
-		 * Sets the camera to fixed mode.
-		 * In fixed mode, the camera stays still at the current location
-		 * (unless the user moves it)
-		 */
-		void setCameraFixedMode();
-
-		/**
-		 * Set the camera to tracking mode.
-		 * In tracking mode, the camera tracks the position of a unit.
-		 */
-		void setCameraTrackingMode(int unitId);
-
-		/**
-		 * Toggles the camera between fixed mode and tracking mode.
-		 * If a unit is selected, we will start tracking that unit.
-		 * Otherwise, we will set the camera back to fixed mode.
-		 * Triggered by the user when they press the tracking button.
-		 */
-		void toggleCameraTrackingMode();
 	}; // class Battle
 
 } // namespace TA3D

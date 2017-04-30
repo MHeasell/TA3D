@@ -224,28 +224,6 @@ namespace TA3D
 				}
 			}
 
-			if (unitBeingTracked >= 0 && unitBeingTracked <= (int)units.max_unit)
-			{
-				if (!units.unit[unitBeingTracked].isAlive()) // Leave tracking mode
-				{
-					setCameraFixedMode();
-				}
-				else
-				{
-					cam_has_target = true;
-					cam_target = units.unit[unitBeingTracked].Pos;
-					cam_target_mx = gfx->SCREEN_W_HALF;
-					cam_target_my = gfx->SCREEN_H_HALF;
-				}
-			}
-			else
-				setCameraFixedMode();
-
-			if (!Console::Instance()->activated() && didKeyGoDown(KEY_T))
-			{
-				toggleCameraTrackingMode();
-			}
-
 			if (isKeyDown(KEY_F1) && units.last_on >= 0 && units.unit[units.last_on].type_id >= 0)
 			{
 				unit_info_id = units.unit[units.last_on].type_id;
@@ -318,19 +296,16 @@ namespace TA3D
 			if (cam.rpos.x < -map->map_w_d)
 			{
 				cam.rpos.x = (float)-map->map_w_d;
-				cam_has_target = false;
 			}
 			if (cam.rpos.x > map->map_w_d)
 			{
 				cam.rpos.x = (float)map->map_w_d;
-				cam_has_target = false;
 			}
 			if (cam.rpos.z < (float)-map->map_h_d + 200.0f)
 			{
 				cam.rpos.z = (float)-map->map_h_d + 200.0f;
-				cam_has_target = false;
 			}
-			if (cam.rpos.z > map->map_h_d && !cam_has_target)
+			if (cam.rpos.z > map->map_h_d)
 				cam.rpos.z = (float)map->map_h_d;
 			if (cam.rpos.z > (float)map->map_h_d + 200.0f)
 				cam.rpos.z = (float)map->map_h_d + 200.0f;
@@ -339,26 +314,6 @@ namespace TA3D
 
 			cam.setMatrix(Rotation);
 			cam.updateShake(deltaTime);
-
-			if (cam_has_target)
-			{
-				Vector3D cur_dir = cam.dir;
-				Vector3D m_pos = cam.pos + cam.zoomFactor * (float(cam_target_mx - gfx->SCREEN_W_HALF) * cam.side - float(cam_target_my - gfx->SCREEN_H_HALF) * cam.up) + cam.znear * cam.dir;
-
-				cur_dir.normalize(); // Direction pointed by the cursor
-				Vector3D moving_target(cam_target - m_pos);
-				moving_target = moving_target - (moving_target % cur_dir) * cur_dir;
-
-				const float d = moving_target.lengthSquared();
-				moving_target.y = 0.0f;
-				const float D = moving_target.lengthSquared();
-				if (Math::AlmostZero(D))
-					cam_has_target = false;
-				else
-					moving_target = d / D * moving_target;
-
-				cam.rpos = moving_target + cam.rpos;
-			}
 
 			if (!selected)
 				current_order = SIGNAL_ORDER_NONE;
@@ -1047,8 +1002,6 @@ namespace TA3D
 				{
 					cur_sel_index = cur_sel;
 					cur_sel = units.unit[cur_sel].type_id;
-					if (check_cat == "CTRL_C")
-						unitBeingTracked = cur_sel_index;
 				}
 			}
 			else if (isControlKeyDown() && isKeyDown(KEY_Z)) // Sélectionne toutes les unités dont le type est déjà sélectionné / Select units of the same type
@@ -2308,18 +2261,6 @@ namespace TA3D
 			Menus::Statistics::Execute();
 
 		return pResult;
-	}
-
-	void Battle::toggleCameraTrackingMode()
-	{
-		if (cur_sel_index >= 0 && cur_sel_index < (int)units.max_unit)
-		{
-			setCameraTrackingMode(cur_sel_index);
-		}
-		else
-		{
-			setCameraFixedMode();
-		}
 	}
 
 	void Battle::decreaseGameSpeed()

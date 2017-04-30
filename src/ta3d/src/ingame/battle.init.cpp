@@ -516,9 +516,7 @@ namespace TA3D
 
 		cam_target_mx = gfx->SCREEN_W_HALF;
 		cam_target_my = gfx->SCREEN_H_HALF;
-		cam_has_target = false;
 		cam_def_timer = MILLISECONDS_SINCE_INIT; // Just to see if the cam has been long enough at the default angle
-		unitBeingTracked = -1;			// Tracking a unit ? negative value => no
 		Camera::inGame = &cam;
 
 		cam.rpos.x = cam.rpos.y = cam.rpos.z = 0.f;

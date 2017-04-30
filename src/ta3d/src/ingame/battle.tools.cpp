@@ -101,29 +101,21 @@ namespace TA3D
 	void Battle::nudgeCameraLeft()
 	{
 		cam.rpos.x -= SCROLL_SPEED * deltaTime * cam_h / 151.0f;
-		cam_has_target = false;
-		unitBeingTracked = -1;
 	}
 
 	void Battle::nudgeCameraRight()
 	{
 		cam.rpos.x += SCROLL_SPEED * deltaTime * cam_h / 151.0f;
-		cam_has_target = false;
-		unitBeingTracked = -1;
 	}
 
 	void Battle::nudgeCameraDown()
 	{
 		cam.rpos.z += SCROLL_SPEED * deltaTime * cam_h / 151.0f;
-		cam_has_target = false;
-		unitBeingTracked = -1;
 	}
 
 	void Battle::nudgeCameraUp()
 	{
 		cam.rpos.z -= SCROLL_SPEED * deltaTime * cam_h / 151.0f;
-		cam_has_target = false;
-		unitBeingTracked = -1;
 	}
 
 	void Battle::putCameraAt(const Vector2D& position)
@@ -135,19 +127,6 @@ namespace TA3D
 	{
 		cam.rpos.x = x;
 		cam.rpos.z = z;
-		cam_has_target = false;
-		unitBeingTracked = -1;
-	}
-
-	void Battle::setCameraFixedMode()
-	{
-		unitBeingTracked = -1;
-		cam_has_target = false;
-	}
-
-	void Battle::setCameraTrackingMode(int unitId)
-	{
-		unitBeingTracked = unitId;
 	}
 
 	Vector2D Battle::screenToMinimapCoordinates(const Vector2D& coordinates) const
