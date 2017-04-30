@@ -213,8 +213,6 @@ namespace TA3D
 		*/
 		void showGameStatus();
 
-		void keyArrowsNotInFreeCam();
-
 	private:
 		//! Results
 		Result pResult;

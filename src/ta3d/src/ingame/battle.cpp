@@ -289,7 +289,24 @@ namespace TA3D
 			}
 
 			if (!Console::Instance()->activated())
-				keyArrowsNotInFreeCam();
+			{
+				if (isKeyDown(KEY_UP))
+				{
+					nudgeCameraUp();
+				}
+				if (isKeyDown(KEY_DOWN))
+				{
+					nudgeCameraDown();
+				}
+				if (isKeyDown(KEY_RIGHT))
+				{
+					nudgeCameraRight();
+				}
+				if (isKeyDown(KEY_LEFT))
+				{
+					nudgeCameraLeft();
+				}
+			}
 
 			float h = map->get_unit_h(cam.rpos.x, cam.rpos.z);
 			if (h < map->sealvl)

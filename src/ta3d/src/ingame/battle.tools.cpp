@@ -105,26 +105,6 @@ namespace TA3D
 			}
 	}
 
-	void Battle::keyArrowsNotInFreeCam()
-	{
-		if (isKeyDown(KEY_UP))
-		{
-			nudgeCameraUp();
-		}
-		if (isKeyDown(KEY_DOWN))
-		{
-			nudgeCameraDown();
-		}
-		if (isKeyDown(KEY_RIGHT))
-		{
-			nudgeCameraRight();
-		}
-		if (isKeyDown(KEY_LEFT))
-		{
-			nudgeCameraLeft();
-		}
-	}
-
 	void Battle::nudgeCameraLeft()
 	{
 		cam.rpos.x -= SCROLL_SPEED * deltaTime * cam_h / 151.0f;
