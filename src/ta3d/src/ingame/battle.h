@@ -474,16 +474,38 @@ namespace TA3D
 		 */
 		void decreaseGameSpeed();
 
+		/**
+		 * Pans the camera up slightly.
+		 * Triggered by the user to move the camera.
+		 */
 		void nudgeCameraUp();
 
+		/**
+		 * Pans the camera down slightly.
+		 * Triggered by the user to move the camera.
+		 */
 		void nudgeCameraDown();
 
+		/**
+		 * Pans the camera right slightly.
+		 * Triggered by the user to move the camera.
+		 */
 		void nudgeCameraRight();
 
+		/**
+		 * Pans the camera left slightly.
+		 * Triggered by the user to move the camera.
+		 */
 		void nudgeCameraLeft();
 
+		/**
+		 * Puts the camera in fixed mode at the target location.
+		 */
 		void putCameraAt(float x, float y);
 
+		/**
+		 * @see putCameraAt(float x, float y)
+		 */
 		void putCameraAt(const Vector2D& position);
 
 		/**
@@ -499,10 +521,25 @@ namespace TA3D
 		 */
 		Vector2D minimapToWorldCoordinates(const Vector2D& coordinates) const;
 
+		/**
+		 * Sets the camera to fixed mode.
+		 * In fixed mode, the camera stays still at the current location
+		 * (unless the user moves it)
+		 */
 		void setCameraFixedMode();
 
+		/**
+		 * Set the camera to tracking mode.
+		 * In tracking mode, the camera tracks the position of a unit.
+		 */
 		void setCameraTrackingMode(int unitId);
 
+		/**
+		 * Toggles the camera between fixed mode and tracking mode.
+		 * If a unit is selected, we will start tracking that unit.
+		 * Otherwise, we will set the camera back to fixed mode.
+		 * Triggered by the user when they press the tracking button.
+		 */
 		void toggleCameraTrackingMode();
 	}; // class Battle
 
