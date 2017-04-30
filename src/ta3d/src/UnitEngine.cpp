@@ -334,9 +334,9 @@ namespace TA3D
 			if (!unit[*e].isAlive() || !unit[*e].visible)
 			{
 				unit[*e].unlock();
-				continue; // Si l'unité n'existe pas on la zappe
+				continue; // If the unit does not exist/is not alive, skip it
 			}
-			unit[*e].flags &= 0xFD; // Enlève l'indicateur de possibilité d'intersection
+			unit[*e].flags &= 0xFD; // Removes the flag for possibility of intersection
 			Vector3D center(unit[*e].model->center + unit[*e].Pos - CamPos);
 			float size = unit[*e].model->size * unit_manager.unit_type[unit[*e].type_id]->Scale * unit_manager.unit_type[unit[*e].type_id]->Scale;
 			center = Dir * center;
@@ -1450,7 +1450,7 @@ namespace TA3D
 	void INGAME_UNITS::renderTick()
 	{
 		if (nb_unit <= 0 || !unit)
-			return; // Pas d'unités à dessiner
+			return; // No units to draw
 
 		const Matrix mCam = Camera::inGame->getMatrix();
 		visible_unit.clear();

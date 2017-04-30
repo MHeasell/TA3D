@@ -561,7 +561,7 @@ namespace TA3D
 			float oangle = 0.0f;
 			const int h_map_w = the_map->map_w >> 1;
 			const int h_map_h = the_map->map_h >> 1;
-			for (std::vector<PARTICLE>::iterator e = part.begin(); e != part.end(); ++e) // Calcule la position des points
+			for (std::vector<PARTICLE>::iterator e = part.begin(); e != part.end(); ++e) // Calculate the position of the points
 			{
 				if (e->light_emitter != light_emitters) // Two passes, one for normal particles, the second for particles that emits light
 					continue;
@@ -577,7 +577,7 @@ namespace TA3D
 						continue;
 				}
 				else
-					continue; // Particule en dehors de la carte donc hors champ
+					continue; // Particle outside the map so out of scope
 				++j;
 				if (!j || !Math::AlmostEquals(oangle, e->angle))
 				{

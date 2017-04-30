@@ -407,7 +407,7 @@ namespace TA3D
 					}
 				}
 
-				if (pointing >= 0 && !rope_selection) // S'il y a quelque chose sous le curseur
+				if (pointing >= 0 && !rope_selection) // If there is something under the cursor
 				{
 					cursor_type = CURSOR_CROSS;
 					bool can_be_captured = false;
