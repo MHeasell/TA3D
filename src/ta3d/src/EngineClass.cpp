@@ -162,7 +162,7 @@ namespace TA3D
 	{
 		if (isNaN(x) || isNaN(y))
 			return 0.0f;
-		x = (x + (float)map_w_d) * 0.125f; // Convertit les coordonnées
+		x = (x + (float)map_w_d) * 0.125f; // Convert the coordinates
 		y = (y + (float)map_h_d) * 0.125f;
 		const int lx = bloc_w_db - 1;
 		const int ly = bloc_h_db - 1;
