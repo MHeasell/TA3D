@@ -518,6 +518,7 @@ namespace TA3D
 		cam.rpos.x = cam.rpos.y = cam.rpos.z = 0.f;
 		cam.rpos.z += 150.0f;
 		cam.rpos.y = lp_CONFIG->camera_def_h;
+		cam.znear = -512.0f;
 		cam.zfar = 500.0f;
 
 		r1 = -lp_CONFIG->camera_def_angle - 0.00001f;

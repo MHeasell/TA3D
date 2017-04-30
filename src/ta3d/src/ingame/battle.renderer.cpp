@@ -340,8 +340,6 @@ namespace TA3D
 
 	void Battle::renderScene()
 	{
-		cam.znear = -512.0f;
-
 		renderWorld();
 
 		renderStencilShadow();
