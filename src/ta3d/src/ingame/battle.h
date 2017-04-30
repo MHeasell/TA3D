@@ -272,17 +272,7 @@ namespace TA3D
 		//!
 		Camera cam;
 		//!
-		Vector3D cam_target;
-		//!
-		int cam_target_mx;
-		//!
-		int cam_target_my;
-		//!
-		bool cam_has_target;
-		//!
 		bool escMenuWasVisible;
-		//! Just to see if the cam has been long enough at the default angle
-		int cam_def_timer;
 
 		//! Indicates whether unit health bars should be shown on the screen
 		bool showHealthBars;

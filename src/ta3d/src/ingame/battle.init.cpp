@@ -512,11 +512,7 @@ namespace TA3D
 		r1 = r2 = r3 = 0.f;
 
 		cam.reset();
-		cam_target.reset();
 
-		cam_target_mx = gfx->SCREEN_W_HALF;
-		cam_target_my = gfx->SCREEN_H_HALF;
-		cam_def_timer = MILLISECONDS_SINCE_INIT; // Just to see if the cam has been long enough at the default angle
 		Camera::inGame = &cam;
 
 		cam.rpos.x = cam.rpos.y = cam.rpos.z = 0.f;
