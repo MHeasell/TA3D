@@ -82,8 +82,6 @@ namespace TA3D
 		*/
 		Result result() const { return pResult; }
 
-		void setCameraDirection(const Vector3D& dir);
-
 		void setShowPing(bool b) { bShowPing = b; }
 		bool getShowPing() const { return bShowPing; }
 

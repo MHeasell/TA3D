@@ -1137,39 +1137,6 @@ namespace TA3D
 		return 0;
 	}
 
-	int program_set_cam(lua_State* L) // set_cam( player_id, { pos = { x, y, z }, dir = { x, y, z }, mode } )
-	{
-		if ((int)lua_tointeger(L, 1) == players.local_human_id)
-		{
-			lua_pushstring(L, "pos");
-			lua_rawget(L, -2);
-			Camera::inGame->rpos = lua_tovector(L, -1);
-
-			lua_pop(L, 1);
-			lua_pushstring(L, "dir");
-			lua_rawget(L, -2);
-			Battle::Instance()->setCameraDirection(lua_tovector(L, -1));
-
-			lua_pop(L, 1);
-		}
-		else
-		{
-#warning TODO: implement program_set_cam in network protocol
-			//			if (network_manager.isServer() && !LuaProgram::passive)
-			//			{
-			//				struct event cam_event;
-			//				cam_event.type = EVENT_CAMERA_POS;
-			//				cam_event.opt1 = lua_tointeger( L, 1 );
-			//				cam_event.x = (float) lua_tonumber( L, 2 );
-			//				cam_event.z = (float) lua_tonumber( L, 3 );
-			//
-			//				network_manager.sendEvent( &cam_event );
-			//			}
-		}
-		lua_pop(L, 2);
-		return 0;
-	}
-
 	int program_clf(lua_State* /*L*/)
 	{
 		the_map->clear_FOW();
@@ -1402,7 +1369,6 @@ namespace TA3D
 		lua_register(L, "play", program_play);
 		lua_register(L, "play_for", program_play_for);
 		lua_register(L, "set_cam_pos", program_set_cam_pos);
-		lua_register(L, "set_cam", program_set_cam);
 		lua_register(L, "clf", program_clf);
 		lua_register(L, "start_x", program_start_x);
 		lua_register(L, "start_z", program_start_z);

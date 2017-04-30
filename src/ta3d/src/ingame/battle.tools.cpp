@@ -11,13 +11,6 @@
 namespace TA3D
 {
 
-	void Battle::setCameraDirection(const Vector3D& dir)
-	{
-		r1 = dir.x;
-		r2 = dir.y;
-		r3 = dir.z;
-	}
-
 	void Battle::setTimeFactor(const float f)
 	{
 		lp_CONFIG->timefactor = f;
