@@ -166,11 +166,6 @@ namespace TA3D
 		*/
 		void preflightUpdate3DSounds();
 
-		/**
-		 * Processes inputs for the camera and updates the camera state.
-		 */
-		void preflightAutomaticCamera();
-
 		/*!
 		** \brief Pre Execute
 		*/
@@ -280,8 +275,6 @@ namespace TA3D
 		Camera cam;
 		//!
 		Vector3D cam_target;
-		//! The position of the camera on the virtual "rail"
-		float camera_zscroll;
 		//!
 		int cam_target_mx;
 		//!
@@ -378,8 +371,6 @@ namespace TA3D
 		bool build_order_given;
 		//!
 		int cur_sel_index;
-		//!
-		int omz;
 		//!
 		float cam_h;
 

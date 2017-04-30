@@ -166,8 +166,6 @@ namespace TA3D
 			// Update 3D sounds
 			preflightUpdate3DSounds();
 
-			preflightAutomaticCamera();
-
 			bool rope_selection = pMouseSelecting && (abs(pMouseRectSelection.x1 - pMouseRectSelection.x2) >= PICK_TOLERANCE || abs(pMouseRectSelection.y1 - pMouseRectSelection.y2) >= PICK_TOLERANCE);
 			if (selected && build < 0 && (!IsOnGUI || IsOnMinimap) && !rope_selection)
 			{

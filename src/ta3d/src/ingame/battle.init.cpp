@@ -513,7 +513,6 @@ namespace TA3D
 
 		cam.reset();
 		cam_target.reset();
-		camera_zscroll = -0.00001f;
 
 		cam_target_mx = gfx->SCREEN_W_HALF;
 		cam_target_my = gfx->SCREEN_H_HALF;
@@ -564,7 +563,6 @@ namespace TA3D
 		build = -1;
 		build_order_given = false;
 		cur_sel_index = -1;
-		omz = mouse_z;
 		cam_h = lp_CONFIG->camera_def_h;
 
 		speed_limit = lp_CONFIG->fps_limit;
