@@ -1,5 +1,5 @@
-#ifndef __TA3D_CAMERA2_H__
-#define __TA3D_CAMERA2_H__
+#ifndef __TA3D_MISC_CAMERA_H__
+#define __TA3D_MISC_CAMERA_H__
 
 
 #include <vector>
@@ -96,4 +96,4 @@ namespace TA3D
 }
 
 
-#endif // __TA3D_CAMERA2_H__
+#endif // __TA3D_MISC_CAMERA_H__
