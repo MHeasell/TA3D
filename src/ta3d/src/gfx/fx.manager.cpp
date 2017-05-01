@@ -29,9 +29,6 @@ namespace TA3D
 
 	int FXManager::add(const String& filename, const String& entryName, const Vector3D& pos, const float size)
 	{
-		if (Camera::inGame != NULL && (pos - Camera::inGame->pos).lengthSquared() >= Camera::inGame->zfar2)
-			return -1;
-
 		MutexLocker locker(pMutex);
 
 		if (nb_fx + 1 > max_fx)
@@ -98,9 +95,6 @@ namespace TA3D
 
 	int FXManager::addFlash(const Vector3D& pos, const float size)
 	{
-		if (Camera::inGame != NULL && (pos - Camera::inGame->pos).lengthSquared() >= Camera::inGame->zfar2)
-			return -1;
-
 		MutexLocker locker(pMutex);
 		if (nb_fx + 1 > max_fx)
 		{
@@ -186,7 +180,7 @@ namespace TA3D
 		glDisable(GL_CULL_FACE);
 		glDepthMask(GL_FALSE);
 		gfx->set_alpha_blending();
-		cam.setView(true);
+		cam.applyToOpenGl();
 		if (UW)
 		{
 			for (int i = 0; i < max_fx; ++i)

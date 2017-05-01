@@ -28,6 +28,7 @@
 #include <misc/rect.h>
 #include <misc/material.light.h>
 #include <scripts/script.h>
+#include "../misc/Camera.h"
 #include "fps.h"
 
 #ifndef SCROLL_SPEED
@@ -484,6 +485,10 @@ namespace TA3D
 		 * Converts a normalized minimap position to a world-space position.
 		 */
 		Vector2D minimapToWorldCoordinates(const Vector2D& coordinates) const;
+
+		Vector2D screenToClipCoordinates(const Vector2D& coordinates) const;
+
+		Rect<float> screenToClipCoordinates(const Rect<int>& rectangle) const;
 	}; // class Battle
 
 } // namespace TA3D

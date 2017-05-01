@@ -1020,14 +1020,13 @@ namespace TA3D
 
 		on_radar &= the_map->view(px, py) > 1;
 
-		Vector3D D(render.Pos - Camera::inGame->pos); // Vecteur "viseur unité" partant de la caméra vers l'unité
-
-		const float dist = D.lengthSquared();
-		const float p = D % Camera::inGame->dir;
-		if (dist >= 16384.0f && p <= 0.0f)
+		// don't draw the object if it is not in the camera view
+		if (!Camera::inGame->viewportContains(render.Pos))
+		{
 			return;
-		if (p > Camera::inGame->zfar2)
-			return; // Si l'objet est hors champ on ne le dessine pas
+		}
+
+		Vector3D zeroVector(0.0f, 0.0f, 0.0f);
 
 		if (!cloaked || isOwnedBy(players.local_human_id)) // Don't show cloaked units
 		{
@@ -1139,8 +1138,7 @@ namespace TA3D
 							}
 							else
 							{
-								D.reset();
-								center = &D;
+								center = &zeroVector;
 								size = 32.0f;
 							}
 						}
@@ -1197,8 +1195,7 @@ namespace TA3D
 							}
 							else
 							{
-								D.x = D.y = D.z = 0.f;
-								center = &D;
+								center = &zeroVector;
 								size = 32.0f;
 							}
 						}
@@ -5216,6 +5213,9 @@ namespace TA3D
 		if (render.type_id < 0 || isNotOwnedBy(players.local_human_id) || render.UID != ID)
 			return;
 
+		Vector3D up = Camera::inGame->up();
+		Vector3D side = Camera::inGame->side();
+
 		const int maxdmg = unit_manager.unit_type[render.type_id]->MaxDamage;
 		Vector3D vPos = render.Pos;
 		const float size = unit_manager.unit_type[render.type_id]->model->size2 * 0.5f;
@@ -5223,11 +5223,11 @@ namespace TA3D
 		const float scale = 200.0f;
 		float w = 0.04f * scale;
 		float h = 0.006f * scale;
-		vPos -= size * Camera::inGame->up;
-		units.hbars_bkg.push_back(vPos - w * Camera::inGame->side + h * Camera::inGame->up);
-		units.hbars_bkg.push_back(vPos + w * Camera::inGame->side + h * Camera::inGame->up);
-		units.hbars_bkg.push_back(vPos + w * Camera::inGame->side - h * Camera::inGame->up);
-		units.hbars_bkg.push_back(vPos - w * Camera::inGame->side - h * Camera::inGame->up);
+		vPos -= size * up;
+		units.hbars_bkg.push_back(vPos - w * side + h * up);
+		units.hbars_bkg.push_back(vPos + w * side + h * up);
+		units.hbars_bkg.push_back(vPos + w * side - h * up);
+		units.hbars_bkg.push_back(vPos - w * side - h * up);
 
 		w -= scale * gfx->SCREEN_W_INV;
 		h -= scale * gfx->SCREEN_H_INV;
@@ -5245,10 +5245,10 @@ namespace TA3D
 		units.hbars_color.push_back(color);
 		units.hbars_color.push_back(color);
 		const float pw = w * (2.0f * (hp / (float)maxdmg) - 1.0f);
-		units.hbars.push_back(vPos - w * Camera::inGame->side + h * Camera::inGame->up);
-		units.hbars.push_back(vPos + pw * Camera::inGame->side + h * Camera::inGame->up);
-		units.hbars.push_back(vPos + pw * Camera::inGame->side - h * Camera::inGame->up);
-		units.hbars.push_back(vPos - w * Camera::inGame->side - h * Camera::inGame->up);
+		units.hbars.push_back(vPos - w * side + h * up);
+		units.hbars.push_back(vPos + pw * side + h * up);
+		units.hbars.push_back(vPos + pw * side - h * up);
+		units.hbars.push_back(vPos - w * side - h * up);
 	}
 
 	void Unit::renderTick()

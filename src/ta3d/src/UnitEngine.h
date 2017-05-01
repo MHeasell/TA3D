@@ -249,7 +249,7 @@ namespace TA3D
 		*/
 		bool selectUnits(const RectTest& reigon);
 
-		int pick(Camera& cam);
+		int pick(Camera& cam, const Vector2D& clipPosition);
 
 		int pick_minimap();
 

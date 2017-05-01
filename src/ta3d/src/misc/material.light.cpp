@@ -66,7 +66,7 @@ namespace TA3D
 		}
 		else
 		{
-			c.setView();
+			c.applyToOpenGl();
 			LightPosition[0] = Pos.x;
 			LightPosition[1] = Pos.y;
 			LightPosition[2] = Pos.z;

@@ -58,12 +58,12 @@ namespace TA3D
 		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 		gfx->clearDepth(); // Clear screen
 
-		cam.setView();
+		cam.applyToOpenGl();
 
 		pSun.Set(cam);
 		pSun.Enable();
 
-		cam.setView();
+		cam.applyToOpenGl();
 
 		glColor4ub(0xFF, 0xFF, 0xFF, 0xFF);
 		glEnable(GL_TEXTURE_2D);
@@ -83,14 +83,14 @@ namespace TA3D
 		if (lp_CONFIG->wireframe)
 			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-		cam.setView(true);
+		cam.applyToOpenGl();
 
 		features.draw(render_time); // Dessine les éléments "2D"
 
 		/*----------------------------------------------------------------------------------------------*/
 
 		// Dessine les unités sous l'eau / Draw units which are under water
-		cam.setView(true);
+		cam.applyToOpenGl();
 		units.draw(true, false, true, lp_CONFIG->height_line);
 
 		// Dessine les objets produits par les armes sous l'eau / Draw weapons which are under water
@@ -98,7 +98,7 @@ namespace TA3D
 
 		particle_engine.drawUW();
 
-		cam.setView(true);
+		cam.applyToOpenGl();
 		// Dessine les unités non encore dessinées / Draw units which have not been drawn
 		units.draw(false, false, true, lp_CONFIG->height_line);
 
@@ -143,7 +143,7 @@ namespace TA3D
 
 				can_be_there = can_be_built(target, build, players.local_human_id);
 
-				cam.setView();
+				cam.applyToOpenGl();
 
 				glTranslatef(target.x, target.y, target.z);
 				glScalef(unit_manager.unit_type[build]->Scale, unit_manager.unit_type[build]->Scale, unit_manager.unit_type[build]->Scale);
@@ -178,7 +178,7 @@ namespace TA3D
 
 					glDisable(GL_CLIP_PLANE2);
 				}
-				cam.setView();
+				cam.applyToOpenGl();
 				glTranslatef(target.x, Math::Max(target.y, map->sealvl), target.z);
 				byte red = 0xFF, green = 0x00;
 				if (can_be_there)
@@ -228,7 +228,7 @@ namespace TA3D
 
 		if ((selected || units.last_on >= 0) && isShiftKeyDown())
 		{
-			cam.setView();
+			cam.applyToOpenGl();
 			bool builders = false;
 			const float t = (float)MILLISECONDS_SINCE_INIT * 0.001f;
 			const float mt = std::fmod(0.5f * t, 1.0f);
@@ -278,7 +278,7 @@ namespace TA3D
 		}
 		if ((selected || units.last_on >= 0) && isControlKeyDown())
 		{
-			cam.setView();
+			cam.applyToOpenGl();
 			const float t = (float)MILLISECONDS_SINCE_INIT * 0.001f;
 			const float mt = std::fmod(0.5f * t, 1.0f);
 			const float mt2 = std::fmod(0.5f * t + 0.5f, 1.0f);
@@ -324,7 +324,7 @@ namespace TA3D
 		}
 		if (showHealthBars)
 		{
-			cam.setView();
+			cam.applyToOpenGl();
 			units.drawHealthBars();
 		}
 	}

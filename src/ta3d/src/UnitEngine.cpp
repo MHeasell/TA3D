@@ -310,7 +310,7 @@ namespace TA3D
 		return selected;
 	}
 
-	int INGAME_UNITS::pick(Camera& cam)
+	int INGAME_UNITS::pick(Camera& cam, const Vector2D& clipPosition)
 	{
 		int index = -1;
 
@@ -321,8 +321,10 @@ namespace TA3D
 		if (last_on != -1)
 			return last_on;
 
-		Vector3D Dir = cam.dir;
-		Vector3D CamPos = cam.pos + cam.zoomFactor * (float(mouse_x - gfx->SCREEN_W_HALF) * cam.side - float(mouse_y - gfx->SCREEN_H_HALF) * cam.up);
+		auto ray = cam.screenToWorldRay(clipPosition);
+		Vector3D Dir = ray.direction;
+		Dir.normalize();
+		Vector3D CamPos = ray.origin;
 
 		std::vector<uint16> detectable;
 
@@ -1452,7 +1454,6 @@ namespace TA3D
 		if (nb_unit <= 0 || !unit)
 			return; // No units to draw
 
-		const Matrix mCam = Camera::inGame->getMatrix();
 		visible_unit.clear();
 		const int bloc_w = the_map->bloc_w_db;
 		const int bloc_h = the_map->bloc_h_db;
@@ -1470,21 +1471,13 @@ namespace TA3D
 			if (!pUnitType->model)
 				continue;
 
+			// skip units that are not in view
 			const Vector3D pos = unit[i].Pos + pUnitType->model->center;
-			const Vector3D pPos = glNMult(pos, mCam);
-			if (std::fabs(pPos.x) > 1.0f || std::fabs(pPos.y) > 1.0f || std::fabs(pPos.z) > 1.0f)
+			if (!Camera::inGame->viewportContains(pos))
 			{
-				const Vector3D rel = pos - Camera::inGame->pos;
-				if (rel.lengthSquared() > pUnitType->model->size2)
-				{
-					Vector3D D = rel - (rel % Camera::inGame->dir) * Camera::inGame->dir;
-					D.normalize();
-					const Vector3D pos2 = pos - 1.42f * pUnitType->model->size2 * D;
-					const Vector3D pPos2 = glNMult(pos2, mCam);
-					if (std::fabs(pPos2.x) > 1.0f || std::fabs(pPos2.y) > 1.0f || std::fabs(pPos2.z) > 1.0f)
-						continue;
-				}
+				continue;
 			}
+
 			unit[i].renderTick();
 			const int px = unit[i].render.px;
 			const int py = unit[i].render.py;

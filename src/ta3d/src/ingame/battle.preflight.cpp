@@ -104,7 +104,7 @@ namespace TA3D
 			if (units.nb_attacked / (units.nb_attacked + units.nb_built + 1) <= 0.25f)
 				sound_manager->setMusicMode(false);
 		}
-		sound_manager->setListenerPos(cam.rpos);
+		sound_manager->setListenerPos(cam.position());
 		sound_manager->update3DSound();
 	}
 } // namespace TA3D

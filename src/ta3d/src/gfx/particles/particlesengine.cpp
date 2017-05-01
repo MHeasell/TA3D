@@ -70,9 +70,6 @@ namespace TA3D
 	{
 		MutexLocker locker(pMutex);
 
-		if (Camera::inGame != NULL && (Camera::inGame->pos - pos).lengthSquared() >= Camera::inGame->zfar2)
-			return;
-
 		for (int i = 0; i < nb; ++i)
 		{
 			PARTICLE new_part;
@@ -131,9 +128,6 @@ namespace TA3D
 		}
 		else
 		{
-			if (Camera::inGame != NULL && (Camera::inGame->pos - pos).lengthSquared() >= Camera::inGame->zfar2)
-				return NULL;
-
 			system = new ParticlesSystem;
 			system->create(abs(nb), gltex[tex]);
 
@@ -294,9 +288,6 @@ namespace TA3D
 
 	void PARTICLE_ENGINE::make_smoke(const Vector3D& pos, int tex, int nb, float speed, float mass, float ddsize, float alpha)
 	{
-		if (Camera::inGame != NULL && (Camera::inGame->pos - pos).lengthSquared() >= Camera::inGame->zfar2)
-			return;
-
 		pMutex.lock();
 
 		float pre = speed * 0.01f;
@@ -340,9 +331,6 @@ namespace TA3D
 
 	void PARTICLE_ENGINE::make_dark_smoke(const Vector3D& pos, int tex, int nb, float speed, float mass, float ddsize, float alpha)
 	{
-		if (Camera::inGame != NULL && (Camera::inGame->pos - pos).lengthSquared() >= Camera::inGame->zfar2)
-			return;
-
 		pMutex.lock();
 
 		float pre = speed * 0.01f;
@@ -385,9 +373,6 @@ namespace TA3D
 
 	void PARTICLE_ENGINE::make_fire(const Vector3D& pos, int tex, int nb, float speed)
 	{
-		if (Camera::inGame != NULL && (Camera::inGame->pos - pos).lengthSquared() >= Camera::inGame->zfar2)
-			return;
-
 		pMutex.lock();
 
 		for (int i = 0; i < nb; ++i)
@@ -531,7 +516,7 @@ namespace TA3D
 		if (!color)
 			color = new GLubyte[16384];
 
-		cam->setView(true);
+		cam->applyToOpenGl();
 
 		gfx->ReInitAllTex(true);
 
@@ -584,8 +569,8 @@ namespace TA3D
 					oangle = e->angle;
 					const float cosinus = cosf(e->angle);
 					const float sinus = sinf(e->angle);
-					A = (cosinus - sinus) * cam->side + (sinus + cosinus) * cam->up;
-					B = (cosinus + sinus) * cam->side + (sinus - cosinus) * cam->up;
+					A = (cosinus - sinus) * cam->side() + (sinus + cosinus) * cam->up();
+					B = (cosinus + sinus) * cam->side() + (sinus - cosinus) * cam->up();
 				}
 				int i_bis = j << 2;
 				point[i_bis++] = e->Pos - e->size * B;
@@ -649,7 +634,7 @@ namespace TA3D
 		glDisableClientState(GL_COLOR_ARRAY);
 
 		float coeffs[3];
-		coeffs[0] = Camera::inGame->zoomFactor * Camera::inGame->zoomFactor / 2.0f;
+		coeffs[0] = 0.125f;
 		coeffs[1] = 0.0f;
 		coeffs[2] = 0.0f;
 		glPointParameterfv(GL_POINT_DISTANCE_ATTENUATION, coeffs);
@@ -686,7 +671,7 @@ namespace TA3D
 		if (particle_systems.empty()) // no need to run the code if there is nothing to draw
 			return;
 
-		Camera::inGame->setView(true);
+		Camera::inGame->applyToOpenGl();
 
 		gfx->ReInitAllTex(true);
 
@@ -703,7 +688,7 @@ namespace TA3D
 		glDisableClientState(GL_COLOR_ARRAY);
 
 		float coeffs[3];
-		coeffs[0] = Camera::inGame->zoomFactor * Camera::inGame->zoomFactor / 2.0f;
+		coeffs[0] = 0.125f;
 		coeffs[1] = 0.0f;
 		coeffs[2] = 0.0f;
 		glPointParameterfv(GL_POINT_DISTANCE_ATTENUATION, coeffs);

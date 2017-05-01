@@ -27,8 +27,10 @@ namespace TA3D
 			return Vector3D(x, y, z);
 		}
 
-		const Vector3D cur_pos = cam.pos + cam.zoomFactor * (float(mouse_x - gfx->SCREEN_W_HALF) * cam.side - float(mouse_y - gfx->SCREEN_H_HALF) * cam.up);
-		return map.hit(cur_pos, cam.dir, true, 2000000000.0f, true);
+		auto clipCoords = screenToClipCoordinates(Vector2D(mouse_x, mouse_y));
+		auto ray = cam.screenToWorldRay(clipCoords);
+
+		return map.hit(ray.origin, ray.direction, true, 2000000000.0f, true);
 	}
 
 	void Battle::showGameStatus()
@@ -93,22 +95,22 @@ namespace TA3D
 
 	void Battle::nudgeCameraLeft()
 	{
-		cam.rpos.x -= SCROLL_SPEED * deltaTime;
+		cam.translate(-SCROLL_SPEED * deltaTime, 0.0f);
 	}
 
 	void Battle::nudgeCameraRight()
 	{
-		cam.rpos.x += SCROLL_SPEED * deltaTime;
+		cam.translate(SCROLL_SPEED * deltaTime, 0.0f);
 	}
 
 	void Battle::nudgeCameraDown()
 	{
-		cam.rpos.z += SCROLL_SPEED * deltaTime;
+		cam.translate(0.0f, SCROLL_SPEED * deltaTime);
 	}
 
 	void Battle::nudgeCameraUp()
 	{
-		cam.rpos.z -= SCROLL_SPEED * deltaTime;
+		cam.translate(0.0f, -SCROLL_SPEED * deltaTime);
 	}
 
 	void Battle::putCameraAt(const Vector2D& position)
@@ -118,8 +120,7 @@ namespace TA3D
 
 	void Battle::putCameraAt(float x, float z)
 	{
-		cam.rpos.x = x;
-		cam.rpos.z = z;
+		cam.setPosition(x, z);
 	}
 
 	Vector2D Battle::screenToMinimapCoordinates(const Vector2D& coordinates) const
@@ -137,6 +138,21 @@ namespace TA3D
 			(coordinates.x - 0.5f) * map->map_w,
 			(coordinates.y - 0.5f) * map->map_h
 		);
+	}
+
+	Vector2D Battle::screenToClipCoordinates(const Vector2D& coordinates) const
+	{
+		return Vector2D(
+			(coordinates.x - gfx->SCREEN_W_HALF) / gfx->SCREEN_W_HALF,
+			(coordinates.y - gfx->SCREEN_H_HALF) / -gfx->SCREEN_H_HALF
+		);
+	}
+
+	Rect<float> Battle::screenToClipCoordinates(const Rect<int>& rectangle) const
+	{
+		auto v1 = screenToClipCoordinates(Vector2D(rectangle.x1, rectangle.y1));
+		auto v2 = screenToClipCoordinates(Vector2D(rectangle.x2, rectangle.y2));
+		return Rect<float>(v1.x, v1.y, v2.x, v2.y);
 	}
 
 	void Battle::handleGameStatusEvents()

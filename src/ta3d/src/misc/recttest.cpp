@@ -22,43 +22,34 @@
 namespace TA3D
 {
 
-	RectTest::RectTest(Camera& cam, const Rect<int>& pos) : cam(cam)
+	RectTest::RectTest(Camera& cam, const Rect<float>& rectangle)
+		: cam(cam),
+		  x1(Math::Min(rectangle.x1, rectangle.x2)),
+		  y1(Math::Min(rectangle.y1, rectangle.y2)),
+		  x2(Math::Max(rectangle.x1, rectangle.x2)),
+		  y2(Math::Max(rectangle.y1, rectangle.y2))
 	{
-		cam.setView();
-		Matrix modelView;
-		Matrix project;
-
-		int viewportCoords[4] = {0, 0, 0, 0};
-		glGetIntegerv(GL_VIEWPORT, viewportCoords);
-		glGetFloatv(GL_MODELVIEW_MATRIX, (float*)modelView.E);
-		glGetFloatv(GL_PROJECTION_MATRIX, (float*)project.E);
-
-		modelView = Transpose(modelView);
-		project = Transpose(project);
-
-		VW = static_cast<float>(viewportCoords[2] - viewportCoords[0]) * 0.5f;
-		VH = -static_cast<float>(viewportCoords[3] - viewportCoords[1]) * 0.5f;
-
-		T = modelView * project; // Matrice de transformation
-
-		X1 = Math::Min(pos.x1, pos.x2);
-		Y1 = Math::Min(pos.y1, pos.y2);
-		X2 = Math::Max(pos.x1, pos.x2);
-		Y2 = Math::Max(pos.y1, pos.y2);
 	}
 
 	bool RectTest::contains(const Vector3D& point) const
 	{
-		Vector3D Vec(point - cam.pos);
-		float d = Vec.lengthSquared();
+		// construct the rays
+		auto bottomLeftRay = cam.screenToWorldRay(Vector2D(x1, y1));
+		auto bottomRightRay = cam.screenToWorldRay(Vector2D(x2, y1));
+		auto topLeftRay = cam.screenToWorldRay(Vector2D(x1, y2));
+		auto topRightRay = cam.screenToWorldRay(Vector2D(x2, y2));
 
-		if (d > 16384.0f && (Vec % cam.dir) <= 0.0f)
-			return false;
+		// construct the clipping planes
+		auto topPlane = Plane3D::fromPoints(topLeftRay.pointAt(0.0f), topLeftRay.pointAt(1.0f), topRightRay.pointAt(0.0f));
+		auto bottomPlane = Plane3D::fromPoints(bottomLeftRay.pointAt(0.0f), bottomRightRay.pointAt(0.0f), bottomLeftRay.pointAt(1.0f));
+		auto leftPlane = Plane3D::fromPoints(bottomLeftRay.pointAt(0.0f), bottomLeftRay.pointAt(1.0f), topLeftRay.pointAt(0.0f));
+		auto rightPlane = Plane3D::fromPoints(bottomRightRay.pointAt(0.0f), topRightRay.pointAt(0.0f), bottomRightRay.pointAt(1.0f));
 
-		Vector3D UPos(glNMult(point, T));
-		UPos.x = UPos.x * VW + VW;
-		UPos.y = UPos.y * VH - VH;
-		return X1 <= UPos.x && X2 >= UPos.x && Y1 <= UPos.y && Y2 >= UPos.y;
+		// test that the point is on the correct side of all planes
+		return topPlane.isInFront(point)
+			   && bottomPlane.isInFront(point)
+			   && leftPlane.isInFront(point)
+			   && rightPlane.isInFront(point);
 	}
 
 } // namespace TA3D

@@ -137,19 +137,19 @@ namespace TA3D
 		const float hsize = size * float(anims[anm]->h[img]);
 		glBindTexture(GL_TEXTURE_2D, anims[anm]->glbmp[img]);
 
-		const float hux = hsize * cam.up.x;
-		const float wsx = wsize * cam.side.x;
-		const float huy = hsize * cam.up.y;
-		const float wsy = wsize * cam.side.y;
-		const float huz = hsize * cam.up.z;
-		const float wsz = wsize * cam.side.z;
+		const float hux = hsize * cam.up().x;
+		const float wsx = wsize * cam.side().x;
+		const float huy = hsize * cam.up().y;
+		const float wsy = wsize * cam.side().y;
+		const float huz = hsize * cam.up().z;
+		const float wsz = wsize * cam.side().z;
 
 		glPushMatrix();
 		glTranslatef(Pos.x, Pos.y, Pos.z);
 
-		const Vector3D vDir(-0.5f * (hsize + wsize) * cam.dir);
+		const Vector3D vDir(-0.5f * (hsize + wsize) * cam.direction());
 		glTranslatef(vDir.x, vDir.y, vDir.z);
-		const float s = 1.0f - 0.5f * (hsize + wsize) / (cam.pos - Pos).length();
+		const float s = 1.0f - 0.5f * (hsize + wsize) / (cam.position() - Pos).length();
 		glScalef(s, s, s);
 		glBegin(GL_QUADS);
 		glTexCoord2f(0.0f, 0.0f);

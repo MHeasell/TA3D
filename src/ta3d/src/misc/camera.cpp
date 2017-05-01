@@ -1,132 +1,218 @@
-/*  TA3D, a remake of Total Annihilation
-    Copyright (C) 2005  Roland BROCHARD
-
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA*/
-#include <stdafx.h>
-#include <TA3D_NameSpace.h>
-#include "camera.h"
-#include "math.h"
+#include <GL/glew.h>
+#include "Camera.h"
+#include "../TA3D_NameSpace.h"
 
 namespace TA3D
 {
+	Camera* Camera::inGame = nullptr;
 
-	Camera* Camera::inGame = NULL;
+	const Vector3D Camera::_direction(0.0f, -1.0f, 0.0f);
+	const Vector3D Camera::_forward(0.0f, 1.0f, 0.0f);
+	const Vector3D Camera::_up(0.0f, 0.0f, -1.0f);
+	const Vector3D Camera::_side(1.0f, 0.0f, 0.0f);
 
-	Camera::Camera() // Initialise la caméra
+	Camera::Camera(const float width, const float height)
+		:
+		_viewportWidth(width),
+		_viewportHeight(height),
+		_position(0.0f, 0.0f, 0.0f),
+		worldOrientation(createOrientationMatrix()),
+		inverseWorldOrientation(createInverseOrientationMatrix()),
+		projection(createProjectionMatrix(width, height)),
+		inverseProjection(createInverseProjectionMatrix(width, height))
 	{
-		reset();
 	}
 
-	void Camera::reset()
+	Ray3D Camera::screenToWorldRay(const Vector2D& point) const
 	{
-		// Pos
-		pos.x = 0.0f;
-		pos.y = 0.0f;
-		pos.z = 30.0f;
-
-		rpos = pos;
-		dir = up = pos;
-		dir.z = -1.0f; // direction
-		up.y = 1.0f;   // Haut
-		zfar = 140000.0f;
-		znear = 1.0f;
-		side = dir * up;
-		zfar2 = zfar * zfar;
-		zoomFactor = 0.5f;
+		Matrix transform = inverseWorldTranslation() * inverseWorldOrientation * inverseProjection;
+		Vector3D startPoint = transform * Vector3D(point.x, point.y, -1.0f);
+		Vector3D endPoint = transform * Vector3D(point.x, point.y, 1.0f);
+		Vector3D direction = endPoint - startPoint;
+		return Ray3D(startPoint, direction);
 	}
 
-	void Camera::setMatrix(const Matrix& v)
+	std::vector<Vector3D> Camera::getProjectionShadow() const
 	{
-		dir.reset();
-		up = dir;
-		dir.z = -1.0f;
-		up.y = 1.0f;
-		dir = dir * v;
-		up = up * v;
-		side = dir * up;
+		std::vector<Vector2D> bounds {
+			Vector2D(-1.0f, -1.0f),
+			Vector2D(1.0f, -1.0f),
+			Vector2D(1.0f, 1.0f),
+			Vector2D(-1.0f, 1.0f),
+		};
+
+		std::vector<Vector3D> out;
+
+		for (auto it = bounds.begin(); it != bounds.end(); ++it)
+		{
+			auto ray = screenToWorldRay(*it);
+			auto point = ray.pointAt(PlaneXZ.intersect(ray));
+			out.push_back(point);
+		}
+
+		return out;
 	}
 
-	void Camera::setView(bool classic)
+	Matrix Camera::getViewMatrix() const
 	{
-		zfar2 = zfar * zfar;
+		return worldOrientation * worldTranslation();
+	}
+
+	Matrix Camera::getProjectionMatrix() const
+	{
+		return projection;
+	}
+
+	Matrix Camera::getViewProjectionMatrix() const
+	{
+		return getProjectionMatrix() * getViewMatrix();
+	}
+
+	void Camera::getFrustum(std::vector<Vector3D>& list) const
+	{
+		// transform from clip space back to world space
+		Matrix transform = inverseWorldTranslation() * inverseWorldOrientation * inverseProjection;
+
+		// near
+		list.push_back(transform * Vector3D(-1.0f, 1.0f, -1.0f)); // top-left
+		list.push_back(transform * Vector3D(1.0f, 1.0f, -1.0f)); // top-right
+		list.push_back(transform * Vector3D(-1.0f, -1.0f, -1.0f)); // bottom-left
+		list.push_back(transform * Vector3D(1.0f, -1.0f, -1.0f)); // bottom-right
+
+		// far
+		list.push_back(transform * Vector3D(-1.0f, 1.0f, 1.0f)); // top-left
+		list.push_back(transform * Vector3D(1.0f, 1.0f, 1.0f)); // top-right
+		list.push_back(transform * Vector3D(-1.0f, -1.0f, 1.0f)); // bottom-left
+		list.push_back(transform * Vector3D(1.0f, -1.0f, 1.0f)); // bottom-right
+	}
+
+	void Camera::applyToOpenGl() const
+	{
+		Matrix view = worldOrientation * worldTranslation();
 
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
-
-		glOrtho(-0.5f * zoomFactor * float(gfx->width), 0.5f * zoomFactor * float(gfx->width), -0.5f * zoomFactor * float(
-			gfx->height), 0.5f * zoomFactor * float(
-			gfx->height), znear, zfar);
-
-		if (classic)
-		{
-			glMatrixMode(GL_MODELVIEW);
-			glLoadIdentity();
-		}
-
-		pos = rpos;
-		Vector3D FP(pos);
-		FP += dir;
-		gluLookAt(pos.x, pos.y, pos.z,
-			FP.x, FP.y, FP.z,
-			up.x, up.y, up.z);
-
-		if (!classic)
-		{
-			glMatrixMode(GL_MODELVIEW);
-			glLoadIdentity();
-		}
-	}
-
-	Matrix Camera::getMatrix() const
-	{
-		glMatrixMode(GL_PROJECTION);
-		glLoadIdentity();
-
-		glOrtho(-0.5f * zoomFactor * float(gfx->width), 0.5f * zoomFactor * float(gfx->width), -0.5f * zoomFactor * float(
-			gfx->height), 0.5f * zoomFactor * float(
-			gfx->height), -512.0f, zfar);
-
-		const Vector3D FP(rpos + dir);
-		gluLookAt(pos.x, pos.y, pos.z,
-			FP.x, FP.y, FP.z,
-			up.x, up.y, up.z);
+		gfx->multMatrix(projection);
 
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
-
-		Matrix mProj;
-		GLfloat tmp[16];
-		glGetFloatv(GL_PROJECTION_MATRIX, tmp);
-		for (int i = 0; i < 16; ++i)
-			mProj.E[i % 4][i / 4] = tmp[i];
-		return mProj;
+		gfx->multMatrix(view);
 	}
 
-	void Camera::getFrustum(std::vector<Vector3D>& list)
+	void Camera::translate(const float x, const float y)
 	{
-		const Vector3D wside = static_cast<float>(gfx->width) * side;
-		const Vector3D hup = static_cast<float>(gfx->height) * up;
-		list.push_back(rpos + znear * dir + 0.5f * zoomFactor * (-wside + hup));
-		list.push_back(rpos + znear * dir + 0.5f * zoomFactor * (wside + hup));
-		list.push_back(rpos + znear * dir + 0.5f * zoomFactor * (-wside - hup));
-		list.push_back(rpos + znear * dir + 0.5f * zoomFactor * (wside - hup));
-
-		list.push_back(rpos + zfar * dir + 0.5f * zoomFactor * (-wside + hup));
-		list.push_back(rpos + zfar * dir + 0.5f * zoomFactor * (wside + hup));
-		list.push_back(rpos + zfar * dir + 0.5f * zoomFactor * (-wside - hup));
-		list.push_back(rpos + zfar * dir + 0.5f * zoomFactor * (wside - hup));
+		_position += Vector3D(x, 0.0f, y);
 	}
 
-} // namespace TA3D
+	void Camera::setPosition(const float x, const float y)
+	{
+		_position = Vector3D(x, _position.y, y);
+	}
+
+	Matrix Camera::createProjectionMatrix(float width, float height)
+	{
+		float halfWidth = width / 2.0f;
+		float halfHeight = height / 2.0f;
+		Matrix ortho = OrthographicProjection(
+			-halfWidth,
+			halfWidth,
+			-halfHeight,
+			halfHeight,
+			-1000.0f,
+			1000.0f
+		);
+
+		Matrix cabinet = CabinetProjection(0.0f, 0.5f);
+
+		return ortho * cabinet;
+	}
+
+	Matrix Camera::createInverseProjectionMatrix(float width, float height)
+	{
+		float halfWidth = width / 2.0f;
+		float halfHeight = height / 2.0f;
+
+		Matrix inverseOrtho = InverseOrthographicProjection(
+			-halfWidth,
+			halfWidth,
+			-halfHeight,
+			halfHeight,
+			-1000.0f,
+			1000.0f
+		);
+
+		Matrix inverseCabinet = CabinetProjection(0.0f, -0.5f);
+
+		return inverseCabinet * inverseOrtho;
+	}
+
+	Matrix Camera::createOrientationMatrix()
+	{
+		return RotateToAxes(_side, _up, _forward);
+	}
+
+	Matrix Camera::createInverseOrientationMatrix()
+	{
+		return Transpose(RotateToAxes(_side, _up, _forward));
+	}
+
+	float Camera::viewportWidth() const
+	{
+		return _viewportWidth;
+	}
+
+	float Camera::viewportHeight() const
+	{
+		return _viewportHeight;
+	}
+
+	const Vector3D& Camera::position() const
+	{
+		return _position;
+	}
+
+	Vector3D& Camera::position()
+	{
+		return _position;
+	}
+
+	const Vector3D& Camera::direction() const
+	{
+		return _direction;
+	}
+
+	const Vector3D& Camera::up() const
+	{
+		return _up;
+	}
+
+	const Vector3D& Camera::side() const
+	{
+		return _side;
+	}
+
+	Matrix Camera::worldTranslation() const
+	{
+		return Translate(-1 * _position);
+	}
+
+	Matrix Camera::inverseWorldTranslation() const
+	{
+		return Translate(_position);
+	}
+
+	bool Camera::viewportContains(const Vector3D& point) const
+	{
+		// convert to clip space
+		auto projectedPoint = getViewProjectionMatrix() * point;
+
+		// test if it's inside the clip volume
+		return
+			projectedPoint.x >= -1.0f
+			&& projectedPoint.x <= 1.0f
+			&& projectedPoint.y >= -1.0f
+			&& projectedPoint.y <= 1.0f
+			&& projectedPoint.z >= -1.0f
+			&& projectedPoint.z <= 1.0f;
+	}
+}

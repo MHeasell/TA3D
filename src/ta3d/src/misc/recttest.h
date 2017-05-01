@@ -34,14 +34,15 @@ namespace TA3D
 	class RectTest
 	{
 	public:
-		RectTest(Camera& cam, const Rect<int>& pos);
+		RectTest(Camera& cam, const Rect<float>& rectangle);
 		bool contains(const Vector3D& point) const;
 
 	private:
 		Camera& cam;
-		float VW, VH;
-		Matrix T;
-		int X1, Y1, X2, Y2;
+		float x1;
+		float y1;
+		float x2;
+		float y2;
 	}; // class RectTest
 
 } // namespace TA3D

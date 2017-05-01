@@ -51,7 +51,14 @@ namespace TA3D
 	}
 
 	Battle::Battle(GameData* g)
-		: pResult(brUnknown), pGameData(g), pNetworkEnabled(false), pNetworkIsServer(false), map(nullptr), escMenuWasVisible(false), bShowPing(false)
+		: pResult(brUnknown),
+		  pGameData(g),
+		  pNetworkEnabled(false),
+		  pNetworkIsServer(false),
+		  map(nullptr),
+		  cam(gfx->width / 2.0f, gfx->height / 2.0f),
+		  escMenuWasVisible(false),
+		  bShowPing(false)
 	{
 		LOG_INFO(LOG_PREFIX_BATTLE << "Preparing a new battle...");
 		grab_mouse(lp_CONFIG->grab_inputs);
@@ -509,20 +516,7 @@ namespace TA3D
 
 	bool Battle::initTheCamera()
 	{
-		r1 = r2 = r3 = 0.f;
-
-		cam.reset();
-
 		Camera::inGame = &cam;
-
-		cam.rpos.x = cam.rpos.y = cam.rpos.z = 0.f;
-		cam.rpos.z += 150.0f;
-		cam.rpos.y = lp_CONFIG->camera_def_h;
-		cam.znear = -512.0f;
-		cam.zfar = 500.0f;
-
-		r1 = -lp_CONFIG->camera_def_angle - 0.00001f;
-
 		return true;
 	}
 

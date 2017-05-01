@@ -1,88 +1,99 @@
-/*  TA3D, a remake of Total Annihilation
-	Copyright (C) 2005  Roland BROCHARD
+#ifndef __TA3D_CAMERA2_H__
+#define __TA3D_CAMERA2_H__
 
-	This program is free software; you can redistribute it and/or modify
-	it under the terms of the GNU General Public License as published by
-	the Free Software Foundation; either version 2 of the License, or
-	(at your option) any later version.
-
-	This program is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-	GNU General Public License for more details.
-
-	You should have received a copy of the GNU General Public License
-	along with this program; if not, write to the Free Software
-	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA*/
-#ifndef __TA3D_XX_MISC_CAMERA_H__
-#define __TA3D_XX_MISC_CAMERA_H__
 
 #include <vector>
-#include "matrix.h"
 #include "vector.h"
+#include "geometry.h"
+#include "matrix.h"
 
 namespace TA3D
 {
-
-	//! Class for managing the camera
 	class Camera
 	{
 	public:
 		static Camera* inGame;
 
-	public:
-		Camera();
+	private:
+		static const Vector3D _direction;
+		static const Vector3D _side;
+		static const Vector3D _up;
+		static const Vector3D _forward;
 
-		/*!
-		** \brief Set the matrix
-		*/
-		void setMatrix(const Matrix& v);
+		const float _viewportWidth;
+		const float _viewportHeight;
 
-		/*!
-		** \brief Get the camera matrix
-		*/
-		Matrix getMatrix() const;
+		Vector3D _position;
 
-		/*!
-		** \brief Replace the OpenGL camera
-		*/
-		void setView(bool classic = false);
-
-		/*!
-		** \brief Reset all data
-		*/
-		void reset();
-
-		/*!
-		** \brief Returns the 8 points defining the frustum volume
-		*/
-		void getFrustum(std::vector<Vector3D>& list);
+		Matrix worldOrientation;
+		Matrix inverseWorldOrientation;
+		Matrix projection;
+		Matrix inverseProjection;
 
 	public:
-		//! Top of the camera
-		Vector3D up;
+		/**
+		 * Constructs a new camera instance.
+		 * @param width The width of the camera viewport
+		 * @param height The height of the camera viewport
+		 */
+		Camera(const float width, const float height);
 
-		//! Side of the camera (optimization for particles)
-		Vector3D side;
+		float viewportWidth() const;
 
-		//! Position
-		Vector3D pos;
+		float viewportHeight() const;
 
-		//! Position of the camera
-		Vector3D rpos;
-		//! Direction of the camera
-		Vector3D dir;
+		const Vector3D& position() const;
 
-		//! For the visible volume
-		float zfar;
-		float znear;
+		const Vector3D& direction() const;
 
-		//! Square of the maximum distance
-		float zfar2;
+		const Vector3D& up() const;
 
-		float zoomFactor;
-	}; // class Camera
+		const Vector3D& side() const;
 
-} // namespace TA3D
+		Vector3D& position();
 
-#endif // __TA3D_XX_MISC_CAMERA_H__
+		/**
+		 * Returns a list of vertex positions representing the shadow
+		 * that the camera's viewport casts on the XZ plane
+		 * in world space.
+		 */
+		std::vector<Vector3D> getProjectionShadow() const;
+
+		/**
+		 * Transforms a point on the screen (in normalized device coordinates)
+		 * to a ray in world space shooting into the world from that point.
+		 */
+		Ray3D screenToWorldRay(const Vector2D& point) const;
+
+		Matrix getViewMatrix() const;
+
+		Matrix getProjectionMatrix() const;
+
+		Matrix getViewProjectionMatrix() const;
+
+		bool viewportContains(const Vector3D& point) const;
+
+		/**
+		 * Returns the 8 points defining the frustum volume.
+		 */
+		void getFrustum(std::vector<Vector3D>& list) const;
+
+		void applyToOpenGl() const;
+
+		void translate(const float x, const float y);
+
+		void setPosition(const float x, const float y);
+
+	private:
+		static Matrix createProjectionMatrix(float width, float height);
+		static Matrix createInverseProjectionMatrix(float width, float height);
+		static Matrix createOrientationMatrix();
+		static Matrix createInverseOrientationMatrix();
+
+		Matrix worldTranslation() const;
+		Matrix inverseWorldTranslation() const;
+	};
+}
+
+
+#endif // __TA3D_CAMERA2_H__

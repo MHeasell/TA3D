@@ -767,100 +767,17 @@ namespace TA3D
 		if (!cam)
 			return;
 
-		Vector3D P;
-		Vector3D A, B, C, D;
-		Vector3D PA, PB, PC, PD;
-
-		A = B = C = D = cam->dir;
-		PA = cam->pos + cam->zoomFactor * (-(float)gfx->SCREEN_W_HALF * cam->side - (float)gfx->SCREEN_H_HALF * cam->up);
-		PB = cam->pos + cam->zoomFactor * ((float)gfx->SCREEN_W_HALF * cam->side - (float)gfx->SCREEN_H_HALF * cam->up);
-		PC = cam->pos + cam->zoomFactor * ((float)gfx->SCREEN_W_HALF * cam->side + (float)gfx->SCREEN_H_HALF * cam->up);
-		PD = cam->pos + cam->zoomFactor * (-(float)gfx->SCREEN_W_HALF * cam->side + (float)gfx->SCREEN_H_HALF * cam->up);
-
-		const int nmax = 64;
-		float cx[4 * nmax + 4], cy[4 * nmax + 4];
-		if (A.y < 0.0f)
-		{
-			P = PA + PA.y / fabsf(A.y) * A;
-			cx[0] = P.x;
-			cy[0] = P.z;
-		}
-		else
-		{
-			P = PA + 10000.0f * A;
-			cx[0] = P.x;
-			cy[0] = P.z;
-		}
-		if (B.y < 0.0f)
-		{
-			P = PB + PB.y / fabsf(B.y) * B;
-			cx[1] = P.x;
-			cy[1] = P.z;
-		}
-		else
-		{
-			P = PB + 10000.0f * B;
-			cx[1] = P.x;
-			cy[1] = P.z;
-		}
-		if (C.y < 0.0f)
-		{
-			P = PC + PC.y / fabsf(C.y) * C;
-			cx[2] = P.x;
-			cy[2] = P.z;
-		}
-		else
-		{
-			P = PC + 10000.0f * C;
-			cx[2] = P.x;
-			cy[2] = P.z;
-		}
-		if (D.y < 0.0f)
-		{
-			P = PD + PD.y / fabsf(D.y) * D;
-			cx[3] = P.x;
-			cy[3] = P.z;
-		}
-		else
-		{
-			P = PD + 10000.0f * D;
-			cx[3] = P.x;
-			cy[3] = P.z;
-		}
-
-		for (int i = 0; i < 4; ++i)
-		{
-			cx[i] = (cx[i] + 0.5f * (float)map_w) * (float)rw / (float)map_w;
-			cy[i] = (cy[i] + 0.5f * (float)map_h) * (float)rh / (float)map_h;
-		}
-		for (int i = 0; i < 4; ++i)
-		{
-			for (int e = 0; e < nmax; ++e)
-			{
-				cx[i * nmax + e + 4] = (cx[i] * float(nmax - e) + cx[(i + 1) % 4] * float(e + 1)) / float(nmax + 1);
-				cy[i * nmax + e + 4] = (cy[i] * float(nmax - e) + cy[(i + 1) % 4] * float(e + 1)) / float(nmax + 1);
-			}
-		}
-		for (int i = 0; i < 4 + (nmax << 2); ++i)
-		{
-			if (cx[i] < 0.0f)
-				cx[i] = 0.0f;
-			else if (cx[i] > rw)
-				cx[i] = (float)rw;
-			if (cy[i] < 0.0f)
-				cy[i] = 0.0f;
-			else if (cy[i] > rh)
-				cy[i] = (float)rh;
-		}
+		std::vector<Vector3D> viewportCoords = cam->getProjectionShadow();
 
 		glDisable(GL_TEXTURE_2D);
 		glColor3ub(0xE5, 0xE5, 0x66);
 		glBegin(GL_LINE_LOOP);
-		for (int i = 0; i < 4; ++i)
+		for (auto it = viewportCoords.begin(); it != viewportCoords.end(); ++it)
 		{
-			glVertex2f(cx[i] + (float)x1, cy[i] + (float)y1);
-			for (int e = 0; e < nmax; ++e)
-				glVertex2f((float)x1 + cx[i * nmax + e + 4], (float)y1 + cy[i * nmax + e + 4]);
+			// project from world space to minimap space
+			float projectedX = ((it->x + (map_w / 2.0f)) / map_w) * rw;
+			float projectedY = ((it->z + (map_h / 2.0f)) / map_h) * rh;
+			glVertex2f(projectedX, projectedY);
 		}
 		glEnd();
 		glColor3ub(0xFF, 0xFF, 0xFF);
@@ -993,7 +910,7 @@ namespace TA3D
 
 	void MAP::draw(Camera* cam, byte player_mask)
 	{
-		cam->setView(true);
+		cam->applyToOpenGl();
 
 		draw_HD(cam, player_mask);
 	}

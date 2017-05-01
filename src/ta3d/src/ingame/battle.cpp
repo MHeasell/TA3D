@@ -284,26 +284,23 @@ namespace TA3D
 				}
 			}
 
-			if (cam.rpos.x < -map->map_w_d)
+			// prevent the camera from panning off the map
+			if (cam.position().x < -map->map_w_d)
 			{
-				cam.rpos.x = (float)-map->map_w_d;
+				cam.position().x = (float)-map->map_w_d;
 			}
-			if (cam.rpos.x > map->map_w_d)
+			if (cam.position().x > map->map_w_d)
 			{
-				cam.rpos.x = (float)map->map_w_d;
+				cam.position().x = (float)map->map_w_d;
 			}
-			if (cam.rpos.z < (float)-map->map_h_d + 200.0f)
+			if (cam.position().z < (float)-map->map_h_d + 200.0f)
 			{
-				cam.rpos.z = (float)-map->map_h_d + 200.0f;
+				cam.position().z = (float)-map->map_h_d + 200.0f;
 			}
-			if (cam.rpos.z > map->map_h_d)
-				cam.rpos.z = (float)map->map_h_d;
-			if (cam.rpos.z > (float)map->map_h_d + 200.0f)
-				cam.rpos.z = (float)map->map_h_d + 200.0f;
-
-			Matrix Rotation = RotateX(r1 * DEG2RAD) * RotateY(r2 * DEG2RAD) * RotateZ(r3 * DEG2RAD);
-
-			cam.setMatrix(Rotation);
+			if (cam.position().z > map->map_h_d)
+				cam.position().z = (float)map->map_h_d;
+			if (cam.position().z > (float)map->map_h_d + 200.0f)
+				cam.position().z = (float)map->map_h_d + 200.0f;
 
 			if (!selected)
 				current_order = SIGNAL_ORDER_NONE;
@@ -348,7 +345,7 @@ namespace TA3D
 				int pointing = 0;
 				if (!IsOnGUI)
 				{
-					pointing = units.pick(cam); // Where is the cursor pointed?
+					pointing = units.pick(cam, screenToClipCoordinates(Vector2D(mouse_x, mouse_y))); // Where is the cursor pointed?
 					if (pointing == -1)			// Is the cursor on a rock, tree, ...?
 					{
 						Vector3D cur_pos(cursorOnMap(cam, *map, IsOnMinimap));
@@ -832,7 +829,7 @@ namespace TA3D
 					{
 						if (cursor_type == CURSOR_DEFAULT || cursor_type == CURSOR_CROSS)
 						{
-							int pointing = IsOnMinimap ? units.pick_minimap() : units.pick(cam); // Select a unit from a single click
+							int pointing = IsOnMinimap ? units.pick_minimap() : units.pick(cam, screenToClipCoordinates(Vector2D(mouse_x, mouse_y))); // Select a unit from a single click
 							if (!isShiftKeyDown())
 							{
 								for (unsigned int e = 0; e < units.index_list_size; ++e)
@@ -856,7 +853,7 @@ namespace TA3D
 							skip = true;
 					}
 					else
-						selected = units.selectUnits(RectTest(cam, pMouseRectSelection)); // SÃ©lÃ©ction au lasso
+						selected = units.selectUnits(RectTest(cam, screenToClipCoordinates(pMouseRectSelection))); // SÃ©lÃ©ction au lasso
 
 					if (!skip)
 					{
@@ -900,7 +897,7 @@ namespace TA3D
 
 			if (!IsOnGUI && (cursor_type == CURSOR_DEFAULT || units.last_on == -1))
 			{
-				units.pick(cam); // Let's see what's under the cursor
+				units.pick(cam, screenToClipCoordinates(Vector2D(mouse_x, mouse_y))); // Let's see what's under the cursor
 
 				if (units.last_on == -1) // Is the cursor on a rock, tree, ...?
 				{
