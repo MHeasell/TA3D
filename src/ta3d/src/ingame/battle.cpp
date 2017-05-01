@@ -284,7 +284,10 @@ namespace TA3D
 				}
 			}
 
-			// prevent the camera from panning off the map
+			// Prevent the camera from panning off the map.
+			// There is some UI-specific padding here because the UI overlaps the viewport,
+			// one day ideally the viewport dimensions should match the visible area on screen
+			// and this will no longer be needed.
 			float minCameraX = -(map->map_w / 2.0f) + (cam.viewportWidth() / 2.0f) - 64.0f; // 64 is UI width (in world units)
 			float maxCameraX = (map->map_w / 2.0f) - (cam.viewportWidth() / 2.0f) - 16.0f; // 16 for single graphics tile trim
 			float minCameraZ = -(map->map_h / 2.0f) + (cam.viewportHeight() / 2.0f) - 16.0f; // 16 is top bar height
