@@ -62,7 +62,6 @@ namespace TA3D
 
 		skin_name = "";
 
-		camera_def_h = 200.0f;
 		camera_zoom_speed = 1.0f;
 
 		player_name = "player";
