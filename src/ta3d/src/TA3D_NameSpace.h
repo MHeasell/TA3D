@@ -76,8 +76,6 @@ namespace TA3D
 
 		String skin_name; // The skin used ( empty means default )
 
-		bool use_texture_cache;		  // Use the texture cache ? (default : disabled because on some systems it doesn't work)
-
 		String net_server;		 // The server that monitor the game server list
 
 		bool right_click_interface; // Right click interface ?

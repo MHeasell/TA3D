@@ -108,43 +108,27 @@ namespace TA3D
 			int indx(0);
 			for (std::vector<GLuint>::iterator i = out.begin(); i != out.end(); ++i, ++indx)
 			{
-				uint32 fw, fh;
-				String cache_filename;
-				cache_filename << filename << "-" << imgname << '-' << indx << ".bin";
-				*i = gfx->load_texture_from_cache(cache_filename, filter, &fw, &fh);
+				SDL_Surface* img = Gaf::RawDataToBitmap(file, idx, indx, NULL, NULL, truecolor);
 
-				if (!(*i))
+				if (!img)
 				{
-					SDL_Surface* img = Gaf::RawDataToBitmap(file, idx, indx, NULL, NULL, truecolor);
-
-					if (!img)
-					{
-						delete file;
-						return;
-					}
-
-					if (w)
-						w[indx] = img->w;
-					if (h)
-						h[indx] = img->h;
-
-					bool with_alpha = false;
-					for (int y = 0; y < img->h && !with_alpha; ++y)
-						for (int x = 0; x < img->w && !with_alpha; ++x)
-							with_alpha |= geta(SurfaceInt(img, x, y)) != 255;
-					gfx->set_texture_format(with_alpha ? gfx->defaultTextureFormat_RGBA() : gfx->defaultTextureFormat_RGB());
-
-					*i = gfx->make_texture(img, filter);
-					gfx->save_texture_to_cache(cache_filename, *i, img->w, img->h, with_alpha);
-					SDL_FreeSurface(img);
+					delete file;
+					return;
 				}
-				else
-				{
-					if (w)
-						w[indx] = fw;
-					if (h)
-						h[indx] = fh;
-				}
+
+				if (w)
+					w[indx] = img->w;
+				if (h)
+					h[indx] = img->h;
+
+				bool with_alpha = false;
+				for (int y = 0; y < img->h && !with_alpha; ++y)
+					for (int x = 0; x < img->w && !with_alpha; ++x)
+						with_alpha |= geta(SurfaceInt(img, x, y)) != 255;
+				gfx->set_texture_format(with_alpha ? gfx->defaultTextureFormat_RGBA() : gfx->defaultTextureFormat_RGB());
+
+				*i = gfx->make_texture(img, filter);
+				SDL_FreeSurface(img);
 			}
 			delete file;
 			return;
@@ -173,21 +157,6 @@ namespace TA3D
 		// Remove GAF extension
 		if (filename.size() >= 4 || Substr(filename, filename.size() - 4, 4).toLower() == ".gaf")
 			filename.erase(filename.size(), 4);
-
-		String cache_filename;
-		cache_filename << filename << "-" << imgname << ".bin";
-		uint32 fw;
-		uint32 fh;
-		GLuint first_try = gfx->load_texture_from_cache(cache_filename, filter, &fw, &fh);
-
-		if (first_try)
-		{
-			if (w)
-				*w = fw;
-			if (h)
-				*h = fh;
-			return first_try;
-		}
 
 		// Now try to open it as a GAF-like directory
 		String::Vector folderList;
@@ -224,7 +193,6 @@ namespace TA3D
 					gfx->set_texture_format(with_alpha ? gfx->defaultTextureFormat_RGBA() : gfx->defaultTextureFormat_RGB());
 
 					GLuint gl_img = gfx->make_texture(img, filter);
-					gfx->save_texture_to_cache(cache_filename, gl_img, img->w, img->h, with_alpha);
 
 					SDL_FreeSurface(img);
 					delete file;
@@ -718,22 +686,9 @@ namespace TA3D
 		pAnimationConverted = true;
 		for (int i = 0; i < nb_bmp; ++i)
 		{
-			String cache_filename;
-			cache_filename << filename << '-' << (name.empty() ? "none" : name) << '-' << i << ".bin";
-
-			if (!filename.empty())
-				glbmp[i] = gfx->load_texture_from_cache(cache_filename, NO_FILTER ? FILTER_NONE : FILTER_TRILINEAR);
-			else
-				glbmp[i] = 0;
-
-			if (!glbmp[i])
-			{
-				bmp[i] = convert_format(bmp[i]);
-				gfx->set_texture_format(gfx->defaultTextureFormat_RGBA());
-				glbmp[i] = gfx->make_texture(bmp[i], NO_FILTER ? FILTER_NONE : FILTER_TRILINEAR);
-				if (!filename.empty())
-					gfx->save_texture_to_cache(cache_filename, glbmp[i], bmp[i]->w, bmp[i]->h, true);
-			}
+			bmp[i] = convert_format(bmp[i]);
+			gfx->set_texture_format(gfx->defaultTextureFormat_RGBA());
+			glbmp[i] = gfx->make_texture(bmp[i], NO_FILTER ? FILTER_NONE : FILTER_TRILINEAR);
 		}
 	}
 

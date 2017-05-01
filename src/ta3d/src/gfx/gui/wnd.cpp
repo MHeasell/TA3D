@@ -1451,30 +1451,26 @@ namespace TA3D
 			String panel = wndFile.pullAsString("gadget0.panel"); // Look for the panel texture
 			int w;
 			int h;
-			background = gfx->load_texture_from_cache(panel, FILTER_LINEAR, (uint32*)&w, (uint32*)&h);
-			if (!background)
+
+			background = Gaf::ToTexture(String("anims\\") << Name, panel, &w, &h, true);
+			if (background == 0) // Try GAF-like directory structure
+				background = Gaf::ToTexture(String("anims\\") << Name << ".gaf", panel, &w, &h, true);
+			if (background == 0) // Try GAF-like directory structure
+				background = Gaf::ToTexture("anims\\commongui", panel, &w, &h, true);
+			if (background == 0)
+				background = Gaf::ToTexture("anims\\commongui.gaf", panel, &w, &h, true);
+			if (background == 0)
 			{
-				background = Gaf::ToTexture(String("anims\\") << Name, panel, &w, &h, true);
-				if (background == 0) // Try GAF-like directory structure
-					background = Gaf::ToTexture(String("anims\\") << Name << ".gaf", panel, &w, &h, true);
-				if (background == 0) // Try GAF-like directory structure
-					background = Gaf::ToTexture("anims\\commongui", panel, &w, &h, true);
-				if (background == 0)
-					background = Gaf::ToTexture("anims\\commongui.gaf", panel, &w, &h, true);
-				if (background == 0)
+				String::Vector file_list;
+				VFS::Instance()->getDirlist("anims\\*", file_list);		 // GAF-like directories
+				VFS::Instance()->getFilelist("anims\\*.gaf", file_list); // Normal GAF files
+				for (String::Vector::const_iterator i = file_list.begin(); i != file_list.end() && background == 0; ++i)
 				{
-					String::Vector file_list;
-					VFS::Instance()->getDirlist("anims\\*", file_list);		 // GAF-like directories
-					VFS::Instance()->getFilelist("anims\\*.gaf", file_list); // Normal GAF files
-					for (String::Vector::const_iterator i = file_list.begin(); i != file_list.end() && background == 0; ++i)
-					{
-						LOG_DEBUG("trying(1) " << *i << " (" << Name << ")");
-						background = Gaf::ToTexture(*i, panel, &w, &h, true, FILTER_LINEAR);
-					}
+					LOG_DEBUG("trying(1) " << *i << " (" << Name << ")");
+					background = Gaf::ToTexture(*i, panel, &w, &h, true, FILTER_LINEAR);
 				}
-				if (background)
-					gfx->save_texture_to_cache(panel, background, w, h, false);
 			}
+
 			background_clamp = true;
 			background_width = w;
 			background_height = h;

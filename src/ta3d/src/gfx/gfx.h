@@ -190,12 +190,9 @@ namespace TA3D
 		GLuint create_texture(int w, int h, int filter_type = FILTER_TRILINEAR, bool clamp = true);
 		GLuint load_texture(const String& file, int filter_type = FILTER_TRILINEAR, uint32* width = NULL, uint32* height = NULL, bool clamp = true, GLuint texFormat = 0, bool* useAlpha = NULL, bool checkSize = false);
 		GLuint load_texture_mask(const String& file, uint32 level, int filter_type = FILTER_TRILINEAR, uint32* width = NULL, uint32* height = NULL, bool clamp = true);
-		GLuint load_texture_from_cache(const String& file, int filter_type = FILTER_TRILINEAR, uint32* width = NULL, uint32* height = NULL, bool clamp = true, bool* useAlpha = NULL);
-		void save_texture_to_cache(String file, GLuint tex, uint32 width, uint32 height, bool useAlpha);
 		void destroy_texture(GLuint& gltex);
 		void disable_texturing();
 		void enable_texturing();
-		bool is_texture_in_cache(const String& file);
 
 		SDL_Surface* load_image(const String& filename);
 

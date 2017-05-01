@@ -75,7 +75,6 @@ namespace TA3D
 			  << "    Camera Default Height = " << TA3D::lp_CONFIG->camera_def_h << ";\n"
 			  << "        Camera Zoom Speed = " << TA3D::lp_CONFIG->camera_zoom_speed << ";\n"
 			  << "                     Skin = " << TA3D::lp_CONFIG->skin_name << ";\n"
-			  << "        Use Texture Cache = " << TA3D::lp_CONFIG->use_texture_cache << ";\n"
 			  << "               Net Server = " << TA3D::lp_CONFIG->net_server << "; // default: " << TA3D_DEFAULT_SERVER_HOSTNAME << "\n"
 			  << "    Right Click Interface = " << TA3D::lp_CONFIG->right_click_interface << ";\n"
 			  << "             Sound Volume = " << TA3D::lp_CONFIG->sound_volume << ";\n"
@@ -143,8 +142,6 @@ namespace TA3D
 
 			TA3D::lp_CONFIG->camera_def_h = cfgFile.pullAsFloat("TA3D.Camera Default Height", 200.0f);
 			TA3D::lp_CONFIG->camera_zoom_speed = cfgFile.pullAsFloat("TA3D.Camera Zoom Speed", 1.0f);
-
-			TA3D::lp_CONFIG->use_texture_cache = cfgFile.pullAsBool("TA3D.Use Texture Cache", false);
 
 			TA3D::lp_CONFIG->skin_name = cfgFile.pullAsString("TA3D.Skin", "");
 

@@ -83,15 +83,11 @@ namespace TA3D
 				lp_CONFIG->fsaa = 0;
 				lp_CONFIG->anisotropy = 1;
 
-				lp_CONFIG->use_texture_cache = false;
-
 				break;
 
 			case Nvidia:
 				lp_CONFIG->fsaa = 0;
 				lp_CONFIG->anisotropy = 1;
-
-				lp_CONFIG->use_texture_cache = true;
 
 				break;
 
@@ -100,15 +96,11 @@ namespace TA3D
 				lp_CONFIG->fsaa = 0;
 				lp_CONFIG->anisotropy = 1;
 
-				lp_CONFIG->use_texture_cache = false;
-
 				break;
 
 			case Unknown:
 				lp_CONFIG->fsaa = 0;
 				lp_CONFIG->anisotropy = 1;
-
-				lp_CONFIG->use_texture_cache = false;
 
 				break;
 		};
@@ -119,15 +111,11 @@ namespace TA3D
 				lp_CONFIG->fsaa = 0;
 				lp_CONFIG->anisotropy = 1;
 
-				lp_CONFIG->use_texture_cache = false;
-
 				break;
 
 			case Nvidia:
 				lp_CONFIG->fsaa = 0;
 				lp_CONFIG->anisotropy = 1;
-
-				lp_CONFIG->use_texture_cache = true;
 
 				break;
 
@@ -136,15 +124,11 @@ namespace TA3D
 				lp_CONFIG->fsaa = 0;
 				lp_CONFIG->anisotropy = 1;
 
-				lp_CONFIG->use_texture_cache = false;
-
 				break;
 
 			case Unknown:
 				lp_CONFIG->fsaa = 0;
 				lp_CONFIG->anisotropy = 1;
-
-				lp_CONFIG->use_texture_cache = false;
 
 				break;
 		};
@@ -913,17 +897,6 @@ namespace TA3D
 			}
 		}
 
-		const bool compressible = texFormat == GL_COMPRESSED_RGB || texFormat == GL_COMPRESSED_RGBA || texFormat == 0;
-		String cache_filename = !file.empty() ? String(file) << ".bin" : String();
-		cache_filename.replace('/', 'S');
-		cache_filename.replace('\\', 'S');
-		if (compressible)
-		{
-			GLuint gltex = load_texture_from_cache(cache_filename, filter_type, width, height, clamp, useAlpha);
-			if (gltex)
-				return gltex;
-		}
-
 		SDL_Surface* bmp = load_image(file);
 		if (bmp == NULL)
 		{
@@ -976,9 +949,6 @@ namespace TA3D
 			textureLoad[gl_tex] = 1;
 			if (with_alpha)
 				textureAlpha.insert(gl_tex);
-
-			if (compressible)
-				save_texture_to_cache(cache_filename, gl_tex, bmp->w, bmp->h, with_alpha);
 		}
 		SDL_FreeSurface(bmp);
 		return gl_tex;
@@ -1029,21 +999,6 @@ namespace TA3D
 		GLuint gl_tex = make_texture(bmp, filter_type, clamp);
 		SDL_FreeSurface(bmp);
 		return gl_tex;
-	}
-
-	bool GFX::is_texture_in_cache(const String& file)
-	{
-		return false;
-	}
-
-	GLuint GFX::load_texture_from_cache(const String& file, int filter_type, uint32* width, uint32* height, bool clamp, bool* useAlpha)
-	{
-		return 0;
-	}
-
-	void GFX::save_texture_to_cache(String file, GLuint tex, uint32 width, uint32 height, bool useAlpha)
-	{
-		return;
 	}
 
 	void GFX::destroy_texture(GLuint& gltex)

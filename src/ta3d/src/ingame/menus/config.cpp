@@ -205,7 +205,7 @@ namespace TA3D
 			pArea->set_state("*.waves", false);
 			pArea->set_state("*.height_line", lp_CONFIG->height_line);
 			pArea->set_state("*.detail_tex", false);
-			pArea->set_state("*.use_texture_cache", lp_CONFIG->use_texture_cache);
+			pArea->set_state("*.use_texture_cache", false);
 			pArea->set_state("*.draw_console_loading", lp_CONFIG->draw_console_loading);
 			pArea->set_state("*.fullscreen", lp_CONFIG->fullscreen);
 			pArea->set_state("*.developer_mode", lp_CONFIG->developerMode);
@@ -470,7 +470,6 @@ namespace TA3D
 			lp_CONFIG->height_line = pArea->get_state("*.height_line");
 			lp_CONFIG->draw_console_loading = pArea->get_state("*.draw_console_loading");
 			lp_CONFIG->fullscreen = pArea->get_state("*.fullscreen");
-			lp_CONFIG->use_texture_cache = pArea->get_state("*.use_texture_cache");
 			lp_CONFIG->developerMode = pArea->get_state("*.developer_mode");
 			if (pArea->get_value("*.camera_def_h") >= 0)
 			{

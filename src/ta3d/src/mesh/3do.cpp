@@ -406,20 +406,19 @@ namespace TA3D
 				cache_filename.replace('\\', 'S');
 
 				gltex[e] = 0;
-				if (!gfx->is_texture_in_cache(cache_filename))
+
+				for (i = 0; i < nb_diff_tex; ++i)
 				{
-					for (i = 0; i < nb_diff_tex; ++i)
-					{
-						int f = e % texture_manager.tex[index_tex[i]].nb_bmp;
-						blit(texture_manager.tex[index_tex[i]].bmp[f], bmp,
-							0, 0, px[i], py[i],
-							texture_manager.tex[index_tex[i]].bmp[f]->w,
-							texture_manager.tex[index_tex[i]].bmp[f]->h);
-					}
-					cache_filename = TA3D::Paths::Files::ReplaceExtension(cache_filename, ".tex");
-					if (!TA3D::Paths::Exists(String(TA3D::Paths::Caches) << cache_filename))
-						SaveTex(bmp, String(TA3D::Paths::Caches) << cache_filename);
+					int f = e % texture_manager.tex[index_tex[i]].nb_bmp;
+					blit(texture_manager.tex[index_tex[i]].bmp[f], bmp,
+						0, 0, px[i], py[i],
+						texture_manager.tex[index_tex[i]].bmp[f]->w,
+						texture_manager.tex[index_tex[i]].bmp[f]->h);
 				}
+				cache_filename = TA3D::Paths::Files::ReplaceExtension(cache_filename, ".tex");
+				if (!TA3D::Paths::Exists(String(TA3D::Paths::Caches) << cache_filename))
+					SaveTex(bmp, String(TA3D::Paths::Caches) << cache_filename);
+
 				tex_cache_name.push_back(cache_filename);
 			}
 		}

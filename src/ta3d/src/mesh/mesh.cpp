@@ -327,7 +327,6 @@ namespace TA3D
 			{
 				GLuint texid = gfx->make_texture(bmp, FILTER_TRILINEAR, true);
 				gltex[id] = texid;
-				gfx->save_texture_to_cache(TA3D::Paths::Files::ReplaceExtension(tex_cache_name[id], ".bin"), texid, bmp->w, bmp->h, true);
 				SDL_FreeSurface(bmp);
 			}
 			else
@@ -337,14 +336,6 @@ namespace TA3D
 			}
 
 			tex_cache_name[id].clear();
-		}
-		else
-		{
-			if (id < (int)tex_cache_name.size() && !tex_cache_name[id].empty() && gfx->is_texture_in_cache(tex_cache_name[id]))
-			{
-				gltex[id] = gfx->load_texture_from_cache(tex_cache_name[id]);
-				tex_cache_name[id].clear();
-			}
 		}
 	}
 

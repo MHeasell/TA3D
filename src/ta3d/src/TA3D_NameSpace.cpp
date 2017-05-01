@@ -58,8 +58,6 @@ namespace TA3D
 
 		file_param.clear();
 
-		use_texture_cache = false;
-
 		pause = false;
 
 		skin_name = "";
