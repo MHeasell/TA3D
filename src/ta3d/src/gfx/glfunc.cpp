@@ -85,7 +85,6 @@ namespace TA3D
 
 		MultiTexturing = GLEW_ARB_multitexture;
 
-		g_useTextureCompression = GLEW_ARB_texture_compression;
 		g_useStencilTwoSide = GLEW_EXT_stencil_two_side;
 		g_useFBO = GLEW_EXT_framebuffer_object;
 		g_useGenMipMaps = GLEW_SGIS_generate_mipmap;

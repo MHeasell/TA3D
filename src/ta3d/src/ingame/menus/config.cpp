@@ -197,7 +197,7 @@ namespace TA3D
 			pArea->set_state("*.right_click_interface", lp_CONFIG->right_click_interface);
 			pArea->set_state("*.disable_GLSL", true);
 			pArea->set_state("*.underwater_bright", false);
-			pArea->set_state("*.use_texture_compression", lp_CONFIG->use_texture_compression);
+			pArea->set_state("*.use_texture_compression", false);
 			pArea->set_state("*.low_definition_map", false);
 			pArea->set_state("*.sky", false);
 			pArea->set_state("*.particle", true);
@@ -467,7 +467,6 @@ namespace TA3D
 			lp_CONFIG->unitTextureQuality = pArea->get_value("*.texture_quality");
 			lp_CONFIG->anisotropy = sint16(pArea->get_value("*.anisotropy"));
 			lp_CONFIG->right_click_interface = pArea->get_state("*.right_click_interface");
-			lp_CONFIG->use_texture_compression = pArea->get_state("*.use_texture_compression");
 			lp_CONFIG->height_line = pArea->get_state("*.height_line");
 			lp_CONFIG->draw_console_loading = pArea->get_state("*.draw_console_loading");
 			lp_CONFIG->fullscreen = pArea->get_state("*.fullscreen");

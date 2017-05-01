@@ -52,8 +52,6 @@ namespace TA3D
 
 		right_click_interface = false;
 
-		use_texture_compression = true;
-
 		enable_shortcuts = true;
 
 		net_server = TA3D_DEFAULT_SERVER_HOSTNAME;

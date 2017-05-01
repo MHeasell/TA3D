@@ -84,7 +84,6 @@ namespace TA3D
 				lp_CONFIG->anisotropy = 1;
 
 				lp_CONFIG->use_texture_cache = false;
-				lp_CONFIG->use_texture_compression = false;
 
 				break;
 
@@ -93,7 +92,6 @@ namespace TA3D
 				lp_CONFIG->anisotropy = 1;
 
 				lp_CONFIG->use_texture_cache = true;
-				lp_CONFIG->use_texture_compression = true;
 
 				break;
 
@@ -103,7 +101,6 @@ namespace TA3D
 				lp_CONFIG->anisotropy = 1;
 
 				lp_CONFIG->use_texture_cache = false;
-				lp_CONFIG->use_texture_compression = true;
 
 				break;
 
@@ -112,7 +109,6 @@ namespace TA3D
 				lp_CONFIG->anisotropy = 1;
 
 				lp_CONFIG->use_texture_cache = false;
-				lp_CONFIG->use_texture_compression = true;
 
 				break;
 		};
@@ -124,7 +120,6 @@ namespace TA3D
 				lp_CONFIG->anisotropy = 1;
 
 				lp_CONFIG->use_texture_cache = false;
-				lp_CONFIG->use_texture_compression = false;
 
 				break;
 
@@ -133,7 +128,6 @@ namespace TA3D
 				lp_CONFIG->anisotropy = 1;
 
 				lp_CONFIG->use_texture_cache = true;
-				lp_CONFIG->use_texture_compression = true;
 
 				break;
 
@@ -143,7 +137,6 @@ namespace TA3D
 				lp_CONFIG->anisotropy = 1;
 
 				lp_CONFIG->use_texture_cache = false;
-				lp_CONFIG->use_texture_compression = true;
 
 				break;
 
@@ -152,7 +145,6 @@ namespace TA3D
 				lp_CONFIG->anisotropy = 1;
 
 				lp_CONFIG->use_texture_cache = false;
-				lp_CONFIG->use_texture_compression = true;
 
 				break;
 		};
@@ -249,10 +241,7 @@ namespace TA3D
 		// Check everything is supported
 		checkConfig();
 
-		if (g_useTextureCompression && lp_CONFIG->use_texture_compression) // Try to enabled the Texture compression
-			set_texture_format(GL_COMPRESSED_RGB_ARB);
-		else
-			set_texture_format(defaultRGBTextureFormat);
+		set_texture_format(defaultRGBTextureFormat);
 		glViewport(0, 0, width, height);
 
 		glGetIntegerv(GL_MAX_TEXTURE_SIZE, &max_tex_size);
@@ -260,8 +249,6 @@ namespace TA3D
 
 	void GFX::checkConfig() const
 	{
-		if (!g_useTextureCompression)
-			lp_CONFIG->use_texture_compression = false;
 	}
 
 	bool GFX::checkVideoCardWorkaround() const
@@ -977,10 +964,7 @@ namespace TA3D
 			*useAlpha = with_alpha;
 		if (texFormat == 0)
 		{
-			if (g_useTextureCompression && lp_CONFIG->use_texture_compression)
-				set_texture_format(with_alpha ? GL_COMPRESSED_RGBA_ARB : GL_COMPRESSED_RGB_ARB);
-			else
-				set_texture_format(with_alpha ? defaultRGBATextureFormat : defaultRGBTextureFormat);
+			set_texture_format(with_alpha ? defaultRGBATextureFormat : defaultRGBTextureFormat);
 		}
 		else
 			set_texture_format(texFormat);
@@ -1041,10 +1025,7 @@ namespace TA3D
 				}
 			}
 		}
-		if (g_useTextureCompression && lp_CONFIG->use_texture_compression)
-			set_texture_format(with_alpha ? GL_COMPRESSED_RGBA_ARB : GL_COMPRESSED_RGB_ARB);
-		else
-			set_texture_format(with_alpha ? defaultRGBATextureFormat : defaultRGBTextureFormat);
+		set_texture_format(with_alpha ? defaultRGBATextureFormat : defaultRGBTextureFormat);
 		GLuint gl_tex = make_texture(bmp, filter_type, clamp);
 		SDL_FreeSurface(bmp);
 		return gl_tex;
@@ -1052,204 +1033,17 @@ namespace TA3D
 
 	bool GFX::is_texture_in_cache(const String& file)
 	{
-		if (ati_workaround || !lp_CONFIG->use_texture_cache || !lp_CONFIG->use_texture_compression || lp_CONFIG->developerMode)
-			return false;
-		String realFile(TA3D::Paths::Caches);
-		realFile += file;
-		if (TA3D::Paths::Exists(realFile))
-		{
-			std::ifstream cache_file(realFile.c_str(), std::ios::binary);
-			uint32 mod_hash;
-			cache_file.read((char*)&mod_hash, sizeof(mod_hash));
-			cache_file.close();
-
-			return mod_hash == hash<String>()(TA3D_CURRENT_MOD); // Check if it corresponds to current mod
-		}
 		return false;
 	}
 
 	GLuint GFX::load_texture_from_cache(const String& file, int filter_type, uint32* width, uint32* height, bool clamp, bool* useAlpha)
 	{
-		if (ati_workaround || !lp_CONFIG->use_texture_cache || !lp_CONFIG->use_texture_compression || !g_useGenMipMaps || !g_useNonPowerOfTwoTextures || lp_CONFIG->developerMode) // No caching in developer mode
-			return 0;
-
-		String realFile(TA3D::Paths::Caches);
-		realFile += file;
-		if (TA3D::Paths::Exists(realFile))
-		{
-			std::ifstream cache_file(realFile.c_str(), std::ios::binary);
-			uint32 mod_hash;
-			cache_file.read((char*)&mod_hash, sizeof(mod_hash));
-
-			if (mod_hash != hash<String>()(TA3D_CURRENT_MOD)) // Doesn't correspond to current mod
-			{
-				cache_file.close();
-				return 0;
-			}
-
-			if (useAlpha)
-				*useAlpha = cache_file.get();
-			else
-				cache_file.get();
-
-			uint32 rw, rh;
-			cache_file.read((char*)&rw, 4);
-			cache_file.read((char*)&rh, 4);
-			if (width)
-				*width = rw;
-			if (height)
-				*height = rh;
-
-			int lod_max = 0;
-			GLint size, internal_format;
-
-			cache_file.read((char*)&lod_max, sizeof(lod_max));
-
-			GLuint tex;
-			glEnable(GL_TEXTURE_2D);
-			glGenTextures(1, &tex);
-
-			if (filter_type == FILTER_NONE || filter_type == FILTER_LINEAR)
-				use_mipmapping(false);
-			else
-				use_mipmapping(true);
-
-			glBindTexture(GL_TEXTURE_2D, tex);
-			if (glGenerateMipmapEXT || !build_mipmaps)
-				glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP_SGIS, GL_FALSE);
-			else
-				glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP_SGIS, GL_TRUE);
-
-			for (int lod = 0; lod < lod_max; ++lod)
-			{
-				GLint w, h, border;
-				cache_file.read((char*)&size, sizeof(GLint));
-
-				byte* img = new byte[size];
-
-				cache_file.read((char*)&internal_format, sizeof(GLint));
-				cache_file.read((char*)&border, sizeof(GLint));
-				cache_file.read((char*)&w, sizeof(GLint));
-				cache_file.read((char*)&h, sizeof(GLint));
-				cache_file.read((char*)img, size);
-				if (lod == 0)
-					glCompressedTexImage2D(GL_TEXTURE_2D, 0, internal_format, w, h, border, size, img);
-				else
-					glCompressedTexSubImage2D(GL_TEXTURE_2D, lod, 0, 0, w, h, internal_format, size, img);
-
-				DELETE_ARRAY(img);
-				if (!build_mipmaps)
-					break;
-			}
-			if (build_mipmaps)
-				glGenerateMipmapEXT(GL_TEXTURE_2D);
-
-			cache_file.close();
-
-			if (filter_type == FILTER_NONE || filter_type == FILTER_LINEAR)
-				use_mipmapping(true);
-
-			glMatrixMode(GL_TEXTURE);
-			glLoadIdentity();
-			glMatrixMode(GL_MODELVIEW);
-
-			if (clamp)
-			{
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-			}
-			else
-			{
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-			}
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, lp_CONFIG->anisotropy);
-
-			switch (filter_type)
-			{
-				case FILTER_NONE:
-					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-					break;
-				case FILTER_LINEAR:
-					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-					break;
-				case FILTER_BILINEAR:
-					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
-					break;
-				case FILTER_TRILINEAR:
-					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-					break;
-			}
-			return tex;
-		}
-		return 0; // File isn't in cache
+		return 0;
 	}
 
 	void GFX::save_texture_to_cache(String file, GLuint tex, uint32 width, uint32 height, bool useAlpha)
 	{
-		if (ati_workaround || !lp_CONFIG->use_texture_cache || !lp_CONFIG->use_texture_compression || !g_useGenMipMaps || !g_useNonPowerOfTwoTextures || lp_CONFIG->developerMode)
-			return;
-
-		file = String(TA3D::Paths::Caches) << file;
-
-		int rw = texture_width(tex), rh = texture_height(tex); // Also binds tex
-
-		GLint compressed;
-		glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_COMPRESSED_ARB, &compressed);
-		// Do not save it if it's not compressed -> save disk space, and it would slow things down
-		if (!compressed)
-			return;
-
-		std::ofstream cache_file(file.c_str(), std::ios::binary);
-
-		if (!cache_file.is_open())
-			return;
-
-		uint32 mod_hash = static_cast<uint32>(hash<String>()(TA3D_CURRENT_MOD)); // Save a hash of current mod
-
-		cache_file.write((const char*)&mod_hash, sizeof(mod_hash));
-
-		cache_file.put(useAlpha);
-		cache_file.write((const char*)&width, 4);
-		cache_file.write((const char*)&height, 4);
-
-		int lod_max = Math::Max(Math::Log2(rw), Math::Log2(rh));
-		if ((1 << lod_max) < rw && (1 << lod_max) < rh)
-			lod_max++;
-
-		cache_file.write((const char*)&lod_max, sizeof(lod_max));
-
-		for (int lod = 0; lod < lod_max; ++lod)
-		{
-			GLint size, internal_format;
-
-			glGetTexLevelParameteriv(GL_TEXTURE_2D, lod, GL_TEXTURE_COMPRESSED_IMAGE_SIZE_ARB, &size);
-			glGetTexLevelParameteriv(GL_TEXTURE_2D, lod, GL_TEXTURE_INTERNAL_FORMAT, &internal_format);
-
-			byte* img = new byte[size];
-			memset(img, 0, size);
-
-			glGetCompressedTexImageARB(GL_TEXTURE_2D, lod, img);
-			GLint w, h, border;
-			glGetTexLevelParameteriv(GL_TEXTURE_2D, lod, GL_TEXTURE_BORDER, &border);
-			glGetTexLevelParameteriv(GL_TEXTURE_2D, lod, GL_TEXTURE_WIDTH, &w);
-			glGetTexLevelParameteriv(GL_TEXTURE_2D, lod, GL_TEXTURE_HEIGHT, &h);
-
-			cache_file.write((const char*)&size, sizeof(GLint));
-			cache_file.write((const char*)&internal_format, sizeof(GLint));
-			cache_file.write((const char*)&border, sizeof(GLint));
-			cache_file.write((const char*)&w, sizeof(GLint));
-			cache_file.write((const char*)&h, sizeof(GLint));
-			cache_file.write((const char*)img, size);
-
-			DELETE_ARRAY(img);
-		}
-
-		cache_file.close();
+		return;
 	}
 
 	uint32 GFX::texture_width(const GLuint gltex)

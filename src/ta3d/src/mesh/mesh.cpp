@@ -317,10 +317,7 @@ namespace TA3D
 			return;
 		if (id < (int)tex_cache_name.size() && !tex_cache_name[id].empty() && TA3D::Paths::ExtractFileExt(tex_cache_name[id]) == ".tex")
 		{
-			if (g_useTextureCompression && lp_CONFIG->use_texture_compression)
-				gfx->set_texture_format(GL_COMPRESSED_RGBA_ARB);
-			else
-				gfx->set_texture_format(gfx->defaultTextureFormat_RGBA());
+			gfx->set_texture_format(gfx->defaultTextureFormat_RGBA());
 
 			String filename(TA3D::Paths::Caches);
 			filename << tex_cache_name[id];

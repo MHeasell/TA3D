@@ -165,10 +165,7 @@ namespace TA3D
 			--(map->mini_h);
 		++(map->mini_w);
 		++(map->mini_h);
-		if (g_useTextureCompression && lp_CONFIG->use_texture_compression)
-			gfx->set_texture_format(GL_COMPRESSED_RGB_ARB);
-		else
-			gfx->set_texture_format(gfx->defaultTextureFormat_RGB());
+		gfx->set_texture_format(gfx->defaultTextureFormat_RGB());
 		map->glmini = gfx->make_texture(map->mini, FILTER_LINEAR, true);
 
 		LOG_INFO("minimap read in " << float(MILLISECONDS_SINCE_INIT - event_timer) * 0.001f << "s.");
@@ -260,10 +257,7 @@ namespace TA3D
 
 		LOG_DEBUG("MAP: creating textures");
 
-		if (g_useTextureCompression && lp_CONFIG->use_texture_compression)
-			gfx->set_texture_format(GL_COMPRESSED_RGB_ARB);
-		else
-			gfx->set_texture_format(gfx->defaultTextureFormat_RGB());
+		gfx->set_texture_format(gfx->defaultTextureFormat_RGB());
 		for (i = 0; i < n_bmp; ++i) // Finis de charger les textures et détruit les objets SDL_Surface
 		{
 			SDL_Surface* tmp = convert_format_24_copy(bmp_tex[i]);
@@ -400,10 +394,7 @@ namespace TA3D
 		LOG_INFO("Lava texture uploaded in " << float(MILLISECONDS_SINCE_INIT - event_timer) * 0.001f << "s.");
 		event_timer = MILLISECONDS_SINCE_INIT;
 
-		if (g_useTextureCompression && lp_CONFIG->use_texture_compression)
-			gfx->set_texture_format(GL_COMPRESSED_RGB_ARB);
-		else
-			gfx->set_texture_format(gfx->defaultTextureFormat_RGB());
+		gfx->set_texture_format(gfx->defaultTextureFormat_RGB());
 
 		LOG_DEBUG("MAP: computing height data (step 1)");
 		// Charge d'autres données sur les blocs
@@ -687,10 +678,7 @@ namespace TA3D
 		*file >> minimap;
 		SDL_Surface* bitmap = load_tnt_minimap_bmp(&minimap, &sw, &sh);
 
-		if (g_useTextureCompression && lp_CONFIG->use_texture_compression)
-			gfx->set_texture_format(GL_COMPRESSED_RGB_ARB);
-		else
-			gfx->set_texture_format(gfx->defaultTextureFormat_RGB());
+		gfx->set_texture_format(gfx->defaultTextureFormat_RGB());
 		GLuint texture = gfx->make_texture(bitmap, FILTER_LINEAR, true);
 
 		SDL_FreeSurface(bitmap);
@@ -705,10 +693,7 @@ namespace TA3D
 			return 0;
 
 		// Convert to a GL texture
-		if (g_useTextureCompression && lp_CONFIG->use_texture_compression)
-			gfx->set_texture_format(GL_COMPRESSED_RGB_ARB);
-		else
-			gfx->set_texture_format(gfx->defaultTextureFormat_RGB());
+		gfx->set_texture_format(gfx->defaultTextureFormat_RGB());
 		GLuint texture = gfx->make_texture(bitmap, FILTER_LINEAR, true);
 
 		SDL_FreeSurface(bitmap);

@@ -388,10 +388,7 @@ namespace TA3D
 		SDL_Surface* bmp = gfx->create_surface_ex(32, mx, my);
 		if (bmp != NULL && mx != 0 && my != 0)
 		{
-			if (g_useTextureCompression && lp_CONFIG->use_texture_compression)
-				gfx->set_texture_format(GL_COMPRESSED_RGB_ARB);
-			else
-				gfx->set_texture_format(gfx->defaultTextureFormat_RGB());
+			gfx->set_texture_format(gfx->defaultTextureFormat_RGB());
 			SDL_FillRect(bmp, NULL, 0);
 			tex_cache_name.clear();
 			gltex.clear();
@@ -745,10 +742,7 @@ namespace TA3D
 				points[i].y = points[i].y > 0.0f ? points[i].y * max_h / maxh : 0.0f;
 		}
 
-		if (g_useTextureCompression && lp_CONFIG->use_texture_compression)
-			gfx->set_texture_format(GL_COMPRESSED_RGBA_ARB);
-		else
-			gfx->set_texture_format(GL_RGB5_A1);
+		gfx->set_texture_format(GL_RGB5_A1);
 		gltex.resize(1);
 		gltex[0] = gfx->make_texture(bmp, FILTER_TRILINEAR);
 

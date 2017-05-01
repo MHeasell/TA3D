@@ -32,7 +32,6 @@ namespace TA3D
 {
 
 	extern bool MultiTexturing;
-	extern bool g_useTextureCompression;
 	extern bool g_useStencilTwoSide;
 	extern bool g_useFBO;
 	extern bool g_useGenMipMaps;

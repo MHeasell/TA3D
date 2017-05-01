@@ -1077,10 +1077,7 @@ namespace TA3D
 	{
 		panel.destroy();
 
-		if (g_useTextureCompression && lp_CONFIG->use_texture_compression)
-			gfx->set_texture_format(GL_COMPRESSED_RGB_ARB);
-		else
-			gfx->set_texture_format(gfx->defaultTextureFormat_RGB());
+		gfx->set_texture_format(gfx->defaultTextureFormat_RGB());
 		int w, h;
 		panel.set(Gaf::ToTexture(String("anims\\") << intgaf, "PANELSIDE2", &w, &h, true));
 		panel.width = w;

@@ -132,10 +132,7 @@ namespace TA3D
 					for (int y = 0; y < img->h && !with_alpha; ++y)
 						for (int x = 0; x < img->w && !with_alpha; ++x)
 							with_alpha |= geta(SurfaceInt(img, x, y)) != 255;
-					if (g_useTextureCompression && lp_CONFIG->use_texture_compression)
-						gfx->set_texture_format(with_alpha ? GL_COMPRESSED_RGBA_ARB : GL_COMPRESSED_RGB_ARB);
-					else
-						gfx->set_texture_format(with_alpha ? gfx->defaultTextureFormat_RGBA() : gfx->defaultTextureFormat_RGB());
+					gfx->set_texture_format(with_alpha ? gfx->defaultTextureFormat_RGBA() : gfx->defaultTextureFormat_RGB());
 
 					*i = gfx->make_texture(img, filter);
 					gfx->save_texture_to_cache(cache_filename, *i, img->w, img->h, with_alpha);
@@ -224,10 +221,7 @@ namespace TA3D
 						for (int x = 0; x < img->w && !with_alpha; ++x)
 							with_alpha |= SurfaceByte(img, (x << 2) + 3, y) != 255;
 					}
-					if (g_useTextureCompression && lp_CONFIG->use_texture_compression)
-						gfx->set_texture_format(with_alpha ? GL_COMPRESSED_RGBA_ARB : GL_COMPRESSED_RGB_ARB);
-					else
-						gfx->set_texture_format(with_alpha ? gfx->defaultTextureFormat_RGBA() : gfx->defaultTextureFormat_RGB());
+					gfx->set_texture_format(with_alpha ? gfx->defaultTextureFormat_RGBA() : gfx->defaultTextureFormat_RGB());
 
 					GLuint gl_img = gfx->make_texture(img, filter);
 					gfx->save_texture_to_cache(cache_filename, gl_img, img->w, img->h, with_alpha);
@@ -735,10 +729,7 @@ namespace TA3D
 			if (!glbmp[i])
 			{
 				bmp[i] = convert_format(bmp[i]);
-				if (g_useTextureCompression && COMPRESSED && lp_CONFIG->use_texture_compression)
-					gfx->set_texture_format(GL_COMPRESSED_RGBA_ARB);
-				else
-					gfx->set_texture_format(gfx->defaultTextureFormat_RGBA());
+				gfx->set_texture_format(gfx->defaultTextureFormat_RGBA());
 				glbmp[i] = gfx->make_texture(bmp[i], NO_FILTER ? FILTER_NONE : FILTER_TRILINEAR);
 				if (!filename.empty())
 					gfx->save_texture_to_cache(cache_filename, glbmp[i], bmp[i]->w, bmp[i]->h, true);

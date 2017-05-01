@@ -78,7 +78,6 @@ namespace TA3D
 			  << "                     Skin = " << TA3D::lp_CONFIG->skin_name << ";\n"
 			  << "        Use Texture Cache = " << TA3D::lp_CONFIG->use_texture_cache << ";\n"
 			  << "               Net Server = " << TA3D::lp_CONFIG->net_server << "; // default: " << TA3D_DEFAULT_SERVER_HOSTNAME << "\n"
-			  << "  Use Texture Compression = " << TA3D::lp_CONFIG->use_texture_compression << ";\n"
 			  << "    Right Click Interface = " << TA3D::lp_CONFIG->right_click_interface << ";\n"
 			  << "             Sound Volume = " << TA3D::lp_CONFIG->sound_volume << ";\n"
 			  << "             Music Volume = " << TA3D::lp_CONFIG->music_volume << ";\n"
@@ -156,8 +155,6 @@ namespace TA3D
 			TA3D::TA3D_CURRENT_MOD = TA3D::lp_CONFIG->last_MOD;
 
 			TA3D::lp_CONFIG->player_name = cfgFile.pullAsString("TA3D.Player name", "player");
-
-			TA3D::lp_CONFIG->use_texture_compression = cfgFile.pullAsBool("TA3D.Use Texture Compression", true);
 
 			TA3D::lp_CONFIG->right_click_interface = cfgFile.pullAsBool("TA3D.Right Click Interface", false);
 
