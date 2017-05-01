@@ -1046,22 +1046,6 @@ namespace TA3D
 		return;
 	}
 
-	uint32 GFX::texture_width(const GLuint gltex)
-	{
-		GLint width;
-		glBindTexture(GL_TEXTURE_2D, gltex);
-		glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_WIDTH, &width);
-		return width;
-	}
-
-	uint32 GFX::texture_height(const GLuint gltex)
-	{
-		GLint height;
-		glBindTexture(GL_TEXTURE_2D, gltex);
-		glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_HEIGHT, &height);
-		return height;
-	}
-
 	void GFX::destroy_texture(GLuint& gltex)
 	{
 		if (gltex) // Test if the texture exists
