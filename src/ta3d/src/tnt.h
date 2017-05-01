@@ -63,11 +63,6 @@ namespace TA3D
 		int h;
 		byte map[TNTMINIMAP_HEIGHT][TNTMINIMAP_WIDTH];
 	};
-	union TNTMINIMAP_U // For strict-aliasing safety
-	{
-		byte bytes[sizeof(TNTMINIMAP)];
-		TNTMINIMAP map;
-	};
 
 	// Load a map in TNT format extracted from a HPI archive
 	MAP* load_tnt_map(File* file); // Charge une map au format TA, extraite d'une archive HPI/UFO
