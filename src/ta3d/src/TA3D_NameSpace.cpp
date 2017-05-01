@@ -62,8 +62,6 @@ namespace TA3D
 
 		skin_name = "";
 
-		camera_zoom_speed = 1.0f;
-
 		player_name = "player";
 		serializedGameData.clear();
 

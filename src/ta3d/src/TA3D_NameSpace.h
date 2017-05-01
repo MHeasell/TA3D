@@ -66,8 +66,6 @@ namespace TA3D
 
 		bool draw_console_loading;
 
-		float camera_zoom_speed;
-
 		String serializedGameData; // Informations about last game
 
 		String last_MOD;
