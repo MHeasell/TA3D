@@ -285,22 +285,26 @@ namespace TA3D
 			}
 
 			// prevent the camera from panning off the map
-			if (cam.position().x < -map->map_w_d)
+			float minCameraX = -(map->map_w / 2.0f) + (cam.viewportWidth() / 2.0f) - 64.0f; // 64 is UI width (in world units)
+			float maxCameraX = (map->map_w / 2.0f) - (cam.viewportWidth() / 2.0f) - 16.0f; // 16 for single graphics tile trim
+			float minCameraZ = -(map->map_h / 2.0f) + (cam.viewportHeight() / 2.0f) - 16.0f; // 16 is top bar height
+			float maxCameraZ = map->map_h_d - (cam.viewportHeight() / 2.0f) + 16.0f - 64.0f; // 16 is bottom bar height, 64 is 4 graphics tile trim
+			if (cam.position().x < minCameraX)
 			{
-				cam.position().x = (float)-map->map_w_d;
+				cam.position().x = minCameraX;
 			}
-			if (cam.position().x > map->map_w_d)
+			if (cam.position().x > maxCameraX)
 			{
-				cam.position().x = (float)map->map_w_d;
+				cam.position().x = maxCameraX;
 			}
-			if (cam.position().z < (float)-map->map_h_d + 200.0f)
+			if (cam.position().z < minCameraZ)
 			{
-				cam.position().z = (float)-map->map_h_d + 200.0f;
+				cam.position().z = minCameraZ;
 			}
-			if (cam.position().z > map->map_h_d)
-				cam.position().z = (float)map->map_h_d;
-			if (cam.position().z > (float)map->map_h_d + 200.0f)
-				cam.position().z = (float)map->map_h_d + 200.0f;
+			if (cam.position().z > maxCameraZ)
+			{
+				cam.position().z = maxCameraZ;
+			}
 
 			if (!selected)
 				current_order = SIGNAL_ORDER_NONE;
