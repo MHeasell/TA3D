@@ -1,5 +1,5 @@
 #include <catch.hpp>
-#include "Camera.h"
+#include "camera.h"
 #include "vector.h"
 
 namespace TA3D

@@ -28,7 +28,7 @@
 #include <misc/rect.h>
 #include <misc/material.light.h>
 #include <scripts/script.h>
-#include "../misc/Camera.h"
+#include "../misc/camera.h"
 #include "fps.h"
 
 #ifndef SCROLL_SPEED

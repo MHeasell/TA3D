@@ -1,5 +1,5 @@
 #include <GL/glew.h>
-#include "Camera.h"
+#include "camera.h"
 #include "../TA3D_NameSpace.h"
 
 namespace TA3D
