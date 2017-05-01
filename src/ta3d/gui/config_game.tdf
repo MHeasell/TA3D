@@ -190,7 +190,7 @@
 	{
 		name=camera_def_angle;
 		type=MENU;
-		entry=,45,50,55,60,63.44,65,70,75,80,85,90;
+		entry=;
 		x1=600;
 		y1=325;
 		x2=730;
