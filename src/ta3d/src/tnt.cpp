@@ -699,21 +699,4 @@ namespace TA3D
 		SDL_FreeSurface(bitmap);
 		return texture;
 	}
-
-	SDL_Surface* load_tnt_minimap_fast_bmp(const String& filename) // Load a minimap into a SDL_Surface* structure from a HPI/UFO archive
-	{
-		int sw, sh;
-		SDL_Surface* fullsize = load_tnt_minimap_fast_raw_bmp(filename, sw, sh);
-
-		if (fullsize == NULL)
-			return 0;
-
-		// Copy the full-sized bitmap down to an exact-sized version
-		SDL_Surface* trimmed = gfx->create_surface(sw, sh);
-		blit(fullsize, trimmed, 0, 0, 0, 0, sw, sh);
-		SDL_FreeSurface(fullsize);
-
-		return trimmed;
-	}
-
 } // namespace TA3D
