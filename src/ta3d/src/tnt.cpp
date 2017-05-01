@@ -669,22 +669,6 @@ namespace TA3D
 		return map;
 	}
 
-	GLuint load_tnt_minimap(File* file, int& sw, int& sh) // Charge une minimap d'une carte, extraite d'une archive HPI/UFO
-	{
-		TNTHEADER header;
-		*file >> header;
-		file->seek(header.PTRminimap);
-		TNTMINIMAP minimap;
-		*file >> minimap;
-		SDL_Surface* bitmap = load_tnt_minimap_bmp(&minimap, &sw, &sh);
-
-		gfx->set_texture_format(gfx->defaultTextureFormat_RGB());
-		GLuint texture = gfx->make_texture(bitmap, FILTER_LINEAR, true);
-
-		SDL_FreeSurface(bitmap);
-		return texture;
-	}
-
 	GLuint load_tnt_minimap_fast(const String& filename, int& sw, int& sh) // Charge une minimap d'une carte contenue dans une archive HPI/UFO
 	{
 		SDL_Surface* bitmap = load_tnt_minimap_fast_raw_bmp(filename, sw, sh);
