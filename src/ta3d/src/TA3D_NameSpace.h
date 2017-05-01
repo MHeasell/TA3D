@@ -66,7 +66,6 @@ namespace TA3D
 
 		bool draw_console_loading;
 
-		float camera_def_angle;
 		float camera_def_h;
 		float camera_zoom_speed;
 
