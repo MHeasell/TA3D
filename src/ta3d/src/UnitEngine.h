@@ -249,6 +249,14 @@ namespace TA3D
 		*/
 		bool selectUnits(const RectTest& reigon);
 
+		/**
+		 * Picks the closest unit that is close
+		 * to the given user mouse position, in clip space.
+		 *
+		 * @param cam The camera to project the position with.
+		 * @param clipPosition The clip-space position search around.
+		 * @return The ID of the found unit, or -1 if no unit is close.
+		 */
 		int pick(Camera& cam, const Vector2D& clipPosition);
 
 		int pick_minimap();
