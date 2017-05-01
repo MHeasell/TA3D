@@ -138,4 +138,15 @@ namespace TA3D
 			REQUIRE(c.E[3][3] == Approx(1.0f));
 		}
 	}
+
+	TEST_CASE("Matrix::Translate")
+	{
+		SECTION("Produces a translation matrix")
+		{
+			auto v = Translate(Vector3D(3.0f, 4.0f, 5.0f)) * Vector3D(11.0f, 15.0f, 19.0f);
+			REQUIRE(v.x == Approx(14.0f));
+			REQUIRE(v.y == Approx(19.0f));
+			REQUIRE(v.z == Approx(24.0f));
+		}
+	}
 }
