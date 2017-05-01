@@ -168,7 +168,7 @@ namespace TA3D
 			for (uint32 i = 0; i < cacheAnm.size(); ++i)
 			{
 				if (cacheAnm[i])
-					cacheAnm[i]->convert(false, true);
+					cacheAnm[i]->convert(false);
 			}
 			pCacheIsDirty = false;
 		}

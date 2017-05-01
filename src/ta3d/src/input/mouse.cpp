@@ -162,7 +162,7 @@ namespace TA3D
 		if (file)
 		{
 			cursor.loadGAFFromRawData(file, false);
-			cursor.convert(false, false);
+			cursor.convert(false);
 
 			CURSOR_MOVE = cursor.findByName("cursormove"); // Match cursor variables with cursor anims
 			CURSOR_GREEN = cursor.findByName("cursorgrn");

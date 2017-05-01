@@ -142,7 +142,7 @@ namespace TA3D
 		if (need_convert)
 		{
 			need_convert = false;
-			anim.convert(false, true);
+			anim.convert(false);
 			anim.clean();
 		}
 	}

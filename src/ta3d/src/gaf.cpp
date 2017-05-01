@@ -746,10 +746,10 @@ namespace TA3D
 			i->clean();
 	}
 
-	void Gaf::AnimationList::convert(const bool no_filter, const bool compressed)
+	void Gaf::AnimationList::convert(const bool no_filter)
 	{
 		for (AnimationVector::iterator i = pList.begin(); i != pList.end(); ++i)
-			i->convert(no_filter, compressed);
+			i->convert(no_filter);
 	}
 
 	sint32 Gaf::RawDataEntriesCount(File* file)

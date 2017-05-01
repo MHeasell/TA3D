@@ -57,7 +57,7 @@ namespace TA3D
 		if (fx_manager.fx_data)
 		{
 			weapon_manager.cannonshell.loadGAFFromRawData(fx_manager.fx_data, Gaf::RawDataGetEntryIndex(fx_manager.fx_data, "cannonshell"));
-			weapon_manager.cannonshell.convert(false, true);
+			weapon_manager.cannonshell.convert(false);
 			weapon_manager.cannonshell.clean();
 			// fx_data is deleted later in FXManager::destroy()
 		}

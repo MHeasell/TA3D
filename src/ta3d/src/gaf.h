@@ -292,7 +292,7 @@ namespace TA3D
 			/*!
 			** \brief
 			*/
-			void convert(const bool no_filter = false, const bool compressed = false);
+			void convert(const bool no_filter = false);
 
 			/*!
 			** \deprecated Use clear instead
