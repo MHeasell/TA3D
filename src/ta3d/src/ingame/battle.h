@@ -517,6 +517,15 @@ namespace TA3D
 		 * @param targetUnitId The unit to repair.
 		 */
 		void issueRepairMission(int targetUnitId) const;
+
+		/**
+		 * Issues a reclaim mission to the currently selected units.
+		 * If the shift key is held, the mission will be queued,
+		 * otherwise, the mission will replace the unit's current mission queue.
+		 *
+		 * @param targetUnitId The unit to reclaim.
+		 */
+		void issueReclaimMission(int targetUnitId) const;
 	}; // class Battle
 
 } // namespace TA3D
