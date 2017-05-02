@@ -569,24 +569,7 @@ namespace TA3D
 			{
 				Vector3D cur_pos(cursorOnMap(cam, *map, IsOnMinimap));
 				int idx = -units.last_on - 2;
-				if (idx >= 0 && features.feature[idx].type >= 0 && feature_manager.getFeaturePointer(features.feature[idx].type)->reclaimable)
-				{
-					for (unsigned int e = 0; e < units.index_list_size; ++e)
-					{
-						units.lock();
-						int i = units.idx_list[e];
-						units.unlock();
-						units.unit[i].lock();
-						if (units.unit[i].isAlive() && units.unit[i].isOwnedBy(players.local_human_id) && units.unit[i].isSelected && unit_manager.unit_type[units.unit[i].type_id]->canresurrect && unit_manager.unit_type[units.unit[i].type_id]->BMcode)
-						{
-							if (isShiftKeyDown())
-								units.unit[i].add_mission(MISSION_REVIVE, &cur_pos, false, idx, NULL);
-							else
-								units.unit[i].set_mission(MISSION_REVIVE, &cur_pos, false, idx, true, NULL);
-						}
-						units.unit[i].unlock();
-					}
-				}
+				issueReviveMission(cur_pos, idx);
 				if (!isShiftKeyDown())
 					current_order = SIGNAL_ORDER_NONE;
 				click_activated = true;
@@ -2173,6 +2156,28 @@ namespace TA3D
 			Menus::Statistics::Execute();
 
 		return pResult;
+	}
+
+	void Battle::issueReviveMission(Vector3D& targetPosition, int targetFeatureId) const
+	{
+		if (targetFeatureId >= 0 && features.feature[targetFeatureId].type >= 0 && feature_manager.getFeaturePointer(features.feature[targetFeatureId].type)->reclaimable)
+		{
+			for (unsigned int e = 0; e < units.index_list_size; ++e)
+			{
+				units.lock();
+				int i = units.idx_list[e];
+				units.unlock();
+				units.unit[i].lock();
+				if (units.unit[i].isAlive() && units.unit[i].isOwnedBy(players.local_human_id) && units.unit[i].isSelected && unit_manager.unit_type[units.unit[i].type_id]->canresurrect && unit_manager.unit_type[units.unit[i].type_id]->BMcode)
+				{
+					if (isShiftKeyDown())
+						units.unit[i].add_mission(MISSION_REVIVE, &targetPosition, false, targetFeatureId, NULL);
+					else
+						units.unit[i].set_mission(MISSION_REVIVE, &targetPosition, false, targetFeatureId, true, NULL);
+				}
+				units.unit[i].unlock();
+			}
+		}
 	}
 
 	void Battle::issueAttackGroundMission(Vector3D& targetPosition) const

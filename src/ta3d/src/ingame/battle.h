@@ -553,6 +553,16 @@ namespace TA3D
 		 * @param targetPosition The position to attack.
 		 */
 		void issueAttackGroundMission(Vector3D& targetPosition) const;
+
+		/**
+		 * Issues a revive mission to the currently selected units.
+		 * If the shift key is held, the mission will be queued,
+		 * otherwise, the mission will replace the unit's current mission queue.
+		 *
+		 * @param targetPosition The position of the unit to be revived.
+		 * @param targetFeatureId The ID of the unit's corpse.
+		 */
+		void issueReviveMission(Vector3D& targetPosition, int targetFeatureId) const;
 	}; // class Battle
 
 } // namespace TA3D
