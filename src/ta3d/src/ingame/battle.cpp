@@ -484,21 +484,7 @@ namespace TA3D
 						}
 						else if (cursor_type == CURSOR_CAPTURE && can_be_captured)
 						{
-							for (size_t e = 0; e < units.index_list_size; e++)
-							{
-								units.lock();
-								const size_t i = units.idx_list[e];
-								units.unlock();
-								units.unit[i].lock();
-								if (units.unit[i].isAlive() && units.unit[i].isOwnedBy(players.local_human_id) && units.unit[i].isSelected && unit_manager.unit_type[units.unit[i].type_id]->CanCapture)
-								{
-									if (isShiftKeyDown())
-										units.unit[i].add_mission(MISSION_CAPTURE, &(units.unit[pointing].Pos), false, 0, &(units.unit[pointing]));
-									else
-										units.unit[i].set_mission(MISSION_CAPTURE, &(units.unit[pointing].Pos), false, 0, true, &(units.unit[pointing]));
-								}
-								units.unit[i].unlock();
-							}
+							issueCaptureMission(pointing);
 							if (!isShiftKeyDown())
 								current_order = SIGNAL_ORDER_NONE;
 							click_activated = true;
@@ -2236,6 +2222,25 @@ namespace TA3D
 			Menus::Statistics::Execute();
 
 		return pResult;
+	}
+
+	void Battle::issueCaptureMission(int targetUnitId) const
+	{
+		for (size_t e = 0; e < units.index_list_size; e++)
+		{
+			units.lock();
+			const size_t i = units.idx_list[e];
+			units.unlock();
+			units.unit[i].lock();
+			if (units.unit[i].isAlive() && units.unit[i].isOwnedBy(players.local_human_id) && units.unit[i].isSelected && unit_manager.unit_type[units.unit[i].type_id]->CanCapture)
+			{
+				if (isShiftKeyDown())
+					units.unit[i].add_mission(MISSION_CAPTURE, &(units.unit[targetUnitId].Pos), false, 0, &(units.unit[targetUnitId]));
+				else
+					units.unit[i].set_mission(MISSION_CAPTURE, &(units.unit[targetUnitId].Pos), false, 0, true, &(units.unit[targetUnitId]));
+			}
+			units.unit[i].unlock();
+		}
 	}
 
 	void Battle::issueAttackMission(int targetUnitId, bool dgun) const

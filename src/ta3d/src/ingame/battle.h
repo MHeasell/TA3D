@@ -499,6 +499,15 @@ namespace TA3D
 		 * @param dgun Currently unknown, presumably to do with the D-Gun button.
 		 */
 		void issueAttackMission(int targetUnitId, bool dgun) const;
+
+		/**
+		 * Issues a capture mission to the currently selected units.
+		 * If the shift key is held, the mission will be queued,
+		 * otherwise, the mission will replace the unit's current mission queue.
+		 *
+		 * @param targetUnitId The unit to capture.
+		 */
+		void issueCaptureMission(int targetUnitId) const;
 	}; // class Battle
 
 } // namespace TA3D
