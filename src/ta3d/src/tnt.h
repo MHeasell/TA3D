@@ -32,21 +32,125 @@
 namespace TA3D
 {
 
-	struct TNTHEADER // Structure de l'en-tête du fichier TNT
+	/**
+	 * Structure of the TNT file header
+	 */
+	struct TNTHEADER
 	{
+        /**
+         * version/file type marker.
+         * It is always 0x2000 in valid TNT files.
+         */
 		int IDversion;
+
+		/**
+		 * The width of the map in 16-pixel units as used for feature/height information.
+		 * To get the width in 32-pixel units (the size of a tile), divide by 2.
+		 */
 		int Width;
+
+		/**
+		 * The height of the map in 16-pixel units as used for feature/height information.
+		 * To get the height in 32-pixel units (the size of a tile), divide by 2.
+		 */
 		int Height;
+
+		/**
+		 * Offset from the beginning of the file to the tile indices array.
+		 * This array contains unsigned shorts
+		 * that are the indices in the tile array
+		 * of the 32x32 pixel tile to be displayed at that point.
+		 */
 		int PTRmapdata;
+
+		/**
+         * Offset from the beginning of the file to the map attributes array.
+         * This array holds the height and feature information
+         * for every 16x16 pixel square on the map.
+         *
+         * NB: There are 4 of these squares for each square
+         * in the tile indices array.
+		 */
 		int PTRmapattr;
+
+		/**
+         * This is the array of tiles referenced by the tile indices array.
+         * One tile consists of unsigned char[32*32].
+		 */
 		int PTRtilegfx;
+
+		/**
+		 * The length of the array of tiles, i.e. the number of tiles.
+		 */
 		int tiles;
+
+		/**
+		 * The length of the array of tile animations (features).
+         * i.e. the number of features.
+		 */
 		int tileanims;
+
+		/**
+         * This is the array of features referenced by the feature indices array.
+         * Each entry is 0x84 bytes long and consists of an unsigned long
+         * that always seems to equal the index of the feature in this array
+         * and a 128-character null-terminated string
+         * that contains the name of the feature to be placed in the location
+         * as found between the square brackets "[]" in a TDF feature file.
+         *
+         * NB: The index seems to be totally useless.
+         * I have noticed that while Cavedog maps include them,
+         * Annihilator doesn't even bother to include them.
+         */
 		int PTRtileanim;
+
+		/**
+         * Any value in the heights array less than this value
+         * is deemed to be "under water"
+         * (i.e. water modifiers and effects apply).
+         */
 		int sealevel;
+
+		/**
+         * Obviously enough, this is where the minimap image is found.
+         * At the offset, the first things you find are 2 unsigned long's:
+         * the minimap's width and height (which always seem to be 252).
+         * What follows is width*height of pixel data.
+         * The difficult part about minimaps
+         * is that they are padded by 0xDD's
+         * (the standard blue used as transparent in TA).
+         */
 		int PTRminimap;
+
+		/**
+         * No-one knows what this is used for.
+         * It may just be here for alignment.
+         */
 		int unknown1;
-		int pad1, pad2, pad3, pad4;
+
+		/**
+         * No-one knows what this is used for.
+         * It may just be here for alignment.
+         */
+		int pad1;
+
+		/**
+         * No-one knows what this is used for.
+         * It may just be here for alignment.
+         */
+		int pad2;
+
+		/**
+         * No-one knows what this is used for.
+         * It may just be here for alignment.
+         */
+		int pad3;
+
+		/**
+         * No-one knows what this is used for.
+         * It may just be here for alignment.
+         */
+		int pad4;
 	};
 	union TNTHEADER_U // For strict-aliasing safety
 	{
@@ -59,8 +163,16 @@ namespace TA3D
 
 	struct TNTMINIMAP
 	{
+		//! The width of the minimap in pixels
 		int w;
+
+		//! The height of the minimap in pixels
 		int h;
+
+		/**
+		 * The minimap data. Each byte is one pixel
+		 * and the data is an index into the TA color pallete.
+		 */
 		byte map[TNTMINIMAP_HEIGHT][TNTMINIMAP_WIDTH];
 	};
 
