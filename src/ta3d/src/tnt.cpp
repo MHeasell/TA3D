@@ -120,15 +120,6 @@ namespace TA3D
 		*file >> header_u;
 		TNTHEADER& header = header_u.header; // Structure pour l'en-tête du fichier
 
-#ifdef TNT_DEBUG_MODE
-		LOG_DEBUG("[tnt - load map] IDversion = " << header.IDversion);
-		LOG_DEBUG("[tnt - load map] Width = " << header.Width);
-		LOG_DEBUG("[tnt - load map] Height = ", header.Height);
-		LOG_DEBUG("[tnt - load map] tiles = ", header.tiles);
-		LOG_DEBUG("[tnt - load map] tileanims = " << header.tileanims);
-		LOG_DEBUG("[tnt - load map] sealevel = " << header.sealevel);
-#endif
-
 		LOG_DEBUG("MAP: reading TDF table");
 		int* TDF_index = new int[header.tileanims];
 
