@@ -295,14 +295,6 @@ namespace TA3D
 		float wind_dir;
 		Vector3D wind_vec;
 
-		int low_nb_idx;
-		int low_w, low_h;
-		Vector3D* low_vtx;
-		Vector3D* low_vtx_flat;
-		float* low_tcoord;
-		uint8* low_col;
-		GLuint* low_index;
-
 		uint8 fog_of_war;
 
 		void clear_FOW(sint8 FOW_flags = -1);

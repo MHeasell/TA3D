@@ -108,13 +108,6 @@ namespace TA3D
 		radar_map.clear();
 		sonar_map.clear();
 
-		low_nb_idx = 0;
-		low_vtx = NULL;
-		low_vtx_flat = NULL;
-		low_tcoord = NULL;
-		low_col = NULL;
-		low_index = NULL;
-
 		wind = 0.0f;
 		wind_dir = 0.0f;
 		wind_vec.reset();
@@ -519,12 +512,6 @@ namespace TA3D
 		sight_map.resize(0, 0);
 		radar_map.resize(0, 0);
 		sonar_map.resize(0, 0);
-
-		DELETE_ARRAY(low_vtx);
-		DELETE_ARRAY(low_vtx_flat);
-		DELETE_ARRAY(low_tcoord);
-		DELETE_ARRAY(low_col);
-		DELETE_ARRAY(low_index);
 
 		ota_data.destroy();
 		view.resize(0, 0);
