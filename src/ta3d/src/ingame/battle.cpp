@@ -596,7 +596,8 @@ namespace TA3D
 
 			if (cursor_type == CURSOR_MOVE && !rope_selection && click_activation && (!IsOnGUI || IsOnMinimap) && !order_removed) // The cursor orders to move
 			{
-				units.give_order_move(players.local_human_id, cursorOnMap(cam, *map, IsOnMinimap), !isShiftKeyDown());
+				const Vector3D& curPos = cursorOnMap(cam, *map, IsOnMinimap);
+				issueMoveMission(curPos);
 				if (!isShiftKeyDown())
 					current_order = SIGNAL_ORDER_NONE;
 				click_activated = true;
@@ -2139,6 +2140,11 @@ namespace TA3D
 			Menus::Statistics::Execute();
 
 		return pResult;
+	}
+
+	void Battle::issueMoveMission(const Vector3D& targetPosition) const
+	{
+		units.give_order_move(players.local_human_id, targetPosition, !isShiftKeyDown());
 	}
 
 	void Battle::issueUnloadMission(const Vector3D& targetPosition)
