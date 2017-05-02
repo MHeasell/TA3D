@@ -508,6 +508,15 @@ namespace TA3D
 		 * @param targetUnitId The unit to capture.
 		 */
 		void issueCaptureMission(int targetUnitId) const;
+
+		/**
+		 * Issues a repair mission to the currently selected units.
+		 * If the shift key is held, the mission will be queued,
+		 * otherwise, the mission will replace the unit's current mission queue.
+		 *
+		 * @param targetUnitId The unit to repair.
+		 */
+		void issueRepairMission(int targetUnitId) const;
 	}; // class Battle
 
 } // namespace TA3D

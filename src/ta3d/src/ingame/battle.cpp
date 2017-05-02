@@ -493,23 +493,7 @@ namespace TA3D
 						{
 							if (cursor_type == CURSOR_REPAIR)
 							{
-								for (unsigned int e = 0; e < units.index_list_size; ++e)
-								{
-									units.lock();
-									int i = units.idx_list[e];
-									units.unlock();
-									units.unit[i].lock();
-									if (units.unit[i].isAlive() && units.unit[i].isOwnedBy(players.local_human_id) && units.unit[i].isSelected && unit_manager.unit_type[units.unit[i].type_id]->Builder && unit_manager.unit_type[units.unit[i].type_id]->BMcode)
-									{
-										if (!isShiftKeyDown())
-											units.unit[i].playSound("repair");
-										if (isShiftKeyDown())
-											units.unit[i].add_mission(MISSION_REPAIR, &(units.unit[pointing].Pos), false, 0, &(units.unit[pointing]));
-										else
-											units.unit[i].set_mission(MISSION_REPAIR, &(units.unit[pointing].Pos), false, 0, true, &(units.unit[pointing]));
-									}
-									units.unit[i].unlock();
-								}
+								issueRepairMission(pointing);
 								if (!isShiftKeyDown())
 									current_order = SIGNAL_ORDER_NONE;
 								click_activated = true;
@@ -2222,6 +2206,27 @@ namespace TA3D
 			Menus::Statistics::Execute();
 
 		return pResult;
+	}
+
+	void Battle::issueRepairMission(int targetUnitId) const
+	{
+		for (unsigned int e = 0; e < units.index_list_size; ++e)
+		{
+			units.lock();
+			int i = units.idx_list[e];
+			units.unlock();
+			units.unit[i].lock();
+			if (units.unit[i].isAlive() && units.unit[i].isOwnedBy(players.local_human_id) && units.unit[i].isSelected && unit_manager.unit_type[units.unit[i].type_id]->Builder && unit_manager.unit_type[units.unit[i].type_id]->BMcode)
+			{
+				if (!isShiftKeyDown())
+					units.unit[i].playSound("repair");
+				if (isShiftKeyDown())
+					units.unit[i].add_mission(MISSION_REPAIR, &(units.unit[targetUnitId].Pos), false, 0, &(units.unit[targetUnitId]));
+				else
+					units.unit[i].set_mission(MISSION_REPAIR, &(units.unit[targetUnitId].Pos), false, 0, true, &(units.unit[targetUnitId]));
+			}
+			units.unit[i].unlock();
+		}
 	}
 
 	void Battle::issueCaptureMission(int targetUnitId) const
