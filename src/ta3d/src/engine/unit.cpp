@@ -993,7 +993,7 @@ namespace TA3D
 		on_mini_radar = false;
 
 		if (!model || hidden)
-			return; // S'il n'y a pas de modèle associé, on quitte la fonction
+			return; // If there is no associated model, skip drawing
 
 		const int px = render.px >> 1;
 		const int py = render.py >> 1;
