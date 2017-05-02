@@ -313,7 +313,6 @@ namespace TA3D
 		float* low_tcoord;
 		uint8* low_col;
 		GLuint* low_index;
-		GLuint low_tex;
 
 		uint8 fog_of_war;
 

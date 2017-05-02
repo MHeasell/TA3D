@@ -373,7 +373,6 @@ namespace TA3D
 			SDL_FreeSurface(bmp_tex[i]);
 		low_def = convert_format_24(low_def);
 		gfx->set_texture_format(GL_RGB5);
-		map->low_tex = gfx->make_texture(low_def); // Build the low details texture map
 		SDL_FreeSurface(low_def);
 
 		LOG_INFO("Low definition texture uploaded in " << float(MILLISECONDS_SINCE_INIT - event_timer) * 0.001f << "s.");

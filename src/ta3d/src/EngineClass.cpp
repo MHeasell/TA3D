@@ -114,7 +114,6 @@ namespace TA3D
 		low_tcoord = NULL;
 		low_col = NULL;
 		low_index = NULL;
-		low_tex = 0;
 
 		wind = 0.0f;
 		wind_dir = 0.0f;
@@ -527,7 +526,6 @@ namespace TA3D
 		DELETE_ARRAY(low_tcoord);
 		DELETE_ARRAY(low_col);
 		DELETE_ARRAY(low_index);
-		gfx->destroy_texture(low_tex);
 
 		ota_data.destroy();
 		gfx->destroy_texture(lava_map);
