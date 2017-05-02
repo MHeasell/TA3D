@@ -588,7 +588,7 @@ namespace TA3D
 
 			if (cursor_type == CURSOR_UNLOAD && !rope_selection && click_activation && (!IsOnGUI || IsOnMinimap) && !order_removed) // The cursor orders to unload units
 			{
-				units.give_order_unload(players.local_human_id, cursorOnMap(cam, *map, IsOnMinimap), !isShiftKeyDown());
+				issueUnloadMission(cursorOnMap(cam, *map, IsOnMinimap));
 				if (!isShiftKeyDown())
 					current_order = SIGNAL_ORDER_NONE;
 				click_activated = true;
@@ -2139,6 +2139,11 @@ namespace TA3D
 			Menus::Statistics::Execute();
 
 		return pResult;
+	}
+
+	void Battle::issueUnloadMission(const Vector3D& targetPosition)
+	{
+		units.give_order_unload(players.local_human_id, targetPosition, !isShiftKeyDown());
 	}
 
 	void Battle::issueReclaimFeatureMission(Vector3D& targetPosition, int targetFeatureId) const

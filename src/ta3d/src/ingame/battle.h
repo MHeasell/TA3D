@@ -573,6 +573,15 @@ namespace TA3D
 		 * @param targetFeatureId The ID of the feature to be reclaimed.
 		 */
 		void issueReclaimFeatureMission(Vector3D& targetPosition, int targetFeatureId) const;
+
+		/**
+		 * Issues an unload mission to the currently selected units.
+		 * If the shift key is held, the mission will be queued,
+		 * otherwise, the mission will replace the unit's current mission queue.
+		 *
+		 * @param targetPosition The position to unload to.
+		 */
+		void issueUnloadMission(const Vector3D& targetPosition);
 	}; // class Battle
 
 } // namespace TA3D
