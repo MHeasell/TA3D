@@ -314,21 +314,6 @@ namespace TA3D
 
 		event_timer = MILLISECONDS_SINCE_INIT;
 
-		SDL_Surface* lava_map = gfx->create_surface_ex(8, Math::Min(map->bloc_w, 1024), Math::Min(map->bloc_h, 1024));
-		SDL_FillRect(lava_map, NULL, 0x0);
-		for (y = 0; y < map->bloc_h; ++y) // Build the lava map
-			for (x = 0; x < map->bloc_w; ++x)
-				if (map->bloc[map->bmap(x, y)].lava)
-					circlefill(lava_map, x * lava_map->w / map->bloc_w, y * lava_map->h / map->bloc_h, 3, 0xFF);
-		LOG_INFO("Lava image built in " << float(MILLISECONDS_SINCE_INIT - event_timer) * 0.001f << "s.");
-		event_timer = MILLISECONDS_SINCE_INIT;
-
-		map->lava_map = gfx->make_texture(lava_map, FILTER_LINEAR, true); // Build the lava texture map
-		SDL_FreeSurface(lava_map);
-
-		LOG_INFO("Lava texture uploaded in " << float(MILLISECONDS_SINCE_INIT - event_timer) * 0.001f << "s.");
-		event_timer = MILLISECONDS_SINCE_INIT;
-
 		gfx->set_texture_format(gfx->defaultTextureFormat_RGB());
 
 		LOG_DEBUG("MAP: computing height data (step 1)");

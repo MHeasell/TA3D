@@ -462,15 +462,6 @@ namespace TA3D
 			LOG_INFO(LOG_PREFIX_BATTLE << "Loading map informations...");
 			map->ota_data.load(map_file);
 
-			if (map->ota_data.lavaworld) // make sure we'll draw lava and not water
-			{
-				gfx->destroy_texture(map->lava_map);
-
-				SDL_Surface* tmp = gfx->create_surface_ex(32, 16, 16);
-				SDL_FillRect(tmp, NULL, 0xFFFFFFFF);
-				map->lava_map = gfx->make_texture(tmp);
-				SDL_FreeSurface(tmp);
-			}
 			delete map_file;
 		}
 		pGameData->map_filename = Paths::Files::ReplaceExtension(pGameData->map_filename, "");

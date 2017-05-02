@@ -287,9 +287,6 @@ namespace TA3D
 		//! To speed up display
 		GLushort buf_i[6500];
 
-		//! Texture of lava areas
-		GLuint lava_map;
-
 		//! Data read from the ota file
 		MAP_OTA ota_data;
 

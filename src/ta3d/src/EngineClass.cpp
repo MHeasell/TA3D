@@ -119,7 +119,6 @@ namespace TA3D
 		wind_dir = 0.0f;
 		wind_vec.reset();
 		ota_data.init();
-		lava_map = 0;
 		mini_w = mini_h = 252;
 		ntex = 0;
 		tex = NULL;
@@ -528,7 +527,6 @@ namespace TA3D
 		DELETE_ARRAY(low_index);
 
 		ota_data.destroy();
-		gfx->destroy_texture(lava_map);
 		view.resize(0, 0);
 		map_data.resize(0, 0);
 		ph_map.resize(0, 0);
