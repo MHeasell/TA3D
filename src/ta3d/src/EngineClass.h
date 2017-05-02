@@ -295,14 +295,6 @@ namespace TA3D
 		float wind_dir;
 		Vector3D wind_vec;
 
-		/*------------- Experimental: code for new map format -----------------------*/
-
-		/*	BLOC		**macro_bloc;	// map
-			uint32		macro_w;
-			uint32		macro_h;*/
-
-		/*---------------------------------------------------------------------------*/
-
 		int low_nb_idx;
 		int low_w, low_h;
 		Vector3D* low_vtx;
