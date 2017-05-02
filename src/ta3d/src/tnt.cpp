@@ -188,14 +188,14 @@ namespace TA3D
 		}
 
 		LOG_DEBUG("MAP: allocating map memory");
-		map->bloc_w = header.Width >> 1;
-		map->bloc_h = header.Height >> 1;
-		map->bloc_w_db = map->bloc_w << 1;
-		map->bloc_h_db = map->bloc_h << 1;
-		map->map_h = map->bloc_h << 4;
-		map->map_w = map->bloc_w << 4;
-		map->map_h_d = map->bloc_h << 3;
-		map->map_w_d = map->bloc_w << 3;
+		map->bloc_w = header.Width / 2;
+		map->bloc_h = header.Height / 2;
+		map->bloc_w_db = map->bloc_w * 2;
+		map->bloc_h_db = map->bloc_h * 2;
+		map->map_h = map->bloc_h * 16;
+		map->map_w = map->bloc_w * 16;
+		map->map_h_d = map->bloc_h * 8;
+		map->map_w_d = map->bloc_w * 8;
 
 		map->bmap.resize(map->bloc_w, map->bloc_h);
 		map->view.resize(map->bloc_w, map->bloc_h);
