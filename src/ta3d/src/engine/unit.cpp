@@ -995,7 +995,7 @@ namespace TA3D
 		const int px = render.px >> 1;
 		const int py = render.py >> 1;
 		if (px < 0 || py < 0 || px >= the_map->widthInGraphicalTiles || py >= the_map->heightInGraphicalTiles)
-			return; // Unité hors de la carte
+			return; // Unit is outside the map
 		const byte player_mask = byte(1 << players.local_human_id);
 
 		on_radar = is_on_radar(player_mask);
