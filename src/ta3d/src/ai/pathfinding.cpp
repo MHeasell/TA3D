@@ -437,21 +437,6 @@ namespace TA3D
 				}
 			}
 		}
-#ifdef DEBUG_AI_PATHFINDER
-		SDL_Surface* bmp = gfx->create_surface_ex(32, zone.getWidth(), zone.getHeight());
-		memset(bmp->pixels, 0, bmp->w * bmp->h * sizeof(int));
-		for (int z = 0; z < the_map->bloc_h_db; ++z)
-			for (int x = 0; x < the_map->bloc_w_db; ++x)
-				if (!(*qmap)(x, z))
-					SurfaceInt(bmp, x, z) = 0xFFFFFFFF;
-
-		for (std::vector<AI::Path::Node>::iterator cur = nodes.begin(); cur != nodes.end(); ++cur) // Mark the path with a special pattern
-			SurfaceInt(bmp, cur->x(), cur->z()) = 0xFF0000FF;
-
-		SDL_SaveBMP(bmp, "pathmap.bmp");
-
-		SDL_FreeSurface(bmp);
-#endif
 
 		if (!nodes.empty() && pathFound)
 		{
@@ -554,14 +539,6 @@ namespace TA3D
 					}
 				}
 			}
-//#define DEBUG_AI_PATHFINDER
-#ifdef DEBUG_AI_PATHFINDER
-			SDL_Surface* bmp = gfx->create_surface_ex(32, zone.getWidth(), zone.getHeight());
-			memset(bmp->pixels, 0, bmp->w * bmp->h * sizeof(int));
-			for (int z = 0; z < the_map->bloc_h_db; ++z)
-				for (int x = 0; x < the_map->bloc_w_db; ++x)
-					SurfaceInt(bmp, x, z) = zone(x, z) | makeacol32(0, 0, 0, 0xFF);
-#endif
 
 			static std::vector<AI::Path::Node> tmp;
 			tmp.clear();
@@ -601,13 +578,7 @@ namespace TA3D
 
 				nodes.push_back(next);
 			}
-#ifdef DEBUG_AI_PATHFINDER
-			for (std::vector<AI::Path::Node>::iterator cur = nodes.begin(); cur != nodes.end(); ++cur) // Do some cleaning
-				SurfaceInt(bmp, cur->x(), cur->z()) = 0xFFFFFFFF;
-			SDL_SaveBMP(bmp, "pathmap.bmp");
 
-			SDL_FreeSurface(bmp);
-#endif
 			for (std::vector<AI::Path::Node>::const_iterator cur = tmp.begin(), end = tmp.end(); cur != end; ++cur) // Do some cleaning
 				zone(cur->x(), cur->z()) = 0;
 			for (std::vector<AI::Path::Node>::const_iterator cur = cleanList.begin(), end = cleanList.end(); cur != end; ++cur) // Do some cleaning
