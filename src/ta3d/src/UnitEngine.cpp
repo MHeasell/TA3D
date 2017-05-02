@@ -1500,10 +1500,10 @@ namespace TA3D
 		}
 	}
 
-	void INGAME_UNITS::draw(bool underwater, bool height_line) // Dessine les unités visibles
+	void INGAME_UNITS::draw(bool underwater, bool height_line)
 	{
 		if (nb_unit <= 0 || !unit)
-			return; // Pas d'unités à dessiner
+			return; // No units to draw
 
 		glEnable(GL_LIGHTING);
 		glEnable(GL_CULL_FACE);
