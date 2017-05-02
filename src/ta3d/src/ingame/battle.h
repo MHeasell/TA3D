@@ -544,6 +544,15 @@ namespace TA3D
 		 * @param targetUnitId The unit to load.
 		 */
 		void issueLoadMission(int targetUnitId) const;
+
+		/**
+		 * Issues an attack ground mission to the currently selected units.
+		 * If the shift key is held, the mission will be queued,
+		 * otherwise, the mission will replace the unit's current mission queue.
+		 *
+		 * @param targetPosition The position to attack.
+		 */
+		void issueAttackGroundMission(Vector3D& targetPosition) const;
 	}; // class Battle
 
 } // namespace TA3D
