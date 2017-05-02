@@ -520,7 +520,7 @@ namespace TA3D
 									{
 										if (cursor_type == CURSOR_LOAD) // Le curseur donne un ordre
 										{
-											units.give_order_load(players.local_human_id, pointing, !isShiftKeyDown());
+											issueLoadMission(pointing);
 											if (!isShiftKeyDown())
 												current_order = SIGNAL_ORDER_NONE;
 											click_activated = true;
@@ -2192,6 +2192,11 @@ namespace TA3D
 			Menus::Statistics::Execute();
 
 		return pResult;
+	}
+
+	void Battle::issueLoadMission(int targetUnitId) const
+	{
+		units.give_order_load(players.local_human_id, targetUnitId, !isShiftKeyDown());
 	}
 
 	void Battle::issueGuardMission(int targetUnitId) const

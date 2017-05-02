@@ -535,6 +535,15 @@ namespace TA3D
 		 * @param targetUnitId The unit to guard.
 		 */
 		void issueGuardMission(int targetUnitId) const;
+
+		/**
+		 * Issues a load mission to the currently selected units.
+		 * If the shift key is held, the mission will be queued,
+		 * otherwise, the mission will replace the unit's current mission queue.
+		 *
+		 * @param targetUnitId The unit to load.
+		 */
+		void issueLoadMission(int targetUnitId) const;
 	}; // class Battle
 
 } // namespace TA3D
