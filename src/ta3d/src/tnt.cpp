@@ -312,35 +312,6 @@ namespace TA3D
 		glGetIntegerv(GL_MAX_TEXTURE_SIZE, &max_tex_size);
 		max_tex_size = Math::Min(max_tex_size, 2048); // This texture can be very big, so let's reduce it
 
-		/*---------- code to convert the map to new format -------------------*/
-		/*	map->macro_w = map->bloc_w+15>>4;
-			map->macro_h = map->bloc_h+15>>4;
-			map->macro_bloc = new BLOC*[map->macro_h];
-			map->macro_bloc[0] = new BLOC[map->macro_h*macro_w];
-
-			for(i=1;i<map->macro_h;i++)
-			map->macro_bloc[i] = &(map->macro_bloc[0][macro_w*i]);
-
-			SDL_Surface *tmp = gfx->create_surface_ex(32,512,512);
-			for(uint32 y=0;y<map->macro_h;y++)
-			for(uint32 x=0;x<map->macro_w;x++) {
-			for(uint32 py=0;py<16 && (y<<4)+py<map->bloc_h;py++)				// Create texture
-			for(uint32 px=0;px<16 && (x<<4)+px<map->bloc_w;px++) {
-			i = map->bmap[(y<<4)+py][(x<<4)+px];
-			uint32 tex_num = i>>6;
-			int tx = (i&0x7)<<5;
-			int ty = ((i>>3)&0x7)<<5;
-			blit(bmp_tex[tex_num],tmp,tx,ty,px<<4,py<<4,32,32);
-			}
-			map->macro_bloc[y][x].tex = gfx->make_texture(tmp);
-			glBindTexture(GL_TEXTURE_2D,map->macro_bloc[y][x].tex);
-			glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
-			glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR_MIPMAP_LINEAR);
-			}
-			SDL_FreeSurface(tmp);*/
-
-		/*--------------------------------------------------------------------*/
-
 		LOG_DEBUG("MAP: creating low definition texture and lava map");
 
 		SDL_Surface* low_def = gfx->create_surface_ex(8, Math::Min(max_tex_size, map->map_w), Math::Min(max_tex_size, map->map_h));
