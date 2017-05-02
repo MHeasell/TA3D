@@ -91,7 +91,7 @@ namespace TA3D
 
 		// Dessine les unités sous l'eau / Draw units which are under water
 		cam.applyToOpenGl();
-		units.draw(true, false, true, lp_CONFIG->height_line);
+		units.draw(true, lp_CONFIG->height_line);
 
 		// Dessine les objets produits par les armes sous l'eau / Draw weapons which are under water
 		weapons.draw(true);
@@ -100,7 +100,7 @@ namespace TA3D
 
 		cam.applyToOpenGl();
 		// Dessine les unités non encore dessinées / Draw units which have not been drawn
-		units.draw(false, false, true, lp_CONFIG->height_line);
+		units.draw(false, lp_CONFIG->height_line);
 
 		// Dessine les objets produits par les armes n'ayant pas été dessinés / Draw weapons which have not been drawn
 		weapons.draw(false);

@@ -228,7 +228,7 @@ namespace TA3D
 
 		void kill(int index, int prev, bool sync = true); // Détruit une unité
 
-		void draw(bool underwater = false, bool limit = false, bool cullface = true, bool height_line = true); // Dessine les unités visibles
+		void draw(bool underwater = false, bool height_line = true); // Dessine les unités visibles
 
 		void drawHealthBars(); // Draw health bars / dessine les barres de vie
 

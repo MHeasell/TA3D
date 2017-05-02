@@ -1500,20 +1500,17 @@ namespace TA3D
 		}
 	}
 
-	void INGAME_UNITS::draw(bool underwater, bool limit, bool cullface, bool height_line) // Dessine les unités visibles
+	void INGAME_UNITS::draw(bool underwater, bool height_line) // Dessine les unités visibles
 	{
 		if (nb_unit <= 0 || !unit)
 			return; // Pas d'unités à dessiner
 
 		glEnable(GL_LIGHTING);
-		if (cullface)
-			glEnable(GL_CULL_FACE);
-		else
-			glDisable(GL_CULL_FACE);
+		glEnable(GL_CULL_FACE);
 
 		glDisable(GL_BLEND);
 		glColor4ub(0xFF, 0xFF, 0xFF, 0xFF);
-		const float sea_lvl = limit ? the_map->sealvl - 5.0f : the_map->sealvl;
+		const float sea_lvl = the_map->sealvl;
 		const float virtual_t = ((float)current_tick) / TICKS_PER_SEC;
 
 		for (std::vector<uint32>::const_iterator e = visible_unit.begin(); e != visible_unit.end(); ++e)
@@ -1528,9 +1525,6 @@ namespace TA3D
 		}
 
 		glDisable(GL_ALPHA_TEST);
-
-		if (!cullface)
-			glEnable(GL_CULL_FACE);
 	}
 
 	void INGAME_UNITS::draw_shadow(float t, const Vector3D& Dir, float alpha) // Dessine les ombres des unités visibles
