@@ -556,7 +556,7 @@ namespace TA3D
 					e->px = short(((int)(e->Pos.x) + h_map_w) >> 4);
 					e->py = short(((int)(e->Pos.z) + h_map_h) >> 4);
 				}
-				if (e->px >= 0 && e->px < the_map->bloc_w && e->py >= 0 && e->py < the_map->bloc_h)
+				if (e->px >= 0 && e->px < the_map->widthInGraphicalTiles && e->py >= 0 && e->py < the_map->heightInGraphicalTiles)
 				{
 					if (!the_map->view(e->px, e->py))
 						continue;

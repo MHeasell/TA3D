@@ -997,7 +997,7 @@ namespace TA3D
 
 		const int px = render.px >> 1;
 		const int py = render.py >> 1;
-		if (px < 0 || py < 0 || px >= the_map->bloc_w || py >= the_map->bloc_h)
+		if (px < 0 || py < 0 || px >= the_map->widthInGraphicalTiles || py >= the_map->heightInGraphicalTiles)
 			return; // Unité hors de la carte
 		const byte player_mask = byte(1 << players.local_human_id);
 
@@ -1326,7 +1326,7 @@ namespace TA3D
 			const Vector3D S_Pos = render.Pos - (h / Dir.y) * Dir; //the_map->hit(Pos,Dir);
 			const int px = ((int)(S_Pos.x) + the_map->map_w_d) >> 4;
 			const int py = ((int)(S_Pos.z) + the_map->map_h_d) >> 4;
-			if (px < 0 || py < 0 || px >= the_map->bloc_w || py >= the_map->bloc_h)
+			if (px < 0 || py < 0 || px >= the_map->widthInGraphicalTiles || py >= the_map->heightInGraphicalTiles)
 			{
 				pMutex.unlock();
 				return; // Shadow out of the map
@@ -1397,7 +1397,7 @@ namespace TA3D
 			const Vector3D S_Pos(render.Pos - (h / Dir.y) * Dir); //the_map->hit(Pos,Dir);
 			const int px = ((int)(S_Pos.x + (float)the_map->map_w_d)) >> 4;
 			const int py = ((int)(S_Pos.z + (float)the_map->map_h_d)) >> 4;
-			if (px < 0 || py < 0 || px >= the_map->bloc_w || py >= the_map->bloc_h)
+			if (px < 0 || py < 0 || px >= the_map->widthInGraphicalTiles || py >= the_map->heightInGraphicalTiles)
 			{
 				pMutex.unlock();
 				return; // Shadow out of the map
@@ -1468,7 +1468,7 @@ namespace TA3D
 				clear_from_map();
 				flags = 4;
 				pMutex.lock();
-				if (cur_px > 0 && cur_py > 0 && cur_px < (the_map->bloc_w << 1) && cur_py < (the_map->bloc_h << 1))
+				if (cur_px > 0 && cur_py > 0 && cur_px < (the_map->widthInGraphicalTiles << 1) && cur_py < (the_map->heightInGraphicalTiles << 1))
 					if (the_map->map_data(cur_px, cur_py).stuff == -1)
 					{
 						int type = feature_manager.get_feature_index(pType->Corpse);
@@ -1493,7 +1493,7 @@ namespace TA3D
 				clear_from_map();
 				flags = 4;
 				pMutex.lock();
-				if (cur_px > 0 && cur_py > 0 && cur_px < (the_map->bloc_w << 1) && cur_py < (the_map->bloc_h << 1))
+				if (cur_px > 0 && cur_py > 0 && cur_px < (the_map->widthInGraphicalTiles << 1) && cur_py < (the_map->heightInGraphicalTiles << 1))
 					if (the_map->map_data(cur_px, cur_py).stuff == -1)
 					{
 						int type = feature_manager.get_feature_index(String(pType->name) << "_heap");
@@ -1549,7 +1549,7 @@ namespace TA3D
 	//! Compute the local map energy WITHOUT current unit contribution (it assumes (x,y) is on pType->gRepulsion)
 	float Unit::getLocalMapEnergy(int x, int y)
 	{
-		if (x < 0 || y < 0 || x >= the_map->bloc_w_db || y >= the_map->bloc_h_db)
+		if (x < 0 || y < 0 || x >= the_map->widthInHeightmapTiles || y >= the_map->heightInHeightmapTiles)
 			return 999999999.0f;
 		float e = the_map->energy(x, y);
 		const UnitType* pType = unit_manager.unit_type[type_id];
@@ -2064,7 +2064,7 @@ namespace TA3D
 
 		if (Math::AlmostZero(build_percent_left) && pType->isfeature) // Turn this unit into a feature
 		{
-			if (cur_px > 0 && cur_py > 0 && cur_px < (the_map->bloc_w << 1) && cur_py < (the_map->bloc_h << 1))
+			if (cur_px > 0 && cur_py > 0 && cur_px < (the_map->widthInGraphicalTiles << 1) && cur_py < (the_map->heightInGraphicalTiles << 1))
 			{
 				if (the_map->map_data(cur_px, cur_py).stuff == -1)
 				{
@@ -2249,9 +2249,9 @@ namespace TA3D
 				// byte mask = 1 << owner_id;
 				bool found = false;
 				for (int y = cur_py - dx; y <= cur_py + dx && !found; y++)
-					if (y >= 0 && y < the_map->bloc_h_db - 1)
+					if (y >= 0 && y < the_map->heightInHeightmapTiles - 1)
 						for (int x = cur_px - dx; x <= cur_px + dx; x++)
-							if (x >= 0 && x < the_map->bloc_w_db - 1)
+							if (x >= 0 && x < the_map->widthInHeightmapTiles - 1)
 							{
 								const int cur_idx = the_map->map_data(x, y).unit_idx;
 
@@ -2918,9 +2918,9 @@ namespace TA3D
 						// byte mask=1<<owner_id;
 						for (int y = cur_py - dx + sy; y <= cur_py + dx; y += 2)
 						{
-							if (y >= 0 && y < the_map->bloc_h_db - 1)
+							if (y >= 0 && y < the_map->heightInHeightmapTiles - 1)
 								for (int x = cur_px - dx + sx; x <= cur_px + dx; x += 2)
-									if (x >= 0 && x < the_map->bloc_w_db - 1)
+									if (x >= 0 && x < the_map->widthInHeightmapTiles - 1)
 									{
 										const int cur_idx = the_map->map_data(x, y).unit_idx;
 										if (cur_idx >= 0 && cur_idx < (int)units.max_unit && units.unit[cur_idx].isAlive() && units.unit[cur_idx].isNotOwnedBy(owner_id) && unit_manager.unit_type[units.unit[cur_idx].type_id]->ShootMe) // This unit is on the sight_map since dx = sightdistance !!
@@ -3379,13 +3379,13 @@ namespace TA3D
 						const int sy = Math::RandomTable() & 0xF;
 						for (int y = cur_py - dx + sy; y <= cur_py + dx && feature_idx == -1; y += 0x8)
 						{
-							if (y >= 0 && y < the_map->bloc_h_db - 1)
+							if (y >= 0 && y < the_map->heightInHeightmapTiles - 1)
 							{
 								for (int x = cur_px - dx + sx; x <= cur_px + dx && feature_idx == -1; x += 0x8)
 								{
 									if (SQUARE(cur_px - x) + SQUARE(cur_py - y) > dx2)
 										continue;
-									if (x >= 0 && x < the_map->bloc_w_db - 1)
+									if (x >= 0 && x < the_map->widthInHeightmapTiles - 1)
 									{
 										const int cur_idx = the_map->map_data(x, y).stuff;
 										if (cur_idx >= 0) // There is a feature
@@ -4267,7 +4267,7 @@ namespace TA3D
 						const int x = i->first->cur_px;
 						const int y = i->first->cur_py;
 						const int cur_type_id = units.unit[cur_idx].type_id;
-						if (x < 0 || x >= the_map->bloc_w_db - 1 || y < 0 || y >= the_map->bloc_h_db - 1 || cur_type_id == -1)
+						if (x < 0 || x >= the_map->widthInHeightmapTiles - 1 || y < 0 || y >= the_map->heightInHeightmapTiles - 1 || cur_type_id == -1)
 							continue;
 						if (units.unit[cur_idx].flags && (units.unit[cur_idx].is_on_radar(mask) || ((the_map->sight_map(x >> 1, y >> 1) & mask) && !units.unit[cur_idx].cloaked)) && (canTargetGround || units.unit[cur_idx].flying) && !unit_manager.unit_type[cur_type_id]->checkCategory(pType->NoChaseCategory))
 						//                                             && !unit_manager.unit_type[ units.unit[cur_idx].type_id ]->checkCategory( pType->BadTargetCategory ) )

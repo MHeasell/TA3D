@@ -248,16 +248,16 @@ namespace TA3D
 		int map_h_d;
 
 		//! Width in 32-pixel graphical tiles
-		int bloc_w;
+		int widthInGraphicalTiles;
 
 		//! Height in 32-pixel graphical tiles
-		int bloc_h;
+		int heightInGraphicalTiles;
 
 		//! Width in 16-pixel heightmap tiles
-		int bloc_w_db;
+		int widthInHeightmapTiles;
 
 		// Height in 16-pixel heightmap tiles
-		int bloc_h_db;
+		int heightInHeightmapTiles;
 
 		//! Minimap
 		SDL_Surface* mini;
@@ -355,10 +355,10 @@ namespace TA3D
 		Vector3D hit(Vector3D Pos, Vector3D Dir, bool water = true, float length = 200000.0f, bool allow_out = false) const; // Calcule l'intersection d'un rayon avec la carte(le rayon partant du dessus de la carte)
 	};
 
-	inline float MAP::get_nh(const int x, const int y) const { return ph_map(Math::Clamp(x, 0, bloc_w_db - 2), Math::Clamp(y, 0, bloc_h_db - 2)); }
-	inline float MAP::get_zdec(const int x, const int y) const { return ph_map(Math::Clamp(x, 0, bloc_w_db - 2), Math::Clamp(y, 0, bloc_h_db - 2)) * tnt_transform_H_DIV; }
+	inline float MAP::get_nh(const int x, const int y) const { return ph_map(Math::Clamp(x, 0, widthInHeightmapTiles - 2), Math::Clamp(y, 0, heightInHeightmapTiles - 2)); }
+	inline float MAP::get_zdec(const int x, const int y) const { return ph_map(Math::Clamp(x, 0, widthInHeightmapTiles - 2), Math::Clamp(y, 0, heightInHeightmapTiles - 2)) * tnt_transform_H_DIV; }
 	inline int MAP::get_zdec_notest(const int x, const int y) const { return static_cast<int>(ph_map(x, y) * (0.125f * tnt_transform_H_DIV) + 0.5f); }
-	inline float MAP::get_h(const int x, const int y) const { return h_map(Math::Clamp(x, 0, bloc_w_db - 2), Math::Clamp(y, 0, bloc_h_db - 2)); }
+	inline float MAP::get_h(const int x, const int y) const { return h_map(Math::Clamp(x, 0, widthInHeightmapTiles - 2), Math::Clamp(y, 0, heightInHeightmapTiles - 2)); }
 
 	extern MAP* the_map;
 

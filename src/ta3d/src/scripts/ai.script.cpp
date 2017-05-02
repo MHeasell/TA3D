@@ -713,10 +713,10 @@ namespace TA3D
 		const float sy = (float)lua_tonumber(L, 4);
 		const int unit_type_id = lua_isstring(L, 5) ? unit_manager.get_unit_index(lua_tostring(L, 5)) : (int)lua_tointeger(L, 5);
 		const int player_id = lua_isnoneornil(L, 6) ? -1 : (int)lua_tointeger(L, 6);
-		const int x0 = Math::Min(Math::Max((int)((nx + (float)the_map->map_w_d) * 0.125f), 0), the_map->bloc_w_db);
-		const int y0 = Math::Min(Math::Max((int)((ny + (float)the_map->map_h_d) * 0.125f), 0), the_map->bloc_h_db);
-		const int x1 = Math::Min(Math::Max((int)((sx + (float)the_map->map_w_d) * 0.125f), 0), the_map->bloc_w_db);
-		const int y1 = Math::Min(Math::Max((int)((sy + (float)the_map->map_h_d) * 0.125f), 0), the_map->bloc_h_db);
+		const int x0 = Math::Min(Math::Max((int)((nx + (float)the_map->map_w_d) * 0.125f), 0), the_map->widthInHeightmapTiles);
+		const int y0 = Math::Min(Math::Max((int)((ny + (float)the_map->map_h_d) * 0.125f), 0), the_map->heightInHeightmapTiles);
+		const int x1 = Math::Min(Math::Max((int)((sx + (float)the_map->map_w_d) * 0.125f), 0), the_map->widthInHeightmapTiles);
+		const int y1 = Math::Min(Math::Max((int)((sy + (float)the_map->map_h_d) * 0.125f), 0), the_map->heightInHeightmapTiles);
 		lua_pop(L, 6);
 
 		lua_newtable(L);

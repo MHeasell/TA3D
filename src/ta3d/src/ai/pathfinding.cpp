@@ -293,7 +293,7 @@ namespace TA3D
 		const int mw_h = smw >> 1;
 		const int mh_h = smh >> 1;
 
-		if (nodes.back().x() < 0 || nodes.back().z() < 0 || nodes.back().x() >= the_map->bloc_w_db || nodes.back().z() >= the_map->bloc_h_db) // Hum we are out !!
+		if (nodes.back().x() < 0 || nodes.back().z() < 0 || nodes.back().x() >= the_map->widthInHeightmapTiles || nodes.back().z() >= the_map->heightInHeightmapTiles) // Hum we are out !!
 		{
 			path.clear();
 			return; // So we can't find a path
@@ -323,7 +323,7 @@ namespace TA3D
 				int nx = nodes.back().x() + Math::Sgn(end_x - nodes.back().x());
 				int nz = nodes.back().z() + Math::Sgn(end_z - nodes.back().z());
 
-				if (nx < 0 || nz < 0 || nx >= the_map->bloc_w_db || nz >= the_map->bloc_h_db)
+				if (nx < 0 || nz < 0 || nx >= the_map->widthInHeightmapTiles || nz >= the_map->heightInHeightmapTiles)
 					break; // If we have to go out there is a problem ...
 
 				if (zone(nx, nz) >= 2 || curDistFromStart > minPathLength)
@@ -348,7 +348,7 @@ namespace TA3D
 						nx = nodes.back().x() + order_dx[e];
 						nz = nodes.back().z() + order_dz[e];
 						zoned[e] = false;
-						if (nx < 0 || nz < 0 || nx >= the_map->bloc_w_db || nz >= the_map->bloc_h_db)
+						if (nx < 0 || nz < 0 || nx >= the_map->widthInHeightmapTiles || nz >= the_map->heightInHeightmapTiles)
 							continue;
 						zoned[e] = zone(nx, nz);
 						if (!zoned[e] && !(*bmap)(nx, nz))
@@ -508,10 +508,10 @@ namespace TA3D
 			{
 				for (int z = -task.dist; z <= task.dist; ++z)
 				{
-					if (end_z + z < 0 || end_z + z >= the_map->bloc_h_db)
+					if (end_z + z < 0 || end_z + z >= the_map->heightInHeightmapTiles)
 						continue;
 					const int dx = int(sqrtf(float(m_dist - z * z)) + 0.5f);
-					for (int x = -dx; x <= dx && end_x + x < the_map->bloc_w_db; ++x)
+					for (int x = -dx; x <= dx && end_x + x < the_map->widthInHeightmapTiles; ++x)
 						if (end_x + x >= 0 && zone(end_x + x, end_z + z) == 1)
 						{
 							qNode.push_back(AI::Path::Node(end_x + x, end_z + z));
@@ -528,7 +528,7 @@ namespace TA3D
 				const int ref = zone(cur.x(), cur.z());
 				for (int i = 0; i < 8; ++i)
 				{
-					if (cur.x() + order_dx[i] < 0 || cur.x() + order_dx[i] >= the_map->bloc_w_db || cur.z() + order_dz[i] < 0 || cur.z() + order_dz[i] >= the_map->bloc_h_db)
+					if (cur.x() + order_dx[i] < 0 || cur.x() + order_dx[i] >= the_map->widthInHeightmapTiles || cur.z() + order_dz[i] < 0 || cur.z() + order_dz[i] >= the_map->heightInHeightmapTiles)
 						continue;
 					const int t = zone(cur.x() + order_dx[i], cur.z() + order_dz[i]);
 					const int r = ref + order_d[i];
@@ -557,7 +557,7 @@ namespace TA3D
 				{
 					const int nx = next.x() + order_dx[i];
 					const int nz = next.z() + order_dz[i];
-					if (nx < 0 || nx >= the_map->bloc_w_db || nz < 0 || nz >= the_map->bloc_h_db)
+					if (nx < 0 || nx >= the_map->widthInHeightmapTiles || nz < 0 || nz >= the_map->heightInHeightmapTiles)
 						continue;
 					const int t = zone(nx, nz);
 					const float f = (float)t + coef * energy(nx, nz);
@@ -610,8 +610,8 @@ namespace TA3D
 
 	inline bool Pathfinder::checkRectFast(const int x1, const int y1, const UnitType* pType)
 	{
-		const int fy = Math::Min(y1 + pType->FootprintZ, the_map->bloc_h_db);
-		const int fx = Math::Min(x1 + pType->FootprintX, the_map->bloc_w_db);
+		const int fy = Math::Min(y1 + pType->FootprintZ, the_map->heightInHeightmapTiles);
+		const int fx = Math::Min(x1 + pType->FootprintX, the_map->widthInHeightmapTiles);
 		const Grid<bool>& obstacles = the_map->obstacles;
 		const int x0 = Math::Max(x1, 0);
 		bool result = true;
@@ -627,8 +627,8 @@ namespace TA3D
 		const float h_min = pType->canhover ? -100.0f : the_map->sealvl - float(pType->MaxWaterDepth) * H_DIV;
 		const float h_max = the_map->sealvl - float(pType->MinWaterDepth) * H_DIV;
 		const float hover_h = pType->canhover ? the_map->sealvl : -100.0f;
-		const int fy = Math::Min(y1 + pType->FootprintZ, the_map->bloc_h_db);
-		const int fx = Math::Min(x1 + pType->FootprintX, the_map->bloc_w_db);
+		const int fy = Math::Min(y1 + pType->FootprintZ, the_map->heightInHeightmapTiles);
+		const int fx = Math::Min(x1 + pType->FootprintX, the_map->widthInHeightmapTiles);
 		const bool bfog = the_map->ota_data.whitefog;
 		y1 = Math::Max(y1, 0);
 		x1 = Math::Max(x1, 0);
@@ -675,16 +675,16 @@ namespace TA3D
 			const String key = pType->getMoveStringID();
 			if (hBitMap.count(key)) // Already done ?
 				continue;
-			BitMap* bmap = new BitMap(the_map->bloc_w_db, the_map->bloc_h_db);
+			BitMap* bmap = new BitMap(the_map->widthInHeightmapTiles, the_map->heightInHeightmapTiles);
 			hBitMap[key] = bmap;
 
 
 			const int mwh = pType->FootprintX >> 1;
 			const int mhh = pType->FootprintZ >> 1;
 
-			for (int y = 0; y < the_map->bloc_h_db; ++y)
+			for (int y = 0; y < the_map->heightInHeightmapTiles; ++y)
 			{
-				for (int x = 0; x < the_map->bloc_w_db; ++x)
+				for (int x = 0; x < the_map->widthInHeightmapTiles; ++x)
 				{
 					bmap->set(x, y, checkRectFull(x - mwh, y - mhh, pType));
 				}

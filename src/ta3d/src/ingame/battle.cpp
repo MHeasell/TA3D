@@ -359,7 +359,7 @@ namespace TA3D
 						const int px = ((int)(cur_pos.x + (float)map->map_w_d)) >> 3;
 						const int py = ((int)(cur_pos.z + (float)map->map_h_d)) >> 3;
 
-						if (px >= 0 && px < map->bloc_w_db && py >= 0 && py < map->bloc_h_db && (map->view_map(px >> 1, py >> 1) & (1 << players.local_human_id)))
+						if (px >= 0 && px < map->widthInHeightmapTiles && py >= 0 && py < map->heightInHeightmapTiles && (map->view_map(px >> 1, py >> 1) & (1 << players.local_human_id)))
 						{
 							int idx = -map->map_data(px, py).unit_idx - 2; // Basic check
 							if (idx < 0 || features.feature[idx].type < 0)
@@ -367,11 +367,11 @@ namespace TA3D
 								units.last_on = -1;
 								for (int dy = -7; dy < 8; ++dy) // Look for things like metal patches
 								{
-									if (py + dy >= 0 && py + dy < map->bloc_h_db)
+									if (py + dy >= 0 && py + dy < map->heightInHeightmapTiles)
 									{
 										for (int dx = -7; dx < 8; ++dx)
 										{
-											if (px + dx >= 0 && px + dx < map->bloc_w_db)
+											if (px + dx >= 0 && px + dx < map->widthInHeightmapTiles)
 											{
 												const int feature_idx = map->map_data(px + dx, py + dy).stuff; // This is thread-safe
 												if (feature_idx >= 0)
@@ -911,7 +911,7 @@ namespace TA3D
 					const Vector3D cur_pos(cursorOnMap(cam, *map, IsOnMinimap));
 					const int px = ((int)(cur_pos.x + (float)map->map_w_d)) >> 3;
 					const int py = ((int)(cur_pos.z + (float)map->map_h_d)) >> 3;
-					if (px >= 0 && px < map->bloc_w_db && py >= 0 && py < map->bloc_h_db && (map->view_map(px >> 1, py >> 1) & (1 << players.local_human_id)))
+					if (px >= 0 && px < map->widthInHeightmapTiles && py >= 0 && py < map->heightInHeightmapTiles && (map->view_map(px >> 1, py >> 1) & (1 << players.local_human_id)))
 					{
 						int idx = -map->map_data(px, py).unit_idx - 2; // Basic check
 						if (idx < 0 || features.feature[idx].type < 0)
@@ -919,11 +919,11 @@ namespace TA3D
 							units.last_on = -1;
 							for (int dy = -7; dy < 8; ++dy) // Look for things like metal patches
 							{
-								if (py + dy >= 0 && py + dy < map->bloc_h_db)
+								if (py + dy >= 0 && py + dy < map->heightInHeightmapTiles)
 								{
 									for (int dx = -7; dx < 8; ++dx)
 									{
-										if (px + dx >= 0 && px + dx < map->bloc_w_db)
+										if (px + dx >= 0 && px + dx < map->widthInHeightmapTiles)
 										{
 											if (map->map_data(px + dx, py + dy).stuff >= 0)
 											{
@@ -1989,13 +1989,13 @@ namespace TA3D
 				glDisable(GL_TEXTURE_2D);
 				glColor3f(1.0f, 1.0f, 1.0f);
 				glBegin(GL_POINTS);
-				const float rw = 128.0f * (float)map->mini_w / 252.0f / (float)map->bloc_w;
-				const float rh = 128.0f * (float)map->mini_h / 252.0f / (float)map->bloc_h;
-				const float dw = 64.0f - 0.5f * (float)map->bloc_w * rw;
-				const float dh = 64.0f - 0.5f * (float)map->bloc_h * rh;
-				for (int y = 0; y < map->bloc_h; ++y)
+				const float rw = 128.0f * (float)map->mini_w / 252.0f / (float)map->widthInGraphicalTiles;
+				const float rh = 128.0f * (float)map->mini_h / 252.0f / (float)map->heightInGraphicalTiles;
+				const float dw = 64.0f - 0.5f * (float)map->widthInGraphicalTiles * rw;
+				const float dh = 64.0f - 0.5f * (float)map->heightInGraphicalTiles * rh;
+				for (int y = 0; y < map->heightInGraphicalTiles; ++y)
 				{
-					for (int x = 0; x < map->bloc_w; ++x)
+					for (int x = 0; x < map->widthInGraphicalTiles; ++x)
 					{
 						if (map->view(x, y))
 							glVertex2f((float)x * rw + dw, (float)y * rh + dh);

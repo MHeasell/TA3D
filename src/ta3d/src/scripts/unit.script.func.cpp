@@ -398,11 +398,11 @@ namespace TA3D
 					const int py = ((int)(Pos.z) + the_map->map_h_d) >> 3;
 					for (int y = py - (unit_manager.unit_type[type_id]->FootprintZ >> 1); y <= py + (unit_manager.unit_type[type_id]->FootprintZ >> 1); y++)
 					{
-						if (y >= 0 && y < (the_map->bloc_h << 1) - 1)
+						if (y >= 0 && y < (the_map->heightInGraphicalTiles << 1) - 1)
 						{
 							for (int x = px - (unit_manager.unit_type[type_id]->FootprintX >> 1); x <= px + (unit_manager.unit_type[type_id]->FootprintX >> 1); x++)
 							{
-								if (x >= 0 && x < (the_map->bloc_w << 1) - 1)
+								if (x >= 0 && x < (the_map->widthInGraphicalTiles << 1) - 1)
 								{
 									const int cur_idx = the_map->map_data(x, y).unit_idx;
 									if (cur_idx >= 0 && cur_idx < (int)units.max_unit && cur_idx != idx)

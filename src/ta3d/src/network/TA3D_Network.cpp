@@ -345,7 +345,7 @@ namespace TA3D
 				{
 					const int sx = event_msg.opt3; // Burn the object
 					const int sy = event_msg.opt4;
-					if (sx < the_map->bloc_w_db && sy < the_map->bloc_h_db)
+					if (sx < the_map->widthInHeightmapTiles && sy < the_map->heightInHeightmapTiles)
 					{
 						const int type = feature_manager.get_feature_index((const char*)(event_msg.str));
 						if (type >= 0)
@@ -363,7 +363,7 @@ namespace TA3D
 				{
 					const int sx = event_msg.opt3; // Burn the object
 					const int sy = event_msg.opt4;
-					if (sx < the_map->bloc_w_db && sy < the_map->bloc_h_db)
+					if (sx < the_map->widthInHeightmapTiles && sy < the_map->heightInHeightmapTiles)
 					{
 						const int idx = the_map->map_data(sx, sy).stuff;
 						if (!features.feature[idx].burning)
@@ -375,7 +375,7 @@ namespace TA3D
 				{
 					const int sx = event_msg.opt3; // Remove the object
 					const int sy = event_msg.opt4;
-					if (sx < the_map->bloc_w_db && sy < the_map->bloc_h_db)
+					if (sx < the_map->widthInHeightmapTiles && sy < the_map->heightInHeightmapTiles)
 					{
 						const int idx = the_map->map_data(sx, sy).stuff;
 						if (idx >= 0)

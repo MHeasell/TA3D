@@ -621,7 +621,7 @@ namespace TA3D
 				LOAD(features.feature[i].dive);
 				LOAD(features.feature[i].angle_x);
 
-				if (features.feature[i].px >= uint32(the_map->bloc_w_db) || features.feature[i].py >= uint32(the_map->bloc_h_db)) // Out of the map ?
+				if (features.feature[i].px >= uint32(the_map->widthInHeightmapTiles) || features.feature[i].py >= uint32(the_map->heightInHeightmapTiles)) // Out of the map ?
 				{
 					features.feature[i].type = -1;
 					features.nb_features--;

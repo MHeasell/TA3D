@@ -269,7 +269,7 @@ namespace TA3D
 					hit |= u_hit;
 				}
 			}
-			if (px >= 0 && px < the_map->bloc_w_db && py >= 0 && py < the_map->bloc_h_db)
+			if (px >= 0 && px < the_map->widthInHeightmapTiles && py >= 0 && py < the_map->heightInHeightmapTiles)
 			{
 				const int t_idx = the_map->map_data(px, py).unit_idx;
 				if (t_idx <= -2 && !weapon_def->unitsonly)
@@ -436,11 +436,11 @@ namespace TA3D
 			std::deque<int> oidx;
 			for (int y = -s; y <= s; ++y)
 			{
-				if (py + y < 0 || py + y >= the_map->bloc_h_db)
+				if (py + y < 0 || py + y >= the_map->heightInHeightmapTiles)
 					continue;
 				for (int x = -s; x <= s; ++x)
 				{
-					if (px + x < 0 || px + x >= the_map->bloc_w_db)
+					if (px + x < 0 || px + x >= the_map->widthInHeightmapTiles)
 						continue;
 
 					const int t_idx = the_map->map_data(px + x, py + y).unit_idx;
@@ -565,7 +565,7 @@ namespace TA3D
 				const int py = ((int)(Pos.z + 0.5f) + the_map->map_h_d) >> 4;
 				Vector3D P = Pos;
 				P.y += 3.0f;
-				if (px >= 0 && px < the_map->bloc_w && py >= 0 && py < the_map->bloc_h)
+				if (px >= 0 && px < the_map->widthInGraphicalTiles && py >= 0 && py < the_map->heightInGraphicalTiles)
 				{
 					if (the_map->bloc[the_map->bmap(px, py)].lava && !weapon_def->lavaexplosiongaf.empty() && !weapon_def->lavaexplosionart.empty())
 					{
@@ -616,7 +616,7 @@ namespace TA3D
 
 		const int px = ((int)(Pos.x + 0.5f) + the_map->map_w_d) >> 4;
 		const int py = ((int)(Pos.z + 0.5f) + the_map->map_h_d) >> 4;
-		if (px < 0 || py < 0 || px >= the_map->bloc_w || py >= the_map->bloc_h)
+		if (px < 0 || py < 0 || px >= the_map->widthInGraphicalTiles || py >= the_map->heightInGraphicalTiles)
 			return;
 		const byte player_mask = byte(1 << players.local_human_id);
 		if (the_map->view(px, py) != 1 || !(the_map->sight_map(px, py) & player_mask))

@@ -424,7 +424,7 @@ namespace TA3D
 			{
 				int px = unit[i].cur_px >> 1;
 				int py = unit[i].cur_py >> 1;
-				if (px < 0 || py < 0 || px >= map->bloc_w || py >= map->bloc_h)
+				if (px < 0 || py < 0 || px >= map->widthInGraphicalTiles || py >= map->heightInGraphicalTiles)
 				{
 					unit[i].unlock();
 					pMutex.lock();
@@ -510,7 +510,7 @@ namespace TA3D
 		const int x = px - (w >> 1);
 		const int y = py - (h >> 1);
 		const int side = Math::AlmostZero(unit_manager.unit_type[unit_type_id]->ExtractsMetal) ? 12 : leave_space ? 12 : 0;
-		if (x < 0 || y < std::max(0, (((int)the_map->get_zdec(x, 0) + 7) >> 3)) || x + w >= the_map->bloc_w_db - 1 || y + h >= the_map->bloc_h_db - 5 - std::max(0, (((int)the_map->get_zdec(x, the_map->bloc_h_db - 2) + 7) >> 3)))
+		if (x < 0 || y < std::max(0, (((int)the_map->get_zdec(x, 0) + 7) >> 3)) || x + w >= the_map->widthInHeightmapTiles - 1 || y + h >= the_map->heightInHeightmapTiles - 5 - std::max(0, (((int)the_map->get_zdec(x, the_map->heightInHeightmapTiles - 2) + 7) >> 3)))
 			return false; // check if it is inside the map
 
 		if (!the_map->check_rect(px - ((w + side) >> 1), py - ((h + side) >> 1), w + side, h + side, unit_id))
@@ -548,7 +548,7 @@ namespace TA3D
 		const int h = unit_manager.unit_type[unit_type_id]->FootprintZ;
 		const int x = px - (w >> 1);
 		const int y = py - (h >> 1);
-		if (x < 0 || y < std::max(0, (((int)the_map->get_zdec(x, 0) + 7) >> 3)) || x + w >= the_map->bloc_w_db - 1 || y + h >= the_map->bloc_h_db - 1)
+		if (x < 0 || y < std::max(0, (((int)the_map->get_zdec(x, 0) + 7) >> 3)) || x + w >= the_map->widthInHeightmapTiles - 1 || y + h >= the_map->heightInHeightmapTiles - 1)
 			return false; // check if it is inside the map
 
 		if (!the_map->check_rect(x, y, w, h, unit_id))
@@ -586,7 +586,7 @@ namespace TA3D
 		const int h = unit_manager.unit_type[unit_type_id]->FootprintZ;
 		const int x = (((int)(Pos.x) + the_map->map_w_d + 4) >> 3) - (w >> 1);
 		const int y = (((int)(Pos.z) + the_map->map_h_d + 4) >> 3) - (h >> 1);
-		if (x < 0 || y < (((int)the_map->get_zdec(x, 0) + 7) >> 3) || x + w >= the_map->bloc_w_db - 1 || y + h >= the_map->bloc_h_db - 1)
+		if (x < 0 || y < (((int)the_map->get_zdec(x, 0) + 7) >> 3) || x + w >= the_map->widthInHeightmapTiles - 1 || y + h >= the_map->heightInHeightmapTiles - 1)
 			return false; // check if it is inside the map
 
 		if (!the_map->check_rect(x, y, w, h, -1))
@@ -973,11 +973,11 @@ namespace TA3D
 				const int end_x = start_x + unit_manager.unit_type[unit[i].type_id]->FootprintX;
 				for (int ry = start_y; ry <= end_y; ++ry)
 				{
-					if (ry >= 0 && ry < map->bloc_h_db)
+					if (ry >= 0 && ry < map->heightInHeightmapTiles)
 					{
 						for (int rx = start_x; rx <= end_x; rx++)
 						{
-							if (rx >= 0 && rx < map->bloc_w_db)
+							if (rx >= 0 && rx < map->widthInHeightmapTiles)
 							{
 								if (map->map_data(rx, ry).stuff >= 0)
 								{
@@ -1455,8 +1455,8 @@ namespace TA3D
 			return; // No units to draw
 
 		visible_unit.clear();
-		const int bloc_w = the_map->bloc_w_db;
-		const int bloc_h = the_map->bloc_h_db;
+		const int bloc_w = the_map->widthInHeightmapTiles;
+		const int bloc_h = the_map->heightInHeightmapTiles;
 		const uint32 player_mask = 1 << players.local_human_id;
 		for (uint32 i = 0; i < max_unit; ++i)
 		{

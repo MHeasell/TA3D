@@ -1278,7 +1278,7 @@ namespace TA3D
 		{
 			const int x = (int)(X + (float)the_map->map_w_d - 8.0f) >> 3;
 			const int y = (int)(Z + (float)the_map->map_h_d - 8.0f) >> 3;
-			if (x > 0 && y > 0 && x < (the_map->bloc_w << 1) && y < (the_map->bloc_h << 1))
+			if (x > 0 && y > 0 && x < (the_map->widthInGraphicalTiles << 1) && y < (the_map->heightInGraphicalTiles << 1))
 				if (the_map->map_data(x, y).stuff == -1)
 				{
 					Vector3D Pos;

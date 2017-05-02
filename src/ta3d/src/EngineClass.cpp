@@ -155,10 +155,10 @@ namespace TA3D
 			return 0.0f;
 		x = (x + (float)map_w_d) * 0.125f; // Convert the coordinates
 		y = (y + (float)map_h_d) * 0.125f;
-		const int lx = bloc_w_db - 1;
-		const int ly = bloc_h_db - 1;
-		x = Math::Clamp(x, 0.0f, float(bloc_w_db - 2));
-		y = Math::Clamp(y, 0.0f, float(bloc_h_db - 2));
+		const int lx = widthInHeightmapTiles - 1;
+		const int ly = heightInHeightmapTiles - 1;
+		x = Math::Clamp(x, 0.0f, float(widthInHeightmapTiles - 2));
+		y = Math::Clamp(y, 0.0f, float(heightInHeightmapTiles - 2));
 		float h[4];
 		const int X = Math::Clamp((int)x, 0, lx - 1), Y = Math::Clamp((int)y, 0, ly - 1);
 		const float dx = x - (float)X;
@@ -188,15 +188,15 @@ namespace TA3D
 
 	float MAP::get_max_h(int x, int y) const
 	{
-		x = Math::Clamp(x, 0, bloc_w_db - 2);
-		y = Math::Clamp(y, 0, bloc_h_db - 2);
+		x = Math::Clamp(x, 0, widthInHeightmapTiles - 2);
+		y = Math::Clamp(y, 0, heightInHeightmapTiles - 2);
 		float h = h_map(x, y);
-		if (x < bloc_w_db - 2)
+		if (x < widthInHeightmapTiles - 2)
 			h = Math::Max(h, h_map(x + 1, y));
-		if (y < bloc_h_db - 2)
+		if (y < heightInHeightmapTiles - 2)
 		{
 			h = Math::Max(h, h_map(x, y + 1));
-			if (x < bloc_w_db - 2)
+			if (x < widthInHeightmapTiles - 2)
 				h = Math::Max(h, h_map(x + 1, y + 1));
 		}
 		return h;
@@ -204,10 +204,10 @@ namespace TA3D
 
 	float MAP::get_max_rect_h(int x, int y, int w, int h) const
 	{
-		const int x1 = Math::Clamp(x - (w >> 1), 0, bloc_w_db - 2);
-		const int x2 = Math::Clamp(x1 + w, 0, bloc_w_db - 2);
-		const int y1 = Math::Clamp(y - (h >> 1), 0, bloc_h_db - 2);
-		const int y2 = Math::Clamp(y1 + h, 0, bloc_h_db - 2);
+		const int x1 = Math::Clamp(x - (w >> 1), 0, widthInHeightmapTiles - 2);
+		const int x2 = Math::Clamp(x1 + w, 0, widthInHeightmapTiles - 2);
+		const int y1 = Math::Clamp(y - (h >> 1), 0, heightInHeightmapTiles - 2);
+		const int y2 = Math::Clamp(y1 + h, 0, heightInHeightmapTiles - 2);
 		float max_h = h_map(x1, y1);
 		for (int Y = y1; Y <= y2; ++Y)
 			for (int X = x1; X <= x2; ++X)
@@ -219,8 +219,8 @@ namespace TA3D
 	{
 		if (yardmap.empty())
 		{
-			const int x2 = Math::Min(x1 + w, bloc_w_db);
-			const int y2 = Math::Min(y1 + h, bloc_h_db);
+			const int x2 = Math::Min(x1 + w, widthInHeightmapTiles);
+			const int y2 = Math::Min(y1 + h, heightInHeightmapTiles);
 			y1 = Math::Max(y1, 0);
 			x1 = Math::Max(x1, 0);
 			for (int y = y1; y < y2; ++y)
@@ -229,8 +229,8 @@ namespace TA3D
 		}
 		else
 		{
-			const int x2 = Math::Min(x1 + w, bloc_w_db);
-			const int y2 = Math::Min(y1 + h, bloc_h_db);
+			const int x2 = Math::Min(x1 + w, widthInHeightmapTiles);
+			const int y2 = Math::Min(y1 + h, heightInHeightmapTiles);
 			const int oy1 = y1;
 			const int ox1 = x1;
 			y1 = Math::Max(y1, 0);
@@ -270,8 +270,8 @@ namespace TA3D
 	{
 		if (yardmap.empty())
 		{
-			const int y2 = std::min(y1 + h, bloc_h_db - 1);
-			const int x2 = std::min(x1 + w, bloc_w_db - 1);
+			const int y2 = std::min(y1 + h, heightInHeightmapTiles - 1);
+			const int x2 = std::min(x1 + w, widthInHeightmapTiles - 1);
 			y1 = std::max(y1, 0);
 			x1 = std::max(x1, 0);
 			if (y2 <= y1 || x2 <= x1)
@@ -285,8 +285,8 @@ namespace TA3D
 		else
 		{
 			uint32 i = 0;
-			const int y2 = std::min(y1 + h, bloc_h_db - 1);
-			const int x2 = std::min(x1 + w, bloc_w_db - 1);
+			const int y2 = std::min(y1 + h, heightInHeightmapTiles - 1);
+			const int x2 = std::min(x1 + w, widthInHeightmapTiles - 1);
 			if (y1 < 0)
 				i -= y1 * w;
 			if (x1 < 0)
@@ -338,8 +338,8 @@ namespace TA3D
 	{
 		if (w == 0 || h == 0)
 			return true;
-		const int y2 = std::min(y1 + h, bloc_h_db - 1);
-		const int x2 = std::min(x1 + w, bloc_w_db - 1);
+		const int y2 = std::min(y1 + h, heightInHeightmapTiles - 1);
+		const int x2 = std::min(x1 + w, widthInHeightmapTiles - 1);
 		y1 = std::max(y1, 0);
 		x1 = std::max(x1, 0);
 		if (y2 <= y1 || x2 <= x1)
@@ -356,8 +356,8 @@ namespace TA3D
 
 	bool MAP::check_rect_discovered(int x1, int y1, int w, int h, const int c) const // Check if the area has been fully discovered
 	{
-		const int y2 = std::min((y1 + h + 1) >> 1, bloc_h - 1);
-		const int x2 = std::min((x1 + w + 1) >> 1, bloc_w - 1);
+		const int y2 = std::min((y1 + h + 1) >> 1, heightInGraphicalTiles - 1);
+		const int x2 = std::min((x1 + w + 1) >> 1, widthInGraphicalTiles - 1);
 		x1 >>= 1;
 		y1 >>= 1;
 		y1 = std::max(y1, 0);
@@ -373,8 +373,8 @@ namespace TA3D
 
 	float MAP::check_rect_dh(int x1, int y1, int w, int h) const
 	{
-		const int y2 = std::min(y1 + h, bloc_h_db - 1);
-		const int x2 = std::min(x1 + w, bloc_w_db - 1);
+		const int y2 = std::min(y1 + h, heightInHeightmapTiles - 1);
+		const int x2 = std::min(x1 + w, widthInHeightmapTiles - 1);
 		y1 = std::max(y1, 0);
 		x1 = std::max(x1, 0);
 		if (y2 <= y1 || x2 <= x1)
@@ -394,8 +394,8 @@ namespace TA3D
 
 	float MAP::check_max_depth(int x1, int y1, int w, int h) const
 	{
-		const int y2 = std::min(y1 + h, bloc_h_db - 1);
-		const int x2 = std::min(x1 + w, bloc_w_db - 1);
+		const int y2 = std::min(y1 + h, heightInHeightmapTiles - 1);
+		const int x2 = std::min(x1 + w, widthInHeightmapTiles - 1);
 		y1 = std::max(y1, 0);
 		x1 = std::max(x1, 0);
 		if (y2 <= y1 || x2 <= x1)
@@ -409,8 +409,8 @@ namespace TA3D
 
 	float MAP::check_min_depth(int x1, int y1, int w, int h) const
 	{
-		const int y2 = std::min(y1 + h, bloc_h_db - 1);
-		const int x2 = std::min(x1 + w, bloc_w_db - 1);
+		const int y2 = std::min(y1 + h, heightInHeightmapTiles - 1);
+		const int x2 = std::min(x1 + w, widthInHeightmapTiles - 1);
 		y1 = std::max(y1, 0);
 		x1 = std::max(x1, 0);
 		if (y2 <= y1 || x2 <= x1)
@@ -426,8 +426,8 @@ namespace TA3D
 	{
 		if (yard_map.empty())
 			return true;
-		const int y2 = std::min(y1 + h, bloc_h_db - 1);
-		const int x2 = std::min(x1 + w, bloc_w_db - 1);
+		const int y2 = std::min(y1 + h, heightInHeightmapTiles - 1);
+		const int x2 = std::min(x1 + w, widthInHeightmapTiles - 1);
 		y1 = std::max(y1, 0);
 		x1 = std::max(x1, 0);
 
@@ -464,8 +464,8 @@ namespace TA3D
 
 	bool MAP::check_lava(int x1, int y1, int w, int h) const
 	{
-		const int y2 = std::min(y1 + h, bloc_h_db - 1);
-		const int x2 = std::min(x1 + w, bloc_w_db - 1);
+		const int y2 = std::min(y1 + h, heightInHeightmapTiles - 1);
+		const int x2 = std::min(x1 + w, widthInHeightmapTiles - 1);
 		y1 = std::max(y1, 0);
 		x1 = std::max(x1, 0);
 
@@ -484,9 +484,9 @@ namespace TA3D
 
 	void MAP::clean_map() // Used to remove all objects when loading a saved game
 	{
-		for (int y = 0; y < bloc_h_db; ++y)
+		for (int y = 0; y < heightInHeightmapTiles; ++y)
 		{
-			for (int x = 0; x < bloc_w_db; ++x)
+			for (int x = 0; x < widthInHeightmapTiles; ++x)
 			{
 				map_data(x, y).stuff = -1;
 				map_data(x, y).unit_idx = -1;
@@ -527,7 +527,7 @@ namespace TA3D
 		}
 		if (lvl)
 		{
-			for (int i = 0; i < bloc_h * bloc_w; i++)
+			for (int i = 0; i < heightInGraphicalTiles * widthInGraphicalTiles; i++)
 				DELETE_ARRAY(lvl[i]);
 			DELETE_ARRAY(lvl);
 		}
@@ -654,8 +654,8 @@ namespace TA3D
 			glDisable(GL_TEXTURE_2D);
 
 			int MY = 0;
-			const int DY = 0x10000 * (bloc_h_db - 2) / rh;
-			const int DX = 0x10000 * (bloc_w_db - 2) / rw;
+			const int DY = 0x10000 * (heightInHeightmapTiles - 2) / rh;
+			const int DX = 0x10000 * (widthInHeightmapTiles - 2) / rw;
 
 			std::vector<Vector2D> lines;
 			std::vector<uint32> colors;
@@ -969,11 +969,11 @@ namespace TA3D
 		// So we need to know what is below yref and what is above (maybe we'll have nothing to render)
 		std::vector<int> xMin; // Those vectors will store the visible lines
 		std::vector<int> xMax;
-		xMin.resize(bloc_h, -1); // Initializing values to -1 ensure we won't render blank lines
-		xMax.resize(bloc_h, -1);
+		xMin.resize(heightInGraphicalTiles, -1); // Initializing values to -1 ensure we won't render blank lines
+		xMax.resize(heightInGraphicalTiles, -1);
 		int n = 0;
-		int x1 = bloc_w - 1;
-		int y1 = bloc_h - 1;
+		int x1 = widthInGraphicalTiles - 1;
+		int y1 = heightInGraphicalTiles - 1;
 		int x2 = 0;
 		int y2 = 0;
 		float ymin = 0.0f;
@@ -1056,7 +1056,7 @@ namespace TA3D
 							y1 = Math::Min(y1, Y1);
 							x2 = Math::Max(x2, X1);
 							y2 = Math::Max(y2, Y1);
-							renderLine(xMin, xMax, X0, Y0, X1, Y1, bloc_w - 1);
+							renderLine(xMin, xMax, X0, Y0, X1, Y1, widthInGraphicalTiles - 1);
 						}
 					}
 				}
@@ -1074,10 +1074,10 @@ namespace TA3D
 		x2 = Math::Max(x2, 0);
 		y1 = Math::Max(y1, 0);
 		y2 = Math::Max(y2, 0);
-		x1 = Math::Min(x1, bloc_w - 1);
-		x2 = Math::Min(x2, bloc_w - 1);
-		y1 = Math::Min(y1, bloc_h - 1);
-		y2 = Math::Min(y2, bloc_h - 1);
+		x1 = Math::Min(x1, widthInGraphicalTiles - 1);
+		x2 = Math::Min(x2, widthInGraphicalTiles - 1);
+		y1 = Math::Min(y1, heightInGraphicalTiles - 1);
+		y2 = Math::Min(y2, heightInGraphicalTiles - 1);
 
 		// ------------------------------------------------------------------
 		// End of visible area calculations
@@ -1127,7 +1127,7 @@ namespace TA3D
 		{
 			const int pre_y = y << 4;
 			const int Y = y << 1;
-			const int pre_y2 = y * bloc_w;
+			const int pre_y2 = y * widthInGraphicalTiles;
 			T.x = (float)-map_w_d;
 			T.y = 0.0f;
 			T.z = float(pre_y - map_h_d);
@@ -1141,7 +1141,7 @@ namespace TA3D
 				continue;
 			if (rx1 > 0)
 				rx1--;
-			if (rx2 < bloc_w - 1)
+			if (rx2 < widthInGraphicalTiles - 1)
 				rx2++;
 
 			for (int x = rx1; x <= rx2; ++x)
@@ -1327,8 +1327,8 @@ namespace TA3D
 					int grey = 0;
 					int black = 0;
 					Z = Y + get_zdec_notest(X, Y);
-					if (Z >= bloc_h_db - 1)
-						Z = bloc_h_db - 2;
+					if (Z >= heightInHeightmapTiles - 1)
+						Z = heightInHeightmapTiles - 2;
 					if (!(view_map(x, Z >> 1) & player_mask))
 					{
 						color[0] = color[1] = color[2] = 0;
@@ -1339,11 +1339,11 @@ namespace TA3D
 						color[0] = color[1] = color[2] = 127;
 						++grey;
 					}
-					if (X + 2 < bloc_w_db)
+					if (X + 2 < widthInHeightmapTiles)
 					{
 						Z = Y + get_zdec_notest(X + 2, Y);
-						if (Z >= bloc_h_db - 1)
-							Z = bloc_h_db - 2;
+						if (Z >= heightInHeightmapTiles - 1)
+							Z = heightInHeightmapTiles - 2;
 						if (!(view_map(x + 1, Z >> 1) & player_mask))
 						{
 							color[8] = color[9] = color[10] = 0;
@@ -1355,11 +1355,11 @@ namespace TA3D
 							++grey;
 						}
 					}
-					if (Y + 2 < bloc_h_db)
+					if (Y + 2 < heightInHeightmapTiles)
 					{
 						Z = Y + 2 + get_zdec_notest(X, Y + 2);
-						if (Z >= bloc_h_db - 1)
-							Z = bloc_h_db - 2;
+						if (Z >= heightInHeightmapTiles - 1)
+							Z = heightInHeightmapTiles - 2;
 						if (!(view_map(x, Z >> 1) & player_mask))
 						{
 							color[24] = color[25] = color[26] = 0;
@@ -1370,11 +1370,11 @@ namespace TA3D
 							color[24] = color[25] = color[26] = 127;
 							++grey;
 						}
-						if (X + 2 < bloc_w_db)
+						if (X + 2 < widthInHeightmapTiles)
 						{
 							Z = Y + 2 + get_zdec_notest(X + 2, Y + 2);
-							if (Z >= bloc_h_db - 1)
-								Z = bloc_h_db - 2;
+							if (Z >= heightInHeightmapTiles - 1)
+								Z = heightInHeightmapTiles - 2;
 							if (!(view_map(x + 1, Z >> 1) & player_mask))
 							{
 								color[32] = color[33] = color[34] = 0;
@@ -1542,11 +1542,11 @@ namespace TA3D
 		const int start_x = x1 - (w >> 1);
 		for (int ry = y1 - (h >> 1); ry <= end_y; ++ry)
 		{
-			if (ry >= 0 && ry < bloc_h_db)
+			if (ry >= 0 && ry < heightInHeightmapTiles)
 			{
 				for (int rx = start_x; rx <= end_x; ++rx)
 				{
-					if (rx >= 0 && rx < bloc_w_db)
+					if (rx >= 0 && rx < widthInHeightmapTiles)
 					{
 						if (map_data(rx, ry).stuff >= 0)
 						{

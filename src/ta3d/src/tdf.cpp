@@ -915,7 +915,7 @@ namespace TA3D
 							const int rnd_x = feature[e].px + (Math::RandomTable() % 12) - 6 + wind_x; // Random pos in neighborhood, but affected by wind :)
 							const int rnd_y = feature[e].py + (Math::RandomTable() % 12) - 6 + wind_z;
 
-							if (rnd_x >= 0 && rnd_y >= 0 && rnd_x < the_map->bloc_w_db && rnd_y < the_map->bloc_h_db) // Check coordinates are valid
+							if (rnd_x >= 0 && rnd_y >= 0 && rnd_x < the_map->widthInHeightmapTiles && rnd_y < the_map->heightInHeightmapTiles) // Check coordinates are valid
 							{
 								burn_feature(units.map->map_data(rnd_x, rnd_y).stuff); // Burn it if there is something to burn 8)
 								if (network_manager.isServer())

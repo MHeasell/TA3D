@@ -179,37 +179,37 @@ namespace TA3D
 		}
 
 		LOG_DEBUG("MAP: allocating map memory");
-		map->bloc_w = header.Width / 2;
-		map->bloc_h = header.Height / 2;
-		map->bloc_w_db = map->bloc_w * 2;
-		map->bloc_h_db = map->bloc_h * 2;
-		map->map_h = map->bloc_h * 16;
-		map->map_w = map->bloc_w * 16;
-		map->map_h_d = map->bloc_h * 8;
-		map->map_w_d = map->bloc_w * 8;
+		map->widthInGraphicalTiles = header.Width / 2;
+		map->heightInGraphicalTiles = header.Height / 2;
+		map->widthInHeightmapTiles = map->widthInGraphicalTiles * 2;
+		map->heightInHeightmapTiles = map->heightInGraphicalTiles * 2;
+		map->map_h = map->heightInGraphicalTiles * 16;
+		map->map_w = map->widthInGraphicalTiles * 16;
+		map->map_h_d = map->heightInGraphicalTiles * 8;
+		map->map_w_d = map->widthInGraphicalTiles * 8;
 
-		map->bmap.resize(map->bloc_w, map->bloc_h);
-		map->view.resize(map->bloc_w, map->bloc_h);
-		map->map_data.resize(map->bloc_w_db, map->bloc_h_db);
-		map->path.resize(map->bloc_w_db, map->bloc_h_db);
-		map->energy.resize(map->bloc_w_db, map->bloc_h_db);
-		map->slope.resize(map->bloc_w_db, map->bloc_h_db);
-		map->obstacles.resize(map->bloc_w_db, map->bloc_h_db);
+		map->bmap.resize(map->widthInGraphicalTiles, map->heightInGraphicalTiles);
+		map->view.resize(map->widthInGraphicalTiles, map->heightInGraphicalTiles);
+		map->map_data.resize(map->widthInHeightmapTiles, map->heightInHeightmapTiles);
+		map->path.resize(map->widthInHeightmapTiles, map->heightInHeightmapTiles);
+		map->energy.resize(map->widthInHeightmapTiles, map->heightInHeightmapTiles);
+		map->slope.resize(map->widthInHeightmapTiles, map->heightInHeightmapTiles);
+		map->obstacles.resize(map->widthInHeightmapTiles, map->heightInHeightmapTiles);
 		map->obstacles.clear();
 
 		LOG_DEBUG("MAP: creating FOW maps");
-		map->sight_map.resize(map->bloc_w, map->bloc_h); // FOW maps
-		map->view_map.resize(map->bloc_w, map->bloc_h);
-		map->radar_map.resize(map->bloc_w, map->bloc_h);
-		map->sonar_map.resize(map->bloc_w, map->bloc_h);
+		map->sight_map.resize(map->widthInGraphicalTiles, map->heightInGraphicalTiles); // FOW maps
+		map->view_map.resize(map->widthInGraphicalTiles, map->heightInGraphicalTiles);
+		map->radar_map.resize(map->widthInGraphicalTiles, map->heightInGraphicalTiles);
+		map->sonar_map.resize(map->widthInGraphicalTiles, map->heightInGraphicalTiles);
 		map->view_map.clear(0);
 		map->sight_map.clear(0);
 		map->radar_map.clear(0);
 		map->sonar_map.clear(0);
 
 		LOG_DEBUG("MAP: allocating height maps");
-		map->h_map.resize(map->bloc_w_db, map->bloc_h_db);
-		map->ph_map.resize(map->bloc_w_db, map->bloc_h_db);
+		map->h_map.resize(map->widthInHeightmapTiles, map->heightInHeightmapTiles);
+		map->ph_map.resize(map->widthInHeightmapTiles, map->heightInHeightmapTiles);
 
 		LOG_DEBUG("MAP: initialising map data");
 		map->path.clear();
@@ -259,8 +259,8 @@ namespace TA3D
 
 		event_timer = MILLISECONDS_SINCE_INIT;
 
-		map->lvl = new Vector3D*[map->bloc_w * map->bloc_h];
-		for (i = 0; i < map->bloc_w * map->bloc_h; ++i)
+		map->lvl = new Vector3D*[map->widthInGraphicalTiles * map->heightInGraphicalTiles];
+		for (i = 0; i < map->widthInGraphicalTiles * map->heightInGraphicalTiles; ++i)
 			map->lvl[i] = NULL;
 
 		LOG_DEBUG("MAP: creating blocs texture coordinates");
@@ -300,9 +300,9 @@ namespace TA3D
 
 		file->seek(header.PTRmapdata);
 		file->read(map->bmap.getData(), map->bmap.getSize());
-		for (y = 0; y < map->bloc_h; ++y)
+		for (y = 0; y < map->heightInGraphicalTiles; ++y)
 		{
-			for (x = 0; x < map->bloc_w; ++x)
+			for (x = 0; x < map->widthInGraphicalTiles; ++x)
 			{
 				if (map->bmap(x, y) >= map->nbbloc) // To add some security
 					map->bmap(x, y) = 0;
@@ -320,9 +320,9 @@ namespace TA3D
 		// Charge d'autres données sur les blocs
 		map->water = false;
 		file->seek(header.PTRmapattr);
-		for (y = 0; y < (map->bloc_h << 1); ++y)
+		for (y = 0; y < (map->heightInGraphicalTiles << 1); ++y)
 		{
-			for (x = 0; x < (map->bloc_w << 1); ++x)
+			for (x = 0; x < (map->widthInGraphicalTiles << 1); ++x)
 			{
 				const int c = byte(file->getc());
 				if (c < header.sealevel)
@@ -336,17 +336,17 @@ namespace TA3D
 
 		LOG_DEBUG("MAP: computing height data (step 2)");
 
-		for (int y = 0; y < map->bloc_h_db; ++y) // Calcule les informations complémentaires sur la carte
+		for (int y = 0; y < map->heightInHeightmapTiles; ++y) // Calcule les informations complémentaires sur la carte
 		{
-			for (int x = 0; x < map->bloc_w_db; ++x)
+			for (int x = 0; x < map->widthInHeightmapTiles; ++x)
 			{
 				map->map_data(x, y).init();
 				map->map_data(x, y).setUnderwater(map->h_map(x, y) < map->sealvl);
 				map->map_data(x, y).setLava(map->bmap(x >> 1, y >> 1) < map->nbbloc ? map->bloc[map->bmap(x >> 1, y >> 1)].lava : false);
-				if (!map->map_data(x, y).isLava() && (x >> 1) + 1 < map->bloc_w && map->bmap((x >> 1) + 1, y >> 1) < map->nbbloc)
+				if (!map->map_data(x, y).isLava() && (x >> 1) + 1 < map->widthInGraphicalTiles && map->bmap((x >> 1) + 1, y >> 1) < map->nbbloc)
 				{
 					map->map_data(x, y).setLava(map->bloc[map->bmap((x >> 1) + 1, y >> 1)].lava);
-					if (!map->map_data(x, y).isLava() && (y >> 1) + 1 < map->bloc_h && map->bmap((x >> 1) + 1, (y >> 1) + 1) < map->nbbloc)
+					if (!map->map_data(x, y).isLava() && (y >> 1) + 1 < map->heightInGraphicalTiles && map->bmap((x >> 1) + 1, (y >> 1) + 1) < map->nbbloc)
 						map->map_data(x, y).setLava(map->bloc[map->bmap((x >> 1) + 1, (y >> 1) + 1)].lava);
 					if (!map->map_data(x, y).isLava() && (y >> 1) - 1 >= 0 && map->bmap((x >> 1) + 1, (y >> 1) - 1) < map->nbbloc)
 						map->map_data(x, y).setLava(map->bloc[map->bmap((x >> 1) + 1, (y >> 1) - 1)].lava);
@@ -354,12 +354,12 @@ namespace TA3D
 				if (!map->map_data(x, y).isLava() && (x >> 1) - 1 >= 0 && map->bmap((x >> 1) - 1, y >> 1) < map->nbbloc)
 				{
 					map->map_data(x, y).setLava(map->bloc[map->bmap((x >> 1) - 1, y >> 1)].lava);
-					if (!map->map_data(x, y).isLava() && (y >> 1) + 1 < map->bloc_h && map->bmap((x >> 1) - 1, (y >> 1) + 1) < map->nbbloc)
+					if (!map->map_data(x, y).isLava() && (y >> 1) + 1 < map->heightInGraphicalTiles && map->bmap((x >> 1) - 1, (y >> 1) + 1) < map->nbbloc)
 						map->map_data(x, y).setLava(map->bloc[map->bmap((x >> 1) - 1, (y >> 1) + 1)].lava);
 					if (!map->map_data(x, y).isLava() && (y >> 1) - 1 >= 0 && map->bmap((x >> 1) - 1, (y >> 1) - 1) < map->nbbloc)
 						map->map_data(x, y).setLava(map->bloc[map->bmap((x >> 1) - 1, (y >> 1) - 1)].lava);
 				}
-				if (!map->map_data(x, y).isLava() && (y >> 1) + 1 < map->bloc_h && map->bmap(x >> 1, (y >> 1) + 1) < map->nbbloc)
+				if (!map->map_data(x, y).isLava() && (y >> 1) + 1 < map->heightInGraphicalTiles && map->bmap(x >> 1, (y >> 1) + 1) < map->nbbloc)
 					map->map_data(x, y).setLava(map->bloc[map->bmap(x >> 1, (y >> 1) + 1)].lava);
 				if (!map->map_data(x, y).isLava() && (y >> 1) - 1 >= 0 && map->bmap(x >> 1, (y >> 1) - 1) < map->nbbloc)
 					map->map_data(x, y).setLava(map->bloc[map->bmap(x >> 1, (y >> 1) - 1)].lava);
@@ -370,9 +370,9 @@ namespace TA3D
 		event_timer = MILLISECONDS_SINCE_INIT;
 
 		LOG_DEBUG("MAP: computing height data (step 3)");
-		for (y = 0; y < (map->bloc_h << 1); ++y)
+		for (y = 0; y < (map->heightInGraphicalTiles << 1); ++y)
 		{
-			for (x = 0; x < (map->bloc_w << 1); ++x) // Projete la carte du relief
+			for (x = 0; x < (map->widthInGraphicalTiles << 1); ++x) // Projete la carte du relief
 			{
 				float h = map->ph_map(x, y);
 				int rec_y = y + int(0.5f - tnt_transform * h / 16.f);
@@ -387,9 +387,9 @@ namespace TA3D
 		}
 
 		LOG_DEBUG("MAP: computing height data (step 4)");
-		for (y = 0; y < (map->bloc_h << 1); ++y)
+		for (y = 0; y < (map->heightInGraphicalTiles << 1); ++y)
 		{
-			for (x = 0; x < (map->bloc_w << 1); ++x) // Lisse la carte du relief projeté
+			for (x = 0; x < (map->widthInGraphicalTiles << 1); ++x) // Lisse la carte du relief projeté
 			{
 				if (!y && Math::AlmostEquals(map->ph_map(x, y), -1.f))
 				{
@@ -410,11 +410,11 @@ namespace TA3D
 					{
 						float h1 = map->ph_map(x, y - 1);
 						int cy = y;
-						while (cy < (map->bloc_h << 1) && Math::AlmostEquals(map->ph_map(x, cy), -1.f))
+						while (cy < (map->heightInGraphicalTiles << 1) && Math::AlmostEquals(map->ph_map(x, cy), -1.f))
 							++cy;
 
-						if (cy >= (map->bloc_h << 1))
-							cy = (map->bloc_h << 1) - 1;
+						if (cy >= (map->heightInGraphicalTiles << 1))
+							cy = (map->heightInGraphicalTiles << 1) - 1;
 
 						float h2 = map->ph_map(x, cy);
 						if (Math::AlmostEquals(h2, -1.f))
@@ -428,9 +428,9 @@ namespace TA3D
 
 		LOG_DEBUG("MAP: computing height data (step 5)");
 
-		for (int y = 0; y < (map->bloc_h << 1); ++y) // Compute slopes on the map using height map and projected datas
+		for (int y = 0; y < (map->heightInGraphicalTiles << 1); ++y) // Compute slopes on the map using height map and projected datas
 		{
-			for (int x = 0; x < (map->bloc_w << 1); ++x)
+			for (int x = 0; x < (map->widthInGraphicalTiles << 1); ++x)
 			{
 				float dh = 0.0f;
 				if (y > 0)
@@ -440,7 +440,7 @@ namespace TA3D
 					dh = Math::Max(dh, std::abs(map->h_map(x, y) - map->h_map(x, y - 1)) * dz);
 				}
 
-				if (y + 1 < (map->bloc_h << 1))
+				if (y + 1 < (map->heightInGraphicalTiles << 1))
 				{
 					float dz = fabsf(map->get_zdec(x, y + 1) - map->get_zdec(x, y) + 8.0f);
 					dz = (Math::AlmostZero(dz)) ? 100000000.f : (8.0f / dz);
@@ -449,7 +449,7 @@ namespace TA3D
 
 				if (x > 0)
 					dh = Math::Max(dh, std::abs(map->h_map(x, y) - map->h_map(x - 1, y)));
-				if (x + 1 < (map->bloc_w << 1))
+				if (x + 1 < (map->widthInGraphicalTiles << 1))
 					dh = Math::Max(dh, std::abs(map->h_map(x, y) - map->h_map(x + 1, y)));
 
 				map->slope(x, y) = dh;
@@ -465,13 +465,13 @@ namespace TA3D
 		LOG_DEBUG("MAP: reading map features data");
 		// Ajoute divers éléments(végétation,...)
 		file->seek(header.PTRmapattr + 1);
-		for (y = 0; y < (map->bloc_h << 1); ++y)
-			for (x = 0; x < (map->bloc_w << 1); ++x)
+		for (y = 0; y < (map->heightInGraphicalTiles << 1); ++y)
+			for (x = 0; x < (map->widthInGraphicalTiles << 1); ++x)
 				map->map_data(x, y).stuff = -1;
 		features.destroy();
-		for (y = 0; y < (map->bloc_h << 1); ++y)
+		for (y = 0; y < (map->heightInGraphicalTiles << 1); ++y)
 		{
-			for (x = 0; x < (map->bloc_w << 1); ++x)
+			for (x = 0; x < (map->widthInGraphicalTiles << 1); ++x)
 			{
 				unsigned short type;
 				*file >> type;
@@ -485,7 +485,7 @@ namespace TA3D
 						Pos.y = map->get_max_rect_h(x, y, feature->footprintx, feature->footprintz);
 					else
 						Pos.y = map->get_unit_h(Pos.x, Pos.z);
-					if (x + 1 < map->bloc_w_db && y + 1 < map->bloc_h_db)
+					if (x + 1 < map->widthInHeightmapTiles && y + 1 < map->heightInHeightmapTiles)
 					{
 						map->map_data(x + 1, y + 1).stuff = features.add_feature(Pos, TDF_index[type]);
 						features.drawFeatureOnMap(map->map_data(x + 1, y + 1).stuff); // Feature index is checked by drawFeatureOnMap so this is secure
