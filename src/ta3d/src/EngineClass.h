@@ -235,28 +235,28 @@ namespace TA3D
 		//! Sonar map
 		Grid<byte> sonar_map;
 
-		//! Width of the map in 16 pixel blocks
+		//! *Half* the width of the map in pixels.
 		int map_w;
 
-		//! Height of the map in 16 pixel blocks
+		//! *Half* the height of the map in pixels
 		int map_h;
 
-		//! Width of the map in 32 pixel (graphical) blocks
+		//! *One quarter* of the width of the map in pixels
 		int map_w_d;
 
-		//! Height of the map in 32 pixel (graphical) blocks
+		//! *One quarter* of the height of the map in pixels
 		int map_h_d;
 
-		//! Width in blocks
+		//! Width in 32-pixel graphical tiles
 		int bloc_w;
 
-		//! Height in blocks
+		//! Height in 32-pixel graphical tiles
 		int bloc_h;
 
-		//! Width in blocks divided by 2
+		//! Width in 16-pixel heightmap tiles
 		int bloc_w_db;
 
-		// Height in blocks divided by 2
+		// Height in 16-pixel heightmap tiles
 		int bloc_h_db;
 
 		//! Minimap
