@@ -298,15 +298,6 @@ namespace TA3D
 			map->bloc[i].texcoord[17] = 63.0f / 64.0f;
 		}
 
-		// Charge les données sur la position des blocs
-		int max_tex_size;
-		glGetIntegerv(GL_MAX_TEXTURE_SIZE, &max_tex_size);
-		max_tex_size = Math::Min(max_tex_size, 2048); // This texture can be very big, so let's reduce it
-
-		LOG_DEBUG("MAP: creating low definition texture and lava map");
-
-		SDL_Surface* low_def = gfx->create_surface_ex(8, Math::Min(max_tex_size, map->map_w), Math::Min(max_tex_size, map->map_h));
-		SDL_FillRect(low_def, NULL, 0x0);
 		file->seek(header.PTRmapdata);
 		file->read(map->bmap.getData(), map->bmap.getSize());
 		for (y = 0; y < map->bloc_h; ++y)
@@ -315,29 +306,12 @@ namespace TA3D
 			{
 				if (map->bmap(x, y) >= map->nbbloc) // To add some security
 					map->bmap(x, y) = 0;
-
-				/*---------- code to build the low def map (mega zoom) ---------------*/
-				i = map->bmap(x, y);
-				const int tex_num = i >> 5;		// Numéro de la texture associée
-				const int tx = (i & 0x1F) << 5; // Coordonnées sur la texture
-
-				stretch_blit(bmp_tex[tex_num], low_def, tx, 0, 32, 32,
-					x * (low_def->w - 1) / map->bloc_w, y * (low_def->h - 1) / map->bloc_h,
-					(x + 1) * (low_def->w - 1) / map->bloc_w - x * (low_def->w - 1) / map->bloc_w,
-					(y + 1) * (low_def->h - 1) / map->bloc_h - y * (low_def->h - 1) / map->bloc_h);
-				/*--------------------------------------------------------------------*/
 			}
 		}
-		LOG_INFO("Low definition map image built in " << float(MILLISECONDS_SINCE_INIT - event_timer) * 0.001f << "s.");
-		event_timer = MILLISECONDS_SINCE_INIT;
 
 		for (i = 0; i < n_bmp; ++i) // Delete SDL_Surface textures
 			SDL_FreeSurface(bmp_tex[i]);
-		low_def = convert_format_24(low_def);
-		gfx->set_texture_format(GL_RGB5);
-		SDL_FreeSurface(low_def);
 
-		LOG_INFO("Low definition texture uploaded in " << float(MILLISECONDS_SINCE_INIT - event_timer) * 0.001f << "s.");
 		event_timer = MILLISECONDS_SINCE_INIT;
 
 		SDL_Surface* lava_map = gfx->create_surface_ex(8, Math::Min(map->bloc_w, 1024), Math::Min(map->bloc_h, 1024));
