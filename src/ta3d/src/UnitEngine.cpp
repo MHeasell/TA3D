@@ -1500,7 +1500,7 @@ namespace TA3D
 		}
 	}
 
-	void INGAME_UNITS::draw(bool underwater, bool height_line)
+	void INGAME_UNITS::draw(bool height_line)
 	{
 		if (nb_unit <= 0 || !unit)
 			return; // No units to draw
@@ -1510,7 +1510,6 @@ namespace TA3D
 
 		glDisable(GL_BLEND);
 		glColor4ub(0xFF, 0xFF, 0xFF, 0xFF);
-		const float sea_lvl = the_map->sealvl;
 		const float virtual_t = ((float)current_tick) / TICKS_PER_SEC;
 
 		for (std::vector<uint32>::const_iterator e = visible_unit.begin(); e != visible_unit.end(); ++e)
@@ -1520,7 +1519,7 @@ namespace TA3D
 			Unit* const pUnit = &(unit[i]);
 			const Model* const model = pUnit->model;
 
-			if (model && ((pUnit->render.Pos.y + model->bottom <= the_map->sealvl && underwater) || (pUnit->render.Pos.y + model->top >= sea_lvl && !underwater))) // Si il y a une unité / If there is a unit
+			if (model) // If there is a unit
 				pUnit->draw(virtual_t, height_line);
 		}
 
