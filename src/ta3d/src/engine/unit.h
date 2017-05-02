@@ -248,7 +248,6 @@ namespace TA3D
 		float h;			   // Altitude (par rapport au sol)
 		bool visible;		   // Indique si l'unité est visible / Tell if the unit is currently visible
 		bool on_radar;		   // Radar drawing mode (icons)
-		bool on_mini_radar;	// On minimap radar
 		short groupe;		   // Indique si l'unité fait partie d'un groupe
 		bool built;			   // Indique si l'unité est en cours de construction (par une autre unité)
 		bool attacked;		   // Indique si l'unité est attaquée

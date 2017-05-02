@@ -40,7 +40,6 @@ namespace TA3D
 		  h(0.0f),
 		  visible(false),
 		  on_radar(false),
-		  on_mini_radar(false),
 		  groupe(0),
 		  built(0),
 		  attacked(false),
@@ -416,7 +415,6 @@ namespace TA3D
 
 		metal_extracted = 0.0f;
 
-		on_mini_radar = false;
 		move_target_computed.x = move_target_computed.y = move_target_computed.z = 0.0f;
 
 		self_destruct = -1; // Don't auto destruct!!
@@ -990,7 +988,6 @@ namespace TA3D
 		UnitType* const pType = unit_manager.unit_type[type_id];
 		visible = false;
 		on_radar = false;
-		on_mini_radar = false;
 
 		if (!model || hidden)
 			return; // If there is no associated model, skip drawing
@@ -1001,7 +998,7 @@ namespace TA3D
 			return; // Unité hors de la carte
 		const byte player_mask = byte(1 << players.local_human_id);
 
-		on_radar = on_mini_radar = is_on_radar(player_mask);
+		on_radar = is_on_radar(player_mask);
 		if (the_map->view(px, py) == 0 || (the_map->view(px, py) > 1 && !on_radar))
 			return; // Unit is not visible
 
