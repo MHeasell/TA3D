@@ -1514,13 +1514,7 @@ namespace TA3D
 
 		for (std::vector<uint32>::const_iterator e = visible_unit.begin(); e != visible_unit.end(); ++e)
 		{
-			const uint32 i = *e;
-
-			Unit* const pUnit = &(unit[i]);
-			const Model* const model = pUnit->model;
-
-			if (model) // If there is a unit
-				pUnit->draw(virtual_t, height_line);
+			unit[*e].draw(virtual_t, height_line);
 		}
 
 		glDisable(GL_ALPHA_TEST);
