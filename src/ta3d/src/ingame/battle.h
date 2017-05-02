@@ -563,6 +563,16 @@ namespace TA3D
 		 * @param targetFeatureId The ID of the unit's corpse.
 		 */
 		void issueReviveMission(Vector3D& targetPosition, int targetFeatureId) const;
+
+		/**
+		 * Issues a reclaim mission to the currently selected units.
+		 * If the shift key is held, the mission will be queued,
+		 * otherwise, the mission will replace the unit's current mission queue.
+		 *
+		 * @param targetPosition The position of the feature to be reclaimed.
+		 * @param targetFeatureId The ID of the feature to be reclaimed.
+		 */
+		void issueReclaimFeatureMission(Vector3D& targetPosition, int targetFeatureId) const;
 	}; // class Battle
 
 } // namespace TA3D
