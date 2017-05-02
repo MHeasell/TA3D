@@ -489,6 +489,16 @@ namespace TA3D
 		Vector2D screenToClipCoordinates(const Vector2D& coordinates) const;
 
 		Rect<float> screenToClipCoordinates(const Rect<int>& rectangle) const;
+
+		/**
+		 * Issues an attack mission to the currently selected units.
+		 * If the shift key is currently held, the mission will be queued,
+		 * otherwise, the mission will replace the unit's current mission queue.
+		 *
+		 * @param targetUnitId The unit to attack.
+		 * @param dgun Currently unknown, presumably to do with the D-Gun button.
+		 */
+		void issueAttackMission(int targetUnitId, bool dgun) const;
 	}; // class Battle
 
 } // namespace TA3D

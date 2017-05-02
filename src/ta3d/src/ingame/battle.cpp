@@ -477,26 +477,7 @@ namespace TA3D
 						order_removed = true;
 						if (cursor_type == CURSOR_ATTACK || cursor_type == CURSOR_BOMB_ATTACK)
 						{
-							for (unsigned int e = 0; e < units.index_list_size; ++e)
-							{
-								uint32 commandfire = current_order == SIGNAL_ORDER_DGUN ? MISSION_FLAG_COMMAND_FIRE : 0;
-								int i = units.idx_list[e];
-								units.unit[i].lock();
-								if (units.unit[i].isAlive() && units.unit[i].isOwnedBy(players.local_human_id) && units.unit[i].isSelected && unit_manager.unit_type[units.unit[i].type_id]->canattack)
-								{
-									for (unsigned int f = 0; f < unit_manager.unit_type[units.unit[i].type_id]->weapon.size(); ++f)
-										if (unit_manager.unit_type[units.unit[i].type_id]->weapon[f] && unit_manager.unit_type[units.unit[i].type_id]->weapon[f]->stockpile)
-										{
-											commandfire = MISSION_FLAG_COMMAND_FIRE;
-											break;
-										}
-									if (isShiftKeyDown())
-										units.unit[i].add_mission(MISSION_ATTACK, &(units.unit[pointing].Pos), false, 0, &(units.unit[pointing]), (byte)commandfire);
-									else
-										units.unit[i].set_mission(MISSION_ATTACK, &(units.unit[pointing].Pos), false, 0, true, &(units.unit[pointing]), (byte)commandfire);
-								}
-								units.unit[i].unlock();
-							}
+							issueAttackMission(pointing, current_order == SIGNAL_ORDER_DGUN);
 							if (!isShiftKeyDown())
 								current_order = SIGNAL_ORDER_NONE;
 							click_activated = true;
@@ -2255,6 +2236,30 @@ namespace TA3D
 			Menus::Statistics::Execute();
 
 		return pResult;
+	}
+
+	void Battle::issueAttackMission(int targetUnitId, bool dgun) const
+	{
+		for (unsigned int e = 0; e < units.index_list_size; ++e)
+		{
+			uint32 commandfire = dgun ? MISSION_FLAG_COMMAND_FIRE : 0;
+			int i = units.idx_list[e];
+			units.unit[i].lock();
+			if (units.unit[i].isAlive() && units.unit[i].isOwnedBy(players.local_human_id) && units.unit[i].isSelected && unit_manager.unit_type[units.unit[i].type_id]->canattack)
+			{
+				for (unsigned int f = 0; f < unit_manager.unit_type[units.unit[i].type_id]->weapon.size(); ++f)
+					if (unit_manager.unit_type[units.unit[i].type_id]->weapon[f] && unit_manager.unit_type[units.unit[i].type_id]->weapon[f]->stockpile)
+					{
+						commandfire = MISSION_FLAG_COMMAND_FIRE;
+						break;
+					}
+				if (isShiftKeyDown())
+					units.unit[i].add_mission(MISSION_ATTACK, &(units.unit[targetUnitId].Pos), false, 0, &(units.unit[targetUnitId]), (byte)commandfire);
+				else
+					units.unit[i].set_mission(MISSION_ATTACK, &(units.unit[targetUnitId].Pos), false, 0, true, &(units.unit[targetUnitId]), (byte)commandfire);
+			}
+			units.unit[i].unlock();
+		}
 	}
 
 	void Battle::decreaseGameSpeed()
