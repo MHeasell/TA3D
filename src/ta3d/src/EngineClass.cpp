@@ -889,8 +889,6 @@ namespace TA3D
 		gfx->unlock();
 	}
 
-	inline float sq(float a) { return a * a; }
-
 	void MAP::draw(Camera* cam, byte player_mask)
 	{
 		cam->applyToOpenGl();
