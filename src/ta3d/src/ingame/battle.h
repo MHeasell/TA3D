@@ -626,6 +626,11 @@ namespace TA3D
 		 * of at least one already selected unit.
 		 */
 		void selectUnitsOfSelectedTypes();
+
+		/**
+		 * Selects all of the player's (selectable) units.
+		 */
+		void selectAllUnits();
 	}; // class Battle
 
 } // namespace TA3D
