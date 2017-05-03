@@ -600,6 +600,13 @@ namespace TA3D
 		 * @param targetPosition The position to patrol to.
 		 */
 		void issuePatrolMission(const Vector3D& targetPosition) const;
+
+		/**
+		 * Finds a feature close the the current cursor position
+		 * and returns its feature index.
+		 * If no feature is found, returns -1.
+		 */
+		int pickFeature() const;
 	}; // class Battle
 
 } // namespace TA3D
