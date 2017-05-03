@@ -749,19 +749,21 @@ namespace TA3D
 			}
 
 			// Select CTRL_* category units
-			if (isControlKeyDown() && (isKeyDown(KEY_C) || isKeyDown(KEY_F) || isKeyDown(KEY_V) || isKeyDown(KEY_B)))
+			if (isControlKeyDown() && didKeyGoDown(KEY_C))
 			{
-				String check_cat = "CTRL_";
-				if (isKeyDown(KEY_C))
-					check_cat += "C";
-				else if (isKeyDown(KEY_F))
-					check_cat += "F";
-				else if (isKeyDown(KEY_V))
-					check_cat += "V";
-				else if (isKeyDown(KEY_B))
-					check_cat += "B";
-
-				selectUnitsInCategory(check_cat);
+				selectUnitsInCategory("CTRL_C");
+			}
+			else if (isControlKeyDown() && didKeyGoDown(KEY_F))
+			{
+				selectUnitsInCategory("CTRL_F");
+			}
+			else if (isControlKeyDown() && didKeyGoDown(KEY_V))
+			{
+				selectUnitsInCategory("CTRL_V");
+			}
+			else if (isControlKeyDown() && didKeyGoDown(KEY_B))
+			{
+				selectUnitsInCategory("CTRL_B");
 			}
 			else if (isControlKeyDown() && isKeyDown(KEY_Z)) // Select units of the same type
 			{
