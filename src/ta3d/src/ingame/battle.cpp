@@ -438,12 +438,7 @@ namespace TA3D
 
 					if (cursor_type == CURSOR_MOVE)
 					{
-						if (!can_be_captured)
-						{
-							if (canguard)
-								cursor_type = CURSOR_GUARD;
-						}
-						else
+						if (can_be_captured)
 						{
 							if (cancapture)
 								cursor_type = CURSOR_CAPTURE;
