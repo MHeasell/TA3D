@@ -190,7 +190,16 @@ namespace TA3D
 		uint32 client_speed[10];
 		float apparent_timefactor;
 		uint32 last_tick[5];
-		sint32 last_on; // Indicate the unit index which was under the cursor (mini map orders)
+
+		/**
+		 * Indicates the unit or feature that was under the cursor.
+		 * If a unit is under the cursor, the value is the unit ID,
+		 * and is guaranteed to be greater than or equal to 0.
+		 * If a feature is under the cursor, the value is (-2 - feature_index),
+		 * and is guaranteed to be less than or equal to -2.
+		 * If no unit or feature was under the cursor, the value is -1.
+		 */
+		sint32 last_on;
 
 		std::vector<uint32> visible_unit;					 // A list to store visible units
 		KDTree<UnitTKit::T, UnitTKit>* kdTree[10];			 // A KDTree filled with units to speed up target detection (one per player)
