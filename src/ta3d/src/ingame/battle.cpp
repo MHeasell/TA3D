@@ -396,11 +396,9 @@ namespace TA3D
 								cursor_type = CURSOR_CANT_ATTACK;
 						}
 					}
-					else
-					{
-						if (units.unit[pointing].isBeingBuilt() && builders)
-							cursor_type = CURSOR_REPAIR;
-					}
+					else if (units.unit[pointing].isBeingBuilt() && builders)
+						cursor_type = CURSOR_REPAIR;
+
 
 					cursor_type = CursorFromSignalOrder(current_order, cursor_type);
 
@@ -482,24 +480,21 @@ namespace TA3D
 						}
 					}
 				}
-				else
+				else if (!rope_selection)
 				{
-					if (!rope_selection)
-					{
-						cursor_type = CursorFromSignalOrder(current_order, cursor_type);
-						if (cursor_type == CURSOR_ATTACK && bombers)
-							cursor_type = CURSOR_BOMB_ATTACK;
+					cursor_type = CursorFromSignalOrder(current_order, cursor_type);
+					if (cursor_type == CURSOR_ATTACK && bombers)
+						cursor_type = CURSOR_BOMB_ATTACK;
 
-						if (left_click_activation)
+					if (left_click_activation)
+					{
+						if (cursor_type == CURSOR_ATTACK || cursor_type == CURSOR_BOMB_ATTACK)
 						{
-							if (cursor_type == CURSOR_ATTACK || cursor_type == CURSOR_BOMB_ATTACK)
-							{
-								Vector3D cursor_pos(cursorOnMap(cam, *map, IsOnMinimap));
-								issueAttackGroundMission(cursor_pos);
-								if (!isShiftKeyDown())
-									current_order = SIGNAL_ORDER_NONE;
-								click_activated = true;
-							}
+							Vector3D cursor_pos(cursorOnMap(cam, *map, IsOnMinimap));
+							issueAttackGroundMission(cursor_pos);
+							if (!isShiftKeyDown())
+								current_order = SIGNAL_ORDER_NONE;
+							click_activated = true;
 						}
 					}
 				}
