@@ -503,14 +503,14 @@ namespace TA3D
 								current_order = SIGNAL_ORDER_NONE;
 							click_activated = true;
 						}
-						else if (cursor_type == CURSOR_GUARD) // Le curseur donne un ordre
+						else if (cursor_type == CURSOR_GUARD)
 						{
 							issueGuardMission(pointing);
 							if (!isShiftKeyDown())
 								current_order = SIGNAL_ORDER_NONE;
 							click_activated = true;
 						}
-						else if (cursor_type == CURSOR_LOAD) // Le curseur donne un ordre
+						else if (cursor_type == CURSOR_LOAD)
 						{
 							issueLoadMission(pointing);
 							if (!isShiftKeyDown())
