@@ -773,11 +773,8 @@ namespace TA3D
 					{
 						if (unit_manager.unit_type[units.unit[i].type_id]->checkCategory(check_cat))
 							units.unit[i].isSelected = true;
-						else
-						{
-							if (!isShiftKeyDown())
-								units.unit[i].isSelected = false;
-						}
+						else if (!isShiftKeyDown())
+							units.unit[i].isSelected = false;
 					}
 				}
 				cur_sel = -1;
