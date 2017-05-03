@@ -745,41 +745,10 @@ namespace TA3D
 
 				if (units.last_on == -1) // Is the cursor on a rock, tree, ...?
 				{
-					const Vector3D cur_pos(cursorOnMap(cam, *map, IsOnMinimap));
-					const int px = ((int)(cur_pos.x + (float)map->map_w_d)) >> 3;
-					const int py = ((int)(cur_pos.z + (float)map->map_h_d)) >> 3;
-					if (px >= 0 && px < map->widthInHeightmapTiles && py >= 0 && py < map->heightInHeightmapTiles && (map->view_map(px >> 1, py >> 1) & (1 << players.local_human_id)))
+					int featureIndex = pickFeature();
+					if (featureIndex != -1)
 					{
-						int idx = -map->map_data(px, py).unit_idx - 2; // Basic check
-						if (idx < 0 || features.feature[idx].type < 0)
-						{
-							units.last_on = -1;
-							for (int dy = -7; dy < 8; ++dy) // Look for things like metal patches
-							{
-								if (py + dy >= 0 && py + dy < map->heightInHeightmapTiles)
-								{
-									for (int dx = -7; dx < 8; ++dx)
-									{
-										if (px + dx >= 0 && px + dx < map->widthInHeightmapTiles)
-										{
-											if (map->map_data(px + dx, py + dy).stuff >= 0)
-											{
-												idx = map->map_data(px + dx, py + dy).stuff;
-												const Feature* const feature = feature_manager.getFeaturePointer(features.feature[idx].type);
-												if (feature && feature->footprintx + 1 >= (abs(dx) << 1) && feature->footprintz + 1 >= (abs(dy) << 1))
-												{
-													units.last_on = -idx - 2;
-													dy = 800;
-													break;
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-						else
-							units.last_on = -idx - 2;
+						units.last_on = -featureIndex - 2;
 					}
 				}
 			}
