@@ -631,6 +631,22 @@ namespace TA3D
 		 * Selects all of the player's (selectable) units.
 		 */
 		void selectAllUnits();
+
+		/**
+		 * Assigns the currently selected units to the given group.
+		 * If the shift key is not being held, this method will replace
+		 * the units that were previously in the group.
+		 * Otherwise, it will add the units to the existing group.
+		 */
+		void assignGroupToSelectedUnits(int groupNumber);
+
+		/**
+		 * Selects all units in the given group.
+		 * If the shift key is not being held,
+		 * this method will replace the current selection.
+		 * Otherwise, it will add the units to the current selection.
+		 */
+		void selectGroup(int groupNumber);
 	}; // class Battle
 
 } // namespace TA3D

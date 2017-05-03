@@ -799,18 +799,7 @@ namespace TA3D
 
 				if (grpe >= 0)
 				{
-					grpe = 1 << grpe;
-					for (unsigned int e = 0; e < units.index_list_size; ++e)
-					{
-						int i = units.idx_list[e];
-						if (units.unit[i].isAlive() && units.unit[i].isOwnedBy(players.local_human_id))
-						{
-							if (units.unit[i].isSelected)
-								setFlag(units.unit[i].groupe, grpe);
-							else if (!isShiftKeyDown())
-								unsetFlag(units.unit[i].groupe, grpe);
-						}
-					}
+					assignGroupToSelectedUnits(grpe);
 				}
 			}
 			else if (isKeyDown(KEY_ALT)) // Recall (select) groups of units
@@ -839,34 +828,7 @@ namespace TA3D
 
 				if (grpe >= 0)
 				{
-					build = -1;
-					grpe = 1 << grpe;
-					for (unsigned int e = 0; e < units.index_list_size; ++e)
-					{
-						int i = units.idx_list[e];
-						if (units.unit[i].isAlive() && units.unit[i].isOwnedBy(players.local_human_id))
-						{
-							if (units.unit[i].groupe & grpe)
-								units.unit[i].isSelected = true;
-							else if (!isShiftKeyDown())
-								units.unit[i].isSelected = false;
-						}
-					}
-				}
-
-				cur_sel = -1;
-				cur_sel_index = -1;
-				for (unsigned int e = 0; e < units.index_list_size && cur_sel != -2; ++e)
-				{
-					int i = units.idx_list[e];
-					if (units.unit[i].isAlive() && units.unit[i].isOwnedBy(players.local_human_id) && units.unit[i].isSelected)
-						cur_sel = (cur_sel == -1) ? i : -2;
-				}
-				selected = (cur_sel != -1);
-				if (cur_sel >= 0)
-				{
-					cur_sel_index = cur_sel;
-					cur_sel = units.unit[cur_sel].type_id;
+					selectGroup(grpe);
 				}
 			}
 
@@ -1960,6 +1922,54 @@ namespace TA3D
 			Menus::Statistics::Execute();
 
 		return pResult;
+	}
+
+	void Battle::selectGroup(int groupNumber)
+	{
+		build = -1;
+		groupNumber = 1 << groupNumber;
+		for (unsigned int e = 0; e < units.index_list_size; ++e)
+		{
+			int i = units.idx_list[e];
+			if (units.unit[i].isAlive() && units.unit[i].isOwnedBy(players.local_human_id))
+			{
+				if (units.unit[i].groupe & groupNumber)
+					units.unit[i].isSelected = true;
+				else if (!isShiftKeyDown())
+					units.unit[i].isSelected = false;
+			}
+		}
+
+		cur_sel = -1;
+		cur_sel_index = -1;
+		for (unsigned int e = 0; e < units.index_list_size && cur_sel != -2; ++e)
+		{
+			int i = units.idx_list[e];
+			if (units.unit[i].isAlive() && units.unit[i].isOwnedBy(players.local_human_id) && units.unit[i].isSelected)
+				cur_sel = (cur_sel == -1) ? i : -2;
+		}
+		selected = (cur_sel != -1);
+		if (cur_sel >= 0)
+		{
+			cur_sel_index = cur_sel;
+			cur_sel = units.unit[cur_sel].type_id;
+		}
+	}
+
+	void Battle::assignGroupToSelectedUnits(int groupNumber)
+	{
+		groupNumber = 1 << groupNumber;
+		for (unsigned int e = 0; e < units.index_list_size; ++e)
+		{
+			int i = units.idx_list[e];
+			if (units.unit[i].isAlive() && units.unit[i].isOwnedBy(players.local_human_id))
+			{
+				if (units.unit[i].isSelected)
+					setFlag(units.unit[i].groupe, groupNumber);
+				else if (!isShiftKeyDown())
+					unsetFlag(units.unit[i].groupe, groupNumber);
+			}
+		}
 	}
 
 	void Battle::selectAllUnits()
