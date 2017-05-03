@@ -398,7 +398,7 @@ namespace TA3D
 					}
 					else
 					{
-						if (units.unit[pointing].build_percent_left > 0.0f && builders)
+						if (units.unit[pointing].isBeingBuilt() && builders)
 							cursor_type = CURSOR_REPAIR;
 					}
 
@@ -683,7 +683,7 @@ namespace TA3D
 										units.unit[i].isSelected = false;
 								}
 							}
-							if (pointing >= 0 && Math::AlmostZero(units.unit[pointing].build_percent_left)) // On ne sÃ©lectionne pas les unitÃ©s en construction
+							if (pointing >= 0 && !units.unit[pointing].isBeingBuilt()) // On ne sÃ©lectionne pas les unitÃ©s en construction
 								units.unit[pointing].isSelected ^= true;											// SÃ©lectionne/DÃ©sÃ©lectionne si l'unitÃ© est dÃ©jÃ  sÃ©lectionnÃ©e en appuyant sur SHIFT
 							selected = false;
 							for (unsigned int e = 0; e < units.index_list_size; ++e)
@@ -1124,7 +1124,7 @@ namespace TA3D
 			int n = cur_sel;
 			if (n == -1)
 				n = -2;
-			if (n >= 0 && units.unit[cur_sel_index].build_percent_left > 0.0f) // Unfinished unit
+			if (n >= 0 && units.unit[cur_sel_index].isBeingBuilt()) // Unfinished unit
 				n = -1;
 			int sel = -1;
 

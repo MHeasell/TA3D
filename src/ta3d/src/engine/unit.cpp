@@ -1082,7 +1082,7 @@ namespace TA3D
 				} while (first != current && i < 1000);
 			}
 
-			if (Math::AlmostZero(build_percent_left) && !mission.empty() && port[INBUILDSTANCE] != 0 && local)
+			if (!isBeingBuilt() && !mission.empty() && port[INBUILDSTANCE] != 0 && local)
 			{
 				if (c_time >= 0.125f)
 				{
@@ -1203,7 +1203,7 @@ namespace TA3D
 
 			glColor4ub(0xFF, 0xFF, 0xFF, 0xFF);
 
-			if (Math::AlmostZero(build_percent_left))
+			if (!isBeingBuilt())
 			{
 				if (pType->onoffable && !port[ACTIVATION])
 					t = 0.0f;
@@ -2059,7 +2059,7 @@ namespace TA3D
 
 		const float resource_min_factor = TA3D::Math::Min(TA3D::players.energy_factor[owner_id], TA3D::players.metal_factor[owner_id]);
 
-		if (Math::AlmostZero(build_percent_left) && pType->isfeature) // Turn this unit into a feature
+		if (!isBeingBuilt() && pType->isfeature) // Turn this unit into a feature
 		{
 			if (cur_px > 0 && cur_py > 0 && cur_px < (the_map->widthInGraphicalTiles << 1) && cur_py < (the_map->heightInGraphicalTiles << 1))
 			{
@@ -2094,7 +2094,7 @@ namespace TA3D
 
 		const bool jump_commands = (((idx + key_frame) & 0xF) == 0); // Saute certaines commandes / Jump some commands so it runs faster with lots of units
 
-		if (Math::AlmostZero(build_percent_left) && self_destruct >= 0.0f) // Self-destruction code
+		if (!isBeingBuilt() && self_destruct >= 0.0f) // Self-destruction code
 		{
 			const int old = (int)self_destruct;
 			self_destruct -= dt;
@@ -2131,7 +2131,7 @@ namespace TA3D
 			{
 				case 1:		   // Début de la mort de l'unité	(Lance le script)
 					flags = 4; // Don't remove the data on the position map because they will be replaced
-					if (Math::AlmostZero(build_percent_left) && local)
+					if (!isBeingBuilt() && local)
 						explode();
 					else
 						flags = 1;
@@ -2165,7 +2165,7 @@ namespace TA3D
 					clear_from_map();
 					return -1;
 			}
-			if (data.nb_piece > 0 && Math::AlmostZero(build_percent_left))
+			if (data.nb_piece > 0 && !isBeingBuilt())
 			{
 				data.move(dt, the_map->ota_data.gravity);
 				if (c_time >= 0.1f)
@@ -2281,7 +2281,7 @@ namespace TA3D
 				if (random_vector)
 					fx_manager.addElectric(Pos + randVec);
 			}
-			if (build_percent_left <= 0.0f)
+			if (!isBeingBuilt())
 				metal_prod = 0.0f;
 		}
 
@@ -3322,7 +3322,7 @@ namespace TA3D
 					{ // On ne défend pas n'importe quoi
 						if (pType->Builder)
 						{
-							if (mission->getUnit()->build_percent_left > 0.0f || mission->getUnit()->hp < unit_manager.unit_type[mission->getUnit()->type_id]->MaxDamage) // Répare l'unité
+							if (mission->getUnit()->isBeingBuilt() || mission->getUnit()->hp < unit_manager.unit_type[mission->getUnit()->type_id]->MaxDamage) // Répare l'unité
 							{
 								add_mission(MISSION_REPAIR | MISSION_FLAG_AUTO, &mission->getUnit()->Pos, true, 0, mission->getUnit());
 								break;
@@ -3455,7 +3455,7 @@ namespace TA3D
 								for (std::deque<UnitTKit::T>::const_iterator i = repair_pads.begin(); i != repair_pads.end() && !going_to_repair_pad; ++i)
 								{
 									const Unit* const pUnit = i->first;
-									if ((pUnit->pad1 == 0xFFFF || pUnit->pad2 == 0xFFFF) && Math::AlmostZero(pUnit->build_percent_left)) // He can repair us :)
+									if ((pUnit->pad1 == 0xFFFF || pUnit->pad2 == 0xFFFF) && !pUnit->isBeingBuilt()) // He can repair us :)
 									{
 										add_mission(MISSION_GET_REPAIRED | MISSION_FLAG_AUTO, &(pUnit->Pos), true, 0, (void*)pUnit);
 										going_to_repair_pad = true;
@@ -3713,7 +3713,7 @@ namespace TA3D
 					}
 					{
 						Unit* target_unit = mission->getUnit();
-						if (target_unit != NULL && target_unit->isAlive() && Math::AlmostZero(target_unit->build_percent_left))
+						if (target_unit != NULL && target_unit->isAlive() && !target_unit->isBeingBuilt())
 						{
 							if (target_unit->hp >= unit_manager.unit_type[target_unit->type_id]->MaxDamage || !pType->BMcode)
 							{
@@ -4402,7 +4402,7 @@ namespace TA3D
 			}
 		}
 
-		if (Math::AlmostZero(build_percent_left))
+		if (!isBeingBuilt())
 		{
 
 			// Change the unit's angle the way we need it to be changed
@@ -4494,7 +4494,7 @@ namespace TA3D
 				if (V.y < 0.0f)
 					V.y = 0.0f;
 			}
-			if (pType->canfly && Math::AlmostZero(build_percent_left) && local)
+			if (pType->canfly && !isBeingBuilt() && local)
 			{
 				if (!mission.empty() && ((mission->getFlags() & MISSION_FLAG_MOVE) || mission->mission() == MISSION_BUILD || mission->mission() == MISSION_BUILD_2 || mission->mission() == MISSION_REPAIR || mission->mission() == MISSION_ATTACK || mission->mission() == MISSION_MOVE || mission->mission() == MISSION_GUARD || mission->mission() == MISSION_GET_REPAIRED || mission->mission() == MISSION_PATROL || mission->mission() == MISSION_RECLAIM || nb_attached > 0 || Pos.x < -the_map->map_w_d || Pos.x > the_map->map_w_d || Pos.z < -the_map->map_h_d || Pos.z > the_map->map_h_d))
 				{
@@ -5112,7 +5112,7 @@ namespace TA3D
 
 	void Unit::draw_on_FOW(bool jamming)
 	{
-		if (hidden || !Math::AlmostZero(build_percent_left))
+		if (hidden || isBeingBuilt())
 			return;
 
 		const int unit_type = type_id;

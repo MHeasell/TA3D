@@ -287,7 +287,7 @@ namespace TA3D
 			unit[*e].lock();
 
 			// Select only units completely built and visible
-			if (unit[*e].isOwnedBy(players.local_human_id) && unit[*e].isAlive() && Math::AlmostZero(unit[*e].build_percent_left) && unit[*e].visible)
+			if (unit[*e].isOwnedBy(players.local_human_id) && unit[*e].isAlive() && !unit[*e].isBeingBuilt() && unit[*e].visible)
 			{
 				if (isShiftKeyDown() && unit[*e].isSelected)
 				{
