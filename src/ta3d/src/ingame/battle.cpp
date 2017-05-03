@@ -830,135 +830,127 @@ namespace TA3D
 					cur_sel = units.unit[cur_sel].type_id;
 				}
 			}
-			else
+			else if (isControlKeyDown() && isKeyDown(KEY_A)) // Select all the player's units
 			{
-				if (isControlKeyDown() && isKeyDown(KEY_A)) // Select all the player's units
+				for (unsigned int e = 0; e < units.index_list_size; ++e)
 				{
+					int i = units.idx_list[e];
+					if (units.unit[i].isAlive() && !units.unit[i].isBeingBuilt() && units.unit[i].isOwnedBy(players.local_human_id))
+						units.unit[i].isSelected = true;
+				}
+				cur_sel = -1;
+				cur_sel_index = -1;
+				for (unsigned int e = 0; e < units.index_list_size && cur_sel != -2; ++e)
+				{
+					int i = units.idx_list[e];
+					if (units.unit[i].isAlive() && units.unit[i].isOwnedBy(players.local_human_id) && units.unit[i].isSelected)
+						cur_sel = (cur_sel == -1) ? i : -2;
+				}
+				selected = (cur_sel != -1);
+				build = -1;
+				if (cur_sel >= 0)
+				{
+					cur_sel_index = cur_sel;
+					cur_sel = units.unit[cur_sel].type_id;
+				}
+			}
+			else if (isControlKeyDown()) // Formation de groupes d'unitÃ©s
+			{
+				int grpe = -1;
+				if (isKeyDown(KEY_0))
+					grpe = 0;
+				if (isKeyDown(KEY_1))
+					grpe = 1;
+				if (isKeyDown(KEY_2))
+					grpe = 2;
+				if (isKeyDown(KEY_3))
+					grpe = 3;
+				if (isKeyDown(KEY_4))
+					grpe = 4;
+				if (isKeyDown(KEY_5))
+					grpe = 5;
+				if (isKeyDown(KEY_6))
+					grpe = 6;
+				if (isKeyDown(KEY_7))
+					grpe = 7;
+				if (isKeyDown(KEY_8))
+					grpe = 8;
+				if (isKeyDown(KEY_9))
+					grpe = 9;
+
+				if (grpe >= 0)
+				{
+					grpe = 1 << grpe;
 					for (unsigned int e = 0; e < units.index_list_size; ++e)
 					{
 						int i = units.idx_list[e];
-						if (units.unit[i].isAlive() && !units.unit[i].isBeingBuilt() && units.unit[i].isOwnedBy(players.local_human_id))
-							units.unit[i].isSelected = true;
-					}
-					cur_sel = -1;
-					cur_sel_index = -1;
-					for (unsigned int e = 0; e < units.index_list_size && cur_sel != -2; ++e)
-					{
-						int i = units.idx_list[e];
-						if (units.unit[i].isAlive() && units.unit[i].isOwnedBy(players.local_human_id) && units.unit[i].isSelected)
-							cur_sel = (cur_sel == -1) ? i : -2;
-					}
-					selected = (cur_sel != -1);
-					build = -1;
-					if (cur_sel >= 0)
-					{
-						cur_sel_index = cur_sel;
-						cur_sel = units.unit[cur_sel].type_id;
-					}
-				}
-				else
-				{
-					if (isControlKeyDown()) // Formation de groupes d'unitÃ©s
-					{
-						int grpe = -1;
-						if (isKeyDown(KEY_0))
-							grpe = 0;
-						if (isKeyDown(KEY_1))
-							grpe = 1;
-						if (isKeyDown(KEY_2))
-							grpe = 2;
-						if (isKeyDown(KEY_3))
-							grpe = 3;
-						if (isKeyDown(KEY_4))
-							grpe = 4;
-						if (isKeyDown(KEY_5))
-							grpe = 5;
-						if (isKeyDown(KEY_6))
-							grpe = 6;
-						if (isKeyDown(KEY_7))
-							grpe = 7;
-						if (isKeyDown(KEY_8))
-							grpe = 8;
-						if (isKeyDown(KEY_9))
-							grpe = 9;
-
-						if (grpe >= 0)
+						if (units.unit[i].isAlive() && units.unit[i].isOwnedBy(players.local_human_id))
 						{
-							grpe = 1 << grpe;
-							for (unsigned int e = 0; e < units.index_list_size; ++e)
-							{
-								int i = units.idx_list[e];
-								if (units.unit[i].isAlive() && units.unit[i].isOwnedBy(players.local_human_id))
-								{
-									if (units.unit[i].isSelected)
-										setFlag(units.unit[i].groupe, grpe);
-									else if (!isShiftKeyDown())
-										unsetFlag(units.unit[i].groupe, grpe);
-								}
-							}
-						}
-					}
-					else
-					{
-						if (isKeyDown(KEY_ALT)) // Restauration de groupes d'unitÃ©s
-						{
-							int grpe = -1;
-							if (isKeyDown(KEY_0))
-								grpe = 0;
-							if (isKeyDown(KEY_1))
-								grpe = 1;
-							if (isKeyDown(KEY_2))
-								grpe = 2;
-							if (isKeyDown(KEY_3))
-								grpe = 3;
-							if (isKeyDown(KEY_4))
-								grpe = 4;
-							if (isKeyDown(KEY_5))
-								grpe = 5;
-							if (isKeyDown(KEY_6))
-								grpe = 6;
-							if (isKeyDown(KEY_7))
-								grpe = 7;
-							if (isKeyDown(KEY_8))
-								grpe = 8;
-							if (isKeyDown(KEY_9))
-								grpe = 9;
-
-							if (grpe >= 0)
-							{
-								build = -1;
-								grpe = 1 << grpe;
-								for (unsigned int e = 0; e < units.index_list_size; ++e)
-								{
-									int i = units.idx_list[e];
-									if (units.unit[i].isAlive() && units.unit[i].isOwnedBy(players.local_human_id))
-									{
-										if (units.unit[i].groupe & grpe)
-											units.unit[i].isSelected = true;
-										else if (!isShiftKeyDown())
-											units.unit[i].isSelected = false;
-									}
-								}
-							}
-
-							cur_sel = -1;
-							cur_sel_index = -1;
-							for (unsigned int e = 0; e < units.index_list_size && cur_sel != -2; ++e)
-							{
-								int i = units.idx_list[e];
-								if (units.unit[i].isAlive() && units.unit[i].isOwnedBy(players.local_human_id) && units.unit[i].isSelected)
-									cur_sel = (cur_sel == -1) ? i : -2;
-							}
-							selected = (cur_sel != -1);
-							if (cur_sel >= 0)
-							{
-								cur_sel_index = cur_sel;
-								cur_sel = units.unit[cur_sel].type_id;
-							}
+							if (units.unit[i].isSelected)
+								setFlag(units.unit[i].groupe, grpe);
+							else if (!isShiftKeyDown())
+								unsetFlag(units.unit[i].groupe, grpe);
 						}
 					}
 				}
 			}
+			else if (isKeyDown(KEY_ALT)) // Restauration de groupes d'unitÃ©s
+			{
+				int grpe = -1;
+				if (isKeyDown(KEY_0))
+					grpe = 0;
+				if (isKeyDown(KEY_1))
+					grpe = 1;
+				if (isKeyDown(KEY_2))
+					grpe = 2;
+				if (isKeyDown(KEY_3))
+					grpe = 3;
+				if (isKeyDown(KEY_4))
+					grpe = 4;
+				if (isKeyDown(KEY_5))
+					grpe = 5;
+				if (isKeyDown(KEY_6))
+					grpe = 6;
+				if (isKeyDown(KEY_7))
+					grpe = 7;
+				if (isKeyDown(KEY_8))
+					grpe = 8;
+				if (isKeyDown(KEY_9))
+					grpe = 9;
+
+				if (grpe >= 0)
+				{
+					build = -1;
+					grpe = 1 << grpe;
+					for (unsigned int e = 0; e < units.index_list_size; ++e)
+					{
+						int i = units.idx_list[e];
+						if (units.unit[i].isAlive() && units.unit[i].isOwnedBy(players.local_human_id))
+						{
+							if (units.unit[i].groupe & grpe)
+								units.unit[i].isSelected = true;
+							else if (!isShiftKeyDown())
+								units.unit[i].isSelected = false;
+						}
+					}
+				}
+
+				cur_sel = -1;
+				cur_sel_index = -1;
+				for (unsigned int e = 0; e < units.index_list_size && cur_sel != -2; ++e)
+				{
+					int i = units.idx_list[e];
+					if (units.unit[i].isAlive() && units.unit[i].isOwnedBy(players.local_human_id) && units.unit[i].isSelected)
+						cur_sel = (cur_sel == -1) ? i : -2;
+				}
+				selected = (cur_sel != -1);
+				if (cur_sel >= 0)
+				{
+					cur_sel_index = cur_sel;
+					cur_sel = units.unit[cur_sel].type_id;
+				}
+			}
+
 
 			/*--------------bloc regroupant ce qui est relatif au temps-------------------*/
 
