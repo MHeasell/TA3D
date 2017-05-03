@@ -769,7 +769,7 @@ namespace TA3D
 				for (unsigned int e = 0; e < units.index_list_size; ++e)
 				{
 					int i = units.idx_list[e];
-					if (units.unit[i].isAlive() && units.unit[i].isOwnedBy(players.local_human_id) && !units.unit[i].isBeingBuilt())
+					if (units.unit[i].isSelectableBy(players.local_human_id))
 					{
 						if (unit_manager.unit_type[units.unit[i].type_id]->checkCategory(check_cat))
 							units.unit[i].isSelected = true;

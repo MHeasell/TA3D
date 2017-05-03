@@ -108,6 +108,14 @@ namespace TA3D
 		 */
 		bool isBeingBuilt() const;
 
+		/**
+		 * Returns true if the unit can be selected by the given player, otherwise false.
+		 * The unit may not be selectable at all (e.g. it is being built)
+		 * or it may be not selectable by the specific player
+		 * (e.g. because it is not owned by the player).
+		 */
+		bool isSelectableBy(PlayerId playerId) const;
+
 		void draw_on_map();
 		void clear_from_map();
 

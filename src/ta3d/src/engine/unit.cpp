@@ -5280,4 +5280,9 @@ namespace TA3D
 	{
 		return !Math::AlmostZero(build_percent_left);
 	}
+
+	bool Unit::isSelectableBy(Unit::PlayerId playerId) const
+	{
+		return isAlive() && isOwnedBy(playerId) && !isBeingBuilt();
+	}
 } // namespace TA3D
