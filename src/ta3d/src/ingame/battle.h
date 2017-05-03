@@ -591,6 +591,15 @@ namespace TA3D
 		 * @param targetPosition The position to move to.
 		 */
 		void issueMoveMission(const Vector3D& targetPosition) const;
+
+		/**
+		 * Issues a patrol mission to the currently selected units.
+		 * If the shift key is held, the mission will be queued,
+		 * otherwise, the mission will replace the unit's current mission queue.
+		 *
+		 * @param targetPosition The position to patrol to.
+		 */
+		void issuePatrolMission(const Vector3D& targetPosition) const;
 	}; // class Battle
 
 } // namespace TA3D
