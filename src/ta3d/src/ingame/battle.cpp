@@ -383,7 +383,7 @@ namespace TA3D
 				{
 					cursor_type = CURSOR_CROSS;
 					bool can_be_captured = false;
-					if (!(players.team[units.unit[pointing].owner_id] & players.team[players.local_human_id])) // Not allied == enemy
+					if (isEnemy(pointing))
 					{
 						can_be_captured = true;
 						if (canattack)
@@ -2092,6 +2092,11 @@ namespace TA3D
 			Menus::Statistics::Execute();
 
 		return pResult;
+	}
+
+	bool Battle::isEnemy(int unitId) const
+	{
+		return !(players.team[units.unit[unitId].owner_id] & players.team[players.local_human_id]);
 	}
 
 	int Battle::pickFeature() const

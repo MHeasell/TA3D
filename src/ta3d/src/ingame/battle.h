@@ -607,6 +607,12 @@ namespace TA3D
 		 * If no feature is found, returns -1.
 		 */
 		int pickFeature() const;
+
+		/**
+		 * Returns true if the unit with the given ID is an enemy unit,
+		 * otherwise false.
+		 */
+		bool isEnemy(int unitId) const;
 	}; // class Battle
 
 } // namespace TA3D
