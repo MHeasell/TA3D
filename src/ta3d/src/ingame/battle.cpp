@@ -753,85 +753,114 @@ namespace TA3D
 			{
 				selectUnitsInCategory("CTRL_C");
 			}
-			else if (isControlKeyDown() && didKeyGoDown(KEY_F))
+			if (isControlKeyDown() && didKeyGoDown(KEY_F))
 			{
 				selectUnitsInCategory("CTRL_F");
 			}
-			else if (isControlKeyDown() && didKeyGoDown(KEY_V))
+			if (isControlKeyDown() && didKeyGoDown(KEY_V))
 			{
 				selectUnitsInCategory("CTRL_V");
 			}
-			else if (isControlKeyDown() && didKeyGoDown(KEY_B))
+			if (isControlKeyDown() && didKeyGoDown(KEY_B))
 			{
 				selectUnitsInCategory("CTRL_B");
 			}
-			else if (isControlKeyDown() && isKeyDown(KEY_Z)) // Select units of the same type
+
+			// Select units of the same type
+			if (isControlKeyDown() && isKeyDown(KEY_Z))
 			{
 				selectUnitsOfSelectedTypes();
 			}
-			else if (isControlKeyDown() && isKeyDown(KEY_A)) // Select all the player's units
+
+			// Select all the player's units
+			if (isControlKeyDown() && isKeyDown(KEY_A))
 			{
 				selectAllUnits();
 			}
-			else if (isControlKeyDown()) // Create groups of units
-			{
-				int grpe = -1;
-				if (isKeyDown(KEY_0))
-					grpe = 0;
-				if (isKeyDown(KEY_1))
-					grpe = 1;
-				if (isKeyDown(KEY_2))
-					grpe = 2;
-				if (isKeyDown(KEY_3))
-					grpe = 3;
-				if (isKeyDown(KEY_4))
-					grpe = 4;
-				if (isKeyDown(KEY_5))
-					grpe = 5;
-				if (isKeyDown(KEY_6))
-					grpe = 6;
-				if (isKeyDown(KEY_7))
-					grpe = 7;
-				if (isKeyDown(KEY_8))
-					grpe = 8;
-				if (isKeyDown(KEY_9))
-					grpe = 9;
 
-				if (grpe >= 0)
-				{
-					assignGroupToSelectedUnits(grpe);
-				}
+			// Create groups of units
+			if (isControlKeyDown() && didKeyGoDown(KEY_0))
+			{
+				assignGroupToSelectedUnits(0);
 			}
-			else if (isKeyDown(KEY_ALT)) // Recall (select) groups of units
+			if (isControlKeyDown() && didKeyGoDown(KEY_1))
 			{
-				int grpe = -1;
-				if (isKeyDown(KEY_0))
-					grpe = 0;
-				if (isKeyDown(KEY_1))
-					grpe = 1;
-				if (isKeyDown(KEY_2))
-					grpe = 2;
-				if (isKeyDown(KEY_3))
-					grpe = 3;
-				if (isKeyDown(KEY_4))
-					grpe = 4;
-				if (isKeyDown(KEY_5))
-					grpe = 5;
-				if (isKeyDown(KEY_6))
-					grpe = 6;
-				if (isKeyDown(KEY_7))
-					grpe = 7;
-				if (isKeyDown(KEY_8))
-					grpe = 8;
-				if (isKeyDown(KEY_9))
-					grpe = 9;
-
-				if (grpe >= 0)
-				{
-					selectGroup(grpe);
-				}
+				assignGroupToSelectedUnits(1);
+			}
+			if (isControlKeyDown() && didKeyGoDown(KEY_2))
+			{
+				assignGroupToSelectedUnits(2);
+			}
+			if (isControlKeyDown() && didKeyGoDown(KEY_3))
+			{
+				assignGroupToSelectedUnits(3);
+			}
+			if (isControlKeyDown() && didKeyGoDown(KEY_4))
+			{
+				assignGroupToSelectedUnits(4);
+			}
+			if (isControlKeyDown() && didKeyGoDown(KEY_5))
+			{
+				assignGroupToSelectedUnits(5);
+			}
+			if (isControlKeyDown() && didKeyGoDown(KEY_6))
+			{
+				assignGroupToSelectedUnits(6);
+			}
+			if (isControlKeyDown() && didKeyGoDown(KEY_7))
+			{
+				assignGroupToSelectedUnits(7);
+			}
+			if (isControlKeyDown() && didKeyGoDown(KEY_8))
+			{
+				assignGroupToSelectedUnits(8);
+			}
+			if (isControlKeyDown() && didKeyGoDown(KEY_9))
+			{
+				assignGroupToSelectedUnits(9);
 			}
 
+			// Recall (select) groups of units
+			if (isKeyDown(KEY_ALT) && didKeyGoDown(KEY_0))
+			{
+				selectGroup(0);
+			}
+			if (isKeyDown(KEY_ALT) && didKeyGoDown(KEY_1))
+			{
+				selectGroup(1);
+			}
+			if (isKeyDown(KEY_ALT) && didKeyGoDown(KEY_2))
+			{
+				selectGroup(2);
+			}
+			if (isKeyDown(KEY_ALT) && didKeyGoDown(KEY_3))
+			{
+				selectGroup(3);
+			}
+			if (isKeyDown(KEY_ALT) && didKeyGoDown(KEY_4))
+			{
+				selectGroup(4);
+			}
+			if (isKeyDown(KEY_ALT) && didKeyGoDown(KEY_5))
+			{
+				selectGroup(5);
+			}
+			if (isKeyDown(KEY_ALT) && didKeyGoDown(KEY_6))
+			{
+				selectGroup(6);
+			}
+			if (isKeyDown(KEY_ALT) && didKeyGoDown(KEY_7))
+			{
+				selectGroup(7);
+			}
+			if (isKeyDown(KEY_ALT) && didKeyGoDown(KEY_8))
+			{
+				selectGroup(8);
+			}
+			if (isKeyDown(KEY_ALT) && didKeyGoDown(KEY_9))
+			{
+				selectGroup(9);
+			}
 
 			/*--------------bloc regroupant ce qui est relatif au temps-------------------*/
 
