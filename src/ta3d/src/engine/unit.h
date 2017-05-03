@@ -101,6 +101,13 @@ namespace TA3D
 		 */
 		bool isEnemy(const int t) const;
 
+		/**
+		 * Returns true if the unit is currently being built, otherwise false.
+		 * A unit is being built if it is being nanolathed into existence
+		 * by another unit.
+		 */
+		bool isBeingBuilt() const;
+
 		void draw_on_map();
 		void clear_from_map();
 

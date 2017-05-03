@@ -769,7 +769,7 @@ namespace TA3D
 				for (unsigned int e = 0; e < units.index_list_size; ++e)
 				{
 					int i = units.idx_list[e];
-					if (units.unit[i].isAlive() && units.unit[i].isOwnedBy(players.local_human_id) && Math::AlmostZero(units.unit[i].build_percent_left))
+					if (units.unit[i].isAlive() && units.unit[i].isOwnedBy(players.local_human_id) && !units.unit[i].isBeingBuilt())
 					{
 						if (unit_manager.unit_type[units.unit[i].type_id]->checkCategory(check_cat))
 							units.unit[i].isSelected = true;
@@ -811,7 +811,7 @@ namespace TA3D
 				for (unsigned int e = 0; e < units.index_list_size; ++e)
 				{
 					const size_t i = units.idx_list[e];
-					if (units.unit[i].isAlive() && Math::AlmostZero(units.unit[i].build_percent_left) && units.unit[i].isOwnedBy(players.local_human_id) && sel_type[units.unit[i].type_id])
+					if (units.unit[i].isAlive() && !units.unit[i].isBeingBuilt() && units.unit[i].isOwnedBy(players.local_human_id) && sel_type[units.unit[i].type_id])
 						units.unit[i].isSelected = true;
 				}
 				cur_sel = -1;
@@ -837,7 +837,7 @@ namespace TA3D
 					for (unsigned int e = 0; e < units.index_list_size; ++e)
 					{
 						int i = units.idx_list[e];
-						if (units.unit[i].isAlive() && Math::AlmostZero(units.unit[i].build_percent_left) && units.unit[i].isOwnedBy(players.local_human_id))
+						if (units.unit[i].isAlive() && !units.unit[i].isBeingBuilt() && units.unit[i].isOwnedBy(players.local_human_id))
 							units.unit[i].isSelected = true;
 					}
 					cur_sel = -1;

@@ -93,7 +93,7 @@ namespace TA3D
 		for (uint32 e = 0U; e < index_list_size; ++e)
 		{
 			uint32 i = idx_list[e];
-			if (unit[i].isAlive() && unit[i].isOwnedBy(player_id) && unit[i].isSelected && Math::AlmostZero(unit[i].build_percent_left) && unit_manager.unit_type[unit[i].type_id]->canmove)
+			if (unit[i].isAlive() && unit[i].isOwnedBy(player_id) && unit[i].isSelected && !unit[i].isBeingBuilt() && unit_manager.unit_type[unit[i].type_id]->canmove)
 			{
 				if (set)
 					unit[i].set_mission(MISSION_MOVE, &target, false, 0, true, NULL, flags);
@@ -112,7 +112,7 @@ namespace TA3D
 		for (uint16 e = 0; e < index_list_size; ++e)
 		{
 			uint16 i = idx_list[e];
-			if (unit[i].isAlive() && unit[i].isOwnedBy(player_id) && unit[i].isSelected && Math::AlmostZero(unit[i].build_percent_left) && unit_manager.unit_type[unit[i].type_id]->canpatrol)
+			if (unit[i].isAlive() && unit[i].isOwnedBy(player_id) && unit[i].isSelected && !unit[i].isBeingBuilt() && unit_manager.unit_type[unit[i].type_id]->canpatrol)
 			{
 				if (set)
 					unit[i].set_mission(MISSION_PATROL, &target, false, 0, true, NULL);
@@ -131,7 +131,7 @@ namespace TA3D
 		for (uint16 e = 0; e < index_list_size; ++e)
 		{
 			uint16 i = idx_list[e];
-			if (unit[i].isAlive() && unit[i].isOwnedBy(player_id) && unit[i].isSelected && Math::AlmostZero(unit[i].build_percent_left) && unit_manager.unit_type[unit[i].type_id]->canguard)
+			if (unit[i].isAlive() && unit[i].isOwnedBy(player_id) && unit[i].isSelected && !unit[i].isBeingBuilt() && unit_manager.unit_type[unit[i].type_id]->canguard)
 			{
 				if (set)
 					unit[i].set_mission(MISSION_GUARD, &unit[target].Pos, false, 0, true, &(unit[target]));
@@ -150,7 +150,7 @@ namespace TA3D
 		for (uint32 e = 0; e < index_list_size; ++e)
 		{
 			const uint32 i = idx_list[e];
-			if (unit[i].isAlive() && unit[i].isOwnedBy(player_id) && unit[i].isSelected && Math::AlmostZero(unit[i].build_percent_left) && unit_manager.unit_type[unit[i].type_id]->canload && unit_manager.unit_type[unit[i].type_id]->BMcode && unit[i].nb_attached > 0)
+			if (unit[i].isAlive() && unit[i].isOwnedBy(player_id) && unit[i].isSelected && !unit[i].isBeingBuilt() && unit_manager.unit_type[unit[i].type_id]->canload && unit_manager.unit_type[unit[i].type_id]->BMcode && unit[i].nb_attached > 0)
 			{
 				if (set)
 				{
@@ -187,7 +187,7 @@ namespace TA3D
 		for (uint32 e = 0; e < index_list_size; ++e)
 		{
 			const uint32 i = idx_list[e];
-			if (unit[i].isAlive() && unit[i].isOwnedBy(player_id) && unit[i].isSelected && Math::AlmostZero(unit[i].build_percent_left) && unit_manager.unit_type[unit[i].type_id]->canload && unit_manager.unit_type[unit[i].type_id]->BMcode)
+			if (unit[i].isAlive() && unit[i].isOwnedBy(player_id) && unit[i].isSelected && !unit[i].isBeingBuilt() && unit_manager.unit_type[unit[i].type_id]->canload && unit_manager.unit_type[unit[i].type_id]->BMcode)
 			{
 				if (set)
 				{
@@ -220,7 +220,7 @@ namespace TA3D
 		for (uint32 e = 0; e < index_list_size; ++e)
 		{
 			const uint32 i = idx_list[e];
-			if (unit[i].isAlive() && unit[i].isOwnedBy(player_id) && unit[i].isSelected && Math::AlmostZero(unit[i].build_percent_left) && unit_manager.unit_type[unit[i].type_id]->Builder)
+			if (unit[i].isAlive() && unit[i].isOwnedBy(player_id) && unit[i].isSelected && !unit[i].isBeingBuilt() && unit_manager.unit_type[unit[i].type_id]->Builder)
 			{
 				if (set)
 					unit[i].set_mission(MISSION_BUILD, &t, false, unit_type_id);
@@ -999,7 +999,7 @@ namespace TA3D
 				unit[i].just_created = false;
 			}
 
-			if (Math::AlmostZero(unit[i].build_percent_left))
+			if (!unit[i].isBeingBuilt())
 			{
 				unit[i].metal_prod = 0.0f;
 				unit[i].metal_cons = 0.0f;
@@ -1617,7 +1617,7 @@ namespace TA3D
 			uint16 i = idx_list[e];
 			pMutex.unlock();
 			unit[i].lock();
-			if (unit[i].isAlive() && !unit[i].command_locked && unit[i].isOwnedBy(player_id) && unit[i].isSelected && Math::AlmostZero(unit[i].build_percent_left))
+			if (unit[i].isAlive() && !unit[i].command_locked && unit[i].isOwnedBy(player_id) && unit[i].isSelected && !unit[i].isBeingBuilt())
 			{
 				MissionStack& mission = unit_manager.unit_type[unit[i].type_id]->BMcode ? unit[i].mission : unit[i].def_mission;
 				MissionStack::iterator cur = mission.begin();

@@ -5275,4 +5275,9 @@ namespace TA3D
 	{
 		return (flags & 1) != 0;
 	}
+
+	bool Unit::isBeingBuilt() const
+	{
+		return !Math::AlmostZero(build_percent_left);
+	}
 } // namespace TA3D
