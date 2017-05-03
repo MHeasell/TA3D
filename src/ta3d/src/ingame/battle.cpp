@@ -803,7 +803,7 @@ namespace TA3D
 				for (unsigned int e = 0; e < units.index_list_size; ++e)
 				{
 					const size_t i = units.idx_list[e];
-					if (units.unit[i].isAlive() && !units.unit[i].isBeingBuilt() && units.unit[i].isOwnedBy(players.local_human_id) && sel_type[units.unit[i].type_id])
+					if (units.unit[i].isSelectableBy(players.local_human_id) && sel_type[units.unit[i].type_id])
 						units.unit[i].isSelected = true;
 				}
 				cur_sel = -1;
@@ -827,7 +827,7 @@ namespace TA3D
 				for (unsigned int e = 0; e < units.index_list_size; ++e)
 				{
 					int i = units.idx_list[e];
-					if (units.unit[i].isAlive() && !units.unit[i].isBeingBuilt() && units.unit[i].isOwnedBy(players.local_human_id))
+					if (units.unit[i].isSelectableBy(players.local_human_id))
 						units.unit[i].isSelected = true;
 				}
 				cur_sel = -1;
