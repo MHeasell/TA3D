@@ -761,32 +761,7 @@ namespace TA3D
 				else if (isKeyDown(KEY_B))
 					check_cat += "B";
 
-				for (unsigned int e = 0; e < units.index_list_size; ++e)
-				{
-					int i = units.idx_list[e];
-					if (units.unit[i].isSelectableBy(players.local_human_id))
-					{
-						if (unit_manager.unit_type[units.unit[i].type_id]->checkCategory(check_cat))
-							units.unit[i].isSelected = true;
-						else if (!isShiftKeyDown())
-							units.unit[i].isSelected = false;
-					}
-				}
-				cur_sel = -1;
-				cur_sel_index = -1;
-				build = -1;
-				for (unsigned int e = 0; e < units.index_list_size && cur_sel != -2; ++e)
-				{
-					int i = units.idx_list[e];
-					if (units.unit[i].isAlive() && units.unit[i].isOwnedBy(players.local_human_id) && units.unit[i].isSelected)
-						cur_sel = (cur_sel == -1) ? i : -2;
-				}
-				selected = (cur_sel != -1);
-				if (cur_sel >= 0)
-				{
-					cur_sel_index = cur_sel;
-					cur_sel = units.unit[cur_sel].type_id;
-				}
+				selectUnitsInCategory(check_cat);
 			}
 			else if (isControlKeyDown() && isKeyDown(KEY_Z)) // Select units of the same type
 			{
@@ -2033,6 +2008,36 @@ namespace TA3D
 			Menus::Statistics::Execute();
 
 		return pResult;
+	}
+
+	void Battle::selectUnitsInCategory(const String& category)
+	{
+		for (unsigned int e = 0; e < units.index_list_size; ++e)
+		{
+			int i = units.idx_list[e];
+			if (units.unit[i].isSelectableBy(players.local_human_id))
+			{
+				if (unit_manager.unit_type[units.unit[i].type_id]->checkCategory(category))
+					units.unit[i].isSelected = true;
+				else if (!isShiftKeyDown())
+					units.unit[i].isSelected = false;
+			}
+		}
+		cur_sel = -1;
+		cur_sel_index = -1;
+		build = -1;
+		for (unsigned int e = 0; e < units.index_list_size && cur_sel != -2; ++e)
+		{
+			int i = units.idx_list[e];
+			if (units.unit[i].isAlive() && units.unit[i].isOwnedBy(players.local_human_id) && units.unit[i].isSelected)
+				cur_sel = (cur_sel == -1) ? i : -2;
+		}
+		selected = (cur_sel != -1);
+		if (cur_sel >= 0)
+		{
+			cur_sel_index = cur_sel;
+			cur_sel = units.unit[cur_sel].type_id;
+		}
 	}
 
 	bool Battle::isEnemy(int unitId) const

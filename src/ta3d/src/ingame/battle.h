@@ -611,6 +611,15 @@ namespace TA3D
 		 * otherwise false.
 		 */
 		bool isEnemy(int unitId) const;
+
+		/**
+		 * Selects all units that match the given category.
+		 * The category is some CTRL_ tag, e.g. "CTRL_V".
+		 * If the shift key is not being held,
+		 * this method will replace the current selection.
+		 * Otherwise, it will add the units to the current selection.
+		 */
+		void selectUnitsInCategory(const String& category);
 	}; // class Battle
 
 } // namespace TA3D
