@@ -625,7 +625,7 @@ namespace TA3D
 			if (didMouseButtonGoUp(LeftMouseButton) && !isShiftKeyDown() && (!IsOnGUI || IsOnMinimap))
 				current_order = SIGNAL_ORDER_NONE;
 
-			//---------------------------------	Code de sÃ©lection d'unitÃ©s
+			//---------------------------------	Code for the selection of units
 
 			if (!IsOnGUI)
 			{
@@ -650,7 +650,7 @@ namespace TA3D
 							for (unsigned int e = 0; e < units.index_list_size; ++e)
 							{
 								int i = units.idx_list[e];
-								if (units.unit[i].isOwnedBy(players.local_human_id)) // On peut dÃ©sÃ©lectionner les morts, Ã§a ne change rien :-)
+								if (units.unit[i].isOwnedBy(players.local_human_id)) // We can deselect the dead, it does not change anything :-)
 									units.unit[i].isSelected = false;
 							}
 						}
@@ -658,7 +658,7 @@ namespace TA3D
 				}
 			}
 
-			if (build == -1 && (!IsOnGUI || (pMouseSelecting && (mouse_y < 32 || mouse_y > gfx->height - 32)) || IsOnMinimap)) // Si le curseur est dans la zone de jeu
+			if (build == -1 && (!IsOnGUI || (pMouseSelecting && (mouse_y < 32 || mouse_y > gfx->height - 32)) || IsOnMinimap)) // If the cursor is in the game area
 			{
 				if ((isMouseButtonUp(LeftMouseButton) && pMouseSelecting) || (IsOnMinimap &&
 					didMouseButtonGoDown(LeftMouseButton))) // RÃ©cupÃ¨re les unitÃ©s prÃ©sentes dans la sÃ©lection
@@ -678,8 +678,8 @@ namespace TA3D
 										units.unit[i].isSelected = false;
 								}
 							}
-							if (pointing >= 0 && !units.unit[pointing].isBeingBuilt()) // On ne sÃ©lectionne pas les unitÃ©s en construction
-								units.unit[pointing].isSelected ^= true;											// SÃ©lectionne/DÃ©sÃ©lectionne si l'unitÃ© est dÃ©jÃ  sÃ©lectionnÃ©e en appuyant sur SHIFT
+							if (pointing >= 0 && !units.unit[pointing].isBeingBuilt()) // Don't select units under construction
+								units.unit[pointing].isSelected ^= true;											// Select / Delete if the unit is already selected by pressing SHIFT
 							selected = false;
 							for (unsigned int e = 0; e < units.index_list_size; ++e)
 							{
@@ -692,7 +692,7 @@ namespace TA3D
 							skip = true;
 					}
 					else
-						selected = units.selectUnits(RectTest(cam, screenToClipCoordinates(pMouseRectSelection))); // SÃ©lÃ©ction au lasso
+						selected = units.selectUnits(RectTest(cam, screenToClipCoordinates(pMouseRectSelection))); // bandbox selection
 
 					if (!skip)
 					{
@@ -788,7 +788,7 @@ namespace TA3D
 					cur_sel = units.unit[cur_sel].type_id;
 				}
 			}
-			else if (isControlKeyDown() && isKeyDown(KEY_Z)) // Sélectionne toutes les unités dont le type est déjà sélectionné / Select units of the same type
+			else if (isControlKeyDown() && isKeyDown(KEY_Z)) // Select units of the same type
 			{
 				std::vector<bool> sel_type;
 				sel_type.resize(unit_manager.nb_unit);
@@ -846,7 +846,7 @@ namespace TA3D
 					cur_sel = units.unit[cur_sel].type_id;
 				}
 			}
-			else if (isControlKeyDown()) // Formation de groupes d'unitÃ©s
+			else if (isControlKeyDown()) // Create groups of units
 			{
 				int grpe = -1;
 				if (isKeyDown(KEY_0))
@@ -886,7 +886,7 @@ namespace TA3D
 					}
 				}
 			}
-			else if (isKeyDown(KEY_ALT)) // Restauration de groupes d'unitÃ©s
+			else if (isKeyDown(KEY_ALT)) // Recall (select) groups of units
 			{
 				int grpe = -1;
 				if (isKeyDown(KEY_0))
