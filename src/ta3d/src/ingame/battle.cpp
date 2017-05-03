@@ -370,19 +370,16 @@ namespace TA3D
 				else
 					pointing = units.pick_minimap();
 
-				if (!rope_selection)
+				if (!rope_selection && pointing < -1) // If there is a feature under the cursor
 				{
-					if (pointing < -1)
-					{
-						Feature* feature = feature_manager.getFeaturePointer(features.feature[-pointing - 2].type);
-						if (feature && canreclamate && feature->reclaimable && build == -1)
-							cursor_type = CURSOR_RECLAIM;
-						if (feature && canresurrect && feature->reclaimable && build == -1 && CURSOR_REVIVE != CURSOR_RECLAIM)
-							cursor_type = CURSOR_REVIVE;
-					}
+					Feature* feature = feature_manager.getFeaturePointer(features.feature[-pointing - 2].type);
+					if (feature && canreclamate && feature->reclaimable && build == -1)
+						cursor_type = CURSOR_RECLAIM;
+					if (feature && canresurrect && feature->reclaimable && build == -1 && CURSOR_REVIVE != CURSOR_RECLAIM)
+						cursor_type = CURSOR_REVIVE;
 				}
 
-				if (pointing >= 0 && !rope_selection) // If there is something under the cursor
+				if (pointing >= 0 && !rope_selection) // If there is a unit under the cursor
 				{
 					cursor_type = CURSOR_CROSS;
 					bool can_be_captured = false;
