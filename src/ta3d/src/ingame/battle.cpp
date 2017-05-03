@@ -489,45 +489,33 @@ namespace TA3D
 								current_order = SIGNAL_ORDER_NONE;
 							click_activated = true;
 						}
-						else
+						else if (cursor_type == CURSOR_REPAIR)
 						{
-							if (cursor_type == CURSOR_REPAIR)
-							{
-								issueRepairMission(pointing);
-								if (!isShiftKeyDown())
-									current_order = SIGNAL_ORDER_NONE;
-								click_activated = true;
-							}
-							else
-							{
-								if (cursor_type == CURSOR_RECLAIM)
-								{
-									issueReclaimMission(pointing);
-									if (!isShiftKeyDown())
-										current_order = SIGNAL_ORDER_NONE;
-									click_activated = true;
-								}
-								else
-								{
-									if (cursor_type == CURSOR_GUARD) // Le curseur donne un ordre
-									{
-										issueGuardMission(pointing);
-										if (!isShiftKeyDown())
-											current_order = SIGNAL_ORDER_NONE;
-										click_activated = true;
-									}
-									else
-									{
-										if (cursor_type == CURSOR_LOAD) // Le curseur donne un ordre
-										{
-											issueLoadMission(pointing);
-											if (!isShiftKeyDown())
-												current_order = SIGNAL_ORDER_NONE;
-											click_activated = true;
-										}
-									}
-								}
-							}
+							issueRepairMission(pointing);
+							if (!isShiftKeyDown())
+								current_order = SIGNAL_ORDER_NONE;
+							click_activated = true;
+						}
+						else if (cursor_type == CURSOR_RECLAIM)
+						{
+							issueReclaimMission(pointing);
+							if (!isShiftKeyDown())
+								current_order = SIGNAL_ORDER_NONE;
+							click_activated = true;
+						}
+						else if (cursor_type == CURSOR_GUARD) // Le curseur donne un ordre
+						{
+							issueGuardMission(pointing);
+							if (!isShiftKeyDown())
+								current_order = SIGNAL_ORDER_NONE;
+							click_activated = true;
+						}
+						else if (cursor_type == CURSOR_LOAD) // Le curseur donne un ordre
+						{
+							issueLoadMission(pointing);
+							if (!isShiftKeyDown())
+								current_order = SIGNAL_ORDER_NONE;
+							click_activated = true;
 						}
 					}
 				}
