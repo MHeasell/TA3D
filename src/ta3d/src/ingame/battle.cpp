@@ -1074,14 +1074,10 @@ namespace TA3D
 				lp_CONFIG->pause = false;
 			}
 
-			if (isKeyDown(KEY_BACKQUOTE) && !pArea.get_state("chat"))
+			if (didKeyGoDown(KEY_BACKQUOTE) && !pArea.get_state("chat"))
 			{
-				if (!tilde)
-					Console::Instance()->toggleShow();
-				tilde = true;
+				Console::Instance()->toggleShow();
 			}
-			else
-				tilde = false;
 
 			gfx->ReInitAllTex(true);
 			gfx->set_2D_mode(); // Affiche console, infos,...

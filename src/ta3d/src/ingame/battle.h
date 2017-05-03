@@ -317,8 +317,6 @@ namespace TA3D
 		//!
 		bool shoot;
 		//!
-		bool tilde;
-		//!
 		bool done;
 		//!
 		int mx;
