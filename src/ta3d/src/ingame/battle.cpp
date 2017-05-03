@@ -862,7 +862,7 @@ namespace TA3D
 				selectGroup(9);
 			}
 
-			/*--------------bloc regroupant ce qui est relatif au temps-------------------*/
+			/*--------------Block grouping what is related to time-------------------*/
 
 			// That code was rewritten multithreaded
 			if (!lp_CONFIG->pause)
