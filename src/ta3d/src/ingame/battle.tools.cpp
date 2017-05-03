@@ -17,7 +17,7 @@ namespace TA3D
 		show_timefactor = 1.0f;
 	}
 
-	Vector3D Battle::cursorOnMap(const Camera& cam, MAP& map, bool on_mini_map)
+	Vector3D Battle::cursorOnMap(const Camera& cam, MAP& map, bool on_mini_map) const
 	{
 		if (on_mini_map) // If the cursor is on the mini_map;
 		{
