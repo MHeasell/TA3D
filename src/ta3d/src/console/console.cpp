@@ -254,7 +254,7 @@ namespace TA3D
 				break;
 			case KEY_ESC:
 				break;
-			case KEY_TILDE:
+			case KEY_BACKQUOTE:
 				if (pInputText.empty()) // If text input is empty, then we're just closing the console
 					break;
 			default:

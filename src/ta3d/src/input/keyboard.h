@@ -222,12 +222,7 @@ namespace TA3D
 #define KEY_PAGEUP SDLK_PAGEUP
 #define KEY_PAGEDOWN SDLK_PAGEDOWN
 
-// This is used to show/hide the console
-#ifdef TA3D_PLATFORM_WINDOWS
-#define KEY_TILDE SDLK_F8
-#else
-#define KEY_TILDE SDLK_RIGHTPAREN
-#endif
+#define KEY_BACKQUOTE SDLK_BACKQUOTE
 
 #define KEY_CAPSLOCK SDLK_CAPSLOCK
 

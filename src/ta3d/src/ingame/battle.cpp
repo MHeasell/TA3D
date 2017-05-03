@@ -1074,7 +1074,7 @@ namespace TA3D
 				lp_CONFIG->pause = false;
 			}
 
-			if (isKeyDown(KEY_TILDE) && !pArea.get_state("chat"))
+			if (isKeyDown(KEY_BACKQUOTE) && !pArea.get_state("chat"))
 			{
 				if (!tilde)
 					Console::Instance()->toggleShow();
