@@ -620,6 +620,12 @@ namespace TA3D
 		 * Otherwise, it will add the units to the current selection.
 		 */
 		void selectUnitsInCategory(const String& category);
+
+		/**
+		 * Selects all units that are of the same type
+		 * of at least one already selected unit.
+		 */
+		void selectUnitsOfSelectedTypes();
 	}; // class Battle
 
 } // namespace TA3D

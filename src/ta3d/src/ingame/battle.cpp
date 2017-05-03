@@ -767,37 +767,7 @@ namespace TA3D
 			}
 			else if (isControlKeyDown() && isKeyDown(KEY_Z)) // Select units of the same type
 			{
-				std::vector<bool> sel_type;
-				sel_type.resize(unit_manager.nb_unit);
-				for (int i = 0; i < unit_manager.nb_unit; ++i)
-					sel_type[i] = false;
-				for (unsigned int e = 0; e < units.index_list_size; ++e)
-				{
-					const size_t i = units.idx_list[e];
-					if (units.unit[i].isAlive() && units.unit[i].isOwnedBy(players.local_human_id) && units.unit[i].isSelected)
-						sel_type[units.unit[i].type_id] = true;
-				}
-				for (unsigned int e = 0; e < units.index_list_size; ++e)
-				{
-					const size_t i = units.idx_list[e];
-					if (units.unit[i].isSelectableBy(players.local_human_id) && sel_type[units.unit[i].type_id])
-						units.unit[i].isSelected = true;
-				}
-				cur_sel = -1;
-				cur_sel_index = -1;
-				for (unsigned int e = 0; e < units.index_list_size && cur_sel != -2; ++e)
-				{
-					const size_t i = units.idx_list[e];
-					if (units.unit[i].isAlive() && units.unit[i].isOwnedBy(players.local_human_id) && units.unit[i].isSelected)
-						cur_sel = (cur_sel == -1) ? (int)i : -2;
-				}
-				selected = (cur_sel != -1);
-				build = -1;
-				if (cur_sel >= 0)
-				{
-					cur_sel_index = cur_sel;
-					cur_sel = units.unit[cur_sel].type_id;
-				}
+				selectUnitsOfSelectedTypes();
 			}
 			else if (isControlKeyDown() && isKeyDown(KEY_A)) // Select all the player's units
 			{
@@ -2010,6 +1980,41 @@ namespace TA3D
 			Menus::Statistics::Execute();
 
 		return pResult;
+	}
+
+	void Battle::selectUnitsOfSelectedTypes()
+	{
+		std::vector<bool> sel_type;
+		sel_type.resize(unit_manager.nb_unit);
+		for (int i = 0; i < unit_manager.nb_unit; ++i)
+			sel_type[i] = false;
+		for (unsigned int e = 0; e < units.index_list_size; ++e)
+		{
+			const size_t i = units.idx_list[e];
+			if (units.unit[i].isAlive() && units.unit[i].isOwnedBy(players.local_human_id) && units.unit[i].isSelected)
+				sel_type[units.unit[i].type_id] = true;
+		}
+		for (unsigned int e = 0; e < units.index_list_size; ++e)
+		{
+			const size_t i = units.idx_list[e];
+			if (units.unit[i].isSelectableBy(players.local_human_id) && sel_type[units.unit[i].type_id])
+				units.unit[i].isSelected = true;
+		}
+		cur_sel = -1;
+		cur_sel_index = -1;
+		for (unsigned int e = 0; e < units.index_list_size && cur_sel != -2; ++e)
+		{
+			const size_t i = units.idx_list[e];
+			if (units.unit[i].isAlive() && units.unit[i].isOwnedBy(players.local_human_id) && units.unit[i].isSelected)
+				cur_sel = (cur_sel == -1) ? (int)i : -2;
+		}
+		selected = (cur_sel != -1);
+		build = -1;
+		if (cur_sel >= 0)
+		{
+			cur_sel_index = cur_sel;
+			cur_sel = units.unit[cur_sel].type_id;
+		}
 	}
 
 	void Battle::selectUnitsInCategory(const String& category)
