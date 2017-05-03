@@ -759,21 +759,13 @@ namespace TA3D
 				String check_cat = "CTRL_";
 				if (isKeyDown(KEY_C))
 					check_cat += "C";
-				else
-				{
-					if (isKeyDown(KEY_F))
-						check_cat += "F";
-					else
-					{
-						if (isKeyDown(KEY_V))
-							check_cat += "V";
-						else
-						{
-							if (isKeyDown(KEY_B))
-								check_cat += "B";
-						}
-					}
-				}
+				else if (isKeyDown(KEY_F))
+					check_cat += "F";
+				else if (isKeyDown(KEY_V))
+					check_cat += "V";
+				else if (isKeyDown(KEY_B))
+					check_cat += "B";
+
 				for (unsigned int e = 0; e < units.index_list_size; ++e)
 				{
 					int i = units.idx_list[e];
