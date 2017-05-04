@@ -276,8 +276,17 @@ namespace TA3D
 		bool just_created;
 		bool first_move;
 		int severity;
+
+		/**
+		 * The X index of the cell that contains this unit's position on the map's heightmap grid.
+		 */
 		int cur_px;
+
+		/**
+		 * The Y index of the cell that contains this unit's position on the map's heightmap grid.
+		 */
 		int cur_py;
+
 		float metal_prod;
 		float metal_cons;
 		float energy_prod;
