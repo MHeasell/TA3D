@@ -589,7 +589,6 @@ namespace TA3D
 		lua_register(L, "unit_x", program_unit_x);
 		lua_register(L, "unit_y", program_unit_y);
 		lua_register(L, "unit_z", program_unit_z);
-		lua_register(L, "move_unit", program_move_unit);
 		lua_register(L, "kill_unit", program_kill_unit);
 		lua_register(L, "kick_unit", program_kick_unit);
 		lua_register(L, "play", program_play);

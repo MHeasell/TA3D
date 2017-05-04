@@ -103,7 +103,6 @@ namespace TA3D
 	int program_unit_x(lua_State* L);
 	int program_unit_y(lua_State* L);
 	int program_unit_z(lua_State* L);
-	int program_move_unit(lua_State* L);
 	int program_kill_unit(lua_State* L);
 	int program_kick_unit(lua_State* L);
 	int program_play(lua_State* L);

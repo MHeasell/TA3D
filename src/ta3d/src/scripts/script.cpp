@@ -441,105 +441,6 @@ namespace TA3D
 		return 1;
 	}
 
-	int program_move_unit(lua_State* L) // move_unit( unit_id, x, z )
-	{
-		int unit_id = (int)lua_tointeger(L, 1);
-
-		if (unit_id >= 0 && unit_id < (int)units.max_unit && units.unit[unit_id].flags && !LuaProgram::passive)
-		{
-			units.lock();
-
-			units.unit[unit_id].Pos.x = (float)lua_tonumber(L, 2);
-			units.unit[unit_id].Pos.z = (float)lua_tonumber(L, 3);
-
-			units.unit[unit_id].clear_from_map();
-			units.unit[unit_id].lastEnergy = 999999999.99f;
-			units.unit[unit_id].selfmove = false;
-
-			int PX = ((int)(units.unit[unit_id].Pos.x + (float)the_map->map_w_d) >> 3);
-			int PY = ((int)(units.unit[unit_id].Pos.z + (float)the_map->map_h_d) >> 3);
-			if (!can_be_there(PX, PY, units.unit[unit_id].type_id, units.unit[unit_id].owner_id))
-			{
-				bool found = false;
-				for (int r = 1; r < 120 && !found; r++) // Circular check
-				{
-					const int r2 = r * r;
-					for (int y = 0; y <= r; y++)
-					{
-						const int x = (int)(sqrtf(float(r2 - y * y)) + 0.5f);
-						if (can_be_there(PX + x, PY + y, units.unit[unit_id].type_id, units.unit[unit_id].owner_id))
-						{
-							PX += x;
-							PY += y;
-							found = true;
-							break;
-						}
-						if (can_be_there(PX - x, PY + y, units.unit[unit_id].type_id, units.unit[unit_id].owner_id))
-						{
-							PX -= x;
-							PY += y;
-							found = true;
-							break;
-						}
-						if (can_be_there(PX + x, PY - y, units.unit[unit_id].type_id, units.unit[unit_id].owner_id))
-						{
-							PX += x;
-							PY -= y;
-							found = true;
-							break;
-						}
-						if (can_be_there(PX - x, PY - y, units.unit[unit_id].type_id, units.unit[unit_id].owner_id))
-						{
-							PX -= x;
-							PY -= y;
-							found = true;
-							break;
-						}
-					}
-				}
-				if (found)
-				{
-					units.unit[unit_id].Pos.x = float((PX << 3) + 8 - the_map->map_w_d);
-					units.unit[unit_id].Pos.z = float((PY << 3) + 8 - the_map->map_h_d);
-					if (!units.unit[unit_id].mission.empty() && (units.unit[unit_id].mission->getFlags() & MISSION_FLAG_MOVE))
-						units.unit[unit_id].mission->Flags() |= MISSION_FLAG_REFRESH_PATH;
-				}
-				else
-				{
-					int prev = 0;
-					for (unsigned int i = 0; i < units.nb_unit; ++i)
-						if (units.idx_list[i] == unit_id)
-						{
-							prev = (int)i;
-							break;
-						}
-					units.kill(unit_id, prev);
-					unit_id = -1;
-				}
-			}
-			if (unit_id >= 0)
-			{
-				units.unit[unit_id].cur_px = PX;
-				units.unit[unit_id].cur_py = PY;
-
-				Vector3D target_pos = units.unit[unit_id].Pos;
-				target_pos.x = float(((int)(target_pos.x) + the_map->map_w_d) >> 3);
-				target_pos.z = float(((int)(target_pos.z) + the_map->map_h_d) >> 3);
-				target_pos.y = Math::Max(the_map->get_max_rect_h((int)target_pos.x, (int)target_pos.z,
-											 unit_manager.unit_type[units.unit[unit_id].type_id]->FootprintX,
-											 unit_manager.unit_type[units.unit[unit_id].type_id]->FootprintZ),
-					the_map->sealvl);
-				units.unit[unit_id].Pos.y = target_pos.y;
-				units.unit[unit_id].draw_on_map();
-			}
-
-			units.unlock();
-		}
-		lua_pop(L, 3);
-
-		return 0;
-	}
-
 	int program_create_unit(lua_State* L) // create_unit( player_id, unit_type_id, x, z )
 	{
 		const int player_id = (int)lua_tointeger(L, 1);
@@ -1363,7 +1264,6 @@ namespace TA3D
 		lua_register(L, "unit_piece_pos", program_unit_piece_pos);
 		lua_register(L, "unit_piece_dir", program_unit_piece_dir);
 		lua_register(L, "unit_height", program_unit_height);
-		lua_register(L, "move_unit", program_move_unit);
 		lua_register(L, "kill_unit", program_kill_unit);
 		lua_register(L, "kick_unit", program_kick_unit);
 		lua_register(L, "play", program_play);
