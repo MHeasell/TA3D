@@ -116,6 +116,12 @@ namespace TA3D
 		 */
 		bool isSelectableBy(PlayerId playerId) const;
 
+		/**
+		 * Sets the units position and updates any relevant cached data.
+		 * Use this in preference to setting the position manually.
+		 */
+		void setPosition(const Vector3D& newPosition);
+
 		void draw_on_map();
 		void clear_from_map();
 

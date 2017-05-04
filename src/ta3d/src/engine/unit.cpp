@@ -5285,4 +5285,12 @@ namespace TA3D
 	{
 		return isAlive() && isOwnedBy(playerId) && !isBeingBuilt();
 	}
+
+	void Unit::setPosition(const Vector3D& newPosition)
+	{
+		Pos = newPosition;
+		auto heightmapPosition = the_map->worldToHeightmapIndex(newPosition);
+		cur_px = heightmapPosition.x;
+		cur_py = heightmapPosition.y;
+	}
 } // namespace TA3D
