@@ -313,11 +313,11 @@ namespace TA3D
 				for (int e = 0; e < list_size; ++e)
 					sw[e] = (e > 0 ? sw[e - 1] : 0.0f) + weights[BuildList[e]].w;
 				int selected_idx = -1;
-				const float selection = float(TA3D_RAND() % 1000000) * 0.000001f * sw[list_size - 1];
+				const float selection = Math::randomFloat(0.0f, sw[list_size - 1]);
 				if (sw[list_size - 1] > 0.1f)
 					for (int e = 0; e < list_size; ++e)
 					{
-						if (selection <= sw[e])
+						if (selection < sw[e])
 						{
 							selected_idx = BuildList[e];
 							break;
@@ -349,11 +349,11 @@ namespace TA3D
 				for (int e = 0; e < list_size; ++e)
 					sw[e] = (e > 0 ? sw[e - 1] : 0.0f) + weights[BuildList[e]].w;
 				int selected_idx = -1;
-				const float selection = float(TA3D_RAND() % 1000000) * 0.000001f * sw[list_size - 1];
+				const float selection = Math::randomFloat(0.0f, sw[list_size - 1]);
 				if (sw[list_size - 1] > 0.1f)
 					for (int e = 0; e < list_size; ++e)
 					{
-						if (selection <= sw[e])
+						if (selection < sw[e])
 						{
 							selected_idx = BuildList[e];
 							break;
@@ -483,7 +483,7 @@ namespace TA3D
 				time_factor = units.apparent_timefactor;
 				suspend(10);
 			}
-			suspend(100 + (TA3D_RAND() % 100));
+			suspend(100 + Math::randomInt(0, 100));
 		}
 		LOG_INFO(LOG_PREFIX_AI << "Stopped for player " << (int)playerID);
 		thread_running = false;

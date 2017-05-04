@@ -493,7 +493,7 @@ namespace TA3D
 						{
 							if (feature_manager.getFeaturePointer(TDF_index[type])->category == "trees"		// Randomize trees angle for more realism
 								|| feature_manager.getFeaturePointer(TDF_index[type])->category == "rocks") // Randomize rocks angle for more realism
-								features.feature[map->map_data(x + 1, y + 1).stuff].angle = float(TA3D_RAND() % 360);
+								features.feature[map->map_data(x + 1, y + 1).stuff].angle = Math::randomFloat(0.0f, 360.0f);
 						}
 					}
 				}

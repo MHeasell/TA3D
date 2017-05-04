@@ -404,7 +404,7 @@ namespace TA3D
 		if (m_InBattle && pBattleTunesCount > 0)
 		{
 			srand((unsigned)time(NULL));
-			cIndex = (sint16)((TA3D_RAND() % pBattleTunesCount) + 1);
+			cIndex = (sint16) Math::randomInt(1, pBattleTunesCount + 1);
 			mCount = 1;
 
 			for (Playlist::const_iterator cur = pPlaylist.begin(); cur != pPlaylist.end(); ++cur)

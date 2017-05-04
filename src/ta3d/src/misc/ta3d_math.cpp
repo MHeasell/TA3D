@@ -40,6 +40,43 @@ namespace TA3D
 			return p;
 		}
 
+		float randomFloat(float min, float max)
+		{
+			float range = max - min;
+
+			// Our range does *not* include max,
+			// so if we get RAND_MAX it's no good.
+			int randInt;
+			do
+			{
+				randInt = rand();
+			}
+			while (randInt == RAND_MAX);
+
+			float randFloat = static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
+
+			return min + (randFloat * range);
+		}
+
+		int randomInt(int min, int max)
+		{
+			int range = max - min;
+			if (range > RAND_MAX)
+			{
+				throw std::logic_error("(max - min) is greater than RAND_MAX");
+			}
+			int acceptable_max = range * (RAND_MAX / range);
+
+			int randInt;
+			do
+			{
+				randInt = rand();
+			}
+			while (randInt >= acceptable_max);
+
+			return min + (randInt % range);
+		}
+
 		PreCachedRandomNumbers::PreCachedRandomNumbers()
 		{
 			reset();

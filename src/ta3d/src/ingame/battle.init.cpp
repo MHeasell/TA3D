@@ -516,7 +516,7 @@ namespace TA3D
 		wind_t = 0.0f; // To handle wind variations
 		wind_change = false;
 		if (map->ota_data.maxwindspeed != map->ota_data.minwindspeed)
-			map->wind = float((TA3D_RAND() % (map->ota_data.maxwindspeed - map->ota_data.minwindspeed)) + map->ota_data.minwindspeed);
+			map->wind = Math::randomFloat(map->ota_data.minwindspeed, map->ota_data.maxwindspeed);
 		return true;
 	}
 

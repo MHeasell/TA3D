@@ -117,6 +117,19 @@ namespace TA3D
 			return AlmostZero(n, TA3D_DEFAULT_DOUBLE_EPSILON);
 		}
 
+		/**
+		 * Generates a random floating point number x,
+		 * where min <= x < max.
+		 */
+		float randomFloat(float min, float max);
+
+		/**
+		 * Generates a random integer x,
+		 * where min <= x < max.
+		 * The difference between min and max must not be greater than RAND_MAX.
+		 */
+		int randomInt(int min, int max);
+
 		/*!
 		 * \brief Get log2(n)
 		 */

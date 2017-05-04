@@ -233,7 +233,7 @@ namespace TA3D
 		{
 			int id = 0;
 			if (unit_type < 0 || unit_type >= unit_manager.nb_unit)
-				id = units.create(abs(TA3D_RAND()) % unit_manager.nb_unit, player_id);
+				id = units.create(Math::randomInt(0, unit_manager.nb_unit), player_id);
 			else
 				id = units.create(unit_type, player_id);
 			if (id == -1) // Ho ho no more space to store that unit, limit reached
@@ -243,8 +243,8 @@ namespace TA3D
 
 			do
 			{
-				units.unit[id].Pos.x = (float)((TA3D_RAND() % the_map->map_w) - the_map->map_w_d);
-				units.unit[id].Pos.z = (float)((TA3D_RAND() % the_map->map_h) - the_map->map_h_d);
+				units.unit[id].Pos.x = Math::randomFloat(-the_map->map_w_d, the_map->map_w_d);
+				units.unit[id].Pos.z = Math::randomFloat(-the_map->map_h_d, the_map->map_h_d);
 				++e;
 			} while (e < 100 && !can_be_built(units.unit[id].Pos, units.unit[id].type_id, player_id));
 
