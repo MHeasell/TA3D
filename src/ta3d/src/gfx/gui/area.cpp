@@ -21,7 +21,7 @@
 #include "skin.manager.h"
 #include <console/console.h>
 #include <TA3D_NameSpace.h>
-#include <misc/math.h>
+#include <misc/ta3d_math.h>
 #include <misc/tdf.h>
 #include <input/keyboard.h>
 #include <input/mouse.h>

@@ -19,7 +19,7 @@
 #include <UnitEngine.h>
 #include <gfx/fx.h>
 #include <misc/camera.h>
-#include <misc/math.h>
+#include <misc/ta3d_math.h>
 #include <sounds/manager.h>
 #include <ingame/players.h>
 #include <EngineClass.h>

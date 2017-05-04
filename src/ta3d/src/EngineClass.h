@@ -32,7 +32,7 @@
 #include "network/TA3D_Network.h"
 #include "misc/camera.h"
 #include <vector>
-#include "misc/math.h"
+#include "misc/ta3d_math.h"
 #include "misc/string.h"
 #include "misc/grid.h"
 

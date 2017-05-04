@@ -30,7 +30,7 @@
 #include "EngineClass.h"
 #include "tdf.h"
 #include "tnt.h"
-#include "misc/math.h"
+#include "misc/ta3d_math.h"
 #include "logs/logs.h"
 #include <cmath>
 

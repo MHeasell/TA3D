@@ -1,5 +1,5 @@
 #include "virtualfile.h"
-#include <misc/math.h>
+#include <misc/ta3d_math.h>
 
 namespace TA3D
 {

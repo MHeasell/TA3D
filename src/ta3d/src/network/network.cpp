@@ -18,7 +18,7 @@
 #include <stdafx.h>
 #include <TA3D_NameSpace.h>
 #include "TA3D_Network.h"
-#include <misc/math.h>
+#include <misc/ta3d_math.h>
 #include <logs/logs.h>
 #include "http.h"
 

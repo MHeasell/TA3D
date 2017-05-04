@@ -3,7 +3,7 @@
 #include <gfx/gfx.h>
 #include "object.h"
 #include <TA3D_NameSpace.h>
-#include <misc/math.h>
+#include <misc/ta3d_math.h>
 
 namespace TA3D
 {

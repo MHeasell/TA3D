@@ -196,8 +196,8 @@ set(TA3D_LIB_SOURCES
 		misc/kdtree.hxx
 		misc/material.light.cpp
 		misc/material.light.h
-		misc/math.cpp
-		misc/math.h
+		misc/ta3d_math.cpp
+		misc/ta3d_math.h
 		misc/matrix.cpp
 		misc/matrix.h
 		misc/mempool.h

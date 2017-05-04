@@ -18,7 +18,7 @@
 #include <stdafx.h>
 #include <ta3dbase.h> // just to use the global camera object
 #include <ingame/sidedata.h>
-#include <misc/math.h>
+#include <misc/ta3d_math.h>
 #include "manager.h"
 #include <logs/logs.h>
 #include <misc/camera.h>

@@ -17,7 +17,7 @@
 #include "stdafx.h"
 #include "TA3D_NameSpace.h" // our namespace, a MUST have.
 #include "ta3dbase.h"
-#include "misc/math.h"
+#include "misc/ta3d_math.h"
 #include "misc/paths.h"
 #include <memory>
 #include <fstream>

@@ -19,7 +19,7 @@
 #include <TA3D_NameSpace.h>
 #include "mouse.h"
 #include "keyboard.h"
-#include "../misc/math.h"
+#include "misc/ta3d_math.h"
 
 int TA3D::mouse_x = 0;
 int TA3D::mouse_y = 0;

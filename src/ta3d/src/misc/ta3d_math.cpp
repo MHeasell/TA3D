@@ -18,7 +18,7 @@
 #include <stdafx.h>
 #include <cstdlib>
 #include <ctime>
-#include "math.h"
+#include "ta3d_math.h"
 
 namespace TA3D
 {

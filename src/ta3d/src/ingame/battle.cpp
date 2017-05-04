@@ -29,7 +29,7 @@
 #include <languages/i18n.h>
 #include <vector>
 #include "menus/statistics.h"
-#include <misc/math.h>
+#include <misc/ta3d_math.h>
 #include <sounds/manager.h>
 #include <logs/logs.h>
 #include <console/console.h>

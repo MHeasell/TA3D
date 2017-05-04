@@ -23,7 +23,7 @@
   \----------------------------------------------------------*/
 
 #include "stdafx.h"
-#include "misc/math.h"
+#include "misc/ta3d_math.h"
 #include "misc/matrix.h"
 #include "TA3D_NameSpace.h"
 #include "ta3dbase.h"

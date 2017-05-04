@@ -34,7 +34,7 @@
 #include <misc/camera.h>
 #include <languages/i18n.h>
 #include <vector>
-#include <misc/math.h>
+#include <misc/ta3d_math.h>
 #include <logs/logs.h>
 #include <sounds/manager.h>
 #include <ingame/players.h>

@@ -29,7 +29,7 @@
 #include <EngineClass.h>
 #include <UnitEngine.h>
 #include <misc/paths.h>
-#include <misc/math.h>
+#include <misc/ta3d_math.h>
 #include <logs/logs.h>
 #include <ingame/players.h>
 #include <memory>

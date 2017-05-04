@@ -1,7 +1,7 @@
 #include <stdafx.h>
 #include <cstring>
 #include "grid.h"
-#include "math.h"
+#include "ta3d_math.h"
 
 namespace TA3D
 {

@@ -46,7 +46,7 @@
 #include "ingame/menus/setupgame.h"
 #include "SdlContextManager.h"
 #include "fbi.h"
-#include "misc/math.h"
+#include "misc/ta3d_math.h"
 
 using namespace TA3D;
 

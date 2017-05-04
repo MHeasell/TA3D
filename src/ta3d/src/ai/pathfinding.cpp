@@ -28,7 +28,7 @@
 #include <scripts/cob.h> // For unit scripts / Pour la lecture et l'éxecution des scripts
 #include <tdf.h>		 // For map features / Pour la gestion des éléments du jeu
 #include <EngineClass.h> // The engine, also includes pathfinding.h / Inclus le moteur(dont le fichier pathfinding.h)
-#include <misc/math.h>
+#include <misc/ta3d_math.h>
 #include <UnitEngine.h>
 #include <misc/usectimer.h>
 #include <misc/bitmap.h>

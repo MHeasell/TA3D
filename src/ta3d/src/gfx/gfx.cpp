@@ -30,7 +30,7 @@
 #include <misc/paths.h>
 #include <logs/logs.h>
 #include <strings.h>
-#include <misc/math.h>
+#include <misc/ta3d_math.h>
 #include <input/keyboard.h>
 #include <input/mouse.h>
 #include "gui/base.h"

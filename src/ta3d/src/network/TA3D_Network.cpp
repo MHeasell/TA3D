@@ -25,7 +25,7 @@
 #include <misc/camera.h>
 #include <ingame/sidedata.h>
 #include <languages/i18n.h>
-#include <misc/math.h>
+#include <misc/ta3d_math.h>
 #include <sounds/manager.h>
 #include <console/console.h>
 #include <ingame/players.h>

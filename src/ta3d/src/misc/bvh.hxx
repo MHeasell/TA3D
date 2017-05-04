@@ -4,7 +4,7 @@
 
 // This is useless but it tells QtCreator where to find symbols :P
 #include "bvh.h"
-#include "math.h"
+#include "ta3d_math.h"
 #include <algorithm>
 
 #define BVH_MAX_SET_SIZE 8

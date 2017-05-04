@@ -20,7 +20,7 @@
 
 #include <stdafx.h>
 #include <algorithm>
-#include "math.h"
+#include "ta3d_math.h"
 
 namespace TA3D
 {

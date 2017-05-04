@@ -28,7 +28,7 @@
 #include <TA3D_NameSpace.h>
 #include <ta3dbase.h>
 #include "3do.h"
-#include <misc/math.h>
+#include <misc/ta3d_math.h>
 #include <misc/paths.h>
 #include <misc/files.h>
 #include <logs/logs.h>

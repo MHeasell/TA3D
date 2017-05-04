@@ -18,7 +18,7 @@
 #ifndef __TA3D_XX_MISC_RECTTEST_H__
 #define __TA3D_XX_MISC_RECTTEST_H__
 
-#include "math.h"
+#include "ta3d_math.h"
 #include "rect.h"
 #include "camera.h"
 

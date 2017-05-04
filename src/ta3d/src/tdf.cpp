@@ -32,7 +32,7 @@
 #include "network/TA3D_Network.h"
 #include "languages/i18n.h"
 #include "logs/logs.h"
-#include "misc/math.h"
+#include "misc/ta3d_math.h"
 #include "misc/material.light.h"
 #include "ingame/players.h"
 #include "mesh/instancing.h"

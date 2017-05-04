@@ -17,7 +17,7 @@
 #include "wnd.h"
 #include <languages/i18n.h>
 #include <ta3dbase.h>
-#include <misc/math.h>
+#include <misc/ta3d_math.h>
 #include <sounds/manager.h>
 #include <console/console.h>
 #include <gfx/glfunc.h>

@@ -17,7 +17,7 @@
 
 #include <logs/logs.h>
 #include "material.light.h"
-#include "math.h"
+#include "ta3d_math.h"
 #include "vector.h"
 
 namespace TA3D

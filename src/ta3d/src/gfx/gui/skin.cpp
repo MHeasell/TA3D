@@ -18,7 +18,7 @@
 #include "skin.h"
 #include <TA3D_NameSpace.h>
 #include <misc/paths.h>
-#include <misc/math.h>
+#include <misc/ta3d_math.h>
 #include "base.h"
 
 namespace TA3D
