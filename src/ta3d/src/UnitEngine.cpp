@@ -422,8 +422,8 @@ namespace TA3D
 
 			if (!unit[i].visible) // Additional checks that have to be done
 			{
-				int px = unit[i].cur_px >> 1;
-				int py = unit[i].cur_py >> 1;
+				int px = unit[i].cur_px / 2;
+				int py = unit[i].cur_py / 2;
 				if (px < 0 || py < 0 || px >= map->widthInGraphicalTiles || py >= map->heightInGraphicalTiles)
 				{
 					unit[i].unlock();
