@@ -216,75 +216,6 @@ namespace TA3D
 		return 1;
 	}
 
-	int CAPI::spawn(lua_State* L)
-	{
-		int unit_type = -1;
-		int player_id = players.local_human_id;
-		int nb_to_spawn = 1;
-		unit_type = lua_gettop(L) > 0 ? unit_manager.get_unit_index(lua_tostring(L, 1)) : -1;
-		if (lua_gettop(L) >= 2)
-		{
-			player_id = (int)lua_tointeger(L, 2);
-			if (lua_gettop(L) >= 3)
-				nb_to_spawn = (int)lua_tointeger(L, 3);
-		}
-		units.lock();
-		for (int i = 0; i < nb_to_spawn; ++i)
-		{
-			int id = 0;
-			if (unit_type < 0 || unit_type >= unit_manager.nb_unit)
-				id = units.create(Math::randomInt(0, unit_manager.nb_unit), player_id);
-			else
-				id = units.create(unit_type, player_id);
-			if (id == -1) // Ho ho no more space to store that unit, limit reached
-				break;
-			units.unit[id].lock();
-			int e(0);
-
-			do
-			{
-				units.unit[id].Pos.x = Math::randomFloat(-the_map->map_w_d, the_map->map_w_d);
-				units.unit[id].Pos.z = Math::randomFloat(-the_map->map_h_d, the_map->map_h_d);
-				++e;
-			} while (e < 100 && !can_be_built(units.unit[id].Pos, units.unit[id].type_id, player_id));
-
-			if (!can_be_built(units.unit[id].Pos, units.unit[id].type_id, player_id))
-			{
-				units.unit[id].flags = 4;
-				units.kill(id, units.index_list_size - 1);
-			}
-			else
-			{ // Compute unit's Y coordinate
-				Vector3D target_pos(units.unit[id].Pos);
-				target_pos.x = (float)(((int)(target_pos.x) + the_map->map_w_d) >> 3);
-				target_pos.z = (float)(((int)(target_pos.z) + the_map->map_h_d) >> 3);
-				target_pos.y = Math::Max(the_map->get_max_rect_h((int)target_pos.x, (int)target_pos.z,
-											 unit_manager.unit_type[units.unit[id].type_id]->FootprintX,
-											 unit_manager.unit_type[units.unit[id].type_id]->FootprintZ),
-					the_map->sealvl);
-
-				units.unit[id].Pos.y = target_pos.y;
-				units.unit[id].cur_px = (int)target_pos.x;
-				units.unit[id].cur_py = (int)target_pos.z;
-				units.unit[id].Pos.x = target_pos.x * 8.0f - static_cast<float>(the_map->map_w_d);
-				units.unit[id].Pos.z = target_pos.z * 8.0f - static_cast<float>(the_map->map_h_d);
-				units.unit[id].draw_on_map();
-
-				if (unit_manager.unit_type[units.unit[id].type_id]->ActivateWhenBuilt) // Start activated
-				{
-					units.unit[id].port[ACTIVATION] = 0;
-					units.unit[id].activate();
-				}
-				if (unit_manager.unit_type[units.unit[id].type_id]->init_cloaked) // Start cloaked
-					units.unit[id].cloaking = true;
-			}
-			units.unit[id].unlock();
-		}
-		units.unlock();
-
-		return 0;
-	}
-
 	int CAPI::setTimeFactor(lua_State* L)
 	{
 		if (lua_gettop(L) > 0)
@@ -713,7 +644,6 @@ namespace TA3D
 		CAPI_REGISTER(scriptDumpDebugInfo);
 		CAPI_REGISTER(setShowModel);
 		CAPI_REGISTER(setFpsLimit);
-		CAPI_REGISTER(spawn);
 		CAPI_REGISTER(setTimeFactor);
 		CAPI_REGISTER(addhp);
 		CAPI_REGISTER(deactivate);

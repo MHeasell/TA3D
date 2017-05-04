@@ -46,7 +46,6 @@ namespace TA3D
 		static int scriptDumpDebugInfo(lua_State* L);
 		static int setShowModel(lua_State* L);
 		static int setFpsLimit(lua_State* L);
-		static int spawn(lua_State* L);
 		static int setTimeFactor(lua_State* L);
 		static int addhp(lua_State* L);
 		static int deactivate(lua_State* L);
