@@ -3,6 +3,7 @@
 
 #include <logs/logs.h>
 #include <vector>
+#include "misc/point.h"
 
 namespace TA3D
 {
@@ -25,6 +26,8 @@ namespace TA3D
 		typedef typename std::vector<Type> Container;
 		typedef Type& reference;
 		typedef const Type& const_reference;
+
+		typedef Point<unsigned int> Point;
 
 	public:
 		Grid();
