@@ -743,8 +743,8 @@ namespace TA3D
 
 	void Features::compute_on_map_pos(const int idx)
 	{
-		feature[idx].px = ((int)(feature[idx].Pos.x) + the_map->map_w_d + 4) >> 3;
-		feature[idx].py = ((int)(feature[idx].Pos.z) + the_map->map_h_d + 4) >> 3;
+		feature[idx].px = ((int)(feature[idx].Pos.x) + the_map->halfWidthInPixels + 4) >> 3;
+		feature[idx].py = ((int)(feature[idx].Pos.z) + the_map->halfHeightInPixels + 4) >> 3;
 	}
 
 	void Features::burn_feature(const int idx)

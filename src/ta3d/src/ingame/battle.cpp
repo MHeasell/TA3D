@@ -288,10 +288,10 @@ namespace TA3D
 			// There is some UI-specific padding here because the UI overlaps the viewport,
 			// one day ideally the viewport dimensions should match the visible area on screen
 			// and this will no longer be needed.
-			float minCameraX = -(map->map_w / 2.0f) + (cam.viewportWidth() / 2.0f) - 64.0f; // 64 is UI width (in world units)
-			float maxCameraX = (map->map_w / 2.0f) - (cam.viewportWidth() / 2.0f) - 16.0f; // 16 for single graphics tile trim
-			float minCameraZ = -(map->map_h / 2.0f) + (cam.viewportHeight() / 2.0f) - 16.0f; // 16 is top bar height
-			float maxCameraZ = map->map_h_d - (cam.viewportHeight() / 2.0f) + 16.0f - 64.0f; // 16 is bottom bar height, 64 is 4 graphics tile trim
+			float minCameraX = -(map->widthInPixels / 2.0f) + (cam.viewportWidth() / 2.0f) - 64.0f; // 64 is UI width (in world units)
+			float maxCameraX = (map->widthInPixels / 2.0f) - (cam.viewportWidth() / 2.0f) - 16.0f; // 16 for single graphics tile trim
+			float minCameraZ = -(map->heightInPixels / 2.0f) + (cam.viewportHeight() / 2.0f) - 16.0f; // 16 is top bar height
+			float maxCameraZ = map->halfHeightInPixels - (cam.viewportHeight() / 2.0f) + 16.0f - 64.0f; // 16 is bottom bar height, 64 is 4 graphics tile trim
 			if (cam.position().x < minCameraX)
 			{
 				cam.position().x = minCameraX;
@@ -420,10 +420,10 @@ namespace TA3D
 					if (cursor_type != CURSOR_DEFAULT && click_activation && !IsOnGUI && isShiftKeyDown()) // Remove commands from queue
 					{
 						Vector3D target(cursorOnMap(cam, *map));
-						target.x = float(((int)(target.x) + map->map_w_d) >> 3);
-						target.z = float(((int)(target.z) + map->map_h_d) >> 3);
-						target.x = target.x * 8.0f - (float)map->map_w_d;
-						target.z = target.z * 8.0f - (float)map->map_h_d;
+						target.x = float(((int)(target.x) + map->halfWidthInPixels) >> 3);
+						target.z = float(((int)(target.z) + map->halfHeightInPixels) >> 3);
+						target.x = target.x * 8.0f - (float)map->halfWidthInPixels;
+						target.z = target.z * 8.0f - (float)map->halfHeightInPixels;
 						target.y = Math::Max(map->get_unit_h(target.x, target.z), map->sealvl);
 						order_removed = units.remove_order(players.local_human_id, target);
 					}
@@ -503,10 +503,10 @@ namespace TA3D
 			if (cursor_type != CURSOR_DEFAULT && click_activation && !IsOnGUI && isShiftKeyDown() && !order_removed) // Remove commands from queue
 			{
 				Vector3D target(cursorOnMap(cam, *map));
-				target.x = float(((int)(target.x) + map->map_w_d) >> 3);
-				target.z = float(((int)(target.z) + map->map_h_d) >> 3);
-				target.x = target.x * 8.0f - (float)map->map_w_d;
-				target.z = target.z * 8.0f - (float)map->map_h_d;
+				target.x = float(((int)(target.x) + map->halfWidthInPixels) >> 3);
+				target.z = float(((int)(target.z) + map->halfHeightInPixels) >> 3);
+				target.x = target.x * 8.0f - (float)map->halfWidthInPixels;
+				target.z = target.z * 8.0f - (float)map->halfHeightInPixels;
 				target.y = Math::Max(map->get_unit_h(target.x, target.z), map->sealvl);
 				order_removed = units.remove_order(players.local_human_id, target);
 			}
@@ -563,8 +563,8 @@ namespace TA3D
 			if (build >= 0 && cursor_type == CURSOR_DEFAULT && didMouseButtonGoUp(LeftMouseButton) && !IsOnGUI)
 			{
 				Vector3D target(cursorOnMap(cam, *map));
-				pMouseRectSelection.x2 = ((int)(target.x) + map->map_w_d) >> 3;
-				pMouseRectSelection.y2 = ((int)(target.z) + map->map_h_d) >> 3;
+				pMouseRectSelection.x2 = ((int)(target.x) + map->halfWidthInPixels) >> 3;
+				pMouseRectSelection.y2 = ((int)(target.z) + map->halfHeightInPixels) >> 3;
 
 				const int d = Math::Max(abs(pMouseRectSelection.x2 - pMouseRectSelection.x1), abs(pMouseRectSelection.y2 - pMouseRectSelection.y1));
 
@@ -584,8 +584,8 @@ namespace TA3D
 					target.y = map->get_max_rect_h((int)target.x, (int)target.z, unit_manager.unit_type[build]->FootprintX, unit_manager.unit_type[build]->FootprintZ);
 					if (unit_manager.unit_type[build]->floatting())
 						target.y = Math::Max(target.y, map->sealvl + ((float)unit_manager.unit_type[build]->AltFromSeaLevel - (float)unit_manager.unit_type[build]->WaterLine) * H_DIV);
-					target.x = target.x * 8.0f - (float)map->map_w_d;
-					target.z = target.z * 8.0f - (float)map->map_h_d;
+					target.x = target.x * 8.0f - (float)map->halfWidthInPixels;
+					target.z = target.z * 8.0f - (float)map->halfHeightInPixels;
 
 					can_be_there = can_be_built(target, build, players.local_human_id);
 
@@ -610,8 +610,8 @@ namespace TA3D
 				if (build >= 0 && cursor_type == CURSOR_DEFAULT && didMouseButtonGoDown(LeftMouseButton) && !IsOnGUI) // Giving the order to build a row
 				{
 					Vector3D target(cursorOnMap(cam, *map));
-					pMouseRectSelection.x1 = ((int)(target.x) + map->map_w_d) >> 3;
-					pMouseRectSelection.y1 = ((int)(target.z) + map->map_h_d) >> 3;
+					pMouseRectSelection.x1 = ((int)(target.x) + map->halfWidthInPixels) >> 3;
+					pMouseRectSelection.y1 = ((int)(target.z) + map->halfHeightInPixels) >> 3;
 					click_activated = true;
 				}
 			}
@@ -1677,8 +1677,8 @@ namespace TA3D
 			int last_on = units.last_on;
 
 			map->draw_mini(0, 0, 128, 128, &cam, byte(1 << players.local_human_id)); // Mini-carte
-			units.draw_mini((float)map->map_w, (float)map->map_h, map->mini_w, map->mini_h);
-			weapons.draw_mini((float)map->map_w, (float)map->map_h, map->mini_w, map->mini_h);
+			units.draw_mini((float)map->widthInPixels, (float)map->heightInPixels, map->mini_w, map->mini_h);
+			weapons.draw_mini((float)map->widthInPixels, (float)map->heightInPixels, map->mini_w, map->mini_h);
 
 			if (view_dbg)
 			{
@@ -2099,8 +2099,8 @@ namespace TA3D
 	int Battle::pickFeature() const
 	{
 		Vector3D cur_pos(cursorOnMap(cam, *map, IsOnMinimap));
-		const int px = ((int)(cur_pos.x + (float) map->map_w_d)) >> 3;
-		const int py = ((int)(cur_pos.z + (float) map->map_h_d)) >> 3;
+		const int px = ((int)(cur_pos.x + (float) map->halfWidthInPixels)) >> 3;
+		const int py = ((int)(cur_pos.z + (float) map->halfHeightInPixels)) >> 3;
 
 		if (px >= 0 && px < map->widthInHeightmapTiles && py >= 0 && py < map->heightInHeightmapTiles && (
 			map->view_map(px >> 1, py >> 1) & (1 << players.local_human_id)))

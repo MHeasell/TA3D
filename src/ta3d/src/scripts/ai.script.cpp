@@ -183,11 +183,11 @@ namespace TA3D
 		if (unit_id >= 0 && unit_id < (int)units.max_unit && units.unit[unit_id].isOwnedBy(lua_currentPlayerID(L)) && unit_type_id >= 0 && unit_manager.unit_type[unit_type_id]->Builder)
 		{
 			Vector3D target;
-			target.x = float(((int)(pos_x) + the_map->map_w_d) >> 3);
-			target.z = float(((int)(pos_z) + the_map->map_h_d) >> 3);
+			target.x = float(((int)(pos_x) + the_map->halfWidthInPixels) >> 3);
+			target.z = float(((int)(pos_z) + the_map->halfHeightInPixels) >> 3);
 			target.y = Math::Max(the_map->get_max_rect_h((int)target.x, (int)target.z, unit_manager.unit_type[unit_type_id]->FootprintX, unit_manager.unit_type[unit_type_id]->FootprintZ), the_map->sealvl);
-			target.x = target.x * 8.0f - (float)the_map->map_w_d;
-			target.z = target.z * 8.0f - (float)the_map->map_h_d;
+			target.x = target.x * 8.0f - (float)the_map->halfWidthInPixels;
+			target.z = target.z * 8.0f - (float)the_map->halfHeightInPixels;
 
 			units.unit[unit_id].lock();
 			if (units.unit[unit_id].flags)
@@ -338,13 +338,13 @@ namespace TA3D
 
 	int ai_map_w(lua_State* L) // map_w()
 	{
-		lua_pushinteger(L, the_map->map_w);
+		lua_pushinteger(L, the_map->widthInPixels);
 		return 1;
 	}
 
 	int ai_map_h(lua_State* L) // map_h()
 	{
-		lua_pushinteger(L, the_map->map_h);
+		lua_pushinteger(L, the_map->heightInPixels);
 		return 1;
 	}
 
@@ -713,10 +713,10 @@ namespace TA3D
 		const float sy = (float)lua_tonumber(L, 4);
 		const int unit_type_id = lua_isstring(L, 5) ? unit_manager.get_unit_index(lua_tostring(L, 5)) : (int)lua_tointeger(L, 5);
 		const int player_id = lua_isnoneornil(L, 6) ? -1 : (int)lua_tointeger(L, 6);
-		const int x0 = Math::Min(Math::Max((int)((nx + (float)the_map->map_w_d) * 0.125f), 0), the_map->widthInHeightmapTiles);
-		const int y0 = Math::Min(Math::Max((int)((ny + (float)the_map->map_h_d) * 0.125f), 0), the_map->heightInHeightmapTiles);
-		const int x1 = Math::Min(Math::Max((int)((sx + (float)the_map->map_w_d) * 0.125f), 0), the_map->widthInHeightmapTiles);
-		const int y1 = Math::Min(Math::Max((int)((sy + (float)the_map->map_h_d) * 0.125f), 0), the_map->heightInHeightmapTiles);
+		const int x0 = Math::Min(Math::Max((int)((nx + (float)the_map->halfWidthInPixels) * 0.125f), 0), the_map->widthInHeightmapTiles);
+		const int y0 = Math::Min(Math::Max((int)((ny + (float)the_map->halfHeightInPixels) * 0.125f), 0), the_map->heightInHeightmapTiles);
+		const int x1 = Math::Min(Math::Max((int)((sx + (float)the_map->halfWidthInPixels) * 0.125f), 0), the_map->widthInHeightmapTiles);
+		const int y1 = Math::Min(Math::Max((int)((sy + (float)the_map->halfHeightInPixels) * 0.125f), 0), the_map->heightInHeightmapTiles);
 		lua_pop(L, 6);
 
 		lua_newtable(L);

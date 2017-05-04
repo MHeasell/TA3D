@@ -631,8 +631,8 @@ namespace TA3D
 		if (unit_idx < 0 || unit_idx >= unit_manager.nb_unit)
 			return false;
 
-		int px = (int)(target.x + (float)the_map->map_w_d + 4.0f) >> 3;
-		int py = (int)(target.z + (float)the_map->map_h_d + 4.0f) >> 3;
+		int px = (int)(target.x + (float)the_map->halfWidthInPixels + 4.0f) >> 3;
+		int py = (int)(target.z + (float)the_map->halfHeightInPixels + 4.0f) >> 3;
 
 		int spx = px;
 		int spy = py;
@@ -702,8 +702,8 @@ namespace TA3D
 				px = features.feature[metal_stuff_id].px;
 				py = features.feature[metal_stuff_id].py;
 			}
-			target.x = float((px << 3) - the_map->map_w_d);
-			target.z = float((py << 3) - the_map->map_h_d);
+			target.x = float((px << 3) - the_map->halfWidthInPixels);
+			target.z = float((py << 3) - the_map->halfHeightInPixels);
 			target.y = Math::Max(the_map->get_max_rect_h((int)target.x, (int)target.z, unit_manager.unit_type[unit_idx]->FootprintX, unit_manager.unit_type[unit_idx]->FootprintZ), the_map->sealvl);
 			return true;
 		}

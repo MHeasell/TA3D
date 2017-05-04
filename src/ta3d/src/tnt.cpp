@@ -183,10 +183,13 @@ namespace TA3D
 		map->heightInGraphicalTiles = header.Height / 2;
 		map->widthInHeightmapTiles = map->widthInGraphicalTiles * 2;
 		map->heightInHeightmapTiles = map->heightInGraphicalTiles * 2;
-		map->map_h = map->heightInGraphicalTiles * 16;
-		map->map_w = map->widthInGraphicalTiles * 16;
-		map->map_h_d = map->heightInGraphicalTiles * 8;
-		map->map_w_d = map->widthInGraphicalTiles * 8;
+
+		// These are known to be wrong (they should be twice as big)
+		// but other code depends on this for now.
+		map->heightInPixels = map->heightInGraphicalTiles * 16;
+		map->widthInPixels = map->widthInGraphicalTiles * 16;
+		map->halfHeightInPixels = map->heightInGraphicalTiles * 8;
+		map->halfWidthInPixels = map->widthInGraphicalTiles * 8;
 
 		map->bmap.resize(map->widthInGraphicalTiles, map->heightInGraphicalTiles);
 		map->view.resize(map->widthInGraphicalTiles, map->heightInGraphicalTiles);
@@ -478,8 +481,8 @@ namespace TA3D
 				if (type <= header.tileanims)
 				{
 					Vector3D Pos;
-					Pos.x = float((x << 3) - map->map_w_d) + 8.0f;
-					Pos.z = float((y << 3) - map->map_h_d) + 8.0f;
+					Pos.x = float((x << 3) - map->halfWidthInPixels) + 8.0f;
+					Pos.z = float((y << 3) - map->halfHeightInPixels) + 8.0f;
 					const Feature* const feature = feature_manager.getFeaturePointer(TDF_index[type]);
 					if (feature && !feature->m3d)
 						Pos.y = map->get_max_rect_h(x, y, feature->footprintx, feature->footprintz);

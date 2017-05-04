@@ -153,8 +153,8 @@ namespace TA3D
 	{
 		if (isNaN(x) || isNaN(y))
 			return 0.0f;
-		x = (x + (float)map_w_d) * 0.125f; // Convert the coordinates
-		y = (y + (float)map_h_d) * 0.125f;
+		x = (x + (float)halfWidthInPixels) * 0.125f; // Convert the coordinates
+		y = (y + (float)halfHeightInPixels) * 0.125f;
 		const int lx = widthInHeightmapTiles - 1;
 		const int ly = heightInHeightmapTiles - 1;
 		x = Math::Clamp(x, 0.0f, float(widthInHeightmapTiles - 2));
@@ -758,8 +758,8 @@ namespace TA3D
 		for (auto it = viewportCoords.begin(); it != viewportCoords.end(); ++it)
 		{
 			// project from world space to minimap space
-			float projectedX = ((it->x + (map_w / 2.0f)) / map_w) * rw;
-			float projectedY = ((it->z + (map_h / 2.0f)) / map_h) * rh;
+			float projectedX = ((it->x + (widthInPixels / 2.0f)) / widthInPixels) * rw;
+			float projectedY = ((it->z + (heightInPixels / 2.0f)) / heightInPixels) * rh;
 			glVertex2f(projectedX, projectedY);
 		}
 		glEnd();
@@ -978,8 +978,8 @@ namespace TA3D
 		float ymax = 0.0f;
 		for (unsigned int i = 0; i < frustum.size(); ++i)
 		{
-			const int x = (int)((frustum[i].x + (float)map_w_d) * 0.0625f);
-			const int y = (int)((frustum[i].z + (float)map_h_d) * 0.0625f);
+			const int x = (int)((frustum[i].x + (float)halfWidthInPixels) * 0.0625f);
+			const int y = (int)((frustum[i].z + (float)halfHeightInPixels) * 0.0625f);
 			x1 = Math::Min(x1, x);
 			y1 = Math::Min(y1, y);
 			x2 = Math::Max(x2, x);
@@ -1032,8 +1032,8 @@ namespace TA3D
 						continue;
 					Vector3D I = A + (yref - A.y) / (B.y - A.y) * (B - A);
 					I.z -= zOffset;
-					const int X0 = (int)((I.x + (float)map_w_d) * 0.0625f + 0.5f);
-					const int Y0 = (int)((I.z + (float)map_h_d) * 0.0625f + 0.5f);
+					const int X0 = (int)((I.x + (float)halfWidthInPixels) * 0.0625f + 0.5f);
+					const int Y0 = (int)((I.z + (float)halfHeightInPixels) * 0.0625f + 0.5f);
 					x1 = Math::Min(x1, X0);
 					y1 = Math::Min(y1, Y0);
 					x2 = Math::Max(x2, X0);
@@ -1048,8 +1048,8 @@ namespace TA3D
 								continue;
 							Vector3D J = C + (yref - C.y) / (D.y - C.y) * (D - C);
 							J.z -= zOffset;
-							const int X1 = (int)((J.x + (float)map_w_d) * 0.0625f + 0.5f);
-							const int Y1 = (int)((J.z + (float)map_h_d) * 0.0625f + 0.5f);
+							const int X1 = (int)((J.x + (float)halfWidthInPixels) * 0.0625f + 0.5f);
+							const int Y1 = (int)((J.z + (float)halfHeightInPixels) * 0.0625f + 0.5f);
 							x1 = Math::Min(x1, X1);
 							y1 = Math::Min(y1, Y1);
 							x2 = Math::Max(x2, X1);
@@ -1126,9 +1126,9 @@ namespace TA3D
 			const int pre_y = y << 4;
 			const int Y = y << 1;
 			const int pre_y2 = y * widthInGraphicalTiles;
-			T.x = (float)-map_w_d;
+			T.x = (float)-halfWidthInPixels;
 			T.y = 0.0f;
-			T.z = float(pre_y - map_h_d);
+			T.z = float(pre_y - halfHeightInPixels);
 			buf_size = 0;
 			ox = x1;
 			bool was_clean = false;
@@ -1480,11 +1480,11 @@ namespace TA3D
 		}
 		int nb = 0;
 		int nb_limit = (int)(Pos.y) + 1000;
-		const float dwm = (float)map_w_d;
-		const float dhm = (float)map_h_d;
+		const float dwm = (float)halfWidthInPixels;
+		const float dhm = (float)halfHeightInPixels;
 		Dir = (1.0f * step) * Dir;
 		float len_step = Dir.length();
-		while (((sealvl < Pos.y && water) || !water) && get_max_h((int)(Pos.x + (float)map_w_d) >> 3, (int)(Pos.z + (float)map_h_d) >> 3) < Pos.y)
+		while (((sealvl < Pos.y && water) || !water) && get_max_h((int)(Pos.x + (float)halfWidthInPixels) >> 3, (int)(Pos.z + (float)halfHeightInPixels) >> 3) < Pos.y)
 		{
 			if (nb >= nb_limit || length < 0.0f)
 				return Pos;

@@ -231,8 +231,8 @@ namespace TA3D
 		int hit_idx = -1;
 		if (!dying && !hit)
 		{
-			const int py = ((int)(OPos.z) + the_map->map_h_d) >> 3;
-			const int px = ((int)(OPos.x) + the_map->map_w_d) >> 3;
+			const int py = ((int)(OPos.z) + the_map->halfHeightInPixels) >> 3;
+			const int px = ((int)(OPos.x) + the_map->halfWidthInPixels) >> 3;
 			Vector3D Dir(V);
 			Dir.normalize();
 			std::deque<BVH_UnitTKit::T> neighbors;
@@ -381,8 +381,8 @@ namespace TA3D
 		{
 			if (damage < 0.0f)
 				damage = float(weapon_def->damage);
-			const int py = (int(OPos.z) + the_map->map_h_d) >> 3;
-			const int px = (int(OPos.x) + the_map->map_w_d) >> 3;
+			const int py = (int(OPos.z) + the_map->halfHeightInPixels) >> 3;
+			const int px = (int(OPos.x) + the_map->halfWidthInPixels) >> 3;
 			const int s = (weapon_def->areaofeffect + 31) >> 5;
 			const int d = (weapon_def->areaofeffect * weapon_def->areaofeffect + 15) >> 4;
 			std::deque<BVH_UnitTKit::T> neighbors;
@@ -561,8 +561,8 @@ namespace TA3D
 			}
 			else if (hit && Math::AlmostEquals(Pos.y, the_map->sealvl))
 			{
-				const int px = ((int)(Pos.x + 0.5f) + the_map->map_w_d) >> 4;
-				const int py = ((int)(Pos.z + 0.5f) + the_map->map_h_d) >> 4;
+				const int px = ((int)(Pos.x + 0.5f) + the_map->halfWidthInPixels) >> 4;
+				const int py = ((int)(Pos.z + 0.5f) + the_map->halfHeightInPixels) >> 4;
 				Vector3D P = Pos;
 				P.y += 3.0f;
 				if (px >= 0 && px < the_map->widthInGraphicalTiles && py >= 0 && py < the_map->heightInGraphicalTiles)
@@ -603,7 +603,7 @@ namespace TA3D
 		}
 		else if (dying && killtime <= 0.0f)
 			weapon_id = -1;
-		else if (Pos.x < -the_map->map_w_d || Pos.x > the_map->map_w_d || Pos.z < -the_map->map_h_d || Pos.z > the_map->map_h_d) // We're out of the map
+		else if (Pos.x < -the_map->halfWidthInPixels || Pos.x > the_map->halfWidthInPixels || Pos.z < -the_map->halfHeightInPixels || Pos.z > the_map->halfHeightInPixels) // We're out of the map
 			weapon_id = -1;
 	}
 
@@ -614,8 +614,8 @@ namespace TA3D
 
 		visible = false;
 
-		const int px = ((int)(Pos.x + 0.5f) + the_map->map_w_d) >> 4;
-		const int py = ((int)(Pos.z + 0.5f) + the_map->map_h_d) >> 4;
+		const int px = ((int)(Pos.x + 0.5f) + the_map->halfWidthInPixels) >> 4;
+		const int py = ((int)(Pos.z + 0.5f) + the_map->halfHeightInPixels) >> 4;
 		if (px < 0 || py < 0 || px >= the_map->widthInGraphicalTiles || py >= the_map->heightInGraphicalTiles)
 			return;
 		const byte player_mask = byte(1 << players.local_human_id);

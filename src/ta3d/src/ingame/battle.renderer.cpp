@@ -109,8 +109,8 @@ namespace TA3D
 		if (build >= 0 && !IsOnGUI) // Display the building we want to build (with nice selection quads)
 		{
 			Vector3D target(cursorOnMap(cam, *map));
-			pMouseRectSelection.x2 = ((int)(target.x) + map->map_w_d) >> 3;
-			pMouseRectSelection.y2 = ((int)(target.z) + map->map_h_d) >> 3;
+			pMouseRectSelection.x2 = ((int)(target.x) + map->halfWidthInPixels) >> 3;
+			pMouseRectSelection.y2 = ((int)(target.z) + map->halfHeightInPixels) >> 3;
 
 			if (isMouseButtonUp(LeftMouseButton))
 			{
@@ -136,8 +136,8 @@ namespace TA3D
 				target.y = map->get_max_rect_h((int)target.x, (int)target.z, unit_manager.unit_type[build]->FootprintX, unit_manager.unit_type[build]->FootprintZ);
 				if (unit_manager.unit_type[build]->floatting())
 					target.y = Math::Max(target.y, map->sealvl + ((float)unit_manager.unit_type[build]->AltFromSeaLevel - (float)unit_manager.unit_type[build]->WaterLine) * H_DIV);
-				target.x = target.x * 8.0f - (float)map->map_w_d;
-				target.z = target.z * 8.0f - (float)map->map_h_d;
+				target.x = target.x * 8.0f - (float)map->halfWidthInPixels;
+				target.z = target.z * 8.0f - (float)map->halfHeightInPixels;
 
 				can_be_there = can_be_built(target, build, players.local_human_id);
 

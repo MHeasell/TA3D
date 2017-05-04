@@ -167,8 +167,8 @@ namespace TA3D
 
 	bool FX::doCanDrawAnim() const
 	{
-		const int px = (int)(Pos.x + float(the_map->map_w_d)) >> 4;
-		const int py = (int)(Pos.z + float(the_map->map_h_d)) >> 4;
+		const int px = (int)(Pos.x + float(the_map->halfWidthInPixels)) >> 4;
+		const int py = (int)(Pos.z + float(the_map->halfHeightInPixels)) >> 4;
 		if (px < 0 || py < 0 || px >= the_map->widthInGraphicalTiles || py >= the_map->heightInGraphicalTiles)
 			return false;
 		const byte player_mask = byte(1 << players.local_human_id);

@@ -532,11 +532,11 @@ namespace TA3D
 		if (unit_id >= 0 && unit_id < (int)units.max_unit && unit_type_id >= 0 && unit_manager.unit_type[unit_type_id]->Builder && !LuaProgram::passive)
 		{
 			Vector3D target;
-			target.x = float(((int)(pos_x) + the_map->map_w_d) >> 3);
-			target.z = float(((int)(pos_z) + the_map->map_h_d) >> 3);
+			target.x = float(((int)(pos_x) + the_map->halfWidthInPixels) >> 3);
+			target.z = float(((int)(pos_z) + the_map->halfHeightInPixels) >> 3);
 			target.y = Math::Max(the_map->get_max_rect_h((int)target.x, (int)target.z, unit_manager.unit_type[unit_type_id]->FootprintX, unit_manager.unit_type[unit_type_id]->FootprintZ), the_map->sealvl);
-			target.x = target.x * 8.0f - (float)the_map->map_w_d;
-			target.z = target.z * 8.0f - (float)the_map->map_h_d;
+			target.x = target.x * 8.0f - (float)the_map->halfWidthInPixels;
+			target.z = target.z * 8.0f - (float)the_map->halfHeightInPixels;
 
 			units.lock();
 			if (units.unit[unit_id].flags)
@@ -732,13 +732,13 @@ namespace TA3D
 
 	int program_map_w(lua_State* L) // map_w()
 	{
-		lua_pushinteger(L, the_map->map_w);
+		lua_pushinteger(L, the_map->widthInPixels);
 		return 1;
 	}
 
 	int program_map_h(lua_State* L) // map_h()
 	{
-		lua_pushinteger(L, the_map->map_h);
+		lua_pushinteger(L, the_map->heightInPixels);
 		return 1;
 	}
 
@@ -1061,7 +1061,7 @@ namespace TA3D
 		lua_pop(L, 1);
 
 		if (player_id < players.count())
-			lua_pushnumber(L, float(the_map->ota_data.startX[player_id] - the_map->map_w) * 0.5f);
+			lua_pushnumber(L, float(the_map->ota_data.startX[player_id] - the_map->widthInPixels) * 0.5f);
 		else
 			lua_pushnumber(L, 0);
 		return 1;
@@ -1073,7 +1073,7 @@ namespace TA3D
 		lua_pop(L, 1);
 
 		if (player_id < players.count())
-			lua_pushnumber(L, float(the_map->ota_data.startZ[player_id] - the_map->map_h) * 0.5f);
+			lua_pushnumber(L, float(the_map->ota_data.startZ[player_id] - the_map->heightInPixels) * 0.5f);
 		else
 			lua_pushnumber(L, 0);
 		return 1;
@@ -1177,14 +1177,14 @@ namespace TA3D
 		Feature* feature = feature_manager.getFeaturePointer(feature_type_id);
 		if (feature && !LuaProgram::passive)
 		{
-			const int x = (int)(X + (float)the_map->map_w_d - 8.0f) >> 3;
-			const int y = (int)(Z + (float)the_map->map_h_d - 8.0f) >> 3;
+			const int x = (int)(X + (float)the_map->halfWidthInPixels - 8.0f) >> 3;
+			const int y = (int)(Z + (float)the_map->halfHeightInPixels - 8.0f) >> 3;
 			if (x > 0 && y > 0 && x < (the_map->widthInGraphicalTiles << 1) && y < (the_map->heightInGraphicalTiles << 1))
 				if (the_map->map_data(x, y).stuff == -1)
 				{
 					Vector3D Pos;
-					Pos.x = float((x << 3) - the_map->map_w_d) + 8.0f;
-					Pos.z = float((y << 3) - the_map->map_h_d) + 8.0f;
+					Pos.x = float((x << 3) - the_map->halfWidthInPixels) + 8.0f;
+					Pos.z = float((y << 3) - the_map->halfHeightInPixels) + 8.0f;
 					Pos.y = the_map->get_unit_h(Pos.x, Pos.z);
 					the_map->map_data(x, y).stuff = features.add_feature(Pos, feature_type_id);
 					if (feature && the_map->map_data(x, y).stuff != -1 && feature->blocking)

@@ -124,8 +124,8 @@ namespace TA3D
 				else
 					return 0;
 			case BUGGER_OFF:
-				return the_map->check_rect((((int)(Pos.x + (float)the_map->map_w_d)) >> 3) - (unit_manager.unit_type[type_id]->FootprintX >> 1),
-						   (((int)(Pos.z + (float)the_map->map_h_d)) >> 3) - (unit_manager.unit_type[type_id]->FootprintZ >> 1),
+				return the_map->check_rect((((int)(Pos.x + (float)the_map->halfWidthInPixels)) >> 3) - (unit_manager.unit_type[type_id]->FootprintX >> 1),
+						   (((int)(Pos.z + (float)the_map->halfHeightInPixels)) >> 3) - (unit_manager.unit_type[type_id]->FootprintZ >> 1),
 						   unit_manager.unit_type[type_id]->FootprintX, unit_manager.unit_type[type_id]->FootprintZ, idx)
 					? 0
 					: 1;
@@ -338,15 +338,15 @@ namespace TA3D
 				return (int)port[type];
 			case PIECE_XZ:
 				compute_model_coord();
-				return PACKXZ((data.data[v1].pos.x + Pos.x) * 2.0f + (float)the_map->map_w, (data.data[v1].pos.z + Pos.z) * 2.0f + (float)the_map->map_h);
+				return PACKXZ((data.data[v1].pos.x + Pos.x) * 2.0f + (float)the_map->widthInPixels, (data.data[v1].pos.z + Pos.z) * 2.0f + (float)the_map->heightInPixels);
 			case PIECE_Y:
 				compute_model_coord();
 				return (int)((data.data[v1].pos.y + Pos.y) * 2.0f) << 16;
 			case UNIT_XZ:
 				if (v1 >= 0 && v1 < (int)units.max_unit && units.unit[v1].isAlive())
-					return PACKXZ(units.unit[v1].Pos.x * 2.0f + (float)the_map->map_w, units.unit[v1].Pos.z * 2.0f + (float)the_map->map_h);
+					return PACKXZ(units.unit[v1].Pos.x * 2.0f + (float)the_map->widthInPixels, units.unit[v1].Pos.z * 2.0f + (float)the_map->heightInPixels);
 				else
-					return PACKXZ(Pos.x * 2.0f + (float)the_map->map_w, Pos.z * 2.0f + (float)the_map->map_h);
+					return PACKXZ(Pos.x * 2.0f + (float)the_map->widthInPixels, Pos.z * 2.0f + (float)the_map->heightInPixels);
 			case UNIT_Y:
 				if (v1 >= 0 && v1 < (int)units.max_unit && units.unit[v1].isAlive())
 					return (int)(units.unit[v1].Pos.y * 2.0f) << 16;
@@ -366,7 +366,7 @@ namespace TA3D
 			case HYPOT:
 				return (int)hypotf(float(v1), float(v2));
 			case GROUND_HEIGHT:
-				return (int)(the_map->get_unit_h(float(UNPACKX(v1) - the_map->map_w) * 0.5f, float(UNPACKZ(v1) - the_map->map_h) * 0.5f) * 2.0f) << 16;
+				return (int)(the_map->get_unit_h(float(UNPACKX(v1) - the_map->widthInPixels) * 0.5f, float(UNPACKZ(v1) - the_map->heightInPixels) * 0.5f) * 2.0f) << 16;
 			default:
 				LOG_DEBUG(LOG_PREFIX_SCRIPT << "GET unknown constant " << type);
 		}
@@ -385,8 +385,8 @@ namespace TA3D
 				break;
 			case YARD_OPEN:
 				port[type] = sint16(v);
-				if (!the_map->check_rect((((int)(Pos.x + (float)the_map->map_w_d)) >> 3) - (unit_manager.unit_type[type_id]->FootprintX >> 1),
-						(((int)(Pos.z + (float)the_map->map_h_d)) >> 3) - (unit_manager.unit_type[type_id]->FootprintZ >> 1),
+				if (!the_map->check_rect((((int)(Pos.x + (float)the_map->halfWidthInPixels)) >> 3) - (unit_manager.unit_type[type_id]->FootprintX >> 1),
+						(((int)(Pos.z + (float)the_map->halfHeightInPixels)) >> 3) - (unit_manager.unit_type[type_id]->FootprintZ >> 1),
 						unit_manager.unit_type[type_id]->FootprintX, unit_manager.unit_type[type_id]->FootprintZ, idx))
 					port[type] ^= 1;
 				break;
@@ -394,8 +394,8 @@ namespace TA3D
 				port[type] = sint16(v);
 				if (port[type])
 				{
-					const int px = ((int)(Pos.x) + the_map->map_w_d) >> 3;
-					const int py = ((int)(Pos.z) + the_map->map_h_d) >> 3;
+					const int px = ((int)(Pos.x) + the_map->halfWidthInPixels) >> 3;
+					const int py = ((int)(Pos.z) + the_map->halfHeightInPixels) >> 3;
 					for (int y = py - (unit_manager.unit_type[type_id]->FootprintZ >> 1); y <= py + (unit_manager.unit_type[type_id]->FootprintZ >> 1); y++)
 					{
 						if (y >= 0 && y < (the_map->heightInGraphicalTiles << 1) - 1)

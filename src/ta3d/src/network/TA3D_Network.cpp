@@ -284,8 +284,8 @@ namespace TA3D
 					pUnit->V.z = sync_msg.vz;
 				pUnit->V.y = 0.0f;
 
-				pUnit->cur_px = ((int)(pUnit->Pos.x) + the_map->map_w_d + 4) >> 3;
-				pUnit->cur_py = ((int)(pUnit->Pos.z) + the_map->map_h_d + 4) >> 3;
+				pUnit->cur_px = ((int)(pUnit->Pos.x) + the_map->halfWidthInPixels + 4) >> 3;
+				pUnit->cur_py = ((int)(pUnit->Pos.z) + the_map->halfHeightInPixels + 4) >> 3;
 
 				if (sync_msg.mask & SYNC_MASK_O)
 					pUnit->Angle.y = (float)sync_msg.orientation * 360.0f / 65536.0f;

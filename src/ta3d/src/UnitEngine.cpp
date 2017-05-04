@@ -207,14 +207,14 @@ namespace TA3D
 			return;
 
 		Vector3D t(target);
-		t.x = float(((int)(t.x) + map->map_w_d) >> 3);
-		t.z = float(((int)(t.z) + map->map_h_d) >> 3);
+		t.x = float(((int)(t.x) + map->halfWidthInPixels) >> 3);
+		t.z = float(((int)(t.z) + map->halfHeightInPixels) >> 3);
 		t.y = map->get_max_rect_h((int)t.x, (int)t.z, unit_manager.unit_type[unit_type_id]->FootprintX,
 			unit_manager.unit_type[unit_type_id]->FootprintZ);
 		if (unit_manager.unit_type[unit_type_id]->floatting())
 			t.y = Math::Max(t.y, map->sealvl + ((float)unit_manager.unit_type[unit_type_id]->AltFromSeaLevel - (float)unit_manager.unit_type[unit_type_id]->WaterLine) * H_DIV);
-		t.x = t.x * 8.0f - (float)map->map_w_d;
-		t.z = t.z * 8.0f - (float)map->map_h_d;
+		t.x = t.x * 8.0f - (float)map->halfWidthInPixels;
+		t.z = t.z * 8.0f - (float)map->halfHeightInPixels;
 
 		pMutex.lock();
 		for (uint32 e = 0; e < index_list_size; ++e)
@@ -401,8 +401,8 @@ namespace TA3D
 		if (last_on != -1)
 			return last_on;
 
-		const float conv_x = ((float)map->mini_w) / (float)map->map_w * 128.0f / 252.0f;
-		const float conv_z = ((float)map->mini_h) / (float)map->map_h * 128.0f / 252.0f;
+		const float conv_x = ((float)map->mini_w) / (float)map->widthInPixels * 128.0f / 252.0f;
+		const float conv_z = ((float)map->mini_h) / (float)map->heightInPixels * 128.0f / 252.0f;
 
 		const byte player_mask = byte(1 << players.local_human_id);
 
@@ -487,8 +487,8 @@ namespace TA3D
 
 			units.unit[id].Pos = pos;
 			units.unit[id].build_percent_left = 100.0f;
-			units.unit[id].cur_px = ((int)(units.unit[id].Pos.x) + the_map->map_w_d + 4) >> 3;
-			units.unit[id].cur_py = ((int)(units.unit[id].Pos.z) + the_map->map_h_d + 4) >> 3;
+			units.unit[id].cur_px = ((int)(units.unit[id].Pos.x) + the_map->halfWidthInPixels + 4) >> 3;
+			units.unit[id].cur_py = ((int)(units.unit[id].Pos.z) + the_map->halfHeightInPixels + 4) >> 3;
 			units.unit[id].birthTime = float(units.current_tick) / float(TICKS_PER_SEC);
 			units.unit[id].unlock();
 
@@ -584,8 +584,8 @@ namespace TA3D
 
 		const int w = unit_manager.unit_type[unit_type_id]->FootprintX;
 		const int h = unit_manager.unit_type[unit_type_id]->FootprintZ;
-		const int x = (((int)(Pos.x) + the_map->map_w_d + 4) >> 3) - (w >> 1);
-		const int y = (((int)(Pos.z) + the_map->map_h_d + 4) >> 3) - (h >> 1);
+		const int x = (((int)(Pos.x) + the_map->halfWidthInPixels + 4) >> 3) - (w >> 1);
+		const int y = (((int)(Pos.z) + the_map->halfHeightInPixels + 4) >> 3) - (h >> 1);
 		if (x < 0 || y < (((int)the_map->get_zdec(x, 0) + 7) >> 3) || x + w >= the_map->widthInHeightmapTiles - 1 || y + h >= the_map->heightInHeightmapTiles - 1)
 			return false; // check if it is inside the map
 

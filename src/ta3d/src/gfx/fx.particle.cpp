@@ -66,8 +66,8 @@ namespace TA3D
 	{
 		if (the_map) // Visibility test
 		{
-			const int px = ((int)(Pos.x + 0.5f) + the_map->map_w_d) >> 4;
-			const int py = ((int)(Pos.z + 0.5f) + the_map->map_h_d) >> 4;
+			const int px = ((int)(Pos.x + 0.5f) + the_map->halfWidthInPixels) >> 4;
+			const int py = ((int)(Pos.z + 0.5f) + the_map->halfHeightInPixels) >> 4;
 			if (px < 0 || py < 0 || px >= the_map->widthInGraphicalTiles || py >= the_map->heightInGraphicalTiles)
 				return;
 			const byte player_mask = byte(1 << players.local_human_id);

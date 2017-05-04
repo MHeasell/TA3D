@@ -77,8 +77,8 @@ namespace TA3D
 			if (nodes.empty())
 				return;
 
-			pos.x = float((nodes.front().x() << 3) - the_map->map_w_d);
-			pos.z = float((nodes.front().z() << 3) - the_map->map_h_d);
+			pos.x = float((nodes.front().x() << 3) - the_map->halfWidthInPixels);
+			pos.z = float((nodes.front().z() << 3) - the_map->halfHeightInPixels);
 			pos.y = 0.0f;
 		}
 
@@ -166,8 +166,8 @@ namespace TA3D
 
 	AI::Path Pathfinder::directPath(const Vector3D& end)
 	{
-		const int x = ((int)end.x + the_map->map_w_d) >> 3;
-		const int z = ((int)end.z + the_map->map_h_d) >> 3;
+		const int x = ((int)end.x + the_map->halfWidthInPixels) >> 3;
+		const int z = ((int)end.z + the_map->halfHeightInPixels) >> 3;
 		AI::Path path;
 		path.push_back(AI::Path::Node(x, z));
 		path.setPos(end);
@@ -268,10 +268,10 @@ namespace TA3D
 
 		MutexLocker mLock(sMutex);
 
-		const int start_x = ((int)task.start.x + the_map->map_w_d) >> 3;
-		const int start_z = ((int)task.start.z + the_map->map_h_d) >> 3;
-		const int end_x = ((int)task.end.x + the_map->map_w_d) >> 3;
-		const int end_z = ((int)task.end.z + the_map->map_h_d) >> 3;
+		const int start_x = ((int)task.start.x + the_map->halfWidthInPixels) >> 3;
+		const int start_z = ((int)task.start.z + the_map->halfHeightInPixels) >> 3;
+		const int end_x = ((int)task.end.x + the_map->halfWidthInPixels) >> 3;
+		const int end_z = ((int)task.end.z + the_map->halfHeightInPixels) >> 3;
 
 		static std::vector<AI::Path::Node> nodes;
 		nodes.clear();

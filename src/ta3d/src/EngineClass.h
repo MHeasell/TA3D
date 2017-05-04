@@ -235,17 +235,17 @@ namespace TA3D
 		//! Sonar map
 		Grid<byte> sonar_map;
 
-		//! *Half* the width of the map in pixels.
-		int map_w;
+		//! Width of the map in pixels. (Really *half* the width, I'm working on it.)
+		int widthInPixels;
 
-		//! *Half* the height of the map in pixels
-		int map_h;
+		//! Height of the map in pixels. (Really *half* the height, I'm working on it.)
+		int heightInPixels;
 
-		//! *One quarter* of the width of the map in pixels
-		int map_w_d;
+		//! Half the width of the map in pixels. (Really *one quarter* of the width, I'm working on it.)
+		int halfWidthInPixels;
 
-		//! *One quarter* of the height of the map in pixels
-		int map_h_d;
+		//! Half the height of the map in pixels. (Really *one quarte* of the height, I'm working on it.)
+		int halfHeightInPixels;
 
 		//! Width in 32-pixel graphical tiles
 		int widthInGraphicalTiles;
