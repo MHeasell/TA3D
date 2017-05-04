@@ -15,8 +15,8 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA*/
 
-#ifndef __TA3D_XX__MATH_H__
-#define __TA3D_XX__MATH_H__
+#ifndef __TA3D_MISC_MATH_H__
+#define __TA3D_MISC_MATH_H__
 
 #include <cstdlib>
 #include <cmath>
@@ -238,4 +238,4 @@ inline const float atanh(const float f)
 
 #define I2PWR16 (1.0f / 65536.0f)
 
-#endif // __TA3D_XX__MATH_H__
+#endif // __TA3D_MISC_MATH_H__
