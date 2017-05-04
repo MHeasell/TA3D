@@ -2296,9 +2296,7 @@ namespace TA3D
 			{
 				if (units.unit[attached_list[i]].flags)
 				{
-					units.unit[attached_list[i]].Pos = Pos + data.data[link_list[i]].pos;
-					units.unit[attached_list[i]].cur_px = ((int)(units.unit[attached_list[i]].Pos.x) + the_map->halfWidthInPixels) >> 3;
-					units.unit[attached_list[i]].cur_py = ((int)(units.unit[attached_list[i]].Pos.z) + the_map->halfHeightInPixels) >> 3;
+					units.unit[attached_list[i]].setPosition(Pos + data.data[link_list[i]].pos);
 					units.unit[attached_list[i]].Angle = Angle;
 				}
 				else
@@ -3861,19 +3859,14 @@ namespace TA3D
 									{
 										compute_model_coord();
 										Vector3D old_pos = target_unit->Pos;
-										target_unit->Pos = Pos + data.data[buildinfo].pos;
+										target_unit->setPosition(Pos + data.data[buildinfo].pos);
 										if (unit_manager.unit_type[target_unit->type_id]->Floater || (unit_manager.unit_type[target_unit->type_id]->canhover && old_pos.y <= the_map->sealvl))
 											target_unit->Pos.y = old_pos.y;
 										if (((Vector3D) (old_pos - target_unit->Pos)).lengthSquared() > 1000000.0f) // It must be continuous
 										{
-											target_unit->Pos.x = old_pos.x;
-											target_unit->Pos.z = old_pos.z;
+											target_unit->setPosition(old_pos);
 										}
-										else
-										{
-											target_unit->cur_px = ((int)(target_unit->Pos.x) + the_map->halfWidthInPixels + 4) >> 3;
-											target_unit->cur_py = ((int)(target_unit->Pos.z) + the_map->halfHeightInPixels + 4) >> 3;
-										}
+
 										target_unit->Angle = Angle;
 										target_unit->Angle.y += data.data[buildinfo].axe[1].angle;
 										pMutex.unlock();
@@ -4447,9 +4440,7 @@ namespace TA3D
 			{
 				if (pType->canmove && pType->BMcode)
 					V.y -= units.g_dt; // L'unité subit la force de gravitation
-				Pos += dt * V;		   // Déplace l'unité
-				cur_px = ((int)(Pos.x) + the_map->halfWidthInPixels + 4) >> 3;
-				cur_py = ((int)(Pos.z) + the_map->halfHeightInPixels + 4) >> 3;
+				setPosition(Pos + (dt * V)); // move the unit
 			}
 		}
 	script_exec:

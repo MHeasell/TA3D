@@ -270,22 +270,21 @@ namespace TA3D
 				pUnit->flying = sync_msg.flags & SYNC_FLAG_FLYING;
 				pUnit->cloaking = sync_msg.flags & SYNC_FLAG_CLOAKING;
 
+				Vector3D tmpPosition(pUnit->Pos);
 				pUnit->last_synctick[0] = sync_msg.timestamp;
 				if (sync_msg.mask & SYNC_MASK_X)
-					pUnit->Pos.x = sync_msg.x;
+					tmpPosition.x = sync_msg.x;
 				if (sync_msg.mask & SYNC_MASK_Y)
-					pUnit->Pos.y = sync_msg.y;
+					tmpPosition.y = sync_msg.y;
 				if (sync_msg.mask & SYNC_MASK_Z)
-					pUnit->Pos.z = sync_msg.z;
+					tmpPosition.z = sync_msg.z;
+				pUnit->setPosition(tmpPosition);
 
 				if (sync_msg.mask & SYNC_MASK_VX)
 					pUnit->V.x = sync_msg.vx;
 				if (sync_msg.mask & SYNC_MASK_VZ)
 					pUnit->V.z = sync_msg.vz;
 				pUnit->V.y = 0.0f;
-
-				pUnit->cur_px = ((int)(pUnit->Pos.x) + the_map->halfWidthInPixels + 4) >> 3;
-				pUnit->cur_py = ((int)(pUnit->Pos.z) + the_map->halfHeightInPixels + 4) >> 3;
 
 				if (sync_msg.mask & SYNC_MASK_O)
 					pUnit->Angle.y = (float)sync_msg.orientation * 360.0f / 65536.0f;

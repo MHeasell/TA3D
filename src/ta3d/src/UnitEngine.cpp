@@ -485,10 +485,8 @@ namespace TA3D
 				}
 			}
 
-			units.unit[id].Pos = pos;
+			units.unit[id].setPosition(pos);
 			units.unit[id].build_percent_left = 100.0f;
-			units.unit[id].cur_px = ((int)(units.unit[id].Pos.x) + the_map->halfWidthInPixels + 4) >> 3;
-			units.unit[id].cur_py = ((int)(units.unit[id].Pos.z) + the_map->halfHeightInPixels + 4) >> 3;
 			units.unit[id].birthTime = float(units.current_tick) / float(TICKS_PER_SEC);
 			units.unit[id].unlock();
 
