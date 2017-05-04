@@ -431,57 +431,28 @@ namespace TA3D
 		glEnable(GL_TEXTURE_2D);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glEnable(GL_BLEND);
-		float sq2 = 1.0f / sqrtf(2.0f);
 		GLuint old = 0;
 		bool texture_loaded = false;
 
 		static const GLubyte index[] = {
 			0, 1, 2, 3,
-			4, 1, 2, 5,
-			6, 1, 2, 7,
-			8, 9, 10, 11,
-			1, 12, 13, 2,
-			1, 14, 15, 2,
-			1, 16, 17, 2};
+		};
 
 		static const float texcoord[] = {
 			0.0f, 0.0f,
-			0.5f, 0.0f,
-			0.5f, 1.0f,
-			0.0f, 1.0f,
-			0.0f, 0.0f,
-			0.0f, 1.0f,
-			0.0f, 0.0f,
-			0.0f, 1.0f,
-			0.0f, 0.0f,
 			1.0f, 0.0f,
 			1.0f, 1.0f,
 			0.0f, 1.0f,
-			1.0f, 0.0f,
-			1.0f, 1.0f,
-			1.0f, 0.0f,
-			1.0f, 1.0f,
-			1.0f, 0.0f,
-			1.0f, 1.0f};
+		};
+
+		// draw at double y height to compensate for camera projection,
+		// which halves vertical distances.
 		const float points[] = {
-			0.0f, 1.0f, -1.0f,
-			0.0f, 1.0f, 0.0f,
-			0.0f, 0.0f, 0.0f,
-			0.0f, 0.0f, -1.0f,
-			-sq2, 1.0f, -sq2,
-			-sq2, 0.0f, -sq2,
-			sq2, 1.0f, -sq2,
-			sq2, 0.0f, -sq2,
-			-1.0f, 1.0f, 0.0f,
-			1.0f, 1.0f, 0.0f,
+			-1.0f, 2.0f, 0.0f,
+			1.0f, 2.0f, 0.0f,
 			1.0f, 0.0f, 0.0f,
 			-1.0f, 0.0f, 0.0f,
-			-sq2, 1.0f, sq2,
-			-sq2, 0.0f, sq2,
-			sq2, 1.0f, sq2,
-			sq2, 0.0f, sq2,
-			0.0f, 1.0f, 1.0f,
-			0.0f, 0.0f, 1.0f};
+			};
 		bool set = true;
 
 		glDisableClientState(GL_NORMAL_ARRAY);
@@ -529,7 +500,7 @@ namespace TA3D
 				}
 
 				Vector3D Pos(feature[i].Pos);
-				float h = float(pFeature->height) * 0.5f;
+				float h = float(pFeature->height);
 				float dw = 0.5f * float(pFeature->anim.w[feature[i].frame]);
 
 				if (pFeature->height > 5.0f)
@@ -555,7 +526,7 @@ namespace TA3D
 					glPushMatrix();
 					glTranslatef(feature[i].Pos.x, feature[i].Pos.y, feature[i].Pos.z);
 					glScalef(dw, h, dw);
-					glDrawRangeElements(GL_QUADS, 0, 17, 28, GL_UNSIGNED_BYTE, index); // draw it
+					glDrawElements(GL_QUADS, 4, GL_UNSIGNED_BYTE, index); // draw it
 					glPopMatrix();
 				}
 				else
