@@ -544,8 +544,8 @@ namespace TA3D
 			Vector3D A;
 			Vector3D B;
 			float oangle = 0.0f;
-			const int h_map_w = the_map->widthInPixels >> 1;
-			const int h_map_h = the_map->heightInPixels >> 1;
+			const int h_map_w = the_map->widthInPixels / 2;
+			const int h_map_h = the_map->heightInPixels / 2;
 			for (std::vector<PARTICLE>::iterator e = part.begin(); e != part.end(); ++e) // Calculate the position of the points
 			{
 				if (e->light_emitter != light_emitters) // Two passes, one for normal particles, the second for particles that emits light
@@ -553,8 +553,8 @@ namespace TA3D
 
 				if (e->px == -1)
 				{
-					e->px = short(((int)(e->Pos.x) + h_map_w) >> 4);
-					e->py = short(((int)(e->Pos.z) + h_map_h) >> 4);
+					e->px = short(((int)(e->Pos.x) + h_map_w) / 16);
+					e->py = short(((int)(e->Pos.z) + h_map_h) / 16);
 				}
 				if (e->px >= 0 && e->px < the_map->widthInGraphicalTiles && e->py >= 0 && e->py < the_map->heightInGraphicalTiles)
 				{
