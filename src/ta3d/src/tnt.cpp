@@ -186,10 +186,10 @@ namespace TA3D
 
 		// These are known to be wrong (they should be twice as big)
 		// but other code depends on this for now.
-		map->heightInPixels = map->heightInGraphicalTiles * 16;
-		map->widthInPixels = map->widthInGraphicalTiles * 16;
-		map->halfHeightInPixels = map->heightInGraphicalTiles * 8;
-		map->halfWidthInPixels = map->widthInGraphicalTiles * 8;
+		map->heightInPixels = map->heightInGraphicalTiles * MAP::GraphicalTileHeightInPixels;
+		map->widthInPixels = map->widthInGraphicalTiles * MAP::GraphicalTileWidthInPixels;
+		map->halfHeightInPixels = map->heightInPixels / 2;
+		map->halfWidthInPixels = map->widthInPixels / 2;
 
 		map->bmap.resize(map->widthInGraphicalTiles, map->heightInGraphicalTiles);
 		map->view.resize(map->widthInGraphicalTiles, map->heightInGraphicalTiles);
