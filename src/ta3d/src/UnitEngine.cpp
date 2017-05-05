@@ -401,9 +401,6 @@ namespace TA3D
 		if (last_on != -1)
 			return last_on;
 
-		const float conv_x = ((float)map->mini_w) / (float)map->widthInPixels * 128.0f / 252.0f;
-		const float conv_z = ((float)map->mini_h) / (float)map->heightInPixels * 128.0f / 252.0f;
-
 		const byte player_mask = byte(1 << players.local_human_id);
 
 		pMutex.lock();
@@ -438,8 +435,9 @@ namespace TA3D
 				}
 			}
 
-			const int x = (int)(unit[i].Pos.x * conv_x + 64.5f);
-			const int y = (int)(unit[i].Pos.z * conv_z + 64.5f);
+			Vector2D normalizedCoordinates = map->worldToNormalizedMinimapCoordinates(Vector2D(unit[i].Pos.x, unit[i].Pos.z));
+			const int x = (int)(normalizedCoordinates.x * 128.0f);
+			const int y = (int)(normalizedCoordinates.y * 128.0f);
 
 			if (x == mouse_x && y == mouse_y)
 			{
