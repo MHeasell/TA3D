@@ -1640,4 +1640,56 @@ namespace TA3D
 		glDisableClientState(GL_VERTEX_ARRAY);
 		glDisableClientState(GL_COLOR_ARRAY);
 	}
+
+	Point<int> MAP::worldToHeightmapIndex(const Vector2D& xzPosition) const
+	{
+		float x = xzPosition.x;
+		float z = xzPosition.y;
+
+		unsigned int newX = static_cast<unsigned int>((x + halfWidthInPixels) / HeightmapTileWidthInPixels);
+		unsigned int newZ = static_cast<unsigned int>((z + halfHeightInPixels) / HeightmapTileHeightInPixels);
+
+		return Point<int>(newX, newZ);
+	}
+
+	Point<int> MAP::worldToHeightmapIndex(const Vector3D& position) const
+	{
+		return worldToHeightmapIndex(Vector2D(position.x, position.z));
+	}
+
+	Vector2D MAP::heightmapIndexToWorld(const Point<int>& heightmapIndex) const
+	{
+		int x = (heightmapIndex.x * HeightmapTileWidthInPixels) + (HeightmapTileWidthInPixels / 2) - the_map->halfWidthInPixels;
+		int y = (heightmapIndex.y * HeightmapTileHeightInPixels) + (HeightmapTileHeightInPixels / 2) - the_map->halfHeightInPixels;
+		return Vector2D(x, y);
+	}
+
+	Point<int> MAP::worldToGraphicalTileIndex(const Vector2D& xzPosition) const
+	{
+		float x = xzPosition.x;
+		float z = xzPosition.y;
+
+		int newX = static_cast<int>((x + halfWidthInPixels) / GraphicalTileWidthInPixels);
+		int newZ = static_cast<int>((z + halfHeightInPixels) / GraphicalTileHeightInPixels);
+
+		return Point<int>(newX, newZ);
+	}
+
+	Vector2D MAP::worldToNormalizedMinimapCoordinates(const Vector2D& xzPosition) const
+	{
+		return Vector2D(
+			(xzPosition.x + halfWidthInPixels) / widthInPixels,
+			(xzPosition.y + halfHeightInPixels) / heightInPixels
+		);
+	}
+
+	Vector2D MAP::worldToNormalizedMinimapCoordinates(const Vector3D& position) const
+	{
+		return worldToNormalizedMinimapCoordinates(Vector2D(position.x, position.z));
+	}
+
+	Point<int> MAP::worldToGraphicalTileIndex(const Vector3D& position) const
+	{
+		return worldToGraphicalTileIndex(Vector2D(position.x, position.z));
+	}
 } // namespace TA3D

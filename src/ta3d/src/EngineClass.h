@@ -314,6 +314,45 @@ namespace TA3D
 
 		~MAP() { destroy(); }
 
+		/**
+		 * Converts the given XZ coordinates in world space
+		 * to the corresponding cell in the heightmap grid that contains it.
+		 *
+		 * This method is valid on inputs that are not inside map boundaries,
+		 * but the resulting index returned may be invalid,
+		 * i.e. outside the grid.
+		 * It is the caller's job to check this if necessary.
+		 */
+		Point<int> worldToHeightmapIndex(const Vector2D& xzPosition) const;
+
+		Point<int> worldToHeightmapIndex(const Vector3D& position) const;
+
+		/**
+		 * Returns the XZ centre of the given heightmap tile in world space.
+		 */
+		Vector2D heightmapIndexToWorld(const Point<int>& heightmapIndex) const;
+
+		/**
+		 * Converts the given XZ coordinates in world space
+		 * to the corresponding cell in the graphical tile grid that contains it.
+		 *
+		 * This method is valid on inputs that are not inside map boundaries,
+		 * but the resulting index returned may be invalid,
+		 * i.e. outside the grid.
+		 * It is the caller's job to check this if necessary.
+		 */
+		Point<int> worldToGraphicalTileIndex(const Vector2D& xzPosition) const;
+
+		Point<int> worldToGraphicalTileIndex(const Vector3D& position) const;
+
+		/**
+		 * Converts a point in world (map pixel) coordinates
+		 * into normalized minimap coordinates (between 0 and 1).
+		 */
+		Vector2D worldToNormalizedMinimapCoordinates(const Vector2D& xzPosition) const;
+
+		Vector2D worldToNormalizedMinimapCoordinates(const Vector3D& position) const;
+
 		void drawCircleOnMap(const float x, const float y, const float radius, const uint32 color, const float thickness = 5.0f) const;
 
 		void update_player_visibility(int player_id, int px, int py, int r, int rd, int sn, int rd_j, int sn_j, bool jamming = false, bool black = false); // r -> sight, rd -> radar range, sn -> sonar range, j for jamming ray
