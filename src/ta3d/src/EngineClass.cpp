@@ -1303,7 +1303,7 @@ namespace TA3D
 				buf_size = 0;
 			}
 		}
-		glDisableClientState(GL_COLOR_ARRAY); // Couleurs(pour le brouillard de guerre)
+		glDisableClientState(GL_COLOR_ARRAY); // Colors (for fog of war)
 
 		gfx->unlock();
 
