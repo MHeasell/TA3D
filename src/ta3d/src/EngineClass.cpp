@@ -1141,7 +1141,7 @@ namespace TA3D
 			{
 				int X = x * 2;
 
-				if (!(view_map(x, y) & player_mask))
+				if (!isDiscoveredBy(player_mask, x, y))
 				{
 					if (water)
 					{
@@ -1153,7 +1153,7 @@ namespace TA3D
 				}
 				else
 				{
-					if (!(sight_map(x, y) & player_mask))
+					if (!isInSightOf(player_mask, x, y))
 					{
 						if (map_data(X, Y).isUnderwater() || map_data(X, Y | 1).isUnderwater() || map_data(X | 1, Y).isUnderwater() || map_data(X | 1, Y | 1).isUnderwater())
 							view(x, y) = 2;
@@ -1322,12 +1322,12 @@ namespace TA3D
 					Z = Y + get_zdec_notest(X, Y);
 					if (Z >= heightInHeightmapTiles - 1)
 						Z = heightInHeightmapTiles - 2;
-					if (!(view_map(x, Z / 2) & player_mask))
+					if (!isDiscoveredBy(player_mask, x, Z / 2))
 					{
 						color[0] = color[1] = color[2] = 0;
 						++black;
 					}
-					else if (!(sight_map(x, Z / 2) & player_mask))
+					else if (!isInSightOf(player_mask, x, Z / 2))
 					{
 						color[0] = color[1] = color[2] = 127;
 						++grey;
@@ -1337,12 +1337,12 @@ namespace TA3D
 						Z = Y + get_zdec_notest(X + 2, Y);
 						if (Z >= heightInHeightmapTiles - 1)
 							Z = heightInHeightmapTiles - 2;
-						if (!(view_map(x + 1, Z / 2) & player_mask))
+						if (!isDiscoveredBy(player_mask, x + 1, Z / 2))
 						{
 							color[8] = color[9] = color[10] = 0;
 							++black;
 						}
-						else if (!(sight_map(x + 1, Z / 2) & player_mask))
+						else if (!isInSightOf(player_mask, x + 1, Z / 2))
 						{
 							color[8] = color[9] = color[10] = 127;
 							++grey;
@@ -1353,12 +1353,12 @@ namespace TA3D
 						Z = Y + 2 + get_zdec_notest(X, Y + 2);
 						if (Z >= heightInHeightmapTiles - 1)
 							Z = heightInHeightmapTiles - 2;
-						if (!(view_map(x, Z / 2) & player_mask))
+						if (!isDiscoveredBy(player_mask, x, Z / 2))
 						{
 							color[24] = color[25] = color[26] = 0;
 							++black;
 						}
-						else if (!(sight_map(x, Z / 2) & player_mask))
+						else if (!isInSightOf(player_mask, x, Z / 2))
 						{
 							color[24] = color[25] = color[26] = 127;
 							++grey;
@@ -1368,12 +1368,12 @@ namespace TA3D
 							Z = Y + 2 + get_zdec_notest(X + 2, Y + 2);
 							if (Z >= heightInHeightmapTiles - 1)
 								Z = heightInHeightmapTiles - 2;
-							if (!(view_map(x + 1, Z / 2) & player_mask))
+							if (!isDiscoveredBy(player_mask, x + 1, Z / 2))
 							{
 								color[32] = color[33] = color[34] = 0;
 								++black;
 							}
-							else if (!(sight_map(x + 1, Z / 2) & player_mask))
+							else if (!isInSightOf(player_mask, x + 1, Z / 2))
 							{
 								color[32] = color[33] = color[34] = 127;
 								++grey;
@@ -1452,6 +1452,16 @@ namespace TA3D
 		glClientActiveTextureARB(GL_TEXTURE0_ARB);
 
 		glPopMatrix();
+	}
+
+	bool MAP::isInSightOf(byte player_mask, unsigned int x, unsigned int z) const
+	{
+		return (sight_map(x, z) & player_mask) != 0;
+	}
+
+	bool MAP::isDiscoveredBy(byte player_mask, unsigned int x, unsigned int z) const
+	{
+		return (view_map(x, z) & player_mask) != 0;
 	}
 
 	Vector3D MAP::hit(Vector3D Pos, Vector3D Dir, bool water, float length, bool allow_out) const // Calculates the intersection of a ray with the map (the ray starts from the top of the map)

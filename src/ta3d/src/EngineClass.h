@@ -396,6 +396,18 @@ namespace TA3D
 		void draw(Camera* cam, byte player_mask);
 
 		Vector3D hit(Vector3D Pos, Vector3D Dir, bool water = true, float length = 200000.0f, bool allow_out = false) const; // Calcule l'intersection d'un rayon avec la carte(le rayon partant du dessus de la carte)
+
+		/**
+		 * Returns true if the graphical tile at the given index
+		 * has been discovered by any players matching the given mask.
+		 */
+		bool isDiscoveredBy(byte player_mask, unsigned int x, unsigned int z) const;
+
+		/**
+		 * Returns true if the graphical tile at the given index
+		 * is in line of sight of any players matching the given mask.
+		 */
+		bool isInSightOf(byte player_mask, unsigned int x, unsigned int z) const;
 	};
 
 	inline float MAP::get_nh(const int x, const int y) const { return ph_map(Math::Clamp(x, 0, widthInHeightmapTiles - 2), Math::Clamp(y, 0, heightInHeightmapTiles - 2)); }
