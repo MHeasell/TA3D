@@ -1311,7 +1311,7 @@ namespace TA3D
 				uint8* color = buf_c + (buf_pos * 4);
 
 				for (int e = 0; e < 36; e += 4)
-					color[e] = color[e | 1] = color[e | 2] = color[e | 3] = 255;
+					color[e] = color[e + 1] = color[e + 2] = color[e + 3] = 255;
 
 				bool is_clean = true;
 				if (fog_of_war != FOW_DISABLED)
