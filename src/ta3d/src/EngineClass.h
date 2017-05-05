@@ -404,44 +404,6 @@ namespace TA3D
 	inline float MAP::get_h(const int x, const int y) const { return h_map(Math::Clamp(x, 0, widthInHeightmapTiles - 2), Math::Clamp(y, 0, heightInHeightmapTiles - 2)); }
 
 	extern MAP* the_map;
-
-	class WATER
-	{
-	public:
-		float map_w;
-		float map_h;
-		float w;
-
-		void init()
-		{
-			map_w = 0.0f;
-			map_h = 0.0f;
-			w = 1.0f;
-		}
-
-		void destroy()
-		{
-			init();
-		}
-
-		WATER()
-		{
-			init();
-		}
-
-		~WATER()
-		{
-			destroy();
-		}
-
-		void build(float m_w, float m_h, float size)
-		{
-			destroy();
-			map_w = m_w;
-			map_h = m_h;
-			w = size;
-		}
-	};
 }
 
 #endif // __TA3D_ENGINE_CL_H__
