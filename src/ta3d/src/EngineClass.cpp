@@ -52,6 +52,13 @@ namespace TA3D
 
 	MAP* the_map = NULL;
 
+	// these are known to be wrong (they should be twice as big)
+	// but other code currently has these values hard-coded.
+	const int MAP::GraphicalTileWidthInPixels = 16;
+	const int MAP::GraphicalTileHeightInPixels = 16;
+	const int MAP::HeightmapTileWidthInPixels = 8;
+	const int MAP::HeightmapTileHeightInPixels = 8;
+
 	void SECTOR::init()
 	{
 		stuff = -1;

@@ -183,6 +183,10 @@ namespace TA3D
 	class MAP : public ObjectSync
 	{
 	public:
+		static const int GraphicalTileWidthInPixels;
+		static const int GraphicalTileHeightInPixels;
+		static const int HeightmapTileWidthInPixels;
+		static const int HeightmapTileHeightInPixels;
 
 		//! Indicates whether the texture is loaded and must be destroyed
 		short ntex;
