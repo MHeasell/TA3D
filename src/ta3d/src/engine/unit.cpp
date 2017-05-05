@@ -5041,8 +5041,9 @@ namespace TA3D
 				}
 				if (found)
 				{
-					Pos.x = float((cur_px << 3) + 4 - the_map->halfWidthInPixels);
-					Pos.z = float((cur_py << 3) + 4 - the_map->halfHeightInPixels);
+					auto worldPosition = the_map->heightmapIndexToWorld(Point<int>(cur_px, cur_py));
+					Pos.x = worldPosition.x;
+					Pos.z = worldPosition.y;
 					if (!mission.empty() && (mission->getFlags() & MISSION_FLAG_MOVE))
 						mission->Flags() |= MISSION_FLAG_REFRESH_PATH;
 				}
