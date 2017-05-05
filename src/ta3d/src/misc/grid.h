@@ -27,8 +27,6 @@ namespace TA3D
 		typedef Type& reference;
 		typedef const Type& const_reference;
 
-		typedef Point<unsigned int> Point;
-
 	public:
 		Grid();
 		Grid(unsigned int w, unsigned int h);
