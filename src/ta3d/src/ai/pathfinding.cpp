@@ -37,8 +37,6 @@
 
 #define PATHFINDER_MAX_LENGTH 500000
 
-//#define DEBUG_PATH
-
 namespace TA3D
 {
 	inline int sq(int a)
@@ -146,9 +144,6 @@ namespace TA3D
 		{
 			stasks[t.UID] = int(tasks.size()) + taskOffset;
 			tasks.push_back(t);
-#ifdef DEBUG_PATH
-			LOG_DEBUG(LOG_PREFIX_PATHS << int(tasks.size()) << " path requests queued");
-#endif
 		}
 
 		if (!isRunning())
@@ -208,14 +203,7 @@ namespace TA3D
 			if (cur.idx >= 0 && units.unit[cur.idx].ID == cur.UID && units.unit[cur.idx].isAlive())
 			{
 				AI::Path path;
-#ifdef DEBUG_PATH
-				uint64 utimer = usectimer();
-#endif
 				findPath(path, cur);
-#ifdef DEBUG_PATH
-				utimer = usectimer() - utimer;
-				LOG_DEBUG(LOG_PREFIX_PATHS << "findPath : " << utimer << " µs");
-#endif
 				path._ready = true;
 
 				Unit* pUnit = &(units.unit[cur.idx]);
