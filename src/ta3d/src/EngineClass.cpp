@@ -503,18 +503,6 @@ namespace TA3D
 
 	void MAP::destroy()
 	{
-		/*------------- Experimental: code for new map format -----------------------*/
-		/*	if (macro_bloc) {
-			for(uint32 y=0;y<macro_h;y++)
-			for(uint32 x=0;x<macro_w;x++)
-			macro_bloc[y][x].destroy();
-			DELETE_ARRAY(macro_bloc[0]);
-			DELETE_ARRAY(macro_bloc);
-			macro_w=0;
-			macro_h=0;
-			}*/
-		/*---------------------------------------------------------------------------*/
-
 		view_map.resize(0, 0);
 		sight_map.resize(0, 0);
 		radar_map.resize(0, 0);
