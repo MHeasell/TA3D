@@ -230,7 +230,7 @@ namespace TA3D
 		//! Map of what has been discovered
 		Grid<byte> view_map;
 
-		//! Map of who is viewing
+		//! Map of what tiles are in sight of each player.
 		Grid<byte> sight_map;
 
 		//! Radar map
