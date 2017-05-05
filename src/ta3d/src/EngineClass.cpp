@@ -1145,7 +1145,7 @@ namespace TA3D
 				{
 					if (water)
 					{
-						if (map_data(X, Y).isUnderwater() && map_data(X, Y | 1).isUnderwater() && map_data(X | 1, Y).isUnderwater() && map_data(X | 1, Y | 1).isUnderwater())
+						if (map_data(X, Y).isUnderwater() && map_data(X, Y + 1).isUnderwater() && map_data(X + 1, Y).isUnderwater() && map_data(X + 1, Y + 1).isUnderwater())
 							view(x, y) = 2;
 						else
 							view(x, y) = 3;
@@ -1155,7 +1155,7 @@ namespace TA3D
 				{
 					if (!isInSightOf(player_mask, x, y))
 					{
-						if (map_data(X, Y).isUnderwater() || map_data(X, Y | 1).isUnderwater() || map_data(X | 1, Y).isUnderwater() || map_data(X | 1, Y | 1).isUnderwater())
+						if (map_data(X, Y).isUnderwater() || map_data(X, Y + 1).isUnderwater() || map_data(X + 1, Y).isUnderwater() || map_data(X + 1, Y + 1).isUnderwater())
 							view(x, y) = 2;
 						else
 							view(x, y) = 3;
@@ -1174,37 +1174,37 @@ namespace TA3D
 							features.list.push_back(map_data(X, Y).stuff);
 						}
 					}
-					if (map_data(X | 1, Y).stuff >= 0 && map_data(X | 1, Y).stuff < features.max_features)
+					if (map_data(X + 1, Y).stuff >= 0 && map_data(X + 1, Y).stuff < features.max_features)
 					{
-						if (features.feature[map_data(X | 1, Y).stuff].type < 0)
-							map_data(X | 1, Y).stuff = -1;
+						if (features.feature[map_data(X + 1, Y).stuff].type < 0)
+							map_data(X + 1, Y).stuff = -1;
 						else
 						{
-							features.feature[map_data(X | 1, Y).stuff].draw = true;
-							features.feature[map_data(X | 1, Y).stuff].grey = (view(x, y) & 2) == 2;
-							features.list.push_back(map_data(X | 1, Y).stuff);
+							features.feature[map_data(X + 1, Y).stuff].draw = true;
+							features.feature[map_data(X + 1, Y).stuff].grey = (view(x, y) & 2) == 2;
+							features.list.push_back(map_data(X + 1, Y).stuff);
 						}
 					}
-					if (map_data(X, Y | 1).stuff >= 0 && map_data(X, Y | 1).stuff < features.max_features)
+					if (map_data(X, Y + 1).stuff >= 0 && map_data(X, Y + 1).stuff < features.max_features)
 					{
-						if (features.feature[map_data(X, Y | 1).stuff].type < 0)
-							map_data(X, Y | 1).stuff = -1;
+						if (features.feature[map_data(X, Y + 1).stuff].type < 0)
+							map_data(X, Y + 1).stuff = -1;
 						else
 						{
-							features.feature[map_data(X, Y | 1).stuff].draw = true;
-							features.feature[map_data(X, Y | 1).stuff].grey = (view(x, y) & 2) == 2;
-							features.list.push_back(map_data(X, Y | 1).stuff);
+							features.feature[map_data(X, Y + 1).stuff].draw = true;
+							features.feature[map_data(X, Y + 1).stuff].grey = (view(x, y) & 2) == 2;
+							features.list.push_back(map_data(X, Y + 1).stuff);
 						}
 					}
-					if (map_data(X | 1, Y | 1).stuff >= 0 && map_data(X | 1, Y | 1).stuff < features.max_features)
+					if (map_data(X + 1, Y + 1).stuff >= 0 && map_data(X + 1, Y + 1).stuff < features.max_features)
 					{
-						if (features.feature[map_data(X | 1, Y | 1).stuff].type < 0)
-							map_data(X | 1, Y | 1).stuff = -1;
+						if (features.feature[map_data(X + 1, Y + 1).stuff].type < 0)
+							map_data(X + 1, Y + 1).stuff = -1;
 						else
 						{
-							features.feature[map_data(X | 1, Y | 1).stuff].draw = true;
-							features.feature[map_data(X | 1, Y | 1).stuff].grey = (view(x, y) & 2) == 2;
-							features.list.push_back(map_data(X | 1, Y | 1).stuff);
+							features.feature[map_data(X + 1, Y + 1).stuff].draw = true;
+							features.feature[map_data(X + 1, Y + 1).stuff].grey = (view(x, y) & 2) == 2;
+							features.list.push_back(map_data(X + 1, Y + 1).stuff);
 						}
 					}
 				}
