@@ -21,6 +21,8 @@
 #include <cstdlib>
 #include <cmath>
 
+#include "../stdafx.h"
+
 #define TA3D_MATH_RANDOM_TABLE_SIZE 0x100000U
 #define TA3D_MATH_RANDOM_TABLE_MASK 0x0FFFFFU
 
@@ -48,10 +50,17 @@ namespace TA3D
 			return (a > b) ? b : a;
 		}
 
+		/**
+		 * Clamps the input value to within the given range.
+		 * @param v The value to clamp
+		 * @param m The minimum allowed value
+		 * @param M The maximum allowed value
+		 * @return v, or min or max if v was out of range.
+		 */
 		template <typename T>
-		inline T Clamp(const T& v, const T m, const T M)
+		inline T Clamp(const T& v, const T min, const T max)
 		{
-			return (v > M) ? M : v < m ? m : v;
+			return (v > max) ? max : v < min ? min : v;
 		}
 
 		inline bool IsPowerOfTwo(const int x)
