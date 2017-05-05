@@ -937,140 +937,13 @@ namespace TA3D
 		// Beginning of visible area calculations
 		// ------------------------------------------------------------------
 
-		// First we need the frustum volume
-		static std::vector<Vector3D> frustum;
-		frustum.clear();
-		cam->getFrustum(frustum);
-
-		const int nLinks = 18;
-		const int fLink[][2] = {{0, 1}, {1, 2}, {2, 3}, {0, 2}, {1, 3}, // Front face
-			{4, 5},
-			{5, 6},
-			{6, 7},
-			{4, 6},
-			{5, 7}, // Back face
-			{0, 4},
-			{1, 5},
-			{2, 6},
-			{3, 7}, // Sides
-			{0, 6},
-			{1, 7},
-			{0, 5},
-			{2, 7}}; // NB: fLink[i][0] < fLink[i][1] for all possible i
-
-		// Once we have the frustum volume, we compute the intersection between this volume and the map "plane" (y = ymin, then y = ymax)
-		// So we need to know what is below yref and what is above (maybe we'll have nothing to render)
-		std::vector<int> xMin; // Those vectors will store the visible lines
-		std::vector<int> xMax;
-		xMin.resize(heightInGraphicalTiles, -1); // Initializing values to -1 ensure we won't render blank lines
-		xMax.resize(heightInGraphicalTiles, -1);
-		int n = 0;
-		int x1 = widthInGraphicalTiles - 1;
-		int y1 = heightInGraphicalTiles - 1;
-		int x2 = 0;
-		int y2 = 0;
-		float ymin = 0.0f;
-		float ymax = 0.0f;
-		for (unsigned int i = 0; i < frustum.size(); ++i)
-		{
-			const int x = (int)((frustum[i].x + (float)halfWidthInPixels) * 0.0625f);
-			const int y = (int)((frustum[i].z + (float)halfHeightInPixels) * 0.0625f);
-			x1 = Math::Min(x1, x);
-			y1 = Math::Min(y1, y);
-			x2 = Math::Max(x2, x);
-			y2 = Math::Max(y2, y);
-			if (i == 0)
-				ymin = ymax = frustum[i].y;
-			ymin = Math::Min(ymin, frustum[i].y);
-			ymax = Math::Max(ymax, frustum[i].y);
-		}
-		ymin = Math::Max(ymin, 0.0f);
-		ymax = Math::Min(ymax, 255.0f * H_DIV);
-		{
-			const float my = ymin;
-			const float My = ymax;
-			ymin = 0.9f * my + 0.1f * My;
-			ymax = 0.1f * my + 0.9f * My;
-		}
-		for (int yRefIndex = 0; yRefIndex < 2; ++yRefIndex)
-		{
-			float yref = 0.; // We must cover the extreme values to ensure everything that should be rendered will be rendered
-			switch (yRefIndex)
-			{
-				case 0:
-					yref = ymin;
-					break;
-				case 1:
-					yref = ymax;
-					break;
-			}
-			bool bFrustum[8];
-			for (unsigned int i = 0; i < frustum.size(); ++i)
-			{
-				if ((bFrustum[i] = (frustum[i].y > yref)))
-					++n;
-			}
-			if (!n)
-				continue;
-
-			bool bLink[18];
-			for (int i = 0; i < nLinks; i++) // Detect intersection of links and map plane
-				bLink[i] = bFrustum[fLink[i][0]] ^ bFrustum[fLink[i][1]];
-			float zOffset = yref * tnt_transform * H_DIV;
-			for (int i = 0; i < nLinks; ++i)
-			{
-				if (bLink[i])
-				{
-					Vector3D A = frustum[fLink[i][0]];
-					Vector3D B = frustum[fLink[i][1]];
-					if (fabsf(A.y - B.y) < 0.1f)
-						continue;
-					Vector3D I = A + (yref - A.y) / (B.y - A.y) * (B - A);
-					I.z -= zOffset;
-					const int X0 = (int)((I.x + (float)halfWidthInPixels) * 0.0625f + 0.5f);
-					const int Y0 = (int)((I.z + (float)halfHeightInPixels) * 0.0625f + 0.5f);
-					x1 = Math::Min(x1, X0);
-					y1 = Math::Min(y1, Y0);
-					x2 = Math::Max(x2, X0);
-					y2 = Math::Max(y2, Y0);
-					for (int e = i + 1; e < nLinks; ++e)
-					{
-						if (fLink[i][0] == fLink[e][0] || fLink[i][0] == fLink[e][1] || fLink[i][1] == fLink[e][0] || fLink[i][1] == fLink[e][1]) // We have detected a border of the visible area
-						{
-							Vector3D C = frustum[fLink[e][0]];
-							Vector3D D = frustum[fLink[e][1]];
-							if (fabsf(C.y - D.y) < 0.1f)
-								continue;
-							Vector3D J = C + (yref - C.y) / (D.y - C.y) * (D - C);
-							J.z -= zOffset;
-							const int X1 = (int)((J.x + (float)halfWidthInPixels) * 0.0625f + 0.5f);
-							const int Y1 = (int)((J.z + (float)halfHeightInPixels) * 0.0625f + 0.5f);
-							x1 = Math::Min(x1, X1);
-							y1 = Math::Min(y1, Y1);
-							x2 = Math::Max(x2, X1);
-							y2 = Math::Max(y2, Y1);
-							renderLine(xMin, xMax, X0, Y0, X1, Y1, widthInGraphicalTiles - 1);
-						}
-					}
-				}
-			}
-		}
-
-		if (!n) // Nothing to render we can safely give up here
-		{
-			gfx->unlock();
-			glPopMatrix();
-			return;
-		}
-
-		x1 = Math::Max(x1, 0);
-		x2 = Math::Max(x2, 0);
-		y1 = Math::Max(y1, 0);
-		y2 = Math::Max(y2, 0);
-		x1 = Math::Min(x1, widthInGraphicalTiles - 1);
-		x2 = Math::Min(x2, widthInGraphicalTiles - 1);
-		y1 = Math::Min(y1, heightInGraphicalTiles - 1);
-		y2 = Math::Min(y2, heightInGraphicalTiles - 1);
+		Vector3D cameraExtents(cam->viewportWidth() / 2.0f, 0.0f, cam->viewportHeight() / 2.0f);
+		auto topLeft = worldToGraphicalTileIndex(cam->position() - cameraExtents);
+		auto bottomRight = worldToGraphicalTileIndex(cam->position() + cameraExtents);
+		int x1 = Math::Clamp(topLeft.x, 0, widthInGraphicalTiles - 1);
+		int y1 = Math::Clamp(topLeft.y, 0, heightInGraphicalTiles - 1);
+		int x2 = Math::Clamp(bottomRight.x, 0, widthInGraphicalTiles - 1);
+		int y2 = Math::Clamp(bottomRight.y, 0, heightInGraphicalTiles - 1);
 
 		// ------------------------------------------------------------------
 		// End of visible area calculations
@@ -1128,16 +1001,7 @@ namespace TA3D
 			ox = x1;
 			bool was_clean = false;
 
-			int rx1 = xMin[y];
-			int rx2 = xMax[y];
-			if (rx1 == -1 || rx2 == -1)
-				continue;
-			if (rx1 > 0)
-				rx1--;
-			if (rx2 < widthInGraphicalTiles - 1)
-				rx2++;
-
-			for (int x = rx1; x <= rx2; ++x)
+			for (int x = x1; x <= x2; ++x)
 			{
 				int X = x * 2;
 
