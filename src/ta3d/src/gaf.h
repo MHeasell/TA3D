@@ -216,7 +216,7 @@ namespace TA3D
 
 			void loadGAFFromDirectory(const String& folderName, const String& entryName);
 
-			void convert(bool NO_FILTER = false, bool COMPRESSED = false);
+			void convert(bool NO_FILTER = false);
 
 			void clean();
 

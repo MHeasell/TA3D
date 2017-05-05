@@ -679,7 +679,7 @@ namespace TA3D
 		name.clear();
 	}
 
-	void Gaf::Animation::convert(bool NO_FILTER, bool COMPRESSED)
+	void Gaf::Animation::convert(bool NO_FILTER)
 	{
 		if (pAnimationConverted)
 			return;
