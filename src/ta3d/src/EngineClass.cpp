@@ -1209,7 +1209,7 @@ namespace TA3D
 					}
 				}
 
-				// Si le joueur ne peut pas voir ce morceau, on ne le dessine pas en clair
+				// If the player can not see this piece, it is not drawn in clear
 				T.x += float(x << 4);
 				const int i = bmap(x, y);
 
