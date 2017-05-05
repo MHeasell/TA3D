@@ -1118,8 +1118,8 @@ namespace TA3D
 		Vector3D V;
 		for (int y = y1; y <= y2; ++y) // Scans blocks that can be seen to draw those that are visible
 		{
-			const int pre_y = y << 4;
-			const int Y = y << 1;
+			const int pre_y = y * 16;
+			const int Y = y * 2;
 			const int pre_y2 = y * widthInGraphicalTiles;
 			T.x = (float)-halfWidthInPixels;
 			T.y = 0.0f;
@@ -1139,7 +1139,7 @@ namespace TA3D
 
 			for (int x = rx1; x <= rx2; ++x)
 			{
-				int X = x << 1;
+				int X = x * 2;
 
 				if (!(view_map(x, y) & player_mask))
 				{
@@ -1210,7 +1210,7 @@ namespace TA3D
 				}
 
 				// If the player can not see this piece, it is not drawn in clear
-				T.x += float(x << 4);
+				T.x += float(x * 16);
 				const int i = bmap(x, y);
 
 				bloc[i].point = lvl[pre_y2 + x];
@@ -1308,7 +1308,7 @@ namespace TA3D
 				for (int e = 0; e < 9; ++e) // Copie le bloc
 					buf_p[buf_pos + e] = bloc[i].point[e];
 
-				uint8* color = buf_c + (buf_pos << 2);
+				uint8* color = buf_c + (buf_pos * 4);
 
 				for (int e = 0; e < 36; e += 4)
 					color[e] = color[e | 1] = color[e | 2] = color[e | 3] = 255;
@@ -1322,12 +1322,12 @@ namespace TA3D
 					Z = Y + get_zdec_notest(X, Y);
 					if (Z >= heightInHeightmapTiles - 1)
 						Z = heightInHeightmapTiles - 2;
-					if (!(view_map(x, Z >> 1) & player_mask))
+					if (!(view_map(x, Z / 2) & player_mask))
 					{
 						color[0] = color[1] = color[2] = 0;
 						++black;
 					}
-					else if (!(sight_map(x, Z >> 1) & player_mask))
+					else if (!(sight_map(x, Z / 2) & player_mask))
 					{
 						color[0] = color[1] = color[2] = 127;
 						++grey;
@@ -1337,12 +1337,12 @@ namespace TA3D
 						Z = Y + get_zdec_notest(X + 2, Y);
 						if (Z >= heightInHeightmapTiles - 1)
 							Z = heightInHeightmapTiles - 2;
-						if (!(view_map(x + 1, Z >> 1) & player_mask))
+						if (!(view_map(x + 1, Z / 2) & player_mask))
 						{
 							color[8] = color[9] = color[10] = 0;
 							++black;
 						}
-						else if (!(sight_map(x + 1, Z >> 1) & player_mask))
+						else if (!(sight_map(x + 1, Z / 2) & player_mask))
 						{
 							color[8] = color[9] = color[10] = 127;
 							++grey;
@@ -1353,12 +1353,12 @@ namespace TA3D
 						Z = Y + 2 + get_zdec_notest(X, Y + 2);
 						if (Z >= heightInHeightmapTiles - 1)
 							Z = heightInHeightmapTiles - 2;
-						if (!(view_map(x, Z >> 1) & player_mask))
+						if (!(view_map(x, Z / 2) & player_mask))
 						{
 							color[24] = color[25] = color[26] = 0;
 							++black;
 						}
-						else if (!(sight_map(x, Z >> 1) & player_mask))
+						else if (!(sight_map(x, Z / 2) & player_mask))
 						{
 							color[24] = color[25] = color[26] = 127;
 							++grey;
@@ -1368,12 +1368,12 @@ namespace TA3D
 							Z = Y + 2 + get_zdec_notest(X + 2, Y + 2);
 							if (Z >= heightInHeightmapTiles - 1)
 								Z = heightInHeightmapTiles - 2;
-							if (!(view_map(x + 1, Z >> 1) & player_mask))
+							if (!(view_map(x + 1, Z / 2) & player_mask))
 							{
 								color[32] = color[33] = color[34] = 0;
 								++black;
 							}
-							else if (!(sight_map(x + 1, Z >> 1) & player_mask))
+							else if (!(sight_map(x + 1, Z / 2) & player_mask))
 							{
 								color[32] = color[33] = color[34] = 127;
 								++grey;
@@ -1383,11 +1383,11 @@ namespace TA3D
 					is_clean = grey == 4 || black == 4 || (grey == 0 && black == 0);
 					if (!map_data(X, Y).isFlat())
 					{
-						color[4] = color[5] = color[6] = uint8((color[0] + color[8]) >> 1);
-						color[12] = color[13] = color[14] = uint8((color[0] + color[24]) >> 1);
-						color[20] = color[21] = color[22] = uint8((color[8] + color[32]) >> 1);
-						color[16] = color[17] = color[18] = uint8((color[12] + color[20]) >> 1);
-						color[28] = color[29] = color[30] = uint8((color[24] + color[32]) >> 1);
+						color[4] = color[5] = color[6] = uint8((color[0] + color[8]) / 2);
+						color[12] = color[13] = color[14] = uint8((color[0] + color[24]) / 2);
+						color[20] = color[21] = color[22] = uint8((color[8] + color[32]) / 2);
+						color[16] = color[17] = color[18] = uint8((color[12] + color[20]) / 2);
+						color[28] = color[29] = color[30] = uint8((color[24] + color[32]) / 2);
 					}
 				}
 
@@ -1426,8 +1426,8 @@ namespace TA3D
 					buf_i[index_size++] = GLushort(2 + buf_pos);
 				}
 				was_clean = is_clean;
-				T.x -= float(x << 4);
-				memcpy(buf_t + (buf_pos << 1), bloc[i].texcoord, 72); // texture
+				T.x -= float(x * 16);
+				memcpy(buf_t + (buf_pos * 2), bloc[i].texcoord, 72); // texture
 
 				++buf_size;
 			}
