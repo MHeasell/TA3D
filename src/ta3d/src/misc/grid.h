@@ -40,10 +40,6 @@ namespace TA3D
 		Grid(const Grid&) = delete;
 		Grid& operator=(const Grid&) = delete;
 
-		~Grid()
-		{
-			data.clear();
-		}
 		void resize(unsigned int w, unsigned int h)
 		{
 			this->w = w;
