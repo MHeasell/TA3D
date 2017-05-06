@@ -37,10 +37,9 @@ namespace TA3D
 			resize(w, h);
 		}
 
-	private:
-		Grid(const Grid&) {}
-		Grid& operator=(const Grid&) {}
-	public:
+		Grid(const Grid&) = delete;
+		Grid& operator=(const Grid&) = delete;
+
 		~Grid()
 		{
 			data.clear();
