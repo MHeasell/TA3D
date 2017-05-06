@@ -188,7 +188,6 @@ set(TA3D_LIB_SOURCES
 		misc/files.h
 		misc/grid.cpp
 		misc/grid.h
-		misc/grid.hxx
 		misc/hash_table.h
 		misc/interface.cpp
 		misc/interface.h
