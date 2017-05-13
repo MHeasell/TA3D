@@ -37,6 +37,16 @@ namespace TA3D
 			resize(w, h);
 		}
 
+		Grid(unsigned int w, unsigned int h, const T& value) : w(0U), h(0U), data()
+		{
+			resize(w, h);
+			fill(value);
+		}
+
+		Grid(unsigned int w, unsigned int h, std::vector<T>& data) : w(w), h(h), data(std::move(data))
+		{
+		}
+
 		Grid(const Grid&) = delete;
 		Grid& operator=(const Grid&) = delete;
 
@@ -46,6 +56,8 @@ namespace TA3D
 			this->h = h;
 			data.resize(w * h);
 		}
+
+		bool operator==(const Grid<T>& other);
 
 		inline const_reference operator()(unsigned int x, unsigned int y) const
 		{
@@ -115,6 +127,40 @@ namespace TA3D
 		unsigned int h;
 		Container data;
 	};
+
+	template<class T>
+	bool Grid<T>::operator==(const Grid<T>& other)
+	{
+		if (w != other.w || h != other.h)
+		{
+			return false;
+		}
+
+		return data == other.data;
+	}
+
+	template<class T>
+	std::ostream& operator<<(std::ostream& os, const Grid<T>& grid)
+	{
+		os << "Grid" << std::endl;
+		os << "{" << std::endl;
+
+		int w = grid.getWidth();
+		int h = grid.getHeight();
+		for (int x = 0; x < w; ++x)
+		{
+			os << "    ";
+			for (int y = 0; y < h; ++y)
+			{
+				os << grid(x, y) << ", ";
+			}
+			os << std::endl;
+		}
+
+		os << "}" << std::endl;
+
+		return os;
+	}
 
 	void gaussianFilter(Grid<float>& grid, float sigma);
 }
