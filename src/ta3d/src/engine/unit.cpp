@@ -1563,8 +1563,9 @@ namespace TA3D
 		static const int order_dx[] = {-1, 0, 1, 1, 1, 0, -1, -1};
 		static const int order_dz[] = {-1, -1, -1, 0, 1, 1, 1, 0};
 		int b = -1;
-		const int x = ((int)dir.x + the_map->halfWidthInPixels + 4) >> 3;
-		const int z = ((int)dir.z + the_map->halfHeightInPixels + 4) >> 3;
+		auto heightmapIndex = the_map->worldToHeightmapIndex(dir);
+		const int x = heightmapIndex.x;
+		const int z = heightmapIndex.y;
 		float E = getLocalMapEnergy(cur_px, cur_py);
 		const UnitType* pType = unit_manager.unit_type[type_id];
 		if (moving)

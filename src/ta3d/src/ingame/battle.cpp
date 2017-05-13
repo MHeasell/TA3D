@@ -420,12 +420,11 @@ namespace TA3D
 					if (cursor_type != CURSOR_DEFAULT && click_activation && !IsOnGUI && isShiftKeyDown()) // Remove commands from queue
 					{
 						Vector3D target(cursorOnMap(cam, *map));
-						target.x = float(((int)(target.x) + map->halfWidthInPixels) >> 3);
-						target.z = float(((int)(target.z) + map->halfHeightInPixels) >> 3);
-						target.x = target.x * 8.0f - (float)map->halfWidthInPixels;
-						target.z = target.z * 8.0f - (float)map->halfHeightInPixels;
-						target.y = Math::Max(map->get_unit_h(target.x, target.z), map->sealvl);
-						order_removed = units.remove_order(players.local_human_id, target);
+						auto heightmapIndex = map->worldToHeightmapIndex(target);
+						float computedY = Math::Max(map->get_unit_h(target.x, target.z), map->sealvl);
+						auto snappedTarget = map->heightmapIndexToWorld(heightmapIndex);
+						Vector3D snappedTarget3D(snappedTarget.x, computedY, snappedTarget.y);
+						order_removed = units.remove_order(players.local_human_id, snappedTarget3D);
 					}
 
 					if (cursor_type == CURSOR_MOVE && canguard && pointing != cur_sel_index && units.unit[pointing].isOwnedBy(players.local_human_id))
@@ -503,12 +502,11 @@ namespace TA3D
 			if (cursor_type != CURSOR_DEFAULT && click_activation && !IsOnGUI && isShiftKeyDown() && !order_removed) // Remove commands from queue
 			{
 				Vector3D target(cursorOnMap(cam, *map));
-				target.x = float(((int)(target.x) + map->halfWidthInPixels) >> 3);
-				target.z = float(((int)(target.z) + map->halfHeightInPixels) >> 3);
-				target.x = target.x * 8.0f - (float)map->halfWidthInPixels;
-				target.z = target.z * 8.0f - (float)map->halfHeightInPixels;
-				target.y = Math::Max(map->get_unit_h(target.x, target.z), map->sealvl);
-				order_removed = units.remove_order(players.local_human_id, target);
+				auto heightmapIndex = map->worldToHeightmapIndex(target);
+				float computedY = Math::Max(map->get_unit_h(target.x, target.z), map->sealvl);
+				auto snappedTarget = map->heightmapIndexToWorld(heightmapIndex);
+				Vector3D snappedTarget3D(snappedTarget.x, computedY, snappedTarget.y);
+				order_removed = units.remove_order(players.local_human_id, snappedTarget3D);
 			}
 
 			if (cursor_type == CURSOR_REVIVE && CURSOR_REVIVE != CURSOR_RECLAIM && !rope_selection && click_activation && (!IsOnGUI || IsOnMinimap) && !order_removed) // The cursor orders to resurrect a wreckage
@@ -563,8 +561,9 @@ namespace TA3D
 			if (build >= 0 && cursor_type == CURSOR_DEFAULT && didMouseButtonGoUp(LeftMouseButton) && !IsOnGUI)
 			{
 				Vector3D target(cursorOnMap(cam, *map));
-				pMouseRectSelection.x2 = ((int)(target.x) + map->halfWidthInPixels) >> 3;
-				pMouseRectSelection.y2 = ((int)(target.z) + map->halfHeightInPixels) >> 3;
+				auto heightmapIndex = map->worldToHeightmapIndex(target);
+				pMouseRectSelection.x2 = heightmapIndex.x;
+				pMouseRectSelection.y2 = heightmapIndex.y;
 
 				const int d = Math::Max(abs(pMouseRectSelection.x2 - pMouseRectSelection.x1), abs(pMouseRectSelection.y2 - pMouseRectSelection.y1));
 
@@ -610,8 +609,9 @@ namespace TA3D
 				if (build >= 0 && cursor_type == CURSOR_DEFAULT && didMouseButtonGoDown(LeftMouseButton) && !IsOnGUI) // Giving the order to build a row
 				{
 					Vector3D target(cursorOnMap(cam, *map));
-					pMouseRectSelection.x1 = ((int)(target.x) + map->halfWidthInPixels) >> 3;
-					pMouseRectSelection.y1 = ((int)(target.z) + map->halfHeightInPixels) >> 3;
+					auto heightmapIndex = map->worldToHeightmapIndex(target);
+					pMouseRectSelection.x1 = heightmapIndex.x;
+					pMouseRectSelection.y1 = heightmapIndex.y;
 					click_activated = true;
 				}
 			}
@@ -2099,8 +2099,9 @@ namespace TA3D
 	int Battle::pickFeature() const
 	{
 		Vector3D cur_pos(cursorOnMap(cam, *map, IsOnMinimap));
-		const int px = ((int)(cur_pos.x + (float) map->halfWidthInPixels)) >> 3;
-		const int py = ((int)(cur_pos.z + (float) map->halfHeightInPixels)) >> 3;
+		auto heightmapIndex = map->worldToHeightmapIndex(cur_pos);
+		const int px = heightmapIndex.x;
+		const int py = heightmapIndex.y;
 
 		if (px >= 0 && px < map->widthInHeightmapTiles && py >= 0 && py < map->heightInHeightmapTiles && (
 			map->view_map(px >> 1, py >> 1) & (1 << players.local_human_id)))

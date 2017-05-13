@@ -231,8 +231,9 @@ namespace TA3D
 		int hit_idx = -1;
 		if (!dying && !hit)
 		{
-			const int py = ((int)(OPos.z) + the_map->halfHeightInPixels) >> 3;
-			const int px = ((int)(OPos.x) + the_map->halfWidthInPixels) >> 3;
+			auto heightmapIndex = the_map->worldToHeightmapIndex(OPos);
+			const int py = heightmapIndex.y;
+			const int px = heightmapIndex.x;
 			Vector3D Dir(V);
 			Dir.normalize();
 			std::deque<BVH_UnitTKit::T> neighbors;

@@ -109,8 +109,9 @@ namespace TA3D
 		if (build >= 0 && !IsOnGUI) // Display the building we want to build (with nice selection quads)
 		{
 			Vector3D target(cursorOnMap(cam, *map));
-			pMouseRectSelection.x2 = ((int)(target.x) + map->halfWidthInPixels) >> 3;
-			pMouseRectSelection.y2 = ((int)(target.z) + map->halfHeightInPixels) >> 3;
+			auto heightmapIndex = map->worldToHeightmapIndex(target);
+			pMouseRectSelection.x2 = heightmapIndex.x;
+			pMouseRectSelection.y2 = heightmapIndex.y;
 
 			if (isMouseButtonUp(LeftMouseButton))
 			{
