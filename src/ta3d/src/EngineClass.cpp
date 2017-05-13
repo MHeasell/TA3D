@@ -503,17 +503,8 @@ namespace TA3D
 
 	void MAP::destroy()
 	{
-		view_map.resize(0, 0);
-		sight_map.resize(0, 0);
-		radar_map.resize(0, 0);
-		sonar_map.resize(0, 0);
-
 		ota_data.destroy();
-		view.resize(0, 0);
-		map_data.resize(0, 0);
-		ph_map.resize(0, 0);
-		h_map.resize(0, 0);
-		bmap.resize(0, 0);
+
 		if (ntex > 0)
 		{
 			for (int i = 0; i < ntex; i++)
