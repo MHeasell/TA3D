@@ -381,8 +381,9 @@ namespace TA3D
 		{
 			if (damage < 0.0f)
 				damage = float(weapon_def->damage);
-			const int py = (int(OPos.z) + the_map->halfHeightInPixels) >> 3;
-			const int px = (int(OPos.x) + the_map->halfWidthInPixels) >> 3;
+			auto heightTileIndex = the_map->worldToHeightmapIndex(OPos);
+			const int py = heightTileIndex.y;
+			const int px = heightTileIndex.x;
 			const int s = (weapon_def->areaofeffect + 31) >> 5;
 			const int d = (weapon_def->areaofeffect * weapon_def->areaofeffect + 15) >> 4;
 			std::deque<BVH_UnitTKit::T> neighbors;
@@ -561,8 +562,9 @@ namespace TA3D
 			}
 			else if (hit && Math::AlmostEquals(Pos.y, the_map->sealvl))
 			{
-				const int px = ((int)(Pos.x + 0.5f) + the_map->halfWidthInPixels) >> 4;
-				const int py = ((int)(Pos.z + 0.5f) + the_map->halfHeightInPixels) >> 4;
+				auto tileIndex = the_map->worldToGraphicalTileIndex(Pos);
+				const int px = tileIndex.x;
+				const int py = tileIndex.y;
 				Vector3D P = Pos;
 				P.y += 3.0f;
 				if (px >= 0 && px < the_map->widthInGraphicalTiles && py >= 0 && py < the_map->heightInGraphicalTiles)
@@ -614,8 +616,9 @@ namespace TA3D
 
 		visible = false;
 
-		const int px = ((int)(Pos.x + 0.5f) + the_map->halfWidthInPixels) >> 4;
-		const int py = ((int)(Pos.z + 0.5f) + the_map->halfHeightInPixels) >> 4;
+		auto tileIndex = the_map->worldToGraphicalTileIndex(Pos);
+		const int px = tileIndex.x;
+		const int py = tileIndex.y;
 		if (px < 0 || py < 0 || px >= the_map->widthInGraphicalTiles || py >= the_map->heightInGraphicalTiles)
 			return;
 		const byte player_mask = byte(1 << players.local_human_id);
