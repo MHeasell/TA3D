@@ -744,8 +744,9 @@ namespace TA3D
 	{
 		gfx->lock();
 
-		px >>= 1;
-		py >>= 1;
+		// convert from heightmap tile index to graphical tile index
+		px /= 2;
+		py /= 2;
 
 		// Update jamming maps
 		if (jamming)
