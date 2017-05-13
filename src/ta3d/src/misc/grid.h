@@ -30,7 +30,6 @@ namespace TA3D
 	public:
 		Grid() : w(0U), h(0U), data()
 		{
-			resize(1U, 1U);
 		}
 		Grid(unsigned int w, unsigned int h) : w(0U), h(0U), data()
 		{

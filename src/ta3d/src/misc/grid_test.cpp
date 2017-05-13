@@ -5,31 +5,44 @@ namespace TA3D
 {
 	TEST_CASE("Grid")
 	{
-		Grid<int> g(3, 4);
-
-		SECTION("has the given width and height")
+		SECTION("when constructed")
 		{
-			REQUIRE(g.getWidth() == 3);
-			REQUIRE(g.getHeight() == 4);
-		}
+			Grid<int> g(3, 4);
 
-		SECTION("can be written to")
-		{
-			g(0, 0) = 2;
-			g(2, 3) = 10;
-			REQUIRE(g(0, 0) == 2);
-			REQUIRE(g(2, 3) == 10);
-		}
-
-		SECTION("can be filled")
-		{
-			g.fill(5);
-			for (int i = 0; i < 3; ++i)
+			SECTION("has the given width and height")
 			{
-				for (int j = 0; j < 4; ++j)
+				REQUIRE(g.getWidth() == 3);
+				REQUIRE(g.getHeight() == 4);
+			}
+
+			SECTION("can be written to")
+			{
+				g(0, 0) = 2;
+				g(2, 3) = 10;
+				REQUIRE(g(0, 0) == 2);
+				REQUIRE(g(2, 3) == 10);
+			}
+
+			SECTION("can be filled")
+			{
+				g.fill(5);
+				for (int i = 0; i < 3; ++i)
 				{
-					REQUIRE(g(i, j) == 5);
+					for (int j = 0; j < 4; ++j)
+					{
+						REQUIRE(g(i, j) == 5);
+					}
 				}
+			}
+		}
+
+		SECTION("zero-argument ctor")
+		{
+			SECTION("constructs an empty grid")
+			{
+				Grid<int> g;
+				REQUIRE(g.getWidth() == 0);
+				REQUIRE(g.getHeight() == 0);
 			}
 		}
 	}
