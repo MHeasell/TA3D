@@ -1321,8 +1321,9 @@ namespace TA3D
 		if (!visible)
 		{
 			const Vector3D S_Pos = render.Pos - (h / Dir.y) * Dir; //the_map->hit(Pos,Dir);
-			const int px = ((int)(S_Pos.x) + the_map->halfWidthInPixels) >> 4;
-			const int py = ((int)(S_Pos.z) + the_map->halfHeightInPixels) >> 4;
+			auto tileIndex = the_map->worldToGraphicalTileIndex(S_Pos);
+			const int px = tileIndex.x;
+			const int py = tileIndex.y;
 			if (px < 0 || py < 0 || px >= the_map->widthInGraphicalTiles || py >= the_map->heightInGraphicalTiles)
 			{
 				pMutex.unlock();
@@ -1392,8 +1393,9 @@ namespace TA3D
 		if (!visible)
 		{
 			const Vector3D S_Pos(render.Pos - (h / Dir.y) * Dir); //the_map->hit(Pos,Dir);
-			const int px = ((int)(S_Pos.x + (float)the_map->halfWidthInPixels)) >> 4;
-			const int py = ((int)(S_Pos.z + (float)the_map->halfHeightInPixels)) >> 4;
+			auto tileIndex = the_map->worldToGraphicalTileIndex(S_Pos);
+			const int px = tileIndex.x;
+			const int py = tileIndex.y;
 			if (px < 0 || py < 0 || px >= the_map->widthInGraphicalTiles || py >= the_map->heightInGraphicalTiles)
 			{
 				pMutex.unlock();
