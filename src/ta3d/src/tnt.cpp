@@ -157,7 +157,7 @@ namespace TA3D
 		++(map->mini_w);
 		++(map->mini_h);
 		gfx->set_texture_format(gfx->defaultTextureFormat_RGB());
-		map->glmini = gfx->make_texture(map->mini, FILTER_LINEAR, true);
+		map->glmini = TextureHandle(gfx, gfx->make_texture(map->mini, FILTER_LINEAR, true));
 
 		LOG_INFO("minimap read in " << float(MILLISECONDS_SINCE_INIT - event_timer) * 0.001f << "s.");
 

@@ -267,7 +267,7 @@ namespace TA3D
 		SDL_Surface* mini;
 
 		//! OpenGL texture for the minimap
-		GLuint glmini;
+		TextureHandle glmini;
 		int mini_w;
 		int mini_h;
 

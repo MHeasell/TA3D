@@ -130,7 +130,7 @@ namespace TA3D
 		ph_map.resize(0, 0);
 		map_data.resize(0, 0);
 		sealvl = 0.0f;
-		glmini = 0;
+		glmini.reset();
 		lvl = NULL;
 		water = true;
 		tnt = false; // Laisse la possibilité de créer un autre format de cartes
@@ -528,7 +528,6 @@ namespace TA3D
 		}
 		if (mini)
 		{
-			gfx->destroy_texture(glmini);
 			SDL_FreeSurface(mini);
 		}
 		init();
@@ -628,7 +627,7 @@ namespace TA3D
 		y1 += (h - rh) >> 1;
 		const float lw = (float)mini_w / 252.0f;
 		const float lh = (float)mini_h / 252.0f;
-		gfx->drawtexture(glmini, (float)x1, (float)y1, (float)x1 + (float)rw, (float)y1 + (float)rh, 0.0f, 0.0f, lw, lh);
+		gfx->drawtexture(glmini.get(), (float)x1, (float)y1, (float)x1 + (float)rw, (float)y1 + (float)rh, 0.0f, 0.0f, lw, lh);
 
 		if (rh == 0 || rw == 0)
 			return;
