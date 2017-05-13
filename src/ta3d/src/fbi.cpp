@@ -702,9 +702,9 @@ namespace TA3D
 		WorkerTime = parseIntDef("UNITINFO.WorkerTime", 1);
 		Builder = parseBool("UNITINFO.Builder") | parseBool("UNITINFO.canbuild");
 		ThreeD = parseBoolDef("UNITINFO.ThreeD", true);
-		SightDistance = parseIntDef("UNITINFO.SightDistance", 100) >> 1;
-		RadarDistance = parseInt("UNITINFO.RadarDistance") >> 1;
-		RadarDistanceJam = parseInt("UNITINFO.RadarDistanceJam") >> 1;
+		SightDistance = parseIntDef("UNITINFO.SightDistance", 100) / 2;
+		RadarDistance = parseInt("UNITINFO.RadarDistance") / 2;
+		RadarDistanceJam = parseInt("UNITINFO.RadarDistanceJam") / 2;
 		soundcategory = parseString("UNITINFO.SoundCategory");
 		if (!parseString("UNITINFO.wthi_badTargetCategory").empty())
 		{
