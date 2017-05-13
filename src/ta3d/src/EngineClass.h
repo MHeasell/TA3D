@@ -221,22 +221,25 @@ namespace TA3D
 		//! Maximum derivative of the height map
 		Grid<float> slope;
 
-		//! Energy of the map used by the pathfinder and units when following a path
+		/**
+		 * Energy of the map used by the pathfinder and units when following a path.
+		 * One tile corresponds to one heightmap tile.
+		 */
 		Grid<float> energy;
 
-		//! A map used by the pathfinder to detect blocking objets
+		//! A map used by the pathfinder to detect blocking objects. One tile corresponds to one heightmap tile.
 		Grid<bool> obstacles;
 
-		//! Map of what has been discovered
+		//! Map of what has been discovered. One view map tile corresponds to one graphical tile.
 		Grid<byte> view_map;
 
-		//! Map of what tiles are in sight of each player.
+		//! Map of what tiles are in sight of each player. One sight tile corresponds to one graphical tile.
 		Grid<byte> sight_map;
 
-		//! Radar map
+		//! Radar map. One radar tile corresponds to one graphical tile.
 		Grid<byte> radar_map;
 
-		//! Sonar map
+		//! Sonar map. One sonar tile corresponds to one graphical tile.
 		Grid<byte> sonar_map;
 
 		//! Width of the map in pixels. (Really *half* the width, I'm working on it.)
