@@ -1825,37 +1825,6 @@ namespace TA3D
 					if (speed > pType->MaxVelocity)
 						V = pType->MaxVelocity / speed * V;
 				}
-				//				if (!(dist < 15.0f && fabsf( Angle.y - f_TargetAngle ) >= 1.0f))
-				//				{
-				//					if (fabsf( Angle.y - f_TargetAngle ) >= 45.0f)
-				//					{
-				//						if (J % V > 0.0f && V.length() > pType->BrakeRate * dt)
-				//							V = V - ((( fabsf( Angle.y - f_TargetAngle ) - 35.0f ) / 135.0f + 1.0f) * 0.5f * pType->BrakeRate * dt) * J;
-				//					}
-				//					else
-				//					{
-				//						float speed = V.length();
-				//						float time_to_stop = speed / pType->BrakeRate;
-				//						float min_dist = time_to_stop * (speed-pType->BrakeRate*0.5f*time_to_stop);
-				//						if (min_dist >= dist
-				//							&& mission->Path().length() == 1
-				//							&& !(mission->getFlags() & MISSION_FLAG_DONT_STOP_MOVE)
-				//							&& ( !mission.hasNext()
-				//								 || (mission(1) != MISSION_MOVE
-				//									 && mission(1) != MISSION_PATROL)))	// Brake if needed
-				//							V = V - pType->BrakeRate * dt * J;
-				//						else if (speed < pType->MaxVelocity)
-				//							V = V + pType->Acceleration * dt * J;
-				//						else
-				//							V = pType->MaxVelocity / speed * V;
-				//					}
-				//				}
-				//				else
-				//				{
-				//					float speed = V.length();
-				//					if (speed > pType->MaxVelocity)
-				//						V = pType->MaxVelocity / speed * V;
-				//				}
 			}
 			else if (selfmove)
 			{
@@ -3591,13 +3560,6 @@ namespace TA3D
 									mindist = cur_mindist;
 								if (allowed_to_fire && dist >= cur_mindist * cur_mindist && dist <= cur_maxdist * cur_maxdist && !pType->weapon[i]->interceptor)
 								{
-									//									if (( (weapon[i].state & 3) == WEAPON_FLAG_IDLE || ( (weapon[i].state & 3) != WEAPON_FLAG_IDLE && weapon[i].target != mission->p ) )
-									//										&& ( target_unit == NULL || ( (!pType->weapon[ i ]->toairweapon
-									//																	   || ( pType->weapon[ i ]->toairweapon && target_unit->flying ) )
-									//																	  && !unit_manager.unit_type[target_unit->type_id]->checkCategory( pType->w_badTargetCategory[i] ) ) )
-									//										&& ( ((mission->getFlags() & MISSION_FLAG_COMMAND_FIRE) && (pType->weapon[ i ]->commandfire || !pType->candgun) )
-									//											 || (!(mission->getFlags() & MISSION_FLAG_COMMAND_FIRE) && !pType->weapon[ i ]->commandfire)
-									//											 || pType->weapon[ i ]->dropped ) )
 									if (((weapon[i].state & 3) == WEAPON_FLAG_IDLE || ((weapon[i].state & 3) != WEAPON_FLAG_IDLE && weapon[i].target != target_unit)) && (target_unit == NULL || ((!pType->weapon[i]->toairweapon || (pType->weapon[i]->toairweapon && target_unit->flying)) && !unit_manager.unit_type[target_unit->type_id]->checkCategory(pType->NoChaseCategory))) && (((mission->getFlags() & MISSION_FLAG_COMMAND_FIRE) && (pType->weapon[i]->commandfire || !pType->candgun)) || (!(mission->getFlags() & MISSION_FLAG_COMMAND_FIRE) && !pType->weapon[i]->commandfire) || pType->weapon[i]->dropped))
 									{
 										weapon[i].state = WEAPON_FLAG_AIM;
