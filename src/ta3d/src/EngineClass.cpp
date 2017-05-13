@@ -124,7 +124,6 @@ namespace TA3D
 		tex = NULL;
 		nbbloc = 0;
 		bloc = NULL;
-		mini = NULL;
 		bmap.resize(0, 0);
 		h_map.resize(0, 0);
 		ph_map.resize(0, 0);
@@ -526,10 +525,6 @@ namespace TA3D
 			}
 			DELETE_ARRAY(bloc);
 		}
-		if (mini)
-		{
-			SDL_FreeSurface(mini);
-		}
 		init();
 
 		the_map = NULL;
@@ -616,7 +611,7 @@ namespace TA3D
 
 	void MAP::draw_mini(int x1, int y1, int w, int h, Camera* cam, byte player_mask) // Draw the mini-map
 	{
-		if (!mini)
+		if (!glmini)
 			return; // Check if it exists
 
 		gfx->set_color(0xFFFFFFFF);

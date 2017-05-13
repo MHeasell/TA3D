@@ -102,6 +102,35 @@ namespace TA3D
 
 	} // unnamed namespace
 
+	struct MinimapInfo
+	{
+		int width;
+		int height;
+		TextureHandle texture;
+
+		MinimapInfo(int width, int height, TextureHandle& texture): width(width), height(height), texture(std::move(texture)) {}
+	};
+
+	MinimapInfo loadMinimap(File* file)
+	{
+		int width;
+		int height;
+		*file >> width;
+		*file >> height;
+
+		SDL_Surface* minimapSurface = gfx->create_surface_ex(8, width, height);
+
+		file->read(minimapSurface->pixels, width * height);
+		minimapSurface = convert_format(minimapSurface);
+
+		gfx->set_texture_format(gfx->defaultTextureFormat_RGB());
+		TextureHandle texture(gfx, gfx->make_texture(minimapSurface, FILTER_LINEAR, true));
+
+		SDL_FreeSurface(minimapSurface);
+
+		return MinimapInfo(width, height, texture);
+	}
+
 	MAP* load_tnt_map(File* file)
 	{
 		LOG_DEBUG("MAP: creating MAP object ...");
@@ -134,31 +163,15 @@ namespace TA3D
 		}
 
 		map->sealvl = float(header.sealevel) * H_DIV;
+
 		// Read the minimap
 		LOG_DEBUG("MAP: reading mini map");
 		int event_timer = MILLISECONDS_SINCE_INIT;
-		int w, h;
 		file->seek(header.PTRminimap);
-		*file >> w;
-		*file >> h;
-		map->mini_w = w;
-		map->mini_h = h;
-		map->mini = gfx->create_surface_ex(8, 252, 252);
-		for (y = 0; y < 252; ++y)
-			file->read((char*)map->mini->pixels + y * map->mini->pitch, 252);
-		map->mini = convert_format(map->mini);
-		map->mini_w = 251;
-		map->mini_h = 251;
-		uint32 mask = makecol(0xFC, 0xFC, 0xFC);
-		while (map->mini_w > 0 && ((SurfaceInt(map->mini, map->mini_w, 0) & mask) == makecol(120, 148, 252) || SurfaceInt(map->mini, map->mini_w, 0) == 0))
-			--(map->mini_w);
-		while (map->mini_h > 0 && ((SurfaceInt(map->mini, 0, map->mini_h) & mask) == makecol(120, 148, 252) || SurfaceInt(map->mini, 0, map->mini_h) == 0))
-			--(map->mini_h);
-		++(map->mini_w);
-		++(map->mini_h);
-		gfx->set_texture_format(gfx->defaultTextureFormat_RGB());
-		map->glmini = TextureHandle(gfx, gfx->make_texture(map->mini, FILTER_LINEAR, true));
-
+		auto minimapInfo = loadMinimap(file);
+		map->mini_w = minimapInfo.width;
+		map->mini_h = minimapInfo.height;
+		map->glmini = std::move(minimapInfo.texture);
 		LOG_INFO("minimap read in " << float(MILLISECONDS_SINCE_INIT - event_timer) * 0.001f << "s.");
 
 		// Lit les différents morceaux
