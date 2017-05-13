@@ -161,8 +161,9 @@ namespace TA3D
 
 	AI::Path Pathfinder::directPath(const Vector3D& end)
 	{
-		const int x = ((int)end.x + the_map->halfWidthInPixels) >> 3;
-		const int z = ((int)end.z + the_map->halfHeightInPixels) >> 3;
+		auto heightmapIndex = the_map->worldToHeightmapIndex(end);
+		const int x = heightmapIndex.x;
+		const int z = heightmapIndex.y;
 		AI::Path path;
 		path.push_back(AI::Path::Node(x, z));
 		path.setPos(end);
@@ -256,10 +257,13 @@ namespace TA3D
 
 		MutexLocker mLock(sMutex);
 
-		const int start_x = ((int)task.start.x + the_map->halfWidthInPixels) >> 3;
-		const int start_z = ((int)task.start.z + the_map->halfHeightInPixels) >> 3;
-		const int end_x = ((int)task.end.x + the_map->halfWidthInPixels) >> 3;
-		const int end_z = ((int)task.end.z + the_map->halfHeightInPixels) >> 3;
+		auto startHeightmapIndex = the_map->worldToHeightmapIndex(task.start);
+		const int start_x = startHeightmapIndex.x;
+		const int start_z = startHeightmapIndex.y;
+
+		auto endHeightmapIndex = the_map->worldToHeightmapIndex(task.end);
+		const int end_x = endHeightmapIndex.x;
+		const int end_z = endHeightmapIndex.y;
 
 		static std::vector<AI::Path::Node> nodes;
 		nodes.clear();

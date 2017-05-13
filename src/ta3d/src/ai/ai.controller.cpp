@@ -631,8 +631,9 @@ namespace TA3D
 		if (unit_idx < 0 || unit_idx >= unit_manager.nb_unit)
 			return false;
 
-		int px = (int)(target.x + (float)the_map->halfWidthInPixels + 4.0f) >> 3;
-		int py = (int)(target.z + (float)the_map->halfHeightInPixels + 4.0f) >> 3;
+		auto heightmapIndex = the_map->worldToHeightmapIndex(target);
+		int px = heightmapIndex.x;
+		int py = heightmapIndex.y;
 
 		int spx = px;
 		int spy = py;
