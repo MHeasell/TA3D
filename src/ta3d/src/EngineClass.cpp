@@ -869,34 +869,6 @@ namespace TA3D
 		draw_HD(cam, player_mask);
 	}
 
-	void renderLine(std::vector<int>& xMin, std::vector<int>& xMax, int x0, int y0, int x1, int y1, int xmax)
-	{
-		if (y0 == y1) // We don't need to handle this case here
-			return;
-		if (y0 > y1) // We want y0 < y1
-		{
-			x0 ^= x1;
-			x1 ^= x0;
-			x0 ^= x1;
-			y0 ^= y1;
-			y1 ^= y0;
-			y0 ^= y1;
-		}
-		int ymax = Math::Min((int)y1, (int)xMin.size() - 1);
-		for (int y = Math::Max(y0, 0); y <= ymax; y++)
-		{
-			int x = x0 + (y - y0) * (x1 - x0) / (y1 - y0);
-			if (x < 0)
-				x = 0;
-			else if (x > xmax)
-				x = xmax;
-			if (xMin[y] > x || xMin[y] == -1)
-				xMin[y] = x;
-			if (xMax[y] < x || xMax[y] == -1)
-				xMax[y] = x;
-		}
-	}
-
 	void MAP::draw_HD(Camera* cam, byte player_mask)
 	{
 		glPushMatrix();
