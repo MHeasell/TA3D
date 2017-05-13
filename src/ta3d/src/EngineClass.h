@@ -358,6 +358,19 @@ namespace TA3D
 
 		void drawCircleOnMap(const float x, const float y, const float radius, const uint32 color, const float thickness = 5.0f) const;
 
+		/**
+		 *
+		 * @param player_id
+		 * @param px X position on the heightmap grid
+		 * @param py Y position on the heightmap grid
+		 * @param r vision range in graphical tiles
+		 * @param rd radar range in graphical tiles
+		 * @param sn sonar range in graphical tiles
+		 * @param rd_j radar jam range in graphical tiles
+		 * @param sn_j sonar jam range in graphical tiles
+		 * @param jamming
+		 * @param black
+		 */
 		void update_player_visibility(int player_id, int px, int py, int r, int rd, int sn, int rd_j, int sn_j, bool jamming = false, bool black = false); // r -> sight, rd -> radar range, sn -> sonar range, j for jamming ray
 
 		void draw_mini(int x1 = 0, int y1 = 0, int w = 252, int h = 252, Camera* cam = NULL, byte player_mask = 0xFF); // Dessine la mini-carte
