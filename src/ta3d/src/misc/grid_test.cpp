@@ -33,4 +33,26 @@ namespace TA3D
 			}
 		}
 	}
+
+	TEST_CASE("Grid.circlefill")
+	{
+		SECTION("Fills a circular area in the grid")
+		{
+			std::vector<int> arr {
+				0, 0, 0, 1, 0, 0, 0,
+				0, 1, 1, 1, 1, 1, 0,
+				0, 1, 1, 1, 1, 1, 0,
+				1, 1, 1, 1, 1, 1, 1,
+				0, 1, 1, 1, 1, 1, 0,
+				0, 1, 1, 1, 1, 1, 0,
+				0, 0, 0, 1, 0, 0, 0,
+			};
+			Grid<int> expected(7, 7, arr);
+
+			Grid<int> g(7, 7, 0);
+			g.circlefill(3, 3, 3, 1);
+
+			REQUIRE(g == expected);
+		}
+	}
 }
