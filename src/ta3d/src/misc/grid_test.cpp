@@ -20,5 +20,17 @@ namespace TA3D
 			REQUIRE(g(0, 0) == 2);
 			REQUIRE(g(2, 3) == 10);
 		}
+
+		SECTION("can be filled")
+		{
+			g.fill(5);
+			for (int i = 0; i < 3; ++i)
+			{
+				for (int j = 0; j < 4; ++j)
+				{
+					REQUIRE(g(i, j) == 5);
+				}
+			}
+		}
 	}
 }

@@ -80,7 +80,11 @@ namespace TA3D
 				for (unsigned int i = i0; i < i1; ++i)
 					(*this)(i + x, j + y) -= grid(i, j);
 		}
-		inline void clear(const T& v = T(0))
+
+		/**
+		 * Overwrites every cell in the grid with the given value.
+		 */
+		inline void fill(const T& v)
 		{
 			std::fill(data.begin(), data.end(), v);
 		}

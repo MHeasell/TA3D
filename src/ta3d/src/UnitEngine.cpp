@@ -1711,9 +1711,9 @@ namespace TA3D
 				gfx->lock();
 
 				if (map->fog_of_war & FOW_GREY)
-					map->sight_map.clear(0);
-				map->radar_map.clear(0); // Clear radar map
-				map->sonar_map.clear(0); // Clear sonar map
+					map->sight_map.fill(0);
+				map->radar_map.fill(0); // Clear radar map
+				map->sonar_map.fill(0); // Clear sonar map
 
 				for (size_t i = 0; i < index_list_size; ++i) // update fog of war, radar and sonar data
 					unit[idx_list[i]].draw_on_FOW();

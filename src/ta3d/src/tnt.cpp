@@ -198,26 +198,26 @@ namespace TA3D
 		map->energy.resize(map->widthInHeightmapTiles, map->heightInHeightmapTiles);
 		map->slope.resize(map->widthInHeightmapTiles, map->heightInHeightmapTiles);
 		map->obstacles.resize(map->widthInHeightmapTiles, map->heightInHeightmapTiles);
-		map->obstacles.clear();
+		map->obstacles.fill(false);
 
 		LOG_DEBUG("MAP: creating FOW maps");
 		map->sight_map.resize(map->widthInGraphicalTiles, map->heightInGraphicalTiles); // FOW maps
 		map->view_map.resize(map->widthInGraphicalTiles, map->heightInGraphicalTiles);
 		map->radar_map.resize(map->widthInGraphicalTiles, map->heightInGraphicalTiles);
 		map->sonar_map.resize(map->widthInGraphicalTiles, map->heightInGraphicalTiles);
-		map->view_map.clear(0);
-		map->sight_map.clear(0);
-		map->radar_map.clear(0);
-		map->sonar_map.clear(0);
+		map->view_map.fill(0);
+		map->sight_map.fill(0);
+		map->radar_map.fill(0);
+		map->sonar_map.fill(0);
 
 		LOG_DEBUG("MAP: allocating height maps");
 		map->h_map.resize(map->widthInHeightmapTiles, map->heightInHeightmapTiles);
 		map->ph_map.resize(map->widthInHeightmapTiles, map->heightInHeightmapTiles);
 
 		LOG_DEBUG("MAP: initialising map data");
-		map->path.clear();
+		map->path.fill(0);
 
-		map->view.clear(0);
+		map->view.fill(0);
 		map->nbbloc = header.tiles;		   // Nombre de blocs nécessaires
 		map->bloc = new BLOC[map->nbbloc]; // Alloue la mémoire pour les blocs
 		map->ntex = short(n_bmp);

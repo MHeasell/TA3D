@@ -110,10 +110,10 @@ namespace TA3D
 				macro_h = 0;*/
 
 		/*---------------------------------------------------------------------------*/
-		view_map.clear();
-		sight_map.clear();
-		radar_map.clear();
-		sonar_map.clear();
+		view_map.fill(0);
+		sight_map.fill(0);
+		radar_map.fill(0);
+		sonar_map.fill(0);
 
 		wind = 0.0f;
 		wind_dir = 0.0f;
@@ -552,18 +552,18 @@ namespace TA3D
 		fog_of_war = FOW_flags;
 
 		if (fog_of_war & FOW_BLACK)
-			view_map.clear(0);
+			view_map.fill(0);
 		else
-			view_map.clear(0xFF);
+			view_map.fill(0xFF);
 		if (fog_of_war & FOW_GREY)
-			sight_map.clear(0);
+			sight_map.fill(0);
 		else
-			sight_map.clear(0xFF);
+			sight_map.fill(0xFF);
 
 		if (fog_of_war == FOW_DISABLED)
 		{
-			radar_map.clear(0xFF);
-			sonar_map.clear(0xFF);
+			radar_map.fill(0xFF);
+			sonar_map.fill(0xFF);
 		}
 	}
 
