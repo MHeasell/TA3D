@@ -1407,20 +1407,6 @@ namespace TA3D
 			model[i]->id = i;
 	}
 
-	void ModelManager::create_from_2d(SDL_Surface* bmp, float w, float h, float max_h, const String& filename)
-	{
-		mInternals.lock();
-
-		model_hashtable[ToLower(filename)] = nb_models;
-		name.push_back(filename);
-
-		Model* pModel = new Model;
-		model.push_back(pModel);
-		mInternals.unlock();
-
-		pModel->create_from_2d(bmp, w, h, max_h);
-	}
-
 	void MeshTypeManager::getMeshList(String::Vector& filelist)
 	{
 		if (lMeshExtension == NULL)

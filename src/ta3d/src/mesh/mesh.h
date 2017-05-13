@@ -311,11 +311,6 @@ namespace TA3D
 		/*!
         ** \brief
         */
-		void create_from_2d(SDL_Surface* bmp, float w, float h, float max_h);
-
-		/*!
-        ** \brief
-        */
 		void draw(float t, AnimationData* data_s = NULL, bool sel = false, bool notex = false,
 			bool c_part = false, int p_tex = 0, const Vector3D* target = NULL, Vector3D* upos = NULL,
 			Matrix* M = NULL, float Size = 0.0f, const Vector3D* Center = NULL, bool reverse = false,
@@ -428,11 +423,6 @@ namespace TA3D
         ** \brief
         */
 		void compute_ids();
-
-		/*!
-        ** \brief
-        */
-		void create_from_2d(SDL_Surface* bmp, float w, float h, float max_h, const String& filename);
 
 	public:
 		int nb_models;			   // Nombre de modèles
