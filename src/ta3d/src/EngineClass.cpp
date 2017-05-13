@@ -103,13 +103,6 @@ namespace TA3D
 
 	void MAP::init()
 	{
-		/*------------- Experimental: code for new map format -----------------------*/
-
-		/*		macro_bloc = NULL;
-				macro_w = 0;
-				macro_h = 0;*/
-
-		/*---------------------------------------------------------------------------*/
 		view_map.fill(0);
 		sight_map.fill(0);
 		radar_map.fill(0);
