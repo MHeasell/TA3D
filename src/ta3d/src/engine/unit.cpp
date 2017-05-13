@@ -5118,16 +5118,16 @@ namespace TA3D
 
 		if (jamming)
 		{
-			radar_jam_range = system_activated ? (unit_manager.unit_type[unit_type]->RadarDistanceJam >> 4) : 0;
-			sonar_jam_range = system_activated ? (unit_manager.unit_type[unit_type]->SonarDistanceJam >> 4) : 0;
+			radar_jam_range = system_activated ? (unit_manager.unit_type[unit_type]->RadarDistanceJam / MAP::GraphicalTileWidthInPixels) : 0;
+			sonar_jam_range = system_activated ? (unit_manager.unit_type[unit_type]->SonarDistanceJam / MAP::GraphicalTileWidthInPixels) : 0;
 
 			the_map->update_player_visibility(owner_id, cur_px, cur_py, 0, 0, 0, radar_jam_range, sonar_jam_range, true);
 		}
 		else
 		{
-			uint32 cur_sight = ((int)h + unit_manager.unit_type[unit_type]->SightDistance) >> 4;
-			radar_range = system_activated ? (unit_manager.unit_type[unit_type]->RadarDistance >> 4) : 0;
-			sonar_range = system_activated ? (unit_manager.unit_type[unit_type]->SonarDistance >> 4) : 0;
+			uint32 cur_sight = ((int)h + unit_manager.unit_type[unit_type]->SightDistance) / MAP::GraphicalTileWidthInPixels;
+			radar_range = system_activated ? (unit_manager.unit_type[unit_type]->RadarDistance / MAP::GraphicalTileWidthInPixels) : 0;
+			sonar_range = system_activated ? (unit_manager.unit_type[unit_type]->SonarDistance / MAP::GraphicalTileWidthInPixels) : 0;
 
 			the_map->update_player_visibility(owner_id, cur_px, cur_py, cur_sight, radar_range, sonar_range, 0, 0, false, old_px != cur_px || old_py != cur_py || cur_sight != sight);
 
