@@ -102,10 +102,10 @@ namespace TA3D
 
 	} // unnamed namespace
 
-	MAP* load_tnt_map(File* file) // Charge une map au format TA, extraite d'une archive HPI/UFO
+	MAP* load_tnt_map(File* file)
 	{
 		LOG_DEBUG("MAP: creating MAP object ...");
-		MAP* map = new MAP; // Crée une nouvelle carte
+		MAP* map = new MAP; // Create a new map
 
 		the_map = map;
 
@@ -113,18 +113,18 @@ namespace TA3D
 
 		map->init();
 		map->tnt = true;
-		TNTHEADER_U header_u; // Structure pour l'en-tête du fichier
+		TNTHEADER_U header_u; // Structure for the file header
 
 		LOG_DEBUG("MAP: reading header");
 
 		*file >> header_u;
-		TNTHEADER& header = header_u.header; // Structure pour l'en-tête du fichier
+		TNTHEADER& header = header_u.header; // Structure for the file header
 
 		LOG_DEBUG("MAP: reading TDF table");
 		int* TDF_index = new int[header.tileanims];
 
 		int i, x, y;
-		for (i = 0; i < header.tileanims; ++i) // Crée le tableau pour la correspondance des éléments
+		for (i = 0; i < header.tileanims; ++i) // Create the feature mapping table
 		{
 			file->seek(header.PTRtileanim + 4 + (i * 132));
 			String fname = file->getString();
@@ -134,7 +134,7 @@ namespace TA3D
 		}
 
 		map->sealvl = float(header.sealevel) * H_DIV;
-		// Lit la minimap
+		// Read the minimap
 		LOG_DEBUG("MAP: reading mini map");
 		int event_timer = MILLISECONDS_SINCE_INIT;
 		int w, h;
