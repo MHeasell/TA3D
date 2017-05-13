@@ -464,20 +464,6 @@ namespace TA3D
 		static Model* load(const String& filename);
 		static void getMeshList(String::Vector& filelist);
 	}; // class Archive
-
-//! A simple macro to auto register Mesh classes functionnalities :) (you don't even need to include the headers \o/)
-#define REGISTER_MESH_TYPE(x)                                          \
-	class __class_register_mesh__##x                                   \
-	{                                                                  \
-	public:                                                            \
-		inline __class_register_mesh__##x()                            \
-		{                                                              \
-			TA3D::MeshTypeManager::registerMeshLoader(x::load);        \
-			TA3D::MeshTypeManager::registerMeshExtension(x::getExt()); \
-		}                                                              \
-	};                                                                 \
-	__class_register_mesh__##x __my__##x##__registerer; // Instantiate an object to have it fully functionnal :)
-
 } // namespace TA3D
 
 #endif

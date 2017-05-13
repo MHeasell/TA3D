@@ -37,8 +37,6 @@
 
 namespace TA3D
 {
-	REGISTER_MESH_TYPE(Mesh3DO);
-
 	static bool coupe(int x1, int y1, int dx1, int dy1, int x2, int y2, int dx2, int dy2)
 	{
 		int u1 = x1, v1 = y1, u2 = x2 + dx2, v2 = y2 + dy2;

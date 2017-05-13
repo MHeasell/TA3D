@@ -24,6 +24,7 @@
 #include <vfs/hpi.h>
 #include <gfx/fx.h>
 #include <input/MouseService.h>
+#include <mesh/3do.h>
 #include "vfs/VfsService.h"
 #include "input/KeyboardService.h"
 #include "stdafx.h"			// standard pch inheritance.
@@ -130,6 +131,9 @@ int main(int argc, char* argv[])
 		TA3D::Archive::registerArchiveLoader(Hpi::loader);
 		TA3D::Archive::registerArchiveFinder(RealFS::finder);
 		TA3D::Archive::registerArchiveLoader(RealFS::loader);
+
+		TA3D::MeshTypeManager::registerMeshLoader(Mesh3DO::load);
+		TA3D::MeshTypeManager::registerMeshExtension(Mesh3DO::getExt());
 
 		// set up services
 		KeyboardService keyboardService;
