@@ -384,25 +384,32 @@ namespace TA3D
 					activate();
 				break;
 			case YARD_OPEN:
-				port[type] = sint16(v);
-				if (!the_map->check_rect((((int)(Pos.x + (float)the_map->halfWidthInPixels)) >> 3) - (unit_manager.unit_type[type_id]->FootprintX >> 1),
-						(((int)(Pos.z + (float)the_map->halfHeightInPixels)) >> 3) - (unit_manager.unit_type[type_id]->FootprintZ >> 1),
-						unit_manager.unit_type[type_id]->FootprintX, unit_manager.unit_type[type_id]->FootprintZ, idx))
-					port[type] ^= 1;
+				{
+					port[type] = sint16(v);
+					auto heightmapIndex = the_map->worldToHeightmapIndex(Pos);
+					if (!the_map->check_rect(
+							heightmapIndex.x - (unit_manager.unit_type[type_id]->FootprintX / 2),
+							heightmapIndex.y - (unit_manager.unit_type[type_id]->FootprintZ / 2),
+							unit_manager.unit_type[type_id]->FootprintX,
+							unit_manager.unit_type[type_id]->FootprintZ,
+							idx))
+						port[type] ^= 1;
+				}
 				break;
 			case BUGGER_OFF:
 				port[type] = sint16(v);
 				if (port[type])
 				{
-					const int px = ((int)(Pos.x) + the_map->halfWidthInPixels) >> 3;
-					const int py = ((int)(Pos.z) + the_map->halfHeightInPixels) >> 3;
-					for (int y = py - (unit_manager.unit_type[type_id]->FootprintZ >> 1); y <= py + (unit_manager.unit_type[type_id]->FootprintZ >> 1); y++)
+					auto heightmapIndex = the_map->worldToHeightmapIndex(Pos);
+					const int px = heightmapIndex.x;
+					const int py = heightmapIndex.y;
+					for (int y = py - (unit_manager.unit_type[type_id]->FootprintZ / 2); y <= py + (unit_manager.unit_type[type_id]->FootprintZ / 2); y++)
 					{
-						if (y >= 0 && y < (the_map->heightInGraphicalTiles << 1) - 1)
+						if (y >= 0 && y < the_map->heightInHeightmapTiles - 1)
 						{
-							for (int x = px - (unit_manager.unit_type[type_id]->FootprintX >> 1); x <= px + (unit_manager.unit_type[type_id]->FootprintX >> 1); x++)
+							for (int x = px - (unit_manager.unit_type[type_id]->FootprintX / 2); x <= px + (unit_manager.unit_type[type_id]->FootprintX / 2); x++)
 							{
-								if (x >= 0 && x < (the_map->widthInGraphicalTiles << 1) - 1)
+								if (x >= 0 && x < the_map->widthInHeightmapTiles - 1)
 								{
 									const int cur_idx = the_map->map_data(x, y).unit_idx;
 									if (cur_idx >= 0 && cur_idx < (int)units.max_unit && cur_idx != idx)
