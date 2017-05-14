@@ -574,9 +574,12 @@ namespace TA3D
 
 		const int w = unitType->FootprintX;
 		const int h = unitType->FootprintZ;
-		const int x = (((int)(Pos.x) + the_map->halfWidthInPixels + 4) >> 3) - (w >> 1);
-		const int y = (((int)(Pos.z) + the_map->halfHeightInPixels + 4) >> 3) - (h >> 1);
-		if (x < 0 || y < (((int)the_map->get_zdec(x, 0) + 7) >> 3) || x + w >= the_map->widthInHeightmapTiles - 1 || y + h >= the_map->heightInHeightmapTiles - 1)
+
+		auto heightIndex = the_map->worldToHeightmapIndex(Pos);
+
+		const int x = heightIndex.x - (w / 2);
+		const int y = heightIndex.y - (h / 2);
+		if (x < 0 || y < 0 || x + w >= the_map->widthInHeightmapTiles || y + h >= the_map->heightInHeightmapTiles)
 			return false; // check if it is inside the map
 
 		if (!the_map->check_rect(x, y, w, h, -1))
