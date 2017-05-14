@@ -532,11 +532,12 @@ namespace TA3D
 		if (unit_type_id < 0 || unit_type_id >= unit_manager.nb_unit)
 			return false;
 
-		const int w = unit_manager.unit_type[unit_type_id]->FootprintX;
-		const int h = unit_manager.unit_type[unit_type_id]->FootprintZ;
-		const int x = px - (w >> 1);
-		const int y = py - (h >> 1);
-		if (x < 0 || y < std::max(0, (((int)the_map->get_zdec(x, 0) + 7) >> 3)) || x + w >= the_map->widthInHeightmapTiles - 1 || y + h >= the_map->heightInHeightmapTiles - 1)
+		auto unitType = unit_manager.unit_type[unit_type_id];
+		const int w = unitType->FootprintX;
+		const int h = unitType->FootprintZ;
+		const int x = px - (w / 2);
+		const int y = py - (h / 2);
+		if (x < 0 || y < 0 || x + w >= the_map->widthInHeightmapTiles || y + h >= the_map->heightInHeightmapTiles)
 			return false; // check if it is inside the map
 
 		if (!the_map->check_rect(x, y, w, h, unit_id))
@@ -549,14 +550,14 @@ namespace TA3D
 		if (max_depth > 0.0f && the_map->ota_data.whitefog)
 			return false;
 
-		if (dh > (float)unit_manager.unit_type[unit_type_id]->MaxSlope * H_DIV && !(unit_manager.unit_type[unit_type_id]->canhover && min_depth <= the_map->sealvl))
+		if (dh > (float)unitType->MaxSlope * H_DIV && !(unitType->canhover && min_depth <= the_map->sealvl))
 			return false; // Check the slope, check if hovering too
 
 		// Check if unit can be there
-		if (min_depth < (float)unit_manager.unit_type[unit_type_id]->MinWaterDepth * H_DIV || (!unit_manager.unit_type[unit_type_id]->canhover && max_depth > (float)unit_manager.unit_type[unit_type_id]->MaxWaterDepth * H_DIV))
+		if (min_depth < (float)unitType->MinWaterDepth * H_DIV || (!unitType->canhover && max_depth > (float) unitType->MaxWaterDepth * H_DIV))
 			return false;
 
-		if (!the_map->check_vents(x, y, w, h, unit_manager.unit_type[unit_type_id]->yardmap))
+		if (!the_map->check_vents(x, y, w, h, unitType->yardmap))
 			return false;
 
 		if (the_map->check_lava((x + 1) >> 1, (y + 1) >> 1, (w + 1) >> 1, (h + 1) >> 1))
