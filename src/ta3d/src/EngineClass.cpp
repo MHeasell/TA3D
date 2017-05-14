@@ -205,6 +205,11 @@ namespace TA3D
 		return h;
 	}
 
+	float MAP::get_max_h(Point<int> index) const
+	{
+		return get_max_h(index.x, index.y);
+	}
+
 	float MAP::get_max_rect_h(int x, int y, int w, int h) const
 	{
 		const int x1 = Math::Clamp(x - (w >> 1), 0, widthInHeightmapTiles - 2);
@@ -1308,7 +1313,7 @@ namespace TA3D
 		const float dhm = (float)halfHeightInPixels;
 		Dir = (1.0f * step) * Dir;
 		float len_step = Dir.length();
-		while (((sealvl < Pos.y && water) || !water) && get_max_h((int)(Pos.x + (float)halfWidthInPixels) >> 3, (int)(Pos.z + (float)halfHeightInPixels) >> 3) < Pos.y)
+		while (((sealvl < Pos.y && water) || !water) && get_max_h(worldToHeightmapIndex(Pos)) < Pos.y)
 		{
 			if (nb >= nb_limit || length < 0.0f)
 				return Pos;

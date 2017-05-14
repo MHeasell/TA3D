@@ -409,6 +409,8 @@ namespace TA3D
 
 		float get_max_h(int x, int y) const;
 
+		float get_max_h(Point<int> index) const;
+
 		float get_max_rect_h(int x, int y, int w, int h) const;
 
 		inline float get_zdec(const int x, const int y) const;
