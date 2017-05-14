@@ -3886,7 +3886,7 @@ namespace TA3D
 									mission->getTarget().setPos(Pos + data.data[buildinfo].pos);
 								}
 							}
-							if (port[INBUILDSTANCE]) // && (pType->BMcode || (!pType->BMcode && port[YARD_OPEN] && !port[BUGGER_OFF])))
+							if (port[INBUILDSTANCE])
 							{
 								V.x = 0.0f;
 								V.y = 0.0f;
@@ -3908,8 +3908,6 @@ namespace TA3D
 										p->hp = 0.000001f;
 										p->built = true;
 									}
-									//                                    else
-									//                                        LOG_WARNING(idx << " can't create unit! (`" << __FILE__ << "`:" << __LINE__ << ")");
 								}
 								else if (pType->BMcode)
 									next_mission();
@@ -4255,7 +4253,6 @@ namespace TA3D
 						else
 							for (uint32 i = 0; i < weapon.size(); ++i)
 								if (weapon[i].state == WEAPON_FLAG_IDLE && pType->weapon[i] != NULL && !pType->weapon[i]->commandfire && !pType->weapon[i]->interceptor && (!pType->weapon[i]->toairweapon || (pType->weapon[i]->toairweapon && units.unit[enemy_idx].flying)) && !unit_manager.unit_type[units.unit[enemy_idx].type_id]->checkCategory(pType->NoChaseCategory))
-								//                                        && !unit_manager.unit_type[ units.unit[enemy_idx].type_id ]->checkCategory( pType->w_badTargetCategory[i] ) ) )
 								{
 									weapon[i].state = WEAPON_FLAG_AIM;
 									weapon[i].target = &(units.unit[enemy_idx]);
@@ -4923,7 +4920,6 @@ namespace TA3D
 			weapons.weapon[w_idx].V = pW->weaponvelocity * Dir;
 		else
 			weapons.weapon[w_idx].V = pW->startvelocity * Dir;
-		//        if (pW->dropped || !pW->lineofsight)
 		weapons.weapon[w_idx].V = weapons.weapon[w_idx].V + V;
 		weapons.weapon[w_idx].owner = (byte)owner;
 		weapons.weapon[w_idx].target = target;
