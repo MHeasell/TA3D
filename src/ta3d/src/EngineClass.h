@@ -333,6 +333,17 @@ namespace TA3D
 		Point<int> worldToHeightmapIndex(float x, float z) const;
 
 		/**
+		 * Converts the given XZ coordinates in world space
+		 * to the corresponding coordinate in heightmap space.
+		 * This can (and probably will) be a fractional coordinate
+		 * if the position is part-way through a tile.
+		 *
+		 * This method is valid on inputs that are not inside map boundaries,
+		 * but the resulting coordinate may be outside the grid.
+		 */
+		Vector2D worldToHeightmapSpace(float x, float z) const;
+
+		/**
 		 * Returns the XZ centre of the given heightmap tile in world space.
 		 */
 		Vector2D heightmapIndexToWorld(const Point<int>& heightmapIndex) const;

@@ -152,8 +152,12 @@ namespace TA3D
 	{
 		if (isNaN(x) || isNaN(y))
 			return 0.0f;
-		x = (x + (float)halfWidthInPixels) * 0.125f; // Convert the coordinates
-		y = (y + (float)halfHeightInPixels) * 0.125f;
+
+		// convert the coordinates
+		auto heightSpacePosition = worldToHeightmapSpace(x, y);
+		x = heightSpacePosition.x;
+		y = heightSpacePosition.y;
+
 		const int lx = widthInHeightmapTiles - 1;
 		const int ly = heightInHeightmapTiles - 1;
 		x = Math::Clamp(x, 0.0f, float(widthInHeightmapTiles - 2));
@@ -1473,6 +1477,13 @@ namespace TA3D
 	Point<int> MAP::worldToHeightmapIndex(float x, float z) const
 	{
 		return worldToHeightmapIndex(Vector2D(x, z));
+	}
+
+	Vector2D MAP::worldToHeightmapSpace(float x, float z) const
+	{
+		return Vector2D(
+			(x + halfWidthInPixels) / HeightmapTileWidthInPixels,
+			(z + halfHeightInPixels) / HeightmapTileHeightInPixels);
 	}
 
 	Vector2D MAP::heightmapIndexToWorld(const Point<int>& heightmapIndex) const
