@@ -1235,8 +1235,6 @@ namespace TA3D
 		glPointSize(3.0f);
 
 		const byte mask = byte(1 << players.local_human_id);
-		int b_w = (int)map_w >> 3;
-		int b_h = (int)map_h >> 3;
 		int nb = 0;
 
 		uint32 player_col_32[TA3D_PLAYERS_HARD_LIMIT];
@@ -1266,7 +1264,7 @@ namespace TA3D
 			{
 				const int px = unit[i].cur_px;
 				const int py = unit[i].cur_py;
-				if (px < 0 || py < 0 || px >= b_w || py >= b_h)
+				if (px < 0 || py < 0 || px >= map->widthInHeightmapTiles || py >= map->heightInHeightmapTiles)
 				{
 					units.unit[i].unlock();
 					pMutex.lock();
@@ -1334,7 +1332,7 @@ namespace TA3D
 			pMutex.unlock();
 
 			units.unit[i].lock();
-			if (units.unit[i].cur_px < 0 || units.unit[i].cur_py < 0 || units.unit[i].cur_px >= b_w || units.unit[i].cur_py >= b_h)
+			if (units.unit[i].cur_px < 0 || units.unit[i].cur_py < 0 || units.unit[i].cur_px >= map->widthInHeightmapTiles || units.unit[i].cur_py >= map->heightInHeightmapTiles)
 			{
 				units.unit[i].unlock();
 				pMutex.lock();
