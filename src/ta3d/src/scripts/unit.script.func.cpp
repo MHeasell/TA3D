@@ -386,12 +386,13 @@ namespace TA3D
 			case YARD_OPEN:
 				{
 					port[type] = sint16(v);
+					auto unitType = unit_manager.unit_type[type_id];
 					auto heightmapIndex = the_map->worldToHeightmapIndex(Pos);
 					if (!the_map->check_rect(
-							heightmapIndex.x - (unit_manager.unit_type[type_id]->FootprintX / 2),
-							heightmapIndex.y - (unit_manager.unit_type[type_id]->FootprintZ / 2),
-							unit_manager.unit_type[type_id]->FootprintX,
-							unit_manager.unit_type[type_id]->FootprintZ,
+							heightmapIndex.x - (unitType->FootprintX / 2),
+							heightmapIndex.y - (unitType->FootprintZ / 2),
+							unitType->FootprintX,
+							unitType->FootprintZ,
 							idx))
 						port[type] ^= 1;
 				}
@@ -400,14 +401,15 @@ namespace TA3D
 				port[type] = sint16(v);
 				if (port[type])
 				{
+					auto unitType = unit_manager.unit_type[type_id];
 					auto heightmapIndex = the_map->worldToHeightmapIndex(Pos);
 					const int px = heightmapIndex.x;
 					const int py = heightmapIndex.y;
-					for (int y = py - (unit_manager.unit_type[type_id]->FootprintZ / 2); y <= py + (unit_manager.unit_type[type_id]->FootprintZ / 2); y++)
+					for (int y = py - (unitType->FootprintZ / 2); y <= py + (unitType->FootprintZ / 2); y++)
 					{
 						if (y >= 0 && y < the_map->heightInHeightmapTiles - 1)
 						{
-							for (int x = px - (unit_manager.unit_type[type_id]->FootprintX / 2); x <= px + (unit_manager.unit_type[type_id]->FootprintX / 2); x++)
+							for (int x = px - (unitType->FootprintX / 2); x <= px + (unitType->FootprintX / 2); x++)
 							{
 								if (x >= 0 && x < the_map->widthInHeightmapTiles - 1)
 								{
