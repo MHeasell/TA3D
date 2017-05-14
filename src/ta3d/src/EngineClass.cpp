@@ -1459,8 +1459,8 @@ namespace TA3D
 		float x = xzPosition.x;
 		float z = xzPosition.y;
 
-		unsigned int newX = static_cast<unsigned int>((x + halfWidthInPixels) / HeightmapTileWidthInPixels);
-		unsigned int newZ = static_cast<unsigned int>((z + halfHeightInPixels) / HeightmapTileHeightInPixels);
+		int newX = static_cast<int>((x + halfWidthInPixels) / HeightmapTileWidthInPixels);
+		int newZ = static_cast<int>((z + halfHeightInPixels) / HeightmapTileHeightInPixels);
 
 		return Point<int>(newX, newZ);
 	}

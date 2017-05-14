@@ -1860,8 +1860,9 @@ namespace TA3D
 																		  // obstacles have moved
 				}
 			}
-			n_px = ((int)(NPos.x) + the_map->halfWidthInPixels + 4) >> 3;
-			n_py = ((int)(NPos.z) + the_map->halfHeightInPixels + 4) >> 3;
+			auto heightmapIndex = the_map->worldToHeightmapIndex(NPos);
+			n_px = heightmapIndex.x;
+			n_py = heightmapIndex.y;
 			precomputed_position = true;
 			bool locked = false;
 			if (!flying)
