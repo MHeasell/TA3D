@@ -570,8 +570,10 @@ namespace TA3D
 		if (unit_type_id < 0 || unit_type_id >= unit_manager.nb_unit)
 			return false;
 
-		const int w = unit_manager.unit_type[unit_type_id]->FootprintX;
-		const int h = unit_manager.unit_type[unit_type_id]->FootprintZ;
+		auto unitType = unit_manager.unit_type[unit_type_id];
+
+		const int w = unitType->FootprintX;
+		const int h = unitType->FootprintZ;
 		const int x = (((int)(Pos.x) + the_map->halfWidthInPixels + 4) >> 3) - (w >> 1);
 		const int y = (((int)(Pos.z) + the_map->halfHeightInPixels + 4) >> 3) - (h >> 1);
 		if (x < 0 || y < (((int)the_map->get_zdec(x, 0) + 7) >> 3) || x + w >= the_map->widthInHeightmapTiles - 1 || y + h >= the_map->heightInHeightmapTiles - 1)
@@ -589,15 +591,15 @@ namespace TA3D
 		if (!the_map->check_rect_discovered(x, y, w, h, 1 << player_id))
 			return false;
 
-		if (dh > (float)unit_manager.unit_type[unit_type_id]->MaxSlope * H_DIV)
+		if (dh > (float)unitType->MaxSlope * H_DIV)
 			return false; // Check the slope
 
 		// Check if unit can be there
-		if (min_depth < (float)unit_manager.unit_type[unit_type_id]->MinWaterDepth * H_DIV || max_depth > (float)unit_manager.unit_type[unit_type_id]->MaxWaterDepth * H_DIV)
+		if (min_depth < (float)unitType->MinWaterDepth * H_DIV || max_depth > (float)unitType->MaxWaterDepth * H_DIV)
 			return false;
-		//	if (depth>0 && (unit_manager.unit_type[unit_type_id]->Category&NOTSUB))	return false;
+		//	if (depth>0 && (unitType->Category&NOTSUB))	return false;
 
-		if (!the_map->check_vents(x, y, w, h, unit_manager.unit_type[unit_type_id]->yardmap))
+		if (!the_map->check_vents(x, y, w, h, unitType->yardmap))
 			return false;
 
 		if (the_map->check_lava((x + 1) >> 1, (y + 1) >> 1, (w + 1) >> 1, (h + 1) >> 1))
