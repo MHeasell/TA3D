@@ -597,7 +597,6 @@ namespace TA3D
 		// Check if unit can be there
 		if (min_depth < (float)unitType->MinWaterDepth * H_DIV || max_depth > (float)unitType->MaxWaterDepth * H_DIV)
 			return false;
-		//	if (depth>0 && (unitType->Category&NOTSUB))	return false;
 
 		if (!the_map->check_vents(x, y, w, h, unitType->yardmap))
 			return false;
