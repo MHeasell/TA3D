@@ -1477,9 +1477,14 @@ namespace TA3D
 
 	Vector2D MAP::heightmapIndexToWorld(const Point<int>& heightmapIndex) const
 	{
-		int x = (heightmapIndex.x * HeightmapTileWidthInPixels) + (HeightmapTileWidthInPixels / 2) - the_map->halfWidthInPixels;
-		int y = (heightmapIndex.y * HeightmapTileHeightInPixels) + (HeightmapTileHeightInPixels / 2) - the_map->halfHeightInPixels;
-		return Vector2D(x, y);
+		return heightmapIndexToWorld(heightmapIndex.x, heightmapIndex.y);
+	}
+
+	Vector2D MAP::heightmapIndexToWorld(int x, int y) const
+	{
+		int newX = (x * HeightmapTileWidthInPixels) + (HeightmapTileWidthInPixels / 2) - the_map->halfWidthInPixels;
+		int newY = (y * HeightmapTileHeightInPixels) + (HeightmapTileHeightInPixels / 2) - the_map->halfHeightInPixels;
+		return Vector2D(newX, newY);
 	}
 
 	Vector2D MAP::heightmapIndexToWorldCorner(const Point<int>& heightmapIndex) const

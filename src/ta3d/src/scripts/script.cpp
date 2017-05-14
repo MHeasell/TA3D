@@ -1172,18 +1172,20 @@ namespace TA3D
 		Feature* feature = feature_manager.getFeaturePointer(feature_type_id);
 		if (feature && !LuaProgram::passive)
 		{
-			const int x = (int)(X + (float)the_map->halfWidthInPixels - 8.0f) >> 3;
-			const int y = (int)(Z + (float)the_map->halfHeightInPixels - 8.0f) >> 3;
-			if (x > 0 && y > 0 && x < (the_map->widthInGraphicalTiles << 1) && y < (the_map->heightInGraphicalTiles << 1))
+			auto heightmapIndex = the_map->worldToHeightmapIndex(X, Z);
+			const int x = heightmapIndex.x;
+			const int y = heightmapIndex.y;
+			if (x > 0 && y > 0 && x < the_map->widthInHeightmapTiles && y < the_map->heightInGraphicalTiles)
 				if (the_map->map_data(x, y).stuff == -1)
 				{
-					Vector3D Pos;
-					Pos.x = float((x << 3) - the_map->halfWidthInPixels) + 8.0f;
-					Pos.z = float((y << 3) - the_map->halfHeightInPixels) + 8.0f;
-					Pos.y = the_map->get_unit_h(Pos.x, Pos.z);
-					the_map->map_data(x, y).stuff = features.add_feature(Pos, feature_type_id);
+					auto worldPos = the_map->heightmapIndexToWorld(x, y);
+					float height = the_map->get_unit_h(worldPos.x, worldPos.y);
+
+					Vector3D finalWorldPos(worldPos.x, height, worldPos.y);
+
+					the_map->map_data(x, y).stuff = features.add_feature(finalWorldPos, feature_type_id);
 					if (feature && the_map->map_data(x, y).stuff != -1 && feature->blocking)
-						the_map->rect(x - (feature->footprintx >> 1), y - (feature->footprintz >> 1), feature->footprintx, feature->footprintz, -2 - the_map->map_data(x, y).stuff);
+						the_map->rect(x - (feature->footprintx / 2), y - (feature->footprintz / 2), feature->footprintx, feature->footprintz, -2 - the_map->map_data(x, y).stuff);
 				}
 		}
 
