@@ -182,12 +182,7 @@ namespace TA3D
 
 		if (unit_id >= 0 && unit_id < (int)units.max_unit && units.unit[unit_id].isOwnedBy(lua_currentPlayerID(L)) && unit_type_id >= 0 && unit_manager.unit_type[unit_type_id]->Builder)
 		{
-			Vector3D target;
-			target.x = float(((int)(pos_x) + the_map->halfWidthInPixels) >> 3);
-			target.z = float(((int)(pos_z) + the_map->halfHeightInPixels) >> 3);
-			target.y = Math::Max(the_map->get_max_rect_h((int)target.x, (int)target.z, unit_manager.unit_type[unit_type_id]->FootprintX, unit_manager.unit_type[unit_type_id]->FootprintZ), the_map->sealvl);
-			target.x = target.x * 8.0f - (float)the_map->halfWidthInPixels;
-			target.z = target.z * 8.0f - (float)the_map->halfHeightInPixels;
+			Vector3D target = the_map->snapToBuildCenter(pos_x, pos_z, unit_type_id);
 
 			units.unit[unit_id].lock();
 			if (units.unit[unit_id].flags)
