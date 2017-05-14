@@ -1470,6 +1470,11 @@ namespace TA3D
 		return worldToHeightmapIndex(Vector2D(position.x, position.z));
 	}
 
+	Point<int> MAP::worldToHeightmapIndex(float x, float z) const
+	{
+		return worldToHeightmapIndex(Vector2D(x, z));
+	}
+
 	Vector2D MAP::heightmapIndexToWorld(const Point<int>& heightmapIndex) const
 	{
 		int x = (heightmapIndex.x * HeightmapTileWidthInPixels) + (HeightmapTileWidthInPixels / 2) - the_map->halfWidthInPixels;
@@ -1515,7 +1520,12 @@ namespace TA3D
 
 	Vector3D MAP::snapToBuildCenter(const Vector3D& position, int unitTypeId) const
 	{
-		auto heightIndex = worldToHeightmapIndex(position);
+		return snapToBuildCenter(position.x, position.z, unitTypeId);
+	}
+
+	Vector3D MAP::snapToBuildCenter(float x, float z, int unitTypeId) const
+	{
+		auto heightIndex = worldToHeightmapIndex(x, z);
 		auto unitType = unit_manager.unit_type[unitTypeId];
 
 		float height = get_max_rect_h(heightIndex.x, heightIndex.y, unitType->FootprintX, unitType->FootprintZ);

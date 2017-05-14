@@ -330,6 +330,8 @@ namespace TA3D
 
 		Point<int> worldToHeightmapIndex(const Vector3D& position) const;
 
+		Point<int> worldToHeightmapIndex(float x, float z) const;
+
 		/**
 		 * Returns the XZ centre of the given heightmap tile in world space.
 		 */
@@ -366,6 +368,8 @@ namespace TA3D
 		 * if you were to build the given type of unit at this location.
 		 */
 		Vector3D snapToBuildCenter(const Vector3D& position, int unitTypeId) const;
+
+		Vector3D snapToBuildCenter(float x, float z, int unitTypeId) const;
 
 		void drawCircleOnMap(const float x, const float y, const float radius, const uint32 color, const float thickness = 5.0f) const;
 
