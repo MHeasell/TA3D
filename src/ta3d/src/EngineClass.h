@@ -336,6 +336,11 @@ namespace TA3D
 		Vector2D heightmapIndexToWorld(const Point<int>& heightmapIndex) const;
 
 		/**
+		 * Returns the XZ position of the top-left corner of the given heightmap tile in world space.
+		 */
+		Vector2D heightmapIndexToWorldCorner(const Point<int>& heightmapIndex) const;
+
+		/**
 		 * Converts the given XZ coordinates in world space
 		 * to the corresponding cell in the graphical tile grid that contains it.
 		 *
@@ -355,6 +360,12 @@ namespace TA3D
 		Vector2D worldToNormalizedMinimapCoordinates(const Vector2D& xzPosition) const;
 
 		Vector2D worldToNormalizedMinimapCoordinates(const Vector3D& position) const;
+
+		/**
+		 * Returns the centre point of the building footprint
+		 * if you were to build the given type of unit at this location.
+		 */
+		Vector3D snapToBuildCenter(const Vector3D& position, int unitTypeId) const;
 
 		void drawCircleOnMap(const float x, const float y, const float radius, const uint32 color, const float thickness = 5.0f) const;
 

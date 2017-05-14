@@ -1477,6 +1477,13 @@ namespace TA3D
 		return Vector2D(x, y);
 	}
 
+	Vector2D MAP::heightmapIndexToWorldCorner(const Point<int>& heightmapIndex) const
+	{
+		int x = (heightmapIndex.x * HeightmapTileWidthInPixels) - the_map->halfWidthInPixels;
+		int y = (heightmapIndex.y * HeightmapTileHeightInPixels) - the_map->halfHeightInPixels;
+		return Vector2D(x, y);
+	}
+
 	Point<int> MAP::worldToGraphicalTileIndex(const Vector2D& xzPosition) const
 	{
 		float x = xzPosition.x;
@@ -1504,5 +1511,21 @@ namespace TA3D
 	Point<int> MAP::worldToGraphicalTileIndex(const Vector3D& position) const
 	{
 		return worldToGraphicalTileIndex(Vector2D(position.x, position.z));
+	}
+
+	Vector3D MAP::snapToBuildCenter(const Vector3D& position, int unitTypeId) const
+	{
+		auto heightIndex = worldToHeightmapIndex(position);
+		auto unitType = unit_manager.unit_type[unitTypeId];
+
+		float height = get_max_rect_h(heightIndex.x, heightIndex.y, unitType->FootprintX, unitType->FootprintZ);
+		if (unitType->floatting())
+		{
+			height = Math::Max(height, sealvl + (unitType->AltFromSeaLevel - unitType->WaterLine) * H_DIV);
+		}
+
+		auto snappedPosition = heightmapIndexToWorldCorner(heightIndex);
+
+		return Vector3D(snappedPosition.x, height, snappedPosition.y);
 	}
 } // namespace TA3D
