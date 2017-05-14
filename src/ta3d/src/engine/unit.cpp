@@ -1467,7 +1467,7 @@ namespace TA3D
 				clear_from_map();
 				flags = 4;
 				pMutex.lock();
-				if (cur_px > 0 && cur_py > 0 && cur_px < (the_map->widthInGraphicalTiles << 1) && cur_py < (the_map->heightInGraphicalTiles << 1))
+				if (cur_px > 0 && cur_py > 0 && cur_px < the_map->widthInHeightmapTiles && cur_py < the_map->heightInHeightmapTiles)
 					if (the_map->map_data(cur_px, cur_py).stuff == -1)
 					{
 						int type = feature_manager.get_feature_index(pType->Corpse);
@@ -1492,7 +1492,7 @@ namespace TA3D
 				clear_from_map();
 				flags = 4;
 				pMutex.lock();
-				if (cur_px > 0 && cur_py > 0 && cur_px < (the_map->widthInGraphicalTiles << 1) && cur_py < (the_map->heightInGraphicalTiles << 1))
+				if (cur_px > 0 && cur_py > 0 && cur_px < the_map->widthInHeightmapTiles && cur_py < the_map->heightInHeightmapTiles)
 					if (the_map->map_data(cur_px, cur_py).stuff == -1)
 					{
 						int type = feature_manager.get_feature_index(String(pType->name) << "_heap");
@@ -2034,7 +2034,7 @@ namespace TA3D
 
 		if (!isBeingBuilt() && pType->isfeature) // Turn this unit into a feature
 		{
-			if (cur_px > 0 && cur_py > 0 && cur_px < (the_map->widthInGraphicalTiles << 1) && cur_py < (the_map->heightInGraphicalTiles << 1))
+			if (cur_px > 0 && cur_py > 0 && cur_px < the_map->widthInHeightmapTiles && cur_py < the_map->heightInHeightmapTiles)
 			{
 				if (the_map->map_data(cur_px, cur_py).stuff == -1)
 				{

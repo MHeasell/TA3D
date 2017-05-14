@@ -336,9 +336,9 @@ namespace TA3D
 		// Charge d'autres données sur les blocs
 		map->water = false;
 		file->seek(header.PTRmapattr);
-		for (y = 0; y < (map->heightInGraphicalTiles << 1); ++y)
+		for (y = 0; y < map->heightInHeightmapTiles; ++y)
 		{
-			for (x = 0; x < (map->widthInGraphicalTiles << 1); ++x)
+			for (x = 0; x < map->widthInHeightmapTiles; ++x)
 			{
 				const int c = byte(file->getc());
 				if (c < header.sealevel)
@@ -386,9 +386,9 @@ namespace TA3D
 		event_timer = MILLISECONDS_SINCE_INIT;
 
 		LOG_DEBUG("MAP: computing height data (step 3)");
-		for (y = 0; y < (map->heightInGraphicalTiles << 1); ++y)
+		for (y = 0; y < map->heightInHeightmapTiles; ++y)
 		{
-			for (x = 0; x < (map->widthInGraphicalTiles << 1); ++x) // Projete la carte du relief
+			for (x = 0; x < map->widthInHeightmapTiles; ++x) // Projete la carte du relief
 			{
 				float h = map->ph_map(x, y);
 				int rec_y = y + int(0.5f - tnt_transform * h / 16.f);
@@ -403,9 +403,9 @@ namespace TA3D
 		}
 
 		LOG_DEBUG("MAP: computing height data (step 4)");
-		for (y = 0; y < (map->heightInGraphicalTiles << 1); ++y)
+		for (y = 0; y < map->heightInHeightmapTiles; ++y)
 		{
-			for (x = 0; x < (map->widthInGraphicalTiles << 1); ++x) // Lisse la carte du relief projeté
+			for (x = 0; x < map->widthInHeightmapTiles; ++x) // Lisse la carte du relief projeté
 			{
 				if (!y && Math::AlmostEquals(map->ph_map(x, y), -1.f))
 				{
@@ -426,11 +426,11 @@ namespace TA3D
 					{
 						float h1 = map->ph_map(x, y - 1);
 						int cy = y;
-						while (cy < (map->heightInGraphicalTiles << 1) && Math::AlmostEquals(map->ph_map(x, cy), -1.f))
+						while (cy < map->heightInHeightmapTiles && Math::AlmostEquals(map->ph_map(x, cy), -1.f))
 							++cy;
 
-						if (cy >= (map->heightInGraphicalTiles << 1))
-							cy = (map->heightInGraphicalTiles << 1) - 1;
+						if (cy >= map->heightInHeightmapTiles)
+							cy = map->heightInHeightmapTiles - 1;
 
 						float h2 = map->ph_map(x, cy);
 						if (Math::AlmostEquals(h2, -1.f))
@@ -444,9 +444,9 @@ namespace TA3D
 
 		LOG_DEBUG("MAP: computing height data (step 5)");
 
-		for (int y = 0; y < (map->heightInGraphicalTiles << 1); ++y) // Compute slopes on the map using height map and projected datas
+		for (int y = 0; y < map->heightInHeightmapTiles; ++y) // Compute slopes on the map using height map and projected datas
 		{
-			for (int x = 0; x < (map->widthInGraphicalTiles << 1); ++x)
+			for (int x = 0; x < map->widthInHeightmapTiles; ++x)
 			{
 				float dh = 0.0f;
 				if (y > 0)
@@ -456,7 +456,7 @@ namespace TA3D
 					dh = Math::Max(dh, std::abs(map->h_map(x, y) - map->h_map(x, y - 1)) * dz);
 				}
 
-				if (y + 1 < (map->heightInGraphicalTiles << 1))
+				if (y + 1 < map->heightInHeightmapTiles)
 				{
 					float dz = fabsf(map->get_zdec(x, y + 1) - map->get_zdec(x, y) + 8.0f);
 					dz = (Math::AlmostZero(dz)) ? 100000000.f : (8.0f / dz);
@@ -465,7 +465,7 @@ namespace TA3D
 
 				if (x > 0)
 					dh = Math::Max(dh, std::abs(map->h_map(x, y) - map->h_map(x - 1, y)));
-				if (x + 1 < (map->widthInGraphicalTiles << 1))
+				if (x + 1 < map->widthInHeightmapTiles)
 					dh = Math::Max(dh, std::abs(map->h_map(x, y) - map->h_map(x + 1, y)));
 
 				map->slope(x, y) = dh;
@@ -481,13 +481,13 @@ namespace TA3D
 		LOG_DEBUG("MAP: reading map features data");
 		// Ajoute divers éléments(végétation,...)
 		file->seek(header.PTRmapattr + 1);
-		for (y = 0; y < (map->heightInGraphicalTiles << 1); ++y)
-			for (x = 0; x < (map->widthInGraphicalTiles << 1); ++x)
+		for (y = 0; y < map->heightInHeightmapTiles; ++y)
+			for (x = 0; x < map->widthInHeightmapTiles; ++x)
 				map->map_data(x, y).stuff = -1;
 		features.destroy();
-		for (y = 0; y < (map->heightInGraphicalTiles << 1); ++y)
+		for (y = 0; y < map->heightInHeightmapTiles; ++y)
 		{
-			for (x = 0; x < (map->widthInGraphicalTiles << 1); ++x)
+			for (x = 0; x < map->widthInHeightmapTiles; ++x)
 			{
 				unsigned short type;
 				*file >> type;
