@@ -32,8 +32,6 @@ namespace TA3D
 		};
 
 	public:
-		typedef int PlayerId;
-
 		//! \name Constructor & Destructor
 		//@{
 		//! Default constructor

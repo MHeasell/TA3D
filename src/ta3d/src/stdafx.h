@@ -55,6 +55,9 @@ namespace TA3D
 	typedef uint8 byte;
 	typedef unsigned char uchar;
 	typedef signed char schar;
+
+	// widely used domain types
+	typedef int PlayerId;
 }
 
 #define DELETE_ARRAY(x)  \
