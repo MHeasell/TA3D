@@ -105,7 +105,7 @@ namespace TA3D
 
 	public:
 		//! Which player is controlling from this machine?
-		int local_human_id;
+		PlayerId local_human_id;
 		//! Who controls this player? (local, remote or AI?)
 		byte control[TA3D_PLAYERS_HARD_LIMIT];
 		//! Names of the players

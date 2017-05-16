@@ -98,7 +98,7 @@ namespace TA3D
 	public:
 		int load(File* file, int dec = 0, const String& filename = String());
 
-		virtual bool draw(float t, AnimationData* data_s = NULL, bool sel_primitive = false, bool alset = false, bool notex = false, int side = 0, bool chg_col = true, bool exploding_parts = false);
+		virtual bool draw(float t, AnimationData* data_s = NULL, bool sel_primitive = false, bool alset = false, bool notex = false, PlayerId side = 0, bool chg_col = true, bool exploding_parts = false);
 		virtual bool draw_nodl(bool alset = false);
 
 		void init3DO();

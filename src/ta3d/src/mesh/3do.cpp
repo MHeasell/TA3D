@@ -567,7 +567,7 @@ namespace TA3D
 		return 0;
 	}
 
-	bool Mesh3DO::draw(float t, AnimationData* data_s, bool sel_primitive, bool alset, bool notex, int side, bool chg_col, bool exploding_parts)
+	bool Mesh3DO::draw(float t, AnimationData* data_s, bool sel_primitive, bool alset, bool notex, PlayerId side, bool chg_col, bool exploding_parts)
 	{
 		bool culling = glIsEnabled(GL_CULL_FACE);
 		glEnable(GL_CULL_FACE);

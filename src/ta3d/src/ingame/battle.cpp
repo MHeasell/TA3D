@@ -1676,7 +1676,7 @@ namespace TA3D
 
 			int last_on = units.last_on;
 
-			map->draw_mini(0, 0, 128, 128, &cam, byte(1 << players.local_human_id)); // Mini-carte
+			map->draw_mini(0, 0, 128, 128, &cam, toPlayerMask(players.local_human_id)); // Mini-carte
 			units.draw_mini((float)map->widthInPixels, (float)map->heightInPixels, map->mini_w, map->mini_h);
 			weapons.draw_mini((float)map->widthInPixels, (float)map->heightInPixels, map->mini_w, map->mini_h);
 

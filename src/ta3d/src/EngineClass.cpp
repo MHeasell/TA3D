@@ -611,7 +611,7 @@ namespace TA3D
 			waterdoesdamage = false;
 	}
 
-	void MAP::draw_mini(int x1, int y1, int w, int h, Camera* cam, byte player_mask) // Draw the mini-map
+	void MAP::draw_mini(int x1, int y1, int w, int h, Camera* cam, PlayerMask player_mask) // Draw the mini-map
 	{
 		if (!glmini)
 			return; // Check if it exists
@@ -749,7 +749,7 @@ namespace TA3D
 		glEnable(GL_TEXTURE_2D);
 	}
 
-	void MAP::update_player_visibility(int player_id, int px, int py, int r, int rd, int sn, int rd_j, int sn_j, bool jamming, bool black)
+	void MAP::update_player_visibility(PlayerId player_id, int px, int py, int r, int rd, int sn, int rd_j, int sn_j, bool jamming, bool black)
 	{
 		gfx->lock();
 
@@ -767,7 +767,7 @@ namespace TA3D
 		}
 		else
 		{
-			const byte mask = byte(1 << player_id);
+			const PlayerMask mask = toPlayerMask(player_id);
 			const int r2 = r * r;
 			const int rd2 = rd * rd;
 			const int sn2 = sn * sn;
@@ -872,14 +872,14 @@ namespace TA3D
 		gfx->unlock();
 	}
 
-	void MAP::draw(Camera* cam, byte player_mask)
+	void MAP::draw(Camera* cam, PlayerMask player_mask)
 	{
 		cam->applyToOpenGl();
 
 		draw_HD(cam, player_mask);
 	}
 
-	void MAP::draw_HD(Camera* cam, byte player_mask)
+	void MAP::draw_HD(Camera* cam, PlayerMask player_mask)
 	{
 		glPushMatrix();
 
@@ -1278,12 +1278,12 @@ namespace TA3D
 		glPopMatrix();
 	}
 
-	bool MAP::isInSightOf(byte player_mask, unsigned int x, unsigned int z) const
+	bool MAP::isInSightOf(PlayerMask player_mask, unsigned int x, unsigned int z) const
 	{
 		return (sight_map(x, z) & player_mask) != 0;
 	}
 
-	bool MAP::isDiscoveredBy(byte player_mask, unsigned int x, unsigned int z) const
+	bool MAP::isDiscoveredBy(PlayerMask player_mask, unsigned int x, unsigned int z) const
 	{
 		return (view_map(x, z) & player_mask) != 0;
 	}

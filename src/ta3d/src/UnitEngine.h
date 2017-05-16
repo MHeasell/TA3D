@@ -133,7 +133,7 @@ namespace TA3D
 
 	extern int MAX_UNIT_PER_PLAYER;
 
-	void* create_unit(int type_id, int owner, Vector3D pos, bool sync = true, bool script = false);
+	void* create_unit(int type_id, PlayerId owner, Vector3D pos, bool sync = true, bool script = false);
 
 #define ICON_UNKNOWN 0x0
 #define ICON_BUILDER 0x1
@@ -271,19 +271,19 @@ namespace TA3D
 
 		int pick_minimap();
 
-		void give_order_move(int player_id, const Vector3D& target, bool set = true, byte flags = 0);
+		void give_order_move(PlayerId player_id, const Vector3D& target, bool set = true, byte flags = 0);
 
-		void give_order_patrol(int player_id, const Vector3D& target, bool set = true);
+		void give_order_patrol(PlayerId player_id, const Vector3D& target, bool set = true);
 
-		void give_order_guard(int player_id, int target, bool set = true);
+		void give_order_guard(PlayerId player_id, int target, bool set = true);
 
-		void give_order_unload(int player_id, const Vector3D& target, bool set = true);
+		void give_order_unload(PlayerId player_id, const Vector3D& target, bool set = true);
 
-		void give_order_load(int player_id, int target, bool set = true);
+		void give_order_load(PlayerId player_id, int target, bool set = true);
 
-		void give_order_build(int player_id, int unit_type_id, const Vector3D& target, bool set = true);
+		void give_order_build(PlayerId player_id, int unit_type_id, const Vector3D& target, bool set = true);
 
-		bool remove_order(int player_id, const Vector3D& target);
+		bool remove_order(PlayerId player_id, const Vector3D& target);
 
 		void complete_menu(int index, bool hide_info = false, bool hide_bpic = false);
 
@@ -291,11 +291,11 @@ namespace TA3D
 
 	extern INGAME_UNITS units;
 
-	bool can_be_built(const Vector3D& Pos, const int unit_type_id, const int player_id);
+	bool can_be_built(const Vector3D& Pos, const int unit_type_id, const PlayerId player_id);
 
-	bool can_be_there(const int px, const int py, const int unit_type_id, const int player_id, const int unit_id = -1);
+	bool can_be_there(const int px, const int py, const int unit_type_id, const PlayerId player_id, const int unit_id = -1);
 
-	bool can_be_there_ai(const int px, const int py, const int unit_type_id, const int player_id, const int unit_id = -1, const bool leave_space = false);
+	bool can_be_there_ai(const int px, const int py, const int unit_type_id, const PlayerId player_id, const int unit_id = -1, const bool leave_space = false);
 
 } // namespace TA3D
 

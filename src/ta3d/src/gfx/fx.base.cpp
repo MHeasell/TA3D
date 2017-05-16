@@ -172,7 +172,7 @@ namespace TA3D
 		const int py = tileIndex.y;
 		if (px < 0 || py < 0 || px >= the_map->widthInGraphicalTiles || py >= the_map->heightInGraphicalTiles)
 			return false;
-		const byte player_mask = byte(1 << players.local_human_id);
+		const PlayerMask player_mask = toPlayerMask(players.local_human_id);
 		return !(((the_map->view(px, py) != 1 || !(the_map->sight_map(px, py) & player_mask)) && (anm > -2 || anm < -4)));
 	}
 

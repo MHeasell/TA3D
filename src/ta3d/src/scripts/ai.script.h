@@ -40,7 +40,7 @@ namespace TA3D
 		AiScript();
 		virtual ~AiScript();
 		void setPlayerID(int id);
-		int getPlayerID();
+		PlayerId getPlayerID();
 		void setType(int type);
 		int getType();
 
@@ -58,7 +58,7 @@ namespace TA3D
 		/*virtual*/ void register_info();
 
 	private:
-		int playerID;
+		PlayerId playerID;
 		String name;
 
 	}; // class AiScript

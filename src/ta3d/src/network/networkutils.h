@@ -58,7 +58,7 @@ namespace TA3D
 		virtual ~SendFileThread() { destroyThread(); }
 	public:
 		int port;
-		int player_id;
+		PlayerId player_id;
 		int progress;
 	};
 

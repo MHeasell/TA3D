@@ -253,7 +253,7 @@ namespace TA3D
 			const Mesh* src = NULL,
 			const AnimationData* src_data = NULL) const;
 
-		virtual bool draw(float t, AnimationData* data_s = NULL, bool sel_primitive = false, bool alset = false, bool notex = false, int side = 0, bool chg_col = true, bool exploding_parts = false) = 0;
+		virtual bool draw(float t, AnimationData* data_s = NULL, bool sel_primitive = false, bool alset = false, bool notex = false, PlayerId side = 0, bool chg_col = true, bool exploding_parts = false) = 0;
 		virtual bool draw_nodl(bool alset = false) = 0;
 
 		bool draw_shadow(Vector3D Dir, float t, AnimationData* data_s = NULL, bool alset = false, bool exploding_parts = false);
@@ -314,7 +314,7 @@ namespace TA3D
 		void draw(float t, AnimationData* data_s = NULL, bool sel = false, bool notex = false,
 			bool c_part = false, int p_tex = 0, const Vector3D* target = NULL, Vector3D* upos = NULL,
 			Matrix* M = NULL, float Size = 0.0f, const Vector3D* Center = NULL, bool reverse = false,
-			int side = 0, bool chg_col = true, Mesh* src = NULL, AnimationData* src_data = NULL);
+			PlayerId side = 0, bool chg_col = true, Mesh* src = NULL, AnimationData* src_data = NULL);
 
 		/*!
         ** \brief

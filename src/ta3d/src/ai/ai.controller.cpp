@@ -284,7 +284,7 @@ namespace TA3D
 							}
 							else
 							{
-								if (units.unit[target_id].cloaked && !units.unit[target_id].is_on_radar(byte(1 << playerID))) // This one is cloaked, not on radar
+								if (units.unit[target_id].cloaked && !units.unit[target_id].is_on_radar(toPlayerMask(playerID))) // This one is cloaked, not on radar
 								{
 									enemy_table.remove(target_id);
 									target_id = -1;

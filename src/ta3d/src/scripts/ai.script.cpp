@@ -46,13 +46,13 @@ namespace TA3D
 		destroy();
 	}
 
-	void AiScript::setPlayerID(int id)
+	void AiScript::setPlayerID(PlayerId id)
 	{
 		playerID = id;
 		register_info();
 	}
 
-	int AiScript::getPlayerID()
+	PlayerId AiScript::getPlayerID()
 	{
 		return playerID;
 	}
@@ -101,15 +101,15 @@ namespace TA3D
 		register_info();
 	}
 
-	int lua_currentPlayerID(lua_State* L)
+	PlayerId lua_currentPlayerID(lua_State* L)
 	{
 		lua_getfield(L, LUA_REGISTRYINDEX, "playerID");
-		const int playerID = (int)lua_tointeger(L, -1);
+		const PlayerId playerID = (PlayerId)lua_tointeger(L, -1);
 		lua_pop(L, 1);
 		return playerID;
 	}
 
-	int ai_playerID(lua_State* L) // playerID()
+	PlayerId ai_playerID(lua_State* L) // playerID()
 	{
 		lua_pushinteger(L, lua_currentPlayerID(L));
 		return 1;
@@ -345,7 +345,7 @@ namespace TA3D
 
 	int ai_player_side(lua_State* L) // player_side( player_id )
 	{
-		const int player_id = (int)lua_tointeger(L, 1);
+		const PlayerId player_id = (PlayerId)lua_tointeger(L, 1);
 		lua_pop(L, 1);
 
 		if (player_id >= 0 && player_id < NB_PLAYERS)
@@ -358,8 +358,8 @@ namespace TA3D
 
 	int ai_allied(lua_State* L) // allied( id0, id1 )
 	{
-		const int player_id0 = (int)lua_tointeger(L, 1);
-		const int player_id1 = (int)lua_tointeger(L, 2);
+		const PlayerId player_id0 = (PlayerId)lua_tointeger(L, 1);
+		const PlayerId player_id1 = (PlayerId)lua_tointeger(L, 2);
 		lua_pop(L, 2);
 
 		if (player_id0 >= 0 && player_id0 < NB_PLAYERS && player_id1 >= 0 && player_id1 < NB_PLAYERS)
@@ -571,7 +571,7 @@ namespace TA3D
 
 	int ai_get_unit_list(lua_State* L) // get_unit_list( player_id ), if player_id == -1 or unset, returns all units
 	{
-		const int player_id = lua_isnoneornil(L, 1) ? -1 : (int)lua_tointeger(L, 1);
+		const PlayerId player_id = lua_isnoneornil(L, 1) ? -1 : (int)lua_tointeger(L, 1);
 		if (!lua_isnone(L, 1))
 			lua_pop(L, 1);
 
@@ -707,7 +707,7 @@ namespace TA3D
 		const float sx = (float)lua_tonumber(L, 3);
 		const float sy = (float)lua_tonumber(L, 4);
 		const int unit_type_id = lua_isstring(L, 5) ? unit_manager.get_unit_index(lua_tostring(L, 5)) : (int)lua_tointeger(L, 5);
-		const int player_id = lua_isnoneornil(L, 6) ? -1 : (int)lua_tointeger(L, 6);
+		const PlayerId player_id = lua_isnoneornil(L, 6) ? -1 : (int)lua_tointeger(L, 6);
 		const int x0 = Math::Min(Math::Max((int)((nx + (float)the_map->halfWidthInPixels) * 0.125f), 0), the_map->widthInHeightmapTiles);
 		const int y0 = Math::Min(Math::Max((int)((ny + (float)the_map->halfHeightInPixels) * 0.125f), 0), the_map->heightInHeightmapTiles);
 		const int x1 = Math::Min(Math::Max((int)((sx + (float)the_map->halfWidthInPixels) * 0.125f), 0), the_map->widthInHeightmapTiles);
@@ -740,7 +740,7 @@ namespace TA3D
 
 	int ai_get_player_resources(lua_State* L) // get_player_resources (playerID)
 	{
-		const int player_id = lua_isnoneornil(L, 1) ? -1 : (int)lua_tointeger(L, 1);
+		const PlayerId player_id = lua_isnoneornil(L, 1) ? -1 : (int)lua_tointeger(L, 1);
 		lua_pop(L, 1);
 
 		if (player_id >= 0 && player_id < (int)players.count())

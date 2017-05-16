@@ -86,7 +86,7 @@ namespace TA3D
 		init();
 	}
 
-	void INGAME_UNITS::give_order_move(int player_id, const Vector3D& target, bool set, byte flags)
+	void INGAME_UNITS::give_order_move(PlayerId player_id, const Vector3D& target, bool set, byte flags)
 	{
 		pMutex.lock();
 
@@ -106,7 +106,7 @@ namespace TA3D
 		pMutex.unlock();
 	}
 
-	void INGAME_UNITS::give_order_patrol(int player_id, const Vector3D& target, bool set)
+	void INGAME_UNITS::give_order_patrol(PlayerId player_id, const Vector3D& target, bool set)
 	{
 		pMutex.lock();
 		for (uint16 e = 0; e < index_list_size; ++e)
@@ -125,7 +125,7 @@ namespace TA3D
 		pMutex.unlock();
 	}
 
-	void INGAME_UNITS::give_order_guard(int player_id, int target, bool set)
+	void INGAME_UNITS::give_order_guard(PlayerId player_id, int target, bool set)
 	{
 		pMutex.lock();
 		for (uint16 e = 0; e < index_list_size; ++e)
@@ -144,7 +144,7 @@ namespace TA3D
 		pMutex.unlock();
 	}
 
-	void INGAME_UNITS::give_order_unload(int player_id, const Vector3D& target, bool set)
+	void INGAME_UNITS::give_order_unload(PlayerId player_id, const Vector3D& target, bool set)
 	{
 		pMutex.lock();
 		for (uint32 e = 0; e < index_list_size; ++e)
@@ -164,7 +164,7 @@ namespace TA3D
 		pMutex.unlock();
 	}
 
-	void INGAME_UNITS::give_order_load(int player_id, int target, bool set)
+	void INGAME_UNITS::give_order_load(PlayerId player_id, int target, bool set)
 	{
 		pMutex.lock();
 		if (unit[target].flags == 0 || !unit_manager.unit_type[unit[target].type_id]->canmove)
@@ -201,7 +201,7 @@ namespace TA3D
 		pMutex.unlock();
 	}
 
-	void INGAME_UNITS::give_order_build(int player_id, int unit_type_id, const Vector3D& target, bool set)
+	void INGAME_UNITS::give_order_build(PlayerId player_id, int unit_type_id, const Vector3D& target, bool set)
 	{
 		if (unit_type_id < 0)
 			return;
@@ -393,7 +393,7 @@ namespace TA3D
 		if (last_on != -1)
 			return last_on;
 
-		const byte player_mask = byte(1 << players.local_human_id);
+		const PlayerMask player_mask = toPlayerMask(players.local_human_id);
 
 		pMutex.lock();
 		for (uint32 e = 0; e < index_list_size; ++e)
@@ -450,7 +450,7 @@ namespace TA3D
 		return index;
 	}
 
-	void* create_unit(int type_id, int owner, Vector3D pos, bool sync, bool script)
+	void* create_unit(int type_id, PlayerId owner, Vector3D pos, bool sync, bool script)
 	{
 		const int id = units.create(type_id, owner);
 		if (id >= 0)
@@ -488,7 +488,7 @@ namespace TA3D
 	}
 
 	bool can_be_there_ai(const int px, const int py, const int unit_type_id,
-		const int, const int unit_id, const bool leave_space)
+		const PlayerId, const int unit_id, const bool leave_space)
 	{
 		if (unit_type_id < 0 || unit_type_id >= unit_manager.nb_unit)
 			return false;
@@ -528,7 +528,7 @@ namespace TA3D
 	}
 
 	bool can_be_there(const int px, const int py, const int unit_type_id,
-		const int, const int unit_id)
+		const PlayerId, const int unit_id)
 	{
 		if (unit_type_id < 0 || unit_type_id >= unit_manager.nb_unit)
 			return false;
@@ -567,7 +567,7 @@ namespace TA3D
 		return true;
 	}
 
-	bool can_be_built(const Vector3D& Pos, const int unit_type_id, const int player_id)
+	bool can_be_built(const Vector3D& Pos, const int unit_type_id, const PlayerId player_id)
 	{
 		if (unit_type_id < 0 || unit_type_id >= unit_manager.nb_unit)
 			return false;
@@ -1234,7 +1234,7 @@ namespace TA3D
 		glDisable(GL_TEXTURE_2D);
 		glPointSize(3.0f);
 
-		const byte mask = byte(1 << players.local_human_id);
+		const PlayerMask mask = toPlayerMask(players.local_human_id);
 		int nb = 0;
 
 		uint32 player_col_32[TA3D_PLAYERS_HARD_LIMIT];
@@ -1252,7 +1252,7 @@ namespace TA3D
 		}
 
 		pMutex.lock();
-		const byte player_mask = byte(1 << players.local_human_id);
+		const PlayerMask player_mask = toPlayerMask(players.local_human_id);
 		for (unsigned int e = 0; e < index_list_size; ++e)
 		{
 			const size_t i = idx_list[e];
@@ -1449,7 +1449,7 @@ namespace TA3D
 		visible_unit.clear();
 		const int bloc_w = the_map->widthInHeightmapTiles;
 		const int bloc_h = the_map->heightInHeightmapTiles;
-		const uint32 player_mask = 1 << players.local_human_id;
+		const PlayerMask player_mask = toPlayerMask(players.local_human_id);
 		for (uint32 i = 0; i < max_unit; ++i)
 		{
 			unit[i].visible = false;
@@ -1600,7 +1600,7 @@ namespace TA3D
 		gfx->unlock();
 	}
 
-	bool INGAME_UNITS::remove_order(int player_id, const Vector3D& target)
+	bool INGAME_UNITS::remove_order(PlayerId player_id, const Vector3D& target)
 	{
 		bool removed_something = false;
 		pMutex.lock();

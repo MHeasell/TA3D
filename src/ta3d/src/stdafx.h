@@ -58,6 +58,9 @@ namespace TA3D
 
 	// widely used domain types
 	typedef int PlayerId;
+	typedef byte PlayerMask;
+
+	inline PlayerMask toPlayerMask(PlayerId playerId) { return 1 << playerId; }
 }
 
 #define DELETE_ARRAY(x)  \

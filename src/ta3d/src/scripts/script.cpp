@@ -296,7 +296,7 @@ namespace TA3D
 
 	int program_get_unit_number_for_player(lua_State* L) // get_unit_number_for_player( player_id )
 	{
-		const int player_id = (int)lua_tointeger(L, 1);
+		const PlayerId player_id = (PlayerId)lua_tointeger(L, 1);
 		lua_pop(L, 1);
 		if (player_id >= 0 && player_id < NB_PLAYERS)
 		{
@@ -344,7 +344,7 @@ namespace TA3D
 
 	int program_annihilated(lua_State* L) // annihilated( player_id )
 	{
-		const int player_id = (int)lua_tointeger(L, 1);
+		const PlayerId player_id = (PlayerId)lua_tointeger(L, 1);
 		lua_pop(L, 1);
 		if (player_id >= 0 && player_id < NB_PLAYERS)
 			lua_pushboolean(L, players.annihilated[player_id]);
@@ -355,7 +355,7 @@ namespace TA3D
 
 	int program_has_unit(lua_State* L) // has_unit( player_id, unit_type_id )
 	{
-		const int player_id = (int)lua_tointeger(L, 1);
+		const PlayerId player_id = (PlayerId)lua_tointeger(L, 1);
 		if (player_id >= 0 && player_id < NB_PLAYERS)
 		{
 			const int unit_type = lua_isstring(L, 2) ? unit_manager.get_unit_index(lua_tostring(L, 2)) : (int)lua_tointeger(L, 2);
@@ -380,7 +380,7 @@ namespace TA3D
 
 	int program_nb_unit_of_type(lua_State* L) // nb_unit_of_type( player_id, unit_type_id )
 	{
-		const int player_id = (int)lua_tointeger(L, 1);
+		const PlayerId player_id = (PlayerId)lua_tointeger(L, 1);
 		if (player_id >= 0 && player_id < NB_PLAYERS)
 		{
 			const int unit_type = lua_isstring(L, 2) ? unit_manager.get_unit_index(lua_tostring(L, 2)) : (int)lua_tointeger(L, 2);
@@ -419,7 +419,7 @@ namespace TA3D
 
 	int program_has_mobile_units(lua_State* L) // has_mobile_units( player_id )
 	{
-		const int player_id = (int)lua_tointeger(L, 1);
+		const PlayerId player_id = (PlayerId)lua_tointeger(L, 1);
 		lua_pop(L, 1);
 		if (player_id >= 0 && player_id < NB_PLAYERS)
 		{
@@ -443,7 +443,7 @@ namespace TA3D
 
 	int program_create_unit(lua_State* L) // create_unit( player_id, unit_type_id, x, z )
 	{
-		const int player_id = (int)lua_tointeger(L, 1);
+		const PlayerId player_id = (PlayerId)lua_tointeger(L, 1);
 		int unit_type_id = !lua_isnumber(L, 2) ? unit_manager.get_unit_index(lua_tostring(L, 2)) : (int)lua_tointeger(L, 2);
 		if (lua_isnumber(L, 2) && unit_type_id == -1)
 			unit_type_id = Math::RandomTable() % (int)unit_manager.nb_unit;
@@ -490,7 +490,7 @@ namespace TA3D
 
 	int program_change_unit_owner(lua_State* L) // change_unit_owner( unit_id, player_id )
 	{
-		const int player_id = (int)lua_tointeger(L, 2);
+		const PlayerId player_id = (PlayerId)lua_tointeger(L, 2);
 		const int unit_id = (int)lua_tointeger(L, 1);
 		lua_pop(L, 2);
 
@@ -739,7 +739,7 @@ namespace TA3D
 
 	int program_player_side(lua_State* L) // player_side( player_id )
 	{
-		const int player_id = (int)lua_tointeger(L, 1);
+		const PlayerId player_id = (PlayerId)lua_tointeger(L, 1);
 		lua_pop(L, 1);
 
 		if (player_id >= 0 && player_id < NB_PLAYERS)
@@ -752,8 +752,8 @@ namespace TA3D
 
 	int program_allied(lua_State* L) // allied( id0, id1 )
 	{
-		const int player_id0 = (int)lua_tointeger(L, 1);
-		const int player_id1 = (int)lua_tointeger(L, 2);
+		const PlayerId player_id0 = (int)lua_tointeger(L, 1);
+		const PlayerId player_id1 = (int)lua_tointeger(L, 2);
 		lua_pop(L, 2);
 
 		if (player_id0 >= 0 && player_id0 < NB_PLAYERS && player_id1 >= 0 && player_id1 < NB_PLAYERS)
@@ -1052,7 +1052,7 @@ namespace TA3D
 
 	int program_start_x(lua_State* L) // start_x( player_id )
 	{
-		const unsigned int player_id = (unsigned int)lua_tointeger(L, 1);
+		const PlayerId player_id = (PlayerId)lua_tointeger(L, 1);
 		lua_pop(L, 1);
 
 		if (player_id < players.count())
@@ -1064,7 +1064,7 @@ namespace TA3D
 
 	int program_start_z(lua_State* L) // start_z( player_id )
 	{
-		const unsigned int player_id = (unsigned int)lua_tointeger(L, 1);
+		const PlayerId player_id = (PlayerId)lua_tointeger(L, 1);
 		lua_pop(L, 1);
 
 		if (player_id < players.count())
@@ -1094,7 +1094,7 @@ namespace TA3D
 
 	int program_give_metal(lua_State* L) // give_metal( player_id, amount )
 	{
-		const unsigned int player_id = (unsigned int)lua_tointeger(L, 1);
+		const PlayerId player_id = (PlayerId)lua_tointeger(L, 1);
 		const float amount = (float)lua_tonumber(L, 2);
 		lua_pop(L, 2);
 
@@ -1110,7 +1110,7 @@ namespace TA3D
 
 	int program_give_energy(lua_State* L) // give_energy( player_id, amount )
 	{
-		const unsigned int player_id = (unsigned int)lua_tointeger(L, 1);
+		const PlayerId player_id = (PlayerId)lua_tointeger(L, 1);
 		const float amount = (float)lua_tonumber(L, 2);
 		lua_pop(L, 2);
 
@@ -1126,7 +1126,7 @@ namespace TA3D
 
 	int program_commander(lua_State* L) // commander( player_id )
 	{
-		const unsigned int player_id = (unsigned int)lua_tointeger(L, 1);
+		const PlayerId player_id = (PlayerId)lua_tointeger(L, 1);
 		lua_pop(L, 1);
 
 		if (player_id < (unsigned int)NB_PLAYERS) // make sure we have a player
@@ -1194,7 +1194,7 @@ namespace TA3D
 
 	int program_send_signal(lua_State* L) // send_signal( player_id, signal )
 	{
-		const int player_id = (int)lua_tointeger(L, 1);
+		const PlayerId player_id = (PlayerId)lua_tointeger(L, 1);
 		const int signal_id = (int)lua_tointeger(L, 2);
 
 		if (player_id == players.local_human_id || player_id == -1)
@@ -1391,7 +1391,7 @@ namespace TA3D
 		while (!(unit_name = ota_parser.pullAsString(String("GlobalHeader.Schema ") << schema << ".units.unit" << i << ".Unitname")).empty())
 		{
 			String unit_key = String("GlobalHeader.Schema ") << schema << ".units.unit" << i;
-			int player_id = ota_parser.pullAsInt(String(unit_key) << ".player") - 1;
+			PlayerId player_id = ota_parser.pullAsInt(String(unit_key) << ".player") - 1;
 			float x = ota_parser.pullAsFloat(String(unit_key) << ".XPos") * 0.5f;
 			float z = ota_parser.pullAsFloat(String(unit_key) << ".ZPos") * 0.5f;
 

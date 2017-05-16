@@ -375,7 +375,7 @@ namespace TA3D
 		pMutex.unlock();
 	}
 
-	void Unit::init(int unit_type, int owner, bool full, bool basic)
+	void Unit::init(int unit_type, PlayerId owner, bool full, bool basic)
 	{
 		pMutex.lock();
 
@@ -464,7 +464,7 @@ namespace TA3D
 		isSelected = false;
 		script = NULL;
 		model = NULL;
-		owner_id = (byte)owner;
+		owner_id = owner;
 		type_id = -1;
 		hp = 0.0f;
 		V.reset();
@@ -521,7 +521,7 @@ namespace TA3D
 		pMutex.unlock();
 	}
 
-	bool Unit::is_on_radar(byte p_mask) const
+	bool Unit::is_on_radar(PlayerMask p_mask) const
 	{
 		if (type_id == -1)
 			return false;
@@ -996,7 +996,7 @@ namespace TA3D
 		const int py = render.py >> 1;
 		if (px < 0 || py < 0 || px >= the_map->widthInGraphicalTiles || py >= the_map->heightInGraphicalTiles)
 			return; // Unit is outside the map
-		const byte player_mask = byte(1 << players.local_human_id);
+		const PlayerMask player_mask = toPlayerMask(players.local_human_id);
 
 		on_radar = is_on_radar(player_mask);
 		if (the_map->view(px, py) == 0 || (the_map->view(px, py) > 1 && !on_radar))
@@ -2379,7 +2379,7 @@ namespace TA3D
 
 					if (weapon[i].target == NULL || ((weapon[i].state & WEAPON_FLAG_WEAPON) == WEAPON_FLAG_WEAPON && ((Weapon*)(weapon[i].target))->weapon_id != -1) || ((weapon[i].state & WEAPON_FLAG_WEAPON) != WEAPON_FLAG_WEAPON && ((Unit*)(weapon[i].target))->isAlive()))
 					{
-						if ((weapon[i].state & WEAPON_FLAG_WEAPON) != WEAPON_FLAG_WEAPON && weapon[i].target != NULL && ((Unit*)(weapon[i].target))->cloaked && ((const Unit*)(weapon[i].target))->isNotOwnedBy(owner_id) && !((const Unit*)(weapon[i].target))->is_on_radar(byte(1 << owner_id)))
+						if ((weapon[i].state & WEAPON_FLAG_WEAPON) != WEAPON_FLAG_WEAPON && weapon[i].target != NULL && ((Unit*)(weapon[i].target))->cloaked && ((const Unit*)(weapon[i].target))->isNotOwnedBy(owner_id) && !((const Unit*)(weapon[i].target))->is_on_radar(toPlayerMask(owner_id)))
 						{
 							weapon[i].data = -1;
 							weapon[i].state = WEAPON_FLAG_IDLE;
@@ -3495,7 +3495,7 @@ namespace TA3D
 						{
 							if (target_unit) // Check if we can target the unit
 							{
-								const byte mask = byte(1 << owner_id);
+								const PlayerMask mask = toPlayerMask(owner_id);
 								if (target_unit->cloaked && !target_unit->is_on_radar(mask))
 								{
 									for (uint32 i = 0; i < weapon.size(); ++i)
@@ -4208,7 +4208,7 @@ namespace TA3D
 							dx = pType->weapon[i]->range >> 1;
 					if (pType->kamikaze && pType->kamikazedistance > dx)
 						dx = pType->kamikazedistance;
-					const byte mask = byte(1 << owner_id);
+					const PlayerMask mask = toPlayerMask(owner_id);
 
 					std::deque<UnitTKit::T> possibleTargets;
 					for (int i = 0; i < NB_PLAYERS; ++i)

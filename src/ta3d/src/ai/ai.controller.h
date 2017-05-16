@@ -56,7 +56,7 @@ namespace TA3D
 	{
 	private:
 		String name;	// Attention faudrait pas qu'il se prenne pour quelqu'un!! -> indique aussi le fichier correspondant Ã  l'IA (faut sauvegarder les cervelles)
-		int playerID;   // Identifiant du joueur / all is in the name :)
+		PlayerId playerID;   // Identifiant du joueur / all is in the name :)
 		uint32 unit_id; // Unit index to run throught the unit array
 		uint32 total_unit;
 

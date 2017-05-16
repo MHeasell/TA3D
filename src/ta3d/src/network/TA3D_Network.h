@@ -65,8 +65,8 @@ namespace TA3D
 		void check();
 		void draw();
 
-		bool isLocal(const unsigned int id) const;
-		bool isRemoteHuman(const unsigned int id) const;
+		bool isLocal(const PlayerId id) const;
+		bool isRemoteHuman(const PlayerId id) const;
 		void sendDamageEvent(int idx, float damage);
 		void sendParalyzeEvent(int idx, float damage);
 		void sendFeatureCreationEvent(int idx);

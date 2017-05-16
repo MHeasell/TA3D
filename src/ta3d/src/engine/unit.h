@@ -125,7 +125,7 @@ namespace TA3D
 
 		void draw_on_FOW(bool jamming = false);
 
-		bool is_on_radar(byte p_mask) const;
+		bool is_on_radar(PlayerMask p_mask) const;
 
 		void start_mission_script(int mission_type);
 
@@ -151,7 +151,7 @@ namespace TA3D
 
 		void unlock_command();
 
-		void init(int unit_type = -1, int owner = -1, bool full = false, bool basic = false);
+		void init(int unit_type = -1, PlayerId owner = -1, bool full = false, bool basic = false);
 
 		void clear_def_mission();
 

@@ -170,7 +170,7 @@ namespace TA3D
 			while (!special_msg.empty()) // Special receiver (sync config data)
 			{
 				const int from = received_special_msg.from;
-				const int player_id = game_data->net2id(from);
+				const PlayerId player_id = game_data->net2id(from);
 				String::Vector params;
 				String((char*)received_special_msg.message).explode(params, ' ');
 				if (params.size() == 1)

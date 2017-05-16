@@ -60,7 +60,7 @@ namespace TA3D
 		{
 			if (network_manager.isServer())
 			{
-				const int player_id = g_ta3d_network->game_data->net2id(from);
+				const PlayerId player_id = g_ta3d_network->game_data->net2id(from);
 				if (player_id >= 0)
 				{
 					units.client_tick[player_id] = getLong() * 1000;
@@ -111,7 +111,7 @@ namespace TA3D
 						strtochat(&chat, msg);
 						network_manager.sendChat(&chat);
 
-						const int player_id = game_data->net2id(chat.from);
+						const PlayerId player_id = game_data->net2id(chat.from);
 						if (player_id >= 0)
 						{
 							pMutex.lock();
@@ -153,7 +153,7 @@ namespace TA3D
 			else
 				break;
 
-			const int player_id = game_data->net2id(received_chat_msg.from);
+			const PlayerId player_id = game_data->net2id(received_chat_msg.from);
 			if (player_id >= 0)
 			{
 				pMutex.lock();
@@ -181,7 +181,7 @@ namespace TA3D
 			else
 				break;
 
-			int player_id = game_data->net2id(received_special_msg.from);
+			PlayerId player_id = game_data->net2id(received_special_msg.from);
 
 			String::Vector params;
 			special_msg.explode(params, " ");
@@ -471,7 +471,7 @@ namespace TA3D
 					{
 						units.unit[event_msg.opt1].lock();
 
-						const int player_id = game_data->net2id(event_msg.opt2);
+						const PlayerId player_id = game_data->net2id(event_msg.opt2);
 
 						if (player_id >= 0)
 							units.unit[event_msg.opt1].last_synctick[player_id] = event_msg.opt3;
@@ -528,7 +528,7 @@ namespace TA3D
 					{
 						weapons.lock();
 						const int w_idx = weapons.add_weapon(w_type, event_msg.opt1);
-						const int player_id = event_msg.opt5;
+						const PlayerId player_id = event_msg.opt5;
 
 						if (weapon_manager.weapon[w_type].startsmoke)
 							particle_engine.make_smoke(startpos, 0, 1, 0.0f, -1.0f, 0.0f, 0.3f);
@@ -672,12 +672,12 @@ namespace TA3D
 		pMutex.unlock();
 	}
 
-	bool TA3DNetwork::isLocal(const unsigned int id) const
+	bool TA3DNetwork::isLocal(const PlayerId id) const
 	{
 		return !(game_data->player_control[id] & PLAYER_CONTROL_FLAG_REMOTE);
 	}
 
-	bool TA3DNetwork::isRemoteHuman(const unsigned int id) const
+	bool TA3DNetwork::isRemoteHuman(const PlayerId id) const
 	{
 		return game_data->player_control[id] == PLAYER_CONTROL_REMOTE_HUMAN;
 	}

@@ -78,7 +78,7 @@ namespace TA3D
 		if (lp_CONFIG->wireframe)
 			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
-		map->draw(&cam, byte(1 << players.local_human_id));
+		map->draw(&cam, toPlayerMask(players.local_human_id));
 
 		if (lp_CONFIG->wireframe)
 			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
