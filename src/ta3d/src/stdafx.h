@@ -57,13 +57,6 @@ namespace TA3D
 	typedef signed char schar;
 }
 
-// zuzuf: to prevent some warnings
-#undef PACKAGE_BUGREPORT
-#undef PACKAGE_NAME
-#undef PACKAGE_TARNAME
-#undef PACKAGE_STRING
-#undef PACKAGE_VERSION
-
 #define DELETE_ARRAY(x)  \
 	do                   \
 	{                    \
