@@ -683,21 +683,7 @@ namespace TA3D
 				if (creating_list)
 					glEndList();
 			}
-#ifdef DEBUG_MODE_3DO
-			if (nb_l_index > 0 && nb_vtx > 0)
-			{
-				glEnableClientState(GL_VERTEX_ARRAY); // Les sommets
-				glDisableClientState(GL_NORMAL_ARRAY);
-				glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-				glDisable(GL_LIGHTING);
-				glDisable(GL_TEXTURE_2D);
-				alset = false;
-				if (!set)
-					glVertexPointer(3, GL_FLOAT, 0, points);
-				set = true;
-				glDrawElements(GL_LINES, nb_l_index, GL_UNSIGNED_SHORT, l_index); // dessine le tout
-			}
-#endif
+
 			if (sel_primitive && selprim >= 0 && nb_vtx > 0) // && (data_s==NULL || (data_s!=NULL && !data_s->explode))) {
 			{
 				glDisableClientState(GL_TEXTURE_COORD_ARRAY);
