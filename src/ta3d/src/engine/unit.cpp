@@ -3539,7 +3539,7 @@ namespace TA3D
 									if (Dir % V < 0.0f)
 										allowed_to_fire = false;
 									const float t = 2.0f / the_map->ota_data.gravity * fabsf(Pos.y - mission->getTarget().getPos().y);
-									cur_mindist = (int)sqrtf(t * V.lengthSquared()) - ((pType->attackrunlength + 1) >> 1);
+									cur_mindist = (int)sqrtf(t * V.lengthSquared()) - ((pType->attackrunlength + 1) / 2);
 									cur_maxdist = cur_mindist + pType->attackrunlength;
 								}
 								else if (pType->weapon[i]->waterweapon && Pos.y > the_map->sealvl)
@@ -3547,12 +3547,12 @@ namespace TA3D
 									if (Dir % V < 0.0f)
 										allowed_to_fire = false;
 									const float t = 2.0f / the_map->ota_data.gravity * fabsf(Pos.y - mission->getTarget().getPos().y);
-									cur_maxdist = (int)sqrtf(t * V.lengthSquared()) + (pType->weapon[i]->range >> 1);
+									cur_maxdist = (int)sqrtf(t * V.lengthSquared()) + (pType->weapon[i]->range / 2);
 									cur_mindist = 0;
 								}
 								else
 								{
-									cur_maxdist = pType->weapon[i]->range >> 1;
+									cur_maxdist = pType->weapon[i]->range / 2;
 									cur_mindist = 0;
 								}
 								if (maxdist < cur_maxdist)
