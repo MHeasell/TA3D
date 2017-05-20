@@ -3521,7 +3521,6 @@ namespace TA3D
 							int maxdist = 0;
 							int mindist = 0xFFFFF;
 
-							//                            if (target_unit != NULL && unit_manager.unit_type[target_unit->type_id]->checkCategory( pType->BadTargetCategory ))
 							if (target_unit != NULL && unit_manager.unit_type[target_unit->type_id]->checkCategory(pType->NoChaseCategory))
 							{
 								next_mission();
