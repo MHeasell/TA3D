@@ -59,6 +59,10 @@ namespace TA3D
 	const int MAP::HeightmapTileWidthInPixels = 8;
 	const int MAP::HeightmapTileHeightInPixels = 8;
 
+	// These are the correct values
+	const int MAP::GraphicalTileWidthInScreenPixels = 32;
+	const int MAP::GraphicalTileHeightInScreenPixels = 32;
+
 	void SECTOR::init()
 	{
 		stuff = -1;

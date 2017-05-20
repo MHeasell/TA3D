@@ -188,6 +188,9 @@ namespace TA3D
 		static const int HeightmapTileWidthInPixels;
 		static const int HeightmapTileHeightInPixels;
 
+		static const int GraphicalTileWidthInScreenPixels;
+		static const int GraphicalTileHeightInScreenPixels;
+
 		//! Indicates whether the texture is loaded and must be destroyed
 		short ntex;
 

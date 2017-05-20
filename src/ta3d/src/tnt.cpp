@@ -174,21 +174,34 @@ namespace TA3D
 		map->glmini = std::move(minimapInfo.texture);
 		LOG_INFO("minimap read in " << float(MILLISECONDS_SINCE_INIT - event_timer) * 0.001f << "s.");
 
-		// Lit les différents morceaux
+		// Read the tile bitmaps
 		LOG_DEBUG("MAP: reading blocs data");
 		event_timer = MILLISECONDS_SINCE_INIT;
-		int n_bmp = (header.tiles + 0x3F) >> 5; // Nombre de textures 1024x32 nécessaires pour mémoriser tout les morceaux
-		SDL_Surface** bmp_tex = new SDL_Surface*[n_bmp];
-		for (i = 0; i < n_bmp; ++i)
-			bmp_tex[i] = gfx->create_surface_ex(8, 1024, 32);
 
-		file->seek(header.PTRtilegfx);
-		for (i = 0; i < header.tiles; ++i) // Lit tout les morceaux
+		// A "tile sheet" is a texture containing multiple tile bitmaps.
+		// Sheets are 32 tiles wide and 1 tile high (1024x32)
+
+		// Compute the number of tile sheets necessary to store all the tile bitmaps
+		int tilesPerSheet = 32;
+		int numberOfTileSheets = (header.tiles / tilesPerSheet) + ((header.tiles % tilesPerSheet == 0) ? 0 : 1);
+
+		SDL_Surface** tileSheets = new SDL_Surface*[numberOfTileSheets];
+		for (i = 0; i < numberOfTileSheets; ++i)
 		{
-			int tex_num = i >> 5;	 // Numéro de la texture associée
-			int tx = (i & 0x1F) << 5; // Coordonnées sur la texture
-			for (y = 0; y < 32; ++y)  // Lit le morceau
-				file->read((char*)bmp_tex[tex_num]->pixels + y * bmp_tex[tex_num]->pitch + tx, 32);
+			tileSheets[i] = gfx->create_surface_ex(8, tilesPerSheet * MAP::GraphicalTileWidthInScreenPixels, MAP::GraphicalTileHeightInScreenPixels);
+		}
+
+		// Read the tile bitmaps into the sheets
+		file->seek(header.PTRtilegfx);
+		for (i = 0; i < header.tiles; ++i)
+		{
+			int sheetNumber = i / tilesPerSheet;
+			int offset = (i % tilesPerSheet) * MAP::GraphicalTileWidthInScreenPixels;
+			for (y = 0; y < MAP::GraphicalTileHeightInScreenPixels; ++y)
+			{
+				int rowOffset = (y * tileSheets[sheetNumber]->pitch) + offset;
+				file->read((byte*)tileSheets[sheetNumber]->pixels + rowOffset, MAP::GraphicalTileWidthInScreenPixels);
+			}
 		}
 
 		LOG_DEBUG("MAP: allocating map memory");
@@ -233,8 +246,8 @@ namespace TA3D
 		map->view.fill(0);
 		map->nbbloc = header.tiles;		   // Nombre de blocs nécessaires
 		map->bloc = new BLOC[map->nbbloc]; // Alloue la mémoire pour les blocs
-		map->ntex = short(n_bmp);
-		map->tex = new GLuint[n_bmp]; // Tableau d'indices de texture OpenGl
+		map->ntex = short(numberOfTileSheets);
+		map->tex = new GLuint[numberOfTileSheets]; // Tableau d'indices de texture OpenGl
 
 		for (i = 0; i < map->nbbloc; i++) // Crée les blocs
 		{
@@ -246,7 +259,7 @@ namespace TA3D
 			{
 				for (x = tx; x < tx + 32; ++x)
 				{
-					const int c = SurfaceByte(bmp_tex[tex_num], x, y);
+					const int c = SurfaceByte(tileSheets[tex_num], x, y);
 					r += pal[c].r;
 					g += pal[c].g;
 					b += pal[c].b;
@@ -265,9 +278,9 @@ namespace TA3D
 		LOG_DEBUG("MAP: creating textures");
 
 		gfx->set_texture_format(gfx->defaultTextureFormat_RGB());
-		for (i = 0; i < n_bmp; ++i) // Finis de charger les textures et détruit les objets SDL_Surface
+		for (i = 0; i < numberOfTileSheets; ++i) // Finis de charger les textures et détruit les objets SDL_Surface
 		{
-			SDL_Surface* tmp = convert_format_24_copy(bmp_tex[i]);
+			SDL_Surface* tmp = convert_format_24_copy(tileSheets[i]);
 			map->tex[i] = gfx->make_texture(tmp);
 			SDL_FreeSurface(tmp);
 		}
@@ -325,8 +338,8 @@ namespace TA3D
 			}
 		}
 
-		for (i = 0; i < n_bmp; ++i) // Delete SDL_Surface textures
-			SDL_FreeSurface(bmp_tex[i]);
+		for (i = 0; i < numberOfTileSheets; ++i) // Delete SDL_Surface textures
+			SDL_FreeSurface(tileSheets[i]);
 
 		event_timer = MILLISECONDS_SINCE_INIT;
 
@@ -522,7 +535,7 @@ namespace TA3D
 		LOG_DEBUG("MAP: freeing temporary allocated memory");
 
 		DELETE_ARRAY(TDF_index);
-		DELETE_ARRAY(bmp_tex);
+		DELETE_ARRAY(tileSheets);
 
 		return map;
 	}
