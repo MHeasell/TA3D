@@ -703,8 +703,8 @@ namespace TA3D
 				px = features.feature[metal_stuff_id].px;
 				py = features.feature[metal_stuff_id].py;
 			}
-			target.x = float((px << 3) - the_map->halfWidthInPixels);
-			target.z = float((py << 3) - the_map->halfHeightInPixels);
+			target.x = float((px << 3) - the_map->halfWidthInWorldUnits);
+			target.z = float((py << 3) - the_map->halfHeightInWorldUnits);
 			target.y = Math::Max(the_map->get_max_rect_h((int)target.x, (int)target.z, unit_manager.unit_type[unit_idx]->FootprintX, unit_manager.unit_type[unit_idx]->FootprintZ), the_map->sealvl);
 			return true;
 		}

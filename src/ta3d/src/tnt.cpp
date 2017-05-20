@@ -188,7 +188,7 @@ namespace TA3D
 		SDL_Surface** tileSheets = new SDL_Surface*[numberOfTileSheets];
 		for (i = 0; i < numberOfTileSheets; ++i)
 		{
-			tileSheets[i] = gfx->create_surface_ex(8, tilesPerSheet * MAP::GraphicalTileWidthInScreenPixels, MAP::GraphicalTileHeightInScreenPixels);
+			tileSheets[i] = gfx->create_surface_ex(8, tilesPerSheet * MAP::GraphicalTileWidthInPixels, MAP::GraphicalTileHeightInPixels);
 		}
 
 		// Read the tile bitmaps into the sheets
@@ -196,11 +196,11 @@ namespace TA3D
 		for (i = 0; i < header.tiles; ++i)
 		{
 			int sheetNumber = i / tilesPerSheet;
-			int offset = (i % tilesPerSheet) * MAP::GraphicalTileWidthInScreenPixels;
-			for (y = 0; y < MAP::GraphicalTileHeightInScreenPixels; ++y)
+			int offset = (i % tilesPerSheet) * MAP::GraphicalTileWidthInPixels;
+			for (y = 0; y < MAP::GraphicalTileHeightInPixels; ++y)
 			{
 				int rowOffset = (y * tileSheets[sheetNumber]->pitch) + offset;
-				file->read((byte*)tileSheets[sheetNumber]->pixels + rowOffset, MAP::GraphicalTileWidthInScreenPixels);
+				file->read((byte*)tileSheets[sheetNumber]->pixels + rowOffset, MAP::GraphicalTileWidthInPixels);
 			}
 		}
 
@@ -212,10 +212,10 @@ namespace TA3D
 
 		// These are known to be wrong (they should be twice as big)
 		// but other code depends on this for now.
-		map->heightInPixels = map->heightInGraphicalTiles * MAP::GraphicalTileHeightInPixels;
-		map->widthInPixels = map->widthInGraphicalTiles * MAP::GraphicalTileWidthInPixels;
-		map->halfHeightInPixels = map->heightInPixels / 2;
-		map->halfWidthInPixels = map->widthInPixels / 2;
+		map->heightInWorldUnits = map->heightInGraphicalTiles * MAP::GraphicalTileHeightInWorldUnits;
+		map->widthInWorldUnits = map->widthInGraphicalTiles * MAP::GraphicalTileWidthInWorldUnits;
+		map->halfHeightInWorldUnits = map->heightInWorldUnits / 2;
+		map->halfWidthInWorldUnits = map->widthInWorldUnits / 2;
 
 		map->bmap.resize(map->widthInGraphicalTiles, map->heightInGraphicalTiles);
 		map->view.resize(map->widthInGraphicalTiles, map->heightInGraphicalTiles);
@@ -507,8 +507,8 @@ namespace TA3D
 				if (type <= header.tileanims)
 				{
 					Vector3D Pos;
-					Pos.x = float((x << 3) - map->halfWidthInPixels) + 8.0f;
-					Pos.z = float((y << 3) - map->halfHeightInPixels) + 8.0f;
+					Pos.x = float((x << 3) - map->halfWidthInWorldUnits) + 8.0f;
+					Pos.z = float((y << 3) - map->halfHeightInWorldUnits) + 8.0f;
 					const Feature* const feature = feature_manager.getFeaturePointer(TDF_index[type]);
 					if (feature && !feature->m3d)
 						Pos.y = map->get_max_rect_h(x, y, feature->footprintx, feature->footprintz);

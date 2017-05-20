@@ -21,8 +21,8 @@ namespace TA3D
 	{
 		if (on_mini_map) // If the cursor is on the mini_map;
 		{
-			const float x = float(mouse_x - 64) * 252.0f / 128.0f * (float)map.widthInPixels / (float)map.mini_w;
-			const float z = float(mouse_y - 64) * 252.0f / 128.0f * (float)map.heightInPixels / (float)map.mini_h;
+			const float x = float(mouse_x - 64) * 252.0f / 128.0f * (float)map.widthInWorldUnits / (float)map.mini_w;
+			const float z = float(mouse_y - 64) * 252.0f / 128.0f * (float)map.heightInWorldUnits / (float)map.mini_h;
 			const float y = map.get_unit_h(x, z);
 			return Vector3D(x, y, z);
 		}
@@ -135,8 +135,8 @@ namespace TA3D
 	Vector2D Battle::minimapToWorldCoordinates(const Vector2D& coordinates) const
 	{
 		return Vector2D(
-			(coordinates.x - 0.5f) * map->widthInPixels,
-			(coordinates.y - 0.5f) * map->heightInPixels
+			(coordinates.x - 0.5f) * map->widthInWorldUnits,
+			(coordinates.y - 0.5f) * map->heightInWorldUnits
 		);
 	}
 

@@ -75,8 +75,8 @@ namespace TA3D
 			if (nodes.empty())
 				return;
 
-			pos.x = float((nodes.front().x() << 3) - the_map->halfWidthInPixels);
-			pos.z = float((nodes.front().z() << 3) - the_map->halfHeightInPixels);
+			pos.x = float((nodes.front().x() << 3) - the_map->halfWidthInWorldUnits);
+			pos.z = float((nodes.front().z() << 3) - the_map->halfHeightInWorldUnits);
 			pos.y = 0.0f;
 		}
 

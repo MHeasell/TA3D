@@ -1913,17 +1913,17 @@ namespace TA3D
 						}
 						else if (!flying && local)
 						{
-							if (Pos.x < -the_map->halfWidthInPixels || Pos.x > the_map->halfWidthInPixels || Pos.z < -the_map->halfHeightInPixels || Pos.z > the_map->halfHeightInPixels)
+							if (Pos.x < -the_map->halfWidthInWorldUnits || Pos.x > the_map->halfWidthInWorldUnits || Pos.z < -the_map->halfHeightInWorldUnits || Pos.z > the_map->halfHeightInWorldUnits)
 							{
 								Vector3D target = Pos;
-								if (target.x < -the_map->halfWidthInPixels + 256)
-									target.x = float(-the_map->halfWidthInPixels + 256);
-								else if (target.x > the_map->halfWidthInPixels - 256)
-									target.x = float(the_map->halfWidthInPixels - 256);
-								if (target.z < -the_map->halfHeightInPixels + 256)
-									target.z = float(-the_map->halfHeightInPixels + 256);
-								else if (target.z > the_map->halfHeightInPixels - 256)
-									target.z = float(the_map->halfHeightInPixels - 256);
+								if (target.x < -the_map->halfWidthInWorldUnits + 256)
+									target.x = float(-the_map->halfWidthInWorldUnits + 256);
+								else if (target.x > the_map->halfWidthInWorldUnits - 256)
+									target.x = float(the_map->halfWidthInWorldUnits - 256);
+								if (target.z < -the_map->halfHeightInWorldUnits + 256)
+									target.z = float(-the_map->halfHeightInWorldUnits + 256);
+								else if (target.z > the_map->halfHeightInWorldUnits - 256)
+									target.z = float(the_map->halfHeightInWorldUnits - 256);
 								next_mission();
 								add_mission(MISSION_MOVE | MISSION_FLAG_AUTO, &target, true, 0, NULL, 0, 1); // Stay on map
 							}
@@ -1973,16 +1973,16 @@ namespace TA3D
 
 		if (flying && local) // Force planes to stay on map
 		{
-			if (Pos.x < -the_map->halfWidthInPixels || Pos.x > the_map->halfWidthInPixels || Pos.z < -the_map->halfHeightInPixels || Pos.z > the_map->halfHeightInPixels)
+			if (Pos.x < -the_map->halfWidthInWorldUnits || Pos.x > the_map->halfWidthInWorldUnits || Pos.z < -the_map->halfHeightInWorldUnits || Pos.z > the_map->halfHeightInWorldUnits)
 			{
-				if (Pos.x < -the_map->halfWidthInPixels)
-					V.x += dt * (-(float)the_map->halfWidthInPixels - Pos.x) * 0.1f;
-				else if (Pos.x > the_map->halfWidthInPixels)
-					V.x -= dt * (Pos.x - (float)the_map->halfWidthInPixels) * 0.1f;
-				if (Pos.z < -the_map->halfHeightInPixels)
-					V.z += dt * (-(float)the_map->halfHeightInPixels - Pos.z) * 0.1f;
-				else if (Pos.z > the_map->halfHeightInPixels)
-					V.z -= dt * (Pos.z - (float)the_map->halfHeightInPixels) * 0.1f;
+				if (Pos.x < -the_map->halfWidthInWorldUnits)
+					V.x += dt * (-(float)the_map->halfWidthInWorldUnits - Pos.x) * 0.1f;
+				else if (Pos.x > the_map->halfWidthInWorldUnits)
+					V.x -= dt * (Pos.x - (float)the_map->halfWidthInWorldUnits) * 0.1f;
+				if (Pos.z < -the_map->halfHeightInWorldUnits)
+					V.z += dt * (-(float)the_map->halfHeightInWorldUnits - Pos.z) * 0.1f;
+				else if (Pos.z > the_map->halfHeightInWorldUnits)
+					V.z -= dt * (Pos.z - (float)the_map->halfHeightInWorldUnits) * 0.1f;
 				float speed = V.length();
 				if (speed > pType->MaxVelocity && speed > 0.0f)
 				{
@@ -2163,17 +2163,17 @@ namespace TA3D
 			goto script_exec;
 		}
 		else if (!jump_commands && do_nothing() && local)
-			if (Pos.x < -the_map->halfWidthInPixels || Pos.x > the_map->halfWidthInPixels || Pos.z < -the_map->halfHeightInPixels || Pos.z > the_map->halfHeightInPixels)
+			if (Pos.x < -the_map->halfWidthInWorldUnits || Pos.x > the_map->halfWidthInWorldUnits || Pos.z < -the_map->halfHeightInWorldUnits || Pos.z > the_map->halfHeightInWorldUnits)
 			{
 				Vector3D target = Pos;
-				if (target.x < -the_map->halfWidthInPixels + 256)
-					target.x = float(-the_map->halfWidthInPixels + 256);
-				else if (target.x > the_map->halfWidthInPixels - 256)
-					target.x = float(the_map->halfWidthInPixels - 256);
-				if (target.z < -the_map->halfHeightInPixels + 256)
-					target.z = float(-the_map->halfHeightInPixels + 256);
-				else if (target.z > the_map->halfHeightInPixels - 256)
-					target.z = float(the_map->halfHeightInPixels - 256);
+				if (target.x < -the_map->halfWidthInWorldUnits + 256)
+					target.x = float(-the_map->halfWidthInWorldUnits + 256);
+				else if (target.x > the_map->halfWidthInWorldUnits - 256)
+					target.x = float(the_map->halfWidthInWorldUnits - 256);
+				if (target.z < -the_map->halfHeightInWorldUnits + 256)
+					target.z = float(-the_map->halfHeightInWorldUnits + 256);
+				else if (target.z > the_map->halfHeightInWorldUnits - 256)
+					target.z = float(the_map->halfHeightInWorldUnits - 256);
 				add_mission(MISSION_MOVE | MISSION_FLAG_AUTO, &target, true, 0, NULL, 0, 1); // Stay on map
 			}
 
@@ -2952,7 +2952,7 @@ namespace TA3D
 										&& units.unit[attached_list[nb_attached - 1]].flags && can_be_built(mission->getTarget().getPos(), units.unit[attached_list[nb_attached - 1]].type_id, owner_id))
 									{
 										const int idx = attached_list[nb_attached - 1];
-										int param[] = {idx, PACKXZ(mission->getTarget().getPos().x * 2.0f + (float)the_map->widthInPixels, mission->getTarget().getPos().z * 2.0f + (float)the_map->heightInPixels)};
+										int param[] = {idx, PACKXZ(mission->getTarget().getPos().x * 2.0f + (float)the_map->widthInWorldUnits, mission->getTarget().getPos().z * 2.0f + (float)the_map->heightInWorldUnits)};
 										launchScript(SCRIPT_TransportDrop, 2, param);
 									}
 									else if (attached_list[nb_attached - 1] < 0 || attached_list[nb_attached - 1] >= (int)units.max_unit || units.unit[attached_list[nb_attached - 1]].flags == 0)
@@ -3891,8 +3891,8 @@ namespace TA3D
 								V.y = 0.0f;
 								V.z = 0.0f;
 								const Vector3D target = mission->getTarget().getPos();
-								if (the_map->check_rect((((int)(target.x) + the_map->halfWidthInPixels + 4) >> 3) - (unit_manager.unit_type[mission->getData()]->FootprintX >> 1),
-										(((int)(target.z) + the_map->halfHeightInPixels + 4) >> 3) - (unit_manager.unit_type[mission->getData()]->FootprintZ >> 1),
+								if (the_map->check_rect((((int)(target.x) + the_map->halfWidthInWorldUnits + 4) >> 3) - (unit_manager.unit_type[mission->getData()]->FootprintX >> 1),
+										(((int)(target.z) + the_map->halfHeightInWorldUnits + 4) >> 3) - (unit_manager.unit_type[mission->getData()]->FootprintZ >> 1),
 										unit_manager.unit_type[mission->getData()]->FootprintX,
 										unit_manager.unit_type[mission->getData()]->FootprintZ,
 										-1)) // Check if we have an empty place to build our unit
@@ -4449,7 +4449,7 @@ namespace TA3D
 			}
 			if (pType->canfly && !isBeingBuilt() && local)
 			{
-				if (!mission.empty() && ((mission->getFlags() & MISSION_FLAG_MOVE) || mission->mission() == MISSION_BUILD || mission->mission() == MISSION_BUILD_2 || mission->mission() == MISSION_REPAIR || mission->mission() == MISSION_ATTACK || mission->mission() == MISSION_MOVE || mission->mission() == MISSION_GUARD || mission->mission() == MISSION_GET_REPAIRED || mission->mission() == MISSION_PATROL || mission->mission() == MISSION_RECLAIM || nb_attached > 0 || Pos.x < -the_map->halfWidthInPixels || Pos.x > the_map->halfWidthInPixels || Pos.z < -the_map->halfHeightInPixels || Pos.z > the_map->halfHeightInPixels))
+				if (!mission.empty() && ((mission->getFlags() & MISSION_FLAG_MOVE) || mission->mission() == MISSION_BUILD || mission->mission() == MISSION_BUILD_2 || mission->mission() == MISSION_REPAIR || mission->mission() == MISSION_ATTACK || mission->mission() == MISSION_MOVE || mission->mission() == MISSION_GUARD || mission->mission() == MISSION_GET_REPAIRED || mission->mission() == MISSION_PATROL || mission->mission() == MISSION_RECLAIM || nb_attached > 0 || Pos.x < -the_map->halfWidthInWorldUnits || Pos.x > the_map->halfWidthInWorldUnits || Pos.z < -the_map->halfHeightInWorldUnits || Pos.z > the_map->halfHeightInWorldUnits))
 				{
 					if (!(mission->mission() == MISSION_GET_REPAIRED && (mission->getFlags() & MISSION_FLAG_BEING_REPAIRED)))
 					{
@@ -5077,16 +5077,16 @@ namespace TA3D
 
 		if (jamming)
 		{
-			radar_jam_range = system_activated ? (unit_manager.unit_type[unit_type]->RadarDistanceJam / MAP::GraphicalTileWidthInPixels) : 0;
-			sonar_jam_range = system_activated ? (unit_manager.unit_type[unit_type]->SonarDistanceJam / MAP::GraphicalTileWidthInPixels) : 0;
+			radar_jam_range = system_activated ? (unit_manager.unit_type[unit_type]->RadarDistanceJam / MAP::GraphicalTileWidthInWorldUnits) : 0;
+			sonar_jam_range = system_activated ? (unit_manager.unit_type[unit_type]->SonarDistanceJam / MAP::GraphicalTileWidthInWorldUnits) : 0;
 
 			the_map->update_player_visibility(owner_id, cur_px, cur_py, 0, 0, 0, radar_jam_range, sonar_jam_range, true);
 		}
 		else
 		{
-			uint32 cur_sight = ((int)h + unit_manager.unit_type[unit_type]->SightDistance) / MAP::GraphicalTileWidthInPixels;
-			radar_range = system_activated ? (unit_manager.unit_type[unit_type]->RadarDistance / MAP::GraphicalTileWidthInPixels) : 0;
-			sonar_range = system_activated ? (unit_manager.unit_type[unit_type]->SonarDistance / MAP::GraphicalTileWidthInPixels) : 0;
+			uint32 cur_sight = ((int)h + unit_manager.unit_type[unit_type]->SightDistance) / MAP::GraphicalTileWidthInWorldUnits;
+			radar_range = system_activated ? (unit_manager.unit_type[unit_type]->RadarDistance / MAP::GraphicalTileWidthInWorldUnits) : 0;
+			sonar_range = system_activated ? (unit_manager.unit_type[unit_type]->SonarDistance / MAP::GraphicalTileWidthInWorldUnits) : 0;
 
 			the_map->update_player_visibility(owner_id, cur_px, cur_py, cur_sight, radar_range, sonar_range, 0, 0, false, old_px != cur_px || old_py != cur_py || cur_sight != sight);
 

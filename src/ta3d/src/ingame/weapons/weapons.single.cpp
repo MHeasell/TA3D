@@ -606,7 +606,7 @@ namespace TA3D
 		}
 		else if (dying && killtime <= 0.0f)
 			weapon_id = -1;
-		else if (Pos.x < -the_map->halfWidthInPixels || Pos.x > the_map->halfWidthInPixels || Pos.z < -the_map->halfHeightInPixels || Pos.z > the_map->halfHeightInPixels) // We're out of the map
+		else if (Pos.x < -the_map->halfWidthInWorldUnits || Pos.x > the_map->halfWidthInWorldUnits || Pos.z < -the_map->halfHeightInWorldUnits || Pos.z > the_map->halfHeightInWorldUnits) // We're out of the map
 			weapon_id = -1;
 	}
 

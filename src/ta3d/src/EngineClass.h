@@ -183,13 +183,13 @@ namespace TA3D
 	class MAP : public ObjectSync
 	{
 	public:
+		static const int GraphicalTileWidthInWorldUnits;
+		static const int GraphicalTileHeightInWorldUnits;
+		static const int HeightmapTileWidthInWorldUnits;
+		static const int HeightmapTileHeightInWorldUnits;
+
 		static const int GraphicalTileWidthInPixels;
 		static const int GraphicalTileHeightInPixels;
-		static const int HeightmapTileWidthInPixels;
-		static const int HeightmapTileHeightInPixels;
-
-		static const int GraphicalTileWidthInScreenPixels;
-		static const int GraphicalTileHeightInScreenPixels;
 
 		//! Indicates whether the texture is loaded and must be destroyed
 		short ntex;
@@ -245,17 +245,17 @@ namespace TA3D
 		//! Sonar map. One sonar tile corresponds to one graphical tile.
 		Grid<PlayerMask> sonar_map;
 
-		//! Width of the map in pixels. (Really *half* the width, I'm working on it.)
-		int widthInPixels;
+		//! Width of the map in TA3D game units.
+		int widthInWorldUnits;
 
-		//! Height of the map in pixels. (Really *half* the height, I'm working on it.)
-		int heightInPixels;
+		//! Height of the map in TA3D game units.
+		int heightInWorldUnits;
 
-		//! Half the width of the map in pixels. (Really *one quarter* of the width, I'm working on it.)
-		int halfWidthInPixels;
+		//! Half the width of the map in TA3D game units.
+		int halfWidthInWorldUnits;
 
-		//! Half the height of the map in pixels. (Really *one quarte* of the height, I'm working on it.)
-		int halfHeightInPixels;
+		//! Half the height of the map in TA3D game units.
+		int halfHeightInWorldUnits;
 
 		//! Width in 32-pixel graphical tiles
 		int widthInGraphicalTiles;

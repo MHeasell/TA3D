@@ -288,10 +288,10 @@ namespace TA3D
 			// There is some UI-specific padding here because the UI overlaps the viewport,
 			// one day ideally the viewport dimensions should match the visible area on screen
 			// and this will no longer be needed.
-			float minCameraX = -(map->widthInPixels / 2.0f) + (cam.viewportWidth() / 2.0f) - 64.0f; // 64 is UI width (in world units)
-			float maxCameraX = (map->widthInPixels / 2.0f) - (cam.viewportWidth() / 2.0f) - 16.0f; // 16 for single graphics tile trim
-			float minCameraZ = -(map->heightInPixels / 2.0f) + (cam.viewportHeight() / 2.0f) - 16.0f; // 16 is top bar height
-			float maxCameraZ = map->halfHeightInPixels - (cam.viewportHeight() / 2.0f) + 16.0f - 64.0f; // 16 is bottom bar height, 64 is 4 graphics tile trim
+			float minCameraX = -(map->widthInWorldUnits / 2.0f) + (cam.viewportWidth() / 2.0f) - 64.0f; // 64 is UI width (in world units)
+			float maxCameraX = (map->widthInWorldUnits / 2.0f) - (cam.viewportWidth() / 2.0f) - 16.0f; // 16 for single graphics tile trim
+			float minCameraZ = -(map->heightInWorldUnits / 2.0f) + (cam.viewportHeight() / 2.0f) - 16.0f; // 16 is top bar height
+			float maxCameraZ = map->halfHeightInWorldUnits - (cam.viewportHeight() / 2.0f) + 16.0f - 64.0f; // 16 is bottom bar height, 64 is 4 graphics tile trim
 			if (cam.position().x < minCameraX)
 			{
 				cam.position().x = minCameraX;
@@ -583,8 +583,8 @@ namespace TA3D
 					target.y = map->get_max_rect_h((int)target.x, (int)target.z, unit_manager.unit_type[build]->FootprintX, unit_manager.unit_type[build]->FootprintZ);
 					if (unit_manager.unit_type[build]->floatting())
 						target.y = Math::Max(target.y, map->sealvl + ((float)unit_manager.unit_type[build]->AltFromSeaLevel - (float)unit_manager.unit_type[build]->WaterLine) * H_DIV);
-					target.x = target.x * 8.0f - (float)map->halfWidthInPixels;
-					target.z = target.z * 8.0f - (float)map->halfHeightInPixels;
+					target.x = target.x * 8.0f - (float)map->halfWidthInWorldUnits;
+					target.z = target.z * 8.0f - (float)map->halfHeightInWorldUnits;
 
 					can_be_there = can_be_built(target, build, players.local_human_id);
 
@@ -1677,8 +1677,8 @@ namespace TA3D
 			int last_on = units.last_on;
 
 			map->draw_mini(0, 0, 128, 128, &cam, toPlayerMask(players.local_human_id)); // Mini-carte
-			units.draw_mini((float)map->widthInPixels, (float)map->heightInPixels, map->mini_w, map->mini_h);
-			weapons.draw_mini((float)map->widthInPixels, (float)map->heightInPixels, map->mini_w, map->mini_h);
+			units.draw_mini((float)map->widthInWorldUnits, (float)map->heightInWorldUnits, map->mini_w, map->mini_h);
+			weapons.draw_mini((float)map->widthInWorldUnits, (float)map->heightInWorldUnits, map->mini_w, map->mini_h);
 
 			if (view_dbg)
 			{

@@ -137,8 +137,8 @@ namespace TA3D
 				target.y = map->get_max_rect_h((int)target.x, (int)target.z, unit_manager.unit_type[build]->FootprintX, unit_manager.unit_type[build]->FootprintZ);
 				if (unit_manager.unit_type[build]->floatting())
 					target.y = Math::Max(target.y, map->sealvl + ((float)unit_manager.unit_type[build]->AltFromSeaLevel - (float)unit_manager.unit_type[build]->WaterLine) * H_DIV);
-				target.x = target.x * 8.0f - (float)map->halfWidthInPixels;
-				target.z = target.z * 8.0f - (float)map->halfHeightInPixels;
+				target.x = target.x * 8.0f - (float)map->halfWidthInWorldUnits;
+				target.z = target.z * 8.0f - (float)map->halfHeightInWorldUnits;
 
 				can_be_there = can_be_built(target, build, players.local_human_id);
 

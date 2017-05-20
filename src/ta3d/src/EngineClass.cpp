@@ -52,16 +52,15 @@ namespace TA3D
 
 	MAP* the_map = NULL;
 
-	// these are known to be wrong (they should be twice as big)
-	// but other code currently has these values hard-coded.
-	const int MAP::GraphicalTileWidthInPixels = 16;
-	const int MAP::GraphicalTileHeightInPixels = 16;
-	const int MAP::HeightmapTileWidthInPixels = 8;
-	const int MAP::HeightmapTileHeightInPixels = 8;
+	// One world unit is equivalent to two pixels on screen.
+	const int MAP::GraphicalTileWidthInWorldUnits = 16;
+	const int MAP::GraphicalTileHeightInWorldUnits = 16;
+	const int MAP::HeightmapTileWidthInWorldUnits = 8;
+	const int MAP::HeightmapTileHeightInWorldUnits = 8;
 
-	// These are the correct values
-	const int MAP::GraphicalTileWidthInScreenPixels = 32;
-	const int MAP::GraphicalTileHeightInScreenPixels = 32;
+	// Texture size of the graphical tiles
+	const int MAP::GraphicalTileWidthInPixels = 32;
+	const int MAP::GraphicalTileHeightInPixels = 32;
 
 	void SECTOR::init()
 	{
@@ -744,8 +743,8 @@ namespace TA3D
 		for (auto it = viewportCoords.begin(); it != viewportCoords.end(); ++it)
 		{
 			// project from world space to minimap space
-			float projectedX = ((it->x + (widthInPixels / 2.0f)) / widthInPixels) * rw;
-			float projectedY = ((it->z + (heightInPixels / 2.0f)) / heightInPixels) * rh;
+			float projectedX = ((it->x + (widthInWorldUnits / 2.0f)) / widthInWorldUnits) * rw;
+			float projectedY = ((it->z + (heightInWorldUnits / 2.0f)) / heightInWorldUnits) * rh;
 			glVertex2f(projectedX, projectedY);
 		}
 		glEnd();
@@ -958,9 +957,9 @@ namespace TA3D
 			const int pre_y = y * 16;
 			const int Y = y * 2;
 			const int pre_y2 = y * widthInGraphicalTiles;
-			T.x = (float)-halfWidthInPixels;
+			T.x = (float)-halfWidthInWorldUnits;
 			T.y = 0.0f;
-			T.z = float(pre_y - halfHeightInPixels);
+			T.z = float(pre_y - halfHeightInWorldUnits);
 			buf_size = 0;
 			ox = x1;
 			bool was_clean = false;
@@ -1313,8 +1312,8 @@ namespace TA3D
 		}
 		int nb = 0;
 		int nb_limit = (int)(Pos.y) + 1000;
-		const float dwm = (float)halfWidthInPixels;
-		const float dhm = (float)halfHeightInPixels;
+		const float dwm = (float)halfWidthInWorldUnits;
+		const float dhm = (float)halfHeightInWorldUnits;
 		Dir = (1.0f * step) * Dir;
 		float len_step = Dir.length();
 		while (((sealvl < Pos.y && water) || !water) && get_max_h(worldToHeightmapIndex(Pos)) < Pos.y)
@@ -1472,8 +1471,8 @@ namespace TA3D
 		float x = xzPosition.x;
 		float z = xzPosition.y;
 
-		int newX = static_cast<int>((x + halfWidthInPixels) / HeightmapTileWidthInPixels);
-		int newZ = static_cast<int>((z + halfHeightInPixels) / HeightmapTileHeightInPixels);
+		int newX = static_cast<int>((x + halfWidthInWorldUnits) / HeightmapTileWidthInWorldUnits);
+		int newZ = static_cast<int>((z + halfHeightInWorldUnits) / HeightmapTileHeightInWorldUnits);
 
 		return Point<int>(newX, newZ);
 	}
@@ -1491,8 +1490,8 @@ namespace TA3D
 	Vector2D MAP::worldToHeightmapSpace(float x, float z) const
 	{
 		return Vector2D(
-			(x + halfWidthInPixels) / HeightmapTileWidthInPixels,
-			(z + halfHeightInPixels) / HeightmapTileHeightInPixels);
+			(x + halfWidthInWorldUnits) / HeightmapTileWidthInWorldUnits,
+			(z + halfHeightInWorldUnits) / HeightmapTileHeightInWorldUnits);
 	}
 
 	Vector2D MAP::heightmapIndexToWorld(const Point<int>& heightmapIndex) const
@@ -1502,15 +1501,15 @@ namespace TA3D
 
 	Vector2D MAP::heightmapIndexToWorld(int x, int y) const
 	{
-		int newX = (x * HeightmapTileWidthInPixels) + (HeightmapTileWidthInPixels / 2) - the_map->halfWidthInPixels;
-		int newY = (y * HeightmapTileHeightInPixels) + (HeightmapTileHeightInPixels / 2) - the_map->halfHeightInPixels;
+		int newX = (x * HeightmapTileWidthInWorldUnits) + (HeightmapTileWidthInWorldUnits / 2) - the_map->halfWidthInWorldUnits;
+		int newY = (y * HeightmapTileHeightInWorldUnits) + (HeightmapTileHeightInWorldUnits / 2) - the_map->halfHeightInWorldUnits;
 		return Vector2D(newX, newY);
 	}
 
 	Vector2D MAP::heightmapIndexToWorldCorner(const Point<int>& heightmapIndex) const
 	{
-		int x = (heightmapIndex.x * HeightmapTileWidthInPixels) - the_map->halfWidthInPixels;
-		int y = (heightmapIndex.y * HeightmapTileHeightInPixels) - the_map->halfHeightInPixels;
+		int x = (heightmapIndex.x * HeightmapTileWidthInWorldUnits) - the_map->halfWidthInWorldUnits;
+		int y = (heightmapIndex.y * HeightmapTileHeightInWorldUnits) - the_map->halfHeightInWorldUnits;
 		return Vector2D(x, y);
 	}
 
@@ -1519,8 +1518,8 @@ namespace TA3D
 		float x = xzPosition.x;
 		float z = xzPosition.y;
 
-		int newX = static_cast<int>((x + halfWidthInPixels) / GraphicalTileWidthInPixels);
-		int newZ = static_cast<int>((z + halfHeightInPixels) / GraphicalTileHeightInPixels);
+		int newX = static_cast<int>((x + halfWidthInWorldUnits) / GraphicalTileWidthInWorldUnits);
+		int newZ = static_cast<int>((z + halfHeightInWorldUnits) / GraphicalTileHeightInWorldUnits);
 
 		return Point<int>(newX, newZ);
 	}
@@ -1528,8 +1527,8 @@ namespace TA3D
 	Vector2D MAP::worldToNormalizedMinimapCoordinates(const Vector2D& xzPosition) const
 	{
 		return Vector2D(
-			(xzPosition.x + halfWidthInPixels) / widthInPixels,
-			(xzPosition.y + halfHeightInPixels) / heightInPixels
+			(xzPosition.x + halfWidthInWorldUnits) / widthInWorldUnits,
+			(xzPosition.y + halfHeightInWorldUnits) / heightInWorldUnits
 		);
 	}
 

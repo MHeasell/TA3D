@@ -727,13 +727,13 @@ namespace TA3D
 
 	int program_map_w(lua_State* L) // map_w()
 	{
-		lua_pushinteger(L, the_map->widthInPixels);
+		lua_pushinteger(L, the_map->widthInWorldUnits);
 		return 1;
 	}
 
 	int program_map_h(lua_State* L) // map_h()
 	{
-		lua_pushinteger(L, the_map->heightInPixels);
+		lua_pushinteger(L, the_map->heightInWorldUnits);
 		return 1;
 	}
 
@@ -1056,7 +1056,7 @@ namespace TA3D
 		lua_pop(L, 1);
 
 		if (player_id < players.count())
-			lua_pushnumber(L, float(the_map->ota_data.startX[player_id] - the_map->widthInPixels) * 0.5f);
+			lua_pushnumber(L, float(the_map->ota_data.startX[player_id] - the_map->widthInWorldUnits) * 0.5f);
 		else
 			lua_pushnumber(L, 0);
 		return 1;
@@ -1068,7 +1068,7 @@ namespace TA3D
 		lua_pop(L, 1);
 
 		if (player_id < players.count())
-			lua_pushnumber(L, float(the_map->ota_data.startZ[player_id] - the_map->heightInPixels) * 0.5f);
+			lua_pushnumber(L, float(the_map->ota_data.startZ[player_id] - the_map->heightInWorldUnits) * 0.5f);
 		else
 			lua_pushnumber(L, 0);
 		return 1;
