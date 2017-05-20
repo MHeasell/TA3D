@@ -215,8 +215,16 @@ namespace TA3D
 		//! Table of information about the terrain
 		Grid<SECTOR> map_data;
 
-		//! Indicates which plots of land are visible on the screen
-		Grid<PlayerMask> view;
+		//!
+		/**
+		 * Indicates which plots of land are visible on the screen.
+		 * The following values can be set:
+		 *
+		 * 1: in sight
+		 * 2: not in sight, (under)water
+		 * 3: not in sight, land
+		 */
+		Grid<byte> view;
 
 		//! Table for pathfinding
 		Grid<int> path;
