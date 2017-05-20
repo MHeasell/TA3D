@@ -134,49 +134,16 @@ namespace TA3D
 	/**
 	 * Blocks composing the map
 	 */
-	class BLOC
+	struct BLOC
 	{
-	public:
-		//! Array of points
-		Vector3D* point;
-
 		//! Texture coordinates
-		float* texcoord;
+		float texcoord[8];
 
 		//! OpenGL texture handle
 		GLuint tex;
 
-		//! Number of indexes
-		byte nbindex;
-
-		//! Number of points
-		byte nbpoint;
-
 		//! Is that a lava block?
 		bool lava;
-		byte tex_x;
-
-		void init()
-		{
-			nbindex = nbpoint = 0;
-			point = NULL;
-			texcoord = NULL;
-			tex = 0;
-			lava = false;
-			tex_x = 0;
-		}
-
-		BLOC()
-		{
-			init();
-		}
-
-		void destroy()
-		{
-			DELETE_ARRAY(point);
-			DELETE_ARRAY(texcoord);
-			init();
-		}
 	};
 
 	//! Map details
@@ -192,10 +159,10 @@ namespace TA3D
 		static const int GraphicalTileHeightInPixels;
 
 		//! Indicates whether the texture is loaded and must be destroyed
-		short ntex;
+		int numberOfTileSheets;
 
 		//! Surface texture
-		GLuint* tex;
+		GLuint* tileSheets;
 
 		//! Number of blocks
 		int nbbloc;
@@ -298,12 +265,8 @@ namespace TA3D
 		bool tnt;
 
 		// Coordinates of the last drawn map window
-		int ox1, ox2;
-		int oy1, oy2;
-
-
-		//! To speed up display
-		GLushort buf_i[6500];
+		int previousX1, previousX2;
+		int previousY1, previousY2;
 
 		//! Data read from the ota file
 		MAP_OTA ota_data;
@@ -365,6 +328,13 @@ namespace TA3D
 		 * Returns the XZ position of the top-left corner of the given heightmap tile in world space.
 		 */
 		Vector2D heightmapIndexToWorldCorner(const Point<int>& heightmapIndex) const;
+
+		/**
+		 * Returns the XZ position of the top-left corner of the given graphical tile in world space.
+		 */
+		Vector2D graphicalTileIndexToWorldCorner(const Point<int>& graphicalTileIndex) const;
+
+		Vector2D graphicalTileIndexToWorldCorner(int x, int y) const;
 
 		/**
 		 * Converts the given XZ coordinates in world space

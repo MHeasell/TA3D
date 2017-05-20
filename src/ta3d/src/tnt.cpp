@@ -246,30 +246,35 @@ namespace TA3D
 		map->view.fill(0);
 		map->nbbloc = header.tiles;		   // Nombre de blocs nécessaires
 		map->bloc = new BLOC[map->nbbloc]; // Alloue la mémoire pour les blocs
-		map->ntex = short(numberOfTileSheets);
-		map->tex = new GLuint[numberOfTileSheets]; // Tableau d'indices de texture OpenGl
+		map->numberOfTileSheets = numberOfTileSheets;
+		map->tileSheets = new GLuint[numberOfTileSheets]; // Tableau d'indices de texture OpenGl
 
-		for (i = 0; i < map->nbbloc; i++) // Crée les blocs
+		// Figure out which blocks are lava
+		for (i = 0; i < map->nbbloc; i++)
 		{
-			map->bloc[i].init();
-			const int tex_num = i >> 5;		// Numéro de la texture associée
-			const int tx = (i & 0x1F) << 5; // Coordonnées sur la texture
-			int r = 0, g = 0, b = 0;
-			for (y = 0; y < 32; ++y)
+			int sheetNumber = i / tilesPerSheet;
+			int offset = (i % tilesPerSheet) * MAP::GraphicalTileWidthInPixels;
+
+			// Figure out if the block is lava
+			// by looking at the colour(!!)
+			// If the block is red enough we'll call it lava.
+			int r = 0;
+			int g = 0;
+			int b = 0;
+			for (y = 0; y < MAP::GraphicalTileHeightInPixels; ++y)
 			{
-				for (x = tx; x < tx + 32; ++x)
+				for (x = offset; x < offset + MAP::GraphicalTileWidthInPixels; ++x)
 				{
-					const int c = SurfaceByte(tileSheets[tex_num], x, y);
+					const int c = SurfaceByte(tileSheets[sheetNumber], x, y);
 					r += pal[c].r;
 					g += pal[c].g;
 					b += pal[c].b;
 				}
 			}
-			r >>= 10;
-			g >>= 10;
-			b >>= 10;
-			map->bloc[i].lava = (r > 4 && g < (r >> 2) && b < (r >> 2));
-			map->bloc[i].tex_x = byte(tx >> 5);
+			r /= 1024;
+			g /= 1024;
+			b /= 1024;
+			map->bloc[i].lava = (r > 4 && g < (r / 4) && b < (r / 4));
 		}
 
 		LOG_INFO("Blocs read in " << float(MILLISECONDS_SINCE_INIT - event_timer) * 0.001f << "s.");
@@ -281,7 +286,7 @@ namespace TA3D
 		for (i = 0; i < numberOfTileSheets; ++i) // Finis de charger les textures et détruit les objets SDL_Surface
 		{
 			SDL_Surface* tmp = convert_format_24_copy(tileSheets[i]);
-			map->tex[i] = gfx->make_texture(tmp);
+			map->tileSheets[i] = gfx->make_texture(tmp);
 			SDL_FreeSurface(tmp);
 		}
 		LOG_INFO("Textures for blocks in " << float(MILLISECONDS_SINCE_INIT - event_timer) * 0.001f << "s.");
@@ -295,36 +300,30 @@ namespace TA3D
 		LOG_DEBUG("MAP: creating blocs texture coordinates");
 		for (i = 0; i < map->nbbloc; ++i) // Crée les blocs
 		{
-			// Numéro de texture
-			int t_n = i >> 5;
-			// Position sur la texture
-			float t_x = ((float)(i & 0x1F)) / 32.f;
+			int sheetNumber = i / tilesPerSheet;
+			float uOffset = (i % tilesPerSheet) / static_cast<float>(tilesPerSheet);
 
-			map->bloc[i].tex = map->tex[t_n];
-			map->bloc[i].nbpoint = 9;
-			map->bloc[i].nbindex = 12;
-			map->bloc[i].texcoord = new float[map->bloc[i].nbpoint << 1];
+			map->bloc[i].tex = map->tileSheets[sheetNumber];
 
-			const float c = (1.f / 32.f) - (1.f / 1024.f);
-			t_x += 1.f / 2048.f;
-			map->bloc[i].texcoord[0] = t_x;
-			map->bloc[i].texcoord[1] = 1.0f / 64.0f;
-			map->bloc[i].texcoord[2] = t_x + c * 0.5f;
-			map->bloc[i].texcoord[3] = 1.0f / 64.0f;
-			map->bloc[i].texcoord[4] = t_x + c;
-			map->bloc[i].texcoord[5] = 1.0f / 64.0f;
-			map->bloc[i].texcoord[6] = t_x;
-			map->bloc[i].texcoord[7] = 0.5f;
-			map->bloc[i].texcoord[8] = t_x + c * 0.5f;
-			map->bloc[i].texcoord[9] = 0.5f;
-			map->bloc[i].texcoord[10] = t_x + c;
-			map->bloc[i].texcoord[11] = 0.5f;
-			map->bloc[i].texcoord[12] = t_x;
-			map->bloc[i].texcoord[13] = 63.0f / 64.0f;
-			map->bloc[i].texcoord[14] = t_x + c * 0.5f;
-			map->bloc[i].texcoord[15] = 63.0f / 64.0f;
-			map->bloc[i].texcoord[16] = t_x + c;
-			map->bloc[i].texcoord[17] = 63.0f / 64.0f;
+			float uvTileWidth = 1.0f / tilesPerSheet;
+
+			float minU = uOffset;
+			float maxU = uOffset + uvTileWidth;
+			float minV = 0.0f;
+			float maxV = 1.0f;
+
+
+			map->bloc[i].texcoord[0] = minU;
+			map->bloc[i].texcoord[1] = maxV;
+
+			map->bloc[i].texcoord[2] = maxU;
+			map->bloc[i].texcoord[3] = maxV;
+
+			map->bloc[i].texcoord[4] = maxU;
+			map->bloc[i].texcoord[5] = minV;
+
+			map->bloc[i].texcoord[6] = minU;
+			map->bloc[i].texcoord[7] = minV;
 		}
 
 		file->seek(header.PTRmapdata);

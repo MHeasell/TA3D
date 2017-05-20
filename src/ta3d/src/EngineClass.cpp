@@ -116,8 +116,8 @@ namespace TA3D
 		wind_vec.reset();
 		ota_data.init();
 		mini_w = mini_h = 252;
-		ntex = 0;
-		tex = NULL;
+		numberOfTileSheets = 0;
+		tileSheets = NULL;
 		nbbloc = 0;
 		bloc = NULL;
 		bmap.resize(0, 0);
@@ -130,25 +130,7 @@ namespace TA3D
 		water = true;
 		tnt = false; // Laisse la possibilité de créer un autre format de cartes
 		view.resize(0, 0);
-		ox1 = ox2 = oy1 = oy2 = 0;
-		int buf_size = 0;
-		for (int i = 0; i < 6500; ++i)
-		{
-			buf_i[i++] = GLushort(0 + buf_size);
-			buf_i[i++] = GLushort(1 + buf_size);
-			buf_i[i++] = GLushort(3 + buf_size);
-			buf_i[i++] = GLushort(4 + buf_size);
-			buf_i[i++] = GLushort(6 + buf_size);
-			buf_i[i++] = GLushort(7 + buf_size);
-			buf_i[i++] = GLushort(7 + buf_size);
-			buf_i[i++] = GLushort(8 + buf_size);
-			buf_i[i++] = GLushort(4 + buf_size);
-			buf_i[i++] = GLushort(5 + buf_size);
-			buf_i[i++] = GLushort(1 + buf_size);
-			buf_i[i++] = GLushort(2 + buf_size);
-			buf_i[i] = GLushort(2 + buf_size);
-			buf_size += 9;
-		}
+		previousX1 = previousX2 = previousY1 = previousY2 = 0;
 	}
 
 	float MAP::get_unit_h(float x, float y) const
@@ -509,11 +491,11 @@ namespace TA3D
 	{
 		ota_data.destroy();
 
-		if (ntex > 0)
+		if (numberOfTileSheets > 0)
 		{
-			for (int i = 0; i < ntex; i++)
-				gfx->destroy_texture(tex[i]);
-			DELETE_ARRAY(tex);
+			for (int i = 0; i < numberOfTileSheets; i++)
+				gfx->destroy_texture(tileSheets[i]);
+			DELETE_ARRAY(tileSheets);
 		}
 		if (lvl)
 		{
@@ -523,11 +505,6 @@ namespace TA3D
 		}
 		if (bloc && nbbloc > 0)
 		{
-			for (int i = 0; i < nbbloc; i++)
-			{
-				bloc[i].point = NULL;
-				bloc[i].destroy();
-			}
 			DELETE_ARRAY(bloc);
 		}
 		init();
@@ -891,7 +868,7 @@ namespace TA3D
 		glDisable(GL_CULL_FACE);
 		glDisable(GL_LIGHTING);
 
-		if (ntex > 0)
+		if (numberOfTileSheets > 0)
 			gfx->ReInitAllTex(true);
 		else
 			glDisableClientState(GL_TEXTURE_COORD_ARRAY);
@@ -903,10 +880,10 @@ namespace TA3D
 		Vector3D cameraExtents(cam->viewportWidth() / 2.0f, 0.0f, cam->viewportHeight() / 2.0f);
 		auto topLeft = worldToGraphicalTileIndex(cam->position() - cameraExtents);
 		auto bottomRight = worldToGraphicalTileIndex(cam->position() + cameraExtents);
-		int x1 = Math::Clamp(topLeft.x, 0, widthInGraphicalTiles - 1);
-		int y1 = Math::Clamp(topLeft.y, 0, heightInGraphicalTiles - 1);
-		int x2 = Math::Clamp(bottomRight.x, 0, widthInGraphicalTiles - 1);
-		int y2 = Math::Clamp(bottomRight.y, 0, heightInGraphicalTiles - 1);
+		int x1 = Math::Clamp(topLeft.x, 0, widthInGraphicalTiles - 2);
+		int y1 = Math::Clamp(topLeft.y, 0, heightInGraphicalTiles - 2);
+		int x2 = Math::Clamp(bottomRight.x, 0, widthInGraphicalTiles - 2);
+		int y2 = Math::Clamp(bottomRight.y, 0, heightInGraphicalTiles - 2);
 
 		// ------------------------------------------------------------------
 		// End of visible area calculations
@@ -914,7 +891,7 @@ namespace TA3D
 
 		glColor4ub(0xFF, 0xFF, 0xFF, 0xFF);
 
-		if (ntex > 0)
+		if (numberOfTileSheets > 0)
 		{
 			glActiveTextureARB(GL_TEXTURE0_ARB);
 			glEnable(GL_TEXTURE_2D);
@@ -922,47 +899,17 @@ namespace TA3D
 			glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 		}
 
-		GLuint old_tex = bloc[0].tex;
-		glBindTexture(GL_TEXTURE_2D, old_tex);
-
-		for (int y = oy1; y <= oy2; ++y)
-			memset(&(view(ox1, y)), 0, ox2 - ox1 + 1);
+		for (int y = previousY1; y <= previousY2; ++y)
+			memset(&(view(previousX1, y)), 0, previousX2 - previousX1 + 1);
 		features.list.clear();
-		ox1 = x1;
-		ox2 = x2;
-		oy1 = y1;
-		oy2 = y2;
+		previousX1 = x1;
+		previousX2 = x2;
+		previousY1 = y1;
+		previousY2 = y2;
 
-		Vector3D buf_p[4500]; // Tampon qui accumule les blocs pour les dessiner en chaîne
-		float buf_t[9000];
-		uint8 buf_c[18000];
-		short buf_size = 0; // in blocs
-		uint16 index_size = 0;
-		bool was_flat = false;
-		glDisableClientState(GL_NORMAL_ARRAY); // we don't need normal data
-		glEnableClientState(GL_VERTEX_ARRAY);  // vertex coordinates
-		glEnableClientState(GL_COLOR_ARRAY);   // Colors(for fog of war)
-		glColorPointer(4, GL_UNSIGNED_BYTE, 0, buf_c);
-		glVertexPointer(3, GL_FLOAT, 0, buf_p);
-
-		glClientActiveTextureARB(GL_TEXTURE0_ARB);
-		glTexCoordPointer(2, GL_FLOAT, 0, buf_t);
-
-		int ox = x1;
-
-		Vector3D T;
-		Vector3D V;
 		for (int y = y1; y <= y2; ++y) // Scans blocks that can be seen to draw those that are visible
 		{
-			const int pre_y = y * 16;
 			const int Y = y * 2;
-			const int pre_y2 = y * widthInGraphicalTiles;
-			T.x = (float)-halfWidthInWorldUnits;
-			T.y = 0.0f;
-			T.z = float(pre_y - halfHeightInWorldUnits);
-			buf_size = 0;
-			ox = x1;
-			bool was_clean = false;
 
 			for (int x = x1; x <= x2; ++x)
 			{
@@ -1036,236 +983,105 @@ namespace TA3D
 					}
 				}
 
-				// If the player can not see this piece, it is not drawn in clear
-				T.x += float(x * 16);
-				const int i = bmap(x, y);
+				// Draw the tile quad
+				const int tileIndex = bmap(x, y);
 
-				bloc[i].point = lvl[pre_y2 + x];
-				if (bloc[i].point == NULL)
+				auto tilePosition = graphicalTileIndexToWorldCorner(x, y);
+				float tileX = tilePosition.x;
+				float tileY = tilePosition.y;
+
+				glBindTexture(GL_TEXTURE_2D, bloc[tileIndex].tex);
+
+				glBegin(GL_QUADS);
+
+				// bottom-left
+				if (fog_of_war == FOW_DISABLED)
 				{
-					lvl[pre_y2 + x] = bloc[i].point = new Vector3D[9];
-					if (tnt)
-					{
-						bloc[i].point[0].x = T.x;
-						bloc[i].point[0].z = get_zdec(X, Y) + T.z;
-						bloc[i].point[1].x = 8.0f + T.x;
-						bloc[i].point[1].z = get_zdec(X | 1, Y) + T.z;
-						bloc[i].point[2].x = 16.0f + T.x;
-						bloc[i].point[2].z = get_zdec(X + 2, Y) + T.z;
-						bloc[i].point[3].x = T.x;
-						bloc[i].point[3].z = 8.0f + get_zdec(X, Y | 1) + T.z;
-						bloc[i].point[4].x = 8.0f + T.x;
-						bloc[i].point[4].z = 8.0f + get_zdec(X | 1, Y | 1) + T.z;
-						bloc[i].point[5].x = 16.0f + T.x;
-						bloc[i].point[5].z = 8.0f + get_zdec(X + 2, Y | 1) + T.z;
-						bloc[i].point[6].x = T.x;
-						bloc[i].point[6].z = 16.0f + get_zdec(X, Y + 2) + T.z;
-						bloc[i].point[7].x = 8.0f + T.x;
-						bloc[i].point[7].z = 16.0f + get_zdec(X | 1, Y + 2) + T.z;
-						bloc[i].point[8].x = 16.0f + T.x;
-						bloc[i].point[8].z = 16.0f + get_zdec(X + 2, Y + 2) + T.z;
-						bloc[i].point[0].y = get_nh(X, Y);
-						bloc[i].point[1].y = get_nh(X | 1, Y);
-						bloc[i].point[2].y = get_nh(X + 2, Y);
-						bloc[i].point[3].y = get_nh(X, Y | 1);
-						bloc[i].point[4].y = get_nh(X | 1, Y | 1);
-						bloc[i].point[5].y = get_nh(X + 2, Y | 1);
-						bloc[i].point[6].y = get_nh(X, Y + 2);
-						bloc[i].point[7].y = get_nh(X | 1, Y + 2);
-						bloc[i].point[8].y = get_nh(X + 2, Y + 2);
-					}
-					else
-					{
-						bloc[i].point[0].x = T.x;
-						bloc[i].point[0].z = T.z;
-						bloc[i].point[1].x = 8.0f + T.x;
-						bloc[i].point[1].z = T.z;
-						bloc[i].point[2].x = 16.0f + T.x;
-						bloc[i].point[2].z = T.z;
-						bloc[i].point[3].x = T.x;
-						bloc[i].point[3].z = 8.0f + T.z;
-						bloc[i].point[4].x = 8.0f + T.x;
-						bloc[i].point[4].z = 8.0f + T.z;
-						bloc[i].point[5].x = 16.0f + T.x;
-						bloc[i].point[5].z = 8.0f + T.z;
-						bloc[i].point[6].x = T.x;
-						bloc[i].point[6].z = 16.0f + T.z;
-						bloc[i].point[7].x = 8.0f + T.x;
-						bloc[i].point[7].z = 16.0f + T.z;
-						bloc[i].point[8].x = 16.0f + T.x;
-						bloc[i].point[8].z = 16.0f + T.z;
-						bloc[i].point[0].y = get_h(X, Y);
-						bloc[i].point[1].y = get_h(X | 1, Y);
-						bloc[i].point[2].y = get_h(X + 2, Y);
-						bloc[i].point[3].y = get_h(X, Y | 1);
-						bloc[i].point[4].y = get_h(X | 1, Y | 1);
-						bloc[i].point[5].y = get_h(X + 2, Y | 1);
-						bloc[i].point[6].y = get_h(X, Y + 2);
-						bloc[i].point[7].y = get_h(X | 1, Y + 2);
-						bloc[i].point[8].y = get_h(X + 2, Y + 2);
-					}
-					map_data(X, Y).setFlat();
-					for (int f = 1; f < 9; ++f) // Check if it's flat
-					{
-						if (!Math::AlmostEquals(bloc[i].point[0].y, bloc[i].point[f].y))
-						{
-							map_data(X, Y).unsetFlat();
-							break;
-						}
-					}
+					glColor3f(1.0f, 1.0f, 1.0f);
 				}
-
-				if (bloc[i].tex != old_tex || buf_size >= 500 || ox + 1 < x)
+				else if (!isDiscoveredBy(player_mask, x, y + 1))
 				{
-					if (buf_size > 0)
-						glDrawRangeElements(GL_TRIANGLE_STRIP, 0, buf_size * 9, index_size, GL_UNSIGNED_SHORT, buf_i); // dessine le tout
-					buf_size = 0;
-					index_size = 0;
-					was_flat = false;
-					if (old_tex != bloc[i].tex)
-					{
-						old_tex = bloc[i].tex;
-						glBindTexture(GL_TEXTURE_2D, bloc[i].tex);
-					}
+					glColor3f(0.0f, 0.0f, 0.0f);
 				}
-				ox = x;
-
-				size_t buf_pos = buf_size * 9U;
-
-				for (int e = 0; e < 9; ++e) // Copie le bloc
-					buf_p[buf_pos + e] = bloc[i].point[e];
-
-				uint8* color = buf_c + (buf_pos * 4);
-
-				for (int e = 0; e < 36; e += 4)
-					color[e] = color[e + 1] = color[e + 2] = color[e + 3] = 255;
-
-				bool is_clean = true;
-				if (fog_of_war != FOW_DISABLED)
+				else if (!isInSightOf(player_mask, x, y + 1))
 				{
-					int Z;
-					int grey = 0;
-					int black = 0;
-					Z = Y + get_zdec_notest(X, Y);
-					if (Z >= heightInHeightmapTiles - 1)
-						Z = heightInHeightmapTiles - 2;
-					if (!isDiscoveredBy(player_mask, x, Z / 2))
-					{
-						color[0] = color[1] = color[2] = 0;
-						++black;
-					}
-					else if (!isInSightOf(player_mask, x, Z / 2))
-					{
-						color[0] = color[1] = color[2] = 127;
-						++grey;
-					}
-					if (X + 2 < widthInHeightmapTiles)
-					{
-						Z = Y + get_zdec_notest(X + 2, Y);
-						if (Z >= heightInHeightmapTiles - 1)
-							Z = heightInHeightmapTiles - 2;
-						if (!isDiscoveredBy(player_mask, x + 1, Z / 2))
-						{
-							color[8] = color[9] = color[10] = 0;
-							++black;
-						}
-						else if (!isInSightOf(player_mask, x + 1, Z / 2))
-						{
-							color[8] = color[9] = color[10] = 127;
-							++grey;
-						}
-					}
-					if (Y + 2 < heightInHeightmapTiles)
-					{
-						Z = Y + 2 + get_zdec_notest(X, Y + 2);
-						if (Z >= heightInHeightmapTiles - 1)
-							Z = heightInHeightmapTiles - 2;
-						if (!isDiscoveredBy(player_mask, x, Z / 2))
-						{
-							color[24] = color[25] = color[26] = 0;
-							++black;
-						}
-						else if (!isInSightOf(player_mask, x, Z / 2))
-						{
-							color[24] = color[25] = color[26] = 127;
-							++grey;
-						}
-						if (X + 2 < widthInHeightmapTiles)
-						{
-							Z = Y + 2 + get_zdec_notest(X + 2, Y + 2);
-							if (Z >= heightInHeightmapTiles - 1)
-								Z = heightInHeightmapTiles - 2;
-							if (!isDiscoveredBy(player_mask, x + 1, Z / 2))
-							{
-								color[32] = color[33] = color[34] = 0;
-								++black;
-							}
-							else if (!isInSightOf(player_mask, x + 1, Z / 2))
-							{
-								color[32] = color[33] = color[34] = 127;
-								++grey;
-							}
-						}
-					}
-					is_clean = grey == 4 || black == 4 || (grey == 0 && black == 0);
-					if (!map_data(X, Y).isFlat())
-					{
-						color[4] = color[5] = color[6] = uint8((color[0] + color[8]) / 2);
-						color[12] = color[13] = color[14] = uint8((color[0] + color[24]) / 2);
-						color[20] = color[21] = color[22] = uint8((color[8] + color[32]) / 2);
-						color[16] = color[17] = color[18] = uint8((color[12] + color[20]) / 2);
-						color[28] = color[29] = color[30] = uint8((color[24] + color[32]) / 2);
-					}
-				}
-
-				if (map_data(X, Y).isFlat())
-				{
-					if (was_flat && bloc[i].tex_x == bloc[bmap(x - 1, y)].tex_x + 1 && is_clean && was_clean && map_data(X, Y).isFlat())
-					{
-						buf_i[index_size - 4] = GLushort(2 + buf_pos);
-						buf_i[index_size - 2] = GLushort(8 + buf_pos);
-						buf_i[index_size - 1] = GLushort(2 + buf_pos);
-					}
-					else
-					{
-						buf_i[index_size++] = GLushort(buf_pos);
-						buf_i[index_size++] = GLushort(2 + buf_pos);
-						buf_i[index_size++] = GLushort(6 + buf_pos);
-						buf_i[index_size++] = GLushort(8 + buf_pos);
-						buf_i[index_size++] = GLushort(2 + buf_pos);
-						was_flat = map_data(X, Y).isFlat(); // If it's only lp_CONFIG->low_definition_map, it cannot be considered flat
-					}
+					glColor3f(0.5f, 0.5f, 0.5f);
 				}
 				else
 				{
-					was_flat = false;
-					buf_i[index_size++] = GLushort(buf_pos);
-					buf_i[index_size++] = GLushort(1 + buf_pos);
-					buf_i[index_size++] = GLushort(3 + buf_pos);
-					buf_i[index_size++] = GLushort(4 + buf_pos);
-					buf_i[index_size++] = GLushort(6 + buf_pos);
-					buf_i[index_size++] = GLushort(7 + buf_pos);
-					buf_i[index_size++] = GLushort(7 + buf_pos);
-					buf_i[index_size++] = GLushort(8 + buf_pos);
-					buf_i[index_size++] = GLushort(4 + buf_pos);
-					buf_i[index_size++] = GLushort(5 + buf_pos);
-					buf_i[index_size++] = GLushort(1 + buf_pos);
-					buf_i[index_size++] = GLushort(2 + buf_pos);
+					glColor3f(1.0f, 1.0f, 1.0f);
 				}
-				was_clean = is_clean;
-				T.x -= float(x * 16);
-				memcpy(buf_t + (buf_pos * 2), bloc[i].texcoord, 72); // texture
 
-				++buf_size;
-			}
-			if (buf_size > 0)
-			{
-				glDrawRangeElements(GL_TRIANGLE_STRIP, 0, buf_size * 9, index_size, GL_UNSIGNED_SHORT, buf_i); // dessine le tout
-				was_flat = false;
-				index_size = 0;
-				buf_size = 0;
+				glTexCoord2f(bloc[tileIndex].texcoord[0], bloc[tileIndex].texcoord[1]);
+				glVertex3f(tileX, 0.0f, tileY + GraphicalTileHeightInWorldUnits);
+
+				// bottom-right
+				if (fog_of_war == FOW_DISABLED)
+				{
+					glColor3f(1.0f, 1.0f, 1.0f);
+				}
+				else if (!isDiscoveredBy(player_mask, x + 1, y + 1))
+				{
+					glColor3f(0.0f, 0.0f, 0.0f);
+				}
+				else if (!isInSightOf(player_mask, x + 1, y + 1))
+				{
+					glColor3f(0.5f, 0.5f, 0.5f);
+				}
+				else
+				{
+					glColor3f(1.0f, 1.0f, 1.0f);
+				}
+
+				glTexCoord2f(bloc[tileIndex].texcoord[2], bloc[tileIndex].texcoord[3]);
+				glVertex3f(tileX + GraphicalTileWidthInWorldUnits, 0.0f, tileY + GraphicalTileHeightInWorldUnits);
+
+				// top-right
+				if (fog_of_war == FOW_DISABLED)
+				{
+					glColor3f(1.0f, 1.0f, 1.0f);
+				}
+				else if (!isDiscoveredBy(player_mask, x + 1, y))
+				{
+					glColor3f(0.0f, 0.0f, 0.0f);
+				}
+				else if (!isInSightOf(player_mask, x + 1, y))
+				{
+					glColor3f(0.5f, 0.5f, 0.5f);
+				}
+				else
+				{
+					glColor3f(1.0f, 1.0f, 1.0f);
+				}
+
+				glTexCoord2f(bloc[tileIndex].texcoord[4], bloc[tileIndex].texcoord[5]);
+				glVertex3f(tileX + GraphicalTileWidthInWorldUnits, 0.0f, tileY);
+
+				// top-left
+				if (fog_of_war == FOW_DISABLED)
+				{
+					glColor3f(1.0f, 1.0f, 1.0f);
+				}
+				else if (!isDiscoveredBy(player_mask, x, y))
+				{
+					glColor3f(0.0f, 0.0f, 0.0f);
+				}
+				else if (!isInSightOf(player_mask, x, y))
+				{
+					glColor3f(0.5f, 0.5f, 0.5f);
+				}
+				else
+				{
+					glColor3f(1.0f, 1.0f, 1.0f);
+				}
+
+				glTexCoord2f(bloc[tileIndex].texcoord[6], bloc[tileIndex].texcoord[7]);
+				glVertex3f(tileX, 0.0f, tileY);
+
+				glEnd();
 			}
 		}
+
 		glDisableClientState(GL_COLOR_ARRAY); // Colors (for fog of war)
 
 		gfx->unlock();
@@ -1511,6 +1327,18 @@ namespace TA3D
 		int x = (heightmapIndex.x * HeightmapTileWidthInWorldUnits) - the_map->halfWidthInWorldUnits;
 		int y = (heightmapIndex.y * HeightmapTileHeightInWorldUnits) - the_map->halfHeightInWorldUnits;
 		return Vector2D(x, y);
+	}
+
+	Vector2D MAP::graphicalTileIndexToWorldCorner(const Point<int>& graphicalTileIndex) const
+	{
+		int x = (graphicalTileIndex.x * GraphicalTileWidthInWorldUnits) - the_map->halfWidthInWorldUnits;
+		int y = (graphicalTileIndex.y * GraphicalTileHeightInWorldUnits) - the_map->halfHeightInWorldUnits;
+		return Vector2D(x, y);
+	}
+
+	Vector2D MAP::graphicalTileIndexToWorldCorner(int x, int y) const
+	{
+		return graphicalTileIndexToWorldCorner(Point<int>(x, y));
 	}
 
 	Point<int> MAP::worldToGraphicalTileIndex(const Vector2D& xzPosition) const
