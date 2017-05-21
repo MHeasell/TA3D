@@ -505,14 +505,12 @@ namespace TA3D
 				*file >> type;
 				if (type <= header.tileanims)
 				{
-					Vector3D Pos;
-					Pos.x = float((x << 3) - map->halfWidthInWorldUnits) + 8.0f;
-					Pos.z = float((y << 3) - map->halfHeightInWorldUnits) + 8.0f;
 					const Feature* const feature = feature_manager.getFeaturePointer(TDF_index[type]);
-					if (feature && !feature->m3d)
-						Pos.y = map->get_max_rect_h(x, y, feature->footprintx, feature->footprintz);
-					else
-						Pos.y = map->get_unit_h(Pos.x, Pos.z);
+					auto xzPos = map->heightmapIndexToWorldCorner(x, y);
+					xzPos.x += (feature->footprintx * MAP::HeightmapTileWidthInWorldUnits) / 2.0f;
+					xzPos.y += (feature->footprintz * MAP::HeightmapTileHeightInWorldUnits) / 2.0f;
+					float height = map->get_unit_h(xzPos.x, xzPos.y);
+					Vector3D Pos(xzPos.x, height, xzPos.y);
 					if (x + 1 < map->widthInHeightmapTiles && y + 1 < map->heightInHeightmapTiles)
 					{
 						map->map_data(x + 1, y + 1).stuff = features.add_feature(Pos, TDF_index[type]);

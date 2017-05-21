@@ -329,6 +329,8 @@ namespace TA3D
 		 */
 		Vector2D heightmapIndexToWorldCorner(const Point<int>& heightmapIndex) const;
 
+		Vector2D heightmapIndexToWorldCorner(int x, int y) const;
+
 		/**
 		 * Returns the XZ position of the top-left corner of the given graphical tile in world space.
 		 */

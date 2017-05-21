@@ -448,10 +448,10 @@ namespace TA3D
 		// draw at double y height to compensate for camera projection,
 		// which halves vertical distances.
 		const float points[] = {
-			-1.0f, 2.0f, 0.0f,
+			0.0f, 2.0f, 0.0f,
 			1.0f, 2.0f, 0.0f,
 			1.0f, 0.0f, 0.0f,
-			-1.0f, 0.0f, 0.0f,
+			0.0f, 0.0f, 0.0f,
 			};
 		bool set = true;
 
@@ -486,6 +486,7 @@ namespace TA3D
 			if (pFeature->not_loaded)
 				pFeature->convert(); // Load data and convert texture
 
+			// If the feature is sprite-based
 			if (!pFeature->m3d && pFeature->anim.nb_bmp > 0)
 			{
 				pFeature->convert(); // Convert texture data if needed
@@ -499,14 +500,18 @@ namespace TA3D
 					glBindTexture(GL_TEXTURE_2D, pFeature->anim.glbmp[feature[i].frame]);
 				}
 
-				Vector3D Pos(feature[i].Pos);
-				float h = float(pFeature->height);
-				float dw = 0.5f * float(pFeature->anim.w[feature[i].frame]);
+				// We divide by 2 a bunch here to convert from pixels to game units,
+				// should be refactored into a method.
+				Vector3D featurePosition(feature[i].Pos);
+				float animOffsetX = pFeature->anim.ofs_x[feature[i].frame] / 2.0f;
+				float animOffsetZ = pFeature->anim.ofs_y[feature[i].frame] / 2.0f;
+				float featureHeight = pFeature->height;
+				float frameWidth = pFeature->anim.w[feature[i].frame] / 2.0f;
+				float frameHeight = pFeature->anim.h[feature[i].frame] / 2.0f;
 
-				if (pFeature->height > 5.0f)
+				// If the feature is tall enough, render it standing up
+				if (featureHeight > 5.0f)
 				{
-					dw *= h / float(pFeature->anim.h[feature[i].frame]);
-
 					if (feature[i].grey)
 						glColor4ub(127, 127, 127, 255);
 					else
@@ -524,21 +529,28 @@ namespace TA3D
 					}
 
 					glPushMatrix();
-					glTranslatef(feature[i].Pos.x, feature[i].Pos.y, feature[i].Pos.z);
-					glScalef(dw, h, dw);
+					glTranslatef(
+						featurePosition.x - animOffsetX,
+						featurePosition.y,
+						featurePosition.z + frameHeight - animOffsetZ);
+					glScalef(frameWidth, frameHeight, 1.0f);
 					glDrawElements(GL_QUADS, 4, GL_UNSIGNED_BYTE, index); // draw it
 					glPopMatrix();
 				}
+				// Otherwise render it flat on the ground
 				else
 				{
-					dw *= 0.5f;
-					h = 0.25f * float(pFeature->anim.h[feature[i].frame]);
-					Pos.x += float(pFeature->anim.ofs_x[feature[i].frame]) * 0.5f - dw;
-					Pos.z += float(pFeature->anim.ofs_y[feature[i].frame]) * 0.5f - h;
-
-					quad_table.queue_quad(pFeature->anim.glbmp[feature[i].frame], QUAD(Pos, dw, h, feature[i].grey ? 0xFF7F7F7F : 0xFFFFFFFF));
+					auto featureColor = feature[i].grey ? 0xFF7F7F7F : 0xFFFFFFFF;
+					auto framePosition = Vector3D(
+						featurePosition.x + (frameWidth / 2.0f) - animOffsetX,
+						featurePosition.y,
+						featurePosition.z + (frameHeight / 2.0f) - animOffsetZ
+					);
+					auto featureQuad = QUAD(framePosition, frameWidth / 2.0f, frameHeight / 2.0f, featureColor);
+					quad_table.queue_quad(pFeature->anim.glbmp[feature[i].frame], featureQuad);
 				}
 			}
+			// If the feature is model-based
 			else if (pFeature->m3d && pFeature->model != NULL)
 			{
 				if (!pFeature->model->animated && !feature[i].sinking && pFeature->model->useDL)

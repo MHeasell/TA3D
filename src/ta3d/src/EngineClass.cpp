@@ -1329,6 +1329,11 @@ namespace TA3D
 		return Vector2D(x, y);
 	}
 
+	Vector2D MAP::heightmapIndexToWorldCorner(int x, int y) const
+	{
+		return heightmapIndexToWorldCorner(Point<int>(x, y));
+	}
+
 	Vector2D MAP::graphicalTileIndexToWorldCorner(const Point<int>& graphicalTileIndex) const
 	{
 		int x = (graphicalTileIndex.x * GraphicalTileWidthInWorldUnits) - the_map->halfWidthInWorldUnits;
