@@ -415,7 +415,7 @@ namespace TA3D
 		symbolic_features.clear();
 	}
 
-	void Features::draw(float t, bool no_flat)
+	void Features::draw(float t)
 	{
 		if (nb_features <= 0)
 			return;
@@ -531,16 +531,12 @@ namespace TA3D
 				}
 				else
 				{
-					// no need to draw things we can't see
-					if (!no_flat)
-					{
-						dw *= 0.5f;
-						h = 0.25f * float(pFeature->anim.h[feature[i].frame]);
-						Pos.x += float(pFeature->anim.ofs_x[feature[i].frame]) * 0.5f - dw;
-						Pos.z += float(pFeature->anim.ofs_y[feature[i].frame]) * 0.5f - h;
+					dw *= 0.5f;
+					h = 0.25f * float(pFeature->anim.h[feature[i].frame]);
+					Pos.x += float(pFeature->anim.ofs_x[feature[i].frame]) * 0.5f - dw;
+					Pos.z += float(pFeature->anim.ofs_y[feature[i].frame]) * 0.5f - h;
 
-						quad_table.queue_quad(pFeature->anim.glbmp[feature[i].frame], QUAD(Pos, dw, h, feature[i].grey ? 0xFF7F7F7F : 0xFFFFFFFF));
-					}
+					quad_table.queue_quad(pFeature->anim.glbmp[feature[i].frame], QUAD(Pos, dw, h, feature[i].grey ? 0xFF7F7F7F : 0xFFFFFFFF));
 				}
 			}
 			else

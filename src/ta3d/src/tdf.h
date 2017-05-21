@@ -385,7 +385,7 @@ namespace TA3D
 		** \brief
 		** \param no_flat
 		*/
-		void draw(float t, bool no_flat = false);
+		void draw(float t);
 
 		/*!
 		** \brief
