@@ -539,45 +539,42 @@ namespace TA3D
 					quad_table.queue_quad(pFeature->anim.glbmp[feature[i].frame], QUAD(Pos, dw, h, feature[i].grey ? 0xFF7F7F7F : 0xFFFFFFFF));
 				}
 			}
-			else
+			else if (pFeature->m3d && pFeature->model != NULL)
 			{
-				if (pFeature->m3d && pFeature->model != NULL)
+				if (!pFeature->model->animated && !feature[i].sinking && pFeature->model->useDL)
 				{
-					if (!pFeature->model->animated && !feature[i].sinking && pFeature->model->useDL)
-					{
-						DrawingTable.queue_Instance(pFeature->model->id,
-							Instance(feature[i].Pos, feature[i].grey ? 0xFF7F7F7F : 0xFFFFFFFF,
-								feature[i].angle));
-					}
+					DrawingTable.queue_Instance(pFeature->model->id,
+						Instance(feature[i].Pos, feature[i].grey ? 0xFF7F7F7F : 0xFFFFFFFF,
+							feature[i].angle));
+				}
+				else
+				{
+					if (feature[i].grey)
+						glColor4ub(127, 127, 127, 255);
 					else
-					{
-						if (feature[i].grey)
-							glColor4ub(127, 127, 127, 255);
-						else
-							glColor4ub(255, 255, 255, 255);
-						glEnable(GL_LIGHTING);
-						glDisable(GL_BLEND);
-						if (!pFeature->converted) // To fix opacity with converted models
-							glDisable(GL_ALPHA_TEST);
-						glPushMatrix();
-						glTranslatef(feature[i].Pos.x, feature[i].Pos.y, feature[i].Pos.z);
-						glRotatef(feature[i].angle, 0.0f, 1.0f, 0.0f);
-						glRotatef(feature[i].angle_x, 1.0f, 0.0f, 0.0f);
-						float lt = t + float(feature[i].timeRef) * ticks2sec;
-						pFeature->model->draw(lt, NULL, false, false, false, 0, NULL, NULL, NULL, 0.0f, NULL, false, 0, !feature[i].grey);
+						glColor4ub(255, 255, 255, 255);
+					glEnable(GL_LIGHTING);
+					glDisable(GL_BLEND);
+					if (!pFeature->converted) // To fix opacity with converted models
+						glDisable(GL_ALPHA_TEST);
+					glPushMatrix();
+					glTranslatef(feature[i].Pos.x, feature[i].Pos.y, feature[i].Pos.z);
+					glRotatef(feature[i].angle, 0.0f, 1.0f, 0.0f);
+					glRotatef(feature[i].angle_x, 1.0f, 0.0f, 0.0f);
+					float lt = t + float(feature[i].timeRef) * ticks2sec;
+					pFeature->model->draw(lt, NULL, false, false, false, 0, NULL, NULL, NULL, 0.0f, NULL, false, 0, !feature[i].grey);
 
-						gfx->ReInitAllTex(true);
+					gfx->ReInitAllTex(true);
 
-						glPopMatrix();
-						glEnable(GL_BLEND);
-						if (!pFeature->converted) // To fix opacity with converted models
-							glEnable(GL_ALPHA_TEST);
-						glDisable(GL_LIGHTING);
-						glDisable(GL_CULL_FACE);
-						glEnable(GL_TEXTURE_2D);
-						texture_loaded = false;
-						set = false;
-					}
+					glPopMatrix();
+					glEnable(GL_BLEND);
+					if (!pFeature->converted) // To fix opacity with converted models
+						glEnable(GL_ALPHA_TEST);
+					glDisable(GL_LIGHTING);
+					glDisable(GL_CULL_FACE);
+					glEnable(GL_TEXTURE_2D);
+					texture_loaded = false;
+					set = false;
 				}
 			}
 		}
