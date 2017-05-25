@@ -127,6 +127,15 @@ namespace TA3D
 		}
 
 		/**
+		 * Quantizes a value to the nearest multiple of the given interval.
+		 *
+		 * @param value The value to quantize.
+		 * @param interval The interval. Must be a positive (>0) number.
+		 * @return The quantized value.
+		 */
+		float snapToInterval(float value, float interval);
+
+		/**
 		 * Generates a random floating point number x,
 		 * where min <= x < max.
 		 */
