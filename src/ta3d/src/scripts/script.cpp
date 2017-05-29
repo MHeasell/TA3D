@@ -1013,8 +1013,9 @@ namespace TA3D
 	{
 		if ((int)lua_tointeger(L, 1) == players.local_human_id)
 		{
-			Camera::inGame->position().x = (float)lua_tonumber(L, 2);
-			Camera::inGame->position().z = (float)lua_tonumber(L, 3);
+			float x = (float)lua_tonumber(L, 2);
+			float z = (float)lua_tonumber(L, 3);
+			Camera::inGame->setPosition(x, z);
 		}
 		else
 		{

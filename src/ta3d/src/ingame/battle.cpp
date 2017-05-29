@@ -294,19 +294,19 @@ namespace TA3D
 			float maxCameraZ = map->halfHeightInWorldUnits - (cam.viewportHeight() / 2.0f) + 16.0f - 64.0f; // 16 is bottom bar height, 64 is 4 graphics tile trim
 			if (cam.position().x < minCameraX)
 			{
-				cam.position().x = minCameraX;
+				cam.setX(minCameraX);
 			}
 			if (cam.position().x > maxCameraX)
 			{
-				cam.position().x = maxCameraX;
+				cam.setX(maxCameraX);
 			}
 			if (cam.position().z < minCameraZ)
 			{
-				cam.position().z = minCameraZ;
+				cam.setZ(minCameraZ);
 			}
 			if (cam.position().z > maxCameraZ)
 			{
-				cam.position().z = maxCameraZ;
+				cam.setZ(maxCameraZ);
 			}
 
 			if (!selected)

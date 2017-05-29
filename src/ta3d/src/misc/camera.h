@@ -50,8 +50,6 @@ namespace TA3D
 
 		const Vector3D& side() const;
 
-		Vector3D& position();
-
 		/**
 		 * Returns a list of vertex positions representing the shadow
 		 * that the camera's viewport casts on the XZ plane
@@ -83,6 +81,10 @@ namespace TA3D
 		void translate(const float x, const float y);
 
 		void setPosition(const float x, const float y);
+
+		void setX(const float x);
+
+		void setZ(const float z);
 
 	private:
 		static Matrix createProjectionMatrix(float width, float height);

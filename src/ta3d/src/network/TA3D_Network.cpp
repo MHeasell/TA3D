@@ -462,8 +462,7 @@ namespace TA3D
 				case EVENT_CAMERA_POS:
 					if (event_msg.opt1 == players.local_human_id) // Move the camera only if the packet is for us
 					{
-						Camera::inGame->position().x = event_msg.x;
-						Camera::inGame->position().z = event_msg.z;
+						Camera::inGame->setPosition(event_msg.x, event_msg.z);
 					}
 					break;
 				case EVENT_UNIT_SYNCED:

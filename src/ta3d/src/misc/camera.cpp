@@ -109,6 +109,16 @@ namespace TA3D
 		_position = Vector3D(x, _position.y, y);
 	}
 
+	void Camera::setX(const float x)
+	{
+		_position.x = x;
+	}
+
+	void Camera::setZ(const float z)
+	{
+		_position.z = z;
+	}
+
 	Matrix Camera::createProjectionMatrix(float width, float height)
 	{
 		float halfWidth = width / 2.0f;
@@ -167,11 +177,6 @@ namespace TA3D
 	}
 
 	const Vector3D& Camera::position() const
-	{
-		return _position;
-	}
-
-	Vector3D& Camera::position()
 	{
 		return _position;
 	}
