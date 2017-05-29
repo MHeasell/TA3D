@@ -302,6 +302,8 @@ namespace TA3D
 
 	}; // class Vector3D
 
+	std::ostream& operator<<(std::ostream& lhs, const Vector3D& rhs);
+
 } // namespace TA3D
 
 //! \name Operators for Vectors

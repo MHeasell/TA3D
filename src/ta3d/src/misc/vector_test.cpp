@@ -33,4 +33,14 @@ namespace TA3D
 			REQUIRE(a.dot(b) == 32.0f);
 		}
 	}
+	TEST_CASE("Vector operator<<")
+	{
+		SECTION("prints the vector to the stream")
+		{
+			Vector3D v(0.5f, 1.0f, 1.5f);
+			std::ostringstream os;
+			os << v;
+			REQUIRE(os.str() == "(0.5, 1, 1.5)");
+		}
+	}
 }

@@ -30,4 +30,9 @@ namespace TA3D
 		}
 	}
 
+	std::ostream& operator<<(std::ostream& lhs, const Vector3D& rhs)
+	{
+		lhs << "(" << rhs.x << ", " << rhs.y << ", " << rhs.z << ")";
+	}
+
 } // namespace TA3D
