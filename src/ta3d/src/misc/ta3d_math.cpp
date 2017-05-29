@@ -79,13 +79,7 @@ namespace TA3D
 
 		float snapToInterval(float value, float interval)
 		{
-			float remainder = remainderf(value, interval);
-			float newValue = value - remainder;
-			if (remainder >= interval / 2.0f)
-			{
-				newValue += interval;
-			}
-			return newValue;
+			return roundf(value / interval) * interval;
 		}
 
 		PreCachedRandomNumbers::PreCachedRandomNumbers()
