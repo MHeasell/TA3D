@@ -23,6 +23,9 @@ namespace TA3D
 			REQUIRE(Math::snapToInterval(-23.0f, 5.0f) == Approx(-25.0f));
 			REQUIRE(Math::snapToInterval(-4.3f, 0.5f) == Approx(-4.5f));
 			REQUIRE(Math::snapToInterval(-4.2f, 0.5f) == Approx(-4.0f));
+			REQUIRE(Math::snapToInterval(0.24f, 0.5f) == Approx(0.0f));
+			REQUIRE(Math::snapToInterval(0.25f, 0.5f) == Approx(0.5f));
+			REQUIRE(Math::snapToInterval(0.26f, 0.5f) == Approx(0.5f));
 		}
 	}
 }

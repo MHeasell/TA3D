@@ -83,7 +83,7 @@ namespace TA3D
 			float newValue = value - remainder;
 			if (remainder >= interval / 2.0f)
 			{
-				newValue += remainder;
+				newValue += interval;
 			}
 			return newValue;
 		}
