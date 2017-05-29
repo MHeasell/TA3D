@@ -202,7 +202,7 @@ namespace TA3D
 
 	Matrix Camera::worldTranslation() const
 	{
-		return Translate(-1 * position());
+		return Translate(-position());
 	}
 
 	Matrix Camera::inverseWorldTranslation() const
