@@ -176,9 +176,13 @@ namespace TA3D
 		return _viewportHeight;
 	}
 
-	const Vector3D& Camera::position() const
+	Vector3D Camera::position() const
 	{
-		return _position;
+		return Vector3D(
+			Math::snapToInterval(_position.x, 0.5f),
+			_position.y,
+			Math::snapToInterval(_position.z, 0.5f)
+		);
 	}
 
 	const Vector3D& Camera::direction() const
@@ -198,12 +202,12 @@ namespace TA3D
 
 	Matrix Camera::worldTranslation() const
 	{
-		return Translate(-1 * _position);
+		return Translate(-1 * position());
 	}
 
 	Matrix Camera::inverseWorldTranslation() const
 	{
-		return Translate(_position);
+		return Translate(position());
 	}
 
 	bool Camera::viewportContains(const Vector3D& point) const

@@ -42,7 +42,7 @@ namespace TA3D
 
 		float viewportHeight() const;
 
-		const Vector3D& position() const;
+		Vector3D position() const;
 
 		const Vector3D& direction() const;
 
