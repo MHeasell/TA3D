@@ -82,6 +82,11 @@ namespace TA3D
 			return roundf(value / interval) * interval;
 		}
 
+		float truncateToInterval(float value, float interval)
+		{
+			return truncf(value / interval) * interval;
+		}
+
 		PreCachedRandomNumbers::PreCachedRandomNumbers()
 		{
 			reset();

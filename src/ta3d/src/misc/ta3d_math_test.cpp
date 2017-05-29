@@ -28,4 +28,20 @@ namespace TA3D
 			REQUIRE(Math::snapToInterval(0.26f, 0.5f) == Approx(0.5f));
 		}
 	}
+
+	TEST_CASE("truncateToInterval")
+	{
+		SECTION("quantizes a value to the multiple of the interval that is closest to zero")
+		{
+			REQUIRE(Math::truncateToInterval(11.3f, 2.0f) == Approx(10.0f));
+			REQUIRE(Math::truncateToInterval(11.0f, 2.0f) == Approx(10.0f));
+			REQUIRE(Math::truncateToInterval(-22.0f, 5.0f) == Approx(-20.0f));
+			REQUIRE(Math::truncateToInterval(-23.0f, 5.0f) == Approx(-20.0f));
+			REQUIRE(Math::truncateToInterval(-4.3f, 0.5f) == Approx(-4.0f));
+			REQUIRE(Math::truncateToInterval(-4.2f, 0.5f) == Approx(-4.0f));
+			REQUIRE(Math::truncateToInterval(0.24f, 0.5f) == Approx(0.0f));
+			REQUIRE(Math::truncateToInterval(0.25f, 0.5f) == Approx(0.0f));
+			REQUIRE(Math::truncateToInterval(0.26f, 0.5f) == Approx(0.0f));
+		}
+	}
 }
