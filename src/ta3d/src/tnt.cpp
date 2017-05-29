@@ -510,6 +510,12 @@ namespace TA3D
 					xzPos.x += (feature->footprintx * MAP::HeightmapTileWidthInWorldUnits) / 2.0f;
 					xzPos.y += (feature->footprintz * MAP::HeightmapTileHeightInWorldUnits) / 2.0f;
 					float height = map->get_unit_h(xzPos.x, xzPos.y);
+
+					// Quantize the height so sprite-based features are aligned with screen pixels.
+					// 1 pixel is 0.5 world units, but height contributes half due to the projection,
+					// so we quantize to whole world units.
+					height = Math::truncateToInterval(height, 1.0f);
+
 					Vector3D Pos(xzPos.x, height, xzPos.y);
 					if (x + 1 < map->widthInHeightmapTiles && y + 1 < map->heightInHeightmapTiles)
 					{
