@@ -3863,7 +3863,8 @@ namespace TA3D
 						Vector3D Dir = mission->getTarget().getPos() - Pos;
 						Dir.y = 0.0f;
 						const float dist = Dir.lengthSquared();
-						const int maxdist = (int)pType->BuildDistance + ((unit_manager.unit_type[mission->getData()]->FootprintX + unit_manager.unit_type[mission->getData()]->FootprintZ) << 1);
+						const auto unitType = unit_manager.unit_type[mission->getData()];
+						const int maxdist = (int)pType->BuildDistance + ((unitType->FootprintX + unitType->FootprintZ) << 1);
 						if (dist > maxdist * maxdist && pType->BMcode) // If the unit is too far from the worksite
 						{
 							setFlag(mission->Flags(), MISSION_FLAG_MOVE);
@@ -3891,10 +3892,11 @@ namespace TA3D
 								V.y = 0.0f;
 								V.z = 0.0f;
 								const Vector3D target = mission->getTarget().getPos();
-								if (the_map->check_rect((((int)(target.x) + the_map->halfWidthInWorldUnits + 4) >> 3) - (unit_manager.unit_type[mission->getData()]->FootprintX >> 1),
-										(((int)(target.z) + the_map->halfHeightInWorldUnits + 4) >> 3) - (unit_manager.unit_type[mission->getData()]->FootprintZ >> 1),
-										unit_manager.unit_type[mission->getData()]->FootprintX,
-										unit_manager.unit_type[mission->getData()]->FootprintZ,
+								if (the_map->check_rect((((int)(target.x) + the_map->halfWidthInWorldUnits + 4) >> 3) - (
+															unitType->FootprintX >> 1),
+										(((int)(target.z) + the_map->halfHeightInWorldUnits + 4) >> 3) - (unitType->FootprintZ >> 1),
+										unitType->FootprintX,
+										unitType->FootprintZ,
 										-1)) // Check if we have an empty place to build our unit
 								{
 									pMutex.unlock();
