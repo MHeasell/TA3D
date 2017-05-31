@@ -1107,7 +1107,7 @@ namespace TA3D
 		return (view_map(x, z) & player_mask) != 0;
 	}
 
-	Vector3D MAP::hit(Vector3D Pos, Vector3D Dir, bool water, float length, bool allow_out) const // Calculates the intersection of a ray with the map (the ray starts from the top of the map)
+	Vector3D MAP::hit(Vector3D Pos, Vector3D Dir, bool water, float length, bool allow_out) const
 	{
 		if (Math::AlmostZero(Dir.x) && Math::AlmostZero(Dir.z)) // Trivial solution
 		{

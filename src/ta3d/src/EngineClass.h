@@ -424,7 +424,8 @@ namespace TA3D
 		void draw_HD(Camera* cam, PlayerMask player_mask);
 		void draw(Camera* cam, PlayerMask player_mask);
 
-		Vector3D hit(Vector3D Pos, Vector3D Dir, bool water = true, float length = 200000.0f, bool allow_out = false) const; // Calcule l'intersection d'un rayon avec la carte(le rayon partant du dessus de la carte)
+		//! Calculates the intersection of a ray with the map (the ray starts from the top of the map)
+		Vector3D hit(Vector3D Pos, Vector3D Dir, bool water = true, float length = 200000.0f, bool allow_out = false) const;
 
 		/**
 		 * Returns true if the graphical tile at the given index
