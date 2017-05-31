@@ -3864,7 +3864,7 @@ namespace TA3D
 						Dir.y = 0.0f;
 						const float dist = Dir.lengthSquared();
 						const int maxdist = (int)pType->BuildDistance + ((unit_manager.unit_type[mission->getData()]->FootprintX + unit_manager.unit_type[mission->getData()]->FootprintZ) << 1);
-						if (dist > maxdist * maxdist && pType->BMcode) // Si l'unité est trop loin du chantier
+						if (dist > maxdist * maxdist && pType->BMcode) // If the unit is too far from the worksite
 						{
 							setFlag(mission->Flags(), MISSION_FLAG_MOVE);
 							mission->setMoveData(maxdist * 7 / 80);
