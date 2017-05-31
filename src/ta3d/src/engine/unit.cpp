@@ -3891,13 +3891,16 @@ namespace TA3D
 								V.x = 0.0f;
 								V.y = 0.0f;
 								V.z = 0.0f;
+
 								const Vector3D target = mission->getTarget().getPos();
-								if (the_map->check_rect((((int)(target.x) + the_map->halfWidthInWorldUnits + 4) >> 3) - (
-															unitType->FootprintX >> 1),
-										(((int)(target.z) + the_map->halfHeightInWorldUnits + 4) >> 3) - (unitType->FootprintZ >> 1),
-										unitType->FootprintX,
-										unitType->FootprintZ,
-										-1)) // Check if we have an empty place to build our unit
+								const Vector2D topLeftPos(
+									target.x - ((unitType->FootprintX * MAP::HeightmapTileWidthInWorldUnits) / 2.0f),
+									target.z - ((unitType->FootprintX * MAP::HeightmapTileWidthInWorldUnits) / 2.0f)
+								);
+								auto topLeftHeightmapIndex = the_map->worldToNearestHeightmapCorner(topLeftPos.x, topLeftPos.y);
+
+								// Check if we have an empty place to build our unit
+								if (the_map->check_rect(topLeftHeightmapIndex.x, topLeftHeightmapIndex.y, unitType->FootprintX, unitType->FootprintZ, -1))
 								{
 									pMutex.unlock();
 									Unit* p = (Unit*)create_unit(mission->getData(), owner_id, mission->getTarget().getPos());
