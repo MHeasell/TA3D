@@ -1382,17 +1382,33 @@ namespace TA3D
 
 	Vector3D MAP::snapToBuildCenter(float x, float z, int unitTypeId) const
 	{
-		auto heightIndex = worldToHeightmapIndex(x, z);
 		auto unitType = unit_manager.unit_type[unitTypeId];
 
-		float height = get_max_rect_h(heightIndex.x, heightIndex.y, unitType->FootprintX, unitType->FootprintZ);
+		float halfFootprintX = (unitType->FootprintX * HeightmapTileWidthInWorldUnits) / 2.0f;
+		float halfFootprintZ = (unitType->FootprintZ * HeightmapTileHeightInWorldUnits) / 2.0f;
+
+		x -= halfFootprintX;
+		z -= halfFootprintZ;
+
+		auto heightIndex = worldToNearestHeightmapCorner(x, z);
+
+		float buildingHeight = get_max_rect_h(heightIndex.x, heightIndex.y, unitType->FootprintX, unitType->FootprintZ);
 		if (unitType->floatting())
 		{
-			height = Math::Max(height, sealvl + (unitType->AltFromSeaLevel - unitType->WaterLine) * H_DIV);
+			float floatingHeight = sealvl - (unitType->WaterLine / 2.0f);
+			buildingHeight = Math::Max(buildingHeight, floatingHeight);
 		}
 
 		auto snappedPosition = heightmapIndexToWorldCorner(heightIndex);
 
-		return Vector3D(snappedPosition.x, height, snappedPosition.y);
+		return Vector3D(snappedPosition.x + halfFootprintX, buildingHeight, snappedPosition.y + halfFootprintZ);
+	}
+
+	Point<int> MAP::worldToNearestHeightmapCorner(float x, float z) const
+	{
+		x += HeightmapTileWidthInWorldUnits / 2.0f;
+		z += HeightmapTileHeightInWorldUnits / 2.0f;
+		auto heightIndex = worldToHeightmapIndex(x, z);
+		return heightIndex;
 	}
 } // namespace TA3D

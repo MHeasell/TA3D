@@ -647,6 +647,10 @@ namespace TA3D
 		 * Otherwise, it will add the units to the current selection.
 		 */
 		void selectGroup(int groupNumber);
+
+		float computeBuildingHeight(int gridX, int gridZ, int unitTypeId) const;
+
+		Vector3D computeBuildingPosition(int gridX, int gridZ, int unitTypeId) const;
 	}; // class Battle
 
 } // namespace TA3D

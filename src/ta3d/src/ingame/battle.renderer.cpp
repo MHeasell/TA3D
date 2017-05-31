@@ -109,120 +109,91 @@ namespace TA3D
 		if (build >= 0 && !IsOnGUI) // Display the building we want to build (with nice selection quads)
 		{
 			Vector3D target(cursorOnMap(cam, *map));
-			auto heightmapIndex = map->worldToHeightmapIndex(target);
-			pMouseRectSelection.x2 = heightmapIndex.x;
-			pMouseRectSelection.y2 = heightmapIndex.y;
 
-			if (isMouseButtonUp(LeftMouseButton))
+			Vector3D buildingPosition = map->snapToBuildCenter(target, build);
+
+			can_be_there = can_be_built(buildingPosition, build, players.local_human_id);
+
+			cam.applyToOpenGl();
+
+			glTranslatef(buildingPosition.x, buildingPosition.y, buildingPosition.z);
+			glScalef(unit_manager.unit_type[build]->Scale, unit_manager.unit_type[build]->Scale, unit_manager.unit_type[build]->Scale);
+			const float DX = float(unit_manager.unit_type[build]->FootprintX << 2);
+			const float DZ = float(unit_manager.unit_type[build]->FootprintZ << 2);
+			if (unit_manager.unit_type[build]->model)
 			{
-				pMouseRectSelection.x1 = pMouseRectSelection.x2;
-				pMouseRectSelection.y1 = pMouseRectSelection.y2;
-			}
-
-			int d = Math::Max(abs(pMouseRectSelection.x2 - pMouseRectSelection.x1), abs(pMouseRectSelection.y2 - pMouseRectSelection.y1));
-
-			int ox = pMouseRectSelection.x1 + 0xFFFF;
-			int oy = pMouseRectSelection.y1 + 0xFFFF;
-
-			for (int c = 0; c <= d; ++c)
-			{
-				target.x = float(pMouseRectSelection.x1 + (pMouseRectSelection.x2 - pMouseRectSelection.x1) * c / Math::Max(d, 1));
-				target.z = float(pMouseRectSelection.y1 + (pMouseRectSelection.y2 - pMouseRectSelection.y1) * c / Math::Max(d, 1));
-
-				if (abs(ox - (int)target.x) < unit_manager.unit_type[build]->FootprintX && abs(oy - (int)target.z) < unit_manager.unit_type[build]->FootprintZ)
-					continue;
-				ox = (int)target.x;
-				oy = (int)target.z;
-
-				target.y = map->get_max_rect_h((int)target.x, (int)target.z, unit_manager.unit_type[build]->FootprintX, unit_manager.unit_type[build]->FootprintZ);
-				if (unit_manager.unit_type[build]->floatting())
-					target.y = Math::Max(target.y, map->sealvl + ((float)unit_manager.unit_type[build]->AltFromSeaLevel - (float)unit_manager.unit_type[build]->WaterLine) * H_DIV);
-				target.x = target.x * 8.0f - (float)map->halfWidthInWorldUnits;
-				target.z = target.z * 8.0f - (float)map->halfHeightInWorldUnits;
-
-				can_be_there = can_be_built(target, build, players.local_human_id);
-
-				cam.applyToOpenGl();
-
-				glTranslatef(target.x, target.y, target.z);
-				glScalef(unit_manager.unit_type[build]->Scale, unit_manager.unit_type[build]->Scale, unit_manager.unit_type[build]->Scale);
-				const float DX = float(unit_manager.unit_type[build]->FootprintX << 2);
-				const float DZ = float(unit_manager.unit_type[build]->FootprintZ << 2);
-				if (unit_manager.unit_type[build]->model)
-				{
-					glEnable(GL_CULL_FACE);
-					gfx->ReInitAllTex(true);
-					if (can_be_there)
-						glColor4ub(0xFF, 0xFF, 0xFF, 0xFF);
-					else
-						glColor4ub(0xFF, 0, 0, 0xFF);
-					glDepthFunc(GL_GREATER);
-					unit_manager.unit_type[build]->model->draw(0.0f, NULL, false, false, false, 0, NULL, NULL, NULL, 0.0f, NULL, false, players.local_human_id, false);
-					glDepthFunc(GL_LESS);
-					unit_manager.unit_type[build]->model->draw(0.0f, NULL, false, false, false, 0, NULL, NULL, NULL, 0.0f, NULL, false, players.local_human_id, false);
-
-					double eqn[4] = {0.0f, -1.0f, 0.0f, map->sealvl - target.y};
-					glClipPlane(GL_CLIP_PLANE2, eqn);
-
-					glEnable(GL_CLIP_PLANE2);
-
-					glEnable(GL_BLEND);
-					glBlendFunc(GL_ONE, GL_ONE);
-					glDepthFunc(GL_EQUAL);
-					glColor4ub(0x7F, 0x7F, 0x7F, 0x7F);
-					unit_manager.unit_type[build]->model->draw(0.0f, NULL, false, true, false, 0, NULL, NULL, NULL, 0.0f, NULL, false, players.local_human_id, false);
-					glColor4ub(0xFF, 0xFF, 0xFF, 0xFF);
-					glDepthFunc(GL_LESS);
-					glDisable(GL_BLEND);
-
-					glDisable(GL_CLIP_PLANE2);
-				}
-				cam.applyToOpenGl();
-				glTranslatef(target.x, Math::Max(target.y, map->sealvl), target.z);
-				byte red = 0xFF, green = 0x00;
-				if (can_be_there)
-				{
-					green = 0xFF;
-					red = 0x00;
-				}
-				glDisable(GL_CULL_FACE);
-				glDisable(GL_TEXTURE_2D);
-				glDisable(GL_LIGHTING);
-				glEnable(GL_BLEND);
-				glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-				glBegin(GL_QUADS);
-				glColor4ub(red, green, 0x00, 0xFF);
-				glVertex3f(-DX, 0.0f, -DZ); // First quad
-				glVertex3f(DX, 0.0f, -DZ);
-				glColor4ub(red, green, 0x00, 0x00);
-				glVertex3f(DX + 2.0f, 5.0f, -DZ - 2.0f);
-				glVertex3f(-DX - 2.0f, 5.0f, -DZ - 2.0f);
-
-				glColor4ub(red, green, 0x00, 0xFF);
-				glVertex3f(-DX, 0.0f, -DZ); // Second quad
-				glVertex3f(-DX, 0.0f, DZ);
-				glColor4ub(red, green, 0x00, 0x00);
-				glVertex3f(-DX - 2.0f, 5.0f, DZ + 2.0f);
-				glVertex3f(-DX - 2.0f, 5.0f, -DZ - 2.0f);
-
-				glColor4ub(red, green, 0x00, 0xFF);
-				glVertex3f(DX, 0.0f, -DZ); // Third quad
-				glVertex3f(DX, 0.0f, DZ);
-				glColor4ub(red, green, 0x00, 0x00);
-				glVertex3f(DX + 2.0f, 5.0f, DZ + 2.0f);
-				glVertex3f(DX + 2.0f, 5.0f, -DZ - 2.0f);
-
-				glColor4ub(red, green, 0x00, 0xFF);
-				glVertex3f(-DX, 0.0f, DZ); // Fourth quad
-				glVertex3f(DX, 0.0f, DZ);
-				glColor4ub(red, green, 0x00, 0x00);
-				glVertex3f(DX + 2.0f, 5.0f, DZ + 2.0f);
-				glVertex3f(-DX - 2.0f, 5.0f, DZ + 2.0f);
-				glEnd();
-				glDisable(GL_BLEND);
-				glEnable(GL_LIGHTING);
 				glEnable(GL_CULL_FACE);
+				gfx->ReInitAllTex(true);
+				if (can_be_there)
+					glColor4ub(0xFF, 0xFF, 0xFF, 0xFF);
+				else
+					glColor4ub(0xFF, 0, 0, 0xFF);
+				glDepthFunc(GL_GREATER);
+				unit_manager.unit_type[build]->model->draw(0.0f, NULL, false, false, false, 0, NULL, NULL, NULL, 0.0f, NULL, false, players.local_human_id, false);
+				glDepthFunc(GL_LESS);
+				unit_manager.unit_type[build]->model->draw(0.0f, NULL, false, false, false, 0, NULL, NULL, NULL, 0.0f, NULL, false, players.local_human_id, false);
+
+				double eqn[4] = {0.0f, -1.0f, 0.0f, map->sealvl - buildingPosition.y};
+				glClipPlane(GL_CLIP_PLANE2, eqn);
+
+				glEnable(GL_CLIP_PLANE2);
+
+				glEnable(GL_BLEND);
+				glBlendFunc(GL_ONE, GL_ONE);
+				glDepthFunc(GL_EQUAL);
+				glColor4ub(0x7F, 0x7F, 0x7F, 0x7F);
+				unit_manager.unit_type[build]->model->draw(0.0f, NULL, false, true, false, 0, NULL, NULL, NULL, 0.0f, NULL, false, players.local_human_id, false);
+				glColor4ub(0xFF, 0xFF, 0xFF, 0xFF);
+				glDepthFunc(GL_LESS);
+				glDisable(GL_BLEND);
+
+				glDisable(GL_CLIP_PLANE2);
 			}
+			cam.applyToOpenGl();
+			glTranslatef(buildingPosition.x, Math::Max(buildingPosition.y, map->sealvl), buildingPosition.z);
+			byte red = 0xFF, green = 0x00;
+			if (can_be_there)
+			{
+				green = 0xFF;
+				red = 0x00;
+			}
+			glDisable(GL_CULL_FACE);
+			glDisable(GL_TEXTURE_2D);
+			glDisable(GL_LIGHTING);
+			glEnable(GL_BLEND);
+			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+			glBegin(GL_QUADS);
+			glColor4ub(red, green, 0x00, 0xFF);
+			glVertex3f(-DX, 0.0f, -DZ); // First quad
+			glVertex3f(DX, 0.0f, -DZ);
+			glColor4ub(red, green, 0x00, 0x00);
+			glVertex3f(DX + 2.0f, 5.0f, -DZ - 2.0f);
+			glVertex3f(-DX - 2.0f, 5.0f, -DZ - 2.0f);
+
+			glColor4ub(red, green, 0x00, 0xFF);
+			glVertex3f(-DX, 0.0f, -DZ); // Second quad
+			glVertex3f(-DX, 0.0f, DZ);
+			glColor4ub(red, green, 0x00, 0x00);
+			glVertex3f(-DX - 2.0f, 5.0f, DZ + 2.0f);
+			glVertex3f(-DX - 2.0f, 5.0f, -DZ - 2.0f);
+
+			glColor4ub(red, green, 0x00, 0xFF);
+			glVertex3f(DX, 0.0f, -DZ); // Third quad
+			glVertex3f(DX, 0.0f, DZ);
+			glColor4ub(red, green, 0x00, 0x00);
+			glVertex3f(DX + 2.0f, 5.0f, DZ + 2.0f);
+			glVertex3f(DX + 2.0f, 5.0f, -DZ - 2.0f);
+
+			glColor4ub(red, green, 0x00, 0xFF);
+			glVertex3f(-DX, 0.0f, DZ); // Fourth quad
+			glVertex3f(DX, 0.0f, DZ);
+			glColor4ub(red, green, 0x00, 0x00);
+			glVertex3f(DX + 2.0f, 5.0f, DZ + 2.0f);
+			glVertex3f(-DX - 2.0f, 5.0f, DZ + 2.0f);
+			glEnd();
+			glDisable(GL_BLEND);
+			glEnable(GL_LIGHTING);
+			glEnable(GL_CULL_FACE);
 		}
 
 		if ((selected || units.last_on >= 0) && isShiftKeyDown())

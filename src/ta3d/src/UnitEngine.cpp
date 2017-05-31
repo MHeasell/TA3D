@@ -206,8 +206,6 @@ namespace TA3D
 		if (unit_type_id < 0)
 			return;
 
-		Vector3D t = map->snapToBuildCenter(target, unit_type_id);
-
 		pMutex.lock();
 		for (uint32 e = 0; e < index_list_size; ++e)
 		{
@@ -215,9 +213,9 @@ namespace TA3D
 			if (unit[i].isAlive() && unit[i].isOwnedBy(player_id) && unit[i].isSelected && !unit[i].isBeingBuilt() && unit_manager.unit_type[unit[i].type_id]->Builder)
 			{
 				if (set)
-					unit[i].set_mission(MISSION_BUILD, &t, false, unit_type_id);
+					unit[i].set_mission(MISSION_BUILD, &target, false, unit_type_id);
 				else
-					unit[i].add_mission(MISSION_BUILD, &t, false, unit_type_id);
+					unit[i].add_mission(MISSION_BUILD, &target, false, unit_type_id);
 			}
 		}
 		pMutex.unlock();

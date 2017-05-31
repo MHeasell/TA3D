@@ -561,47 +561,23 @@ namespace TA3D
 			if (build >= 0 && cursor_type == CURSOR_DEFAULT && didMouseButtonGoUp(LeftMouseButton) && !IsOnGUI)
 			{
 				Vector3D target(cursorOnMap(cam, *map));
-				auto heightmapIndex = map->worldToHeightmapIndex(target);
-				pMouseRectSelection.x2 = heightmapIndex.x;
-				pMouseRectSelection.y2 = heightmapIndex.y;
 
-				const int d = Math::Max(abs(pMouseRectSelection.x2 - pMouseRectSelection.x1), abs(pMouseRectSelection.y2 - pMouseRectSelection.y1));
+				Vector3D buildingPosition = map->snapToBuildCenter(target, build);
 
-				int ox = pMouseRectSelection.x1 + 0xFFFF;
-				int oy = pMouseRectSelection.y1 + 0xFFFF;
+				can_be_there = can_be_built(buildingPosition, build, players.local_human_id);
 
-				for (int c = 0; c <= d; ++c)
+				if (can_be_there)
 				{
-					target.x = float(pMouseRectSelection.x1 + (pMouseRectSelection.x2 - pMouseRectSelection.x1) * c / Math::Max(d, 1));
-					target.z = float(pMouseRectSelection.y1 + (pMouseRectSelection.y2 - pMouseRectSelection.y1) * c / Math::Max(d, 1));
-
-					if (abs(ox - (int)target.x) < unit_manager.unit_type[build]->FootprintX && abs(oy - (int)target.z) < unit_manager.unit_type[build]->FootprintZ)
-						continue;
-					ox = (int)target.x;
-					oy = (int)target.z;
-
-					target.y = map->get_max_rect_h((int)target.x, (int)target.z, unit_manager.unit_type[build]->FootprintX, unit_manager.unit_type[build]->FootprintZ);
-					if (unit_manager.unit_type[build]->floatting())
-						target.y = Math::Max(target.y, map->sealvl + ((float)unit_manager.unit_type[build]->AltFromSeaLevel - (float)unit_manager.unit_type[build]->WaterLine) * H_DIV);
-					target.x = target.x * 8.0f - (float)map->halfWidthInWorldUnits;
-					target.z = target.z * 8.0f - (float)map->halfHeightInWorldUnits;
-
-					can_be_there = can_be_built(target, build, players.local_human_id);
-
-					if (can_be_there)
-					{
-						units.give_order_build(players.local_human_id, build, target, !(isShiftKeyDown() || c != 0));
-						build_order_given = true;
-					}
-				}
-				if (build_order_given)
-				{
+					units.give_order_build(players.local_human_id, build, buildingPosition, !isShiftKeyDown());
 					if (!isShiftKeyDown())
 						build = -1;
 					sound_manager->playTDFSound("OKTOBUILD", "sound", NULL);
 				}
 				else
+				{
 					sound_manager->playTDFSound("NOTOKTOBUILD", "sound", NULL);
+				}
+
 				click_activated = true;
 			}
 			else
@@ -1951,6 +1927,24 @@ namespace TA3D
 			Menus::Statistics::Execute();
 
 		return pResult;
+	}
+
+	Vector3D Battle::computeBuildingPosition(int gridX, int gridZ, int unitTypeId) const
+	{
+		float buildingHeight = computeBuildingHeight(gridX, gridZ, unitTypeId);
+		auto buildingXZ = map->heightmapIndexToWorld(gridX, gridZ);
+		return Vector3D(buildingXZ.x, buildingHeight, buildingXZ.y);
+	}
+
+	float Battle::computeBuildingHeight(int gridX, int gridZ, int unitTypeId) const
+	{
+		float buildingHeight = map->get_max_rect_h(gridX, gridZ, unit_manager.unit_type[unitTypeId]->FootprintX, unit_manager.unit_type[unitTypeId]->FootprintZ);
+		if (unit_manager.unit_type[unitTypeId]->floatting())
+		{
+			float floatingHeight = map->sealvl - (unit_manager.unit_type[unitTypeId]->WaterLine / 2.0f);
+			buildingHeight = Math::Max(buildingHeight, floatingHeight);
+		}
+		return buildingHeight;
 	}
 
 	void Battle::selectGroup(int groupNumber)

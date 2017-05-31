@@ -308,6 +308,13 @@ namespace TA3D
 
 		/**
 		 * Converts the given XZ coordinates in world space
+		 * to the corresponding cell in the heightmap grid
+		 * whose top-left corner this position is closest to.
+		 */
+		Point<int> worldToNearestHeightmapCorner(float x, float z) const;
+
+		/**
+		 * Converts the given XZ coordinates in world space
 		 * to the corresponding coordinate in heightmap space.
 		 * This can (and probably will) be a fractional coordinate
 		 * if the position is part-way through a tile.
