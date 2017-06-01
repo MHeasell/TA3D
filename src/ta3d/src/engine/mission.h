@@ -151,15 +151,25 @@ namespace TA3D
 		//! \name Constructors & Destructor
 		//@{
 		//! Default constructor
-		Mission();
+		Mission() : qStep(), time(0.0f), last_d(0.0f), move_data(0), path(), node(0) {}
+
 		//! Copy constructor
-		Mission(const Mission& rhs);
+		Mission(const Mission& rhs) : qStep(rhs.qStep), time(rhs.time), last_d(rhs.last_d), move_data(rhs.move_data), path(rhs.path), node(rhs.node) {}
 		//! Destructor
-		~Mission();
+		~Mission() {}
 		//@}
 
 		//! Operator =
-		Mission& operator=(const Mission& rhs);
+		Mission& operator=(const Mission& rhs)
+		{
+			qStep = rhs.qStep;
+			time = rhs.time;
+			last_d = rhs.last_d;
+			move_data = rhs.move_data;
+			path = rhs.path;
+			node = rhs.node;
+			return *this;
+		}
 
 		bool empty() const { return qStep.empty(); }
 		int size() const { return int(qStep.size()); }
@@ -340,7 +350,5 @@ namespace TA3D
 	};
 
 } // namespace TA3D
-
-#include "mission.hxx"
 
 #endif // __TA3D_ENGINE_MISSION_H__

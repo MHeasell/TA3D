@@ -47,7 +47,6 @@ set(TA3D_LIB_SOURCES
 		engine.h
 		engine/mission.cpp
 		engine/mission.h
-		engine/mission.hxx
 		engine/unit.cpp
 		engine/unit.defines.h
 		engine/unit.h
