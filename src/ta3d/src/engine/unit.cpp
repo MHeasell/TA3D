@@ -2758,7 +2758,7 @@ namespace TA3D
 
 			followPath(dt, b_TargetAngle, f_TargetAngle, NPos, n_px, n_py, precomputed_position);
 
-			switch (mission->mission()) // Commandes générales / General orders
+			switch (mission->mission()) // General orders
 			{
 				case MISSION_WAIT:												  // Wait for a specified time (campaign)
 					mission->setFlags(0);										  // Don't move, do not shoot !! just wait
@@ -3923,7 +3923,7 @@ namespace TA3D
 					break;
 			};
 
-			switch (pType->TEDclass) // Commandes particulières
+			switch (pType->TEDclass) // Special orders
 			{
 				case CLASS_PLANT:
 					switch (mission->mission())
