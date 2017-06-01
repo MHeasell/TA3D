@@ -459,7 +459,7 @@ namespace TA3D
 			pos.x = x;
 			pos.z = z;
 			pos.y = Math::Max(the_map->get_max_rect_h((int)x, (int)z, unit_manager.unit_type[unit_type_id]->FootprintX, unit_manager.unit_type[unit_type_id]->FootprintZ), the_map->sealvl);
-			Unit* unit = (Unit*)create_unit(unit_type_id, player_id, pos, true, true); // Force synchronization
+			Unit* unit = create_unit(unit_type_id, player_id, pos, true, true); // Force synchronization
 			int idx = unit ? unit->idx : -1;
 			if (unit)
 			{

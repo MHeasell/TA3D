@@ -133,7 +133,7 @@ namespace TA3D
 
 	extern int MAX_UNIT_PER_PLAYER;
 
-	void* create_unit(int type_id, PlayerId owner, Vector3D pos, bool sync = true, bool script = false);
+	Unit* create_unit(int type_id, PlayerId owner, Vector3D pos, bool sync = true, bool script = false);
 
 #define ICON_UNKNOWN 0x0
 #define ICON_BUILDER 0x1

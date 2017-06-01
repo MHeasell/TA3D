@@ -448,7 +448,7 @@ namespace TA3D
 		return index;
 	}
 
-	void* create_unit(int type_id, PlayerId owner, Vector3D pos, bool sync, bool script)
+	Unit* create_unit(int type_id, PlayerId owner, Vector3D pos, bool sync, bool script)
 	{
 		const int id = units.create(type_id, owner);
 		if (id >= 0)
@@ -482,7 +482,7 @@ namespace TA3D
 
 			return &(units.unit[id]);
 		}
-		return NULL;
+		return nullptr;
 	}
 
 	bool can_be_there_ai(const int px, const int py, const int unit_type_id,
