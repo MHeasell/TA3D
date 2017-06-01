@@ -242,7 +242,7 @@ namespace TA3D
 		bool requestedMovingAnimationState;
 		sint16* port;			  // Ports
 		MissionStack missionQueue;	 // Orders given to the unit
-		MissionStack def_mission; // Orders given to units built by this plant
+		MissionStack defaultMissionQueue; // Orders given to units built by this plant
 
 		/**
 		 * To indicate, among other things, to the unit manager if the unit exists.

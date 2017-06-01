@@ -1609,7 +1609,7 @@ namespace TA3D
 			unit[i].lock();
 			if (unit[i].isAlive() && !unit[i].command_locked && unit[i].isOwnedBy(player_id) && unit[i].isSelected && !unit[i].isBeingBuilt())
 			{
-				MissionStack& mission = unit_manager.unit_type[unit[i].type_id]->BMcode ? unit[i].missionQueue : unit[i].def_mission;
+				MissionStack& mission = unit_manager.unit_type[unit[i].type_id]->BMcode ? unit[i].missionQueue : unit[i].defaultMissionQueue;
 				MissionStack::iterator cur = mission.begin();
 				if (cur != mission.end() && unit_manager.unit_type[unit[i].type_id]->BMcode)
 					++cur; // Don't read the first one ( which is being executed )

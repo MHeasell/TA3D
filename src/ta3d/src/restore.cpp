@@ -350,7 +350,7 @@ namespace TA3D
 			SAVE(units.unit[i].command_locked);
 
 			units.unit[i].missionQueue.save(file);
-			units.unit[i].def_mission.save(file);
+			units.unit[i].defaultMissionQueue.save(file);
 
 			if (units.unit[i].script)
 			{
@@ -837,7 +837,7 @@ namespace TA3D
 			LOAD(units.unit[i].command_locked);
 
 			units.unit[i].missionQueue.load(file);
-			units.unit[i].def_mission.load(file);
+			units.unit[i].defaultMissionQueue.load(file);
 
 			if (units.unit[i].script)
 			{

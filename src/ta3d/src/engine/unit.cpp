@@ -28,7 +28,7 @@ namespace TA3D
 		  drawing(false),
 		  port(NULL),
 		  missionQueue(),
-		  def_mission(),
+		  defaultMissionQueue(),
 		  flags(0),
 		  kills(0),
 		  selfmove(false),
@@ -479,7 +479,7 @@ namespace TA3D
 			unit_type = -1;
 		port[ACTIVATION] = 0;
 		missionQueue.clear();
-		def_mission.clear();
+		defaultMissionQueue.clear();
 		build_percent_left = 0.0f;
 		memset(last_synctick, 0, 40);
 		if (unit_type != -1)
@@ -517,7 +517,7 @@ namespace TA3D
 	void Unit::clear_def_mission()
 	{
 		pMutex.lock();
-		def_mission.clear();
+		defaultMissionQueue.clear();
 		pMutex.unlock();
 	}
 
@@ -631,7 +631,7 @@ namespace TA3D
 		}
 
 		Mission tmp;
-		Mission& new_mission = step ? (def_mode ? def_mission.front() : missionQueue.front()) : tmp;
+		Mission& new_mission = step ? (def_mode ? defaultMissionQueue.front() : missionQueue.front()) : tmp;
 
 		new_mission.addStep();
 		new_mission.setMissionType((uint8)mission_type);
@@ -648,7 +648,7 @@ namespace TA3D
 
 		if (!step && patrol_node == -1 && mission_type == MISSION_PATROL)
 		{
-			MissionStack& mission_base = def_mode ? def_mission : missionQueue;
+			MissionStack& mission_base = def_mode ? defaultMissionQueue : missionQueue;
 			if (!mission_base.empty()) // Ajoute l'ordre aux autres
 			{
 				MissionStack::iterator cur = mission_base.begin();
@@ -707,7 +707,7 @@ namespace TA3D
 			if (!step)
 			{
 				if (def_mode)
-					def_mission.add(new_mission);
+					defaultMissionQueue.add(new_mission);
 				else
 					missionQueue.add(new_mission);
 			}
@@ -857,27 +857,27 @@ namespace TA3D
 
 		if (def_mode)
 		{
-			def_mission.clear();
-			def_mission.add();
+			defaultMissionQueue.clear();
+			defaultMissionQueue.add();
 
-			def_mission->setMissionType((uint8)mission_type);
-			def_mission->getTarget().set(targetType, targetIdx, target_ID);
-			def_mission->setData(dat);
-			def_mission->Path().clear();
-			def_mission->setLastD(9999999.0f);
-			def_mission->setFlags(m_flags);
-			def_mission->setMoveData(move_data);
-			def_mission->setNode(1);
+			defaultMissionQueue->setMissionType((uint8)mission_type);
+			defaultMissionQueue->getTarget().set(targetType, targetIdx, target_ID);
+			defaultMissionQueue->setData(dat);
+			defaultMissionQueue->Path().clear();
+			defaultMissionQueue->setLastD(9999999.0f);
+			defaultMissionQueue->setFlags(m_flags);
+			defaultMissionQueue->setMoveData(move_data);
+			defaultMissionQueue->setNode(1);
 			if (target)
-				def_mission->getTarget().setPos(*target);
+				defaultMissionQueue->getTarget().setPos(*target);
 
 			if (stopit)
 			{
-				def_mission->addStep();
-				def_mission->setMissionType(MISSION_STOP);
-				def_mission->setData(0);
-				def_mission->Path().clear();
-				def_mission->setFlags(uint8(m_flags & ~MISSION_FLAG_MOVE));
+				defaultMissionQueue->addStep();
+				defaultMissionQueue->setMissionType(MISSION_STOP);
+				defaultMissionQueue->setData(0);
+				defaultMissionQueue->Path().clear();
+				defaultMissionQueue->setFlags(uint8(m_flags & ~MISSION_FLAG_MOVE));
 			}
 		}
 		else
@@ -3783,10 +3783,10 @@ namespace TA3D
 								{
 									Vector3D target = Pos;
 									target.z += 128.0f;
-									if (!def_mission)
+									if (!defaultMissionQueue)
 										target_unit->set_mission(MISSION_MOVE | MISSION_FLAG_AUTO, &target, false, 5, true, NULL, 0, 5); // Fait sortir l'unité du bâtiment
 									else
-										target_unit->missionQueue = def_mission;
+										target_unit->missionQueue = defaultMissionQueue;
 								}
 								missionQueue->getTarget().set(Mission::Target::TargetNone, -1, 0);
 								next_mission();
@@ -4592,8 +4592,8 @@ namespace TA3D
 			return;
 		}
 
-		MissionStack::iterator cur = def_orders ? def_mission.begin() : missionQueue.begin();
-		MissionStack::iterator end = def_orders ? def_mission.end() : missionQueue.end();
+		MissionStack::iterator cur = def_orders ? defaultMissionQueue.begin() : missionQueue.begin();
+		MissionStack::iterator end = def_orders ? defaultMissionQueue.end() : missionQueue.end();
 
 		glEnable(GL_BLEND);
 		glEnable(GL_TEXTURE_2D);
