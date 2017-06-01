@@ -199,17 +199,17 @@ namespace TA3D
 
 		inline bool do_nothing() const
 		{
-			return mission.doNothing() && !port[INBUILDSTANCE];
+			return missionQueue.doNothing() && !port[INBUILDSTANCE];
 		}
 
 		inline bool is_obstacle() const
 		{
-			return (!(mission.doingNothing() && !port[INBUILDSTANCE]) && !(mission->getFlags() & MISSION_FLAG_MOVE) && mission->mission() != MISSION_MOVE && mission->mission() != MISSION_BUILD && mission->mission() != MISSION_REPAIR && mission->mission() != MISSION_ATTACK && mission->mission() != MISSION_CAPTURE && mission->mission() != MISSION_RECLAIM && mission->mission() != MISSION_REVIVE && mission->mission() != MISSION_GUARD && mission->mission() != MISSION_LOAD && mission->mission() != MISSION_UNLOAD && mission->mission() != MISSION_PATROL) || build_percent_left > 0.0f;
+			return (!(missionQueue.doingNothing() && !port[INBUILDSTANCE]) && !(missionQueue->getFlags() & MISSION_FLAG_MOVE) && missionQueue->mission() != MISSION_MOVE && missionQueue->mission() != MISSION_BUILD && missionQueue->mission() != MISSION_REPAIR && missionQueue->mission() != MISSION_ATTACK && missionQueue->mission() != MISSION_CAPTURE && missionQueue->mission() != MISSION_RECLAIM && missionQueue->mission() != MISSION_REVIVE && missionQueue->mission() != MISSION_GUARD && missionQueue->mission() != MISSION_LOAD && missionQueue->mission() != MISSION_UNLOAD && missionQueue->mission() != MISSION_PATROL) || build_percent_left > 0.0f;
 		}
 
 		inline bool do_nothing_ai() const
 		{
-			return mission.doNothingAI() && !port[INBUILDSTANCE];
+			return missionQueue.doNothingAI() && !port[INBUILDSTANCE];
 		}
 
 		void renderTick();
@@ -241,7 +241,7 @@ namespace TA3D
 		bool movingAnimation;
 		bool requestedMovingAnimationState;
 		sint16* port;			  // Ports
-		MissionStack mission;	 // Orders given to the unit
+		MissionStack missionQueue;	 // Orders given to the unit
 		MissionStack def_mission; // Orders given to units built by this plant
 
 		/**

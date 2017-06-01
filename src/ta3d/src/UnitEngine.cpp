@@ -629,7 +629,7 @@ namespace TA3D
 			}
 		}
 
-		Unit* target = pointed_only ? NULL : (!unit[index].mission.empty() ? unit[index].mission->getTarget().getUnit() : NULL);
+		Unit* target = pointed_only ? NULL : (!unit[index].missionQueue.empty() ? unit[index].missionQueue->getTarget().getUnit() : NULL);
 		if (target && target->flags == 0)
 			target = NULL;
 
@@ -661,7 +661,7 @@ namespace TA3D
 					int ph = unit_manager.unit_type[unit[index].type_id]->Pic_h[i];
 
 					int nb(0);
-					for (MissionStack::iterator m = unit[index].mission.begin(); m != unit[index].mission.end(); ++m)
+					for (MissionStack::iterator m = unit[index].missionQueue.begin(); m != unit[index].missionQueue.end(); ++m)
 					{
 						if ((m->lastMission() == MISSION_BUILD || m->lastMission() == MISSION_BUILD_2) && m->lastStep().getData() == unit_manager.unit_type[unit[index].type_id]->BuildList[i])
 							++nb;
@@ -713,7 +713,7 @@ namespace TA3D
 			unit[index].lock();
 			if (unit[index].isOwnedBy(players.local_human_id))
 			{
-				target = !unit[index].mission.empty() ? unit[index].mission->getTarget().getUnit() : NULL;
+				target = !unit[index].missionQueue.empty() ? unit[index].missionQueue->getTarget().getUnit() : NULL;
 				if (target && target->flags == 0)
 					target = NULL;
 			}
@@ -733,7 +733,7 @@ namespace TA3D
 					(float)ta3dSideData.side_int_data[players.side_view].UnitName.x1,
 					(float)ta3dSideData.side_int_data[players.side_view].UnitName.y1,
 					0.0f, 0xFFFFFFFF, unit_manager.unit_type[unit[index].type_id]->name);
-				if (target && !unit[index].mission.empty() && (unit[index].mission->getFlags() & MISSION_FLAG_TARGET_WEAPON) != MISSION_FLAG_TARGET_WEAPON)
+				if (target && !unit[index].missionQueue.empty() && (unit[index].missionQueue->getFlags() & MISSION_FLAG_TARGET_WEAPON) != MISSION_FLAG_TARGET_WEAPON)
 				{
 					unit[index].unlock();
 					target->lock();
@@ -802,7 +802,7 @@ namespace TA3D
 
 				if (unit[index].isOwnedBy(players.local_human_id))
 				{
-					if (target && (unit[index].mission->getFlags() & MISSION_FLAG_TARGET_WEAPON) != MISSION_FLAG_TARGET_WEAPON)
+					if (target && (unit[index].missionQueue->getFlags() & MISSION_FLAG_TARGET_WEAPON) != MISSION_FLAG_TARGET_WEAPON)
 					{
 						unit[index].unlock();
 						target->lock();
@@ -843,7 +843,7 @@ namespace TA3D
 
 				if (unit[index].isOwnedBy(players.local_human_id))
 				{
-					if (target && (unit[index].mission->getFlags() & MISSION_FLAG_TARGET_WEAPON) != MISSION_FLAG_TARGET_WEAPON)
+					if (target && (unit[index].missionQueue->getFlags() & MISSION_FLAG_TARGET_WEAPON) != MISSION_FLAG_TARGET_WEAPON)
 					{
 						unit[index].unlock();
 						target->lock();
@@ -1055,7 +1055,7 @@ namespace TA3D
 
 			if (unit[i].isOwnedBy(players.local_human_id))
 			{
-				if (unit[i].attacked || (!unit[i].mission.empty() && unit[i].mission->mission() == MISSION_ATTACK))
+				if (unit[i].attacked || (!unit[i].missionQueue.empty() && unit[i].missionQueue->mission() == MISSION_ATTACK))
 					nb_attacked += 100;
 				if (unit[i].built)
 					nb_built++;
@@ -1400,10 +1400,10 @@ namespace TA3D
 
 		if (unit[index].isAlive())
 		{
-			if (!unit[index].mission.empty() && !unit_manager.unit_type[unit[index].type_id]->BMcode && (unit[index].mission->mission() == MISSION_BUILD_2 || unit[index].mission->mission() == MISSION_BUILD) // It was building something that we must destroy too
-				&& unit[index].mission->getTarget().getUnit())
+			if (!unit[index].missionQueue.empty() && !unit_manager.unit_type[unit[index].type_id]->BMcode && (unit[index].missionQueue->mission() == MISSION_BUILD_2 || unit[index].missionQueue->mission() == MISSION_BUILD) // It was building something that we must destroy too
+				&& unit[index].missionQueue->getTarget().getUnit())
 			{
-				Unit* p = unit[index].mission->getTarget().getUnit();
+				Unit* p = unit[index].missionQueue->getTarget().getUnit();
 				p->lock();
 				p->hp = 0.0f;
 				p->built = false;
@@ -1609,7 +1609,7 @@ namespace TA3D
 			unit[i].lock();
 			if (unit[i].isAlive() && !unit[i].command_locked && unit[i].isOwnedBy(player_id) && unit[i].isSelected && !unit[i].isBeingBuilt())
 			{
-				MissionStack& mission = unit_manager.unit_type[unit[i].type_id]->BMcode ? unit[i].mission : unit[i].def_mission;
+				MissionStack& mission = unit_manager.unit_type[unit[i].type_id]->BMcode ? unit[i].missionQueue : unit[i].def_mission;
 				MissionStack::iterator cur = mission.begin();
 				if (cur != mission.end() && unit_manager.unit_type[unit[i].type_id]->BMcode)
 					++cur; // Don't read the first one ( which is being executed )

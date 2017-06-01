@@ -419,7 +419,7 @@ namespace TA3D
 										units.unit[cur_idx].lock();
 										const int type = units.unit[cur_idx].type_id;
 										const UnitType* const tType = type >= 0 ? unit_manager.unit_type[type] : NULL;
-										if (units.unit[cur_idx].isOwnedBy(owner_id) && tType != NULL && tType->canmove && tType->BMcode == 1 && !units.unit[cur_idx].isBeingBuilt() && (!units.unit[cur_idx].mission || (units.unit[cur_idx].mission->mission() & 0xFF) != MISSION_MOVE))
+										if (units.unit[cur_idx].isOwnedBy(owner_id) && tType != NULL && tType->canmove && tType->BMcode == 1 && !units.unit[cur_idx].isBeingBuilt() && (!units.unit[cur_idx].missionQueue || (units.unit[cur_idx].missionQueue->mission() & 0xFF) != MISSION_MOVE))
 										{
 											Vector3D target = units.unit[cur_idx].Pos;
 											target.z += 100.0f;

@@ -209,11 +209,11 @@ namespace TA3D
 
 				Unit* pUnit = &(units.unit[cur.idx]);
 				pUnit->lock();
-				if (pUnit->ID == cur.UID && pUnit->isAlive() && !pUnit->mission.empty() && pUnit->requesting_pathfinder && (pUnit->mission->getFlags() & MISSION_FLAG_MOVE))
+				if (pUnit->ID == cur.UID && pUnit->isAlive() && !pUnit->missionQueue.empty() && pUnit->requesting_pathfinder && (pUnit->missionQueue->getFlags() & MISSION_FLAG_MOVE))
 				{
-					pUnit->mission->Path().replaceWith(path);
+					pUnit->missionQueue->Path().replaceWith(path);
 					pUnit->requesting_pathfinder = false;
-					if (pUnit->mission->Path().empty()) // Can't find a path to get where it has been ordered to go
+					if (pUnit->missionQueue->Path().empty()) // Can't find a path to get where it has been ordered to go
 						pUnit->playSound("cant1");
 				}
 				pUnit->unlock();
