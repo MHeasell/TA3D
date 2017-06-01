@@ -155,8 +155,6 @@ namespace TA3D
 
 		//! Copy constructor
 		Mission(const Mission& rhs) : qStep(rhs.qStep), time(rhs.time), last_d(rhs.last_d), move_data(rhs.move_data), path(rhs.path), node(rhs.node) {}
-		//! Destructor
-		~Mission() {}
 		//@}
 
 		//! Operator =
