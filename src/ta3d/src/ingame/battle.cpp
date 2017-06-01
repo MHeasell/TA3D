@@ -1582,8 +1582,8 @@ namespace TA3D
 			if (sel >= 0 && didMouseButtonGoDown(RightMouseButton))
 			{
 				units.unit[cur_sel_index].lock();
-				MissionStack::iterator cur = units.unit[cur_sel_index].missionQueue.begin();
-				MissionStack::iterator end = units.unit[cur_sel_index].missionQueue.end();
+				MissionQueue::iterator cur = units.unit[cur_sel_index].missionQueue.begin();
+				MissionQueue::iterator end = units.unit[cur_sel_index].missionQueue.end();
 				int nb(1);
 				if (isShiftKeyDown())
 					nb = 5;

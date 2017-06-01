@@ -225,7 +225,7 @@ namespace TA3D
 
 	}; // class Mission
 
-	class MissionStack
+	class MissionQueue
 	{
 	public:
 		typedef std::list<Mission> Container;

@@ -661,7 +661,7 @@ namespace TA3D
 					int ph = unit_manager.unit_type[unit[index].type_id]->Pic_h[i];
 
 					int nb(0);
-					for (MissionStack::iterator m = unit[index].missionQueue.begin(); m != unit[index].missionQueue.end(); ++m)
+					for (MissionQueue::iterator m = unit[index].missionQueue.begin(); m != unit[index].missionQueue.end(); ++m)
 					{
 						if ((m->lastMission() == MISSION_BUILD || m->lastMission() == MISSION_BUILD_2) && m->lastStep().getData() == unit_manager.unit_type[unit[index].type_id]->BuildList[i])
 							++nb;
@@ -1609,8 +1609,8 @@ namespace TA3D
 			unit[i].lock();
 			if (unit[i].isAlive() && !unit[i].command_locked && unit[i].isOwnedBy(player_id) && unit[i].isSelected && !unit[i].isBeingBuilt())
 			{
-				MissionStack& mission = unit_manager.unit_type[unit[i].type_id]->BMcode ? unit[i].missionQueue : unit[i].defaultMissionQueue;
-				MissionStack::iterator cur = mission.begin();
+				MissionQueue& mission = unit_manager.unit_type[unit[i].type_id]->BMcode ? unit[i].missionQueue : unit[i].defaultMissionQueue;
+				MissionQueue::iterator cur = mission.begin();
 				if (cur != mission.end() && unit_manager.unit_type[unit[i].type_id]->BMcode)
 					++cur; // Don't read the first one ( which is being executed )
 

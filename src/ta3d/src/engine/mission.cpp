@@ -70,17 +70,17 @@ namespace TA3D
 		return Pos;
 	}
 
-	bool MissionStack::doNothing() const
+	bool MissionQueue::doNothing() const
 	{
 		return empty() || ((this->mission() == MISSION_STOP || this->mission() == MISSION_STANDBY || this->mission() == MISSION_VTOL_STANDBY) && size() == 1 && front().size() == 1);
 	}
 
-	bool MissionStack::doingNothing() const
+	bool MissionQueue::doingNothing() const
 	{
 		return empty() || (this->mission() == MISSION_STOP || this->mission() == MISSION_STANDBY || this->mission() == MISSION_VTOL_STANDBY);
 	}
 
-	bool MissionStack::doNothingAI() const
+	bool MissionQueue::doNothingAI() const
 	{
 		return empty() || ((this->mission() == MISSION_STOP || this->mission() == MISSION_STANDBY || this->mission() == MISSION_VTOL_STANDBY || this->mission() == MISSION_MOVE) && size() == 1 && front().size() == 1);
 	}
@@ -159,7 +159,7 @@ namespace TA3D
 		}
 	}
 
-	void MissionStack::save(gzFile file)
+	void MissionQueue::save(gzFile file)
 	{
 		for (Container::iterator i = sMission.begin(); i != sMission.end(); ++i)
 		{
@@ -169,7 +169,7 @@ namespace TA3D
 		gzputc(file, 0);
 	}
 
-	void MissionStack::load(gzFile file)
+	void MissionQueue::load(gzFile file)
 	{
 		sMission.clear();
 		while (gzgetc(file))

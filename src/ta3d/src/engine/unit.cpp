@@ -609,7 +609,7 @@ namespace TA3D
 		if (type_id != -1 && mission_type == MISSION_BUILD && pType->BMcode && pType->Builder && target != NULL)
 		{
 			bool removed = false;
-			MissionStack::iterator cur = missionQueue.begin();
+			MissionQueue::iterator cur = missionQueue.begin();
 			if (!missionQueue.empty())
 				++cur; // Don't read the first one ( which is being executed )
 
@@ -648,11 +648,11 @@ namespace TA3D
 
 		if (!step && patrol_node == -1 && mission_type == MISSION_PATROL)
 		{
-			MissionStack& mission_base = def_mode ? defaultMissionQueue : missionQueue;
+			MissionQueue& mission_base = def_mode ? defaultMissionQueue : missionQueue;
 			if (!mission_base.empty()) // Ajoute l'ordre aux autres
 			{
-				MissionStack::iterator cur = mission_base.begin();
-				MissionStack::iterator last = mission_base.end();
+				MissionQueue::iterator cur = mission_base.begin();
+				MissionQueue::iterator last = mission_base.end();
 				patrol_node = 0;
 				while (cur != mission_base.end())
 				{
@@ -3455,7 +3455,7 @@ namespace TA3D
 						missionQueue.back().Flags() |= MISSION_FLAG_MOVE;
 						missionQueue.back().Path().clear();
 
-						MissionStack::iterator cur = missionQueue.begin();
+						MissionQueue::iterator cur = missionQueue.begin();
 						for (++cur; cur != missionQueue.end() && cur->mission() != MISSION_PATROL; ++cur)
 						{
 							missionQueue.add(*cur);
@@ -4592,8 +4592,8 @@ namespace TA3D
 			return;
 		}
 
-		MissionStack::iterator cur = def_orders ? defaultMissionQueue.begin() : missionQueue.begin();
-		MissionStack::iterator end = def_orders ? defaultMissionQueue.end() : missionQueue.end();
+		MissionQueue::iterator cur = def_orders ? defaultMissionQueue.begin() : missionQueue.begin();
+		MissionQueue::iterator end = def_orders ? defaultMissionQueue.end() : missionQueue.end();
 
 		glEnable(GL_BLEND);
 		glEnable(GL_TEXTURE_2D);
