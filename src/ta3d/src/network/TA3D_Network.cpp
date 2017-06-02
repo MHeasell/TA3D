@@ -281,10 +281,10 @@ namespace TA3D
 				pUnit->setPosition(tmpPosition);
 
 				if (sync_msg.mask & SYNC_MASK_VX)
-					pUnit->V.x = sync_msg.vx;
+					pUnit->velocity.x = sync_msg.vx;
 				if (sync_msg.mask & SYNC_MASK_VZ)
-					pUnit->V.z = sync_msg.vz;
-				pUnit->V.y = 0.0f;
+					pUnit->velocity.z = sync_msg.vz;
+				pUnit->velocity.y = 0.0f;
 
 				if (sync_msg.mask & SYNC_MASK_O)
 					pUnit->Angle.y = (float)sync_msg.orientation * 360.0f / 65536.0f;
@@ -547,7 +547,7 @@ namespace TA3D
 							{
 								units.unit[event_msg.opt1].lock();
 								if (units.unit[event_msg.opt1].isAlive())
-									weapons.weapon[w_idx].V = weapons.weapon[w_idx].V + units.unit[event_msg.opt1].V;
+									weapons.weapon[w_idx].V = weapons.weapon[w_idx].V + units.unit[event_msg.opt1].velocity;
 								units.unit[event_msg.opt1].unlock();
 							}
 							weapons.weapon[w_idx].owner = (byte)player_id;

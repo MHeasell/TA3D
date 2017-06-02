@@ -261,7 +261,7 @@ namespace TA3D
 			SAVE(units.unit[i].ownerId);
 			SAVE(units.unit[i].hp);
 			SAVE(units.unit[i].position);
-			SAVE(units.unit[i].V);
+			SAVE(units.unit[i].velocity);
 			SAVE(units.unit[i].Angle);
 			SAVE(units.unit[i].V_Angle);
 			SAVE(units.unit[i].isSelected);
@@ -747,7 +747,7 @@ namespace TA3D
 				units.unit[i].local = !(game_data->player_control[player_id] & PLAYER_CONTROL_FLAG_REMOTE);
 			LOAD(units.unit[i].hp);
 			LOAD(units.unit[i].position);
-			LOAD(units.unit[i].V);
+			LOAD(units.unit[i].velocity);
 			LOAD(units.unit[i].Angle);
 			LOAD(units.unit[i].V_Angle);
 			LOAD(units.unit[i].isSelected);

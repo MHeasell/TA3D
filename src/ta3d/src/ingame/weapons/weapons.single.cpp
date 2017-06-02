@@ -127,7 +127,7 @@ namespace TA3D
 					else if (!weapon_def->interceptor && (uint32)target < units.max_unit && units.unit[target].isAlive()) // Met à jour les coordonnées de la cible
 					{
 						target_pos = units.unit[target].position;
-						target_V = units.unit[target].V;
+						target_V = units.unit[target].velocity;
 					}
 					else
 						target = -1;

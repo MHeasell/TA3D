@@ -234,7 +234,7 @@ namespace TA3D
 		float hp;
 
 		Vector3D position;
-		Vector3D V;
+		Vector3D velocity;
 		Vector3D Angle;
 		Vector3D V_Angle;
 

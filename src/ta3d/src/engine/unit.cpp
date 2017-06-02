@@ -20,7 +20,7 @@ namespace TA3D
 		  typeId(0),
 		  hp(0.0f),
 		  position(),
-		  V(),
+		  velocity(),
 		  Angle(),
 		  V_Angle(),
 		  isSelected(false),
@@ -314,13 +314,13 @@ namespace TA3D
 			if (!missionQueue->Path().empty())
 			{
 				missionQueue->Path().clear();
-				V.reset();
+				velocity.reset();
 			}
 			if (!(unit_manager.unit_type[typeId]->canfly && nb_attached > 0)) // Once charged with units the Atlas cannot land
 				stopMovingAnimation();
 			was_moving = false;
 			if (!(missionQueue->Flags() & MISSION_FLAG_DONT_STOP_MOVE))
-				V.reset(); // Stop unit's movement
+				velocity.reset(); // Stop unit's movement
 		}
 		else if (selfmove && !(unit_manager.unit_type[typeId]->canfly && nb_attached > 0))
 			stopMovingAnimation();
@@ -467,7 +467,7 @@ namespace TA3D
 		ownerId = owner;
 		typeId = -1;
 		hp = 0.0f;
-		V.reset();
+		velocity.reset();
 		position.reset();
 		data.init();
 		Angle.reset();
@@ -1621,7 +1621,7 @@ namespace TA3D
 					selfmove = false;
 					if (was_moving)
 					{
-						V.reset();
+						velocity.reset();
 						if (!(pType->canfly && nb_attached > 0)) // Once charged with units the Atlas cannot land
 							stopMovingAnimation();
 					}
@@ -1673,7 +1673,7 @@ namespace TA3D
 									if (!(unit_manager.unit_type[typeId]->canfly && nb_attached > 0)) // Once loaded with units the Atlas cannot land
 										stopMovingAnimation();
 									was_moving = false;
-									V.reset();
+									velocity.reset();
 									V_Angle.reset();
 								}
 								if (!missionQueue->Path().empty()) // Update required data
@@ -1717,7 +1717,7 @@ namespace TA3D
 								was_moving = false;
 							}
 							if (!(missionQueue->getFlags() & MISSION_FLAG_DONT_STOP_MOVE))
-								V.reset();		   // Stop unit's movement
+								velocity.reset();		   // Stop unit's movement
 							if (missionQueue->isStep()) // It's meaningless to try to finish this mission like an ordinary order
 							{
 								next_mission();
@@ -1801,12 +1801,12 @@ namespace TA3D
 				I.z = -J.x;
 				I.x = J.z;
 				I.y = 0.0f;
-				V = (V % K) * K + (V % J) * J;
+				velocity = (velocity % K) * K + (velocity % J) * J;
 
 				Vector3D D(Target.z - position.z, 0.0f, position.x - Target.x);
 				D.normalize();
-				float speed = sqrtf(V.x * V.x + V.z * V.z);
-				const float vsin = fabsf(D % V);
+				float speed = sqrtf(velocity.x * velocity.x + velocity.z * velocity.z);
+				const float vsin = fabsf(D % velocity);
 				const float deltaX = 8.0f * vsin / (pType->TurnRate * DEG2RAD);
 				const float time_to_stop = speed / pType->BrakeRate;
 				const float min_dist = time_to_stop * (speed - pType->BrakeRate * 0.5f * time_to_stop);
@@ -1814,17 +1814,17 @@ namespace TA3D
 																		  //					&& mission->Path().length() == 1
 																		  && !(missionQueue->getFlags() & MISSION_FLAG_DONT_STOP_MOVE) && (!missionQueue.hasNext() || (missionQueue(1) != MISSION_MOVE && missionQueue(1) != MISSION_PATROL)))) // Brake if needed
 				{
-					V = V - pType->BrakeRate * dt * J;
+					velocity = velocity - pType->BrakeRate * dt * J;
 					// Don't go backward
-					if (J % V <= 0.0f)
-						V.reset();
+					if (J % velocity <= 0.0f)
+						velocity.reset();
 				}
 				else if (speed < pType->MaxVelocity)
 				{
-					V = V + pType->Acceleration * dt * J;
-					speed = V.length();
+					velocity = velocity + pType->Acceleration * dt * J;
+					speed = velocity.length();
 					if (speed > pType->MaxVelocity)
-						V = pType->MaxVelocity / speed * V;
+						velocity = pType->MaxVelocity / speed * velocity;
 				}
 			}
 			else if (selfmove)
@@ -1832,7 +1832,7 @@ namespace TA3D
 				selfmove = false;
 				if (was_moving)
 				{
-					V.reset();
+					velocity.reset();
 					if (!(pType->canfly && nb_attached > 0)) // Once charged with units the Atlas cannot land
 						stopMovingAnimation();
 				}
@@ -1841,14 +1841,14 @@ namespace TA3D
 					requesting_pathfinder = false;
 			}
 
-			NPos = position + dt * V;			   // Check if the unit can go where V brings it
+			NPos = position + dt * velocity;			   // Check if the unit can go where V brings it
 			if (!Math::AlmostZero(was_locked)) // Random move to solve the unit lock problem
 			{
-				if (V.x > 0.0f)
+				if (velocity.x > 0.0f)
 					NPos.x += float(Math::RandomTable() % 101) * 0.01f;
 				else
 					NPos.x -= float(Math::RandomTable() % 101) * 0.01f;
-				if (V.z > 0.0f)
+				if (velocity.z > 0.0f)
 					NPos.z += float(Math::RandomTable() % 101) * 0.01f;
 				else
 					NPos.z -= float(Math::RandomTable() % 101) * 0.01f;
@@ -1878,29 +1878,29 @@ namespace TA3D
 							// Check some basic solutions first
 							if (cur_px != n_px && can_be_there(cur_px, n_py, typeId, ownerId, idx))
 							{
-								V.z = !Math::AlmostZero(V.z)
-									? (V.z < 0.0f
-											  ? -sqrtf(SQUARE(V.z) + SQUARE(V.x))
-											  : sqrtf(SQUARE(V.z) + SQUARE(V.x)))
+								velocity.z = !Math::AlmostZero(velocity.z)
+									? (velocity.z < 0.0f
+											  ? -sqrtf(SQUARE(velocity.z) + SQUARE(velocity.x))
+											  : sqrtf(SQUARE(velocity.z) + SQUARE(velocity.x)))
 									: 0.0f;
-								V.x = 0.0f;
+								velocity.x = 0.0f;
 								NPos.x = position.x;
 								n_px = cur_px;
 							}
 							else if (cur_py != n_py && can_be_there(n_px, cur_py, typeId, ownerId, idx))
 							{
-								V.x = !Math::AlmostZero(V.x)
-									? ((V.x < 0.0f)
-											  ? -sqrtf(SQUARE(V.z) + SQUARE(V.x))
-											  : sqrtf(SQUARE(V.z) + SQUARE(V.x)))
+								velocity.x = !Math::AlmostZero(velocity.x)
+									? ((velocity.x < 0.0f)
+											  ? -sqrtf(SQUARE(velocity.z) + SQUARE(velocity.x))
+											  : sqrtf(SQUARE(velocity.z) + SQUARE(velocity.x)))
 									: 0.0f;
-								V.z = 0.0f;
+								velocity.z = 0.0f;
 								NPos.z = position.z;
 								n_py = cur_py;
 							}
 							else if (can_be_there(cur_px, cur_py, typeId, ownerId, idx))
 							{
-								V.x = V.y = V.z = 0.0f; // Don't move since we can't
+								velocity.x = velocity.y = velocity.z = 0.0f; // Don't move since we can't
 								NPos = position;
 								n_px = cur_px;
 								n_py = cur_py;
@@ -1976,23 +1976,23 @@ namespace TA3D
 			if (position.x < -the_map->halfWidthInWorldUnits || position.x > the_map->halfWidthInWorldUnits || position.z < -the_map->halfHeightInWorldUnits || position.z > the_map->halfHeightInWorldUnits)
 			{
 				if (position.x < -the_map->halfWidthInWorldUnits)
-					V.x += dt * (-(float)the_map->halfWidthInWorldUnits - position.x) * 0.1f;
+					velocity.x += dt * (-(float)the_map->halfWidthInWorldUnits - position.x) * 0.1f;
 				else if (position.x > the_map->halfWidthInWorldUnits)
-					V.x -= dt * (position.x - (float)the_map->halfWidthInWorldUnits) * 0.1f;
+					velocity.x -= dt * (position.x - (float)the_map->halfWidthInWorldUnits) * 0.1f;
 				if (position.z < -the_map->halfHeightInWorldUnits)
-					V.z += dt * (-(float)the_map->halfHeightInWorldUnits - position.z) * 0.1f;
+					velocity.z += dt * (-(float)the_map->halfHeightInWorldUnits - position.z) * 0.1f;
 				else if (position.z > the_map->halfHeightInWorldUnits)
-					V.z -= dt * (position.z - (float)the_map->halfHeightInWorldUnits) * 0.1f;
-				float speed = V.length();
+					velocity.z -= dt * (position.z - (float)the_map->halfHeightInWorldUnits) * 0.1f;
+				float speed = velocity.length();
 				if (speed > pType->MaxVelocity && speed > 0.0f)
 				{
-					V = pType->MaxVelocity / speed * V;
+					velocity = pType->MaxVelocity / speed * velocity;
 					speed = pType->MaxVelocity;
 				}
 				if (speed > 0.0f)
 				{
-					Angle.y = acosf(V.z / speed) * RAD2DEG;
-					if (V.x < 0.0f)
+					Angle.y = acosf(velocity.z / speed) * RAD2DEG;
+					if (velocity.x < 0.0f)
 						Angle.y = -Angle.y;
 				}
 			}
@@ -2012,7 +2012,7 @@ namespace TA3D
 		const sint32 o_px = cur_px;
 		const sint32 o_py = cur_py;
 		compute_coord = true;
-		const Vector3D old_V = V;   // Store the speed, so we can do some calculations
+		const Vector3D old_V = velocity;   // Store the speed, so we can do some calculations
 		bool b_TargetAngle = false; // Do we aim, move, ... ?? Need to change unit angle
 		float f_TargetAngle = 0.0f;
 
@@ -2407,28 +2407,28 @@ namespace TA3D
 
 							if (pType->attackrunlength > 0)
 							{
-								if (target % V < 0.0f)
+								if (target % velocity < 0.0f)
 								{
 									weapon[i].state = WEAPON_FLAG_IDLE;
 									weapon[i].data = -1;
 									break; // We're not shooting at the target
 								}
 								const float t = 2.0f / the_map->ota_data.gravity * fabsf(target.y);
-								mindist = (int)sqrtf(t * V.lengthSquared()) - ((pType->attackrunlength + 1) >> 1);
+								mindist = (int)sqrtf(t * velocity.lengthSquared()) - ((pType->attackrunlength + 1) >> 1);
 								maxdist = mindist + (pType->attackrunlength);
 							}
 							else
 							{
 								if (pType->weapon[i]->waterweapon && position.y > the_map->sealvl)
 								{
-									if (target % V < 0.0f)
+									if (target % velocity < 0.0f)
 									{
 										weapon[i].state = WEAPON_FLAG_IDLE;
 										weapon[i].data = -1;
 										break; // We're not shooting at the target
 									}
 									const float t = 2.0f / the_map->ota_data.gravity * fabsf(target.y);
-									mindist = (int)sqrtf(t * V.lengthSquared());
+									mindist = (int)sqrtf(t * velocity.lengthSquared());
 									maxdist = mindist + (pType->weapon[i]->range >> 1);
 								}
 								else
@@ -2445,7 +2445,7 @@ namespace TA3D
 							Vector3D target_translation;
 							if (target_unit != NULL)
 								for (int k = 0; k < 3; ++k) // Iterate to get a better approximation
-									target_translation = ((target + target_translation).length() / pType->weapon[i]->weaponvelocity) * (target_unit->V - V);
+									target_translation = ((target + target_translation).length() / pType->weapon[i]->weaponvelocity) * (target_unit->velocity - velocity);
 
 							if (pType->weapon[i]->turret) // Si l'unité doit viser, on la fait viser / if it must aim, we make it aim
 							{
@@ -2839,7 +2839,7 @@ namespace TA3D
 							else
 							{ // being repaired
 								position = target;
-								V.reset();
+								velocity.reset();
 
 								if (target_unit->port[ACTIVATION])
 								{
@@ -3442,7 +3442,7 @@ namespace TA3D
 					{
 						if (!pType->canfly || (!missionQueue.hasNext() || missionQueue->mission() != MISSION_PATROL))
 						{
-							V.reset(); // Stop the unit
+							velocity.reset(); // Stop the unit
 							if (precomputed_position)
 							{
 								NPos = position;
@@ -3536,18 +3536,18 @@ namespace TA3D
 								bool allowed_to_fire = true;
 								if (pType->attackrunlength > 0)
 								{
-									if (Dir % V < 0.0f)
+									if (Dir % velocity < 0.0f)
 										allowed_to_fire = false;
 									const float t = 2.0f / the_map->ota_data.gravity * fabsf(position.y - missionQueue->getTarget().getPos().y);
-									cur_mindist = (int)sqrtf(t * V.lengthSquared()) - ((pType->attackrunlength + 1) / 2);
+									cur_mindist = (int)sqrtf(t * velocity.lengthSquared()) - ((pType->attackrunlength + 1) / 2);
 									cur_maxdist = cur_mindist + pType->attackrunlength;
 								}
 								else if (pType->weapon[i]->waterweapon && position.y > the_map->sealvl)
 								{
-									if (Dir % V < 0.0f)
+									if (Dir % velocity < 0.0f)
 										allowed_to_fire = false;
 									const float t = 2.0f / the_map->ota_data.gravity * fabsf(position.y - missionQueue->getTarget().getPos().y);
-									cur_maxdist = (int)sqrtf(t * V.lengthSquared()) + (pType->weapon[i]->range / 2);
+									cur_maxdist = (int)sqrtf(t * velocity.lengthSquared()) + (pType->weapon[i]->range / 2);
 									cur_mindist = 0;
 								}
 								else
@@ -3888,9 +3888,9 @@ namespace TA3D
 							}
 							if (port[INBUILDSTANCE])
 							{
-								V.x = 0.0f;
-								V.y = 0.0f;
-								V.z = 0.0f;
+								velocity.x = 0.0f;
+								velocity.y = 0.0f;
+								velocity.z = 0.0f;
 
 								const Vector3D target = missionQueue->getTarget().getPos();
 								const Vector2D topLeftPos(
@@ -3948,7 +3948,7 @@ namespace TA3D
 					if (!(missionQueue->getFlags() & MISSION_FLAG_MOVE) && !(missionQueue->getFlags() & MISSION_FLAG_DONT_STOP_MOVE) && ((missionQueue->mission() != MISSION_ATTACK && pType->canfly) || !pType->canfly) && !selfmove)
 					{
 						if (!flying)
-							V.x = V.z = 0.0f;
+							velocity.x = velocity.z = 0.0f;
 						if (precomputed_position)
 						{
 							NPos = position;
@@ -3971,7 +3971,7 @@ namespace TA3D
 							if (missionQueue.hasNext())
 								next_mission();
 							if (!selfmove)
-								V.reset(); // Frottements
+								velocity.reset(); // Frottements
 							break;
 						case MISSION_MOVE:
 							missionQueue->Flags() |= MISSION_FLAG_CAN_ATTACK;
@@ -3981,7 +3981,7 @@ namespace TA3D
 									missionQueue->Flags() |= MISSION_FLAG_DONT_STOP_MOVE;
 
 								if (!(missionQueue->getFlags() & MISSION_FLAG_DONT_STOP_MOVE)) // If needed
-									V.reset();											  // Stop the unit
+									velocity.reset();											  // Stop the unit
 								if (precomputed_position)
 								{
 									NPos = position;
@@ -4038,10 +4038,10 @@ namespace TA3D
 						I.z = -J.x;
 						I.x = J.z;
 						I.y = 0.0f;
-						V = (V % K) * K + (V % J) * J + units.exp_dt_4 * (V % I) * I;
-						const float speed = V.lengthSquared();
+						velocity = (velocity % K) * K + (velocity % J) * J + units.exp_dt_4 * (velocity % I) * I;
+						const float speed = velocity.lengthSquared();
 						if (speed < pType->MaxVelocity * pType->MaxVelocity)
-							V = V + pType->Acceleration * dt * J;
+							velocity = velocity + pType->Acceleration * dt * J;
 					}
 					if (!pType->hoverattack)
 						break;
@@ -4076,26 +4076,26 @@ namespace TA3D
 								ideal_dist = pType->BuildDistance * 0.5f;
 						};
 
-						V += (Math::Clamp(10.0f * (dist - ideal_dist), -pType->Acceleration, pType->Acceleration) * dt) * J;
+						velocity += (Math::Clamp(10.0f * (dist - ideal_dist), -pType->Acceleration, pType->Acceleration) * dt) * J;
 
 						if (dist < 2.0f * ideal_dist)
 						{
 							J.z = sinf(Angle.y * DEG2RAD);
 							J.x = -cosf(Angle.y * DEG2RAD);
 							J.y = 0.0f;
-							V = units.exp_dt_4 * V + (dt * dist * Math::Max(8.0f * (cosf(PI * ((float)units.current_tick) / (float)TICKS_PER_SEC) - 0.5f), 0.0f)) * J;
+							velocity = units.exp_dt_4 * velocity + (dt * dist * Math::Max(8.0f * (cosf(PI * ((float)units.current_tick) / (float)TICKS_PER_SEC) - 0.5f), 0.0f)) * J;
 						}
 						else
 						{
 							J.z = sinf(Angle.y * DEG2RAD);
 							J.x = -cosf(Angle.y * DEG2RAD);
 							J.y = 0.0f;
-							J = (J % V) * J;
-							V = (V - J) + units.exp_dt_4 * J;
+							J = (J % velocity) * J;
+							velocity = (velocity - J) + units.exp_dt_4 * J;
 						}
-						const float speed = V.lengthSquared();
+						const float speed = velocity.lengthSquared();
 						if (speed > pType->MaxVelocity * pType->MaxVelocity)
-							V = pType->MaxVelocity / V.length() * V;
+							velocity = pType->MaxVelocity / velocity.length() * velocity;
 					}
 					break;
 				case MISSION_GUARD:
@@ -4127,17 +4127,17 @@ namespace TA3D
 								acc *= pType->Acceleration;
 							}
 						}
-						V += dt * acc;
+						velocity += dt * acc;
 
 						J.z = sinf(Angle.y * DEG2RAD);
 						J.x = -cosf(Angle.y * DEG2RAD);
 						J.y = 0.0f;
-						J = (J % V) * J;
-						V = (V - J) + units.exp_dt_4 * J;
+						J = (J % velocity) * J;
+						velocity = (velocity - J) + units.exp_dt_4 * J;
 
-						const float speed = V.lengthSquared();
+						const float speed = velocity.lengthSquared();
 						if (speed > pType->MaxVelocity * pType->MaxVelocity)
-							V = pType->MaxVelocity / sqrtf(speed) * V;
+							velocity = pType->MaxVelocity / sqrtf(speed) * velocity;
 					}
 					break;
 			}
@@ -4327,14 +4327,14 @@ namespace TA3D
 		if (pType->canfly) // Set plane orientation
 		{
 			Vector3D J, K(0.0f, 1.0f, 0.0f);
-			J = V * K;
+			J = velocity * K;
 
 			Vector3D virtual_G;				  // Compute the apparent gravity force ( seen from the plane )
 			virtual_G.x = virtual_G.z = 0.0f; // Standard gravity vector
 			virtual_G.y = -4.0f * units.g_dt;
 			float d = J.lengthSquared();
 			if (!Math::AlmostZero(d))
-				virtual_G = virtual_G + (((old_V - V) % J) / d) * J; // Add the opposite of the speed derivative projected on the side of the unit
+				virtual_G = virtual_G + (((old_V - velocity) % J) / d) * J; // Add the opposite of the speed derivative projected on the side of the unit
 
 			d = virtual_G.length();
 			if (!Math::AlmostZero(d))
@@ -4397,17 +4397,17 @@ namespace TA3D
 			if (precomputed_position)
 			{
 				if (pType->canmove && pType->BMcode && !flying)
-					V.y -= units.g_dt; // L'unité subit la force de gravitation
+					velocity.y -= units.g_dt; // L'unité subit la force de gravitation
 				position = NPos;
-				position.y = OPos.y + V.y * dt;
+				position.y = OPos.y + velocity.y * dt;
 				cur_px = n_px;
 				cur_py = n_py;
 			}
 			else
 			{
 				if (pType->canmove && pType->BMcode)
-					V.y -= units.g_dt; // L'unité subit la force de gravitation
-				setPosition(position + (dt * V)); // move the unit
+					velocity.y -= units.g_dt; // L'unité subit la force de gravitation
+				setPosition(position + (dt * velocity)); // move the unit
 			}
 		}
 	script_exec:
@@ -4422,24 +4422,24 @@ namespace TA3D
 			{
 				hover_on_water = true;
 				position.y = the_map->sealvl;
-				if (V.y < 0.0f)
-					V.y = 0.0f;
+				if (velocity.y < 0.0f)
+					velocity.y = 0.0f;
 			}
 			else if (pType->Floater)
 			{
 				position.y = the_map->sealvl + (float)pType->AltFromSeaLevel * H_DIV;
-				V.y = 0.0f;
+				velocity.y = 0.0f;
 			}
 			else if (!Math::AlmostZero(pType->WaterLine))
 			{
 				position.y = the_map->sealvl - pType->WaterLine * H_DIV;
-				V.y = 0.0f;
+				velocity.y = 0.0f;
 			}
 			else if (!pType->canfly && position.y > Math::Max(min_h, the_map->sealvl) && pType->BMcode) // Prevent non flying units from "jumping"
 			{
 				position.y = Math::Max(min_h, the_map->sealvl);
-				if (V.y < 0.0f)
-					V.y = 0.0f;
+				if (velocity.y < 0.0f)
+					velocity.y = 0.0f;
 			}
 			if (pType->canhover)
 			{
@@ -4449,8 +4449,8 @@ namespace TA3D
 			if (min_h > position.y)
 			{
 				position.y = min_h;
-				if (V.y < 0.0f)
-					V.y = 0.0f;
+				if (velocity.y < 0.0f)
+					velocity.y = 0.0f;
 			}
 			if (pType->canfly && !isBeingBuilt() && local)
 			{
@@ -4459,7 +4459,7 @@ namespace TA3D
 					if (!(missionQueue->mission() == MISSION_GET_REPAIRED && (missionQueue->getFlags() & MISSION_FLAG_BEING_REPAIRED)))
 					{
 						const float ideal_h = Math::Max(min_h, the_map->sealvl) + (float)pType->CruiseAlt * H_DIV;
-						V.y = (ideal_h - position.y) * 2.0f;
+						velocity.y = (ideal_h - position.y) * 2.0f;
 					}
 					flying = true;
 				}
@@ -4468,7 +4468,7 @@ namespace TA3D
 					if (can_be_there(cur_px, cur_py, typeId, ownerId, idx)) // Check it can be there
 					{
 						float ideal_h = min_h;
-						V.y = (ideal_h - position.y) * 1.5f;
+						velocity.y = (ideal_h - position.y) * 1.5f;
 						flying = false;
 					}
 					else // There is someone there, find an other place to land
@@ -4924,7 +4924,7 @@ namespace TA3D
 			weapons.weapon[w_idx].V = pW->weaponvelocity * Dir;
 		else
 			weapons.weapon[w_idx].V = pW->startvelocity * Dir;
-		weapons.weapon[w_idx].V = weapons.weapon[w_idx].V + V;
+		weapons.weapon[w_idx].V = weapons.weapon[w_idx].V + velocity;
 		weapons.weapon[w_idx].owner = (byte)owner;
 		weapons.weapon[w_idx].target = target;
 		if (target >= 0)
