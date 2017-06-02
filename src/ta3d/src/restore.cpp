@@ -263,7 +263,7 @@ namespace TA3D
 			SAVE(units.unit[i].position);
 			SAVE(units.unit[i].velocity);
 			SAVE(units.unit[i].orientation);
-			SAVE(units.unit[i].V_Angle);
+			SAVE(units.unit[i].angularVelocity);
 			SAVE(units.unit[i].isSelected);
 			SAVE(units.unit[i].death_delay);
 			SAVE(units.unit[i].paralyzed);
@@ -749,7 +749,7 @@ namespace TA3D
 			LOAD(units.unit[i].position);
 			LOAD(units.unit[i].velocity);
 			LOAD(units.unit[i].orientation);
-			LOAD(units.unit[i].V_Angle);
+			LOAD(units.unit[i].angularVelocity);
 			LOAD(units.unit[i].isSelected);
 			LOAD(units.unit[i].death_delay);
 			LOAD(units.unit[i].paralyzed);

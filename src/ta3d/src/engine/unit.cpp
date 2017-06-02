@@ -22,7 +22,7 @@ namespace TA3D
 		  position(),
 		  velocity(),
 		  orientation(),
-		  V_Angle(),
+		  angularVelocity(),
 		  isSelected(false),
 		  data(),
 		  drawing(false),
@@ -471,7 +471,7 @@ namespace TA3D
 		position.reset();
 		data.init();
 		orientation.reset();
-		V_Angle = orientation;
+		angularVelocity = orientation;
 		int i;
 		for (i = 0; i < 21; ++i)
 			port[i] = 0;
@@ -1674,7 +1674,7 @@ namespace TA3D
 										stopMovingAnimation();
 									was_moving = false;
 									velocity.reset();
-									V_Angle.reset();
+									angularVelocity.reset();
 								}
 								if (!missionQueue->Path().empty()) // Update required data
 									Target = missionQueue->Path().Pos();
@@ -2318,7 +2318,7 @@ namespace TA3D
 			}
 		}
 
-		V_Angle.reset();
+		angularVelocity.reset();
 		c_time += dt;
 
 		//------------------------------ Beginning of weapon related code ---------------------------------------
@@ -4382,17 +4382,17 @@ namespace TA3D
 					if (f_TargetAngle < orientation.y)
 						aspeed = -aspeed;
 					float a = f_TargetAngle - orientation.y;
-					V_Angle.y = aspeed;
-					float b = f_TargetAngle - (orientation.y + dt * V_Angle.y);
+					angularVelocity.y = aspeed;
+					float b = f_TargetAngle - (orientation.y + dt * angularVelocity.y);
 					if (((a < 0.0f && b > 0.0f) || (a > 0.0f && b < 0.0f)) && !isNaN(f_TargetAngle))
 					{
-						V_Angle.y = 0.0f;
+						angularVelocity.y = 0.0f;
 						orientation.y = f_TargetAngle;
 					}
 				}
 			}
 
-			orientation = orientation + dt * V_Angle;
+			orientation = orientation + dt * angularVelocity;
 			Vector3D OPos = position;
 			if (precomputed_position)
 			{
