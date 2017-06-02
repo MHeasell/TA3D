@@ -126,7 +126,7 @@ namespace TA3D
 					}
 					else if (!weapon_def->interceptor && (uint32)target < units.max_unit && units.unit[target].isAlive()) // Met à jour les coordonnées de la cible
 					{
-						target_pos = units.unit[target].Pos;
+						target_pos = units.unit[target].position;
 						target_V = units.unit[target].V;
 					}
 					else
@@ -395,7 +395,7 @@ namespace TA3D
 				if (pUnit->idx == shooter_idx)
 					continue;
 				pUnit->lock();
-				if (pUnit->isAlive() && pUnit->local && ((Vector3D) (pUnit->Pos - Pos)).lengthSquared() <= d)
+				if (pUnit->isAlive() && pUnit->local && ((Vector3D) (pUnit->position - Pos)).lengthSquared() <= d)
 				{
 					const bool ok = pUnit->hp > 0.0f;
 					damage = float(weapon_def->get_damage_for_unit(unit_manager.unit_type[pUnit->typeId]->Unitname));
@@ -425,7 +425,7 @@ namespace TA3D
 							g_ta3d_network->sendDamageEvent(pUnit->idx, cur_damage);
 					}
 
-					Vector3D D = (pUnit->Pos - Pos) * RotateY(-pUnit->Angle.y * DEG2RAD);
+					Vector3D D = (pUnit->position - Pos) * RotateY(-pUnit->Angle.y * DEG2RAD);
 					D.normalize();
 					int param[] = {(int)(10.0f * DEG2TA * D.z), (int)(10.0f * DEG2TA * D.x)};
 					pUnit->launchScript(SCRIPT_HitByWeapon, 2, param);

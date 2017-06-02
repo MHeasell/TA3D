@@ -52,7 +52,7 @@ namespace TA3D
 			{
 				const Unit* p = getUnit();
 				if (p)
-					return p->Pos;
+					return p->position;
 			}
 			break;
 			case TargetWeapon:

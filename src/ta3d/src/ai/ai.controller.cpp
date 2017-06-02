@@ -295,7 +295,7 @@ namespace TA3D
 							}
 						}
 						if (target_id >= 0)
-							units.unit[*i].set_mission(MISSION_ATTACK, &units.unit[target_id].Pos, false, 0, true, (&units.unit[target_id]), MISSION_FLAG_COMMAND_FIRE);
+							units.unit[*i].set_mission(MISSION_ATTACK, &units.unit[target_id].position, false, 0, true, (&units.unit[target_id]), MISSION_FLAG_COMMAND_FIRE);
 					}
 					units.unit[*i].unlock();
 				}
@@ -329,7 +329,7 @@ namespace TA3D
 #endif
 				if (selected_idx >= 0)
 				{
-					units.unit[*i].add_mission(MISSION_BUILD, &units.unit[*i].Pos, false, selected_idx);
+					units.unit[*i].add_mission(MISSION_BUILD, &units.unit[*i].position, false, selected_idx);
 					weights[selected_idx].w *= 0.8f;
 				}
 			}
@@ -361,7 +361,7 @@ namespace TA3D
 					}
 				if (selected_idx >= 0)
 				{
-					Vector3D target = units.unit[*i].Pos;
+					Vector3D target = units.unit[*i].position;
 					if (findBuildPlace(target, selected_idx, playerID, 5, 50))
 					{
 						if (unit_manager.unit_type[units.unit[*i].typeId]->BMcode)

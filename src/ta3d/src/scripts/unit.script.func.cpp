@@ -34,7 +34,7 @@ namespace TA3D
 		if (visible) // Don't draw things which could tell the player there is something there
 		{
 			compute_model_coord();
-			particle_engine.make_fire(Pos + data.data[obj].pos, 1, 10, 45.0f);
+			particle_engine.make_fire(position + data.data[obj].pos, 1, 10, 45.0f);
 		}
 		if (!(explosion_type & EXPLODE_BITMAPONLY))
 		{
@@ -124,8 +124,8 @@ namespace TA3D
 				else
 					return 0;
 			case BUGGER_OFF:
-				return the_map->check_rect((((int)(Pos.x + (float)the_map->halfWidthInWorldUnits)) >> 3) - (unit_manager.unit_type[typeId]->FootprintX >> 1),
-						   (((int)(Pos.z + (float)the_map->halfHeightInWorldUnits)) >> 3) - (unit_manager.unit_type[typeId]->FootprintZ >> 1),
+				return the_map->check_rect((((int)(position.x + (float)the_map->halfWidthInWorldUnits)) >> 3) - (unit_manager.unit_type[typeId]->FootprintX >> 1),
+						   (((int)(position.z + (float)the_map->halfHeightInWorldUnits)) >> 3) - (unit_manager.unit_type[typeId]->FootprintZ >> 1),
 						   unit_manager.unit_type[typeId]->FootprintX, unit_manager.unit_type[typeId]->FootprintZ, idx)
 					? 0
 					: 1;
@@ -220,15 +220,15 @@ namespace TA3D
 				switch (smoke_type)
 				{
 					case 0:
-						particle_engine.emit_part(Pos + data.data[from_piece].pos, dir, fire, 1, 10.0f, 2.5f, 5.0f, true);
+						particle_engine.emit_part(position + data.data[from_piece].pos, dir, fire, 1, 10.0f, 2.5f, 5.0f, true);
 						break;
 					case 2:
 					case 3:
-						particle_engine.emit_part(Pos + data.data[from_piece].pos, dir, 0, 1, 10.0f, 10.0f, 10.0f, false, 0.3f);
+						particle_engine.emit_part(position + data.data[from_piece].pos, dir, 0, 1, 10.0f, 10.0f, 10.0f, false, 0.3f);
 						break;
 					case 257: // Fumée
 					case 258:
-						particle_engine.emit_part(Pos + data.data[from_piece].pos, dir, 0, 1, 10.0f, 10.0f, 10.0f, true, 0.3f);
+						particle_engine.emit_part(position + data.data[from_piece].pos, dir, 0, 1, 10.0f, 10.0f, 10.0f, true, 0.3f);
 						break;
 				}
 			}
@@ -236,11 +236,11 @@ namespace TA3D
 				switch (smoke_type)
 				{
 					case 0:
-						particle_engine.make_smoke(Pos + data.data[from_piece].pos, fire, 1, 0.0f, 0.0f, 0.0f, 0.5f);
+						particle_engine.make_smoke(position + data.data[from_piece].pos, fire, 1, 0.0f, 0.0f, 0.0f, 0.5f);
 						break;
 					case 257:
 					case 258:
-						particle_engine.make_smoke(Pos + data.data[from_piece].pos, 0, 1, 10.0f, -1.0f, 0.0f, 0.5f);
+						particle_engine.make_smoke(position + data.data[from_piece].pos, 0, 1, 10.0f, -1.0f, 0.0f, 0.5f);
 						break;
 				}
 		}
@@ -338,20 +338,20 @@ namespace TA3D
 				return (int)port[type];
 			case PIECE_XZ:
 				compute_model_coord();
-				return PACKXZ((data.data[v1].pos.x + Pos.x) * 2.0f + (float)the_map->widthInWorldUnits, (data.data[v1].pos.z + Pos.z) * 2.0f + (float)the_map->heightInWorldUnits);
+				return PACKXZ((data.data[v1].pos.x + position.x) * 2.0f + (float)the_map->widthInWorldUnits, (data.data[v1].pos.z + position.z) * 2.0f + (float)the_map->heightInWorldUnits);
 			case PIECE_Y:
 				compute_model_coord();
-				return (int)((data.data[v1].pos.y + Pos.y) * 2.0f) << 16;
+				return (int)((data.data[v1].pos.y + position.y) * 2.0f) << 16;
 			case UNIT_XZ:
 				if (v1 >= 0 && v1 < (int)units.max_unit && units.unit[v1].isAlive())
-					return PACKXZ(units.unit[v1].Pos.x * 2.0f + (float)the_map->widthInWorldUnits, units.unit[v1].Pos.z * 2.0f + (float)the_map->heightInWorldUnits);
+					return PACKXZ(units.unit[v1].position.x * 2.0f + (float)the_map->widthInWorldUnits, units.unit[v1].position.z * 2.0f + (float)the_map->heightInWorldUnits);
 				else
-					return PACKXZ(Pos.x * 2.0f + (float)the_map->widthInWorldUnits, Pos.z * 2.0f + (float)the_map->heightInWorldUnits);
+					return PACKXZ(position.x * 2.0f + (float)the_map->widthInWorldUnits, position.z * 2.0f + (float)the_map->heightInWorldUnits);
 			case UNIT_Y:
 				if (v1 >= 0 && v1 < (int)units.max_unit && units.unit[v1].isAlive())
-					return (int)(units.unit[v1].Pos.y * 2.0f) << 16;
+					return (int)(units.unit[v1].position.y * 2.0f) << 16;
 				else
-					return (int)(Pos.y * 2.0f) << 16;
+					return (int)(position.y * 2.0f) << 16;
 			case UNIT_HEIGHT:
 				if (v1 >= 0 && v1 < (int)units.max_unit && units.unit[v1].isAlive())
 					return (int)(units.unit[v1].model->top * 2.0f) << 16;
@@ -387,7 +387,7 @@ namespace TA3D
 				{
 					port[type] = sint16(v);
 					auto unitType = unit_manager.unit_type[typeId];
-					auto heightmapIndex = the_map->worldToHeightmapIndex(Pos);
+					auto heightmapIndex = the_map->worldToHeightmapIndex(position);
 					if (!the_map->check_rect(
 							heightmapIndex.x - (unitType->FootprintX / 2),
 							heightmapIndex.y - (unitType->FootprintZ / 2),
@@ -402,7 +402,7 @@ namespace TA3D
 				if (port[type])
 				{
 					auto unitType = unit_manager.unit_type[typeId];
-					auto heightmapIndex = the_map->worldToHeightmapIndex(Pos);
+					auto heightmapIndex = the_map->worldToHeightmapIndex(position);
 					const int px = heightmapIndex.x;
 					const int py = heightmapIndex.y;
 					for (int y = py - (unitType->FootprintZ / 2); y <= py + (unitType->FootprintZ / 2); y++)
@@ -421,7 +421,7 @@ namespace TA3D
 										const UnitType* const tType = type >= 0 ? unit_manager.unit_type[type] : NULL;
 										if (units.unit[cur_idx].isOwnedBy(ownerId) && tType != NULL && tType->canmove && tType->BMcode == 1 && !units.unit[cur_idx].isBeingBuilt() && (!units.unit[cur_idx].missionQueue || (units.unit[cur_idx].missionQueue->mission() & 0xFF) != MISSION_MOVE))
 										{
-											Vector3D target = units.unit[cur_idx].Pos;
+											Vector3D target = units.unit[cur_idx].position;
 											target.z += 100.0f;
 											units.unit[cur_idx].add_mission(MISSION_MOVE | MISSION_FLAG_AUTO, &target, true);
 										}

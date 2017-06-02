@@ -127,7 +127,7 @@ namespace TA3D
 			const UnitType* const pUnitType = (type >= 0) ? unit_manager.unit_type[type] : NULL;
 			if (type < 0 || !pUnitType->model)
 				continue;
-			allUnits.push_back(std::make_pair(pUnit, std::make_pair(pUnit->Pos, pUnitType->model->size2)));
+			allUnits.push_back(std::make_pair(pUnit, std::make_pair(pUnit->position, pUnitType->model->size2)));
 		}
 
 		pool.reset();

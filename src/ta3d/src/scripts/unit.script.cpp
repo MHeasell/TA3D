@@ -332,7 +332,7 @@ namespace TA3D
 		const int unit_id = (int)lua_tointeger(L, 2);
 		lua_settop(L, 0);
 		if (unit_id >= 0 && unit_id < (int)units.max_unit && units.unit[unit_id].flags)
-			lua_pushvector(L, units.unit[unit_id].Pos);
+			lua_pushvector(L, units.unit[unit_id].position);
 		else
 			lua_pushvector(L, Vector3D());
 		return 1;

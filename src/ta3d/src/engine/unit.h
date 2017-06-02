@@ -233,7 +233,7 @@ namespace TA3D
 		//! The unit's remaining hit points
 		float hp;
 
-		Vector3D Pos;
+		Vector3D position;
 		Vector3D V;
 		Vector3D Angle;
 		Vector3D V_Angle;

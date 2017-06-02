@@ -270,7 +270,7 @@ namespace TA3D
 				pUnit->flying = sync_msg.flags & SYNC_FLAG_FLYING;
 				pUnit->cloaking = sync_msg.flags & SYNC_FLAG_CLOAKING;
 
-				Vector3D tmpPosition(pUnit->Pos);
+				Vector3D tmpPosition(pUnit->position);
 				pUnit->last_synctick[0] = sync_msg.timestamp;
 				if (sync_msg.mask & SYNC_MASK_X)
 					tmpPosition.x = sync_msg.x;
@@ -396,9 +396,9 @@ namespace TA3D
 						units.unit[event_msg.opt1].lock();
 
 						units.unit[event_msg.opt1].severity = event_msg.opt2;
-						units.unit[event_msg.opt1].Pos.x = event_msg.x;
-						units.unit[event_msg.opt1].Pos.y = event_msg.y;
-						units.unit[event_msg.opt1].Pos.z = event_msg.z;
+						units.unit[event_msg.opt1].position.x = event_msg.x;
+						units.unit[event_msg.opt1].position.y = event_msg.y;
+						units.unit[event_msg.opt1].position.z = event_msg.z;
 
 						units.unit[event_msg.opt1].explode(); // BOOM :)
 

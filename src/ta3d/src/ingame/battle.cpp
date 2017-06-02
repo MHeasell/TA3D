@@ -1638,9 +1638,9 @@ namespace TA3D
 				{
 					if (isShiftKeyDown())
 						for (int i = 0; i < 5; ++i)
-							units.give_order_build(players.local_human_id, build, units.unit[cur_sel_index].Pos, false);
+							units.give_order_build(players.local_human_id, build, units.unit[cur_sel_index].position, false);
 					else
-						units.give_order_build(players.local_human_id, build, units.unit[cur_sel_index].Pos, false);
+						units.give_order_build(players.local_human_id, build, units.unit[cur_sel_index].position, false);
 					build = -1;
 				}
 			}
@@ -2236,9 +2236,9 @@ namespace TA3D
 			if (units.unit[i].isAlive() && units.unit[i].isOwnedBy(players.local_human_id) && units.unit[i].isSelected && unit_manager.unit_type[units.unit[i].typeId]->CanReclamate && unit_manager.unit_type[units.unit[i].typeId]->BMcode)
 			{
 				if (isShiftKeyDown())
-					units.unit[i].add_mission(MISSION_RECLAIM, &(units.unit[targetUnitId].Pos), false, 0, &(units.unit[targetUnitId]));
+					units.unit[i].add_mission(MISSION_RECLAIM, &(units.unit[targetUnitId].position), false, 0, &(units.unit[targetUnitId]));
 				else
-					units.unit[i].set_mission(MISSION_RECLAIM, &(units.unit[targetUnitId].Pos), false, 0, true, &(units.unit[targetUnitId]));
+					units.unit[i].set_mission(MISSION_RECLAIM, &(units.unit[targetUnitId].position), false, 0, true, &(units.unit[targetUnitId]));
 			}
 			units.unit[i].unlock();
 		}
@@ -2257,9 +2257,9 @@ namespace TA3D
 				if (!isShiftKeyDown())
 					units.unit[i].playSound("repair");
 				if (isShiftKeyDown())
-					units.unit[i].add_mission(MISSION_REPAIR, &(units.unit[targetUnitId].Pos), false, 0, &(units.unit[targetUnitId]));
+					units.unit[i].add_mission(MISSION_REPAIR, &(units.unit[targetUnitId].position), false, 0, &(units.unit[targetUnitId]));
 				else
-					units.unit[i].set_mission(MISSION_REPAIR, &(units.unit[targetUnitId].Pos), false, 0, true, &(units.unit[targetUnitId]));
+					units.unit[i].set_mission(MISSION_REPAIR, &(units.unit[targetUnitId].position), false, 0, true, &(units.unit[targetUnitId]));
 			}
 			units.unit[i].unlock();
 		}
@@ -2276,9 +2276,9 @@ namespace TA3D
 			if (units.unit[i].isAlive() && units.unit[i].isOwnedBy(players.local_human_id) && units.unit[i].isSelected && unit_manager.unit_type[units.unit[i].typeId]->CanCapture)
 			{
 				if (isShiftKeyDown())
-					units.unit[i].add_mission(MISSION_CAPTURE, &(units.unit[targetUnitId].Pos), false, 0, &(units.unit[targetUnitId]));
+					units.unit[i].add_mission(MISSION_CAPTURE, &(units.unit[targetUnitId].position), false, 0, &(units.unit[targetUnitId]));
 				else
-					units.unit[i].set_mission(MISSION_CAPTURE, &(units.unit[targetUnitId].Pos), false, 0, true, &(units.unit[targetUnitId]));
+					units.unit[i].set_mission(MISSION_CAPTURE, &(units.unit[targetUnitId].position), false, 0, true, &(units.unit[targetUnitId]));
 			}
 			units.unit[i].unlock();
 		}
@@ -2300,9 +2300,9 @@ namespace TA3D
 						break;
 					}
 				if (isShiftKeyDown())
-					units.unit[i].add_mission(MISSION_ATTACK, &(units.unit[targetUnitId].Pos), false, 0, &(units.unit[targetUnitId]), (byte)commandfire);
+					units.unit[i].add_mission(MISSION_ATTACK, &(units.unit[targetUnitId].position), false, 0, &(units.unit[targetUnitId]), (byte)commandfire);
 				else
-					units.unit[i].set_mission(MISSION_ATTACK, &(units.unit[targetUnitId].Pos), false, 0, true, &(units.unit[targetUnitId]), (byte)commandfire);
+					units.unit[i].set_mission(MISSION_ATTACK, &(units.unit[targetUnitId].position), false, 0, true, &(units.unit[targetUnitId]), (byte)commandfire);
 			}
 			units.unit[i].unlock();
 		}

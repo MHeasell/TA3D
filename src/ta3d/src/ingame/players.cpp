@@ -254,9 +254,9 @@ namespace TA3D
 						sync.flags |= SYNC_FLAG_FLYING;
 					if (units.unit[i].cloaking)
 						sync.flags |= SYNC_FLAG_CLOAKING;
-					sync.x = units.unit[i].Pos.x;
-					sync.y = units.unit[i].Pos.y;
-					sync.z = units.unit[i].Pos.z;
+					sync.x = units.unit[i].position.x;
+					sync.y = units.unit[i].position.y;
+					sync.z = units.unit[i].position.z;
 					sync.vx = units.unit[i].V.x;
 					sync.vz = units.unit[i].V.z;
 					float angle = units.unit[i].Angle.y;

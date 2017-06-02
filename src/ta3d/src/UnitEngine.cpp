@@ -134,9 +134,9 @@ namespace TA3D
 			if (unit[i].isAlive() && unit[i].isOwnedBy(player_id) && unit[i].isSelected && !unit[i].isBeingBuilt() && unit_manager.unit_type[unit[i].typeId]->canguard)
 			{
 				if (set)
-					unit[i].set_mission(MISSION_GUARD, &unit[target].Pos, false, 0, true, &(unit[target]));
+					unit[i].set_mission(MISSION_GUARD, &unit[target].position, false, 0, true, &(unit[target]));
 				else
-					unit[i].add_mission(MISSION_GUARD, &unit[target].Pos, false, 0, &(unit[target]));
+					unit[i].add_mission(MISSION_GUARD, &unit[target].position, false, 0, &(unit[target]));
 				if (unit_manager.unit_type[unit[i].typeId]->BMcode && set)
 					unit[i].playSound("ok1");
 			}
@@ -191,11 +191,11 @@ namespace TA3D
 			{
 				if (set)
 				{
-					unit[i].set_mission(MISSION_LOAD, &unit[target].Pos, false, 0, true, &(unit[target]));
+					unit[i].set_mission(MISSION_LOAD, &unit[target].position, false, 0, true, &(unit[target]));
 					unit[i].playSound("ok1");
 				}
 				else
-					unit[i].add_mission(MISSION_LOAD, &unit[target].Pos, false, 0, &(unit[target]));
+					unit[i].add_mission(MISSION_LOAD, &unit[target].position, false, 0, &(unit[target]));
 			}
 		}
 		pMutex.unlock();
@@ -288,7 +288,7 @@ namespace TA3D
 					if (!isShiftKeyDown())
 						unit[*e].isSelected = false;
 
-					if (reigon.contains(unit[*e].Pos))
+					if (reigon.contains(unit[*e].position))
 					{
 						unit[*e].isSelected = true;
 						selected = true;
@@ -329,7 +329,7 @@ namespace TA3D
 				continue; // If the unit does not exist/is not alive, skip it
 			}
 			unit[*e].flags &= 0xFD; // Removes the flag for possibility of intersection
-			Vector3D center(unit[*e].model->center + unit[*e].Pos - CamPos);
+			Vector3D center(unit[*e].model->center + unit[*e].position - CamPos);
 			float size = unit[*e].model->size * unit_manager.unit_type[unit[*e].typeId]->Scale * unit_manager.unit_type[unit[*e].typeId]->Scale;
 			center = Dir * center;
 			float dist = center.lengthSquared();
@@ -425,7 +425,7 @@ namespace TA3D
 				}
 			}
 
-			Vector2D normalizedCoordinates = map->worldToNormalizedMinimapCoordinates(Vector2D(unit[i].Pos.x, unit[i].Pos.z));
+			Vector2D normalizedCoordinates = map->worldToNormalizedMinimapCoordinates(Vector2D(unit[i].position.x, unit[i].position.z));
 			const int x = (int)(normalizedCoordinates.x * 128.0f);
 			const int y = (int)(normalizedCoordinates.y * 128.0f);
 
@@ -917,14 +917,14 @@ namespace TA3D
 			const UnitType* const pUnitType = (type >= 0) ? unit_manager.unit_type[type] : NULL;
 			if (type >= 0 && owner < 10)
 			{
-				allUnits[owner].push_back(std::make_pair(pUnit, pUnit->Pos));
+				allUnits[owner].push_back(std::make_pair(pUnit, pUnit->position));
 				if (pUnitType->IsAirBase)
-					repairPads[owner].push_back(std::make_pair(pUnit, pUnit->Pos));
+					repairPads[owner].push_back(std::make_pair(pUnit, pUnit->position));
 			}
 			if (type < 0 || (!shootallMode && !pUnitType->ShootMe))
 				continue;
 			if (owner < 10)
-				detectableUnits[owner].push_back(std::make_pair(pUnit, pUnit->Pos));
+				detectableUnits[owner].push_back(std::make_pair(pUnit, pUnit->position));
 		}
 		static MemoryPool<KDTree<UnitTKit::T, UnitTKit>> pool(32768U);
 		pool.reset();
@@ -1275,8 +1275,8 @@ namespace TA3D
 					continue; // Unité non visible / Unit is not visible
 				}
 				//			unit[i].flags|=0x10;
-				mini_pos[nb << 1] = unit[i].Pos.x;
-				mini_pos[(nb << 1) + 1] = unit[i].Pos.z;
+				mini_pos[nb << 1] = unit[i].position.x;
+				mini_pos[(nb << 1) + 1] = unit[i].position.z;
 				mini_col[nb++] = player_col_32_h[unit[i].ownerId];
 			}
 			units.unit[i].unlock();
@@ -1340,8 +1340,8 @@ namespace TA3D
 			if (unit[i].isAlive() && ((unit[i].isOwnedBy(players.local_human_id) && unit[i].isSelected) || (i == last_on && (players.team[unit[i].ownerId] & players.team[players.local_human_id]))))
 			{
 				cur_id = unit[i].ownerId;
-				float pos_x = unit[i].Pos.x * rw + 64.0f;
-				float pos_y = unit[i].Pos.z * rh + 64.0f;
+				float pos_x = unit[i].position.x * rw + 64.0f;
+				float pos_y = unit[i].position.z * rh + 64.0f;
 				bool anti_missile = unit[i].weapon.size() > 0 && unit_manager.unit_type[unit[i].typeId]->antiweapons && unit_manager.unit_type[unit[i].typeId]->weapon[0];
 				if (unit[i].radar_range > 0 || unit[i].radar_jam_range > 0 || unit[i].sonar_jam_range || unit[i].sonar_range > 0 || anti_missile)
 				{
@@ -1462,7 +1462,7 @@ namespace TA3D
 				continue;
 
 			// skip units that are not in view
-			const Vector3D pos = unit[i].Pos + pUnitType->model->center;
+			const Vector3D pos = unit[i].position + pUnitType->model->center;
 			if (!Camera::inGame->viewportContains(pos))
 			{
 				continue;
