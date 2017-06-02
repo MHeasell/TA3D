@@ -67,7 +67,7 @@ namespace TA3D
 
 		float damage_modifier() const
 		{
-			return port[ARMORED] ? unit_manager.unit_type[type_id]->DamageModifier : 1.0f;
+			return port[ARMORED] ? unit_manager.unit_type[typeId]->DamageModifier : 1.0f;
 		}
 
 		/**
@@ -228,7 +228,7 @@ namespace TA3D
 		PlayerId ownerId;
 
 		//! Type of the unit
-		int type_id;
+		int typeId;
 
 		//! The unit's remaining hit points
 		float hp;

@@ -242,8 +242,8 @@ namespace TA3D
 						units.unit[i].hp = 0;
 					else
 					{
-						if (units.unit[i].hp > unit_manager.unit_type[units.unit[i].type_id]->MaxDamage)
-							units.unit[i].hp = (float)unit_manager.unit_type[units.unit[i].type_id]->MaxDamage;
+						if (units.unit[i].hp > unit_manager.unit_type[units.unit[i].typeId]->MaxDamage)
+							units.unit[i].hp = (float)unit_manager.unit_type[units.unit[i].typeId]->MaxDamage;
 					}
 				}
 			}

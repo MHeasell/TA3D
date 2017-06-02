@@ -362,7 +362,7 @@ namespace TA3D
 			bool has = false;
 			const uint32 last_possible_idx = Math::Min((int)units.max_unit, (player_id + 1) * MAX_UNIT_PER_PLAYER);
 			for (uint32 i = player_id * MAX_UNIT_PER_PLAYER; i < last_possible_idx; ++i)
-				if (units.unit[i].flags && units.unit[i].isOwnedBy(player_id) && units.unit[i].type_id == unit_type)
+				if (units.unit[i].flags && units.unit[i].isOwnedBy(player_id) && units.unit[i].typeId == unit_type)
 				{
 					has = true;
 					break;
@@ -387,7 +387,7 @@ namespace TA3D
 			int nb = 0;
 			const uint32 last_possible_idx = Math::Min((int)units.max_unit, (player_id + 1) * MAX_UNIT_PER_PLAYER);
 			for (uint32 i = player_id * MAX_UNIT_PER_PLAYER; i < last_possible_idx; ++i)
-				if (units.unit[i].flags && units.unit[i].isOwnedBy(player_id) && units.unit[i].type_id == unit_type)
+				if (units.unit[i].flags && units.unit[i].isOwnedBy(player_id) && units.unit[i].typeId == unit_type)
 					nb++;
 			lua_pop(L, 2);
 			lua_pushinteger(L, nb);
@@ -407,7 +407,7 @@ namespace TA3D
 		{
 			const int unit_type = lua_isstring(L, 2) ? unit_manager.get_unit_index(lua_tostring(L, 2)) : (int)lua_tointeger(L, 2);
 			lua_pop(L, 2);
-			lua_pushboolean(L, units.unit[unit_id].isAlive() && units.unit[unit_id].type_id == unit_type);
+			lua_pushboolean(L, units.unit[unit_id].isAlive() && units.unit[unit_id].typeId == unit_type);
 		}
 		else
 		{
@@ -429,7 +429,7 @@ namespace TA3D
 				const uint32 i = units.idx_list[e];
 				if (units.unit[i].isAlive() && units.unit[i].isOwnedBy(player_id))
 				{
-					const int type = units.unit[i].type_id;
+					const int type = units.unit[i].typeId;
 					if (type >= 0 && type < unit_manager.nb_unit && unit_manager.unit_type[type]->canmove && unit_manager.unit_type[type]->BMcode)
 						result = true;
 				}
@@ -514,7 +514,7 @@ namespace TA3D
 		{
 			units.lock();
 			if (units.unit[unit_id].flags)
-				units.unit[unit_id].hp = health * (float)unit_manager.unit_type[units.unit[unit_id].type_id]->MaxDamage;
+				units.unit[unit_id].hp = health * (float)unit_manager.unit_type[units.unit[unit_id].typeId]->MaxDamage;
 			units.unlock();
 		}
 
@@ -710,7 +710,7 @@ namespace TA3D
 		{
 			units.lock();
 			if (units.unit[unit_id].flags)
-				lua_pushnumber(L, units.unit[unit_id].hp * 100.0f / (float)unit_manager.unit_type[units.unit[unit_id].type_id]->MaxDamage);
+				lua_pushnumber(L, units.unit[unit_id].hp * 100.0f / (float)unit_manager.unit_type[units.unit[unit_id].typeId]->MaxDamage);
 			else
 				lua_pushnumber(L, 0);
 			units.unlock();
@@ -772,7 +772,7 @@ namespace TA3D
 		if (unit_id >= 0 && unit_id < (int)units.max_unit && units.unit[unit_id].flags)
 		{
 			units.lock();
-			const UnitType* pType = units.unit[unit_id].type_id >= 0 ? unit_manager.unit_type[units.unit[unit_id].type_id] : NULL;
+			const UnitType* pType = units.unit[unit_id].typeId >= 0 ? unit_manager.unit_type[units.unit[unit_id].typeId] : NULL;
 			if (pType && pType->model)
 				lua_pushnumber(L, pType->model->top);
 			else
@@ -792,7 +792,7 @@ namespace TA3D
 		if (unit_id >= 0 && unit_id < (int)units.max_unit && units.unit[unit_id].flags)
 		{
 			units.lock();
-			UnitType* pType = units.unit[unit_id].type_id >= 0 ? unit_manager.unit_type[units.unit[unit_id].type_id] : NULL;
+			UnitType* pType = units.unit[unit_id].typeId >= 0 ? unit_manager.unit_type[units.unit[unit_id].typeId] : NULL;
 			if (pType && pType->model && pType->script)
 			{
 				const int piece_id = pType->script->identify(lua_tostring(L, -1));
@@ -828,7 +828,7 @@ namespace TA3D
 		if (unit_id >= 0 && unit_id < (int)units.max_unit && units.unit[unit_id].flags)
 		{
 			units.lock();
-			UnitType* pType = units.unit[unit_id].type_id >= 0 ? unit_manager.unit_type[units.unit[unit_id].type_id] : NULL;
+			UnitType* pType = units.unit[unit_id].typeId >= 0 ? unit_manager.unit_type[units.unit[unit_id].typeId] : NULL;
 			if (pType && pType->model && pType->script)
 			{
 				const int piece_id = pType->script->identify(lua_tostring(L, -1));

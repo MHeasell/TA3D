@@ -153,7 +153,7 @@ namespace TA3D
 
 #if DEBUG_USE_PRINT_CODE == 1
 		//        bool print_code = false;
-		//bool	print_code = String::ToLower( unit_manager.unit_type[type_id]->Unitname ) == "armtship" && (String::ToLower( script->name[script_id] ) == "transportpickup" || String::ToLower( script->name[script_id] ) == "boomcalc" );
+		//bool	print_code = String::ToLower( unit_manager.unit_type[typeId]->Unitname ) == "armtship" && (String::ToLower( script->name[script_id] ) == "transportpickup" || String::ToLower( script->name[script_id] ) == "boomcalc" );
 		bool print_code = script->names[script_id] == "MOTIONCONTROL";
 #endif
 

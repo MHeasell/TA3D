@@ -322,7 +322,7 @@ namespace TA3D
 		{
 			units.unit[unit_id].lock();
 			if (units.unit[unit_id].flags)
-				lua_pushnumber(L, units.unit[unit_id].hp * 100.0f / (float)unit_manager.unit_type[units.unit[unit_id].type_id]->MaxDamage);
+				lua_pushnumber(L, units.unit[unit_id].hp * 100.0f / (float)unit_manager.unit_type[units.unit[unit_id].typeId]->MaxDamage);
 			else
 				lua_pushnumber(L, 0.0);
 			units.unit[unit_id].unlock();
@@ -557,7 +557,7 @@ namespace TA3D
 			lua_pushnumber(L, pUnit->hp); // unit hit points
 			lua_setfield(L, -2, "hp");
 
-			lua_pushinteger(L, pUnit->type_id); // unit type_id
+			lua_pushinteger(L, pUnit->typeId); // unit typeId
 			lua_setfield(L, -2, "type");
 
 			lua_getglobal(L, "__unit_metatable"); // Set the magic metatable that will virtually keep all user specified data
@@ -673,7 +673,7 @@ namespace TA3D
 		const float end_z = (float)lua_tonumber(L, 4);
 		const int unit_id = (int)lua_tointeger(L, 5);
 		const int max_dist = (int)lua_tointeger(L, 6);
-		const int type_id = unit_id < 0 || (uint32)unit_id >= units.max_unit ? -1 : units.unit[unit_id].type_id;
+		const int type_id = unit_id < 0 || (uint32)unit_id >= units.max_unit ? -1 : units.unit[unit_id].typeId;
 		lua_pop(L, 6);
 
 		if (type_id >= 0)
@@ -725,7 +725,7 @@ namespace TA3D
 				continue;
 			if (pUnit->cur_px < x0 || pUnit->cur_px >= x1 || pUnit->cur_py < y0 || pUnit->cur_py >= y1)
 				continue;
-			const int type_id = pUnit->type_id;
+			const int type_id = pUnit->typeId;
 			if ((pUnit->isOwnedBy(player_id) || player_id == -1) && type_id >= 0 && (unit_type_id == -1 || type_id == unit_type_id || (unit_type_id == -2 && unit_manager.unit_type[type_id]->canattack) || (unit_type_id == -3 && unit_manager.unit_type[type_id]->Builder)) && !seen.contains(pUnit->idx))
 			{
 				seen.insert(pUnit->idx);

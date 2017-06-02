@@ -93,13 +93,13 @@ namespace TA3D
 		for (uint32 e = 0U; e < index_list_size; ++e)
 		{
 			uint32 i = idx_list[e];
-			if (unit[i].isAlive() && unit[i].isOwnedBy(player_id) && unit[i].isSelected && !unit[i].isBeingBuilt() && unit_manager.unit_type[unit[i].type_id]->canmove)
+			if (unit[i].isAlive() && unit[i].isOwnedBy(player_id) && unit[i].isSelected && !unit[i].isBeingBuilt() && unit_manager.unit_type[unit[i].typeId]->canmove)
 			{
 				if (set)
 					unit[i].set_mission(MISSION_MOVE, &target, false, 0, true, NULL, flags);
 				else
 					unit[i].add_mission(MISSION_MOVE, &target, false, 0, NULL, flags);
-				if (unit_manager.unit_type[unit[i].type_id]->BMcode && set)
+				if (unit_manager.unit_type[unit[i].typeId]->BMcode && set)
 					unit[i].playSound("ok1");
 			}
 		}
@@ -112,13 +112,13 @@ namespace TA3D
 		for (uint16 e = 0; e < index_list_size; ++e)
 		{
 			uint16 i = idx_list[e];
-			if (unit[i].isAlive() && unit[i].isOwnedBy(player_id) && unit[i].isSelected && !unit[i].isBeingBuilt() && unit_manager.unit_type[unit[i].type_id]->canpatrol)
+			if (unit[i].isAlive() && unit[i].isOwnedBy(player_id) && unit[i].isSelected && !unit[i].isBeingBuilt() && unit_manager.unit_type[unit[i].typeId]->canpatrol)
 			{
 				if (set)
 					unit[i].set_mission(MISSION_PATROL, &target, false, 0, true, NULL);
 				else
 					unit[i].add_mission(MISSION_PATROL, &target, false, 0, NULL);
-				if (unit_manager.unit_type[unit[i].type_id]->BMcode && set)
+				if (unit_manager.unit_type[unit[i].typeId]->BMcode && set)
 					unit[i].playSound("ok1");
 			}
 		}
@@ -131,13 +131,13 @@ namespace TA3D
 		for (uint16 e = 0; e < index_list_size; ++e)
 		{
 			uint16 i = idx_list[e];
-			if (unit[i].isAlive() && unit[i].isOwnedBy(player_id) && unit[i].isSelected && !unit[i].isBeingBuilt() && unit_manager.unit_type[unit[i].type_id]->canguard)
+			if (unit[i].isAlive() && unit[i].isOwnedBy(player_id) && unit[i].isSelected && !unit[i].isBeingBuilt() && unit_manager.unit_type[unit[i].typeId]->canguard)
 			{
 				if (set)
 					unit[i].set_mission(MISSION_GUARD, &unit[target].Pos, false, 0, true, &(unit[target]));
 				else
 					unit[i].add_mission(MISSION_GUARD, &unit[target].Pos, false, 0, &(unit[target]));
-				if (unit_manager.unit_type[unit[i].type_id]->BMcode && set)
+				if (unit_manager.unit_type[unit[i].typeId]->BMcode && set)
 					unit[i].playSound("ok1");
 			}
 		}
@@ -150,7 +150,7 @@ namespace TA3D
 		for (uint32 e = 0; e < index_list_size; ++e)
 		{
 			const uint32 i = idx_list[e];
-			if (unit[i].isAlive() && unit[i].isOwnedBy(player_id) && unit[i].isSelected && !unit[i].isBeingBuilt() && unit_manager.unit_type[unit[i].type_id]->canload && unit_manager.unit_type[unit[i].type_id]->BMcode && unit[i].nb_attached > 0)
+			if (unit[i].isAlive() && unit[i].isOwnedBy(player_id) && unit[i].isSelected && !unit[i].isBeingBuilt() && unit_manager.unit_type[unit[i].typeId]->canload && unit_manager.unit_type[unit[i].typeId]->BMcode && unit[i].nb_attached > 0)
 			{
 				if (set)
 				{
@@ -167,12 +167,12 @@ namespace TA3D
 	void INGAME_UNITS::give_order_load(PlayerId player_id, int target, bool set)
 	{
 		pMutex.lock();
-		if (unit[target].flags == 0 || !unit_manager.unit_type[unit[target].type_id]->canmove)
+		if (unit[target].flags == 0 || !unit_manager.unit_type[unit[target].typeId]->canmove)
 		{
 			pMutex.unlock();
 			return;
 		}
-		switch (unit_manager.unit_type[unit[target].type_id]->TEDclass)
+		switch (unit_manager.unit_type[unit[target].typeId]->TEDclass)
 		{
 			case CLASS_UNDEF:
 			case CLASS_WATER:
@@ -187,7 +187,7 @@ namespace TA3D
 		for (uint32 e = 0; e < index_list_size; ++e)
 		{
 			const uint32 i = idx_list[e];
-			if (unit[i].isAlive() && unit[i].isOwnedBy(player_id) && unit[i].isSelected && !unit[i].isBeingBuilt() && unit_manager.unit_type[unit[i].type_id]->canload && unit_manager.unit_type[unit[i].type_id]->BMcode)
+			if (unit[i].isAlive() && unit[i].isOwnedBy(player_id) && unit[i].isSelected && !unit[i].isBeingBuilt() && unit_manager.unit_type[unit[i].typeId]->canload && unit_manager.unit_type[unit[i].typeId]->BMcode)
 			{
 				if (set)
 				{
@@ -210,7 +210,7 @@ namespace TA3D
 		for (uint32 e = 0; e < index_list_size; ++e)
 		{
 			const uint32 i = idx_list[e];
-			if (unit[i].isAlive() && unit[i].isOwnedBy(player_id) && unit[i].isSelected && !unit[i].isBeingBuilt() && unit_manager.unit_type[unit[i].type_id]->Builder)
+			if (unit[i].isAlive() && unit[i].isOwnedBy(player_id) && unit[i].isSelected && !unit[i].isBeingBuilt() && unit_manager.unit_type[unit[i].typeId]->Builder)
 			{
 				if (set)
 					unit[i].set_mission(MISSION_BUILD, &target, false, unit_type_id);
@@ -330,7 +330,7 @@ namespace TA3D
 			}
 			unit[*e].flags &= 0xFD; // Removes the flag for possibility of intersection
 			Vector3D center(unit[*e].model->center + unit[*e].Pos - CamPos);
-			float size = unit[*e].model->size * unit_manager.unit_type[unit[*e].type_id]->Scale * unit_manager.unit_type[unit[*e].type_id]->Scale;
+			float size = unit[*e].model->size * unit_manager.unit_type[unit[*e].typeId]->Scale * unit_manager.unit_type[unit[*e].typeId]->Scale;
 			center = Dir * center;
 			float dist = center.lengthSquared();
 			if (dist < size)
@@ -617,7 +617,7 @@ namespace TA3D
 			last_on = -1;
 		if (index >= 0 && (uint32)index < max_unit)
 			unit[index].lock();
-		if (index < 0 || index >= (int)max_unit || unit[index].flags == 0 || unit[index].type_id < 0)
+		if (index < 0 || index >= (int)max_unit || unit[index].flags == 0 || unit[index].typeId < 0)
 		{
 			if (last_on >= 0)
 				pointed_only = true;
@@ -639,31 +639,31 @@ namespace TA3D
 		if (!pointed_only && !hide_bpic)
 		{
 			int stock = 0;
-			for (uint32 i = 0; i < unit_manager.unit_type[unit[index].type_id]->weapon.size(); ++i)
-				if (unit_manager.unit_type[unit[index].type_id]->weapon[i] && unit_manager.unit_type[unit[index].type_id]->weapon[i]->stockpile)
+			for (uint32 i = 0; i < unit_manager.unit_type[unit[index].typeId]->weapon.size(); ++i)
+				if (unit_manager.unit_type[unit[index].typeId]->weapon[i] && unit_manager.unit_type[unit[index].typeId]->weapon[i]->stockpile)
 				{
 					stock = unit[index].weapon[i].stock;
 					break;
 				}
 
-			if ((unit_manager.unit_type[unit[index].type_id]->Builder && !unit_manager.unit_type[unit[index].type_id]->BMcode) || unit[index].planned_weapons > 0.0f || stock > 0) // Affiche la liste de construction
+			if ((unit_manager.unit_type[unit[index].typeId]->Builder && !unit_manager.unit_type[unit[index].typeId]->BMcode) || unit[index].planned_weapons > 0.0f || stock > 0) // Affiche la liste de construction
 			{
-				int page = unit_manager.unit_type[unit[index].type_id]->page;
+				int page = unit_manager.unit_type[unit[index].typeId]->page;
 
 				glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_COLOR);
-				for (int i = 0; i < unit_manager.unit_type[unit[index].type_id]->nb_unit; ++i) // Affiche les différentes images d'unités constructibles
+				for (int i = 0; i < unit_manager.unit_type[unit[index].typeId]->nb_unit; ++i) // Affiche les différentes images d'unités constructibles
 				{
-					if (unit_manager.unit_type[unit[index].type_id]->Pic_p[i] != page)
+					if (unit_manager.unit_type[unit[index].typeId]->Pic_p[i] != page)
 						continue;
-					int px = unit_manager.unit_type[unit[index].type_id]->Pic_x[i];
-					int py = unit_manager.unit_type[unit[index].type_id]->Pic_y[i];
-					int pw = unit_manager.unit_type[unit[index].type_id]->Pic_w[i];
-					int ph = unit_manager.unit_type[unit[index].type_id]->Pic_h[i];
+					int px = unit_manager.unit_type[unit[index].typeId]->Pic_x[i];
+					int py = unit_manager.unit_type[unit[index].typeId]->Pic_y[i];
+					int pw = unit_manager.unit_type[unit[index].typeId]->Pic_w[i];
+					int ph = unit_manager.unit_type[unit[index].typeId]->Pic_h[i];
 
 					int nb(0);
 					for (MissionQueue::iterator m = unit[index].missionQueue.begin(); m != unit[index].missionQueue.end(); ++m)
 					{
-						if ((m->lastMission() == MISSION_BUILD || m->lastMission() == MISSION_BUILD_2) && m->lastStep().getData() == unit_manager.unit_type[unit[index].type_id]->BuildList[i])
+						if ((m->lastMission() == MISSION_BUILD || m->lastMission() == MISSION_BUILD_2) && m->lastStep().getData() == unit_manager.unit_type[unit[index].typeId]->BuildList[i])
 							++nb;
 					}
 					if (nb > 0)
@@ -682,7 +682,7 @@ namespace TA3D
 					}
 					else
 					{
-						if (unit_manager.unit_type[unit[index].type_id]->BuildList[i] == -1) // Il s'agit d'une arme / It's a weapon
+						if (unit_manager.unit_type[unit[index].typeId]->BuildList[i] == -1) // Il s'agit d'une arme / It's a weapon
 						{
 							String buf;
 							if (float(int(unit[index].planned_weapons)) == unit[index].planned_weapons)
@@ -726,24 +726,24 @@ namespace TA3D
 		{
 			unit[index].lock();
 
-			if (unit[index].type_id >= 0 && unit[index].isAlive())
+			if (unit[index].typeId >= 0 && unit[index].isAlive())
 			{
 				glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 				gfx->print_center(gfx->normal_font,
 					(float)ta3dSideData.side_int_data[players.side_view].UnitName.x1,
 					(float)ta3dSideData.side_int_data[players.side_view].UnitName.y1,
-					0.0f, 0xFFFFFFFF, unit_manager.unit_type[unit[index].type_id]->name);
+					0.0f, 0xFFFFFFFF, unit_manager.unit_type[unit[index].typeId]->name);
 				if (target && !unit[index].missionQueue.empty() && (unit[index].missionQueue->getFlags() & MISSION_FLAG_TARGET_WEAPON) != MISSION_FLAG_TARGET_WEAPON)
 				{
 					unit[index].unlock();
 					target->lock();
-					if (target->isAlive() && target->type_id >= 0)
+					if (target->isAlive() && target->typeId >= 0)
 					{
 						glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 						gfx->print_center(gfx->normal_font,
 							(float)ta3dSideData.side_int_data[players.side_view].UnitName2.x1,
 							(float)ta3dSideData.side_int_data[players.side_view].UnitName2.y1,
-							0.0f, 0xFFFFFFFF, unit_manager.unit_type[target->type_id]->name);
+							0.0f, 0xFFFFFFFF, unit_manager.unit_type[target->typeId]->name);
 					}
 					target->unlock();
 					unit[index].lock();
@@ -792,7 +792,7 @@ namespace TA3D
 				glBegin(GL_QUADS);
 				glColor4ub(0xFF, 0, 0, 0xFF);
 
-				if (unit[index].isOwnedBy(players.local_human_id) || !unit_manager.unit_type[unit[index].type_id]->HideDamage)
+				if (unit[index].isOwnedBy(players.local_human_id) || !unit_manager.unit_type[unit[index].typeId]->HideDamage)
 				{
 					glVertex2i(ta3dSideData.side_int_data[players.side_view].DamageBar.x1, ta3dSideData.side_int_data[players.side_view].DamageBar.y1);
 					glVertex2i(ta3dSideData.side_int_data[players.side_view].DamageBar.x2, ta3dSideData.side_int_data[players.side_view].DamageBar.y1);
@@ -806,7 +806,7 @@ namespace TA3D
 					{
 						unit[index].unlock();
 						target->lock();
-						if (target->isAlive() && target->type_id >= 0 && !unit_manager.unit_type[target->type_id]->HideDamage) // Si l'unité a une cible
+						if (target->isAlive() && target->typeId >= 0 && !unit_manager.unit_type[target->typeId]->HideDamage) // Si l'unité a une cible
 						{
 							glVertex2i(ta3dSideData.side_int_data[players.side_view].DamageBar2.x1, ta3dSideData.side_int_data[players.side_view].DamageBar2.y1);
 							glVertex2i(ta3dSideData.side_int_data[players.side_view].DamageBar2.x2, ta3dSideData.side_int_data[players.side_view].DamageBar2.y1);
@@ -827,9 +827,9 @@ namespace TA3D
 
 				glColor3ub(0, 0xFF, 0);
 
-				if (unit[index].hp > 0 && (unit[index].isOwnedBy(players.local_human_id) || !unit_manager.unit_type[unit[index].type_id]->HideDamage))
+				if (unit[index].hp > 0 && (unit[index].isOwnedBy(players.local_human_id) || !unit_manager.unit_type[unit[index].typeId]->HideDamage))
 				{
-					const UnitType* const pType = unit_manager.unit_type[unit[index].type_id];
+					const UnitType* const pType = unit_manager.unit_type[unit[index].typeId];
 					const InterfaceData& side_data = ta3dSideData.side_int_data[players.side_view];
 					glVertex2f((float)side_data.DamageBar.x1,
 						(float)side_data.DamageBar.y1);
@@ -847,9 +847,9 @@ namespace TA3D
 					{
 						unit[index].unlock();
 						target->lock();
-						if (target->isAlive() && target->type_id >= 0 && !unit_manager.unit_type[target->type_id]->HideDamage && target->hp > 0)
+						if (target->isAlive() && target->typeId >= 0 && !unit_manager.unit_type[target->typeId]->HideDamage && target->hp > 0)
 						{
-							const UnitType* const pType = unit_manager.unit_type[target->type_id];
+							const UnitType* const pType = unit_manager.unit_type[target->typeId];
 							const InterfaceData& side_data = ta3dSideData.side_int_data[players.side_view];
 							glVertex2f((float)side_data.DamageBar2.x1,
 								(float)side_data.DamageBar2.y1);
@@ -913,7 +913,7 @@ namespace TA3D
 			if (!pUnit->isAlive())
 				continue;
 			const int owner = pUnit->ownerId;
-			const int type = pUnit->type_id;
+			const int type = pUnit->typeId;
 			const UnitType* const pUnitType = (type >= 0) ? unit_manager.unit_type[type] : NULL;
 			if (type >= 0 && owner < 10)
 			{
@@ -947,22 +947,22 @@ namespace TA3D
 
 			unit[i].lock();
 
-			if (unit[i].flags == 0 || unit[i].type_id == -1) // It has nothing to do there
+			if (unit[i].flags == 0 || unit[i].typeId == -1) // It has nothing to do there
 			{
 				unit[i].unlock();
 				pMutex.lock();
 				continue;
 			}
 
-			if (unit[i].just_created && !Math::AlmostZero(unit_manager.unit_type[unit[i].type_id]->ExtractsMetal)) // Compute amount of metal extracted by sec
+			if (unit[i].just_created && !Math::AlmostZero(unit_manager.unit_type[unit[i].typeId]->ExtractsMetal)) // Compute amount of metal extracted by sec
 			{
 				int metal_base = 0;
 				const int px = unit[i].cur_px;
 				const int py = unit[i].cur_py;
-				const int start_x = px - (unit_manager.unit_type[unit[i].type_id]->FootprintX >> 1);
-				const int start_y = py - (unit_manager.unit_type[unit[i].type_id]->FootprintZ >> 1);
-				const int end_y = start_y + unit_manager.unit_type[unit[i].type_id]->FootprintZ;
-				const int end_x = start_x + unit_manager.unit_type[unit[i].type_id]->FootprintX;
+				const int start_x = px - (unit_manager.unit_type[unit[i].typeId]->FootprintX >> 1);
+				const int start_y = py - (unit_manager.unit_type[unit[i].typeId]->FootprintZ >> 1);
+				const int end_y = start_y + unit_manager.unit_type[unit[i].typeId]->FootprintZ;
+				const int end_x = start_x + unit_manager.unit_type[unit[i].typeId]->FootprintX;
 				for (int ry = start_y; ry <= end_y; ++ry)
 				{
 					if (ry >= 0 && ry < map->heightInHeightmapTiles)
@@ -974,7 +974,7 @@ namespace TA3D
 								if (map->map_data(rx, ry).stuff >= 0)
 								{
 									const Feature* const feature = feature_manager.getFeaturePointer(features.feature[map->map_data(rx, ry).stuff].type);
-									metal_base = feature->metal * unit_manager.unit_type[unit[i].type_id]->FootprintZ * unit_manager.unit_type[unit[i].type_id]->FootprintX;
+									metal_base = feature->metal * unit_manager.unit_type[unit[i].typeId]->FootprintZ * unit_manager.unit_type[unit[i].typeId]->FootprintX;
 									ry = end_y;
 									break;
 								}
@@ -984,7 +984,7 @@ namespace TA3D
 						}
 					}
 				}
-				unit[i].metal_extracted = float(metal_base) * unit_manager.unit_type[unit[i].type_id]->ExtractsMetal;
+				unit[i].metal_extracted = float(metal_base) * unit_manager.unit_type[unit[i].typeId]->ExtractsMetal;
 
 				int param[] = {metal_base << 2};
 				unit[i].launchScript(SCRIPT_SetSpeed, 1, param);
@@ -997,18 +997,18 @@ namespace TA3D
 				unit[i].metal_cons = 0.0f;
 				unit[i].energy_prod = 0.0f;
 				unit[i].energy_cons = 0.0f;
-				players.c_metal_s[unit[i].ownerId] += unit_manager.unit_type[unit[i].type_id]->MetalStorage;
-				players.c_energy_s[unit[i].ownerId] += unit_manager.unit_type[unit[i].type_id]->EnergyStorage;
-				players.c_commander[unit[i].ownerId] |= (unit_manager.unit_type[unit[i].type_id]->TEDclass == CLASS_COMMANDER);
-				unit[i].energy_prod += (float)unit_manager.unit_type[unit[i].type_id]->EnergyMake;
-				if ((unit[i].port[ACTIVATION] || !unit_manager.unit_type[unit[i].type_id]->onoffable) && unit_manager.unit_type[unit[i].type_id]->EnergyUse <= players.energy[unit[i].ownerId])
+				players.c_metal_s[unit[i].ownerId] += unit_manager.unit_type[unit[i].typeId]->MetalStorage;
+				players.c_energy_s[unit[i].ownerId] += unit_manager.unit_type[unit[i].typeId]->EnergyStorage;
+				players.c_commander[unit[i].ownerId] |= (unit_manager.unit_type[unit[i].typeId]->TEDclass == CLASS_COMMANDER);
+				unit[i].energy_prod += (float)unit_manager.unit_type[unit[i].typeId]->EnergyMake;
+				if ((unit[i].port[ACTIVATION] || !unit_manager.unit_type[unit[i].typeId]->onoffable) && unit_manager.unit_type[unit[i].typeId]->EnergyUse <= players.energy[unit[i].ownerId])
 				{
-					unit[i].metal_prod += unit_manager.unit_type[unit[i].type_id]->MakesMetal + unit_manager.unit_type[unit[i].type_id]->MetalMake;
-					if (!Math::AlmostZero(unit_manager.unit_type[unit[i].type_id]->ExtractsMetal)) // Extracteur de métal
+					unit[i].metal_prod += unit_manager.unit_type[unit[i].typeId]->MakesMetal + unit_manager.unit_type[unit[i].typeId]->MetalMake;
+					if (!Math::AlmostZero(unit_manager.unit_type[unit[i].typeId]->ExtractsMetal)) // Extracteur de métal
 						unit[i].metal_prod += unit[i].metal_extracted;
-					if (unit_manager.unit_type[unit[i].type_id]->WindGenerator) // Wind Generator
+					if (unit_manager.unit_type[unit[i].typeId]->WindGenerator) // Wind Generator
 					{
-						unit[i].energy_prod += map->wind * (float)unit_manager.unit_type[unit[i].type_id]->WindGenerator * 0.0002f;
+						unit[i].energy_prod += map->wind * (float)unit_manager.unit_type[unit[i].typeId]->WindGenerator * 0.0002f;
 						if (wind_change)
 						{
 							int param[] = {(int)(map->wind * 50.0f)};
@@ -1018,12 +1018,12 @@ namespace TA3D
 							unit[i].launchScript(SCRIPT_go);
 						}
 					}
-					if (unit_manager.unit_type[unit[i].type_id]->TidalGenerator) // Tidal Generator
+					if (unit_manager.unit_type[unit[i].typeId]->TidalGenerator) // Tidal Generator
 						unit[i].energy_prod += float(map->ota_data.tidalstrength);
-					if (unit_manager.unit_type[unit[i].type_id]->EnergyUse < 0)
-						unit[i].energy_prod -= float(unit_manager.unit_type[unit[i].type_id]->EnergyUse);
+					if (unit_manager.unit_type[unit[i].typeId]->EnergyUse < 0)
+						unit[i].energy_prod -= float(unit_manager.unit_type[unit[i].typeId]->EnergyUse);
 					else
-						unit[i].energy_cons = (float)unit_manager.unit_type[unit[i].type_id]->EnergyUse;
+						unit[i].energy_cons = (float)unit_manager.unit_type[unit[i].typeId]->EnergyUse;
 					TA3D::players.requested_energy[unit[i].ownerId] += unit[i].energy_cons;
 					TA3D::players.requested_metal[unit[i].ownerId] += unit[i].metal_cons;
 				}
@@ -1342,7 +1342,7 @@ namespace TA3D
 				cur_id = unit[i].ownerId;
 				float pos_x = unit[i].Pos.x * rw + 64.0f;
 				float pos_y = unit[i].Pos.z * rh + 64.0f;
-				bool anti_missile = unit[i].weapon.size() > 0 && unit_manager.unit_type[unit[i].type_id]->antiweapons && unit_manager.unit_type[unit[i].type_id]->weapon[0];
+				bool anti_missile = unit[i].weapon.size() > 0 && unit_manager.unit_type[unit[i].typeId]->antiweapons && unit_manager.unit_type[unit[i].typeId]->weapon[0];
 				if (unit[i].radar_range > 0 || unit[i].radar_jam_range > 0 || unit[i].sonar_jam_range || unit[i].sonar_range > 0 || anti_missile)
 				{
 					glEnd();
@@ -1357,7 +1357,7 @@ namespace TA3D
 				if (unit[i].sonar_jam_range > 0)
 					gfx->circle_zoned(pos_x, pos_y, float(unit[i].sonar_jam_range << 4) * rw, 0.0f, 0.0f, 127.0f, 127.0f, makeacol(192, 192, 0, 255));
 				if (anti_missile)
-					gfx->dot_circle_zoned(float(MILLISECONDS_SINCE_INIT) * 0.001f, pos_x, pos_y, (float)unit_manager.unit_type[unit[i].type_id]->weapon[0]->coverage * rw, 0.0f, 0.0f, 127.0f, 127.0f, 0xFFFFFFFF);
+					gfx->dot_circle_zoned(float(MILLISECONDS_SINCE_INIT) * 0.001f, pos_x, pos_y, (float)unit_manager.unit_type[unit[i].typeId]->weapon[0]->coverage * rw, 0.0f, 0.0f, 127.0f, 127.0f, 0xFFFFFFFF);
 				if (unit[i].radar_range > 0 || unit[i].radar_jam_range > 0 || unit[i].sonar_jam_range || unit[i].sonar_range > 0 || anti_missile)
 				{
 					glPointSize(3.0f);
@@ -1400,7 +1400,7 @@ namespace TA3D
 
 		if (unit[index].isAlive())
 		{
-			if (!unit[index].missionQueue.empty() && !unit_manager.unit_type[unit[index].type_id]->BMcode && (unit[index].missionQueue->mission() == MISSION_BUILD_2 || unit[index].missionQueue->mission() == MISSION_BUILD) // It was building something that we must destroy too
+			if (!unit[index].missionQueue.empty() && !unit_manager.unit_type[unit[index].typeId]->BMcode && (unit[index].missionQueue->mission() == MISSION_BUILD_2 || unit[index].missionQueue->mission() == MISSION_BUILD) // It was building something that we must destroy too
 				&& unit[index].missionQueue->getTarget().getUnit())
 			{
 				Unit* p = unit[index].missionQueue->getTarget().getUnit();
@@ -1417,7 +1417,7 @@ namespace TA3D
 		unit[index].clear_from_map();
 		unit[index].lock();
 
-		if (unit[index].type_id >= 0 && unit_manager.unit_type[unit[index].type_id]->canload && unit[index].nb_attached > 0)
+		if (unit[index].typeId >= 0 && unit_manager.unit_type[unit[index].typeId]->canload && unit[index].nb_attached > 0)
 		{
 			for (int i = 0; i < unit[index].nb_attached; ++i)
 			{
@@ -1454,7 +1454,7 @@ namespace TA3D
 			if (!unit[i].isAlive())
 				continue;
 			unit[i].visible = false;
-			const int type_id = unit[i].type_id;
+			const int type_id = unit[i].typeId;
 			if (type_id < 0)
 				continue;
 			const UnitType* const pUnitType = unit_manager.unit_type[type_id];
@@ -1609,9 +1609,9 @@ namespace TA3D
 			unit[i].lock();
 			if (unit[i].isAlive() && !unit[i].command_locked && unit[i].isOwnedBy(player_id) && unit[i].isSelected && !unit[i].isBeingBuilt())
 			{
-				MissionQueue& mission = unit_manager.unit_type[unit[i].type_id]->BMcode ? unit[i].missionQueue : unit[i].defaultMissionQueue;
+				MissionQueue& mission = unit_manager.unit_type[unit[i].typeId]->BMcode ? unit[i].missionQueue : unit[i].defaultMissionQueue;
 				MissionQueue::iterator cur = mission.begin();
-				if (cur != mission.end() && unit_manager.unit_type[unit[i].type_id]->BMcode)
+				if (cur != mission.end() && unit_manager.unit_type[unit[i].typeId]->BMcode)
 					++cur; // Don't read the first one ( which is being executed )
 
 				while (cur != mission.end()) // Reads the mission list

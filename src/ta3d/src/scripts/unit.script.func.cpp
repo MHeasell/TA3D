@@ -124,9 +124,9 @@ namespace TA3D
 				else
 					return 0;
 			case BUGGER_OFF:
-				return the_map->check_rect((((int)(Pos.x + (float)the_map->halfWidthInWorldUnits)) >> 3) - (unit_manager.unit_type[type_id]->FootprintX >> 1),
-						   (((int)(Pos.z + (float)the_map->halfHeightInWorldUnits)) >> 3) - (unit_manager.unit_type[type_id]->FootprintZ >> 1),
-						   unit_manager.unit_type[type_id]->FootprintX, unit_manager.unit_type[type_id]->FootprintZ, idx)
+				return the_map->check_rect((((int)(Pos.x + (float)the_map->halfWidthInWorldUnits)) >> 3) - (unit_manager.unit_type[typeId]->FootprintX >> 1),
+						   (((int)(Pos.z + (float)the_map->halfHeightInWorldUnits)) >> 3) - (unit_manager.unit_type[typeId]->FootprintZ >> 1),
+						   unit_manager.unit_type[typeId]->FootprintX, unit_manager.unit_type[typeId]->FootprintZ, idx)
 					? 0
 					: 1;
 			case BUILD_PERCENT_LEFT:
@@ -386,7 +386,7 @@ namespace TA3D
 			case YARD_OPEN:
 				{
 					port[type] = sint16(v);
-					auto unitType = unit_manager.unit_type[type_id];
+					auto unitType = unit_manager.unit_type[typeId];
 					auto heightmapIndex = the_map->worldToHeightmapIndex(Pos);
 					if (!the_map->check_rect(
 							heightmapIndex.x - (unitType->FootprintX / 2),
@@ -401,7 +401,7 @@ namespace TA3D
 				port[type] = sint16(v);
 				if (port[type])
 				{
-					auto unitType = unit_manager.unit_type[type_id];
+					auto unitType = unit_manager.unit_type[typeId];
 					auto heightmapIndex = the_map->worldToHeightmapIndex(Pos);
 					const int px = heightmapIndex.x;
 					const int py = heightmapIndex.y;
@@ -417,7 +417,7 @@ namespace TA3D
 									if (cur_idx >= 0 && cur_idx < (int)units.max_unit && cur_idx != idx)
 									{
 										units.unit[cur_idx].lock();
-										const int type = units.unit[cur_idx].type_id;
+										const int type = units.unit[cur_idx].typeId;
 										const UnitType* const tType = type >= 0 ? unit_manager.unit_type[type] : NULL;
 										if (units.unit[cur_idx].isOwnedBy(ownerId) && tType != NULL && tType->canmove && tType->BMcode == 1 && !units.unit[cur_idx].isBeingBuilt() && (!units.unit[cur_idx].missionQueue || (units.unit[cur_idx].missionQueue->mission() & 0xFF) != MISSION_MOVE))
 										{

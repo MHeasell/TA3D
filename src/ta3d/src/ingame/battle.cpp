@@ -172,7 +172,7 @@ namespace TA3D
 				for (size_t i = 0; i < units.index_list_size; ++i)
 				{
 					const uint32 e = units.idx_list[i];
-					if (units.unit[e].isAlive() && units.unit[e].isOwnedBy(players.local_human_id) && units.unit[e].isSelected && unit_manager.unit_type[units.unit[e].type_id]->canmove)
+					if (units.unit[e].isAlive() && units.unit[e].isOwnedBy(players.local_human_id) && units.unit[e].isSelected && unit_manager.unit_type[units.unit[e].typeId]->canmove)
 					{
 						cursor_type = CURSOR_MOVE;
 						break;
@@ -224,9 +224,9 @@ namespace TA3D
 				}
 			}
 
-			if (isKeyDown(KEY_F1) && units.last_on >= 0 && units.unit[units.last_on].type_id >= 0)
+			if (isKeyDown(KEY_F1) && units.last_on >= 0 && units.unit[units.last_on].typeId >= 0)
 			{
-				unit_info_id = units.unit[units.last_on].type_id;
+				unit_info_id = units.unit[units.last_on].typeId;
 			}
 			else if (isKeyDown(KEY_F1) && cur_sel >= 0)
 			{
@@ -339,7 +339,7 @@ namespace TA3D
 					int i = units.idx_list[e];
 					if (units.unit[i].isAlive() && units.unit[i].isOwnedBy(players.local_human_id) && units.unit[i].isSelected)
 					{
-						UnitType* pType = unit_manager.unit_type[units.unit[i].type_id];
+						UnitType* pType = unit_manager.unit_type[units.unit[i].typeId];
 						builders |= pType->Builder;
 						canattack |= pType->canattack;
 						canreclamate |= pType->CanReclamate;
@@ -685,7 +685,7 @@ namespace TA3D
 						if (cur_sel >= 0)
 						{
 							cur_sel_index = cur_sel;
-							cur_sel = units.unit[cur_sel].type_id;
+							cur_sel = units.unit[cur_sel].typeId;
 							// Let's do some noise
 							units.unit[cur_sel_index].playSound("select1");
 						}
@@ -1145,24 +1145,24 @@ namespace TA3D
 					units.unit[i].lock();
 					if (units.unit[i].isAlive() && units.unit[i].isOwnedBy(players.local_human_id) && units.unit[i].isSelected)
 					{
-						onoffable |= unit_manager.unit_type[units.unit[i].type_id]->onoffable;
-						canstop |= unit_manager.unit_type[units.unit[i].type_id]->canstop;
-						canmove |= unit_manager.unit_type[units.unit[i].type_id]->canmove;
-						canpatrol |= unit_manager.unit_type[units.unit[i].type_id]->canpatrol;
-						canguard |= unit_manager.unit_type[units.unit[i].type_id]->canguard;
-						canattack |= unit_manager.unit_type[units.unit[i].type_id]->canattack;
-						canreclam |= unit_manager.unit_type[units.unit[i].type_id]->CanReclamate;
-						builders |= unit_manager.unit_type[units.unit[i].type_id]->Builder;
-						canload |= unit_manager.unit_type[units.unit[i].type_id]->canload;
-						cancapture |= unit_manager.unit_type[units.unit[i].type_id]->CanCapture;
-						cancloak |= unit_manager.unit_type[units.unit[i].type_id]->CloakCost > 0;
-						candgun |= unit_manager.unit_type[units.unit[i].type_id]->candgun;
+						onoffable |= unit_manager.unit_type[units.unit[i].typeId]->onoffable;
+						canstop |= unit_manager.unit_type[units.unit[i].typeId]->canstop;
+						canmove |= unit_manager.unit_type[units.unit[i].typeId]->canmove;
+						canpatrol |= unit_manager.unit_type[units.unit[i].typeId]->canpatrol;
+						canguard |= unit_manager.unit_type[units.unit[i].typeId]->canguard;
+						canattack |= unit_manager.unit_type[units.unit[i].typeId]->canattack;
+						canreclam |= unit_manager.unit_type[units.unit[i].typeId]->CanReclamate;
+						builders |= unit_manager.unit_type[units.unit[i].typeId]->Builder;
+						canload |= unit_manager.unit_type[units.unit[i].typeId]->canload;
+						cancapture |= unit_manager.unit_type[units.unit[i].typeId]->CanCapture;
+						cancloak |= unit_manager.unit_type[units.unit[i].typeId]->CloakCost > 0;
+						candgun |= unit_manager.unit_type[units.unit[i].typeId]->candgun;
 
-						if (unit_manager.unit_type[units.unit[i].type_id]->canattack)
+						if (unit_manager.unit_type[units.unit[i].typeId]->canattack)
 							setFlag(sforder, units.unit[i].port[STANDINGFIREORDERS]);
-						if (unit_manager.unit_type[units.unit[i].type_id]->canmove)
+						if (unit_manager.unit_type[units.unit[i].typeId]->canmove)
 							setFlag(smorder, units.unit[i].port[STANDINGMOVEORDERS]);
-						if (unit_manager.unit_type[units.unit[i].type_id]->onoffable)
+						if (unit_manager.unit_type[units.unit[i].typeId]->onoffable)
 							setFlag(onoff_state, units.unit[i].port[ACTIVATION] ? 2 : 1);
 					}
 					units.unit[i].unlock();
@@ -1405,7 +1405,7 @@ namespace TA3D
 						unsigned int i = units.idx_list[e];
 						units.unlock();
 						units.unit[i].lock();
-						if (units.unit[i].isAlive() && units.unit[i].isOwnedBy(players.local_human_id) && units.unit[i].isSelected && unit_manager.unit_type[units.unit[i].type_id]->onoffable)
+						if (units.unit[i].isAlive() && units.unit[i].isOwnedBy(players.local_human_id) && units.unit[i].isSelected && unit_manager.unit_type[units.unit[i].typeId]->onoffable)
 						{
 							if (onoff_obj->nb_stages > 1)
 							{
@@ -1443,7 +1443,7 @@ namespace TA3D
 						unsigned int i = units.idx_list[e];
 						units.unlock();
 						units.unit[i].lock();
-						if (units.unit[i].isAlive() && units.unit[i].isOwnedBy(players.local_human_id) && units.unit[i].isSelected && unit_manager.unit_type[units.unit[i].type_id]->CloakCost > 0)
+						if (units.unit[i].isAlive() && units.unit[i].isOwnedBy(players.local_human_id) && units.unit[i].isSelected && unit_manager.unit_type[units.unit[i].typeId]->CloakCost > 0)
 						{
 							if (cloak_obj->nb_stages > 1)
 							{
@@ -1566,7 +1566,7 @@ namespace TA3D
 						unsigned int i = units.idx_list[e];
 						units.unlock();
 						units.unit[i].lock();
-						if (units.unit[i].isAlive() && units.unit[i].isOwnedBy(players.local_human_id) && units.unit[i].isSelected && unit_manager.unit_type[units.unit[i].type_id]->canstop)
+						if (units.unit[i].isAlive() && units.unit[i].isOwnedBy(players.local_human_id) && units.unit[i].isSelected && unit_manager.unit_type[units.unit[i].typeId]->canstop)
 							units.unit[i].set_mission(MISSION_STOP);
 						units.unit[i].unlock();
 						units.lock();
@@ -1616,7 +1616,7 @@ namespace TA3D
 					}
 					if (prev >= 0)
 					{
-						const int type = units.unit[cur_sel_index].missionQueue->getUnit()->type_id;
+						const int type = units.unit[cur_sel_index].missionQueue->getUnit()->typeId;
 						const float metal_to_give_back = (1.0f - units.unit[cur_sel_index].missionQueue->getUnit()->build_percent_left * 0.01f) * (float)unit_manager.unit_type[type]->BuildCostMetal;
 						const int p_id = units.unit[cur_sel_index].ownerId;
 						units.unit[cur_sel_index].missionQueue->getUnit()->clear_from_map();
@@ -1686,8 +1686,8 @@ namespace TA3D
 			if (internal_name && last_on >= 0)
 			{
 				units.unit[last_on].lock();
-				if (units.unit[last_on].type_id >= 0 && !unit_manager.unit_type[units.unit[last_on].type_id]->Unitname.empty())
-					gfx->print(gfx->normal_font, 128.0f, 32.0f, 0.0f, 0xFFFFFFFF, String("internal name ") << unit_manager.unit_type[units.unit[last_on].type_id]->Unitname);
+				if (units.unit[last_on].typeId >= 0 && !unit_manager.unit_type[units.unit[last_on].typeId]->Unitname.empty())
+					gfx->print(gfx->normal_font, 128.0f, 32.0f, 0.0f, 0xFFFFFFFF, String("internal name ") << unit_manager.unit_type[units.unit[last_on].typeId]->Unitname);
 				units.unit[last_on].unlock();
 			}
 			else
@@ -1975,7 +1975,7 @@ namespace TA3D
 		if (cur_sel >= 0)
 		{
 			cur_sel_index = cur_sel;
-			cur_sel = units.unit[cur_sel].type_id;
+			cur_sel = units.unit[cur_sel].typeId;
 		}
 	}
 
@@ -2016,7 +2016,7 @@ namespace TA3D
 		if (cur_sel >= 0)
 		{
 			cur_sel_index = cur_sel;
-			cur_sel = units.unit[cur_sel].type_id;
+			cur_sel = units.unit[cur_sel].typeId;
 		}
 	}
 
@@ -2030,12 +2030,12 @@ namespace TA3D
 		{
 			const size_t i = units.idx_list[e];
 			if (units.unit[i].isAlive() && units.unit[i].isOwnedBy(players.local_human_id) && units.unit[i].isSelected)
-				sel_type[units.unit[i].type_id] = true;
+				sel_type[units.unit[i].typeId] = true;
 		}
 		for (unsigned int e = 0; e < units.index_list_size; ++e)
 		{
 			const size_t i = units.idx_list[e];
-			if (units.unit[i].isSelectableBy(players.local_human_id) && sel_type[units.unit[i].type_id])
+			if (units.unit[i].isSelectableBy(players.local_human_id) && sel_type[units.unit[i].typeId])
 				units.unit[i].isSelected = true;
 		}
 		cur_sel = -1;
@@ -2051,7 +2051,7 @@ namespace TA3D
 		if (cur_sel >= 0)
 		{
 			cur_sel_index = cur_sel;
-			cur_sel = units.unit[cur_sel].type_id;
+			cur_sel = units.unit[cur_sel].typeId;
 		}
 	}
 
@@ -2062,7 +2062,7 @@ namespace TA3D
 			int i = units.idx_list[e];
 			if (units.unit[i].isSelectableBy(players.local_human_id))
 			{
-				if (unit_manager.unit_type[units.unit[i].type_id]->checkCategory(category))
+				if (unit_manager.unit_type[units.unit[i].typeId]->checkCategory(category))
 					units.unit[i].isSelected = true;
 				else if (!isShiftKeyDown())
 					units.unit[i].isSelected = false;
@@ -2081,7 +2081,7 @@ namespace TA3D
 		if (cur_sel >= 0)
 		{
 			cur_sel_index = cur_sel;
-			cur_sel = units.unit[cur_sel].type_id;
+			cur_sel = units.unit[cur_sel].typeId;
 		}
 	}
 
@@ -2157,7 +2157,7 @@ namespace TA3D
 				int i = units.idx_list[e];
 				units.unlock();
 				units.unit[i].lock();
-				if (units.unit[i].isAlive() && units.unit[i].isOwnedBy(players.local_human_id) && units.unit[i].isSelected && unit_manager.unit_type[units.unit[i].type_id]->CanReclamate && unit_manager.unit_type[units.unit[i].type_id]->BMcode)
+				if (units.unit[i].isAlive() && units.unit[i].isOwnedBy(players.local_human_id) && units.unit[i].isSelected && unit_manager.unit_type[units.unit[i].typeId]->CanReclamate && unit_manager.unit_type[units.unit[i].typeId]->BMcode)
 				{
 					if (isShiftKeyDown())
 						units.unit[i].add_mission(MISSION_RECLAIM, &targetPosition, false, targetFeatureId, NULL);
@@ -2179,7 +2179,7 @@ namespace TA3D
 				int i = units.idx_list[e];
 				units.unlock();
 				units.unit[i].lock();
-				if (units.unit[i].isAlive() && units.unit[i].isOwnedBy(players.local_human_id) && units.unit[i].isSelected && unit_manager.unit_type[units.unit[i].type_id]->canresurrect && unit_manager.unit_type[units.unit[i].type_id]->BMcode)
+				if (units.unit[i].isAlive() && units.unit[i].isOwnedBy(players.local_human_id) && units.unit[i].isSelected && unit_manager.unit_type[units.unit[i].typeId]->canresurrect && unit_manager.unit_type[units.unit[i].typeId]->BMcode)
 				{
 					if (isShiftKeyDown())
 						units.unit[i].add_mission(MISSION_REVIVE, &targetPosition, false, targetFeatureId, NULL);
@@ -2198,10 +2198,10 @@ namespace TA3D
 			uint32 commandfire = current_order == SIGNAL_ORDER_DGUN ? MISSION_FLAG_COMMAND_FIRE : 0;
 			int i = units.idx_list[e];
 			units.unit[i].lock();
-			if (units.unit[i].isAlive() && units.unit[i].isOwnedBy(players.local_human_id) && units.unit[i].isSelected && unit_manager.unit_type[units.unit[i].type_id]->canattack && (unit_manager.unit_type[units.unit[i].type_id]->BMcode || !unit_manager.unit_type[units.unit[i].type_id]->Builder))
+			if (units.unit[i].isAlive() && units.unit[i].isOwnedBy(players.local_human_id) && units.unit[i].isSelected && unit_manager.unit_type[units.unit[i].typeId]->canattack && (unit_manager.unit_type[units.unit[i].typeId]->BMcode || !unit_manager.unit_type[units.unit[i].typeId]->Builder))
 			{
-				for (unsigned int f = 0; f < unit_manager.unit_type[units.unit[i].type_id]->weapon.size(); ++f)
-					if (unit_manager.unit_type[units.unit[i].type_id]->weapon[f] && unit_manager.unit_type[units.unit[i].type_id]->weapon[f]->stockpile)
+				for (unsigned int f = 0; f < unit_manager.unit_type[units.unit[i].typeId]->weapon.size(); ++f)
+					if (unit_manager.unit_type[units.unit[i].typeId]->weapon[f] && unit_manager.unit_type[units.unit[i].typeId]->weapon[f]->stockpile)
 					{
 						commandfire = MISSION_FLAG_COMMAND_FIRE;
 						break;
@@ -2233,7 +2233,7 @@ namespace TA3D
 			int i = units.idx_list[e];
 			units.unlock();
 			units.unit[i].lock();
-			if (units.unit[i].isAlive() && units.unit[i].isOwnedBy(players.local_human_id) && units.unit[i].isSelected && unit_manager.unit_type[units.unit[i].type_id]->CanReclamate && unit_manager.unit_type[units.unit[i].type_id]->BMcode)
+			if (units.unit[i].isAlive() && units.unit[i].isOwnedBy(players.local_human_id) && units.unit[i].isSelected && unit_manager.unit_type[units.unit[i].typeId]->CanReclamate && unit_manager.unit_type[units.unit[i].typeId]->BMcode)
 			{
 				if (isShiftKeyDown())
 					units.unit[i].add_mission(MISSION_RECLAIM, &(units.unit[targetUnitId].Pos), false, 0, &(units.unit[targetUnitId]));
@@ -2252,7 +2252,7 @@ namespace TA3D
 			int i = units.idx_list[e];
 			units.unlock();
 			units.unit[i].lock();
-			if (units.unit[i].isAlive() && units.unit[i].isOwnedBy(players.local_human_id) && units.unit[i].isSelected && unit_manager.unit_type[units.unit[i].type_id]->Builder && unit_manager.unit_type[units.unit[i].type_id]->BMcode)
+			if (units.unit[i].isAlive() && units.unit[i].isOwnedBy(players.local_human_id) && units.unit[i].isSelected && unit_manager.unit_type[units.unit[i].typeId]->Builder && unit_manager.unit_type[units.unit[i].typeId]->BMcode)
 			{
 				if (!isShiftKeyDown())
 					units.unit[i].playSound("repair");
@@ -2273,7 +2273,7 @@ namespace TA3D
 			const size_t i = units.idx_list[e];
 			units.unlock();
 			units.unit[i].lock();
-			if (units.unit[i].isAlive() && units.unit[i].isOwnedBy(players.local_human_id) && units.unit[i].isSelected && unit_manager.unit_type[units.unit[i].type_id]->CanCapture)
+			if (units.unit[i].isAlive() && units.unit[i].isOwnedBy(players.local_human_id) && units.unit[i].isSelected && unit_manager.unit_type[units.unit[i].typeId]->CanCapture)
 			{
 				if (isShiftKeyDown())
 					units.unit[i].add_mission(MISSION_CAPTURE, &(units.unit[targetUnitId].Pos), false, 0, &(units.unit[targetUnitId]));
@@ -2291,10 +2291,10 @@ namespace TA3D
 			uint32 commandfire = dgun ? MISSION_FLAG_COMMAND_FIRE : 0;
 			int i = units.idx_list[e];
 			units.unit[i].lock();
-			if (units.unit[i].isAlive() && units.unit[i].isOwnedBy(players.local_human_id) && units.unit[i].isSelected && unit_manager.unit_type[units.unit[i].type_id]->canattack)
+			if (units.unit[i].isAlive() && units.unit[i].isOwnedBy(players.local_human_id) && units.unit[i].isSelected && unit_manager.unit_type[units.unit[i].typeId]->canattack)
 			{
-				for (unsigned int f = 0; f < unit_manager.unit_type[units.unit[i].type_id]->weapon.size(); ++f)
-					if (unit_manager.unit_type[units.unit[i].type_id]->weapon[f] && unit_manager.unit_type[units.unit[i].type_id]->weapon[f]->stockpile)
+				for (unsigned int f = 0; f < unit_manager.unit_type[units.unit[i].typeId]->weapon.size(); ++f)
+					if (unit_manager.unit_type[units.unit[i].typeId]->weapon[f] && unit_manager.unit_type[units.unit[i].typeId]->weapon[f]->stockpile)
 					{
 						commandfire = MISSION_FLAG_COMMAND_FIRE;
 						break;

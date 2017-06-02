@@ -207,7 +207,7 @@ namespace TA3D
 				const int i = units.idx_list[e];
 				if (units.unit[i].isAlive() && units.unit[i].isOwnedBy(players.local_human_id) && (units.unit[i].isSelected || i == units.last_on))
 				{
-					const int type_id = units.unit[i].type_id;
+					const int type_id = units.unit[i].typeId;
 					if (type_id >= 0)
 					{
 						const UnitType* const pType = unit_manager.unit_type[type_id];
@@ -236,7 +236,7 @@ namespace TA3D
 				for (unsigned int e = 0; e < units.index_list_size; ++e)
 				{
 					const int i = units.idx_list[e];
-					const int type_id = units.unit[i].type_id;
+					const int type_id = units.unit[i].typeId;
 					if (type_id < 0)
 						continue;
 					if (units.unit[i].isAlive() && units.unit[i].isOwnedBy(players.local_human_id) && !units.unit[i].isSelected && unit_manager.unit_type[type_id]->Builder && unit_manager.unit_type[type_id]->BMcode)
@@ -257,7 +257,7 @@ namespace TA3D
 				const int i = units.idx_list[e];
 				if (units.unit[i].isAlive() && units.unit[i].isOwnedBy(players.local_human_id) && (units.unit[i].isSelected || i == units.last_on))
 				{
-					const int type_id = units.unit[i].type_id;
+					const int type_id = units.unit[i].typeId;
 					if (type_id >= 0)
 					{
 						const UnitType* const pType = unit_manager.unit_type[type_id];

@@ -290,10 +290,10 @@ namespace TA3D
 				if (pUnit->isAlive() && pUnit->local)
 				{
 					const bool ok = pUnit->hp > 0.0f; // Juste pour identifier l'assassin...
-					damage = float(weapon_def->get_damage_for_unit(unit_manager.unit_type[pUnit->type_id]->Unitname)) * pUnit->damage_modifier();
+					damage = float(weapon_def->get_damage_for_unit(unit_manager.unit_type[pUnit->typeId]->Unitname)) * pUnit->damage_modifier();
 					if (weapon_def->paralyzer)
 					{
-						if (!unit_manager.unit_type[pUnit->type_id]->ImmuneToParalyzer)
+						if (!unit_manager.unit_type[pUnit->typeId]->ImmuneToParalyzer)
 						{
 							pUnit->paralyzed = damage / 60.0f; // Get paralyzed (900 dmg <-> 15sec according to WeaponS.TDF)
 							if (network_manager.isConnected()) // Send damage event
@@ -398,11 +398,11 @@ namespace TA3D
 				if (pUnit->isAlive() && pUnit->local && ((Vector3D) (pUnit->Pos - Pos)).lengthSquared() <= d)
 				{
 					const bool ok = pUnit->hp > 0.0f;
-					damage = float(weapon_def->get_damage_for_unit(unit_manager.unit_type[pUnit->type_id]->Unitname));
+					damage = float(weapon_def->get_damage_for_unit(unit_manager.unit_type[pUnit->typeId]->Unitname));
 					const float cur_damage = damage * weapon_def->edgeeffectiveness * pUnit->damage_modifier();
 					if (weapon_def->paralyzer)
 					{
-						if (!unit_manager.unit_type[pUnit->type_id]->ImmuneToParalyzer)
+						if (!unit_manager.unit_type[pUnit->typeId]->ImmuneToParalyzer)
 						{
 							pUnit->paralyzed = cur_damage / 60.0f; // Get paralyzed (900 <-> 15sec)
 							if (network_manager.isConnected())	 // Send damage event

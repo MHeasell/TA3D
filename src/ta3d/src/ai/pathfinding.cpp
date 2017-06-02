@@ -235,14 +235,14 @@ namespace TA3D
 		if (task.idx >= 0)
 		{
 			units.unit[task.idx].lock();
-			if (units.unit[task.idx].ID != task.UID || units.unit[task.idx].type_id < 0)
+			if (units.unit[task.idx].ID != task.UID || units.unit[task.idx].typeId < 0)
 			{
 				units.unit[task.idx].unlock();
 				return;
 			}
 		}
 		const UnitType* pType = task.idx >= 0
-			? unit_manager.unit_type[units.unit[task.idx].type_id]
+			? unit_manager.unit_type[units.unit[task.idx].typeId]
 			: unit_manager.unit_type[-task.idx];
 		if (task.idx >= 0)
 			units.unit[task.idx].unlock();

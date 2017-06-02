@@ -249,14 +249,14 @@ namespace TA3D
 			const int i = units.idx_list[e];
 			SAVE(i);
 			SAVE(units.unit[i].flags);
-			SAVE(units.unit[i].type_id);
+			SAVE(units.unit[i].typeId);
 
-			if (units.unit[i].type_id < 0 || !units.unit[i].isAlive())
+			if (units.unit[i].typeId < 0 || !units.unit[i].isAlive())
 				continue;
 
 			SAVE(units.unit[i].ID); // Store its ID so we don't lose its "name"
 
-			writestring(file, unit_manager.unit_type[units.unit[i].type_id]->Unitname); // Store the name so it doesn't rely on the feature order
+			writestring(file, unit_manager.unit_type[units.unit[i].typeId]->Unitname); // Store the name so it doesn't rely on the feature order
 
 			SAVE(units.unit[i].ownerId);
 			SAVE(units.unit[i].hp);
@@ -726,19 +726,19 @@ namespace TA3D
 			int i;
 			LOAD(i);
 			LOAD(units.unit[i].flags);
-			LOAD(units.unit[i].type_id);
+			LOAD(units.unit[i].typeId);
 			const PlayerId player_id = (int)i / MAX_UNIT_PER_PLAYER;
 
-			if (units.unit[i].type_id < 0 || !units.unit[i].isAlive())
+			if (units.unit[i].typeId < 0 || !units.unit[i].isAlive())
 				continue;
 			units.idx_list[units.index_list_size++] = uint16(i);
 
 			uint32 ID;
 			LOAD(ID);
 
-			units.unit[i].type_id = short(unit_manager.get_unit_index(readstring(file)));
+			units.unit[i].typeId = short(unit_manager.get_unit_index(readstring(file)));
 
-			units.unit[i].init(units.unit[i].type_id, player_id, false, true);
+			units.unit[i].init(units.unit[i].typeId, player_id, false, true);
 
 			units.unit[i].ID = ID;
 
@@ -875,7 +875,7 @@ namespace TA3D
 		for (size_t i = 0; i < units.max_unit; i++) // Build the free index list
 		{
 			const PlayerId player_id = (int)i / MAX_UNIT_PER_PLAYER;
-			if (units.unit[i].type_id < 0 || !units.unit[i].isAlive())
+			if (units.unit[i].typeId < 0 || !units.unit[i].isAlive())
 				units.free_idx[player_id * MAX_UNIT_PER_PLAYER + (units.free_index_size[player_id]++)] = uint16(i);
 		}
 

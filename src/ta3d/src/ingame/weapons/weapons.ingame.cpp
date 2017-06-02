@@ -123,7 +123,7 @@ namespace TA3D
 			const Unit* const pUnit = &(units.unit[i]);
 			if (!pUnit->isAlive())
 				continue;
-			const int type = pUnit->type_id;
+			const int type = pUnit->typeId;
 			const UnitType* const pUnitType = (type >= 0) ? unit_manager.unit_type[type] : NULL;
 			if (type < 0 || !pUnitType->model)
 				continue;

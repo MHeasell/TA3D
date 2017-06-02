@@ -116,16 +116,16 @@ namespace TA3D
 				continue; // Error
 			units.unlock();
 			units.unit[i].lock();
-			if (units.unit[i].isAlive() && units.unit[i].type_id >= 0)
+			if (units.unit[i].isAlive() && units.unit[i].typeId >= 0)
 			{
 				if (units.unit[i].isOwnedBy(playerID))
 				{
-					weights[units.unit[i].type_id].nb++;
-					if (weights[units.unit[i].type_id].type & AI_FLAG_ARMY)
+					weights[units.unit[i].typeId].nb++;
+					if (weights[units.unit[i].typeId].type & AI_FLAG_ARMY)
 						wip_army_list.push_back(i);
-					if (weights[units.unit[i].type_id].type & AI_FLAG_BUILDER)
+					if (weights[units.unit[i].typeId].type & AI_FLAG_BUILDER)
 						wip_builder_list.push_back(i);
-					if (weights[units.unit[i].type_id].type & AI_FLAG_FACTORY)
+					if (weights[units.unit[i].typeId].type & AI_FLAG_FACTORY)
 						wip_factory_list.push_back(i);
 				}
 				else
@@ -276,7 +276,7 @@ namespace TA3D
 						while (!enemy_list[player_target].empty() && target_id == -1)
 						{
 							target_id = enemy_list[player_target].begin()->idx;
-							if (!units.unit[target_id].isAlive() || units.unit[target_id].type_id < 0 || units.unit[target_id].type_id >= unit_manager.nb_unit || units.unit[target_id].isNotOwnedBy(player_target))
+							if (!units.unit[target_id].isAlive() || units.unit[target_id].typeId < 0 || units.unit[target_id].typeId >= unit_manager.nb_unit || units.unit[target_id].isNotOwnedBy(player_target))
 							{
 								enemy_table.remove(target_id);
 								target_id = -1;
@@ -306,10 +306,10 @@ namespace TA3D
 		{
 			suspend(1);
 			units.unit[*i].lock();
-			if (units.unit[*i].isAlive() && units.unit[*i].do_nothing_ai() && unit_manager.unit_type[units.unit[*i].type_id]->nb_unit > 0)
+			if (units.unit[*i].isAlive() && units.unit[*i].do_nothing_ai() && unit_manager.unit_type[units.unit[*i].typeId]->nb_unit > 0)
 			{
-				const int list_size = unit_manager.unit_type[units.unit[*i].type_id]->nb_unit;
-				const std::vector<short>& BuildList = unit_manager.unit_type[units.unit[*i].type_id]->BuildList;
+				const int list_size = unit_manager.unit_type[units.unit[*i].typeId]->nb_unit;
+				const std::vector<short>& BuildList = unit_manager.unit_type[units.unit[*i].typeId]->BuildList;
 				for (int e = 0; e < list_size; ++e)
 					sw[e] = (e > 0 ? sw[e - 1] : 0.0f) + weights[BuildList[e]].w;
 				int selected_idx = -1;
@@ -342,10 +342,10 @@ namespace TA3D
 			suspend(1);
 
 			units.unit[*i].lock();
-			if (units.unit[*i].isAlive() && units.unit[*i].do_nothing_ai() && unit_manager.unit_type[units.unit[*i].type_id]->nb_unit > 0)
+			if (units.unit[*i].isAlive() && units.unit[*i].do_nothing_ai() && unit_manager.unit_type[units.unit[*i].typeId]->nb_unit > 0)
 			{
-				const int list_size = unit_manager.unit_type[units.unit[*i].type_id]->nb_unit;
-				const std::vector<short>& BuildList = unit_manager.unit_type[units.unit[*i].type_id]->BuildList;
+				const int list_size = unit_manager.unit_type[units.unit[*i].typeId]->nb_unit;
+				const std::vector<short>& BuildList = unit_manager.unit_type[units.unit[*i].typeId]->BuildList;
 				for (int e = 0; e < list_size; ++e)
 					sw[e] = (e > 0 ? sw[e - 1] : 0.0f) + weights[BuildList[e]].w;
 				int selected_idx = -1;
@@ -364,7 +364,7 @@ namespace TA3D
 					Vector3D target = units.unit[*i].Pos;
 					if (findBuildPlace(target, selected_idx, playerID, 5, 50))
 					{
-						if (unit_manager.unit_type[units.unit[*i].type_id]->BMcode)
+						if (unit_manager.unit_type[units.unit[*i].typeId]->BMcode)
 							units.unit[*i].set_mission(MISSION_BUILD, &target, false, selected_idx);
 						else
 							units.unit[*i].add_mission(MISSION_BUILD, &target, false, selected_idx);
