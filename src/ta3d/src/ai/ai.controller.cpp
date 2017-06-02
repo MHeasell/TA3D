@@ -131,10 +131,10 @@ namespace TA3D
 				else
 				{
 					nb_units[AI_UNIT_TYPE_ENEMY]++;
-					nb_enemy[units.unit[i].owner_id]++;
+					nb_enemy[units.unit[i].ownerId]++;
 					if (!enemy_table.contains(i))
 					{
-						enemy_list[units.unit[i].owner_id].push_back(WeightCoef(i, 0));
+						enemy_list[units.unit[i].ownerId].push_back(WeightCoef(i, 0));
 						enemy_table.insert(i);
 					}
 				}

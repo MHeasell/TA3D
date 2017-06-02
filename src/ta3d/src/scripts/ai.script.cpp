@@ -551,7 +551,7 @@ namespace TA3D
 			lua_pushinteger(L, pUnit->ID); // unit Unique ID
 			lua_setfield(L, -2, "UID");
 
-			lua_pushinteger(L, pUnit->owner_id); // the player this unit belongs to
+			lua_pushinteger(L, pUnit->ownerId); // the player this unit belongs to
 			lua_setfield(L, -2, "owner");
 
 			lua_pushnumber(L, pUnit->hp); // unit hit points

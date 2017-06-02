@@ -16,7 +16,7 @@ namespace TA3D
 		: script((UnitScriptInterface*)NULL),
 		  render(),
 		  model(NULL),
-		  owner_id(0),
+		  ownerId(0),
 		  type_id(0),
 		  hp(0.0f),
 		  Pos(),
@@ -277,7 +277,7 @@ namespace TA3D
 
 	bool Unit::isEnemy(const int t) const
 	{
-		return t >= 0 && t < (int)units.max_unit && !(players.team[units.unit[t].owner_id] & players.team[owner_id]);
+		return t >= 0 && t < (int)units.max_unit && !(players.team[units.unit[t].ownerId] & players.team[ownerId]);
 	}
 
 	int Unit::runScriptFunction(const int id, int nb_param, int* param) // Launch and run the script, returning it's values to param if not NULL
@@ -464,7 +464,7 @@ namespace TA3D
 		isSelected = false;
 		script = NULL;
 		model = NULL;
-		owner_id = owner;
+		ownerId = owner;
 		type_id = -1;
 		hp = 0.0f;
 		V.reset();
@@ -1210,7 +1210,7 @@ namespace TA3D
 				if (cloaked || (cloaking && isNotOwnedBy(players.local_human_id)))
 					glColor4ub(0xFF, 0xFF, 0xFF, 0x7F);
 				glDisable(GL_CULL_FACE);
-				the_model->draw(t, &render.Anim, isOwnedBy(players.local_human_id) && isSelected, false, c_part, build_part, target, &upos, &M, size, center, reverse, owner_id, cloaked, src, src_data);
+				the_model->draw(t, &render.Anim, isOwnedBy(players.local_human_id) && isSelected, false, c_part, build_part, target, &upos, &M, size, center, reverse, ownerId, cloaked, src, src_data);
 				glEnable(GL_CULL_FACE);
 				if (cloaked || (cloaking && isNotOwnedBy(players.local_human_id)))
 					gfx->set_color(0xFFFFFFFF);
@@ -1239,16 +1239,16 @@ namespace TA3D
 
 					glClipPlane(GL_CLIP_PLANE0, eqn);
 					glEnable(GL_CLIP_PLANE0);
-					the_model->draw(t, &render.Anim, isOwnedBy(players.local_human_id) && isSelected, true, c_part, build_part, target, &upos, &M, size, center, reverse, owner_id, true, src, src_data);
+					the_model->draw(t, &render.Anim, isOwnedBy(players.local_human_id) && isSelected, true, c_part, build_part, target, &upos, &M, size, center, reverse, ownerId, true, src, src_data);
 
 					eqn[1] = -eqn[1];
 					eqn[3] = -eqn[3];
 					glClipPlane(GL_CLIP_PLANE0, eqn);
-					the_model->draw(t, &render.Anim, isOwnedBy(players.local_human_id) && isSelected, false, false, build_part, target, &upos, &M, size, center, reverse, owner_id);
+					the_model->draw(t, &render.Anim, isOwnedBy(players.local_human_id) && isSelected, false, false, build_part, target, &upos, &M, size, center, reverse, ownerId);
 					glDisable(GL_CLIP_PLANE0);
 
 					glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-					the_model->draw(t, &render.Anim, isOwnedBy(players.local_human_id) && isSelected, true, false, build_part, target, &upos, &M, size, center, reverse, owner_id);
+					the_model->draw(t, &render.Anim, isOwnedBy(players.local_human_id) && isSelected, true, false, build_part, target, &upos, &M, size, center, reverse, ownerId);
 					glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 				}
 				else
@@ -1262,19 +1262,19 @@ namespace TA3D
 						glClipPlane(GL_CLIP_PLANE0, eqn);
 						glEnable(GL_CLIP_PLANE0);
 						glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-						the_model->draw(t, &render.Anim, isOwnedBy(players.local_human_id) && isSelected, true, c_part, build_part, target, &upos, &M, size, center, reverse, owner_id, true, src, src_data);
+						the_model->draw(t, &render.Anim, isOwnedBy(players.local_human_id) && isSelected, true, c_part, build_part, target, &upos, &M, size, center, reverse, ownerId, true, src, src_data);
 						glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
 						eqn[1] = -eqn[1];
 						eqn[3] = -eqn[3];
 						glClipPlane(GL_CLIP_PLANE0, eqn);
-						the_model->draw(t, &render.Anim, isOwnedBy(players.local_human_id) && isSelected, true, false, build_part, target, &upos, &M, size, center, reverse, owner_id);
+						the_model->draw(t, &render.Anim, isOwnedBy(players.local_human_id) && isSelected, true, false, build_part, target, &upos, &M, size, center, reverse, ownerId);
 						glDisable(GL_CLIP_PLANE0);
 					}
 					else
 					{
 						glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-						the_model->draw(t, &render.Anim, isOwnedBy(players.local_human_id) && isSelected, true, false, build_part, target, &upos, &M, size, center, reverse, owner_id);
+						the_model->draw(t, &render.Anim, isOwnedBy(players.local_human_id) && isSelected, true, false, build_part, target, &upos, &M, size, center, reverse, ownerId);
 						glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 					}
 				}
@@ -1869,14 +1869,14 @@ namespace TA3D
 			{
 				if (n_px != cur_px || n_py != cur_py) // has something changed ??
 				{
-					bool place_is_empty = can_be_there(n_px, n_py, type_id, owner_id, idx);
+					bool place_is_empty = can_be_there(n_px, n_py, type_id, ownerId, idx);
 					if (!(flags & 64) && !place_is_empty)
 					{
 						if (!pType->canfly)
 						{
 							locked = true;
 							// Check some basic solutions first
-							if (cur_px != n_px && can_be_there(cur_px, n_py, type_id, owner_id, idx))
+							if (cur_px != n_px && can_be_there(cur_px, n_py, type_id, ownerId, idx))
 							{
 								V.z = !Math::AlmostZero(V.z)
 									? (V.z < 0.0f
@@ -1887,7 +1887,7 @@ namespace TA3D
 								NPos.x = Pos.x;
 								n_px = cur_px;
 							}
-							else if (cur_py != n_py && can_be_there(n_px, cur_py, type_id, owner_id, idx))
+							else if (cur_py != n_py && can_be_there(n_px, cur_py, type_id, ownerId, idx))
 							{
 								V.x = !Math::AlmostZero(V.x)
 									? ((V.x < 0.0f)
@@ -1898,7 +1898,7 @@ namespace TA3D
 								NPos.z = Pos.z;
 								n_py = cur_py;
 							}
-							else if (can_be_there(cur_px, cur_py, type_id, owner_id, idx))
+							else if (can_be_there(cur_px, cur_py, type_id, ownerId, idx))
 							{
 								V.x = V.y = V.z = 0.0f; // Don't move since we can't
 								NPos = Pos;
@@ -1929,7 +1929,7 @@ namespace TA3D
 							}
 							else
 							{
-								if (!can_be_there(cur_px, cur_py, type_id, owner_id, idx) && !flying)
+								if (!can_be_there(cur_px, cur_py, type_id, ownerId, idx) && !flying)
 								{
 									NPos = Pos;
 									n_px = cur_px;
@@ -2030,7 +2030,7 @@ namespace TA3D
 
 		const UnitType* const pType = unit_manager.unit_type[type_id];
 
-		const float resource_min_factor = TA3D::Math::Min(TA3D::players.energy_factor[owner_id], TA3D::players.metal_factor[owner_id]);
+		const float resource_min_factor = TA3D::Math::Min(TA3D::players.energy_factor[ownerId], TA3D::players.metal_factor[ownerId]);
 
 		if (!isBeingBuilt() && pType->isfeature) // Turn this unit into a feature
 		{
@@ -2210,13 +2210,13 @@ namespace TA3D
 		if (cloaking && paralyzed <= 0.0f)
 		{
 			const int conso_energy = (!missionQueue || !(missionQueue->getFlags() & MISSION_FLAG_MOVE)) ? pType->CloakCost : pType->CloakCostMoving;
-			TA3D::players.requested_energy[owner_id] += (float)conso_energy;
-			if (players.energy[owner_id] >= (energy_cons + (float)conso_energy) * dt)
+			TA3D::players.requested_energy[ownerId] += (float)conso_energy;
+			if (players.energy[ownerId] >= (energy_cons + (float)conso_energy) * dt)
 			{
 				energy_cons += (float)conso_energy;
 				const int dx = pType->mincloakdistance >> 3;
 				const int distance = SQUARE(pType->mincloakdistance);
-				// byte mask = 1 << owner_id;
+				// byte mask = 1 << ownerId;
 				bool found = false;
 				for (int y = cur_py - dx; y <= cur_py + dx && !found; y++)
 					if (y >= 0 && y < the_map->heightInHeightmapTiles - 1)
@@ -2225,7 +2225,7 @@ namespace TA3D
 							{
 								const int cur_idx = the_map->map_data(x, y).unit_idx;
 
-								if (cur_idx >= 0 && cur_idx < (int)units.max_unit && units.unit[cur_idx].isAlive() && units.unit[cur_idx].isNotOwnedBy(owner_id) && distance >=
+								if (cur_idx >= 0 && cur_idx < (int)units.max_unit && units.unit[cur_idx].isAlive() && units.unit[cur_idx].isNotOwnedBy(ownerId) && distance >=
 																																										(Pos -
 																																										 units.unit[cur_idx].Pos).lengthSquared())
 								{
@@ -2301,10 +2301,10 @@ namespace TA3D
 				const float conso_metal = ((float)pType->weapon[idx]->metalpershot) / pType->weapon[idx]->reloadtime;
 				const float conso_energy = ((float)pType->weapon[idx]->energypershot) / pType->weapon[idx]->reloadtime;
 
-				TA3D::players.requested_energy[owner_id] += conso_energy;
-				TA3D::players.requested_metal[owner_id] += conso_metal;
+				TA3D::players.requested_energy[ownerId] += conso_energy;
+				TA3D::players.requested_metal[ownerId] += conso_metal;
 
-				if (players.metal[owner_id] >= (metal_cons + conso_metal * resource_min_factor) * dt && players.energy[owner_id] >= (energy_cons + conso_energy * resource_min_factor) * dt)
+				if (players.metal[ownerId] >= (metal_cons + conso_metal * resource_min_factor) * dt && players.energy[ownerId] >= (energy_cons + conso_energy * resource_min_factor) * dt)
 				{
 					metal_cons += conso_metal * resource_min_factor;
 					energy_cons += conso_energy * resource_min_factor;
@@ -2379,7 +2379,7 @@ namespace TA3D
 
 					if (weapon[i].target == NULL || ((weapon[i].state & WEAPON_FLAG_WEAPON) == WEAPON_FLAG_WEAPON && ((Weapon*)(weapon[i].target))->weapon_id != -1) || ((weapon[i].state & WEAPON_FLAG_WEAPON) != WEAPON_FLAG_WEAPON && ((Unit*)(weapon[i].target))->isAlive()))
 					{
-						if ((weapon[i].state & WEAPON_FLAG_WEAPON) != WEAPON_FLAG_WEAPON && weapon[i].target != NULL && ((Unit*)(weapon[i].target))->cloaked && ((const Unit*)(weapon[i].target))->isNotOwnedBy(owner_id) && !((const Unit*)(weapon[i].target))->is_on_radar(toPlayerMask(owner_id)))
+						if ((weapon[i].state & WEAPON_FLAG_WEAPON) != WEAPON_FLAG_WEAPON && weapon[i].target != NULL && ((Unit*)(weapon[i].target))->cloaked && ((const Unit*)(weapon[i].target))->isNotOwnedBy(ownerId) && !((const Unit*)(weapon[i].target))->is_on_radar(toPlayerMask(ownerId)))
 						{
 							weapon[i].data = -1;
 							weapon[i].state = WEAPON_FLAG_IDLE;
@@ -2647,7 +2647,7 @@ namespace TA3D
 					{
 						if (weapon[i].burst > 0 && weapon[i].delay < pType->weapon[i]->burstrate)
 							break;
-						if ((players.metal[owner_id] < pType->weapon[i]->metalpershot || players.energy[owner_id] < pType->weapon[i]->energypershot) && !pType->weapon[i]->stockpile)
+						if ((players.metal[ownerId] < pType->weapon[i]->metalpershot || players.energy[ownerId] < pType->weapon[i]->energypershot) && !pType->weapon[i]->stockpile)
 						{
 							weapon[i].state = WEAPON_FLAG_AIM; // Pas assez d'énergie pour tirer / not enough energy to fire
 							weapon[i].data = -1;
@@ -2687,8 +2687,8 @@ namespace TA3D
 								weapon[i].stock--;
 							else
 							{ // We use energy and metal only for weapons with no prebuilt ammo
-								players.c_metal[owner_id] -= (float)pType->weapon[i]->metalpershot;
-								players.c_energy[owner_id] -= (float)pType->weapon[i]->energypershot;
+								players.c_metal[ownerId] -= (float)pType->weapon[i]->metalpershot;
+								players.c_energy[ownerId] -= (float)pType->weapon[i]->energypershot;
 							}
 							launchScript(Fire_script); // Run the fire animation script
 							if (!pType->weapon[i]->soundstart.empty())
@@ -2844,13 +2844,13 @@ namespace TA3D
 								if (target_unit->port[ACTIVATION])
 								{
 									const float conso_energy = float(unit_manager.unit_type[target_unit->type_id]->WorkerTime * pType->BuildCostEnergy) / float(pType->BuildTime);
-									TA3D::players.requested_energy[owner_id] += conso_energy;
-									if (players.energy[owner_id] >= (energy_cons + conso_energy * TA3D::players.energy_factor[owner_id]) * dt)
+									TA3D::players.requested_energy[ownerId] += conso_energy;
+									if (players.energy[ownerId] >= (energy_cons + conso_energy * TA3D::players.energy_factor[ownerId]) * dt)
 									{
 										target_unit->lock();
-										target_unit->energy_cons += conso_energy * TA3D::players.energy_factor[owner_id];
+										target_unit->energy_cons += conso_energy * TA3D::players.energy_factor[ownerId];
 										target_unit->unlock();
-										hp += dt * TA3D::players.energy_factor[owner_id] * float(unit_manager.unit_type[target_unit->type_id]->WorkerTime * pType->MaxDamage) / (float)pType->BuildTime;
+										hp += dt * TA3D::players.energy_factor[ownerId] * float(unit_manager.unit_type[target_unit->type_id]->WorkerTime * pType->MaxDamage) / (float)pType->BuildTime;
 									}
 									if (hp >= pType->MaxDamage) // Unit has been repaired
 									{
@@ -2883,7 +2883,7 @@ namespace TA3D
 						int enemy_idx = -1;
 						int sx = Math::RandomTable() & 1;
 						int sy = Math::RandomTable() & 1;
-						// byte mask=1<<owner_id;
+						// byte mask=1<<ownerId;
 						for (int y = cur_py - dx + sy; y <= cur_py + dx; y += 2)
 						{
 							if (y >= 0 && y < the_map->heightInHeightmapTiles - 1)
@@ -2891,7 +2891,7 @@ namespace TA3D
 									if (x >= 0 && x < the_map->widthInHeightmapTiles - 1)
 									{
 										const int cur_idx = the_map->map_data(x, y).unit_idx;
-										if (cur_idx >= 0 && cur_idx < (int)units.max_unit && units.unit[cur_idx].isAlive() && units.unit[cur_idx].isNotOwnedBy(owner_id) && unit_manager.unit_type[units.unit[cur_idx].type_id]->ShootMe) // This unit is on the sight_map since dx = sightdistance !!
+										if (cur_idx >= 0 && cur_idx < (int)units.max_unit && units.unit[cur_idx].isAlive() && units.unit[cur_idx].isNotOwnedBy(ownerId) && unit_manager.unit_type[units.unit[cur_idx].type_id]->ShootMe) // This unit is on the sight_map since dx = sightdistance !!
 										{
 											enemy_idx = cur_idx;
 											break;
@@ -2929,7 +2929,7 @@ namespace TA3D
 								if (pType->TransportMaxUnits == 1) // Code for units like the arm atlas
 								{
 									if (attached_list[0] >= 0 && attached_list[0] < (int)units.max_unit // Check we can do that
-										&& units.unit[attached_list[0]].flags && can_be_built(Pos, units.unit[attached_list[0]].type_id, owner_id))
+										&& units.unit[attached_list[0]].flags && can_be_built(Pos, units.unit[attached_list[0]].type_id, ownerId))
 									{
 										launchScript(SCRIPT_EndTransport);
 
@@ -2949,7 +2949,7 @@ namespace TA3D
 								else
 								{
 									if (attached_list[nb_attached - 1] >= 0 && attached_list[nb_attached - 1] < (int)units.max_unit // Check we can do that
-										&& units.unit[attached_list[nb_attached - 1]].flags && can_be_built(missionQueue->getTarget().getPos(), units.unit[attached_list[nb_attached - 1]].type_id, owner_id))
+										&& units.unit[attached_list[nb_attached - 1]].flags && can_be_built(missionQueue->getTarget().getPos(), units.unit[attached_list[nb_attached - 1]].type_id, ownerId))
 									{
 										const int idx = attached_list[nb_attached - 1];
 										int param[] = {idx, PACKXZ(missionQueue->getTarget().getPos().x * 2.0f + (float)the_map->widthInWorldUnits, missionQueue->getTarget().getPos().z * 2.0f + (float)the_map->heightInWorldUnits)};
@@ -3061,7 +3061,7 @@ namespace TA3D
 						{
 							if (missionQueue->mission() == MISSION_CAPTURE)
 							{
-								if (unit_manager.unit_type[target_unit->type_id]->commander || target_unit->isOwnedBy(owner_id))
+								if (unit_manager.unit_type[target_unit->type_id]->commander || target_unit->isOwnedBy(ownerId))
 								{
 									playSound("cant1");
 									next_mission();
@@ -3114,7 +3114,7 @@ namespace TA3D
 											target_unit->clear_from_map();
 											target_unit->lock();
 
-											Unit* new_unit = create_unit(target_unit->type_id, owner_id, target_unit->Pos);
+											Unit* new_unit = create_unit(target_unit->type_id, ownerId, target_unit->Pos);
 											if (new_unit)
 											{
 												new_unit->lock();
@@ -3233,7 +3233,7 @@ namespace TA3D
 										if (wreckage_type_id >= 0)
 										{
 											pMutex.unlock();
-											Unit* unit_p = create_unit(wreckage_type_id, owner_id, obj_pos);
+											Unit* unit_p = create_unit(wreckage_type_id, ownerId, obj_pos);
 
 											if (unit_p)
 											{
@@ -3289,7 +3289,7 @@ namespace TA3D
 						next_mission();
 						break;
 					}
-					if (missionQueue->getUnit() && missionQueue->getUnit()->isAlive() && missionQueue->getUnit()->isOwnedBy(owner_id))
+					if (missionQueue->getUnit() && missionQueue->getUnit()->isAlive() && missionQueue->getUnit()->isOwnedBy(ownerId))
 					{ // On ne défend pas n'importe quoi
 						if (pType->Builder)
 						{
@@ -3336,10 +3336,10 @@ namespace TA3D
 						add_mission(MISSION_PATROL | MISSION_FLAG_AUTO, &Pos, false, 0, NULL, MISSION_FLAG_CAN_ATTACK, 0, 0); // Retour à la case départ après l'éxécution de tous les ordres / back to beginning
 
 					if (pType->CanReclamate // Auto reclaim things on the battle field when needed
-						&& (players.r_energy[owner_id] >= players.energy_t[owner_id] || players.r_metal[owner_id] >= players.metal_t[owner_id]))
+						&& (players.r_energy[ownerId] >= players.energy_t[ownerId] || players.r_metal[ownerId] >= players.metal_t[ownerId]))
 					{
-						const bool energyLack = players.r_energy[owner_id] >= players.energy_t[owner_id];
-						const bool metalLack = players.r_metal[owner_id] >= players.metal_t[owner_id];
+						const bool energyLack = players.r_energy[ownerId] >= players.energy_t[ownerId];
+						const bool metalLack = players.r_metal[ownerId] >= players.metal_t[ownerId];
 						const int dx = pType->SightDistance >> 3;
 						const int dx2 = SQUARE(dx);
 						int feature_idx = -1;
@@ -3376,7 +3376,7 @@ namespace TA3D
 					{
 						const int dx = pType->SightDistance;
 						std::deque<UnitTKit::T> friends;
-						units.kdTreeFriends[owner_id]->maxDistanceQuery(friends, Pos, (float)dx);
+						units.kdTreeFriends[ownerId]->maxDistanceQuery(friends, Pos, (float)dx);
 						bool done = false;
 
 						for (std::deque<UnitTKit::T>::const_iterator i = friends.begin(); i != friends.end(); ++i)
@@ -3422,7 +3422,7 @@ namespace TA3D
 								pad_timer = 0.0f;
 								bool going_to_repair_pad = false;
 								std::deque<UnitTKit::T> repair_pads;
-								units.kdTreeRepairPads[owner_id]->maxDistanceQuery(repair_pads, Pos, pType->ManeuverLeashLength);
+								units.kdTreeRepairPads[ownerId]->maxDistanceQuery(repair_pads, Pos, pType->ManeuverLeashLength);
 								for (std::deque<UnitTKit::T>::const_iterator i = repair_pads.begin(); i != repair_pads.end() && !going_to_repair_pad; ++i)
 								{
 									const Unit* const pUnit = i->first;
@@ -3495,7 +3495,7 @@ namespace TA3D
 						{
 							if (target_unit) // Check if we can target the unit
 							{
-								const PlayerMask mask = toPlayerMask(owner_id);
+								const PlayerMask mask = toPlayerMask(ownerId);
 								if (target_unit->cloaked && !target_unit->is_on_radar(mask))
 								{
 									for (uint32 i = 0; i < weapon.size(); ++i)
@@ -3719,14 +3719,14 @@ namespace TA3D
 										}
 
 										const float conso_energy = ((float)(pType->WorkerTime * unit_manager.unit_type[target_unit->type_id]->BuildCostEnergy)) / (float)unit_manager.unit_type[target_unit->type_id]->BuildTime;
-										TA3D::players.requested_energy[owner_id] += conso_energy;
-										if (players.energy[owner_id] >= (energy_cons + conso_energy * TA3D::players.energy_factor[owner_id]) * dt)
+										TA3D::players.requested_energy[ownerId] += conso_energy;
+										if (players.energy[ownerId] >= (energy_cons + conso_energy * TA3D::players.energy_factor[ownerId]) * dt)
 										{
-											energy_cons += conso_energy * TA3D::players.energy_factor[owner_id];
+											energy_cons += conso_energy * TA3D::players.energy_factor[ownerId];
 											const UnitType* pTargetType = unit_manager.unit_type[target_unit->type_id];
 											const float maxdmg = float(pTargetType->MaxDamage);
 											target_unit->hp = std::min(maxdmg,
-												target_unit->hp + dt * TA3D::players.energy_factor[owner_id] * (float)pType->WorkerTime * maxdmg / (float)pTargetType->BuildTime);
+												target_unit->hp + dt * TA3D::players.energy_factor[ownerId] * (float)pType->WorkerTime * maxdmg / (float)pTargetType->BuildTime);
 										}
 										target_unit->built = true;
 									}
@@ -3804,10 +3804,10 @@ namespace TA3D
 								const float conso_metal = ((float)(pType->WorkerTime * unit_manager.unit_type[target_unit->type_id]->BuildCostMetal)) / (float)unit_manager.unit_type[target_unit->type_id]->BuildTime;
 								const float conso_energy = ((float)(pType->WorkerTime * unit_manager.unit_type[target_unit->type_id]->BuildCostEnergy)) / (float)unit_manager.unit_type[target_unit->type_id]->BuildTime;
 
-								TA3D::players.requested_energy[owner_id] += conso_energy;
-								TA3D::players.requested_metal[owner_id] += conso_metal;
+								TA3D::players.requested_energy[ownerId] += conso_energy;
+								TA3D::players.requested_metal[ownerId] += conso_metal;
 
-								if (players.metal[owner_id] >= (metal_cons + conso_metal * resource_min_factor) * dt && players.energy[owner_id] >= (energy_cons + conso_energy * resource_min_factor) * dt)
+								if (players.metal[ownerId] >= (metal_cons + conso_metal * resource_min_factor) * dt && players.energy[ownerId] >= (energy_cons + conso_energy * resource_min_factor) * dt)
 								{
 									metal_cons += conso_metal * resource_min_factor;
 									energy_cons += conso_energy * resource_min_factor;
@@ -3903,7 +3903,7 @@ namespace TA3D
 								if (the_map->check_rect(topLeftHeightmapIndex.x, topLeftHeightmapIndex.y, unitType->FootprintX, unitType->FootprintZ, -1))
 								{
 									pMutex.unlock();
-									Unit* p = create_unit(missionQueue->getData(), owner_id, missionQueue->getTarget().getPos());
+									Unit* p = create_unit(missionQueue->getData(), ownerId, missionQueue->getTarget().getPos());
 									if (p)
 										missionQueue->getTarget().set(Mission::Target::TargetUnit, p->idx, p->ID);
 									pMutex.lock();
@@ -4212,11 +4212,11 @@ namespace TA3D
 							dx = pType->weapon[i]->range >> 1;
 					if (pType->kamikaze && pType->kamikazedistance > dx)
 						dx = pType->kamikazedistance;
-					const PlayerMask mask = toPlayerMask(owner_id);
+					const PlayerMask mask = toPlayerMask(ownerId);
 
 					std::deque<UnitTKit::T> possibleTargets;
 					for (int i = 0; i < NB_PLAYERS; ++i)
-						if (i != owner_id && !(players.team[owner_id] & players.team[i]))
+						if (i != ownerId && !(players.team[ownerId] & players.team[i]))
 							units.kdTree[i]->maxDistanceQuery(possibleTargets, Pos, float(dx));
 
 					for (std::deque<UnitTKit::T>::iterator i = possibleTargets.begin(); enemy_idx == -1 && i != possibleTargets.end(); ++i)
@@ -4287,7 +4287,7 @@ namespace TA3D
 					{
 						const uint32 i = *f;
 						// Yes we don't defend against allies :D, can lead to funny situations :P
-						if (weapons.weapon[i].weapon_id != -1 && !(players.team[units.unit[weapons.weapon[i].shooter_idx].owner_id] & players.team[owner_id]) && weapon_manager.weapon[weapons.weapon[i].weapon_id].targetable)
+						if (weapons.weapon[i].weapon_id != -1 && !(players.team[units.unit[weapons.weapon[i].shooter_idx].ownerId] & players.team[ownerId]) && weapon_manager.weapon[weapons.weapon[i].weapon_id].targetable)
 						{
 							if (((Vector3D) (weapons.weapon[i].target_pos - Pos)).lengthSquared() <= coverage &&
 								((Vector3D) (weapons.weapon[i].Pos - Pos)).lengthSquared() <= range)
@@ -4465,7 +4465,7 @@ namespace TA3D
 				}
 				else
 				{
-					if (can_be_there(cur_px, cur_py, type_id, owner_id, idx)) // Check it can be there
+					if (can_be_there(cur_px, cur_py, type_id, ownerId, idx)) // Check it can be there
 					{
 						float ideal_h = min_h;
 						V.y = (ideal_h - Pos.y) * 1.5f;
@@ -4880,7 +4880,7 @@ namespace TA3D
 	{
 		const UnitType* pType = unit_manager.unit_type[type_id];
 		const WeaponDef* pW = pType->weapon[w_id]; // Critical information, we can't lose it so we save it before unlocking this unit
-		const int owner = owner_id;
+		const int owner = ownerId;
 		const Vector3D D = Dir * RotateY(-Angle.y * DEG2RAD);
 		int param[] = {(int)(-10.0f * DEG2TA * D.z), (int)(-10.0f * DEG2TA * D.x)};
 		launchScript(SCRIPT_RockUnit, 2, param);
@@ -4902,7 +4902,7 @@ namespace TA3D
 			event.opt2 = (uint16)target;
 			event.opt3 = units.current_tick; // Will be used to extrapolate those data on client side
 			event.opt4 = pW->damage;
-			event.opt5 = owner_id;
+			event.opt5 = ownerId;
 			event.x = target_pos.x;
 			event.y = target_pos.y;
 			event.z = target_pos.z;
@@ -4964,7 +4964,7 @@ namespace TA3D
 		{
 			// First check we're on a "legal" place if it can move
 			pMutex.lock();
-			if (pType->canmove && pType->BMcode && !can_be_there(cur_px, cur_py, type_id, owner_id))
+			if (pType->canmove && pType->BMcode && !can_be_there(cur_px, cur_py, type_id, ownerId))
 			{
 				// Try to find a suitable place
 
@@ -4975,28 +4975,28 @@ namespace TA3D
 					for (int y = 0; y <= r; ++y)
 					{
 						const int x = (int)(sqrtf(float(r2 - y * y)) + 0.5f);
-						if (can_be_there(cur_px + x, cur_py + y, type_id, owner_id))
+						if (can_be_there(cur_px + x, cur_py + y, type_id, ownerId))
 						{
 							cur_px += x;
 							cur_py += y;
 							found = true;
 							break;
 						}
-						if (can_be_there(cur_px - x, cur_py + y, type_id, owner_id))
+						if (can_be_there(cur_px - x, cur_py + y, type_id, ownerId))
 						{
 							cur_px -= x;
 							cur_py += y;
 							found = true;
 							break;
 						}
-						if (can_be_there(cur_px + x, cur_py - y, type_id, owner_id))
+						if (can_be_there(cur_px + x, cur_py - y, type_id, ownerId))
 						{
 							cur_px += x;
 							cur_py -= y;
 							found = true;
 							break;
 						}
-						if (can_be_there(cur_px - x, cur_py - y, type_id, owner_id))
+						if (can_be_there(cur_px - x, cur_py - y, type_id, ownerId))
 						{
 							cur_px -= x;
 							cur_py -= y;
@@ -5085,7 +5085,7 @@ namespace TA3D
 			radar_jam_range = system_activated ? (unit_manager.unit_type[unit_type]->RadarDistanceJam / MAP::GraphicalTileWidthInWorldUnits) : 0;
 			sonar_jam_range = system_activated ? (unit_manager.unit_type[unit_type]->SonarDistanceJam / MAP::GraphicalTileWidthInWorldUnits) : 0;
 
-			the_map->update_player_visibility(owner_id, cur_px, cur_py, 0, 0, 0, radar_jam_range, sonar_jam_range, true);
+			the_map->update_player_visibility(ownerId, cur_px, cur_py, 0, 0, 0, radar_jam_range, sonar_jam_range, true);
 		}
 		else
 		{
@@ -5093,7 +5093,7 @@ namespace TA3D
 			radar_range = system_activated ? (unit_manager.unit_type[unit_type]->RadarDistance / MAP::GraphicalTileWidthInWorldUnits) : 0;
 			sonar_range = system_activated ? (unit_manager.unit_type[unit_type]->SonarDistance / MAP::GraphicalTileWidthInWorldUnits) : 0;
 
-			the_map->update_player_visibility(owner_id, cur_px, cur_py, cur_sight, radar_range, sonar_range, 0, 0, false, old_px != cur_px || old_py != cur_py || cur_sight != sight);
+			the_map->update_player_visibility(ownerId, cur_px, cur_py, cur_sight, radar_range, sonar_range, 0, 0, false, old_px != cur_px || old_py != cur_py || cur_sight != sight);
 
 			sight = cur_sight;
 			old_px = cur_px;
@@ -5221,12 +5221,12 @@ namespace TA3D
 
 	bool Unit::isOwnedBy(const PlayerId playerId) const
 	{
-		return playerId == owner_id;
+		return playerId == ownerId;
 	}
 
 	bool Unit::isNotOwnedBy(const PlayerId playerId) const
 	{
-		return playerId != owner_id;
+		return playerId != ownerId;
 	}
 
 	bool Unit::isAlive() const

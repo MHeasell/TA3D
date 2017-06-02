@@ -773,7 +773,7 @@ namespace TA3D
 			units.unit[unit_id].unlock();
 			return -1;
 		}
-		int result = game_data->player_network_id[units.unit[unit_id].owner_id];
+		int result = game_data->player_network_id[units.unit[unit_id].ownerId];
 		units.unit[unit_id].unlock();
 		return result;
 	}

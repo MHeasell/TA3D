@@ -321,7 +321,7 @@ namespace TA3D
 		if (unit_idx >= 0 && unit_idx < (int)units.max_unit)
 		{
 			if (units.unit[unit_idx].flags)
-				lua_pushinteger(L, units.unit[unit_idx].owner_id);
+				lua_pushinteger(L, units.unit[unit_idx].ownerId);
 			else
 				lua_pushinteger(L, -1);
 		}
@@ -497,7 +497,7 @@ namespace TA3D
 		if (unit_id >= 0 && unit_id < (int)units.max_unit && player_id >= 0 && player_id < NB_PLAYERS && units.unit[unit_id].flags && !LuaProgram::passive)
 		{
 			units.lock();
-			units.unit[unit_id].owner_id = (byte)player_id;
+			units.unit[unit_id].ownerId = (byte)player_id;
 			units.unlock();
 		}
 

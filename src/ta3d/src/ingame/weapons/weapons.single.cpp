@@ -304,9 +304,9 @@ namespace TA3D
 					{
 						pUnit->hp -= damage;																																												  // L'unité touchée encaisse les dégats
 						pUnit->flags &= 0xEF;																																												  // This unit must explode if it has been damaged by a weapon even if it is being reclaimed
-						if (ok && shooter_idx >= 0 && (uint32)shooter_idx < units.max_unit && pUnit->hp <= 0.0f && units.unit[shooter_idx].owner_id < players.count() && pUnit->owner_id != units.unit[shooter_idx].owner_id) // Non,non les unités que l'on se détruit ne comptent pas dans le nombre de tués mais dans les pertes
+						if (ok && shooter_idx >= 0 && (uint32)shooter_idx < units.max_unit && pUnit->hp <= 0.0f && units.unit[shooter_idx].ownerId < players.count() && pUnit->ownerId != units.unit[shooter_idx].ownerId) // Non,non les unités que l'on se détruit ne comptent pas dans le nombre de tués mais dans les pertes
 						{
-							players.kills[units.unit[shooter_idx].owner_id]++;
+							players.kills[units.unit[shooter_idx].ownerId]++;
 							units.unit[shooter_idx].kills++;
 						}
 						if (pUnit->hp <= 0.0f)
@@ -413,9 +413,9 @@ namespace TA3D
 					{
 						pUnit->hp -= cur_damage;																																											  // L'unité touchée encaisse les dégats
 						unsetFlag(pUnit->flags, 0x10);																																										  // This unit must explode if it has been damaged by a weapon even if it is being reclaimed
-						if (ok && shooter_idx >= 0 && (uint32)shooter_idx < units.max_unit && pUnit->hp <= 0.0f && units.unit[shooter_idx].owner_id < players.count() && pUnit->owner_id != units.unit[shooter_idx].owner_id) // Non,non les unités que l'on se détruit ne comptent pas dans le nombre de tués mais dans les pertes
+						if (ok && shooter_idx >= 0 && (uint32)shooter_idx < units.max_unit && pUnit->hp <= 0.0f && units.unit[shooter_idx].ownerId < players.count() && pUnit->ownerId != units.unit[shooter_idx].ownerId) // Non,non les unités que l'on se détruit ne comptent pas dans le nombre de tués mais dans les pertes
 						{
-							players.kills[units.unit[shooter_idx].owner_id]++;
+							players.kills[units.unit[shooter_idx].ownerId]++;
 							units.unit[shooter_idx].kills++;
 						}
 						if (pUnit->hp <= 0.0f)

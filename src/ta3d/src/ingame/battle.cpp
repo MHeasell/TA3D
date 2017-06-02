@@ -1618,7 +1618,7 @@ namespace TA3D
 					{
 						const int type = units.unit[cur_sel_index].missionQueue->getUnit()->type_id;
 						const float metal_to_give_back = (1.0f - units.unit[cur_sel_index].missionQueue->getUnit()->build_percent_left * 0.01f) * (float)unit_manager.unit_type[type]->BuildCostMetal;
-						const int p_id = units.unit[cur_sel_index].owner_id;
+						const int p_id = units.unit[cur_sel_index].ownerId;
 						units.unit[cur_sel_index].missionQueue->getUnit()->clear_from_map();
 						units.unit[cur_sel_index].missionQueue->getUnit()->flags = 0; // Don't count it as a loss
 						units.kill(units.unit[cur_sel_index].missionQueue->getUnit()->idx, prev);
@@ -2087,7 +2087,7 @@ namespace TA3D
 
 	bool Battle::isEnemy(int unitId) const
 	{
-		return !(players.team[units.unit[unitId].owner_id] & players.team[players.local_human_id]);
+		return !(players.team[units.unit[unitId].ownerId] & players.team[players.local_human_id]);
 	}
 
 	int Battle::pickFeature() const

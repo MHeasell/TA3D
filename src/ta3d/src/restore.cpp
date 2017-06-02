@@ -258,7 +258,7 @@ namespace TA3D
 
 			writestring(file, unit_manager.unit_type[units.unit[i].type_id]->Unitname); // Store the name so it doesn't rely on the feature order
 
-			SAVE(units.unit[i].owner_id);
+			SAVE(units.unit[i].ownerId);
 			SAVE(units.unit[i].hp);
 			SAVE(units.unit[i].Pos);
 			SAVE(units.unit[i].V);
@@ -742,7 +742,7 @@ namespace TA3D
 
 			units.unit[i].ID = ID;
 
-			LOAD(units.unit[i].owner_id);
+			LOAD(units.unit[i].ownerId);
 			if (network_manager.isConnected())
 				units.unit[i].local = !(game_data->player_control[player_id] & PLAYER_CONTROL_FLAG_REMOTE);
 			LOAD(units.unit[i].hp);

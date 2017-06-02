@@ -225,14 +225,18 @@ namespace TA3D
 		Model* model;					 // Modèle représentant l'objet
 
 		//! ID of the player that owns this unit
-		PlayerId owner_id;
+		PlayerId ownerId;
 
-		int type_id;					 // Type d'unité
-		float hp;						 // Points de vie restant à l'unité
-		Vector3D Pos;					 // Vecteur position
-		Vector3D V;						 // Vitesse de l'unité
-		Vector3D Angle;					 // Orientation dans l'espace
-		Vector3D V_Angle;				 // Variation de l'orientation dans l'espace
+		//! Type of the unit
+		int type_id;
+
+		//! The unit's remaining hit points
+		float hp;
+
+		Vector3D Pos;
+		Vector3D V;
+		Vector3D Angle;
+		Vector3D V_Angle;
 
 		//! Indicates whether the unit is currently selected
 		bool isSelected;

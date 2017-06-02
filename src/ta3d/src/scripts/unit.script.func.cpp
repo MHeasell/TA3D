@@ -102,7 +102,7 @@ namespace TA3D
 			case MY_ID: // returns ID of current unit
 				return idx;
 			case UNIT_TEAM: // returns team(player ID in TA) of unit given with parameter
-				return owner_id;
+				return ownerId;
 			case VETERAN_LEVEL: // gets kills * 100
 				return 0;		// not yet implemented
 			case ATAN:
@@ -309,7 +309,7 @@ namespace TA3D
 				return idx;
 			case UNIT_TEAM: // returns team(player ID in TA) of unit given with parameter
 				if (v1 >= 0 && v1 < (int)units.max_unit && units.unit[v1].isAlive())
-					return units.unit[v1].owner_id;
+					return units.unit[v1].ownerId;
 				else
 					return -1;
 			case UNIT_BUILD_PERCENT_LEFT: // basically BUILD_PERCENT_LEFT, but comes with a unit parameter
@@ -321,7 +321,7 @@ namespace TA3D
 				return !isEnemy(v1);
 			case UNIT_IS_ON_THIS_COMP: // indicates if the 1st parameter(a unit ID) is local to this computer
 				if (v1 >= 0 && v1 < (int)units.max_unit && units.unit[v1].isAlive())
-					return !(players.control[units.unit[v1].owner_id] & PLAYER_CONTROL_FLAG_REMOTE);
+					return !(players.control[units.unit[v1].ownerId] & PLAYER_CONTROL_FLAG_REMOTE);
 				else
 					return 0;
 			case BUILD_PERCENT_LEFT:
@@ -419,7 +419,7 @@ namespace TA3D
 										units.unit[cur_idx].lock();
 										const int type = units.unit[cur_idx].type_id;
 										const UnitType* const tType = type >= 0 ? unit_manager.unit_type[type] : NULL;
-										if (units.unit[cur_idx].isOwnedBy(owner_id) && tType != NULL && tType->canmove && tType->BMcode == 1 && !units.unit[cur_idx].isBeingBuilt() && (!units.unit[cur_idx].missionQueue || (units.unit[cur_idx].missionQueue->mission() & 0xFF) != MISSION_MOVE))
+										if (units.unit[cur_idx].isOwnedBy(ownerId) && tType != NULL && tType->canmove && tType->BMcode == 1 && !units.unit[cur_idx].isBeingBuilt() && (!units.unit[cur_idx].missionQueue || (units.unit[cur_idx].missionQueue->mission() & 0xFF) != MISSION_MOVE))
 										{
 											Vector3D target = units.unit[cur_idx].Pos;
 											target.z += 100.0f;

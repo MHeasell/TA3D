@@ -912,7 +912,7 @@ namespace TA3D
 			const Unit* const pUnit = &(unit[i]);
 			if (!pUnit->isAlive())
 				continue;
-			const int owner = pUnit->owner_id;
+			const int owner = pUnit->ownerId;
 			const int type = pUnit->type_id;
 			const UnitType* const pUnitType = (type >= 0) ? unit_manager.unit_type[type] : NULL;
 			if (type >= 0 && owner < 10)
@@ -997,11 +997,11 @@ namespace TA3D
 				unit[i].metal_cons = 0.0f;
 				unit[i].energy_prod = 0.0f;
 				unit[i].energy_cons = 0.0f;
-				players.c_metal_s[unit[i].owner_id] += unit_manager.unit_type[unit[i].type_id]->MetalStorage;
-				players.c_energy_s[unit[i].owner_id] += unit_manager.unit_type[unit[i].type_id]->EnergyStorage;
-				players.c_commander[unit[i].owner_id] |= (unit_manager.unit_type[unit[i].type_id]->TEDclass == CLASS_COMMANDER);
+				players.c_metal_s[unit[i].ownerId] += unit_manager.unit_type[unit[i].type_id]->MetalStorage;
+				players.c_energy_s[unit[i].ownerId] += unit_manager.unit_type[unit[i].type_id]->EnergyStorage;
+				players.c_commander[unit[i].ownerId] |= (unit_manager.unit_type[unit[i].type_id]->TEDclass == CLASS_COMMANDER);
 				unit[i].energy_prod += (float)unit_manager.unit_type[unit[i].type_id]->EnergyMake;
-				if ((unit[i].port[ACTIVATION] || !unit_manager.unit_type[unit[i].type_id]->onoffable) && unit_manager.unit_type[unit[i].type_id]->EnergyUse <= players.energy[unit[i].owner_id])
+				if ((unit[i].port[ACTIVATION] || !unit_manager.unit_type[unit[i].type_id]->onoffable) && unit_manager.unit_type[unit[i].type_id]->EnergyUse <= players.energy[unit[i].ownerId])
 				{
 					unit[i].metal_prod += unit_manager.unit_type[unit[i].type_id]->MakesMetal + unit_manager.unit_type[unit[i].type_id]->MetalMake;
 					if (!Math::AlmostZero(unit_manager.unit_type[unit[i].type_id]->ExtractsMetal)) // Extracteur de métal
@@ -1024,8 +1024,8 @@ namespace TA3D
 						unit[i].energy_prod -= float(unit_manager.unit_type[unit[i].type_id]->EnergyUse);
 					else
 						unit[i].energy_cons = (float)unit_manager.unit_type[unit[i].type_id]->EnergyUse;
-					TA3D::players.requested_energy[unit[i].owner_id] += unit[i].energy_cons;
-					TA3D::players.requested_metal[unit[i].owner_id] += unit[i].metal_cons;
+					TA3D::players.requested_energy[unit[i].ownerId] += unit[i].energy_cons;
+					TA3D::players.requested_metal[unit[i].ownerId] += unit[i].metal_cons;
 				}
 			}
 			unit[i].unlock();
@@ -1060,7 +1060,7 @@ namespace TA3D
 				if (unit[i].built)
 					nb_built++;
 			}
-			players.c_nb_unit[unit[i].owner_id]++; // Compte les unités de chaque joueur
+			players.c_nb_unit[unit[i].ownerId]++; // Compte les unités de chaque joueur
 			unit[i].unlock();
 			if (unit[i].move(dt, key_frame) == -1) // Vérifie si l'unité a été détruite
 			{
@@ -1081,10 +1081,10 @@ namespace TA3D
 			pMutex.unlock();
 
 			unit[i].lock();
-			players.c_metal_t[unit[i].owner_id] += unit[i].metal_prod;
-			players.c_metal_u[unit[i].owner_id] += unit[i].metal_cons;
-			players.c_energy_t[unit[i].owner_id] += unit[i].energy_prod;
-			players.c_energy_u[unit[i].owner_id] += unit[i].energy_cons;
+			players.c_metal_t[unit[i].ownerId] += unit[i].metal_prod;
+			players.c_metal_u[unit[i].ownerId] += unit[i].metal_cons;
+			players.c_energy_t[unit[i].ownerId] += unit[i].energy_prod;
+			players.c_energy_u[unit[i].ownerId] += unit[i].energy_cons;
 
 			unit[i].cur_energy_cons = unit[i].energy_cons;
 			unit[i].cur_energy_prod = unit[i].energy_prod;
@@ -1277,7 +1277,7 @@ namespace TA3D
 				//			unit[i].flags|=0x10;
 				mini_pos[nb << 1] = unit[i].Pos.x;
 				mini_pos[(nb << 1) + 1] = unit[i].Pos.z;
-				mini_col[nb++] = player_col_32_h[unit[i].owner_id];
+				mini_col[nb++] = player_col_32_h[unit[i].ownerId];
 			}
 			units.unit[i].unlock();
 			pMutex.lock();
@@ -1337,9 +1337,9 @@ namespace TA3D
 				continue;
 			}
 
-			if (unit[i].isAlive() && ((unit[i].isOwnedBy(players.local_human_id) && unit[i].isSelected) || (i == last_on && (players.team[unit[i].owner_id] & players.team[players.local_human_id]))))
+			if (unit[i].isAlive() && ((unit[i].isOwnedBy(players.local_human_id) && unit[i].isSelected) || (i == last_on && (players.team[unit[i].ownerId] & players.team[players.local_human_id]))))
 			{
-				cur_id = unit[i].owner_id;
+				cur_id = unit[i].ownerId;
 				float pos_x = unit[i].Pos.x * rw + 64.0f;
 				float pos_y = unit[i].Pos.z * rh + 64.0f;
 				bool anti_missile = unit[i].weapon.size() > 0 && unit_manager.unit_type[unit[i].type_id]->antiweapons && unit_manager.unit_type[unit[i].type_id]->weapon[0];
@@ -1409,8 +1409,8 @@ namespace TA3D
 				p->built = false;
 				p->unlock();
 			}
-			players.nb_unit[unit[index].owner_id]--;
-			players.losses[unit[index].owner_id]++; // Statistics
+			players.nb_unit[unit[index].ownerId]--;
+			players.losses[unit[index].ownerId]++; // Statistics
 		}
 
 		unit[index].unlock();
