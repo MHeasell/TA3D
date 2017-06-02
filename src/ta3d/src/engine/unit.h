@@ -261,7 +261,9 @@ namespace TA3D
 		 * 64 -> the unit is landed (for planes)
 		 */
 		byte flags;
-		int kills;				  // How many kills did this unit
+
+		//! The number of kills the unit has
+		int kills;
 		bool selfmove;			  // The unit has decided to move to a place with lower MAP::energy
 		float lastEnergy;		  // Previous energy level at the unit position (if it changes then someone is getting closer, we can decide to move)
 		float c_time;		   // Compteur de temps entre 2 émissions de particules par une unité de construction
