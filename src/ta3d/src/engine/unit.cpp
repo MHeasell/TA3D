@@ -21,7 +21,7 @@ namespace TA3D
 		  hp(0.0f),
 		  position(),
 		  velocity(),
-		  Angle(),
+		  orientation(),
 		  V_Angle(),
 		  isSelected(false),
 		  data(),
@@ -151,7 +151,7 @@ namespace TA3D
 	{
 		activate();
 		// Work in model coordinates
-		Vector3D Dir(dir * RotateXZY(-Angle.x * DEG2RAD, -Angle.z * DEG2RAD, -Angle.y * DEG2RAD));
+		Vector3D Dir(dir * RotateXZY(-orientation.x * DEG2RAD, -orientation.z * DEG2RAD, -orientation.y * DEG2RAD));
 		Vector3D P(Dir);
 		P.y = 0.0f;
 		float angle = acosf(P.z / P.length()) * RAD2DEG;
@@ -252,7 +252,7 @@ namespace TA3D
 
 		// Matrice pour le calcul des positions des éléments du modèle de l'unité
 		//    M = RotateZ(Angle.z*DEG2RAD) * RotateY(Angle.y * DEG2RAD) * RotateX(Angle.x * DEG2RAD) * Scale(scale);
-		Matrix M = RotateZYX(Angle.z * DEG2RAD, Angle.y * DEG2RAD, Angle.x * DEG2RAD) * Scale(scale);
+		Matrix M = RotateZYX(orientation.z * DEG2RAD, orientation.y * DEG2RAD, orientation.x * DEG2RAD) * Scale(scale);
 		model->compute_coord(&data, &M);
 		pMutex.unlock();
 	}
@@ -470,8 +470,8 @@ namespace TA3D
 		velocity.reset();
 		position.reset();
 		data.init();
-		Angle.reset();
-		V_Angle = Angle;
+		orientation.reset();
+		V_Angle = orientation;
 		int i;
 		for (i = 0; i < 21; ++i)
 			port[i] = 0;
@@ -1476,7 +1476,7 @@ namespace TA3D
 							the_map->map_data(cur_px, cur_py).stuff = features.add_feature(position, type);
 							if (the_map->map_data(cur_px, cur_py).stuff >= 0) // Keep unit orientation
 							{
-								features.feature[the_map->map_data(cur_px, cur_py).stuff].angle = Angle.y;
+								features.feature[the_map->map_data(cur_px, cur_py).stuff].angle = orientation.y;
 								if (sinking)
 									features.sink_feature(the_map->map_data(cur_px, cur_py).stuff);
 								features.drawFeatureOnMap(the_map->map_data(cur_px, cur_py).stuff);
@@ -1501,7 +1501,7 @@ namespace TA3D
 							the_map->map_data(cur_px, cur_py).stuff = features.add_feature(position, type);
 							if (the_map->map_data(cur_px, cur_py).stuff >= 0) // Keep unit orientation
 							{
-								features.feature[the_map->map_data(cur_px, cur_py).stuff].angle = Angle.y;
+								features.feature[the_map->map_data(cur_px, cur_py).stuff].angle = orientation.y;
 								if (sinking)
 									features.sink_feature(the_map->map_data(cur_px, cur_py).stuff);
 								features.drawFeatureOnMap(the_map->map_data(cur_px, cur_py).stuff);
@@ -1790,13 +1790,13 @@ namespace TA3D
 				if (J.x < 0.0f)
 					f_TargetAngle = -f_TargetAngle;
 
-				if (Angle.y - f_TargetAngle >= 360.0f)
+				if (orientation.y - f_TargetAngle >= 360.0f)
 					f_TargetAngle += 360.0f;
-				else if (Angle.y - f_TargetAngle <= -360.0f)
+				else if (orientation.y - f_TargetAngle <= -360.0f)
 					f_TargetAngle -= 360.0f;
 
-				J.z = cosf(Angle.y * DEG2RAD);
-				J.x = sinf(Angle.y * DEG2RAD);
+				J.z = cosf(orientation.y * DEG2RAD);
+				J.x = sinf(orientation.y * DEG2RAD);
 				J.y = 0.0f;
 				I.z = -J.x;
 				I.x = J.z;
@@ -1905,7 +1905,7 @@ namespace TA3D
 								n_px = cur_px;
 								n_py = cur_py;
 								missionQueue->Flags() |= MISSION_FLAG_MOVE;
-								if (fabsf(Angle.y - f_TargetAngle) <= 0.1f || !b_TargetAngle) // Don't prevent unit from rotating!!
+								if (fabsf(orientation.y - f_TargetAngle) <= 0.1f || !b_TargetAngle) // Don't prevent unit from rotating!!
 									missionQueue->Path().clear();
 							}
 							else
@@ -1991,9 +1991,9 @@ namespace TA3D
 				}
 				if (speed > 0.0f)
 				{
-					Angle.y = acosf(velocity.z / speed) * RAD2DEG;
+					orientation.y = acosf(velocity.z / speed) * RAD2DEG;
 					if (velocity.x < 0.0f)
-						Angle.y = -Angle.y;
+						orientation.y = -orientation.y;
 				}
 			}
 		}
@@ -2046,7 +2046,7 @@ namespace TA3D
 						if (the_map->map_data(cur_px, cur_py).stuff == -1)
 							LOG_ERROR("Could not turn `" << pType->Unitname << "` into a feature ! Cannot create the feature");
 						else
-							features.feature[the_map->map_data(cur_px, cur_py).stuff].angle = Angle.y;
+							features.feature[the_map->map_data(cur_px, cur_py).stuff].angle = orientation.y;
 						pMutex.unlock();
 						clear_from_map();
 						pMutex.lock();
@@ -2270,7 +2270,7 @@ namespace TA3D
 				if (units.unit[attached_list[i]].flags)
 				{
 					units.unit[attached_list[i]].setPosition(position + data.data[link_list[i]].pos);
-					units.unit[attached_list[i]].Angle = Angle;
+					units.unit[attached_list[i]].orientation = orientation;
 				}
 				else
 				{
@@ -2493,7 +2493,7 @@ namespace TA3D
 								if (pType->aim_data[i].check) // Check angle limitations (not in OTA)
 								{
 									// Go back in model coordinates so we can compare to the weapon main direction
-									Vector3D dir = target * RotateXZY(-Angle.x * DEG2RAD, -Angle.z * DEG2RAD, -Angle.y * DEG2RAD);
+									Vector3D dir = target * RotateXZY(-orientation.x * DEG2RAD, -orientation.z * DEG2RAD, -orientation.y * DEG2RAD);
 									// Check weapon
 									if (VAngle(dir, pType->aim_data[i].dir) > pType->aim_data[i].Maxangledif)
 									{
@@ -2514,7 +2514,7 @@ namespace TA3D
 								float angle = acosf(RT.z) * RAD2DEG;
 								if (RT.x < 0.0f)
 									angle = -angle;
-								angle -= Angle.y;
+								angle -= orientation.y;
 								if (angle < -180.0f)
 									angle += 360.0f;
 								else if (angle > 180.0f)
@@ -2552,7 +2552,7 @@ namespace TA3D
 									angle = acosf(RT % target) * RAD2DEG;
 									if (target.y < 0.0f)
 										angle = -angle;
-									angle -= Angle.x;
+									angle -= orientation.x;
 									if (angle > 180.0f)
 										angle -= 360.0f;
 									if (angle < -180.0f)
@@ -2582,7 +2582,7 @@ namespace TA3D
 										weapon[i].aim_dir.normalize();
 									}
 									else
-										weapon[i].aim_dir = cosf((float)aiming[1] * TA2RAD) * (cosf((float)aiming[0] * TA2RAD + Angle.y * DEG2RAD) * I + sinf((float)aiming[0] * TA2RAD + Angle.y * DEG2RAD) * J) + sinf((float)aiming[1] * TA2RAD) * IJ;
+										weapon[i].aim_dir = cosf((float)aiming[1] * TA2RAD) * (cosf((float)aiming[0] * TA2RAD + orientation.y * DEG2RAD) * I + sinf((float)aiming[0] * TA2RAD + orientation.y * DEG2RAD) * J) + sinf((float)aiming[1] * TA2RAD) * IJ;
 								}
 								else
 									launchScript(Aim_script, 2, aiming);
@@ -2809,7 +2809,7 @@ namespace TA3D
 						else if (!(missionQueue->getFlags() & MISSION_FLAG_MOVE))
 						{
 							b_TargetAngle = true;
-							f_TargetAngle = target_unit->Angle.y;
+							f_TargetAngle = target_unit->orientation.y;
 							if (missionQueue->getData() >= 0)
 							{
 								setFlag(missionQueue->Flags(), MISSION_FLAG_BEING_REPAIRED);
@@ -3119,7 +3119,7 @@ namespace TA3D
 											{
 												new_unit->lock();
 
-												new_unit->Angle = target_unit->Angle;
+												new_unit->orientation = target_unit->orientation;
 												new_unit->hp = target_unit->hp;
 												new_unit->build_percent_left = target_unit->build_percent_left;
 
@@ -3239,7 +3239,7 @@ namespace TA3D
 											{
 												unit_p->lock();
 
-												unit_p->Angle.y = obj_angle;
+												unit_p->orientation.y = obj_angle;
 												unit_p->hp = 0.01f;				   // Need to be repaired :P
 												unit_p->build_percent_left = 0.0f; // It's finished ...
 												unit_p->unlock();
@@ -3832,8 +3832,8 @@ namespace TA3D
 											target_unit->setPosition(old_pos);
 										}
 
-										target_unit->Angle = Angle;
-										target_unit->Angle.y += data.data[buildinfo].axe[1].angle;
+										target_unit->orientation = orientation;
+										target_unit->orientation.y += data.data[buildinfo].axe[1].angle;
 										pMutex.unlock();
 										target_unit->draw_on_map();
 										pMutex.lock();
@@ -4032,8 +4032,8 @@ namespace TA3D
 								f_TargetAngle = -f_TargetAngle;
 						}
 
-						J.z = cosf(Angle.y * DEG2RAD);
-						J.x = sinf(Angle.y * DEG2RAD);
+						J.z = cosf(orientation.y * DEG2RAD);
+						J.x = sinf(orientation.y * DEG2RAD);
 						J.y = 0.0f;
 						I.z = -J.x;
 						I.x = J.z;
@@ -4080,15 +4080,15 @@ namespace TA3D
 
 						if (dist < 2.0f * ideal_dist)
 						{
-							J.z = sinf(Angle.y * DEG2RAD);
-							J.x = -cosf(Angle.y * DEG2RAD);
+							J.z = sinf(orientation.y * DEG2RAD);
+							J.x = -cosf(orientation.y * DEG2RAD);
 							J.y = 0.0f;
 							velocity = units.exp_dt_4 * velocity + (dt * dist * Math::Max(8.0f * (cosf(PI * ((float)units.current_tick) / (float)TICKS_PER_SEC) - 0.5f), 0.0f)) * J;
 						}
 						else
 						{
-							J.z = sinf(Angle.y * DEG2RAD);
-							J.x = -cosf(Angle.y * DEG2RAD);
+							J.z = sinf(orientation.y * DEG2RAD);
+							J.x = -cosf(orientation.y * DEG2RAD);
 							J.y = 0.0f;
 							J = (J % velocity) * J;
 							velocity = (velocity - J) + units.exp_dt_4 * J;
@@ -4129,8 +4129,8 @@ namespace TA3D
 						}
 						velocity += dt * acc;
 
-						J.z = sinf(Angle.y * DEG2RAD);
-						J.x = -cosf(Angle.y * DEG2RAD);
+						J.z = sinf(orientation.y * DEG2RAD);
+						J.x = -cosf(orientation.y * DEG2RAD);
 						J.y = 0.0f;
 						J = (J % velocity) * J;
 						velocity = (velocity - J) + units.exp_dt_4 * J;
@@ -4147,7 +4147,7 @@ namespace TA3D
 				if (!pType->canfly && !pType->Upright && !pType->floatting() && !(pType->canhover && position.y <= the_map->sealvl))
 				{
 					Vector3D I, J, K, A, B, C;
-					Matrix M = RotateY((Angle.y + 90.0f) * DEG2RAD);
+					Matrix M = RotateY((orientation.y + 90.0f) * DEG2RAD);
 					I.x = 4.0f;
 					J.z = 4.0f;
 					K.y = 1.0f;
@@ -4169,15 +4169,15 @@ namespace TA3D
 						float angle_2 = VAngle(D, K) * RAD2DEG;
 						if (D.x > 0.0f)
 							angle_2 = -angle_2;
-						if (fabsf(angle_1 - Angle.x) <= 180.0f && fabsf(angle_2 - Angle.z) <= 180.0f)
+						if (fabsf(angle_1 - orientation.x) <= 180.0f && fabsf(angle_2 - orientation.z) <= 180.0f)
 						{
-							Angle.x = angle_1;
-							Angle.z = angle_2;
+							orientation.x = angle_1;
+							orientation.z = angle_2;
 						}
 					}
 				}
 				else if (!pType->canfly)
-					Angle.x = Angle.z = 0.0f;
+					orientation.x = orientation.z = 0.0f;
 			}
 
 			bool returning_fire = (port[STANDINGFIREORDERS] == SFORDER_RETURN_FIRE && attacked);
@@ -4350,15 +4350,15 @@ namespace TA3D
 				if (virtual_G.x > 0.0f)
 					angle_2 = -angle_2;
 
-				if (fabsf(angle_1 - Angle.x) < 360.0f)
-					Angle.x += 5.0f * dt * (angle_1 - Angle.x); // We need something continuous
-				if (fabsf(angle_2 - Angle.z) < 360.0f)
-					Angle.z += 5.0f * dt * (angle_2 - Angle.z);
+				if (fabsf(angle_1 - orientation.x) < 360.0f)
+					orientation.x += 5.0f * dt * (angle_1 - orientation.x); // We need something continuous
+				if (fabsf(angle_2 - orientation.z) < 360.0f)
+					orientation.z += 5.0f * dt * (angle_2 - orientation.z);
 
-				if (Angle.x < -360.0f || Angle.x > 360.0f)
-					Angle.x = 0.0f;
-				if (Angle.z < -360.0f || Angle.z > 360.0f)
-					Angle.z = 0.0f;
+				if (orientation.x < -360.0f || orientation.x > 360.0f)
+					orientation.x = 0.0f;
+				if (orientation.z < -360.0f || orientation.z > 360.0f)
+					orientation.z = 0.0f;
 			}
 		}
 
@@ -4369,30 +4369,30 @@ namespace TA3D
 
 			if (b_TargetAngle && !isNaN(f_TargetAngle) && pType->BMcode) // Don't remove the class check otherwise factories can spin
 			{
-				while (!isNaN(f_TargetAngle) && fabsf(f_TargetAngle - Angle.y) > 180.0f)
+				while (!isNaN(f_TargetAngle) && fabsf(f_TargetAngle - orientation.y) > 180.0f)
 				{
-					if (f_TargetAngle < Angle.y)
-						Angle.y -= 360.0f;
+					if (f_TargetAngle < orientation.y)
+						orientation.y -= 360.0f;
 					else
-						Angle.y += 360.0f;
+						orientation.y += 360.0f;
 				}
-				if (!isNaN(f_TargetAngle) && fabsf(f_TargetAngle - Angle.y) >= 1.0f)
+				if (!isNaN(f_TargetAngle) && fabsf(f_TargetAngle - orientation.y) >= 1.0f)
 				{
 					float aspeed = pType->TurnRate;
-					if (f_TargetAngle < Angle.y)
+					if (f_TargetAngle < orientation.y)
 						aspeed = -aspeed;
-					float a = f_TargetAngle - Angle.y;
+					float a = f_TargetAngle - orientation.y;
 					V_Angle.y = aspeed;
-					float b = f_TargetAngle - (Angle.y + dt * V_Angle.y);
+					float b = f_TargetAngle - (orientation.y + dt * V_Angle.y);
 					if (((a < 0.0f && b > 0.0f) || (a > 0.0f && b < 0.0f)) && !isNaN(f_TargetAngle))
 					{
 						V_Angle.y = 0.0f;
-						Angle.y = f_TargetAngle;
+						orientation.y = f_TargetAngle;
 					}
 				}
 			}
 
-			Angle = Angle + dt * V_Angle;
+			orientation = orientation + dt * V_Angle;
 			Vector3D OPos = position;
 			if (precomputed_position)
 			{
@@ -4537,12 +4537,12 @@ namespace TA3D
 			{
 				const UnitType* pType = unit_manager.unit_type[typeId];
 				const float scale = pType->Scale;
-				const Matrix M = RotateXZY(-Angle.x * DEG2RAD, -Angle.z * DEG2RAD, -Angle.y * DEG2RAD) * Scale(1.0f / scale);
+				const Matrix M = RotateXZY(-orientation.x * DEG2RAD, -orientation.z * DEG2RAD, -orientation.y * DEG2RAD) * Scale(1.0f / scale);
 				const Vector3D RP = (P - position) * M;
 				const bool is_hit = model->hit(RP, Dir, &data, hit_vec, M) >= -1;
 				if (is_hit)
 				{
-					*hit_vec = ((*hit_vec) * RotateYZX(Angle.y * DEG2RAD, Angle.z * DEG2RAD, Angle.x * DEG2RAD)) * Scale(scale) + position;
+					*hit_vec = ((*hit_vec) * RotateYZX(orientation.y * DEG2RAD, orientation.z * DEG2RAD, orientation.x * DEG2RAD)) * Scale(scale) + position;
 					*hit_vec = ((*hit_vec - P) % Dir) * Dir + P;
 				}
 
@@ -4564,12 +4564,12 @@ namespace TA3D
 			{
 				const UnitType* pType = unit_manager.unit_type[typeId];
 				const float scale = pType->Scale;
-				const Matrix M = RotateXZY(-Angle.x * DEG2RAD, -Angle.z * DEG2RAD, -Angle.y * DEG2RAD) * Scale(1.0f / scale);
+				const Matrix M = RotateXZY(-orientation.x * DEG2RAD, -orientation.z * DEG2RAD, -orientation.y * DEG2RAD) * Scale(1.0f / scale);
 				const Vector3D RP = (P - position) * M;
 				const bool is_hit = model->hit_fast(RP, Dir, &data, hit_vec, M);
 				if (is_hit)
 				{
-					*hit_vec = ((*hit_vec) * RotateYZX(Angle.y * DEG2RAD, Angle.z * DEG2RAD, Angle.x * DEG2RAD)) * Scale(scale) + position;
+					*hit_vec = ((*hit_vec) * RotateYZX(orientation.y * DEG2RAD, orientation.z * DEG2RAD, orientation.x * DEG2RAD)) * Scale(scale) + position;
 					*hit_vec = ((*hit_vec - P) % Dir) * Dir + P;
 				}
 
@@ -4881,7 +4881,7 @@ namespace TA3D
 		const UnitType* pType = unit_manager.unit_type[typeId];
 		const WeaponDef* pW = pType->weapon[w_id]; // Critical information, we can't lose it so we save it before unlocking this unit
 		const int owner = ownerId;
-		const Vector3D D = Dir * RotateY(-Angle.y * DEG2RAD);
+		const Vector3D D = Dir * RotateY(-orientation.y * DEG2RAD);
 		int param[] = {(int)(-10.0f * DEG2TA * D.z), (int)(-10.0f * DEG2TA * D.x)};
 		launchScript(SCRIPT_RockUnit, 2, param);
 
@@ -5210,7 +5210,7 @@ namespace TA3D
 	{
 		render.UID = ID;
 		render.Pos = position;
-		render.Angle = Angle;
+		render.Angle = orientation;
 		lock();
 		render.Anim = data;
 		unlock();

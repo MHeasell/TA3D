@@ -316,7 +316,7 @@ namespace TA3D
 							g_ta3d_network->sendDamageEvent(hit_idx, damage);
 					}
 
-					Vector3D D = V * RotateY(-pUnit->Angle.y * DEG2RAD);
+					Vector3D D = V * RotateY(-pUnit->orientation.y * DEG2RAD);
 					D.normalize();
 					int param[] = {(int)(10.0f * DEG2TA * D.z), (int)(10.0f * DEG2TA * D.x)};
 					pUnit->launchScript(SCRIPT_HitByWeapon, 2, param);
@@ -425,7 +425,7 @@ namespace TA3D
 							g_ta3d_network->sendDamageEvent(pUnit->idx, cur_damage);
 					}
 
-					Vector3D D = (pUnit->position - Pos) * RotateY(-pUnit->Angle.y * DEG2RAD);
+					Vector3D D = (pUnit->position - Pos) * RotateY(-pUnit->orientation.y * DEG2RAD);
 					D.normalize();
 					int param[] = {(int)(10.0f * DEG2TA * D.z), (int)(10.0f * DEG2TA * D.x)};
 					pUnit->launchScript(SCRIPT_HitByWeapon, 2, param);

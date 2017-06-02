@@ -287,7 +287,7 @@ namespace TA3D
 				pUnit->velocity.y = 0.0f;
 
 				if (sync_msg.mask & SYNC_MASK_O)
-					pUnit->Angle.y = (float)sync_msg.orientation * 360.0f / 65536.0f;
+					pUnit->orientation.y = (float)sync_msg.orientation * 360.0f / 65536.0f;
 
 				if (sync_msg.mask & SYNC_MASK_HP)
 					pUnit->hp = sync_msg.hp;

@@ -235,7 +235,7 @@ namespace TA3D
 
 		Vector3D position;
 		Vector3D velocity;
-		Vector3D Angle;
+		Vector3D orientation;
 		Vector3D V_Angle;
 
 		//! Indicates whether the unit is currently selected

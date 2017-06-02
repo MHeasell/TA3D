@@ -1013,7 +1013,7 @@ namespace TA3D
 						{
 							int param[] = {(int)(map->wind * 50.0f)};
 							unit[i].launchScript(SCRIPT_SetSpeed, 1, param);
-							param[0] = (int)((map->wind_dir - unit[i].Angle.y) * DEG2TA);
+							param[0] = (int)((map->wind_dir - unit[i].orientation.y) * DEG2TA);
 							unit[i].launchScript(SCRIPT_SetDirection, 1, param);
 							unit[i].launchScript(SCRIPT_go);
 						}
@@ -1208,7 +1208,7 @@ namespace TA3D
 		unit[unit_index].ID = next_unit_ID++; // So now we know who is this unit :)
 
 		// Angle de 10° maximum
-		unit[unit_index].Angle.y = float(((sint32)(Math::RandomTable() % 20001)) - 10000) * 0.0001f * (float)unit_manager.unit_type[type_id]->BuildAngle * TA2DEG;
+		unit[unit_index].orientation.y = float(((sint32)(Math::RandomTable() % 20001)) - 10000) * 0.0001f * (float)unit_manager.unit_type[type_id]->BuildAngle * TA2DEG;
 
 		idx_list[index_list_size++] = uint16(unit_index);
 

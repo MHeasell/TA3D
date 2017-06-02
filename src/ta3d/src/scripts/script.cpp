@@ -933,7 +933,7 @@ namespace TA3D
 		if (unit_id >= 0 && unit_id < (int)units.max_unit && units.unit[unit_id].flags)
 		{
 			units.lock();
-			lua_pushvector(L, units.unit[unit_id].Angle);
+			lua_pushvector(L, units.unit[unit_id].orientation);
 			units.unlock();
 		}
 		else

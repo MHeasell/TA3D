@@ -259,7 +259,7 @@ namespace TA3D
 					sync.z = units.unit[i].position.z;
 					sync.vx = units.unit[i].velocity.x;
 					sync.vz = units.unit[i].velocity.z;
-					float angle = units.unit[i].Angle.y;
+					float angle = units.unit[i].orientation.y;
 					while (angle < 0.0f)
 						angle += 360.0f;
 					sync.orientation = (uint16)(angle * 65535.0f / 360.0f);

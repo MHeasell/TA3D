@@ -298,7 +298,7 @@ namespace TA3D
 			case CURRENT_SPEED:
 				return int(velocity.length());
 			case HEADING:
-				return int(Angle.y * DEG2TA);
+				return int(orientation.y * DEG2TA);
 			case VETERAN_LEVEL:
 				return 100 * kills;
 			case MIN_ID:
@@ -358,7 +358,7 @@ namespace TA3D
 				else
 					return (int)(model->top * 2.0f) << 16;
 			case XZ_ATAN:
-				return (int)(atan2f(UNPACKX(v1), UNPACKZ(v1)) * RAD2TA - Angle.y * DEG2TA) + 32768;
+				return (int)(atan2f(UNPACKX(v1), UNPACKZ(v1)) * RAD2TA - orientation.y * DEG2TA) + 32768;
 			case XZ_HYPOT:
 				return (int)hypotf(UNPACKX(v1), UNPACKZ(v1)) << 16;
 			case ATAN:
