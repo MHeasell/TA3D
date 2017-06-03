@@ -110,6 +110,44 @@ namespace TA3D
 		 */
 		IntersectResult intersect(const Ray3D& ray) const;
 	};
+
+	struct Triangle3D
+	{
+		Vector3D a;
+		Vector3D b;
+		Vector3D c;
+
+		Triangle3D() {}
+		Triangle3D(const Vector3D& a, const Vector3D& b, const Vector3D& c): a(a), b(b), c(c) {}
+
+		/**
+		 * Returns the distance along the ray
+		 * at which it intersects with this triangle.
+		 * The distance is defined in terms of the ray's
+		 * direction vector.
+		 *
+		 * If the ray and the triangle never intersect,
+		 * this will return positive infinity.
+		 */
+		float intersect(const Ray3D& ray) const;
+
+		/**
+		 * Converts the input world-space coordinates
+		 * which lie on the triangle into barycentric coordinates.
+		 */
+		Vector3D toBarycentric(const Vector3D& p) const;
+
+		/**
+		 * Converts the input barycentric coordinates
+		 * into world-space coordinates.
+		 */
+		Vector3D toCartesian(const Vector3D& p) const;
+
+		/**
+		 * Returns the plane on which this triangle lies.
+		 */
+		Plane3D toPlane() const;
+	};
 }
 
 #endif //__TA3D_GEOMETRY_H__

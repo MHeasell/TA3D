@@ -104,4 +104,71 @@ namespace TA3D
 		// return a miss
 		return IntersectResult();
 	}
+
+	float Triangle3D::intersect(const Ray3D& ray) const
+	{
+		float d = toPlane().intersect(ray);
+		if (std::isinf(d))
+		{
+			return std::numeric_limits<float>::infinity();
+		}
+
+		Vector3D p = toBarycentric(ray.pointAt(d));
+		if (p.x < 0 || p.y < 0 || p.z < 0)
+		{
+			return std::numeric_limits<float>::infinity();
+		}
+
+		return d;
+	}
+
+	Plane3D Triangle3D::toPlane() const
+	{
+		return Plane3D::fromPoints(a, b, c);
+	}
+
+	Vector3D Triangle3D::toBarycentric(const Vector3D& p) const
+	{
+		auto v0 = b - a;
+		auto v1 = c - a;
+		auto v2 = p - a;
+
+		float v = ((v1.dot(v1) * v2.dot(v0)) - (v1.dot(v0) * v2.dot(v1)))
+				/ ((v0.dot(v0) * v1.dot(v1)) - (v0.dot(v1) * v1.dot(v0)));
+
+		float w = ((v0.dot(v0) * v2.dot(v1)) - (v0.dot(v1) * v2.dot(v0)))
+				/ ((v0.dot(v0) * v1.dot(v1)) - (v0.dot(v1) * v1.dot(v0)));
+
+		float u = 1.0f - v - w;
+
+		return Vector3D(u, v, w);
+	}
+
+	Vector3D Triangle3D::toCartesian(const Vector3D& p) const
+	{
+		return (p.x * a) + (p.y * b) + (p.z * c);
+	}
+
+	const Triangle3D::LineIntersectResult& Triangle3D::LineIntersectResult::closestTo(
+		const Vector3D& v,
+	    const Triangle3D::LineIntersectResult& b)
+	{
+		if (!hit)
+		{
+			return b;
+		}
+		if (!b.hit)
+		{
+			return *this;
+		}
+
+		if ((point - v).lengthSquared() < (b.point - v).lengthSquared())
+		{
+			return *this;
+		}
+		else
+		{
+			return b;
+		}
+	}
 }

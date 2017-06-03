@@ -114,4 +114,180 @@ namespace TA3D
 			REQUIRE(!intersect.hit);
 		}
 	}
+
+	TEST_CASE("Triangle3D.toBarycentric")
+	{
+		SECTION("barycentric conversion test 1")
+		{
+			Vector3D p(1.0f, 0.0f, 0.0f);
+			Triangle3D tri(
+				Vector3D(0.0f, 0.0f, 0.0f),
+				Vector3D(2.0f, 0.0f, 0.0f),
+				Vector3D(0.0f, 2.0f, 0.0f));
+			Vector3D bary = tri.toBarycentric(p);
+
+			REQUIRE(bary.x == Approx(0.5f));
+			REQUIRE(bary.y == Approx(0.5f));
+			REQUIRE(bary.z == Approx(0.0f));
+		}
+
+		SECTION("barycentric conversion test 2")
+		{
+			Vector3D p(0.5f, 0.5f, 0.0f);
+			Triangle3D tri(
+				Vector3D(0.0f, 0.0f, 0.0f),
+				Vector3D(2.0f, 0.0f, 0.0f),
+				Vector3D(0.0f, 2.0f, 0.0f));
+			Vector3D bary = tri.toBarycentric(p);
+
+			REQUIRE(bary.x == Approx(0.5f));
+			REQUIRE(bary.y == Approx(0.25f));
+			REQUIRE(bary.z == Approx(0.25f));
+		}
+
+		SECTION("barycentric conversion test 3")
+		{
+			Vector3D p(-5.0f, 0.5f, 5.0f);
+			Triangle3D tri(
+				Vector3D(-0.5f, 0.5f, -0.5f),
+				Vector3D(0.5f, 0.5f, -0.5f),
+				Vector3D(0.5f, 0.5f, 0.5f));
+			Vector3D bary = tri.toBarycentric(p);
+
+			REQUIRE(bary.x == Approx(5.5f));
+			REQUIRE(bary.y == Approx(-10.0f));
+			REQUIRE(bary.z == Approx(5.5f));
+		}
+	}
+
+	TEST_CASE("Triangle3D.toCartesian")
+	{
+		SECTION("test 1")
+		{
+			Vector3D p(0.5f, 0.5f, 0.0f);
+			Triangle3D tri(
+				Vector3D(0.0f, 0.0f, 0.0f),
+				Vector3D(2.0f, 0.0f, 0.0f),
+				Vector3D(0.0f, 2.0f, 0.0f));
+			Vector3D cart = tri.toCartesian(p);
+
+			REQUIRE(cart.x == Approx(1.0f));
+			REQUIRE(cart.y == Approx(0.0f));
+			REQUIRE(cart.z == Approx(0.0f));
+		}
+
+		SECTION("test 2")
+		{
+			Vector3D p(0.5f, 0.25f, 0.25f);
+			Triangle3D tri(
+				Vector3D(0.0f, 0.0f, 0.0f),
+				Vector3D(2.0f, 0.0f, 0.0f),
+				Vector3D(0.0f, 2.0f, 0.0f));
+			Vector3D cart = tri.toCartesian(p);
+
+			REQUIRE(cart.x == Approx(0.5f));
+			REQUIRE(cart.y == Approx(0.5f));
+			REQUIRE(cart.z == Approx(0.0f));
+		}
+
+		SECTION("test 3")
+		{
+			Vector3D p(5.5f, -10.0f, 5.5f);
+			Triangle3D tri(
+				Vector3D(-0.5f, 0.5f, -0.5f),
+				Vector3D(0.5f, 0.5f, -0.5f),
+				Vector3D(0.5f, 0.5f, 0.5f));
+			Vector3D cart = tri.toCartesian(p);
+
+			REQUIRE(cart.x == Approx(-5.0f));
+			REQUIRE(cart.y == Approx(0.5f));
+			REQUIRE(cart.z == Approx(5.0f));
+		}
+	}
+
+	TEST_CASE("Triangle3D.intersect")
+	{
+		SECTION("returns the distance when the ray hits")
+		{
+			Triangle3D tri(
+				Vector3D(-1.0f, -1.0f, 0.0f),
+				Vector3D(1.0f, -1.0f, 0.0f),
+				Vector3D(0.0f, 1.0f, 0.0f));
+			Ray3D r(
+				Vector3D(0.0f, 0.0f, 10.0f),
+				Vector3D(0.0f, 0.0f, -1.0f));
+			REQUIRE(tri.intersect(r) == Approx(10.0f));
+		}
+
+		SECTION("returns infinity when the ray misses")
+		{
+			SECTION("case 1")
+			{
+				Triangle3D tri(
+					Vector3D(-1.0f, -1.0f, 0.0f),
+					Vector3D(1.0f, -1.0f, 0.0f),
+					Vector3D(0.0f, 1.0f, 0.0f));
+				Ray3D r(
+					Vector3D(2.0f, 2.0f, 10.0f),
+					Vector3D(0.0f, 0.0f, -1.0f));
+				REQUIRE(tri.intersect(r) == std::numeric_limits<float>::infinity());
+			}
+
+			SECTION("case 2")
+			{
+				Triangle3D tri(
+					Vector3D(1.0f, 1.0f, 0.0f),
+					Vector3D(3.0f, 1.0f, 0.0f),
+					Vector3D(0.0f, 3.0f, 0.0f));
+				Ray3D r(
+					Vector3D(0.0f, 0.0f, 10.0f),
+					Vector3D(0.0f, 0.0f, -1.0f));
+				REQUIRE(tri.intersect(r) == std::numeric_limits<float>::infinity());
+			}
+
+			SECTION("when ray is parallel above the triangle")
+			{
+				Triangle3D tri(
+					Vector3D(1.0f, 1.0f, 0.0f),
+					Vector3D(3.0f, 1.0f, 0.0f),
+					Vector3D(0.0f, 3.0f, 0.0f));
+				Ray3D r(
+					Vector3D(0.0f, 0.0f, 10.0f),
+					Vector3D(0.0f, 1.0f, 0.0f));
+				REQUIRE(tri.intersect(r) == std::numeric_limits<float>::infinity());
+			}
+
+			SECTION("when ray is parallel below the triangle")
+			{
+				Triangle3D tri(
+					Vector3D(1.0f, 1.0f, 0.0f),
+					Vector3D(3.0f, 1.0f, 0.0f),
+					Vector3D(0.0f, 3.0f, 0.0f));
+				Ray3D r(
+					Vector3D(0.0f, 0.0f, -10.0f),
+					Vector3D(0.0f, 1.0f, 0.0f));
+				REQUIRE(tri.intersect(r) == std::numeric_limits<float>::infinity());
+			}
+		}
+	}
+
+	TEST_CASE("Triangle3D.toPlane")
+	{
+		SECTION("returns the plane the triangle lies on")
+		{
+			Triangle3D tri(
+				Vector3D(-1, -1, 0),
+				Vector3D(1, -1, 0),
+				Vector3D(0, 1, 0));
+			Plane3D p = tri.toPlane();
+
+			REQUIRE(p.point.x == Approx(-1.0f));
+			REQUIRE(p.point.y == Approx(-1.0f));
+			REQUIRE(p.point.z == Approx(0.0f));
+
+			REQUIRE(p.normal.x == Approx(0.0f));
+			REQUIRE(p.normal.y == Approx(0.0f));
+			REQUIRE(p.normal.z == Approx(4.0f));
+		}
+	}
 }
