@@ -395,6 +395,8 @@ namespace TA3D
 
 		void doStopMission(Mission& mission);
 
+		void doRepairMission(Mission& mission, float dt);
+
 	}; // class Unit
 
 } // namespace TA3D

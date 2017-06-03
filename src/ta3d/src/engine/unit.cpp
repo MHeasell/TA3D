@@ -2945,94 +2945,7 @@ namespace TA3D
 					doStopMission(currentMission);
 					break;
 				case MISSION_REPAIR:
-					if (!missionQueue->getTarget().isValid())
-					{
-						next_mission();
-						break;
-					}
-					{
-						Unit* target_unit = missionQueue->getUnit();
-						if (target_unit != NULL && target_unit->isAlive() && !target_unit->isBeingBuilt())
-						{
-							if (target_unit->hp >= unit_manager.unit_type[target_unit->typeId]->MaxDamage || !pType->BMcode)
-							{
-								if (pType->BMcode)
-									target_unit->hp = (float)unit_manager.unit_type[target_unit->typeId]->MaxDamage;
-								next_mission();
-							}
-							else
-							{
-								Vector3D Dir = target_unit->position - position;
-								Dir.y = 0.0f;
-								const float dist = Dir.lengthSquared();
-								const int maxdist = (int)pType->BuildDistance + ((unit_manager.unit_type[target_unit->typeId]->FootprintX + unit_manager.unit_type[target_unit->typeId]->FootprintZ) << 1);
-								if (dist > maxdist * maxdist && pType->BMcode) // Si l'unité est trop loin du chantier
-								{
-									missionQueue->Flags() |= MISSION_FLAG_MOVE;
-									missionQueue->setMoveData(maxdist * 7 / 80);
-									missionQueue->setData(0);
-									c_time = 0.0f;
-								}
-								else
-								{
-									if (missionQueue->getFlags() & MISSION_FLAG_MOVE) // Stop moving if needed
-									{
-										stopMoving();
-										break;
-									}
-									if (missionQueue->getData() == 0)
-									{
-										missionQueue->setData(1);
-										start_building(target_unit->position - position);
-									}
-
-									if (port[INBUILDSTANCE] != 0)
-									{
-										if (local && network_manager.isConnected() && nanolathe_target < 0) // Synchronize nanolathe emission
-										{
-											nanolathe_target = target_unit->idx;
-											g_ta3d_network->sendUnitNanolatheEvent(idx, target_unit->idx, false, false);
-										}
-
-										const float conso_energy = ((float)(pType->WorkerTime * unit_manager.unit_type[target_unit->typeId]->BuildCostEnergy)) / (float)unit_manager.unit_type[target_unit->typeId]->BuildTime;
-										TA3D::players.requested_energy[ownerId] += conso_energy;
-										if (players.energy[ownerId] >= (energy_cons + conso_energy * TA3D::players.energy_factor[ownerId]) * dt)
-										{
-											energy_cons += conso_energy * TA3D::players.energy_factor[ownerId];
-											const UnitType* pTargetType = unit_manager.unit_type[target_unit->typeId];
-											const float maxdmg = float(pTargetType->MaxDamage);
-											target_unit->hp = std::min(maxdmg,
-												target_unit->hp + dt * TA3D::players.energy_factor[ownerId] * (float)pType->WorkerTime * maxdmg / (float)pTargetType->BuildTime);
-										}
-										target_unit->built = true;
-									}
-								}
-							}
-						}
-						else if (target_unit != NULL && target_unit->flags)
-						{
-							Vector3D Dir = target_unit->position - position;
-							Dir.y = 0.0f;
-							const float dist = Dir.lengthSquared();
-							const int maxdist = (int)pType->BuildDistance + ((unit_manager.unit_type[target_unit->typeId]->FootprintX + unit_manager.unit_type[target_unit->typeId]->FootprintZ) << 1);
-							if (dist > maxdist * maxdist && pType->BMcode) // Si l'unité est trop loin du chantier
-							{
-								c_time = 0.0f;
-								missionQueue->Flags() |= MISSION_FLAG_MOVE;
-								missionQueue->setMoveData(maxdist * 7 / 80);
-							}
-							else
-							{
-								if (missionQueue->getFlags() & MISSION_FLAG_MOVE) // Stop moving if needed
-									stopMoving();
-								if (pType->BMcode)
-								{
-									start_building(target_unit->position - position);
-									missionQueue->setMissionType(MISSION_BUILD_2); // Change de type de mission
-								}
-							}
-						}
-					}
+					doRepairMission(currentMission, dt);
 					break;
 				case MISSION_BUILD_2:
 					if (!missionQueue->getTarget().isValid())
@@ -5439,6 +5352,99 @@ namespace TA3D
 				}
 			}
 			missionQueue->setData(missionQueue->getData() + 1);
+		}
+	}
+
+	void Unit::doRepairMission(Mission& mission, float dt)
+	{
+		const auto pType = unit_manager.unit_type[typeId];
+
+		if (!mission.getTarget().isValid())
+		{
+			next_mission();
+			return;
+		}
+
+		Unit* target_unit = mission.getUnit();
+		if (target_unit != NULL && target_unit->isAlive() && !target_unit->isBeingBuilt())
+		{
+			if (target_unit->hp >= unit_manager.unit_type[target_unit->typeId]->MaxDamage || !pType->BMcode)
+			{
+				if (pType->BMcode)
+					target_unit->hp = (float)unit_manager.unit_type[target_unit->typeId]->MaxDamage;
+				next_mission();
+			}
+			else
+			{
+				Vector3D Dir = target_unit->position - position;
+				Dir.y = 0.0f;
+				const float dist = Dir.lengthSquared();
+				const int maxdist = (int)pType->BuildDistance + ((unit_manager.unit_type[target_unit->typeId]->FootprintX + unit_manager.unit_type[target_unit->typeId]->FootprintZ) << 1);
+				if (dist > maxdist * maxdist && pType->BMcode) // Si l'unité est trop loin du chantier
+				{
+					mission.Flags() |= MISSION_FLAG_MOVE;
+					mission.setMoveData(maxdist * 7 / 80);
+					mission.setData(0);
+					c_time = 0.0f;
+				}
+				else
+				{
+					if (mission.getFlags() & MISSION_FLAG_MOVE) // Stop moving if needed
+					{
+						stopMoving();
+						return;
+					}
+					if (mission.getData() == 0)
+					{
+						mission.setData(1);
+						start_building(target_unit->position - position);
+					}
+
+					if (port[INBUILDSTANCE] != 0)
+					{
+						if (local && network_manager.isConnected() && nanolathe_target < 0) // Synchronize nanolathe emission
+						{
+							nanolathe_target = target_unit->idx;
+							g_ta3d_network->sendUnitNanolatheEvent(idx, target_unit->idx, false, false);
+						}
+
+						const float conso_energy = ((float)(pType->WorkerTime * unit_manager.unit_type[target_unit->typeId]->BuildCostEnergy)) / (float)unit_manager.unit_type[target_unit->typeId]->BuildTime;
+						TA3D::players.requested_energy[ownerId] += conso_energy;
+						if (players.energy[ownerId] >= (energy_cons + conso_energy * TA3D::players.energy_factor[ownerId]) * dt)
+						{
+							energy_cons += conso_energy * TA3D::players.energy_factor[ownerId];
+							const UnitType* pTargetType = unit_manager.unit_type[target_unit->typeId];
+							const float maxdmg = float(pTargetType->MaxDamage);
+							target_unit->hp = std::min(maxdmg,
+													   target_unit->hp + dt * TA3D::players.energy_factor[ownerId] * (float)pType->WorkerTime * maxdmg / (float)pTargetType->BuildTime);
+						}
+						target_unit->built = true;
+					}
+				}
+			}
+		}
+		else if (target_unit != NULL && target_unit->flags)
+		{
+			Vector3D Dir = target_unit->position - position;
+			Dir.y = 0.0f;
+			const float dist = Dir.lengthSquared();
+			const int maxdist = (int)pType->BuildDistance + ((unit_manager.unit_type[target_unit->typeId]->FootprintX + unit_manager.unit_type[target_unit->typeId]->FootprintZ) << 1);
+			if (dist > maxdist * maxdist && pType->BMcode) // Si l'unité est trop loin du chantier
+			{
+				c_time = 0.0f;
+				mission.Flags() |= MISSION_FLAG_MOVE;
+				mission.setMoveData(maxdist * 7 / 80);
+			}
+			else
+			{
+				if (mission.getFlags() & MISSION_FLAG_MOVE) // Stop moving if needed
+					stopMoving();
+				if (pType->BMcode)
+				{
+					start_building(target_unit->position - position);
+					mission.setMissionType(MISSION_BUILD_2); // Change de type de mission
+				}
+			}
 		}
 	}
 } // namespace TA3D
