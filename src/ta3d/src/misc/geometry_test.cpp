@@ -93,4 +93,25 @@ namespace TA3D
 			REQUIRE(p.normal.z == Approx(1.0f));
 		}
 	}
+
+	TEST_CASE("BoundingBox.intersect")
+	{
+		SECTION("finds the point at which the ray enters the box")
+		{
+			BoundingBox3D box(Vector3D(0.0f, 0.0f, 0.0f), Vector3D(1.0f, 1.0f, 1.0f));
+			Ray3D ray(Vector3D(-5.0f, 0.0f, 0.0f), Vector3D(1.0f, 0.0f, 0.0f));
+			auto intersect = box.intersect(ray);
+			REQUIRE(intersect.hit);
+			REQUIRE(intersect.enter == Approx(4.0f));
+			REQUIRE(intersect.exit == Approx(6.0f));
+		}
+
+		SECTION("returns a miss when the ray misses")
+		{
+			BoundingBox3D box(Vector3D(0.0f, 0.0f, 0.0f), Vector3D(1.0f, 1.0f, 1.0f));
+			Ray3D ray(Vector3D(-5.0f, 0.0f, 0.0f), Vector3D(1.0f, 1.0f, 0.0f));
+			auto intersect = box.intersect(ray);
+			REQUIRE(!intersect.hit);
+		}
+	}
 }

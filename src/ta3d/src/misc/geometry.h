@@ -65,6 +65,51 @@ namespace TA3D
 
 	/** A plane along the XY axis with the normal pointing towards positive Z */
 	static const Plane3D PlaneXY = Plane3D(Vector3D(), Vector3D(0.0f, 0.0f, 1.0f));
+
+	/** An axis-aligned bounding box in 3D space */
+	struct BoundingBox3D
+	{
+		struct IntersectResult
+		{
+			/**
+			 * True if the result is a hit, otherwise false.
+			 * If this is false then enter and exit are not set.
+			 */
+			bool hit;
+
+			/**
+			 * The distance along the ray at which it entered the bounding box.
+			 */
+			float enter;
+
+			/**
+			 * The distance along the ray at which it exited the bounding box.
+			 */
+			float exit;
+
+			/** Constructs a result representing a miss. */
+			IntersectResult(): hit(false) {}
+
+			/** Constructs a result representing a hit with the given entry and exit distances */
+			IntersectResult(float enter, float exit): hit(true), enter(enter), exit(exit) {}
+		};
+
+		/** The position of the center of the box. */
+		Vector3D center;
+
+		/** The box's extents in all directions from the center. */
+		Vector3D extents;
+
+		BoundingBox3D(const Vector3D& center, const Vector3D& extents): center(center), extents(extents) {}
+
+		/**
+		 * Computes the intersection between the given ray and the bounding box.
+		 * If the ray intersects, returns a result containing the distances
+		 * at which the ray enters and exits the bounding box.
+		 * Otherwise, returns a result indicating that the ray missed.
+		 */
+		IntersectResult intersect(const Ray3D& ray) const;
+	};
 }
 
 #endif //__TA3D_GEOMETRY_H__
