@@ -5120,7 +5120,6 @@ namespace TA3D
 			int enemy_idx = -1;
 			int sx = Math::RandomTable() & 1;
 			int sy = Math::RandomTable() & 1;
-			// byte mask=1<<ownerId;
 			for (int y = cur_py - dx + sy; y <= cur_py + dx; y += 2)
 			{
 				if (y >= 0 && y < the_map->heightInHeightmapTiles - 1)
@@ -5203,7 +5202,6 @@ namespace TA3D
 				}
 				else
 				{
-					//                                if (!is_running(get_script_index(SCRIPT_TransportDrop)) && port[ BUSY ] == 0.0f )
 					if (port[BUSY] == 0)
 						next_mission();
 				}
@@ -5254,7 +5252,6 @@ namespace TA3D
 					{
 						if (nb_attached == 0)
 						{
-							//										int param[] = { (int)((position.y - target_unit->position.y - target_unit->model->top)*2.0f) << 16 };
 							int param[] = {(int)((position.y - target_unit->position.y) * 2.0f) << 16};
 							launchScript(SCRIPT_BeginTransport, 1, param);
 							runScriptFunction(SCRIPT_QueryTransport, 1, param);
