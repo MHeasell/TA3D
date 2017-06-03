@@ -893,7 +893,7 @@ namespace TA3D
 		glColor4ub(0xFF, 0xFF, 0xFF, 0xFF);
 	}
 
-	void INGAME_UNITS::move(float dt, int key_frame, bool wind_change)
+	void INGAME_UNITS::move(float dt, bool wind_change)
 	{
 		if (nb_unit <= 0 || unit == NULL)
 		{
@@ -1062,7 +1062,7 @@ namespace TA3D
 			}
 			players.c_nb_unit[unit[i].ownerId]++; // Compte les unités de chaque joueur
 			unit[i].unlock();
-			if (unit[i].move(dt, key_frame) == -1) // Vérifie si l'unité a été détruite
+			if (unit[i].move(dt) == -1) // Vérifie si l'unité a été détruite
 			{
 				if (unit[i].local) // Don't kill remote units, since we're told when to kill them
 				{
@@ -1696,7 +1696,7 @@ namespace TA3D
 		{
 			counter += step;
 
-			move(dt, current_tick, wind_change); // Animate units
+			move(dt, wind_change); // Animate units
 
 			pMutex.lock();
 

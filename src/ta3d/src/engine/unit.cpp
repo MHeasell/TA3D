@@ -2003,7 +2003,7 @@ namespace TA3D
 		//----------------------------------- End of moving code ------------------------------------
 	}
 
-	int Unit::move(const float dt, const int key_frame)
+	int Unit::move(const float dt)
 	{
 		pMutex.lock();
 
@@ -2066,8 +2066,6 @@ namespace TA3D
 
 		if (the_map->ota_data.waterdoesdamage && position.y < the_map->sealvl) // The unit is damaged by the "acid" water
 			hp -= dt * float(the_map->ota_data.waterdamage);
-
-		const bool jump_commands = (((idx + key_frame) & 0xF) == 0); // Saute certaines commandes / Jump some commands so it runs faster with lots of units
 
 		if (!isBeingBuilt() && self_destruct >= 0.0f) // Self-destruction code
 		{
@@ -2164,7 +2162,7 @@ namespace TA3D
 			}
 			goto script_exec;
 		}
-		else if (!jump_commands && do_nothing() && local)
+		else if (do_nothing() && local)
 			if (position.x < -the_map->halfWidthInWorldUnits || position.x > the_map->halfWidthInWorldUnits || position.z < -the_map->halfHeightInWorldUnits || position.z > the_map->halfHeightInWorldUnits)
 			{
 				Vector3D target = position;
@@ -2370,8 +2368,6 @@ namespace TA3D
 					weapon[i].data = -1;
 					break;
 				case WEAPON_FLAG_AIM: // Vise une unité / aiming code
-					if (jump_commands)
-						break;
 					if (!(missionQueue->getFlags() & MISSION_FLAG_CAN_ATTACK) || (weapon[i].target == NULL && pType->weapon[i]->toairweapon))
 					{
 						weapon[i].data = -1;
@@ -2792,8 +2788,6 @@ namespace TA3D
 					doReclaimMission(currentMission, dt);
 					break;
 				case MISSION_GUARD:
-					if (jump_commands)
-						break;
 					doGuardMission(currentMission);
 					break;
 				case MISSION_PATROL: // Mode patrouille
@@ -2936,8 +2930,6 @@ namespace TA3D
 				break;
 				case MISSION_STANDBY:
 				case MISSION_VTOL_STANDBY:
-					if (jump_commands)
-						break;
 					doStandbyMission(currentMission);
 					break;
 				case MISSION_ATTACK: // Attaque une unité / attack a unit
@@ -2963,9 +2955,6 @@ namespace TA3D
 									break;
 								}
 							}
-
-							if (jump_commands && missionQueue->getData() != 0 && pType->attackrunlength == 0)
-								break; // Just do basic checks every tick, and advanced ones when needed
 
 							if (weapon.size() == 0 && !pType->kamikaze) // Check if this units has weapons
 							{
@@ -3088,8 +3077,6 @@ namespace TA3D
 					if (missionQueue->mission() != MISSION_STOP && missionQueue->mission() != MISSION_STANDBY && missionQueue->mission() != MISSION_VTOL_STANDBY)
 						break;
 					missionQueue->setMissionType(MISSION_STOP);
-					if (jump_commands && missionQueue->getData() != 0)
-						break;
 					if (missionQueue->getData() > 5)
 					{
 						if (missionQueue.hasNext())
@@ -3600,7 +3587,7 @@ namespace TA3D
 					break;
 			}
 
-			if (((missionQueue->getFlags() & MISSION_FLAG_MOVE) || !local) && !jump_commands) // Set unit orientation if it's on the ground
+			if ((missionQueue->getFlags() & MISSION_FLAG_MOVE) || !local) // Set unit orientation if it's on the ground
 			{
 				if (!pType->canfly && !pType->Upright && !pType->floatting() && !(pType->canhover && position.y <= the_map->sealvl))
 				{
@@ -3639,7 +3626,7 @@ namespace TA3D
 			}
 
 			bool returning_fire = (port[STANDINGFIREORDERS] == SFORDER_RETURN_FIRE && attacked);
-			if ((((missionQueue->getFlags() & MISSION_FLAG_CAN_ATTACK) == MISSION_FLAG_CAN_ATTACK) || do_nothing()) && (port[STANDINGFIREORDERS] == SFORDER_FIRE_AT_WILL || returning_fire) && !jump_commands && local)
+			if ((((missionQueue->getFlags() & MISSION_FLAG_CAN_ATTACK) == MISSION_FLAG_CAN_ATTACK) || do_nothing()) && (port[STANDINGFIREORDERS] == SFORDER_FIRE_AT_WILL || returning_fire) && local)
 			{
 				// Si l'unité peut attaquer d'elle même les unités enemies proches, elle le fait / Attack nearby enemies
 
@@ -3868,7 +3855,7 @@ namespace TA3D
 			}
 		}
 	script_exec:
-		if (!attached && ((!jump_commands && pType->canmove) || first_move))
+		if (!attached && (pType->canmove || first_move))
 		{
 			bool hover_on_water = false;
 			float min_h = the_map->get_unit_h(position.x, position.z);

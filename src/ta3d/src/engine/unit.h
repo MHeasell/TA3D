@@ -173,7 +173,7 @@ namespace TA3D
 
 		bool playSound(const String& key);
 
-		int move(const float dt, const int key_frame = 0);
+		int move(const float dt);
 
 		void computeHeadingBasedOnEnergy(Vector3D& dir, const bool moving);
 

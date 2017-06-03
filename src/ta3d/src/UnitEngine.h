@@ -246,7 +246,7 @@ namespace TA3D
 
 		void draw_mini(float map_w, float map_h, int mini_w, int mini_h); // Repère les unités sur la mini-carte
 
-		void move(float dt, int key_frame = 0, bool wind_change = false);
+		void move(float dt, bool wind_change = false);
 
 		int create(int type_id, int owner);
 
