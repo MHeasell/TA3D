@@ -4228,7 +4228,6 @@ namespace TA3D
 						if (x < 0 || x >= the_map->widthInHeightmapTiles - 1 || y < 0 || y >= the_map->heightInHeightmapTiles - 1 || cur_type_id == -1)
 							continue;
 						if (units.unit[cur_idx].flags && (units.unit[cur_idx].is_on_radar(mask) || ((the_map->sight_map(x >> 1, y >> 1) & mask) && !units.unit[cur_idx].cloaked)) && (canTargetGround || units.unit[cur_idx].flying) && !unit_manager.unit_type[cur_type_id]->checkCategory(pType->NoChaseCategory))
-						//                                             && !unit_manager.unit_type[ units.unit[cur_idx].typeId ]->checkCategory( pType->BadTargetCategory ) )
 						{
 							if (returning_fire)
 							{
