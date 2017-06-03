@@ -59,8 +59,8 @@ namespace TA3D
 		//! Index of the unit that is on this sector
 		sint32 unit_idx;
 
-		//! underwater, lava, flat
-		uint32 flags;	// underwater, lava, flat
+		//! underwater, lava
+		uint32 flags;	// underwater, lava
 
 		//! Is the sector underwater?
 		inline bool isUnderwater() const { return flags & 1U; }
@@ -68,19 +68,8 @@ namespace TA3D
 		//! Is the sector lava? Used for pathfinding.
 		inline bool isLava() const { return flags & 2U; }
 
-		//! Is the sector flat? Used in the renderer to simplify geometry.
-		inline bool isFlat() const { return flags & 4U; }
-
-		inline void setUnderwater() { flags |= 1U; }
-		inline void setLava() { flags |= 2U; }
-		inline void setFlat() { flags |= 4U; }
-		inline void unsetUnderwater() { flags &= ~1U; }
-		inline void unsetLava() { flags &= ~2U; }
-		inline void unsetFlat() { flags &= ~4U; }
-
 		inline void setUnderwater(bool b) { flags = b ? (flags | 1U) : (flags & ~1U); }
 		inline void setLava(bool b) { flags = b ? (flags | 2U) : (flags & ~2U); }
-		inline void setFlat(bool b) { flags = b ? (flags | 4U) : (flags & ~4U); }
 
 		void init();
 	};
