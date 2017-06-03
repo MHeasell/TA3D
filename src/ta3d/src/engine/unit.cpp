@@ -2933,137 +2933,7 @@ namespace TA3D
 					doStandbyMission(currentMission);
 					break;
 				case MISSION_ATTACK: // Attaque une unité / attack a unit
-					if (!missionQueue->getTarget().isValid())
-					{
-						next_mission();
-						break;
-					}
-					{
-						Unit* target_unit = missionQueue->getUnit();
-						Weapon* target_weapon = missionQueue->getWeapon();
-						if ((target_unit != NULL && target_unit->isAlive()) || (target_weapon != NULL && target_weapon->weapon_id != -1) || missionQueue->getTarget().isStatic())
-						{
-							if (target_unit) // Check if we can target the unit
-							{
-								const PlayerMask mask = toPlayerMask(ownerId);
-								if (target_unit->cloaked && !target_unit->is_on_radar(mask))
-								{
-									for (uint32 i = 0; i < weapon.size(); ++i)
-										if (weapon[i].target == target_unit) // Stop shooting
-											weapon[i].state = WEAPON_FLAG_IDLE;
-									next_mission();
-									break;
-								}
-							}
-
-							if (weapon.size() == 0 && !pType->kamikaze) // Check if this units has weapons
-							{
-								next_mission();
-								break;
-							}
-
-							Vector3D Dir = missionQueue->getTarget().getPos() - position;
-							Dir.y = 0.0f;
-							float dist = Dir.lengthSquared();
-							int maxdist = 0;
-							int mindist = 0xFFFFF;
-
-							if (target_unit != NULL && unit_manager.unit_type[target_unit->typeId]->checkCategory(pType->NoChaseCategory))
-							{
-								next_mission();
-								break;
-							}
-
-							for (uint32 i = 0; i < weapon.size(); ++i)
-							{
-								if (pType->weapon[i] == NULL || pType->weapon[i]->interceptor)
-									continue;
-								int cur_mindist;
-								int cur_maxdist;
-								bool allowed_to_fire = true;
-								if (pType->attackrunlength > 0)
-								{
-									if (Dir % velocity < 0.0f)
-										allowed_to_fire = false;
-									const float t = 2.0f / the_map->ota_data.gravity * fabsf(position.y - missionQueue->getTarget().getPos().y);
-									cur_mindist = (int)sqrtf(t * velocity.lengthSquared()) - ((pType->attackrunlength + 1) / 2);
-									cur_maxdist = cur_mindist + pType->attackrunlength;
-								}
-								else if (pType->weapon[i]->waterweapon && position.y > the_map->sealvl)
-								{
-									if (Dir % velocity < 0.0f)
-										allowed_to_fire = false;
-									const float t = 2.0f / the_map->ota_data.gravity * fabsf(position.y - missionQueue->getTarget().getPos().y);
-									cur_maxdist = (int)sqrtf(t * velocity.lengthSquared()) + (pType->weapon[i]->range / 2);
-									cur_mindist = 0;
-								}
-								else
-								{
-									cur_maxdist = pType->weapon[i]->range / 2;
-									cur_mindist = 0;
-								}
-								if (maxdist < cur_maxdist)
-									maxdist = cur_maxdist;
-								if (mindist > cur_mindist)
-									mindist = cur_mindist;
-								if (allowed_to_fire && dist >= cur_mindist * cur_mindist && dist <= cur_maxdist * cur_maxdist && !pType->weapon[i]->interceptor)
-								{
-									if (((weapon[i].state & 3) == WEAPON_FLAG_IDLE || ((weapon[i].state & 3) != WEAPON_FLAG_IDLE && weapon[i].target != target_unit)) && (target_unit == NULL || ((!pType->weapon[i]->toairweapon || (pType->weapon[i]->toairweapon && target_unit->flying)) && !unit_manager.unit_type[target_unit->typeId]->checkCategory(pType->NoChaseCategory))) && (((missionQueue->getFlags() & MISSION_FLAG_COMMAND_FIRE) && (pType->weapon[i]->commandfire || !pType->candgun)) || (!(missionQueue->getFlags() & MISSION_FLAG_COMMAND_FIRE) && !pType->weapon[i]->commandfire) || pType->weapon[i]->dropped))
-									{
-										weapon[i].state = WEAPON_FLAG_AIM;
-										weapon[i].target = target_unit;
-										weapon[i].target_pos = missionQueue->getTarget().getPos();
-										weapon[i].data = -1;
-										if (missionQueue->getFlags() & MISSION_FLAG_TARGET_WEAPON)
-											weapon[i].state |= WEAPON_FLAG_WEAPON;
-										if (pType->weapon[i]->commandfire)
-											weapon[i].state |= WEAPON_FLAG_COMMAND_FIRE;
-									}
-								}
-							}
-
-							if (pType->kamikaze && pType->kamikazedistance > maxdist)
-								maxdist = pType->kamikazedistance;
-
-							if (mindist > maxdist)
-								mindist = maxdist;
-
-							missionQueue->Flags() |= MISSION_FLAG_CAN_ATTACK;
-
-							if (pType->kamikaze // Kamikaze attack !!
-								&& dist <= pType->kamikazedistance * pType->kamikazedistance && self_destruct < 0.0f)
-								self_destruct = 0.01f;
-
-							if (dist > maxdist * maxdist || dist < mindist * mindist) // Si l'unité est trop loin de sa cible / if unit isn't where it should be
-							{
-								if (!pType->canmove) // Bah là si on peut pas bouger faut changer de cible!! / need to change target
-								{
-									next_mission();
-									break;
-								}
-								else if (!pType->canfly || pType->hoverattack)
-								{
-									c_time = 0.0f;
-									missionQueue->Flags() |= MISSION_FLAG_MOVE;
-									missionQueue->setMoveData(maxdist * 7 / 80);
-								}
-							}
-							else if (missionQueue->getData() == 0)
-							{
-								missionQueue->setData(2);
-								int param[] = {0};
-								for (uint32 i = 0; i < weapon.size(); ++i)
-									if (pType->weapon[i])
-										param[0] = Math::Max(param[0], (int)(pType->weapon[i]->reloadtime * 1000.0f) * Math::Max(1, (int)pType->weapon[i]->burst));
-								launchScript(SCRIPT_SetMaxReloadTime, 1, param);
-							}
-
-							if (missionQueue->getFlags() & MISSION_FLAG_COMMAND_FIRED)
-								next_mission();
-						}
-						else
-							next_mission();
-					}
+					doAttackMission(currentMission);
 					break;
 				case MISSION_GUARD_NOMOVE:
 					setFlag(missionQueue->Flags(), MISSION_FLAG_CAN_ATTACK);
@@ -5428,5 +5298,142 @@ namespace TA3D
 		}
 		else
 			mission.setData(mission.getData() + 1);
+	}
+
+	void Unit::doAttackMission(Mission& mission)
+	{
+		const auto pType = unit_manager.unit_type[typeId];
+
+		if (!mission.getTarget().isValid())
+		{
+			next_mission();
+			return;
+		}
+		{
+			Unit* target_unit = mission.getUnit();
+			Weapon* target_weapon = mission.getWeapon();
+			if ((target_unit != NULL && target_unit->isAlive()) || (target_weapon != NULL && target_weapon->weapon_id != -1) || mission.getTarget().isStatic())
+			{
+				if (target_unit) // Check if we can target the unit
+				{
+					const PlayerMask mask = toPlayerMask(ownerId);
+					if (target_unit->cloaked && !target_unit->is_on_radar(mask))
+					{
+						for (uint32 i = 0; i < weapon.size(); ++i)
+							if (weapon[i].target == target_unit) // Stop shooting
+								weapon[i].state = WEAPON_FLAG_IDLE;
+						next_mission();
+						return;
+					}
+				}
+
+				if (weapon.size() == 0 && !pType->kamikaze) // Check if this units has weapons
+				{
+					next_mission();
+					return;
+				}
+
+				Vector3D Dir = mission.getTarget().getPos() - position;
+				Dir.y = 0.0f;
+				float dist = Dir.lengthSquared();
+				int maxdist = 0;
+				int mindist = 0xFFFFF;
+
+				if (target_unit != NULL && unit_manager.unit_type[target_unit->typeId]->checkCategory(pType->NoChaseCategory))
+				{
+					next_mission();
+					return;
+				}
+
+				for (uint32 i = 0; i < weapon.size(); ++i)
+				{
+					if (pType->weapon[i] == NULL || pType->weapon[i]->interceptor)
+						continue;
+					int cur_mindist;
+					int cur_maxdist;
+					bool allowed_to_fire = true;
+					if (pType->attackrunlength > 0)
+					{
+						if (Dir % velocity < 0.0f)
+							allowed_to_fire = false;
+						const float t = 2.0f / the_map->ota_data.gravity * fabsf(position.y - mission.getTarget().getPos().y);
+						cur_mindist = (int)sqrtf(t * velocity.lengthSquared()) - ((pType->attackrunlength + 1) / 2);
+						cur_maxdist = cur_mindist + pType->attackrunlength;
+					}
+					else if (pType->weapon[i]->waterweapon && position.y > the_map->sealvl)
+					{
+						if (Dir % velocity < 0.0f)
+							allowed_to_fire = false;
+						const float t = 2.0f / the_map->ota_data.gravity * fabsf(position.y - mission.getTarget().getPos().y);
+						cur_maxdist = (int)sqrtf(t * velocity.lengthSquared()) + (pType->weapon[i]->range / 2);
+						cur_mindist = 0;
+					}
+					else
+					{
+						cur_maxdist = pType->weapon[i]->range / 2;
+						cur_mindist = 0;
+					}
+					if (maxdist < cur_maxdist)
+						maxdist = cur_maxdist;
+					if (mindist > cur_mindist)
+						mindist = cur_mindist;
+					if (allowed_to_fire && dist >= cur_mindist * cur_mindist && dist <= cur_maxdist * cur_maxdist && !pType->weapon[i]->interceptor)
+					{
+						if (((weapon[i].state & 3) == WEAPON_FLAG_IDLE || ((weapon[i].state & 3) != WEAPON_FLAG_IDLE && weapon[i].target != target_unit)) && (target_unit == NULL || ((!pType->weapon[i]->toairweapon || (pType->weapon[i]->toairweapon && target_unit->flying)) && !unit_manager.unit_type[target_unit->typeId]->checkCategory(pType->NoChaseCategory))) && (((mission.getFlags() & MISSION_FLAG_COMMAND_FIRE) && (pType->weapon[i]->commandfire || !pType->candgun)) || (!(mission.getFlags() & MISSION_FLAG_COMMAND_FIRE) && !pType->weapon[i]->commandfire) || pType->weapon[i]->dropped))
+						{
+							weapon[i].state = WEAPON_FLAG_AIM;
+							weapon[i].target = target_unit;
+							weapon[i].target_pos = mission.getTarget().getPos();
+							weapon[i].data = -1;
+							if (mission.getFlags() & MISSION_FLAG_TARGET_WEAPON)
+								weapon[i].state |= WEAPON_FLAG_WEAPON;
+							if (pType->weapon[i]->commandfire)
+								weapon[i].state |= WEAPON_FLAG_COMMAND_FIRE;
+						}
+					}
+				}
+
+				if (pType->kamikaze && pType->kamikazedistance > maxdist)
+					maxdist = pType->kamikazedistance;
+
+				if (mindist > maxdist)
+					mindist = maxdist;
+
+				mission.Flags() |= MISSION_FLAG_CAN_ATTACK;
+
+				if (pType->kamikaze // Kamikaze attack !!
+					&& dist <= pType->kamikazedistance * pType->kamikazedistance && self_destruct < 0.0f)
+					self_destruct = 0.01f;
+
+				if (dist > maxdist * maxdist || dist < mindist * mindist) // Si l'unité est trop loin de sa cible / if unit isn't where it should be
+				{
+					if (!pType->canmove) // Bah là si on peut pas bouger faut changer de cible!! / need to change target
+					{
+						next_mission();
+						return;
+					}
+					else if (!pType->canfly || pType->hoverattack)
+					{
+						c_time = 0.0f;
+						mission.Flags() |= MISSION_FLAG_MOVE;
+						mission.setMoveData(maxdist * 7 / 80);
+					}
+				}
+				else if (mission.getData() == 0)
+				{
+					mission.setData(2);
+					int param[] = {0};
+					for (uint32 i = 0; i < weapon.size(); ++i)
+						if (pType->weapon[i])
+							param[0] = Math::Max(param[0], (int)(pType->weapon[i]->reloadtime * 1000.0f) * Math::Max(1, (int)pType->weapon[i]->burst));
+					launchScript(SCRIPT_SetMaxReloadTime, 1, param);
+				}
+
+				if (mission.getFlags() & MISSION_FLAG_COMMAND_FIRED)
+					next_mission();
+			}
+			else
+				next_mission();
+		}
 	}
 } // namespace TA3D
