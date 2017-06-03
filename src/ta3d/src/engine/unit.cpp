@@ -2753,297 +2753,32 @@ namespace TA3D
 
 		if (!missionQueue.empty())
 		{
-			missionQueue->setTime(missionQueue->getTime() + dt);
+			auto currentMission = missionQueue.front();
+
+			currentMission.setTime(currentMission.getTime() + dt);
 			last_path_refresh += dt;
 
 			followPath(dt, hasTargetAngle, targetAngle, NPos, n_px, n_py, precomputed_position);
 
-			switch (missionQueue->mission()) // General orders
+			switch (currentMission.mission()) // General orders
 			{
 				case MISSION_WAIT:												  // Wait for a specified time (campaign)
-					missionQueue->setFlags(0);										  // Don't move, do not shoot !! just wait
-					if (missionQueue->getTime() >= (float)missionQueue->getData() * 0.001f) // Done :)
-						next_mission();
+					doWaitMission(currentMission);
 					break;
 				case MISSION_WAIT_ATTACKED: // Wait until a specified unit is attacked (campaign)
-					if (missionQueue->getData() < 0 || missionQueue->getData() >= (int)units.max_unit || !units.unit[missionQueue->getData()].isAlive())
-						next_mission();
-					else if (units.unit[missionQueue->getData()].attacked)
-						next_mission();
+					doWaitAttackMission(currentMission);
 					break;
 				case MISSION_GET_REPAIRED:
-					if (!missionQueue->getTarget().isValid())
-					{
-						next_mission();
-						break;
-					}
-					if (missionQueue->getTarget().isUnit() && missionQueue->getUnit() && missionQueue->getUnit()->isAlive())
-					{
-						Unit* target_unit = missionQueue->getUnit();
-
-						if (!(missionQueue->getFlags() & MISSION_FLAG_PAD_CHECKED))
-						{
-							missionQueue->Flags() |= MISSION_FLAG_PAD_CHECKED;
-							int param[] = {0, 1};
-							target_unit->runScriptFunction(SCRIPT_QueryLandingPad, 2, param);
-							missionQueue->setData(param[0]);
-						}
-
-						target_unit->compute_model_coord();
-						const int piece_id = missionQueue->getData() >= 0 ? missionQueue->getData() : (-missionQueue->getData() - 1);
-						const Vector3D target = target_unit->position + target_unit->data.data[piece_id].pos;
-
-						Vector3D Dir = target - position;
-						Dir.y = 0.0f;
-						const float dist = Dir.lengthSquared();
-						const int maxdist = 6;
-						if (dist > maxdist * maxdist && pType->BMcode) // Si l'unité est trop loin du chantier
-						{
-							unsetFlag(missionQueue->Flags(), MISSION_FLAG_BEING_REPAIRED);
-							c_time = 0.0f;
-							setFlag(missionQueue->Flags(), MISSION_FLAG_MOVE);
-							missionQueue->setMoveData(maxdist * 8 / 80);
-							if (!missionQueue->Path().empty())
-								missionQueue->Path().setPos(target); // Update path in real time!
-						}
-						else if (!(missionQueue->getFlags() & MISSION_FLAG_MOVE))
-						{
-							hasTargetAngle = true;
-							targetAngle = target_unit->orientation.y;
-							if (missionQueue->getData() >= 0)
-							{
-								setFlag(missionQueue->Flags(), MISSION_FLAG_BEING_REPAIRED);
-								Dir = target - position;
-								position = position + 3.0f * dt * Dir;
-								position.x = target.x;
-								position.z = target.z;
-								if (Dir.lengthSquared() < 3.0f)
-								{
-									target_unit->lock();
-									if (target_unit->pad1 != 0xFFFF && target_unit->pad2 != 0xFFFF) // We can't land here
-									{
-										target_unit->unlock();
-										next_mission();
-										if (!missionQueue.empty() && missionQueue->mission() == MISSION_STOP) // Don't stop we were patroling
-											next_mission();
-										break;
-									}
-									if (target_unit->pad1 == 0xFFFF) // tell others we're here
-										target_unit->pad1 = (uint16)piece_id;
-									else
-										target_unit->pad2 = (uint16)piece_id;
-									target_unit->unlock();
-									missionQueue->setData(-missionQueue->getData() - 1);
-								}
-							}
-							else
-							{ // being repaired
-								position = target;
-								velocity.reset();
-
-								if (target_unit->port[ACTIVATION])
-								{
-									const float conso_energy = float(unit_manager.unit_type[target_unit->typeId]->WorkerTime * pType->BuildCostEnergy) / float(pType->BuildTime);
-									TA3D::players.requested_energy[ownerId] += conso_energy;
-									if (players.energy[ownerId] >= (energy_cons + conso_energy * TA3D::players.energy_factor[ownerId]) * dt)
-									{
-										target_unit->lock();
-										target_unit->energy_cons += conso_energy * TA3D::players.energy_factor[ownerId];
-										target_unit->unlock();
-										hp += dt * TA3D::players.energy_factor[ownerId] * float(unit_manager.unit_type[target_unit->typeId]->WorkerTime * pType->MaxDamage) / (float)pType->BuildTime;
-									}
-									if (hp >= pType->MaxDamage) // Unit has been repaired
-									{
-										hp = (float)pType->MaxDamage;
-										target_unit->lock();
-										if (target_unit->pad1 == piece_id) // tell others we've left
-											target_unit->pad1 = 0xFFFF;
-										else
-											target_unit->pad2 = 0xFFFF;
-										target_unit->unlock();
-										next_mission();
-										if (!missionQueue.empty() && missionQueue->mission() == MISSION_STOP) // Don't stop we were patroling
-											next_mission();
-										break;
-									}
-									built = true;
-								}
-							}
-						}
-						else
-							stopMoving();
-					}
-					else
-						next_mission();
+					doGetRepairedMission(currentMission, dt);
 					break;
 				case MISSION_STANDBY_MINE: // Don't even try to do something else, the unit must die !!
-					if (self_destruct < 0.0f)
-					{
-						int dx = ((pType->SightDistance + (int)(h + 0.5f)) >> 3) + 1;
-						int enemy_idx = -1;
-						int sx = Math::RandomTable() & 1;
-						int sy = Math::RandomTable() & 1;
-						// byte mask=1<<ownerId;
-						for (int y = cur_py - dx + sy; y <= cur_py + dx; y += 2)
-						{
-							if (y >= 0 && y < the_map->heightInHeightmapTiles - 1)
-								for (int x = cur_px - dx + sx; x <= cur_px + dx; x += 2)
-									if (x >= 0 && x < the_map->widthInHeightmapTiles - 1)
-									{
-										const int cur_idx = the_map->map_data(x, y).unit_idx;
-										if (cur_idx >= 0 && cur_idx < (int)units.max_unit && units.unit[cur_idx].isAlive() && units.unit[cur_idx].isNotOwnedBy(ownerId) && unit_manager.unit_type[units.unit[cur_idx].typeId]->ShootMe) // This unit is on the sight_map since dx = sightdistance !!
-										{
-											enemy_idx = cur_idx;
-											break;
-										}
-									}
-							if (enemy_idx >= 0)
-								break;
-							sx ^= 1;
-						}
-						if (enemy_idx >= 0) // Annihilate it !!!
-							toggle_self_destruct();
-					}
+					doStandbyMineMission(currentMission);
 					break;
 				case MISSION_UNLOAD:
-					if (nb_attached > 0)
-					{
-						Vector3D Dir = missionQueue->getTarget().getPos() - position;
-						Dir.y = 0.0f;
-						float dist = Dir.lengthSquared();
-						int maxdist = 0;
-						if (pType->TransportMaxUnits == 1) // Code for units like the arm atlas
-							maxdist = 3;
-						else
-							maxdist = pType->SightDistance;
-						if (dist > maxdist * maxdist && pType->BMcode) // Si l'unité est trop loin du chantier
-						{
-							c_time = 0.0f;
-							missionQueue->Flags() |= MISSION_FLAG_MOVE;
-							missionQueue->setMoveData(maxdist * 8 / 80);
-						}
-						else if (!(missionQueue->getFlags() & MISSION_FLAG_MOVE))
-						{
-							if (missionQueue->getLastD() >= 0.0f)
-							{
-								if (pType->TransportMaxUnits == 1) // Code for units like the arm atlas
-								{
-									if (attached_list[0] >= 0 && attached_list[0] < (int)units.max_unit // Check we can do that
-										&& units.unit[attached_list[0]].flags && can_be_built(position, units.unit[attached_list[0]].typeId, ownerId))
-									{
-										launchScript(SCRIPT_EndTransport);
-
-										Unit* target_unit = &(units.unit[attached_list[0]]);
-										target_unit->attached = false;
-										target_unit->hidden = false;
-										nb_attached = 0;
-										pMutex.unlock();
-										target_unit->draw_on_map();
-										pMutex.lock();
-									}
-									else if (attached_list[0] < 0 || attached_list[0] >= (int)units.max_unit || units.unit[attached_list[0]].flags == 0)
-										nb_attached = 0;
-
-									next_mission();
-								}
-								else
-								{
-									if (attached_list[nb_attached - 1] >= 0 && attached_list[nb_attached - 1] < (int)units.max_unit // Check we can do that
-										&& units.unit[attached_list[nb_attached - 1]].flags && can_be_built(missionQueue->getTarget().getPos(), units.unit[attached_list[nb_attached - 1]].typeId, ownerId))
-									{
-										const int idx = attached_list[nb_attached - 1];
-										int param[] = {idx, PACKXZ(missionQueue->getTarget().getPos().x * 2.0f + (float)the_map->widthInWorldUnits, missionQueue->getTarget().getPos().z * 2.0f + (float)the_map->heightInWorldUnits)};
-										launchScript(SCRIPT_TransportDrop, 2, param);
-									}
-									else if (attached_list[nb_attached - 1] < 0 || attached_list[nb_attached - 1] >= (int)units.max_unit || units.unit[attached_list[nb_attached - 1]].flags == 0)
-										nb_attached--;
-								}
-								missionQueue->setLastD(-1.0f);
-							}
-							else
-							{
-								//                                if (!is_running(get_script_index(SCRIPT_TransportDrop)) && port[ BUSY ] == 0.0f )
-								if (port[BUSY] == 0)
-									next_mission();
-							}
-						}
-						else
-							stopMoving();
-					}
-					else
-						next_mission();
+					doUnloadMission(currentMission);
 					break;
 				case MISSION_LOAD:
-					if (!missionQueue->getTarget().isValid())
-					{
-						next_mission();
-						break;
-					}
-					if (missionQueue->getUnit())
-					{
-						Unit* target_unit = missionQueue->getUnit();
-						if (!target_unit->isAlive())
-						{
-							next_mission();
-							break;
-						}
-						Vector3D Dir = target_unit->position - position;
-						Dir.y = 0.0f;
-						float dist = Dir.lengthSquared();
-						int maxdist = 0;
-						if (pType->TransportMaxUnits == 1) // Code for units like the arm atlas
-							maxdist = 3;
-						else
-							maxdist = pType->SightDistance;
-						if (dist > maxdist * maxdist && pType->BMcode) // Si l'unité est trop loin du chantier
-						{
-							c_time = 0.0f;
-							missionQueue->Flags() |= MISSION_FLAG_MOVE;
-							missionQueue->setMoveData(maxdist * 8 / 80);
-						}
-						else if (!(missionQueue->getFlags() & MISSION_FLAG_MOVE))
-						{
-							if (missionQueue->getLastD() >= 0.0f)
-							{
-								if (pType->TransportMaxUnits == 1) // Code for units like the arm atlas
-								{
-									if (nb_attached == 0)
-									{
-										//										int param[] = { (int)((position.y - target_unit->position.y - target_unit->model->top)*2.0f) << 16 };
-										int param[] = {(int)((position.y - target_unit->position.y) * 2.0f) << 16};
-										launchScript(SCRIPT_BeginTransport, 1, param);
-										runScriptFunction(SCRIPT_QueryTransport, 1, param);
-										target_unit->attached = true;
-										link_list[nb_attached] = (short)param[0];
-										target_unit->hidden = param[0] < 0;
-										attached_list[nb_attached++] = target_unit->idx;
-										target_unit->clear_from_map();
-									}
-									next_mission();
-								}
-								else
-								{
-									if (nb_attached >= pType->TransportMaxUnits)
-									{
-										next_mission();
-										break;
-									}
-									int param[] = {target_unit->idx};
-									launchScript(SCRIPT_TransportPickup, 1, param);
-								}
-								missionQueue->setLastD(-1.0f);
-							}
-							else
-							{
-								if (port[BUSY] == 0)
-									next_mission();
-							}
-						}
-						else
-							stopMoving();
-					}
-					else
-						next_mission();
+					doLoadMission(currentMission);
 					break;
 				case MISSION_CAPTURE:
 				case MISSION_REVIVE:
@@ -5249,5 +4984,310 @@ namespace TA3D
 		auto heightmapPosition = the_map->worldToHeightmapIndex(newPosition);
 		cur_px = heightmapPosition.x;
 		cur_py = heightmapPosition.y;
+	}
+
+	void Unit::doWaitMission(Mission& mission)
+	{
+		mission.setFlags(0); // Don't move, do not shoot !! just wait
+		if (mission.getTime() >= (float)mission.getData() * 0.001f) // Done :)
+			next_mission();
+	}
+
+	void Unit::doWaitAttackMission(Mission& mission)
+	{
+		if (mission.getData() < 0 || mission.getData() >= (int)units.max_unit || !units.unit[mission.getData()].isAlive())
+			next_mission();
+		else if (units.unit[mission.getData()].attacked)
+			next_mission();
+	}
+
+	void Unit::doGetRepairedMission(Mission& mission, float dt)
+	{
+		const auto pType = unit_manager.unit_type[typeId];
+
+		if (!mission.getTarget().isValid())
+		{
+			next_mission();
+			return;
+		}
+		if (mission.getTarget().isUnit() && mission.getUnit() && mission.getUnit()->isAlive())
+		{
+			Unit* target_unit = mission.getUnit();
+
+			if (!(mission.getFlags() & MISSION_FLAG_PAD_CHECKED))
+			{
+				mission.Flags() |= MISSION_FLAG_PAD_CHECKED;
+				int param[] = {0, 1};
+				target_unit->runScriptFunction(SCRIPT_QueryLandingPad, 2, param);
+				mission.setData(param[0]);
+			}
+
+			target_unit->compute_model_coord();
+			const int piece_id = mission.getData() >= 0 ? mission.getData() : (-mission.getData() - 1);
+			const Vector3D target = target_unit->position + target_unit->data.data[piece_id].pos;
+
+			Vector3D Dir = target - position;
+			Dir.y = 0.0f;
+			const float dist = Dir.lengthSquared();
+			const int maxdist = 6;
+			if (dist > maxdist * maxdist && pType->BMcode) // Si l'unité est trop loin du chantier
+			{
+				unsetFlag(mission.Flags(), MISSION_FLAG_BEING_REPAIRED);
+				c_time = 0.0f;
+				setFlag(mission.Flags(), MISSION_FLAG_MOVE);
+				mission.setMoveData(maxdist * 8 / 80);
+				if (!mission.Path().empty())
+					mission.Path().setPos(target); // Update path in real time!
+			}
+			else if (!(mission.getFlags() & MISSION_FLAG_MOVE))
+			{
+				hasTargetAngle = true;
+				targetAngle = target_unit->orientation.y;
+				if (mission.getData() >= 0)
+				{
+					setFlag(mission.Flags(), MISSION_FLAG_BEING_REPAIRED);
+					Dir = target - position;
+					position = position + 3.0f * dt * Dir;
+					position.x = target.x;
+					position.z = target.z;
+					if (Dir.lengthSquared() < 3.0f)
+					{
+						target_unit->lock();
+						if (target_unit->pad1 != 0xFFFF && target_unit->pad2 != 0xFFFF) // We can't land here
+						{
+							target_unit->unlock();
+							next_mission();
+							if (!missionQueue.empty() && mission.mission() == MISSION_STOP) // Don't stop we were patroling
+								next_mission();
+							return;
+						}
+						if (target_unit->pad1 == 0xFFFF) // tell others we're here
+							target_unit->pad1 = (uint16)piece_id;
+						else
+							target_unit->pad2 = (uint16)piece_id;
+						target_unit->unlock();
+						mission.setData(-mission.getData() - 1);
+					}
+				}
+				else
+				{ // being repaired
+					position = target;
+					velocity.reset();
+
+					if (target_unit->port[ACTIVATION])
+					{
+						const float conso_energy = float(unit_manager.unit_type[target_unit->typeId]->WorkerTime * pType->BuildCostEnergy) / float(pType->BuildTime);
+						TA3D::players.requested_energy[ownerId] += conso_energy;
+						if (players.energy[ownerId] >= (energy_cons + conso_energy * TA3D::players.energy_factor[ownerId]) * dt)
+						{
+							target_unit->lock();
+							target_unit->energy_cons += conso_energy * TA3D::players.energy_factor[ownerId];
+							target_unit->unlock();
+							hp += dt * TA3D::players.energy_factor[ownerId] * float(unit_manager.unit_type[target_unit->typeId]->WorkerTime * pType->MaxDamage) / (float)pType->BuildTime;
+						}
+						if (hp >= pType->MaxDamage) // Unit has been repaired
+						{
+							hp = (float)pType->MaxDamage;
+							target_unit->lock();
+							if (target_unit->pad1 == piece_id) // tell others we've left
+								target_unit->pad1 = 0xFFFF;
+							else
+								target_unit->pad2 = 0xFFFF;
+							target_unit->unlock();
+							next_mission();
+							if (!missionQueue.empty() && mission.mission() == MISSION_STOP) // Don't stop we were patroling
+								next_mission();
+							return;
+						}
+						built = true;
+					}
+				}
+			}
+			else
+				stopMoving();
+		}
+		else
+			next_mission();
+	}
+
+	void Unit::doStandbyMineMission(Mission& mission)
+	{
+		const auto pType = unit_manager.unit_type[typeId];
+
+		if (self_destruct < 0.0f)
+		{
+			int dx = ((pType->SightDistance + (int)(h + 0.5f)) >> 3) + 1;
+			int enemy_idx = -1;
+			int sx = Math::RandomTable() & 1;
+			int sy = Math::RandomTable() & 1;
+			// byte mask=1<<ownerId;
+			for (int y = cur_py - dx + sy; y <= cur_py + dx; y += 2)
+			{
+				if (y >= 0 && y < the_map->heightInHeightmapTiles - 1)
+					for (int x = cur_px - dx + sx; x <= cur_px + dx; x += 2)
+						if (x >= 0 && x < the_map->widthInHeightmapTiles - 1)
+						{
+							const int cur_idx = the_map->map_data(x, y).unit_idx;
+							if (cur_idx >= 0 && cur_idx < (int)units.max_unit && units.unit[cur_idx].isAlive() && units.unit[cur_idx].isNotOwnedBy(ownerId) && unit_manager.unit_type[units.unit[cur_idx].typeId]->ShootMe) // This unit is on the sight_map since dx = sightdistance !!
+							{
+								enemy_idx = cur_idx;
+								break;
+							}
+						}
+				if (enemy_idx >= 0)
+					break;
+				sx ^= 1;
+			}
+			if (enemy_idx >= 0) // Annihilate it !!!
+				toggle_self_destruct();
+		}
+	}
+
+	void Unit::doUnloadMission(Mission& mission)
+	{
+		const auto pType = unit_manager.unit_type[typeId];
+
+		if (nb_attached > 0)
+		{
+			Vector3D Dir = missionQueue->getTarget().getPos() - position;
+			Dir.y = 0.0f;
+			float dist = Dir.lengthSquared();
+			int maxdist = 0;
+			if (pType->TransportMaxUnits == 1) // Code for units like the arm atlas
+				maxdist = 3;
+			else
+				maxdist = pType->SightDistance;
+			if (dist > maxdist * maxdist && pType->BMcode) // Si l'unité est trop loin du chantier
+			{
+				c_time = 0.0f;
+				missionQueue->Flags() |= MISSION_FLAG_MOVE;
+				missionQueue->setMoveData(maxdist * 8 / 80);
+			}
+			else if (!(missionQueue->getFlags() & MISSION_FLAG_MOVE))
+			{
+				if (missionQueue->getLastD() >= 0.0f)
+				{
+					if (pType->TransportMaxUnits == 1) // Code for units like the arm atlas
+					{
+						if (attached_list[0] >= 0 && attached_list[0] < (int)units.max_unit // Check we can do that
+							&& units.unit[attached_list[0]].flags && can_be_built(position, units.unit[attached_list[0]].typeId, ownerId))
+						{
+							launchScript(SCRIPT_EndTransport);
+
+							Unit* target_unit = &(units.unit[attached_list[0]]);
+							target_unit->attached = false;
+							target_unit->hidden = false;
+							nb_attached = 0;
+							pMutex.unlock();
+							target_unit->draw_on_map();
+							pMutex.lock();
+						}
+						else if (attached_list[0] < 0 || attached_list[0] >= (int)units.max_unit || units.unit[attached_list[0]].flags == 0)
+							nb_attached = 0;
+
+						next_mission();
+					}
+					else
+					{
+						if (attached_list[nb_attached - 1] >= 0 && attached_list[nb_attached - 1] < (int)units.max_unit // Check we can do that
+							&& units.unit[attached_list[nb_attached - 1]].flags && can_be_built(missionQueue->getTarget().getPos(), units.unit[attached_list[nb_attached - 1]].typeId, ownerId))
+						{
+							const int idx = attached_list[nb_attached - 1];
+							int param[] = {idx, PACKXZ(missionQueue->getTarget().getPos().x * 2.0f + (float)the_map->widthInWorldUnits, missionQueue->getTarget().getPos().z * 2.0f + (float)the_map->heightInWorldUnits)};
+							launchScript(SCRIPT_TransportDrop, 2, param);
+						}
+						else if (attached_list[nb_attached - 1] < 0 || attached_list[nb_attached - 1] >= (int)units.max_unit || units.unit[attached_list[nb_attached - 1]].flags == 0)
+							nb_attached--;
+					}
+					missionQueue->setLastD(-1.0f);
+				}
+				else
+				{
+					//                                if (!is_running(get_script_index(SCRIPT_TransportDrop)) && port[ BUSY ] == 0.0f )
+					if (port[BUSY] == 0)
+						next_mission();
+				}
+			}
+			else
+				stopMoving();
+		}
+		else
+			next_mission();
+	}
+
+	void Unit::doLoadMission(Mission& mission)
+	{
+		const auto pType = unit_manager.unit_type[typeId];
+
+		if (!missionQueue->getTarget().isValid())
+		{
+			next_mission();
+			return;
+		}
+		if (missionQueue->getUnit())
+		{
+			Unit* target_unit = missionQueue->getUnit();
+			if (!target_unit->isAlive())
+			{
+				next_mission();
+				return;
+			}
+			Vector3D Dir = target_unit->position - position;
+			Dir.y = 0.0f;
+			float dist = Dir.lengthSquared();
+			int maxdist = 0;
+			if (pType->TransportMaxUnits == 1) // Code for units like the arm atlas
+				maxdist = 3;
+			else
+				maxdist = pType->SightDistance;
+			if (dist > maxdist * maxdist && pType->BMcode) // Si l'unité est trop loin du chantier
+			{
+				c_time = 0.0f;
+				missionQueue->Flags() |= MISSION_FLAG_MOVE;
+				missionQueue->setMoveData(maxdist * 8 / 80);
+			}
+			else if (!(missionQueue->getFlags() & MISSION_FLAG_MOVE))
+			{
+				if (missionQueue->getLastD() >= 0.0f)
+				{
+					if (pType->TransportMaxUnits == 1) // Code for units like the arm atlas
+					{
+						if (nb_attached == 0)
+						{
+							//										int param[] = { (int)((position.y - target_unit->position.y - target_unit->model->top)*2.0f) << 16 };
+							int param[] = {(int)((position.y - target_unit->position.y) * 2.0f) << 16};
+							launchScript(SCRIPT_BeginTransport, 1, param);
+							runScriptFunction(SCRIPT_QueryTransport, 1, param);
+							target_unit->attached = true;
+							link_list[nb_attached] = (short)param[0];
+							target_unit->hidden = param[0] < 0;
+							attached_list[nb_attached++] = target_unit->idx;
+							target_unit->clear_from_map();
+						}
+						next_mission();
+					}
+					else
+					{
+						if (nb_attached >= pType->TransportMaxUnits)
+						{
+							next_mission();
+							return;
+						}
+						int param[] = {target_unit->idx};
+						launchScript(SCRIPT_TransportPickup, 1, param);
+					}
+					missionQueue->setLastD(-1.0f);
+				}
+				else
+				{
+					if (port[BUSY] == 0)
+						next_mission();
+				}
+			}
+			else
+				stopMoving();
+		}
+		else
+			next_mission();
 	}
 } // namespace TA3D

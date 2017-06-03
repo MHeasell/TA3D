@@ -369,6 +369,18 @@ namespace TA3D
 	private:
 		void start_building(const Vector3D& dir);
 
+		void doWaitMission(Mission& mission);
+
+		void doWaitAttackMission(Mission& mission);
+
+		void doGetRepairedMission(Mission& mission, float dt);
+
+		void doStandbyMineMission(Mission& mission);
+
+		void doUnloadMission(Mission& mission);
+
+		void doLoadMission(Mission& mission);
+
 	}; // class Unit
 
 } // namespace TA3D
