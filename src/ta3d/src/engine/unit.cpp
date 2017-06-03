@@ -2794,49 +2794,7 @@ namespace TA3D
 				case MISSION_GUARD:
 					if (jump_commands)
 						break;
-					if (!missionQueue->getTarget().isValid())
-					{
-						next_mission();
-						break;
-					}
-					if (missionQueue->getUnit() && missionQueue->getUnit()->isAlive() && missionQueue->getUnit()->isOwnedBy(ownerId))
-					{ // On ne défend pas n'importe quoi
-						if (pType->Builder)
-						{
-							if (missionQueue->getUnit()->isBeingBuilt() || missionQueue->getUnit()->hp < unit_manager.unit_type[missionQueue->getUnit()->typeId]->MaxDamage) // Répare l'unité
-							{
-								add_mission(MISSION_REPAIR | MISSION_FLAG_AUTO, &missionQueue->getUnit()->position, true, 0, missionQueue->getUnit());
-								break;
-							}
-							else if (!missionQueue->getUnit()->missionQueue.empty() && (missionQueue->getUnit()->missionQueue->mission() == MISSION_BUILD_2 || missionQueue->getUnit()->missionQueue->mission() == MISSION_REPAIR)) // L'aide à construire
-							{
-								add_mission(MISSION_REPAIR | MISSION_FLAG_AUTO, &missionQueue->getUnit()->missionQueue->getTarget().getPos(), true, 0, missionQueue->getUnit()->missionQueue->getUnit());
-								break;
-							}
-						}
-						if (pType->canattack)
-						{
-							if (!missionQueue->getUnit()->missionQueue.empty() && missionQueue->getUnit()->missionQueue->mission() == MISSION_ATTACK) // L'aide à attaquer
-							{
-								add_mission(MISSION_ATTACK | MISSION_FLAG_AUTO, &missionQueue->getUnit()->missionQueue->getTarget().getPos(), true, 0, missionQueue->getUnit()->missionQueue->getUnit());
-								break;
-							}
-						}
-						if (!pType->canfly)
-						{
-							if (((Vector3D) (position - missionQueue->getUnit()->position)).lengthSquared() >= 25600.0f) // On reste assez près
-							{
-								missionQueue->Flags() |= MISSION_FLAG_MOVE; // | MISSION_FLAG_REFRESH_PATH;
-								missionQueue->setMoveData(10);
-								c_time = 0.0f;
-								break;
-							}
-							else if (missionQueue->getFlags() & MISSION_FLAG_MOVE)
-								stopMoving();
-						}
-					}
-					else
-						next_mission();
+					doGuardMission(currentMission);
 					break;
 				case MISSION_PATROL: // Mode patrouille
 				{
@@ -5429,6 +5387,52 @@ namespace TA3D
 				stopMoving();
 			if (feature_locked)
 				features.unlock();
+		}
+		else
+			next_mission();
+	}
+
+	void Unit::doGuardMission(Mission& mission)
+	{
+		const auto pType = unit_manager.unit_type[typeId];
+
+		auto targetUnit = mission.getUnit();
+
+		if (targetUnit && targetUnit->isAlive() && targetUnit->isOwnedBy(ownerId))
+		{ // On ne défend pas n'importe quoi
+			if (pType->Builder)
+			{
+				if (targetUnit->isBeingBuilt() || targetUnit->hp < unit_manager.unit_type[targetUnit->typeId]->MaxDamage) // Répare l'unité
+				{
+					add_mission(MISSION_REPAIR | MISSION_FLAG_AUTO, &targetUnit->position, true, 0, targetUnit);
+					return;
+				}
+				else if (!targetUnit->missionQueue.empty() && (targetUnit->missionQueue->mission() == MISSION_BUILD_2 || targetUnit->missionQueue->mission() == MISSION_REPAIR)) // L'aide à construire
+				{
+					add_mission(MISSION_REPAIR | MISSION_FLAG_AUTO, &targetUnit->missionQueue->getTarget().getPos(), true, 0, targetUnit->missionQueue->getUnit());
+					return;
+				}
+			}
+			if (pType->canattack)
+			{
+				if (!targetUnit->missionQueue.empty() && targetUnit->missionQueue->mission() == MISSION_ATTACK) // L'aide à attaquer
+				{
+					add_mission(MISSION_ATTACK | MISSION_FLAG_AUTO, &targetUnit->missionQueue->getTarget().getPos(), true, 0, targetUnit->missionQueue->getUnit());
+					return;
+				}
+			}
+			if (!pType->canfly)
+			{
+				if (((Vector3D) (position - targetUnit->position)).lengthSquared() >= 25600.0f) // On reste assez près
+				{
+					mission.Flags() |= MISSION_FLAG_MOVE; // | MISSION_FLAG_REFRESH_PATH;
+					mission.setMoveData(10);
+					c_time = 0.0f;
+					return;
+				}
+				else if (mission.getFlags() & MISSION_FLAG_MOVE)
+					stopMoving();
+			}
 		}
 		else
 			next_mission();
