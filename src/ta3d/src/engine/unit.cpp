@@ -2938,17 +2938,7 @@ namespace TA3D
 				case MISSION_VTOL_STANDBY:
 					if (jump_commands)
 						break;
-					if (missionQueue->getData() > 5)
-					{
-						if (missionQueue.hasNext()) // If there is a mission after this one
-						{
-							next_mission();
-							if (!missionQueue.empty() && (missionQueue->mission() == MISSION_STANDBY || missionQueue->mission() == MISSION_VTOL_STANDBY))
-								missionQueue->setData(0);
-						}
-					}
-					else
-						missionQueue->setData(missionQueue->getData() + 1);
+					doStandbyMission(currentMission);
 					break;
 				case MISSION_ATTACK: // Attaque une unité / attack a unit
 					if (!missionQueue->getTarget().isValid())
@@ -5436,5 +5426,20 @@ namespace TA3D
 		}
 		else
 			next_mission();
+	}
+
+	void Unit::doStandbyMission(Mission& mission)
+	{
+		if (mission.getData() > 5)
+		{
+			if (missionQueue.hasNext()) // If there is a mission after this one
+			{
+				next_mission();
+				if (!missionQueue.empty() && (mission.mission() == MISSION_STANDBY || mission.mission() == MISSION_VTOL_STANDBY))
+					mission.setData(0);
+			}
+		}
+		else
+			mission.setData(mission.getData() + 1);
 	}
 } // namespace TA3D

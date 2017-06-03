@@ -389,6 +389,8 @@ namespace TA3D
 
 		void doGuardMission(Mission& mission);
 
+		void doStandbyMission(Mission& mission);
+
 	}; // class Unit
 
 } // namespace TA3D
