@@ -109,7 +109,9 @@ namespace TA3D
 		  previous_sync(),
 		  nanolathe_target(0),
 		  nanolathe_reverse(false),
-		  nanolathe_feature(false)
+		  nanolathe_feature(false),
+		  b_TargetAngle(false),
+		  f_TargetAngle(0.0f)
 	{
 	}
 
@@ -2013,8 +2015,6 @@ namespace TA3D
 		const sint32 o_py = cur_py;
 		compute_coord = true;
 		const Vector3D old_V = velocity;   // Store the speed, so we can do some calculations
-		bool b_TargetAngle = false; // Do we aim, move, ... ?? Need to change unit angle
-		float f_TargetAngle = 0.0f;
 
 		Vector3D NPos = position;
 		int n_px = cur_px;

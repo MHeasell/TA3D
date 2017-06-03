@@ -361,6 +361,11 @@ namespace TA3D
 		bool nanolathe_reverse;
 		bool nanolathe_feature;
 
+		//! Indicates whether the unit should steer towards a target angle
+		bool b_TargetAngle;
+		//! The angle the unit should steer towards.
+		float f_TargetAngle;
+
 	private:
 		void start_building(const Vector3D& dir);
 
