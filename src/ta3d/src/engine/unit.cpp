@@ -2786,6 +2786,8 @@ namespace TA3D
 					doCaptureMission(currentMission, dt);
 					break;
 				case MISSION_REVIVE:
+					doReviveMission(currentMission, dt);
+					break;
 				case MISSION_RECLAIM:
 					selfmove = false;
 					if (!missionQueue->getTarget().isValid())
@@ -5388,6 +5390,134 @@ namespace TA3D
 			}
 			else
 				next_mission();
+		}
+		else
+			next_mission();
+	}
+
+	void Unit::doReviveMission(Mission& mission, float dt)
+	{
+		const auto pType = unit_manager.unit_type[typeId];
+
+		selfmove = false;
+		if (!missionQueue->getTarget().isValid())
+		{
+			next_mission();
+			return;
+		}
+
+		if (missionQueue->getData() >= 0 && missionQueue->getData() < features.max_features) // Reclaim a feature/wreckage
+		{
+			features.lock();
+			if (features.feature[missionQueue->getData()].type <= 0)
+			{
+				features.unlock();
+				next_mission();
+				return;
+			}
+			bool feature_locked = true;
+
+			Vector3D Dir = features.feature[missionQueue->getData()].Pos - position;
+			Dir.y = 0.0f;
+			missionQueue->getTarget().setPos(features.feature[missionQueue->getData()].Pos);
+			float dist = Dir.lengthSquared();
+			Feature* pFeature = feature_manager.getFeaturePointer(features.feature[missionQueue->getData()].type);
+			int tsize = pFeature == NULL ? 0 : ((pFeature->footprintx + pFeature->footprintz) << 2);
+			int maxdist = pType->SightDistance + tsize;
+			if (dist > maxdist * maxdist && pType->BMcode) // If the unit is too far from its target
+			{
+				c_time = 0.0f;
+				if (!(missionQueue->Flags() & MISSION_FLAG_MOVE))
+					missionQueue->Flags() |= MISSION_FLAG_REFRESH_PATH | MISSION_FLAG_MOVE;
+				missionQueue->setMoveData(Math::Max(maxdist * 7 / 80, (tsize + 7) >> 3));
+				missionQueue->setLastD(0.0f);
+			}
+			else if (!(missionQueue->getFlags() & MISSION_FLAG_MOVE))
+			{
+				if (missionQueue->getLastD() >= 0.0f)
+				{
+					start_building(features.feature[missionQueue->getData()].Pos - position);
+					missionQueue->setLastD(-1.0f);
+				}
+				if (pType->BMcode && port[INBUILDSTANCE] != 0)
+				{
+					if (local && network_manager.isConnected() && nanolathe_target < 0) // Synchronize nanolathe emission
+					{
+						nanolathe_target = missionQueue->getData();
+						g_ta3d_network->sendUnitNanolatheEvent(idx, missionQueue->getData(), true, true);
+					}
+
+					playSound("working");
+					// Reclaim the object
+					const Feature* feature = feature_manager.getFeaturePointer(features.feature[missionQueue->getData()].type);
+					const float recup = std::min(dt * float(pType->WorkerTime * feature->damage) / (5.5f * (float)feature->metal), features.feature[missionQueue->getData()].hp);
+					features.feature[missionQueue->getData()].hp -= recup;
+					if (features.feature[missionQueue->getData()].hp <= 0.0f) // Job done
+					{
+						features.removeFeatureFromMap(missionQueue->getData()); // Remove the object from map
+
+						if (!feature->name.empty()) // Creates the corresponding unit
+						{
+							bool success = false;
+							String wreckage_name = feature->name;
+							wreckage_name = Substr(wreckage_name, 0, wreckage_name.length() - 5); // Remove the _dead/_heap suffix
+
+							int wreckage_type_id = unit_manager.get_unit_index(wreckage_name);
+							Vector3D obj_pos = features.feature[missionQueue->getData()].Pos;
+							float obj_angle = features.feature[missionQueue->getData()].angle;
+							features.unlock();
+							feature_locked = false;
+							if (network_manager.isConnected())
+								g_ta3d_network->sendFeatureDeathEvent(missionQueue->getData());
+							features.delete_feature(missionQueue->getData()); // Delete the object
+
+							if (wreckage_type_id >= 0)
+							{
+								pMutex.unlock();
+								Unit* unit_p = create_unit(wreckage_type_id, ownerId, obj_pos);
+
+								if (unit_p)
+								{
+									unit_p->lock();
+
+									unit_p->orientation.y = obj_angle;
+									unit_p->hp = 0.01f;				   // Need to be repaired :P
+									unit_p->build_percent_left = 0.0f; // It's finished ...
+									unit_p->unlock();
+									unit_p->draw_on_map();
+								}
+								pMutex.lock();
+
+								if (unit_p)
+								{
+									missionQueue->setMissionType(MISSION_REPAIR); // Now let's repair what we've resurrected
+									missionQueue->getTarget().set(Mission::Target::TargetUnit, unit_p->idx, unit_p->ID);
+									missionQueue->setData(1);
+									success = true;
+								}
+							}
+							if (!success)
+							{
+								playSound("cant1");
+								next_mission();
+							}
+						}
+						else
+						{
+							features.unlock();
+							feature_locked = false;
+							if (network_manager.isConnected())
+								g_ta3d_network->sendFeatureDeathEvent(missionQueue->getData());
+							features.delete_feature(missionQueue->getData()); // Delete the object
+							next_mission();
+						}
+					}
+				}
+			}
+			else
+				stopMoving();
+			if (feature_locked)
+				features.unlock();
 		}
 		else
 			next_mission();
