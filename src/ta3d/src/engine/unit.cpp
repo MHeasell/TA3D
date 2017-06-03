@@ -2783,6 +2783,8 @@ namespace TA3D
 					doLoadMission(currentMission);
 					break;
 				case MISSION_CAPTURE:
+					doCaptureMission(currentMission, dt);
+					break;
 				case MISSION_REVIVE:
 				case MISSION_RECLAIM:
 					selfmove = false;
@@ -5285,6 +5287,107 @@ namespace TA3D
 			}
 			else
 				stopMoving();
+		}
+		else
+			next_mission();
+	}
+
+	void Unit::doCaptureMission(Mission& mission, float dt)
+	{
+		const auto pType = unit_manager.unit_type[typeId];
+
+		selfmove = false;
+		if (!mission.getTarget().isValid())
+		{
+			next_mission();
+			return;
+		}
+		if (mission.getUnit()) // Récupère une unité / It's a unit
+		{
+			Unit* target_unit = mission.getUnit();
+			if (target_unit->isAlive())
+			{
+				if (unit_manager.unit_type[target_unit->typeId]->commander || target_unit->isOwnedBy(ownerId))
+				{
+					playSound("cant1");
+					next_mission();
+					return;
+				}
+				if (!(mission.getFlags() & MISSION_FLAG_TARGET_CHECKED))
+				{
+					mission.Flags() |= MISSION_FLAG_TARGET_CHECKED;
+					mission.setData(Math::Min(unit_manager.unit_type[target_unit->typeId]->BuildCostMetal * 100, 10000));
+				}
+
+				Vector3D Dir = target_unit->position - position;
+				Dir.y = 0.0f;
+				float dist = Dir.lengthSquared();
+				UnitType* tType = target_unit->typeId == -1 ? NULL : unit_manager.unit_type[target_unit->typeId];
+				int tsize = (tType == NULL) ? 0 : ((tType->FootprintX + tType->FootprintZ) << 2);
+				int maxdist = pType->SightDistance + tsize;
+				if (dist > maxdist * maxdist && pType->BMcode) // Si l'unité est trop loin du chantier
+				{
+					c_time = 0.0f;
+					if (!(mission.Flags() & MISSION_FLAG_MOVE))
+						mission.Flags() |= MISSION_FLAG_REFRESH_PATH | MISSION_FLAG_MOVE;
+					mission.setMoveData(Math::Max(maxdist * 7 / 80, (tsize + 7) >> 3));
+					mission.setLastD(0.0f);
+				}
+				else if (!(mission.getFlags() & MISSION_FLAG_MOVE))
+				{
+					if (mission.getLastD() >= 0.0f)
+					{
+						start_building(target_unit->position - position);
+						mission.setLastD(-1.0f);
+					}
+
+					if (pType->BMcode && port[INBUILDSTANCE] != 0)
+					{
+						if (local && network_manager.isConnected() && nanolathe_target < 0)
+						{ // Synchronize nanolathe emission
+							nanolathe_target = target_unit->idx;
+							g_ta3d_network->sendUnitNanolatheEvent(idx, target_unit->idx, false, false);
+						}
+
+						playSound("working");
+
+						mission.setData(mission.getData() - (int)(dt * 1000.0f + 0.5f));
+						if (mission.getData() <= 0) // Unit has been captured
+						{
+							pMutex.unlock();
+
+							target_unit->clear_from_map();
+							target_unit->lock();
+
+							Unit* new_unit = create_unit(target_unit->typeId, ownerId, target_unit->position);
+							if (new_unit)
+							{
+								new_unit->lock();
+
+								new_unit->orientation = target_unit->orientation;
+								new_unit->hp = target_unit->hp;
+								new_unit->build_percent_left = target_unit->build_percent_left;
+
+								new_unit->unlock();
+							}
+
+							target_unit->flags = 0x14;
+							target_unit->hp = 0.0f;
+							target_unit->local = true; // Force synchronization in networking mode
+
+							target_unit->unlock();
+
+							pMutex.lock();
+							next_mission();
+						}
+
+					}
+				}
+				else
+					stopMoving();
+			}
+			else
+				next_mission();
 		}
 		else
 			next_mission();

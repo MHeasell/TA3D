@@ -381,6 +381,8 @@ namespace TA3D
 
 		void doLoadMission(Mission& mission);
 
+		void doCaptureMission(Mission& mission, float dt);
+
 	}; // class Unit
 
 } // namespace TA3D
