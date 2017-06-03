@@ -4923,7 +4923,7 @@ namespace TA3D
 
 		if (nb_attached > 0)
 		{
-			Vector3D Dir = missionQueue->getTarget().getPos() - position;
+			Vector3D Dir = mission.getTarget().getPos() - position;
 			Dir.y = 0.0f;
 			float dist = Dir.lengthSquared();
 			int maxdist = 0;
@@ -4934,12 +4934,12 @@ namespace TA3D
 			if (dist > maxdist * maxdist && pType->BMcode) // Si l'unité est trop loin du chantier
 			{
 				c_time = 0.0f;
-				missionQueue->Flags() |= MISSION_FLAG_MOVE;
-				missionQueue->setMoveData(maxdist * 8 / 80);
+				mission.Flags() |= MISSION_FLAG_MOVE;
+				mission.setMoveData(maxdist * 8 / 80);
 			}
-			else if (!(missionQueue->getFlags() & MISSION_FLAG_MOVE))
+			else if (!(mission.getFlags() & MISSION_FLAG_MOVE))
 			{
-				if (missionQueue->getLastD() >= 0.0f)
+				if (mission.getLastD() >= 0.0f)
 				{
 					if (pType->TransportMaxUnits == 1) // Code for units like the arm atlas
 					{
@@ -4964,16 +4964,16 @@ namespace TA3D
 					else
 					{
 						if (attached_list[nb_attached - 1] >= 0 && attached_list[nb_attached - 1] < (int)units.max_unit // Check we can do that
-							&& units.unit[attached_list[nb_attached - 1]].flags && can_be_built(missionQueue->getTarget().getPos(), units.unit[attached_list[nb_attached - 1]].typeId, ownerId))
+							&& units.unit[attached_list[nb_attached - 1]].flags && can_be_built(mission.getTarget().getPos(), units.unit[attached_list[nb_attached - 1]].typeId, ownerId))
 						{
 							const int idx = attached_list[nb_attached - 1];
-							int param[] = {idx, PACKXZ(missionQueue->getTarget().getPos().x * 2.0f + (float)the_map->widthInWorldUnits, missionQueue->getTarget().getPos().z * 2.0f + (float)the_map->heightInWorldUnits)};
+							int param[] = {idx, PACKXZ(mission.getTarget().getPos().x * 2.0f + (float)the_map->widthInWorldUnits, mission.getTarget().getPos().z * 2.0f + (float)the_map->heightInWorldUnits)};
 							launchScript(SCRIPT_TransportDrop, 2, param);
 						}
 						else if (attached_list[nb_attached - 1] < 0 || attached_list[nb_attached - 1] >= (int)units.max_unit || units.unit[attached_list[nb_attached - 1]].flags == 0)
 							nb_attached--;
 					}
-					missionQueue->setLastD(-1.0f);
+					mission.setLastD(-1.0f);
 				}
 				else
 				{
@@ -4992,14 +4992,14 @@ namespace TA3D
 	{
 		const auto pType = unit_manager.unit_type[typeId];
 
-		if (!missionQueue->getTarget().isValid())
+		if (!mission.getTarget().isValid())
 		{
 			next_mission();
 			return;
 		}
-		if (missionQueue->getUnit())
+		if (mission.getUnit())
 		{
-			Unit* target_unit = missionQueue->getUnit();
+			Unit* target_unit = mission.getUnit();
 			if (!target_unit->isAlive())
 			{
 				next_mission();
@@ -5016,12 +5016,12 @@ namespace TA3D
 			if (dist > maxdist * maxdist && pType->BMcode) // Si l'unité est trop loin du chantier
 			{
 				c_time = 0.0f;
-				missionQueue->Flags() |= MISSION_FLAG_MOVE;
-				missionQueue->setMoveData(maxdist * 8 / 80);
+				mission.Flags() |= MISSION_FLAG_MOVE;
+				mission.setMoveData(maxdist * 8 / 80);
 			}
-			else if (!(missionQueue->getFlags() & MISSION_FLAG_MOVE))
+			else if (!(mission.getFlags() & MISSION_FLAG_MOVE))
 			{
-				if (missionQueue->getLastD() >= 0.0f)
+				if (mission.getLastD() >= 0.0f)
 				{
 					if (pType->TransportMaxUnits == 1) // Code for units like the arm atlas
 					{
@@ -5048,7 +5048,7 @@ namespace TA3D
 						int param[] = {target_unit->idx};
 						launchScript(SCRIPT_TransportPickup, 1, param);
 					}
-					missionQueue->setLastD(-1.0f);
+					mission.setLastD(-1.0f);
 				}
 				else
 				{
@@ -5169,16 +5169,16 @@ namespace TA3D
 		const auto pType = unit_manager.unit_type[typeId];
 
 		selfmove = false;
-		if (!missionQueue->getTarget().isValid())
+		if (!mission.getTarget().isValid())
 		{
 			next_mission();
 			return;
 		}
 
-		if (missionQueue->getData() >= 0 && missionQueue->getData() < features.max_features) // Reclaim a feature/wreckage
+		if (mission.getData() >= 0 && mission.getData() < features.max_features) // Reclaim a feature/wreckage
 		{
 			features.lock();
-			if (features.feature[missionQueue->getData()].type <= 0)
+			if (features.feature[mission.getData()].type <= 0)
 			{
 				features.unlock();
 				next_mission();
@@ -5186,44 +5186,44 @@ namespace TA3D
 			}
 			bool feature_locked = true;
 
-			Vector3D Dir = features.feature[missionQueue->getData()].Pos - position;
+			Vector3D Dir = features.feature[mission.getData()].Pos - position;
 			Dir.y = 0.0f;
-			missionQueue->getTarget().setPos(features.feature[missionQueue->getData()].Pos);
+			mission.getTarget().setPos(features.feature[mission.getData()].Pos);
 			float dist = Dir.lengthSquared();
-			Feature* pFeature = feature_manager.getFeaturePointer(features.feature[missionQueue->getData()].type);
+			Feature* pFeature = feature_manager.getFeaturePointer(features.feature[mission.getData()].type);
 			int tsize = pFeature == NULL ? 0 : ((pFeature->footprintx + pFeature->footprintz) << 2);
 			int maxdist = pType->SightDistance + tsize;
 			if (dist > maxdist * maxdist && pType->BMcode) // If the unit is too far from its target
 			{
 				c_time = 0.0f;
-				if (!(missionQueue->Flags() & MISSION_FLAG_MOVE))
-					missionQueue->Flags() |= MISSION_FLAG_REFRESH_PATH | MISSION_FLAG_MOVE;
-				missionQueue->setMoveData(Math::Max(maxdist * 7 / 80, (tsize + 7) >> 3));
-				missionQueue->setLastD(0.0f);
+				if (!(mission.Flags() & MISSION_FLAG_MOVE))
+					mission.Flags() |= MISSION_FLAG_REFRESH_PATH | MISSION_FLAG_MOVE;
+				mission.setMoveData(Math::Max(maxdist * 7 / 80, (tsize + 7) >> 3));
+				mission.setLastD(0.0f);
 			}
-			else if (!(missionQueue->getFlags() & MISSION_FLAG_MOVE))
+			else if (!(mission.getFlags() & MISSION_FLAG_MOVE))
 			{
-				if (missionQueue->getLastD() >= 0.0f)
+				if (mission.getLastD() >= 0.0f)
 				{
-					start_building(features.feature[missionQueue->getData()].Pos - position);
-					missionQueue->setLastD(-1.0f);
+					start_building(features.feature[mission.getData()].Pos - position);
+					mission.setLastD(-1.0f);
 				}
 				if (pType->BMcode && port[INBUILDSTANCE] != 0)
 				{
 					if (local && network_manager.isConnected() && nanolathe_target < 0) // Synchronize nanolathe emission
 					{
-						nanolathe_target = missionQueue->getData();
-						g_ta3d_network->sendUnitNanolatheEvent(idx, missionQueue->getData(), true, true);
+						nanolathe_target = mission.getData();
+						g_ta3d_network->sendUnitNanolatheEvent(idx, mission.getData(), true, true);
 					}
 
 					playSound("working");
 					// Reclaim the object
-					const Feature* feature = feature_manager.getFeaturePointer(features.feature[missionQueue->getData()].type);
-					const float recup = std::min(dt * float(pType->WorkerTime * feature->damage) / (5.5f * (float)feature->metal), features.feature[missionQueue->getData()].hp);
-					features.feature[missionQueue->getData()].hp -= recup;
-					if (features.feature[missionQueue->getData()].hp <= 0.0f) // Job done
+					const Feature* feature = feature_manager.getFeaturePointer(features.feature[mission.getData()].type);
+					const float recup = std::min(dt * float(pType->WorkerTime * feature->damage) / (5.5f * (float)feature->metal), features.feature[mission.getData()].hp);
+					features.feature[mission.getData()].hp -= recup;
+					if (features.feature[mission.getData()].hp <= 0.0f) // Job done
 					{
-						features.removeFeatureFromMap(missionQueue->getData()); // Remove the object from map
+						features.removeFeatureFromMap(mission.getData()); // Remove the object from map
 
 						if (!feature->name.empty()) // Creates the corresponding unit
 						{
@@ -5232,13 +5232,13 @@ namespace TA3D
 							wreckage_name = Substr(wreckage_name, 0, wreckage_name.length() - 5); // Remove the _dead/_heap suffix
 
 							int wreckage_type_id = unit_manager.get_unit_index(wreckage_name);
-							Vector3D obj_pos = features.feature[missionQueue->getData()].Pos;
-							float obj_angle = features.feature[missionQueue->getData()].angle;
+							Vector3D obj_pos = features.feature[mission.getData()].Pos;
+							float obj_angle = features.feature[mission.getData()].angle;
 							features.unlock();
 							feature_locked = false;
 							if (network_manager.isConnected())
-								g_ta3d_network->sendFeatureDeathEvent(missionQueue->getData());
-							features.delete_feature(missionQueue->getData()); // Delete the object
+								g_ta3d_network->sendFeatureDeathEvent(mission.getData());
+							features.delete_feature(mission.getData()); // Delete the object
 
 							if (wreckage_type_id >= 0)
 							{
@@ -5259,9 +5259,9 @@ namespace TA3D
 
 								if (unit_p)
 								{
-									missionQueue->setMissionType(MISSION_REPAIR); // Now let's repair what we've resurrected
-									missionQueue->getTarget().set(Mission::Target::TargetUnit, unit_p->idx, unit_p->ID);
-									missionQueue->setData(1);
+									mission.setMissionType(MISSION_REPAIR); // Now let's repair what we've resurrected
+									mission.getTarget().set(Mission::Target::TargetUnit, unit_p->idx, unit_p->ID);
+									mission.setData(1);
 									success = true;
 								}
 							}
@@ -5276,8 +5276,8 @@ namespace TA3D
 							features.unlock();
 							feature_locked = false;
 							if (network_manager.isConnected())
-								g_ta3d_network->sendFeatureDeathEvent(missionQueue->getData());
-							features.delete_feature(missionQueue->getData()); // Delete the object
+								g_ta3d_network->sendFeatureDeathEvent(mission.getData());
+							features.delete_feature(mission.getData()); // Delete the object
 							next_mission();
 						}
 					}
@@ -5297,14 +5297,14 @@ namespace TA3D
 		const auto pType = unit_manager.unit_type[typeId];
 
 		selfmove = false;
-		if (!missionQueue->getTarget().isValid())
+		if (!mission.getTarget().isValid())
 		{
 			next_mission();
 			return;
 		}
-		if (missionQueue->getUnit()) // Récupère une unité / It's a unit
+		if (mission.getUnit()) // Récupère une unité / It's a unit
 		{
-			Unit* target_unit = missionQueue->getUnit();
+			Unit* target_unit = mission.getUnit();
 			if (target_unit->isAlive())
 			{
 				Vector3D Dir = target_unit->position - position;
@@ -5316,17 +5316,17 @@ namespace TA3D
 				if (dist > maxdist * maxdist && pType->BMcode) // Si l'unité est trop loin du chantier
 				{
 					c_time = 0.0f;
-					if (!(missionQueue->Flags() & MISSION_FLAG_MOVE))
-						missionQueue->Flags() |= MISSION_FLAG_REFRESH_PATH | MISSION_FLAG_MOVE;
-					missionQueue->setMoveData(Math::Max(maxdist * 7 / 80, (tsize + 7) >> 3));
-					missionQueue->setLastD(0.0f);
+					if (!(mission.Flags() & MISSION_FLAG_MOVE))
+						mission.Flags() |= MISSION_FLAG_REFRESH_PATH | MISSION_FLAG_MOVE;
+					mission.setMoveData(Math::Max(maxdist * 7 / 80, (tsize + 7) >> 3));
+					mission.setLastD(0.0f);
 				}
-				else if (!(missionQueue->getFlags() & MISSION_FLAG_MOVE))
+				else if (!(mission.getFlags() & MISSION_FLAG_MOVE))
 				{
-					if (missionQueue->getLastD() >= 0.0f)
+					if (mission.getLastD() >= 0.0f)
 					{
 						start_building(target_unit->position - position);
-						missionQueue->setLastD(-1.0f);
+						mission.setLastD(-1.0f);
 					}
 
 					if (pType->BMcode && port[INBUILDSTANCE] != 0)
@@ -5361,10 +5361,10 @@ namespace TA3D
 			else
 				next_mission();
 		}
-		else if (missionQueue->getData() >= 0 && missionQueue->getData() < features.max_features) // Reclaim a feature/wreckage
+		else if (mission.getData() >= 0 && mission.getData() < features.max_features) // Reclaim a feature/wreckage
 		{
 			features.lock();
-			if (features.feature[missionQueue->getData()].type <= 0)
+			if (features.feature[mission.getData()].type <= 0)
 			{
 				features.unlock();
 				next_mission();
@@ -5372,55 +5372,55 @@ namespace TA3D
 			}
 			bool feature_locked = true;
 
-			Vector3D Dir = features.feature[missionQueue->getData()].Pos - position;
+			Vector3D Dir = features.feature[mission.getData()].Pos - position;
 			Dir.y = 0.0f;
-			missionQueue->getTarget().setPos(features.feature[missionQueue->getData()].Pos);
+			mission.getTarget().setPos(features.feature[mission.getData()].Pos);
 			float dist = Dir.lengthSquared();
-			Feature* pFeature = feature_manager.getFeaturePointer(features.feature[missionQueue->getData()].type);
+			Feature* pFeature = feature_manager.getFeaturePointer(features.feature[mission.getData()].type);
 			int tsize = pFeature == NULL ? 0 : ((pFeature->footprintx + pFeature->footprintz) << 2);
 			int maxdist = ((int)(pType->BuildDistance)) + tsize;
 			if (dist > maxdist * maxdist && pType->BMcode) // If the unit is too far from its target
 			{
 				c_time = 0.0f;
-				if (!(missionQueue->Flags() & MISSION_FLAG_MOVE))
-					missionQueue->Flags() |= MISSION_FLAG_REFRESH_PATH | MISSION_FLAG_MOVE;
-				missionQueue->setMoveData(Math::Max(maxdist * 7 / 80, (tsize + 7) >> 3));
-				missionQueue->setLastD(0.0f);
+				if (!(mission.Flags() & MISSION_FLAG_MOVE))
+					mission.Flags() |= MISSION_FLAG_REFRESH_PATH | MISSION_FLAG_MOVE;
+				mission.setMoveData(Math::Max(maxdist * 7 / 80, (tsize + 7) >> 3));
+				mission.setLastD(0.0f);
 			}
-			else if (!(missionQueue->getFlags() & MISSION_FLAG_MOVE))
+			else if (!(mission.getFlags() & MISSION_FLAG_MOVE))
 			{
-				if (missionQueue->getLastD() >= 0.0f)
+				if (mission.getLastD() >= 0.0f)
 				{
-					start_building(features.feature[missionQueue->getData()].Pos - position);
-					missionQueue->setLastD(-1.0f);
+					start_building(features.feature[mission.getData()].Pos - position);
+					mission.setLastD(-1.0f);
 				}
 				if (pType->BMcode && port[INBUILDSTANCE] != 0)
 				{
 					if (local && network_manager.isConnected() && nanolathe_target < 0) // Synchronize nanolathe emission
 					{
-						nanolathe_target = missionQueue->getData();
-						g_ta3d_network->sendUnitNanolatheEvent(idx, missionQueue->getData(), true, true);
+						nanolathe_target = mission.getData();
+						g_ta3d_network->sendUnitNanolatheEvent(idx, mission.getData(), true, true);
 					}
 
 					playSound("working");
 					// Reclaim the object
-					const Feature* feature = feature_manager.getFeaturePointer(features.feature[missionQueue->getData()].type);
-					const float recup = std::min(dt * float(pType->WorkerTime * feature->damage) / (5.5f * (float)feature->metal), features.feature[missionQueue->getData()].hp);
-					features.feature[missionQueue->getData()].hp -= recup;
+					const Feature* feature = feature_manager.getFeaturePointer(features.feature[mission.getData()].type);
+					const float recup = std::min(dt * float(pType->WorkerTime * feature->damage) / (5.5f * (float)feature->metal), features.feature[mission.getData()].hp);
+					features.feature[mission.getData()].hp -= recup;
 					if (dt > 0.0f)
 					{
 						metal_prod += recup * (float)feature->metal / (dt * (float)feature->damage);
 						energy_prod += recup * (float)feature->energy / (dt * (float)feature->damage);
 					}
-					if (features.feature[missionQueue->getData()].hp <= 0.0f) // Job done
+					if (features.feature[mission.getData()].hp <= 0.0f) // Job done
 					{
-						features.removeFeatureFromMap(missionQueue->getData()); // Remove the object from map
+						features.removeFeatureFromMap(mission.getData()); // Remove the object from map
 
 						features.unlock();
 						feature_locked = false;
 						if (network_manager.isConnected())
-							g_ta3d_network->sendFeatureDeathEvent(missionQueue->getData());
-						features.delete_feature(missionQueue->getData()); // Delete the object
+							g_ta3d_network->sendFeatureDeathEvent(mission.getData());
+						features.delete_feature(mission.getData()); // Delete the object
 						next_mission();
 					}
 				}
