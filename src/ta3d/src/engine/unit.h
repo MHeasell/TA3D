@@ -385,6 +385,8 @@ namespace TA3D
 
 		void doReviveMission(Mission& mission, float dt);
 
+		void doReclaimMission(Mission& mission, float dt);
+
 	}; // class Unit
 
 } // namespace TA3D
