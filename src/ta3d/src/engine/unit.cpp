@@ -110,8 +110,8 @@ namespace TA3D
 		  nanolathe_target(0),
 		  nanolathe_reverse(false),
 		  nanolathe_feature(false),
-		  b_TargetAngle(false),
-		  f_TargetAngle(0.0f)
+		  hasTargetAngle(false),
+		  targetAngle(0.0f)
 	{
 	}
 
@@ -2756,7 +2756,7 @@ namespace TA3D
 			missionQueue->setTime(missionQueue->getTime() + dt);
 			last_path_refresh += dt;
 
-			followPath(dt, b_TargetAngle, f_TargetAngle, NPos, n_px, n_py, precomputed_position);
+			followPath(dt, hasTargetAngle, targetAngle, NPos, n_px, n_py, precomputed_position);
 
 			switch (missionQueue->mission()) // General orders
 			{
@@ -2808,8 +2808,8 @@ namespace TA3D
 						}
 						else if (!(missionQueue->getFlags() & MISSION_FLAG_MOVE))
 						{
-							b_TargetAngle = true;
-							f_TargetAngle = target_unit->orientation.y;
+							hasTargetAngle = true;
+							targetAngle = target_unit->orientation.y;
 							if (missionQueue->getData() >= 0)
 							{
 								setFlag(missionQueue->Flags(), MISSION_FLAG_BEING_REPAIRED);
@@ -4026,10 +4026,10 @@ namespace TA3D
 							J = 1.0f / dist * J;
 						if (dist > (float)pType->ManeuverLeashLength * 0.5f)
 						{
-							b_TargetAngle = true;
-							f_TargetAngle = acosf(J.z) * RAD2DEG;
+							hasTargetAngle = true;
+							targetAngle = acosf(J.z) * RAD2DEG;
 							if (J.x < 0.0f)
-								f_TargetAngle = -f_TargetAngle;
+								targetAngle = -targetAngle;
 						}
 
 						J.z = cosf(orientation.y * DEG2RAD);
@@ -4060,10 +4060,10 @@ namespace TA3D
 						const float dist = J.length();
 						if (dist > 0.0f)
 							J = 1.0f / dist * J;
-						b_TargetAngle = true;
-						f_TargetAngle = acosf(J.z) * RAD2DEG;
+						hasTargetAngle = true;
+						targetAngle = acosf(J.z) * RAD2DEG;
 						if (J.x < 0.0f)
-							f_TargetAngle = -f_TargetAngle;
+							targetAngle = -targetAngle;
 
 						float ideal_dist = (float)pType->SightDistance * 0.25f;
 						switch (missionQueue->mission())
@@ -4108,10 +4108,10 @@ namespace TA3D
 						const float dist = J.length();
 						if (dist > 0.0f)
 							J = 1.0f / dist * J;
-						b_TargetAngle = true;
-						f_TargetAngle = acosf(J.z) * RAD2DEG;
+						hasTargetAngle = true;
+						targetAngle = acosf(J.z) * RAD2DEG;
 						if (J.x < 0.0f)
-							f_TargetAngle = -f_TargetAngle;
+							targetAngle = -targetAngle;
 						const float ideal_dist = (float)pType->SightDistance;
 
 						Vector3D acc;
@@ -4119,7 +4119,7 @@ namespace TA3D
 							acc = pType->Acceleration * J;
 						else
 						{
-							f_TargetAngle += 90.0f;
+							targetAngle += 90.0f;
 							acc = pType->Acceleration * (10.0f * (dist - ideal_dist) * J + Vector3D(J.z, 0.0f, -J.x));
 							if (acc.lengthSquared() >= pType->Acceleration * pType->Acceleration)
 							{
@@ -4366,27 +4366,27 @@ namespace TA3D
 
 			// Change the unit's angle the way we need it to be changed
 
-			if (b_TargetAngle && !isNaN(f_TargetAngle) && pType->BMcode) // Don't remove the class check otherwise factories can spin
+			if (hasTargetAngle && !isNaN(targetAngle) && pType->BMcode) // Don't remove the class check otherwise factories can spin
 			{
-				while (!isNaN(f_TargetAngle) && fabsf(f_TargetAngle - orientation.y) > 180.0f)
+				while (!isNaN(targetAngle) && fabsf(targetAngle - orientation.y) > 180.0f)
 				{
-					if (f_TargetAngle < orientation.y)
+					if (targetAngle < orientation.y)
 						orientation.y -= 360.0f;
 					else
 						orientation.y += 360.0f;
 				}
-				if (!isNaN(f_TargetAngle) && fabsf(f_TargetAngle - orientation.y) >= 1.0f)
+				if (!isNaN(targetAngle) && fabsf(targetAngle - orientation.y) >= 1.0f)
 				{
 					float aspeed = pType->TurnRate;
-					if (f_TargetAngle < orientation.y)
+					if (targetAngle < orientation.y)
 						aspeed = -aspeed;
-					float a = f_TargetAngle - orientation.y;
+					float a = targetAngle - orientation.y;
 					angularVelocity.y = aspeed;
-					float b = f_TargetAngle - (orientation.y + dt * angularVelocity.y);
-					if (((a < 0.0f && b > 0.0f) || (a > 0.0f && b < 0.0f)) && !isNaN(f_TargetAngle))
+					float b = targetAngle - (orientation.y + dt * angularVelocity.y);
+					if (((a < 0.0f && b > 0.0f) || (a > 0.0f && b < 0.0f)) && !isNaN(targetAngle))
 					{
 						angularVelocity.y = 0.0f;
-						orientation.y = f_TargetAngle;
+						orientation.y = targetAngle;
 					}
 				}
 			}
