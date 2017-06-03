@@ -393,6 +393,8 @@ namespace TA3D
 
 		void doAttackMission(Mission& mission);
 
+		void doStopMission(Mission& mission);
+
 	}; // class Unit
 
 } // namespace TA3D

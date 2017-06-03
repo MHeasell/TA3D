@@ -2942,46 +2942,7 @@ namespace TA3D
 						next_mission();
 					break;
 				case MISSION_STOP:																																																													// Arrête tout ce qui était en cours / stop everything running
-					while (missionQueue.hasNext() && (missionQueue->mission() == MISSION_STOP || missionQueue->mission() == MISSION_STANDBY || missionQueue->mission() == MISSION_VTOL_STANDBY) && (missionQueue(1) == MISSION_STOP || missionQueue(1) == MISSION_STANDBY || missionQueue(1) == MISSION_VTOL_STANDBY)) // Don't make a big stop stack :P
-						next_mission();
-					if (missionQueue->mission() != MISSION_STOP && missionQueue->mission() != MISSION_STANDBY && missionQueue->mission() != MISSION_VTOL_STANDBY)
-						break;
-					missionQueue->setMissionType(MISSION_STOP);
-					if (missionQueue->getData() > 5)
-					{
-						if (missionQueue.hasNext())
-						{
-							next_mission();
-							if (!missionQueue.empty() && missionQueue->mission() == MISSION_STOP) // Mode attente / wait mode
-								missionQueue->setData(1);
-						}
-					}
-					else
-					{
-						if (missionQueue->getData() == 0)
-						{
-							stopMovingAnimation();
-							was_moving = false;
-							selfmove = false;
-							if (port[INBUILDSTANCE])
-							{
-								launchScript(SCRIPT_stopbuilding);
-								deactivate();
-							}
-							for (uint32 i = 0; i < weapon.size(); ++i)
-								if (weapon[i].state)
-								{
-									launchScript(SCRIPT_TargetCleared);
-									break;
-								}
-							for (uint32 i = 0; i < weapon.size(); ++i) // Stop weapons
-							{
-								weapon[i].state = WEAPON_FLAG_IDLE;
-								weapon[i].data = -1;
-							}
-						}
-						missionQueue->setData(missionQueue->getData() + 1);
-					}
+					doStopMission(currentMission);
 					break;
 				case MISSION_REPAIR:
 					if (!missionQueue->getTarget().isValid())
@@ -5434,6 +5395,50 @@ namespace TA3D
 			}
 			else
 				next_mission();
+		}
+	}
+
+	void Unit::doStopMission(Mission& mission)
+	{
+		while (missionQueue.hasNext() && (missionQueue->mission() == MISSION_STOP || missionQueue->mission() == MISSION_STANDBY || missionQueue->mission() == MISSION_VTOL_STANDBY) && (missionQueue(1) == MISSION_STOP || missionQueue(1) == MISSION_STANDBY || missionQueue(1) == MISSION_VTOL_STANDBY)) // Don't make a big stop stack :P
+			next_mission();
+		if (missionQueue->mission() != MISSION_STOP && missionQueue->mission() != MISSION_STANDBY && missionQueue->mission() != MISSION_VTOL_STANDBY)
+			return;
+		missionQueue->setMissionType(MISSION_STOP);
+		if (missionQueue->getData() > 5)
+		{
+			if (missionQueue.hasNext())
+			{
+				next_mission();
+				if (!missionQueue.empty() && missionQueue->mission() == MISSION_STOP) // Mode attente / wait mode
+					missionQueue->setData(1);
+			}
+		}
+		else
+		{
+			if (missionQueue->getData() == 0)
+			{
+				stopMovingAnimation();
+				was_moving = false;
+				selfmove = false;
+				if (port[INBUILDSTANCE])
+				{
+					launchScript(SCRIPT_stopbuilding);
+					deactivate();
+				}
+				for (uint32 i = 0; i < weapon.size(); ++i)
+					if (weapon[i].state)
+					{
+						launchScript(SCRIPT_TargetCleared);
+						break;
+					}
+				for (uint32 i = 0; i < weapon.size(); ++i) // Stop weapons
+				{
+					weapon[i].state = WEAPON_FLAG_IDLE;
+					weapon[i].data = -1;
+				}
+			}
+			missionQueue->setData(missionQueue->getData() + 1);
 		}
 	}
 } // namespace TA3D
