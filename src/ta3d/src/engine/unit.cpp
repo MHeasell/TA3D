@@ -2015,6 +2015,8 @@ namespace TA3D
 		const sint32 o_py = cur_py;
 		compute_coord = true;
 		const Vector3D old_V = velocity;   // Store the speed, so we can do some calculations
+		hasTargetAngle = false;
+		targetAngle = 0.0f;
 
 		Vector3D NPos = position;
 		int n_px = cur_px;
