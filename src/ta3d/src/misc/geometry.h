@@ -23,6 +23,16 @@ namespace TA3D
 	/** An infinite plane in 3D space. */
 	struct Plane3D
 	{
+		struct IntersectResult
+		{
+			bool hit;
+			float d;
+			IntersectResult(): hit(false) {}
+			explicit IntersectResult(float d): hit(true), d(d) {}
+			float orInfinity() { return hit ? d : std::numeric_limits<float>::infinity(); }
+			float orElse(float alternative) { return hit ? d : alternative; }
+		};
+
 		/**
 		 * Creates a plane from 3 points that lie on it.
 		 * The plane is constructed such that the points
@@ -46,10 +56,22 @@ namespace TA3D
 		 * direction vector.
 		 *
 		 * If the ray and the plane never intersect,
-		 * i.e. they are parallel, this will return either
-		 * positive or negative infinity.
+		 * i.e. they are parallel, this will return
+		 * a result indicating that they did not intersect.
 		 */
-		float intersect(const Ray3D& ray) const;
+		IntersectResult intersect(const Ray3D& ray) const;
+
+		/**
+		 * Returns the distance along the ray
+		 * at which it intersects with this plane.
+		 * The distance is defined in terms of the ray's
+		 * direction vector.
+		 *
+		 * If the ray does not intersect, i.e. it is parallel,
+		 * if the ray is in front of the plane we return infinity,
+		 * otherwise we return negative infinity.
+		 */
+		float intersectOrInfinity(const Ray3D& ray) const;
 
 		/**
 		 * Returns true if the given point is in front of the plane.
@@ -113,6 +135,15 @@ namespace TA3D
 
 	struct Triangle3D
 	{
+		struct IntersectResult
+		{
+			bool hit;
+			float d;
+			IntersectResult(): hit(false) {}
+			explicit IntersectResult(float d): hit(true), d(d) {}
+			float orInfinity() { return hit ? d : std::numeric_limits<float>::infinity(); }
+		};
+
 		Vector3D a;
 		Vector3D b;
 		Vector3D c;
@@ -127,9 +158,9 @@ namespace TA3D
 		 * direction vector.
 		 *
 		 * If the ray and the triangle never intersect,
-		 * this will return positive infinity.
+		 * this will return a result indicating that they did not intersect.
 		 */
-		float intersect(const Ray3D& ray) const;
+		IntersectResult intersect(const Ray3D& ray) const;
 
 		/**
 		 * Converts the input world-space coordinates

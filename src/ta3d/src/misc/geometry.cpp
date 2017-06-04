@@ -22,11 +22,16 @@ namespace TA3D
 		return Plane3D(position, normal);
 	}
 
-	float Plane3D::intersect(const Ray3D& ray) const
+	Plane3D::IntersectResult Plane3D::intersect(const Ray3D& ray) const
 	{
 		float a = (point - ray.origin).dot(normal);
 		float b = ray.direction.dot(normal);
-		return a / b;
+		if (b == 0.0f)
+		{
+			return IntersectResult();
+		}
+
+		return IntersectResult(a / b);
 	}
 
 	bool Plane3D::isInFront(const Vector3D& p) const
@@ -34,13 +39,26 @@ namespace TA3D
 		return (p - point).dot(normal) > 0;
 	}
 
+	float Plane3D::intersectOrInfinity(const Ray3D& ray) const
+	{
+		auto result = intersect(ray);
+		if (result.hit)
+		{
+			return result.d;
+		}
+
+		return isInFront(ray.origin)
+			? std::numeric_limits<float>::infinity()
+			: -std::numeric_limits<float>::infinity();
+	}
+
 	BoundingBox3D::IntersectResult BoundingBox3D::intersect(const Ray3D& ray) const
 	{
-		Plane3D bottomPlane(center + Vector3D(0.0f, 0.0f, -extents.z), Vector3D(0.0f, 0.0f, 1.0f));
-		Plane3D topPlane(center + Vector3D(0.0f, 0.0f, extents.z), Vector3D(0.0f, 0.0f, 1.0f));
+		Plane3D bottomPlane(center + Vector3D(0.0f, 0.0f, -extents.z), Vector3D(0.0f, 0.0f, -1.0f));
+		Plane3D topPlane(center + Vector3D(0.0f, 0.0f, extents.z), Vector3D(0.0f, 0.0f, -1.0f));
 
-		float bottomIntersect = bottomPlane.intersect(ray);
-		float topIntersect = topPlane.intersect(ray);
+		float bottomIntersect = bottomPlane.intersectOrInfinity(ray);
+		float topIntersect = topPlane.intersectOrInfinity(ray);
 
 		float zEnter;
 		float zExit;
@@ -55,11 +73,11 @@ namespace TA3D
 			zExit = bottomIntersect;
 		}
 
-		Plane3D leftPlane(center + Vector3D(-extents.x, 0.0f, 0.0f), Vector3D(1.0f, 0.0f, 0.0f));
-		Plane3D rightPlane(center + Vector3D(extents.x, 0.0f, 0.0f), Vector3D(1.0f, 0.0f, 0.0f));
+		Plane3D leftPlane(center + Vector3D(-extents.x, 0.0f, 0.0f), Vector3D(-1.0f, 0.0f, 0.0f));
+		Plane3D rightPlane(center + Vector3D(extents.x, 0.0f, 0.0f), Vector3D(-1.0f, 0.0f, 0.0f));
 
-		float leftIntersect = leftPlane.intersect(ray);
-		float rightIntersect = rightPlane.intersect(ray);
+		float leftIntersect = leftPlane.intersectOrInfinity(ray);
+		float rightIntersect = rightPlane.intersectOrInfinity(ray);
 
 		float xEnter;
 		float xExit;
@@ -74,11 +92,11 @@ namespace TA3D
 			xExit = leftIntersect;
 		}
 
-		Plane3D nearPlane(center + Vector3D(0.0f, -extents.y, 0.0f), Vector3D(0.0f, 1.0f, 0.0f));
-		Plane3D farPlane(center + Vector3D(0.0f, extents.y, 0.0f), Vector3D(0.0f, 1.0f, 0.0f));
+		Plane3D nearPlane(center + Vector3D(0.0f, -extents.y, 0.0f), Vector3D(0.0f, -1.0f, 0.0f));
+		Plane3D farPlane(center + Vector3D(0.0f, extents.y, 0.0f), Vector3D(0.0f, -1.0f, 0.0f));
 
-		float nearIntersect = nearPlane.intersect(ray);
-		float farIntersect = farPlane.intersect(ray);
+		float nearIntersect = nearPlane.intersectOrInfinity(ray);
+		float farIntersect = farPlane.intersectOrInfinity(ray);
 
 		float yEnter;
 		float yExit;
@@ -105,21 +123,21 @@ namespace TA3D
 		return IntersectResult();
 	}
 
-	float Triangle3D::intersect(const Ray3D& ray) const
+	Triangle3D::IntersectResult Triangle3D::intersect(const Ray3D& ray) const
 	{
-		float d = toPlane().intersect(ray);
-		if (std::isinf(d))
+		auto intersect = toPlane().intersect(ray);
+		if (!intersect.hit)
 		{
-			return std::numeric_limits<float>::infinity();
+			return IntersectResult();
 		}
 
-		Vector3D p = toBarycentric(ray.pointAt(d));
+		Vector3D p = toBarycentric(ray.pointAt(intersect.d));
 		if (p.x < 0 || p.y < 0 || p.z < 0)
 		{
-			return std::numeric_limits<float>::infinity();
+			return IntersectResult();
 		}
 
-		return d;
+		return IntersectResult(intersect.d);
 	}
 
 	Plane3D Triangle3D::toPlane() const

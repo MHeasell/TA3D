@@ -46,7 +46,18 @@ namespace TA3D
 		for (auto it = bounds.begin(); it != bounds.end(); ++it)
 		{
 			auto ray = screenToWorldRay(*it);
-			auto point = ray.pointAt(PlaneXZ.intersect(ray));
+			auto intersect = PlaneXZ.intersect(ray);
+
+			// If the ray didn't intersect the plane
+			// then this implies our camera is somehow parallel.
+			// Skipping the point probably isn't the correct behaviour here,
+			// but this shouldn't happen anyway since our camera angle is fixed.
+			if (!intersect.hit)
+			{
+				continue;
+			}
+
+			auto point = ray.pointAt(intersect.d);
 			out.push_back(point);
 		}
 

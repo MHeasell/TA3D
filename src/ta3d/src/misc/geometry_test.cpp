@@ -21,14 +21,25 @@ namespace TA3D
 		{
 			Ray3D r(Vector3D(3.0f, 10.0f, 4.0f), Vector3D(0.0f, -2.0f, 0.0f));
 			Plane3D p(Vector3D(0.0f, 0.0f, 0.0f), Vector3D(0.0f, 1.0f, 0.0f));
-			REQUIRE(p.intersect(r) == 5.0f);
+			auto intersect = p.intersect(r);
+			REQUIRE(intersect.hit);
+			REQUIRE(intersect.d == 5.0f);
 		}
 
-		SECTION("Returns infinity when the ray is parallel")
+		SECTION("Returns a miss when the ray is parallel in front of the plane")
 		{
 			Ray3D r(Vector3D(1.0f, 1.0f, 1.0f), Vector3D(1.0f, 0.0f, 0.0f));
 			Plane3D p(Vector3D(0.0f, 0.0f, 0.0f), Vector3D(0.0f, 1.0f, 0.0f));
-			REQUIRE(std::abs(p.intersect(r)) == std::numeric_limits<float>::infinity());
+			auto intersect = p.intersect(r);
+			REQUIRE(!intersect.hit);
+		}
+
+		SECTION("Returns a miss when the ray is parallel behind the plane")
+		{
+			Ray3D r(Vector3D(1.0f, -1.0f, 1.0f), Vector3D(1.0f, 0.0f, 0.0f));
+			Plane3D p(Vector3D(0.0f, 0.0f, 0.0f), Vector3D(0.0f, 1.0f, 0.0f));
+			auto intersect = p.intersect(r);
+			REQUIRE(!intersect.hit);
 		}
 	}
 
@@ -216,10 +227,12 @@ namespace TA3D
 			Ray3D r(
 				Vector3D(0.0f, 0.0f, 10.0f),
 				Vector3D(0.0f, 0.0f, -1.0f));
-			REQUIRE(tri.intersect(r) == Approx(10.0f));
+			auto intersect = tri.intersect(r);
+			REQUIRE(intersect.hit);
+			REQUIRE(intersect.d == Approx(10.0f));
 		}
 
-		SECTION("returns infinity when the ray misses")
+		SECTION("returns a miss when the ray misses")
 		{
 			SECTION("case 1")
 			{
@@ -230,7 +243,7 @@ namespace TA3D
 				Ray3D r(
 					Vector3D(2.0f, 2.0f, 10.0f),
 					Vector3D(0.0f, 0.0f, -1.0f));
-				REQUIRE(tri.intersect(r) == std::numeric_limits<float>::infinity());
+				REQUIRE(!tri.intersect(r).hit);
 			}
 
 			SECTION("case 2")
@@ -242,7 +255,7 @@ namespace TA3D
 				Ray3D r(
 					Vector3D(0.0f, 0.0f, 10.0f),
 					Vector3D(0.0f, 0.0f, -1.0f));
-				REQUIRE(tri.intersect(r) == std::numeric_limits<float>::infinity());
+				REQUIRE(!tri.intersect(r).hit);
 			}
 
 			SECTION("when ray is parallel above the triangle")
@@ -254,7 +267,7 @@ namespace TA3D
 				Ray3D r(
 					Vector3D(0.0f, 0.0f, 10.0f),
 					Vector3D(0.0f, 1.0f, 0.0f));
-				REQUIRE(tri.intersect(r) == std::numeric_limits<float>::infinity());
+				REQUIRE(!tri.intersect(r).hit);
 			}
 
 			SECTION("when ray is parallel below the triangle")
@@ -266,7 +279,7 @@ namespace TA3D
 				Ray3D r(
 					Vector3D(0.0f, 0.0f, -10.0f),
 					Vector3D(0.0f, 1.0f, 0.0f));
-				REQUIRE(tri.intersect(r) == std::numeric_limits<float>::infinity());
+				REQUIRE(!tri.intersect(r).hit);
 			}
 		}
 	}
