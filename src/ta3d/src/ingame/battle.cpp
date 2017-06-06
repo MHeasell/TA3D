@@ -2098,7 +2098,7 @@ namespace TA3D
 		const int py = heightmapIndex.y;
 
 		if (px >= 0 && px < map->widthInHeightmapTiles && py >= 0 && py < map->heightInHeightmapTiles && (
-			map->view_map(px >> 1, py >> 1) & (1 << players.local_human_id)))
+			map->view_map(px / 2, py / 2) & (1 << players.local_human_id)))
 		{
 			int idx = -map->map_data(px, py).unit_idx - 2; // Basic check
 			if (idx < 0 || features.feature[idx].type < 0)
