@@ -304,6 +304,11 @@ namespace TA3D
 
 	std::ostream& operator<<(std::ostream& lhs, const Vector3D& rhs);
 
+	/**
+	 * Returns the scalar triple product of vectors a, b and c.
+	 */
+	float scalarTriple(const Vector3D& a, const Vector3D& b, const Vector3D& c);
+
 } // namespace TA3D
 
 //! \name Operators for Vectors

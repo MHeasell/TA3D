@@ -36,4 +36,8 @@ namespace TA3D
 		return lhs;
 	}
 
+	float scalarTriple(const Vector3D& a, const Vector3D& b, const Vector3D& c)
+	{
+		return a.cross(b).dot(c);
+	}
 } // namespace TA3D
