@@ -423,6 +423,20 @@ namespace TA3D
 		//! Calculates the intersection of a ray with the map (the ray starts from the top of the map)
 		Vector3D hit(Vector3D Pos, Vector3D Dir, bool water = true, float length = 200000.0f, bool allow_out = false) const;
 
+		struct IntersectResult
+		{
+			bool hit;
+			Vector3D v;
+			IntersectResult(): hit(false) {}
+			explicit IntersectResult(const Vector3D& v): hit(true), v(v) {}
+		};
+
+		IntersectResult hit2(Vector3D Pos, Vector3D Dir, bool water = true, float length = 200000.0f, bool allow_out = false) const;
+
+		IntersectResult findIntersectWithTerrain(const Ray3D& ray) const;
+
+		IntersectResult findIntersectWithHeightmapCell(const Vector3D& start, const Vector3D& end, int x, int y) const;
+
 		/**
 		 * Returns true if the graphical tile at the given index
 		 * has been discovered by any players matching the given mask.

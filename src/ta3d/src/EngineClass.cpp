@@ -1107,6 +1107,154 @@ namespace TA3D
 		return (view_map(x, z) & player_mask) != 0;
 	}
 
+	MAP::IntersectResult MAP::findIntersectWithTerrain(const Ray3D& ray) const
+	{
+		// * find the point where the ray enters the map bounding box
+
+		BoundingBox3D mapBoundingBox(
+			Vector3D(0.0f, 63.75f, 0.0f),
+			Vector3D(halfWidthInWorldUnits, 63.75f, halfHeightInWorldUnits));
+
+		auto intersect = mapBoundingBox.intersect(ray);
+		if (!intersect.hit)
+		{
+			return IntersectResult();
+		}
+
+		auto startPoint = ray.pointAt(intersect.enter);
+		auto endPoint = ray.pointAt(intersect.exit);
+
+		// * for each cell the ray passes through
+		//   - construct triangles representing terrain
+		//   - test intersection with the triangles
+
+		auto startCell = worldToHeightmapIndex(ray.pointAt(intersect.enter));
+
+		int xDirection = ray.direction.x > 0 ? 1 : -1;
+		int zDirection = ray.direction.z > 1 ? 1 : -1;
+		float xPlaneOffset = (HeightmapTileWidthInWorldUnits / 2.0f) * xDirection;
+		float zPlaneOffset = (HeightmapTileHeightInWorldUnits / 2.0f) * zDirection;
+
+		while (true)
+		{
+			if (startCell.x >= 0
+				&& startCell.y >= 0
+				&& startCell.x < widthInHeightmapTiles - 1
+				&& startCell.y < heightInHeightmapTiles - 1)
+			{
+				auto cellIntersect = findIntersectWithHeightmapCell(startPoint, endPoint, startCell.x, startCell.y);
+				if (cellIntersect.hit)
+				{
+					return cellIntersect;
+				}
+			}
+
+			auto cellPos = heightmapIndexToWorld(startCell);
+
+			Plane3D xPlane(Vector3D(cellPos.x + xPlaneOffset, 0.0f, 0.0f), Vector3D(1.0f, 0.0f, 0.0f));
+			float xIntersect = xPlane.intersect(ray).orInfinity();
+
+			Plane3D zPlane(Vector3D(0.0f, 0.0f, cellPos.y + zPlaneOffset), Vector3D(0.0f, 0.0f, 1.0f));
+			float zIntersect = zPlane.intersect(ray).orInfinity();
+
+			if (xIntersect < zIntersect)
+			{
+				if (xIntersect >= intersect.exit)
+				{
+					return IntersectResult();
+				}
+
+				startCell.x += xDirection;
+			}
+			else
+			{
+				if (zIntersect >= intersect.exit)
+				{
+					return IntersectResult();
+				}
+
+				startCell.y += zDirection;
+			}
+		}
+	}
+
+	MAP::IntersectResult MAP::findIntersectWithHeightmapCell(const Vector3D& start, const Vector3D& end, int x, int y) const
+	{
+		float topLeftHeight = h_map(x, y);
+		Vector2D xzPosTopLeft = heightmapIndexToWorldCorner(x, y);
+		Vector3D posTopLeft(xzPosTopLeft.x, topLeftHeight, xzPosTopLeft.y);
+
+		float topRightHeight = h_map(x + 1, y);
+		Vector2D xzPosTopRight = heightmapIndexToWorldCorner(x + 1, y);
+		Vector3D posTopRight(xzPosTopRight.x, topRightHeight, xzPosTopRight.y);
+
+		float bottomLeftHeight = h_map(x, y + 1);
+		Vector2D xzPosBottomLeft = heightmapIndexToWorldCorner(x, y + 1);
+		Vector3D posBottomLeft(xzPosBottomLeft.x, bottomLeftHeight, xzPosBottomLeft.y);
+
+		float bottomRightHeight = h_map(x + 1, y + 1);
+		Vector2D xzPosBottomRight = heightmapIndexToWorldCorner(x + 1, y + 1);
+		Vector3D posBottomRight(xzPosBottomRight.x, bottomRightHeight, xzPosBottomRight.y);
+
+		float midHeight = (topLeftHeight + topRightHeight + bottomLeftHeight + bottomRightHeight) / 4.0f;
+		Vector2D xzPosMiddle = heightmapIndexToWorld(x, y);
+		Vector3D posMiddle(xzPosMiddle.x, midHeight, xzPosMiddle.y);
+
+		Triangle3D left, bottom, right, top;
+
+		// For robust collision testing under floating point arithmetic,
+		// we ensure that the direction of any edge shared by two triangles
+		// is the same in both triangles.
+		// When this is true, the intersectLine intersection test
+		// guarantees that a line passing exactly through the edge
+		// will intersect at least one of the triangles.
+		if (std::abs(y - x) % 2 == 0)  // checkerboard pattern
+		{
+			left = Triangle3D(posTopLeft, posMiddle, posBottomLeft);
+			bottom = Triangle3D(posBottomLeft, posBottomRight, posMiddle);
+			right = Triangle3D(posBottomRight, posMiddle, posTopRight);
+			top = Triangle3D(posTopRight, posTopLeft, posMiddle);
+		}
+		else
+		{
+			left = Triangle3D(posTopLeft, posBottomLeft, posMiddle);
+			bottom = Triangle3D(posBottomLeft, posMiddle, posBottomRight);
+			right = Triangle3D(posBottomRight, posTopRight, posMiddle);
+			top = Triangle3D(posTopRight, posMiddle, posTopLeft);
+		}
+
+		auto result = left.intersectLine(start, end);
+		result = result.closestTo(start, bottom.intersectLine(start, end));
+		result = result.closestTo(start, right.intersectLine(start, end));
+		result = result.closestTo(start, top.intersectLine(start, end));
+
+		return result.hit ? IntersectResult(result.point) : IntersectResult();
+	}
+
+	MAP::IntersectResult MAP::hit2(Vector3D Pos, Vector3D Dir, bool water, float length, bool allow_out) const
+	{
+		Ray3D ray(Pos, Dir);
+		auto result = findIntersectWithTerrain(ray);
+
+		if (water)
+		{
+			Plane3D waterPlane(Vector3D(0.0f, sealvl, 0.0f), Vector3D(0.0f, 1.0f, 0.0f));
+			auto waterResult = waterPlane.intersect(ray);
+			if (waterResult.hit)
+			{
+				auto waterPoint = ray.pointAt(waterResult.d);
+
+				// accept whichever point is the least distance along the ray
+				if (!result.hit || (waterPoint - ray.origin).dot(ray.direction) < (result.v - ray.origin).dot(ray.direction))
+				{
+					result = IntersectResult(waterPoint);
+				}
+			}
+		}
+
+		return result;
+	}
+
 	Vector3D MAP::hit(Vector3D Pos, Vector3D Dir, bool water, float length, bool allow_out) const
 	{
 		if (Math::AlmostZero(Dir.x) && Math::AlmostZero(Dir.z)) // Trivial solution

@@ -30,7 +30,12 @@ namespace TA3D
 		auto clipCoords = screenToClipCoordinates(Vector2D(mouse_x, mouse_y));
 		auto ray = cam.screenToWorldRay(clipCoords);
 
-		return map.hit(ray.origin, ray.direction, true, 2000000000.0f, true);
+		auto intersect = map.hit2(ray.origin, ray.direction, true, 2000000000.0f, true);
+		if (!intersect.hit)
+		{
+			throw std::runtime_error("cursor position did not intersect the map");
+		}
+		return intersect.v;
 	}
 
 	void Battle::showGameStatus()
