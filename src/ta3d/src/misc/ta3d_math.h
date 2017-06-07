@@ -157,6 +157,11 @@ namespace TA3D
 		 */
 		int randomInt(int min, int max);
 
+		/**
+		 * Returns true if a and b both have the same sign.
+		 */
+		bool sameSign(float a, float b);
+
 		/*!
 		 * \brief Get log2(n)
 		 */

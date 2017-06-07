@@ -87,6 +87,11 @@ namespace TA3D
 			return truncf(value / interval) * interval;
 		}
 
+		bool sameSign(float a, float b)
+		{
+			return (a * b) >= 0.0f;
+		}
+
 		PreCachedRandomNumbers::PreCachedRandomNumbers()
 		{
 			reset();

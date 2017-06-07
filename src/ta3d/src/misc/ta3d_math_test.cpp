@@ -44,4 +44,15 @@ namespace TA3D
 			REQUIRE(Math::truncateToInterval(0.26f, 0.5f) == Approx(0.0f));
 		}
 	}
+
+	TEST_CASE("sameSign")
+	{
+		SECTION("returns true when args have same sign")
+		{
+			REQUIRE(Math::sameSign(1.0f, 2.0f));
+			REQUIRE(!Math::sameSign(-1.0f, 2.0f));
+			REQUIRE(!Math::sameSign(1.0f, -2.0f));
+			REQUIRE(Math::sameSign(-1.0f, -2.0f));
+		}
+	}
 }
