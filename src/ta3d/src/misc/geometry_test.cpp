@@ -329,6 +329,58 @@ namespace TA3D
 		}
 	}
 
+	TEST_CASE("Triangle3D.intersectLine")
+	{
+		SECTION("returns the point when the line hits")
+		{
+			Triangle3D tri(
+				Vector3D(-1.0f, -1.0f, 0.0f),
+				Vector3D(1.0f, -1.0f, 0.0f),
+				Vector3D(0.0f, 1.0f, 0.0f));
+			auto intersect = tri.intersectLine(Vector3D(0.0f, 0.0f, 10.0f), Vector3D(0.0f, 0.0f, -10.0f));
+			REQUIRE(intersect.hit);
+			REQUIRE(intersect.point.x == Approx(0.0f));
+			REQUIRE(intersect.point.y == Approx(0.0f));
+			REQUIRE(intersect.point.z == Approx(0.0f));
+		}
+
+		SECTION("works for a line in the other direction")
+		{
+			Triangle3D tri(
+				Vector3D(-1.0f, -1.0f, 0.0f),
+				Vector3D(1.0f, -1.0f, 0.0f),
+				Vector3D(0.0f, 1.0f, 0.0f));
+			auto intersect = tri.intersectLine(Vector3D(0.0f, 0.0f, -10.0f), Vector3D(0.0f, 0.0f, 10.0f));
+			REQUIRE(intersect.hit);
+			REQUIRE(intersect.point.x == Approx(0.0f));
+			REQUIRE(intersect.point.y == Approx(0.0f));
+			REQUIRE(intersect.point.z == Approx(0.0f));
+		}
+
+		SECTION("hits at the corner of the triangle")
+		{
+			Triangle3D tri(
+				Vector3D(-1.0f, -1.0f, 0.0f),
+				Vector3D(1.0f, -1.0f, 0.0f),
+				Vector3D(0.0f, 1.0f, 0.0f));
+			auto intersect = tri.intersectLine(Vector3D(-1.0f, -1.0f, 10.0f), Vector3D(-1.0f, -1.0f, -10.0f));
+			REQUIRE(intersect.hit);
+			REQUIRE(intersect.point.x == Approx(-1.0f));
+			REQUIRE(intersect.point.y == Approx(-1.0f));
+			REQUIRE(intersect.point.z == Approx(0.0f));
+		}
+
+		SECTION("misses just below the corner of the triangle")
+		{
+			Triangle3D tri(
+				Vector3D(-1.0f, -1.0f, 0.0f),
+				Vector3D(1.0f, -1.0f, 0.0f),
+				Vector3D(0.0f, 1.0f, 0.0f));
+			auto intersect = tri.intersectLine(Vector3D(-1.0f, -1.000001f, 10.0f), Vector3D(-1.0f, -1.000001f, -10.0f));
+			REQUIRE(!intersect.hit);
+		}
+	}
+
 	TEST_CASE("Triangle3D.toPlane")
 	{
 		SECTION("returns the plane the triangle lies on")

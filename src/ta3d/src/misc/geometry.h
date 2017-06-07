@@ -144,6 +144,15 @@ namespace TA3D
 			float orInfinity() { return hit ? d : std::numeric_limits<float>::infinity(); }
 		};
 
+		struct LineIntersectResult
+		{
+			bool hit;
+			Vector3D point;
+			LineIntersectResult(): hit(false) {}
+			explicit LineIntersectResult(const Vector3D& v): hit(true), point(v) {}
+			const LineIntersectResult& closestTo(const Vector3D& v, const LineIntersectResult& b);
+		};
+
 		Vector3D a;
 		Vector3D b;
 		Vector3D c;
@@ -161,6 +170,24 @@ namespace TA3D
 		 * this will return a result indicating that they did not intersect.
 		 */
 		IntersectResult intersect(const Ray3D& ray) const;
+
+		/**
+		 * Returns the point at which the given line intersects this triangle.
+		 * If the line and the triangle do not intersect,
+		 * returns a result indicating this.
+		 *
+		 * The intersection test is performed using scalar triple product.
+		 * If another triangle shares an edge with this one,
+		 * the test guarantees that the line intersects
+		 * either with this triangle or the other triangle,
+		 * provided that the edge goes in the same direction
+		 * in both triangles.
+		 * (That is, any of A->B, B->C, C->A)
+		 *
+		 * @param p The point at which the line starts
+		 * @param q The point at which the line ends
+		 */
+		LineIntersectResult intersectLine(const Vector3D& p, const Vector3D& q) const;
 
 		/**
 		 * Converts the input world-space coordinates

@@ -140,6 +140,34 @@ namespace TA3D
 		return IntersectResult(intersect.d);
 	}
 
+	Triangle3D::LineIntersectResult Triangle3D::intersectLine(const Vector3D& p, const Vector3D& q) const
+	{
+		auto pq = q - p;
+		auto pa = a - p;
+		auto pb = b - p;
+		auto pc = c - p;
+
+		float u = scalarTriple(pq, pc, pb);
+		float v = scalarTriple(pq, pa, pc);
+		if (!Math::sameSign(u, v))
+		{
+			return LineIntersectResult();
+		}
+
+		float w = scalarTriple(pq, pb, pa);
+		if (!Math::sameSign(v, w))
+		{
+			return LineIntersectResult();
+		}
+
+		float denominator = u + v + w;
+		u /= denominator;
+		v /= denominator;
+		w /= denominator;
+
+		return LineIntersectResult(toCartesian(Vector3D(u, v, w)));
+	}
+
 	Plane3D Triangle3D::toPlane() const
 	{
 		return Plane3D::fromPoints(a, b, c);
