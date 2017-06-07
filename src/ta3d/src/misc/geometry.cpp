@@ -10,6 +10,11 @@ namespace TA3D
 		return origin + (t * direction);
 	}
 
+	bool Ray3D::isLessFar(const Vector3D& a, const Vector3D& b) const
+	{
+		return (a - origin).dot(direction) < (b - origin).dot(direction);
+	}
+
 	Plane3D Plane3D::fromPoints(Vector3D a, Vector3D b, Vector3D c)
 	{
 		auto position = a;

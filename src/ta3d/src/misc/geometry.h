@@ -18,6 +18,12 @@ namespace TA3D
 
 		/** Returns the position along the ray at time t. */
 		Vector3D pointAt(const float t) const;
+
+		/**
+		 * Returns true if point a is less far along the ray than point b.
+		 * a and b are both assumed to lie on the ray.
+		 */
+		bool isLessFar(const Vector3D& a, const Vector3D& b) const;
 	};
 
 	/** An infinite plane in 3D space. */

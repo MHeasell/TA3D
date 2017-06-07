@@ -1245,7 +1245,7 @@ namespace TA3D
 				auto waterPoint = ray.pointAt(waterResult.d);
 
 				// accept whichever point is the least distance along the ray
-				if (!result.hit || (waterPoint - ray.origin).dot(ray.direction) < (result.v - ray.origin).dot(ray.direction))
+				if (!result.hit || ray.isLessFar(waterPoint, result.v))
 				{
 					result = IntersectResult(waterPoint);
 				}

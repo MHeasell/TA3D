@@ -15,6 +15,18 @@ namespace TA3D
 		}
 	}
 
+	TEST_CASE("Ray3D.isLessFar")
+	{
+		SECTION("returns true when point a is the least far along")
+		{
+			Ray3D r(Vector3D(3.0f, 10.0f, 4.0f), Vector3D(0.0f, -2.0f, 0.0f));
+			REQUIRE(r.isLessFar(r.pointAt(1.0f), r.pointAt(2.0f)));
+			REQUIRE(!r.isLessFar(r.pointAt(3.0f), r.pointAt(2.0f)));
+			REQUIRE(r.isLessFar(r.pointAt(-5.0f), r.pointAt(-4.0f)));
+			REQUIRE(!r.isLessFar(r.pointAt(-5.0f), r.pointAt(-6.0f)));
+		}
+	}
+
 	TEST_CASE("Plane3D.intersect")
 	{
 		SECTION("Gets the time of intersection with a ray")
