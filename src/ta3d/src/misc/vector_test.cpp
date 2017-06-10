@@ -43,4 +43,16 @@ namespace TA3D
 			REQUIRE(os.str() == "(0.5, 1, 1.5)");
 		}
 	}
+
+	TEST_CASE("Vector.normalized")
+	{
+		SECTION("returns a new normalized vector")
+		{
+			Vector3D v(3.0, 4.0, 0.0);
+			Vector3D n = v.normalized();
+			REQUIRE(n.x == Approx(0.6f));
+			REQUIRE(n.y == Approx(0.8f));
+			REQUIRE(n.z == Approx(0.0f));
+		}
+	}
 }

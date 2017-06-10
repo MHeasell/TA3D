@@ -172,6 +172,22 @@ namespace TA3D
 			}
 		}
 
+		inline Vector3D normalized()
+		{
+			float n = length(); // Inverse de la norme du vecteur
+			if (!TA3D::Math::AlmostZero(n))
+			{
+				n = 1.0f / n;
+				return Vector3D(
+					x * n,
+					y * n,
+					z * n
+				);
+			}
+
+			return Vector3D(0.0f, 0.0f, 0.0f);
+		}
+
 		float dot(const Vector3D& rhs) const
 		{
 			return (x * rhs.x) + (y * rhs.y) + (z * rhs.z);
