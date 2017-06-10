@@ -669,8 +669,6 @@ namespace TA3D
 						Vector3D R_Dir = (sqrtf(pFeature->model->size) * 2.0f + feature[i].Pos.y) * Dir * RotateY(-feature[i].angle * DEG2RAD) * RotateX(-feature[i].angle_x * DEG2RAD);
 						if (g_useStencilTwoSide) // Si l'extension GL_EXT_stencil_two_side est disponible
 							pFeature->model->draw_shadow(R_Dir, lt, NULL);
-						else
-							pFeature->model->draw_shadow_basic(R_Dir, lt, NULL);
 						glPopMatrix();
 
 						if (create_display_list)

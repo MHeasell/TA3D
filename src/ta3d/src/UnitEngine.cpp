@@ -1541,25 +1541,6 @@ namespace TA3D
 				gfx->unlock();
 			}
 		}
-		else // Si elle ne l'est pas
-		{
-			glDepthMask(GL_FALSE);
-			glColorMask(0, 0, 0, 0);
-
-			glClear(GL_STENCIL_BUFFER_BIT);
-			glEnable(GL_STENCIL_TEST);
-			glStencilFunc(GL_ALWAYS, 128, 0xffffffff);
-			glEnable(GL_CULL_FACE);
-
-			for (std::vector<uint32>::const_iterator e = visible_unit.begin(); e != visible_unit.end(); ++e)
-			{
-				const uint32 i = *e;
-
-				gfx->lock();
-				unit[i].drawShadowBasic(Dir);
-				gfx->unlock();
-			}
-		}
 
 		gfx->lock();
 		features.draw_shadow(t, Dir);

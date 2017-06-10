@@ -258,8 +258,6 @@ namespace TA3D
 
 		bool draw_shadow(Vector3D Dir, float t, AnimationData* data_s = NULL, bool alset = false, bool exploding_parts = false);
 
-		bool draw_shadow_basic(Vector3D Dir, float t, AnimationData* data_s = NULL, bool alset = false, bool exploding_parts = false);
-
 		int hit(Vector3D Pos, Vector3D Dir, AnimationData* data_s, Vector3D* I, Matrix M) const;
 
 		bool hit_fast(Vector3D Pos, Vector3D Dir, AnimationData* data_s, Vector3D* I);
@@ -325,11 +323,6 @@ namespace TA3D
         ** \brief
         */
 		void draw_shadow(const Vector3D& Dir, float t, AnimationData* data_s = NULL);
-
-		/*!
-        ** \brief
-        */
-		void draw_shadow_basic(const Vector3D& Dir, float t, AnimationData* data_s = NULL);
 
 		/*!
         ** \brief
