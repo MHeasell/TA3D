@@ -1128,7 +1128,7 @@ namespace TA3D
 		//   - construct triangles representing terrain
 		//   - test intersection with the triangles
 
-		auto startCell = worldToHeightmapIndex(ray.pointAt(intersect.enter));
+		auto startCell = worldToHeightmapIndex(startPoint);
 
 		int xDirection = ray.direction.x > 0 ? 1 : -1;
 		int zDirection = ray.direction.z > 1 ? 1 : -1;
