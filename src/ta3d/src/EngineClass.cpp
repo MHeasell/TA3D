@@ -1124,11 +1124,14 @@ namespace TA3D
 		auto startPoint = ray.pointAt(intersect.enter);
 		auto endPoint = ray.pointAt(intersect.exit);
 
-		// * for each cell the ray passes through
-		//   - construct triangles representing terrain
-		//   - test intersection with the triangles
+		return findIntersectWithTerrainLine(startPoint, endPoint);
+	}
 
+	MAP::IntersectResult MAP::findIntersectWithTerrainLine(const Vector3D& startPoint, const Vector3D& endPoint) const
+	{
 		auto startCell = worldToHeightmapIndex(startPoint);
+
+		Ray3D ray(startPoint, endPoint - startPoint);
 
 		int xDirection = ray.direction.x > 0 ? 1 : -1;
 		int zDirection = ray.direction.z > 1 ? 1 : -1;
@@ -1159,7 +1162,7 @@ namespace TA3D
 
 			if (xIntersect < zIntersect)
 			{
-				if (xIntersect >= intersect.exit)
+				if (xIntersect > 1.0f)
 				{
 					return IntersectResult();
 				}
@@ -1168,7 +1171,7 @@ namespace TA3D
 			}
 			else
 			{
-				if (zIntersect >= intersect.exit)
+				if (zIntersect > 1.0f)
 				{
 					return IntersectResult();
 				}

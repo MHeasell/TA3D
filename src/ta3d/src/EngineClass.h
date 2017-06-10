@@ -435,6 +435,8 @@ namespace TA3D
 
 		IntersectResult findIntersectWithTerrain(const Ray3D& ray) const;
 
+		IntersectResult findIntersectWithTerrainLine(const Vector3D& startPoint, const Vector3D& endPoint) const;
+
 		IntersectResult findIntersectWithHeightmapCell(const Vector3D& start, const Vector3D& end, int x, int y) const;
 
 		/**
