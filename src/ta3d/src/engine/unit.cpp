@@ -2324,424 +2324,7 @@ namespace TA3D
 		//------------------------------ Beginning of weapon related code ---------------------------------------
 		for (unsigned int i = 0; i < weapon.size(); ++i)
 		{
-			if (pType->weapon[i] == NULL)
-				continue; // Skip that weapon if not present on the unit
-			weapon[i].delay += dt;
-			weapon[i].time += dt;
-
-			int Query_script;
-			int Aim_script;
-			int AimFrom_script;
-			int Fire_script;
-			switch (i)
-			{
-				case 0:
-					Query_script = SCRIPT_QueryPrimary;
-					Aim_script = SCRIPT_AimPrimary;
-					AimFrom_script = SCRIPT_AimFromPrimary;
-					Fire_script = SCRIPT_FirePrimary;
-					break;
-				case 1:
-					Query_script = SCRIPT_QuerySecondary;
-					Aim_script = SCRIPT_AimSecondary;
-					AimFrom_script = SCRIPT_AimFromSecondary;
-					Fire_script = SCRIPT_FireSecondary;
-					break;
-				case 2:
-					Query_script = SCRIPT_QueryTertiary;
-					Aim_script = SCRIPT_AimTertiary;
-					AimFrom_script = SCRIPT_AimFromTertiary;
-					Fire_script = SCRIPT_FireTertiary;
-					break;
-				default:
-					Query_script = SCRIPT_QueryWeapon + (i - 3) * 4;
-					Aim_script = SCRIPT_AimWeapon + (i - 3) * 4;
-					AimFrom_script = SCRIPT_AimFromWeapon + (i - 3) * 4;
-					Fire_script = SCRIPT_FireWeapon + (i - 3) * 4;
-			}
-
-			switch (weapon[i].state & 3)
-			{
-				case WEAPON_FLAG_IDLE: // Doing nothing, waiting for orders
-					if (pType->weapon[i]->turret)
-						script->setReturnValue(UnitScriptInterface::get_script_name(Aim_script), 0);
-					weapon[i].data = -1;
-					break;
-				case WEAPON_FLAG_AIM: // Vise une unité / aiming code
-					if (!(missionQueue->getFlags() & MISSION_FLAG_CAN_ATTACK) || (weapon[i].target == NULL && pType->weapon[i]->toairweapon))
-					{
-						weapon[i].data = -1;
-						weapon[i].state = WEAPON_FLAG_IDLE;
-						break;
-					}
-
-					if (weapon[i].target == NULL || ((weapon[i].state & WEAPON_FLAG_WEAPON) == WEAPON_FLAG_WEAPON && ((Weapon*)(weapon[i].target))->weapon_id != -1) || ((weapon[i].state & WEAPON_FLAG_WEAPON) != WEAPON_FLAG_WEAPON && ((Unit*)(weapon[i].target))->isAlive()))
-					{
-						if ((weapon[i].state & WEAPON_FLAG_WEAPON) != WEAPON_FLAG_WEAPON && weapon[i].target != NULL && ((Unit*)(weapon[i].target))->cloaked && ((const Unit*)(weapon[i].target))->isNotOwnedBy(ownerId) && !((const Unit*)(weapon[i].target))->is_on_radar(toPlayerMask(ownerId)))
-						{
-							weapon[i].data = -1;
-							weapon[i].state = WEAPON_FLAG_IDLE;
-							break;
-						}
-
-						if (!(weapon[i].state & WEAPON_FLAG_COMMAND_FIRE) && pType->weapon[i]->commandfire) // Not allowed to fire
-						{
-							weapon[i].data = -1;
-							weapon[i].state = WEAPON_FLAG_IDLE;
-							break;
-						}
-
-						if (weapon[i].delay >= pType->weapon[i]->reloadtime || pType->weapon[i]->stockpile)
-						{
-							bool readyToFire = false;
-
-							Unit* const target_unit = (weapon[i].state & WEAPON_FLAG_WEAPON) == WEAPON_FLAG_WEAPON ? NULL : (Unit*)weapon[i].target;
-							const Weapon* const target_weapon = (weapon[i].state & WEAPON_FLAG_WEAPON) == WEAPON_FLAG_WEAPON ? (Weapon*)weapon[i].target : NULL;
-
-							Vector3D target = target_unit == NULL ? (target_weapon == NULL ? weapon[i].target_pos - position : target_weapon->Pos - position) : target_unit->position - position;
-							float dist = target.lengthSquared();
-							int maxdist = 0;
-							int mindist = 0;
-
-							if (pType->attackrunlength > 0)
-							{
-								if (target % velocity < 0.0f)
-								{
-									weapon[i].state = WEAPON_FLAG_IDLE;
-									weapon[i].data = -1;
-									break; // We're not shooting at the target
-								}
-								const float t = 2.0f / the_map->ota_data.gravity * fabsf(target.y);
-								mindist = (int)sqrtf(t * velocity.lengthSquared()) - ((pType->attackrunlength + 1) >> 1);
-								maxdist = mindist + (pType->attackrunlength);
-							}
-							else
-							{
-								if (pType->weapon[i]->waterweapon && position.y > the_map->sealvl)
-								{
-									if (target % velocity < 0.0f)
-									{
-										weapon[i].state = WEAPON_FLAG_IDLE;
-										weapon[i].data = -1;
-										break; // We're not shooting at the target
-									}
-									const float t = 2.0f / the_map->ota_data.gravity * fabsf(target.y);
-									mindist = (int)sqrtf(t * velocity.lengthSquared());
-									maxdist = mindist + (pType->weapon[i]->range >> 1);
-								}
-								else
-									maxdist = pType->weapon[i]->range >> 1;
-							}
-
-							if (dist > maxdist * maxdist || dist < mindist * mindist)
-							{
-								weapon[i].state = WEAPON_FLAG_IDLE;
-								weapon[i].data = -1;
-								break; // We're too far from the target
-							}
-
-							Vector3D target_translation;
-							if (target_unit != NULL)
-								for (int k = 0; k < 3; ++k) // Iterate to get a better approximation
-									target_translation = ((target + target_translation).length() / pType->weapon[i]->weaponvelocity) * (target_unit->velocity - velocity);
-
-							if (pType->weapon[i]->turret) // Si l'unité doit viser, on la fait viser / if it must aim, we make it aim
-							{
-								readyToFire = script->getReturnValue(UnitScriptInterface::get_script_name(Aim_script));
-
-								int start_piece = weapon[i].aim_piece;
-								if (weapon[i].aim_piece < 0)
-									weapon[i].aim_piece = start_piece = runScriptFunction(AimFrom_script);
-								if (start_piece < 0 || start_piece >= data.nb_piece)
-									start_piece = 0;
-								compute_model_coord();
-
-								Vector3D target_pos_on_unit; // Read the target piece on the target unit so we better know where to aim
-								target_pos_on_unit.reset();
-								const Model* pModel = NULL;
-								Vector3D pos_of_target_unit;
-								if (target_unit != NULL)
-								{
-									target_unit->lock();
-									if (target_unit->isAlive())
-									{
-										pos_of_target_unit = target_unit->position;
-										pModel = target_unit->model;
-										if (weapon[i].data == -1 && pModel && pModel->nb_obj > 0)
-											weapon[i].data = sint16(Math::RandomTable() % pModel->nb_obj);
-										if (weapon[i].data >= 0)
-										{
-											target_unit->compute_model_coord();
-											if (target_unit->isAlive())
-											{
-												if (pModel && (int)target_unit->data.data.size() < weapon[i].data && pModel->mesh->random_pos(&(target_unit->data), weapon[i].data, &target_pos_on_unit))
-													target_pos_on_unit = target_unit->data.data[weapon[i].data].tpos;
-											}
-										}
-										else if (pModel)
-											target_pos_on_unit = pModel->center;
-									}
-									target_unit->unlock();
-								}
-
-								target += target_translation - data.data[start_piece].tpos;
-								if (target_unit != NULL)
-									target += target_pos_on_unit;
-
-								if (pType->aim_data[i].check) // Check angle limitations (not in OTA)
-								{
-									// Go back in model coordinates so we can compare to the weapon main direction
-									Vector3D dir = target * RotateXZY(-orientation.x * DEG2RAD, -orientation.z * DEG2RAD, -orientation.y * DEG2RAD);
-									// Check weapon
-									if (VAngle(dir, pType->aim_data[i].dir) > pType->aim_data[i].Maxangledif)
-									{
-										weapon[i].state = WEAPON_FLAG_IDLE;
-										weapon[i].data = -1;
-										break;
-									}
-								}
-
-								dist = target.length();
-								target = (1.0f / dist) * target;
-								const Vector3D I(0.0f, 0.0f, 1.0f),
-									J(1.0f, 0.0f, 0.0f),
-									IJ(0.0f, 1.0f, 0.0f);
-								Vector3D RT = target;
-								RT.y = 0.0f;
-								RT.normalize();
-								float angle = acosf(RT.z) * RAD2DEG;
-								if (RT.x < 0.0f)
-									angle = -angle;
-								angle -= orientation.y;
-								if (angle < -180.0f)
-									angle += 360.0f;
-								else if (angle > 180.0f)
-									angle -= 360.0f;
-
-								int aiming[] = {(int)(angle * DEG2TA), -4096};
-								if (pType->weapon[i]->ballistic) // Calculs de ballistique / ballistic calculations
-								{
-									Vector3D D = target_unit == NULL
-										? (target_weapon == NULL
-												  ? position + data.data[start_piece].tpos - weapon[i].target_pos
-												  : (position + data.data[start_piece].tpos - target_weapon->Pos))
-										: (position + data.data[start_piece].tpos - pos_of_target_unit - target_pos_on_unit);
-									D.y = 0.0f;
-									float v;
-									if (Math::AlmostZero(pType->weapon[i]->startvelocity))
-										v = pType->weapon[i]->weaponvelocity;
-									else
-										v = pType->weapon[i]->startvelocity;
-									if (target_unit == NULL)
-									{
-										if (target_weapon == NULL)
-											aiming[1] = (int)(ballistic_angle(v, the_map->ota_data.gravity, D.length(), (position + data.data[start_piece].tpos).y, weapon[i].target_pos.y) * DEG2TA);
-										else
-											aiming[1] = (int)(ballistic_angle(v, the_map->ota_data.gravity, D.length(), (position + data.data[start_piece].tpos).y, target_weapon->Pos.y) * DEG2TA);
-									}
-									else if (pModel)
-										aiming[1] = (int)(ballistic_angle(v, the_map->ota_data.gravity, D.length(),
-															  (position + data.data[start_piece].tpos).y,
-															  pos_of_target_unit.y + pModel->center.y * 0.5f)
-											* DEG2TA);
-								}
-								else
-								{
-									angle = acosf(RT % target) * RAD2DEG;
-									if (target.y < 0.0f)
-										angle = -angle;
-									angle -= orientation.x;
-									if (angle > 180.0f)
-										angle -= 360.0f;
-									if (angle < -180.0f)
-										angle += 360.0f;
-									if (fabsf(angle) > 180.0f)
-									{
-										weapon[i].state = WEAPON_FLAG_IDLE;
-										weapon[i].data = -1;
-										break;
-									}
-									aiming[1] = (int)(angle * DEG2TA);
-								}
-								if (readyToFire)
-								{
-									if (pType->weapon[i]->lineofsight)
-									{
-										if (!target_unit)
-										{
-											if (target_weapon == NULL)
-												weapon[i].aim_dir = weapon[i].target_pos - (position + data.data[start_piece].tpos);
-											else
-												weapon[i].aim_dir = ((Weapon*)(weapon[i].target))->Pos - (position + data.data[start_piece].tpos);
-										}
-										else
-											weapon[i].aim_dir = ((Unit*)(weapon[i].target))->position + target_pos_on_unit - (position + data.data[start_piece].tpos);
-										weapon[i].aim_dir += target_translation;
-										weapon[i].aim_dir.normalize();
-									}
-									else
-										weapon[i].aim_dir = cosf((float)aiming[1] * TA2RAD) * (cosf((float)aiming[0] * TA2RAD + orientation.y * DEG2RAD) * I + sinf((float)aiming[0] * TA2RAD + orientation.y * DEG2RAD) * J) + sinf((float)aiming[1] * TA2RAD) * IJ;
-								}
-								else
-									launchScript(Aim_script, 2, aiming);
-							}
-							else
-							{
-								readyToFire = launchScript(Aim_script, 0, NULL) != 0;
-								if (!readyToFire)
-									readyToFire = script->getReturnValue(UnitScriptInterface::get_script_name(Aim_script));
-								if (pType->weapon[i]->lineofsight)
-								{
-									int start_piece = weapon[i].aim_piece;
-									if (weapon[i].aim_piece < 0)
-										weapon[i].aim_piece = start_piece = runScriptFunction(AimFrom_script);
-									if (start_piece < 0 || start_piece >= data.nb_piece)
-										start_piece = 0;
-									compute_model_coord();
-
-									if (!target_unit)
-									{
-										if (target_weapon == NULL)
-											weapon[i].aim_dir = weapon[i].target_pos - (position + data.data[start_piece].tpos);
-										else
-											weapon[i].aim_dir = ((Weapon*)(weapon[i].target))->Pos - (position + data.data[start_piece].tpos);
-									}
-									else
-									{
-										Vector3D target_pos_on_unit; // Read the target piece on the target unit so we better know where to aim
-										if (weapon[i].data == -1)
-											weapon[i].data = (sint16)target_unit->get_sweet_spot();
-										if (weapon[i].data >= 0)
-										{
-											if (target_unit->model && target_unit->model->mesh->random_pos(&(target_unit->data), weapon[i].data, &target_pos_on_unit))
-												target_pos_on_unit = target_unit->data.data[weapon[i].data].tpos;
-										}
-										else if (target_unit->model)
-											target_pos_on_unit = target_unit->model->center;
-										weapon[i].aim_dir = ((Unit*)(weapon[i].target))->position + target_pos_on_unit - (position + data.data[start_piece].tpos);
-									}
-									weapon[i].aim_dir += target_translation;
-									weapon[i].aim_dir.normalize();
-								}
-								weapon[i].data = -1;
-							}
-							if (readyToFire)
-							{
-								weapon[i].time = 0.0f;
-								weapon[i].state = WEAPON_FLAG_SHOOT; // (puis) on lui demande de tirer / tell it to fire
-								weapon[i].burst = 0;
-							}
-						}
-					}
-					else
-					{
-						launchScript(SCRIPT_TargetCleared);
-						weapon[i].state = WEAPON_FLAG_IDLE;
-						weapon[i].data = -1;
-					}
-					break;
-				case WEAPON_FLAG_SHOOT: // Tire sur une unité / fire!
-					if (weapon[i].target == NULL || ((weapon[i].state & WEAPON_FLAG_WEAPON) == WEAPON_FLAG_WEAPON && ((Weapon*)(weapon[i].target))->weapon_id != -1) || ((weapon[i].state & WEAPON_FLAG_WEAPON) != WEAPON_FLAG_WEAPON && ((Unit*)(weapon[i].target))->isAlive()))
-					{
-						if (weapon[i].burst > 0 && weapon[i].delay < pType->weapon[i]->burstrate)
-							break;
-						if ((players.metal[ownerId] < pType->weapon[i]->metalpershot || players.energy[ownerId] < pType->weapon[i]->energypershot) && !pType->weapon[i]->stockpile)
-						{
-							weapon[i].state = WEAPON_FLAG_AIM; // Pas assez d'énergie pour tirer / not enough energy to fire
-							weapon[i].data = -1;
-							script->setReturnValue(UnitScriptInterface::get_script_name(Aim_script), 0);
-							break;
-						}
-						if (pType->weapon[i]->stockpile && weapon[i].stock <= 0)
-						{
-							weapon[i].state = WEAPON_FLAG_AIM; // Plus rien pour tirer / nothing to fire
-							weapon[i].data = -1;
-							script->setReturnValue(UnitScriptInterface::get_script_name(Aim_script), 0);
-							break;
-						}
-						int start_piece = runScriptFunction(Query_script);
-						if (start_piece >= 0 && start_piece < data.nb_piece)
-						{
-							compute_model_coord();
-							if (!pType->weapon[i]->waterweapon && position.y + data.data[start_piece].tpos.y <= the_map->sealvl) // Can't shoot from water !!
-								break;
-							Vector3D Dir = data.data[start_piece].dir;
-							if (pType->weapon[i]->vlaunch)
-							{
-								Dir.x = 0.0f;
-								Dir.y = 1.0f;
-								Dir.z = 0.0f;
-							}
-							else if (!pType->weapon[i]->turret || Dir.isNull())
-								Dir = weapon[i].aim_dir;
-							if (i == 3)
-							{
-								LOG_DEBUG("firing from " << (position + data.data[start_piece].tpos).y << " (" << the_map->get_unit_h((position + data.data[start_piece].tpos).x, (position + data.data[start_piece].tpos).z) << ")");
-								LOG_DEBUG("from piece " << start_piece << " (" << Query_script << "," << Aim_script << "," << Fire_script << ")");
-							}
-
-							// SHOOT NOW !!
-							if (pType->weapon[i]->stockpile)
-								weapon[i].stock--;
-							else
-							{ // We use energy and metal only for weapons with no prebuilt ammo
-								players.c_metal[ownerId] -= (float)pType->weapon[i]->metalpershot;
-								players.c_energy[ownerId] -= (float)pType->weapon[i]->energypershot;
-							}
-							launchScript(Fire_script); // Run the fire animation script
-							if (!pType->weapon[i]->soundstart.empty())
-								sound_manager->playSound(pType->weapon[i]->soundstart, &position);
-
-							if (weapon[i].target == NULL)
-								shoot(-1, position + data.data[start_piece].tpos, Dir, i, weapon[i].target_pos);
-							else
-							{
-								if (weapon[i].state & WEAPON_FLAG_WEAPON)
-									shoot(((Weapon*)(weapon[i].target))->idx, position + data.data[start_piece].tpos, Dir, i, weapon[i].target_pos);
-								else
-									shoot(((Unit*)(weapon[i].target))->idx, position + data.data[start_piece].tpos, Dir, i, weapon[i].target_pos);
-							}
-							weapon[i].burst++;
-							if (weapon[i].burst >= pType->weapon[i]->burst)
-								weapon[i].burst = 0;
-							weapon[i].delay = 0.0f;
-							weapon[i].aim_piece = -1;
-						}
-						if (weapon[i].burst == 0 && pType->weapon[i]->commandfire && !pType->weapon[i]->dropped) // Shoot only once
-						{
-							weapon[i].state = WEAPON_FLAG_IDLE;
-							weapon[i].data = -1;
-							script->setReturnValue(UnitScriptInterface::get_script_name(Aim_script), 0);
-							if (!missionQueue.empty())
-								missionQueue->Flags() |= MISSION_FLAG_COMMAND_FIRED;
-							break;
-						}
-						if (weapon[i].target != NULL && (weapon[i].state & WEAPON_FLAG_WEAPON) != WEAPON_FLAG_WEAPON && ((Unit*)(weapon[i].target))->hp > 0) // La cible est-elle détruite ?? / is target destroyed ??
-						{
-							if (weapon[i].burst == 0)
-							{
-								weapon[i].state = WEAPON_FLAG_AIM;
-								weapon[i].data = -1;
-								weapon[i].time = 0.0f;
-								script->setReturnValue(UnitScriptInterface::get_script_name(Aim_script), 0);
-							}
-						}
-						else if (weapon[i].target != NULL || weapon[i].burst == 0)
-						{
-							launchScript(SCRIPT_TargetCleared);
-							weapon[i].state = WEAPON_FLAG_IDLE;
-							weapon[i].data = -1;
-							script->setReturnValue(UnitScriptInterface::get_script_name(Aim_script), 0);
-						}
-					}
-					else
-					{
-						launchScript(SCRIPT_TargetCleared);
-						weapon[i].state = WEAPON_FLAG_IDLE;
-						weapon[i].data = -1;
-					}
-					break;
-			}
+			handleWeapon(i, dt);
 		}
 
 		//---------------------------- Beginning of mission execution code --------------------------------------
@@ -3711,6 +3294,431 @@ namespace TA3D
 		attacked = false;
 		pMutex.unlock();
 		return 0;
+	}
+
+	void Unit::handleWeapon(int i, float dt)
+	{
+		const auto pType = unit_manager.unit_type[typeId];
+
+		if (pType->weapon[i] == NULL)
+			return; // Skip that weapon if not present on the unit
+
+		weapon[i].delay += dt;
+		weapon[i].time += dt;
+
+		int Query_script;
+		int Aim_script;
+		int AimFrom_script;
+		int Fire_script;
+		switch (i)
+		{
+			case 0:
+				Query_script = SCRIPT_QueryPrimary;
+				Aim_script = SCRIPT_AimPrimary;
+				AimFrom_script = SCRIPT_AimFromPrimary;
+				Fire_script = SCRIPT_FirePrimary;
+				break;
+			case 1:
+				Query_script = SCRIPT_QuerySecondary;
+				Aim_script = SCRIPT_AimSecondary;
+				AimFrom_script = SCRIPT_AimFromSecondary;
+				Fire_script = SCRIPT_FireSecondary;
+				break;
+			case 2:
+				Query_script = SCRIPT_QueryTertiary;
+				Aim_script = SCRIPT_AimTertiary;
+				AimFrom_script = SCRIPT_AimFromTertiary;
+				Fire_script = SCRIPT_FireTertiary;
+				break;
+			default:
+				Query_script = SCRIPT_QueryWeapon + (i - 3) * 4;
+				Aim_script = SCRIPT_AimWeapon + (i - 3) * 4;
+				AimFrom_script = SCRIPT_AimFromWeapon + (i - 3) * 4;
+				Fire_script = SCRIPT_FireWeapon + (i - 3) * 4;
+		}
+
+		switch (weapon[i].state & 3)
+		{
+			case WEAPON_FLAG_IDLE: // Doing nothing, waiting for orders
+				if (pType->weapon[i]->turret)
+					script->setReturnValue(UnitScriptInterface::get_script_name(Aim_script), 0);
+				weapon[i].data = -1;
+				break;
+			case WEAPON_FLAG_AIM: // Vise une unité / aiming code
+				if (!(missionQueue->getFlags() & MISSION_FLAG_CAN_ATTACK) || (weapon[i].target == NULL && pType->weapon[i]->toairweapon))
+				{
+					weapon[i].data = -1;
+					weapon[i].state = WEAPON_FLAG_IDLE;
+					break;
+				}
+
+				if (weapon[i].target == NULL || ((weapon[i].state & WEAPON_FLAG_WEAPON) == WEAPON_FLAG_WEAPON && ((Weapon*)(weapon[i].target))->weapon_id != -1) || ((weapon[i].state & WEAPON_FLAG_WEAPON) != WEAPON_FLAG_WEAPON && ((Unit*)(weapon[i].target))->isAlive()))
+				{
+					if ((weapon[i].state & WEAPON_FLAG_WEAPON) != WEAPON_FLAG_WEAPON && weapon[i].target != NULL && ((Unit*)(weapon[i].target))->cloaked && ((const Unit*)(weapon[i].target))->isNotOwnedBy(ownerId) && !((const Unit*)(weapon[i].target))->is_on_radar(toPlayerMask(ownerId)))
+					{
+						weapon[i].data = -1;
+						weapon[i].state = WEAPON_FLAG_IDLE;
+						break;
+					}
+
+					if (!(weapon[i].state & WEAPON_FLAG_COMMAND_FIRE) && pType->weapon[i]->commandfire) // Not allowed to fire
+					{
+						weapon[i].data = -1;
+						weapon[i].state = WEAPON_FLAG_IDLE;
+						break;
+					}
+
+					if (weapon[i].delay >= pType->weapon[i]->reloadtime || pType->weapon[i]->stockpile)
+					{
+						bool readyToFire = false;
+
+						Unit* const target_unit = (weapon[i].state & WEAPON_FLAG_WEAPON) == WEAPON_FLAG_WEAPON ? NULL : (Unit*)weapon[i].target;
+						const Weapon* const target_weapon = (weapon[i].state & WEAPON_FLAG_WEAPON) == WEAPON_FLAG_WEAPON ? (Weapon*)weapon[i].target : NULL;
+
+						Vector3D target = target_unit == NULL ? (target_weapon == NULL ? weapon[i].target_pos - position : target_weapon->Pos - position) : target_unit->position - position;
+						float dist = target.lengthSquared();
+						int maxdist = 0;
+						int mindist = 0;
+
+						if (pType->attackrunlength > 0)
+						{
+							if (target % velocity < 0.0f)
+							{
+								weapon[i].state = WEAPON_FLAG_IDLE;
+								weapon[i].data = -1;
+								break; // We're not shooting at the target
+							}
+							const float t = 2.0f / the_map->ota_data.gravity * fabsf(target.y);
+							mindist = (int)sqrtf(t * velocity.lengthSquared()) - ((pType->attackrunlength + 1) >> 1);
+							maxdist = mindist + (pType->attackrunlength);
+						}
+						else
+						{
+							if (pType->weapon[i]->waterweapon && position.y > the_map->sealvl)
+							{
+								if (target % velocity < 0.0f)
+								{
+									weapon[i].state = WEAPON_FLAG_IDLE;
+									weapon[i].data = -1;
+									break; // We're not shooting at the target
+								}
+								const float t = 2.0f / the_map->ota_data.gravity * fabsf(target.y);
+								mindist = (int)sqrtf(t * velocity.lengthSquared());
+								maxdist = mindist + (pType->weapon[i]->range >> 1);
+							}
+							else
+								maxdist = pType->weapon[i]->range >> 1;
+						}
+
+						if (dist > maxdist * maxdist || dist < mindist * mindist)
+						{
+							weapon[i].state = WEAPON_FLAG_IDLE;
+							weapon[i].data = -1;
+							break; // We're too far from the target
+						}
+
+						Vector3D target_translation;
+						if (target_unit != NULL)
+							for (int k = 0; k < 3; ++k) // Iterate to get a better approximation
+								target_translation = ((target + target_translation).length() / pType->weapon[i]->weaponvelocity) * (target_unit->velocity - velocity);
+
+						if (pType->weapon[i]->turret) // Si l'unité doit viser, on la fait viser / if it must aim, we make it aim
+						{
+							readyToFire = script->getReturnValue(UnitScriptInterface::get_script_name(Aim_script));
+
+							int start_piece = weapon[i].aim_piece;
+							if (weapon[i].aim_piece < 0)
+								weapon[i].aim_piece = start_piece = runScriptFunction(AimFrom_script);
+							if (start_piece < 0 || start_piece >= data.nb_piece)
+								start_piece = 0;
+							compute_model_coord();
+
+							Vector3D target_pos_on_unit; // Read the target piece on the target unit so we better know where to aim
+							target_pos_on_unit.reset();
+							const Model* pModel = NULL;
+							Vector3D pos_of_target_unit;
+							if (target_unit != NULL)
+							{
+								target_unit->lock();
+								if (target_unit->isAlive())
+								{
+									pos_of_target_unit = target_unit->position;
+									pModel = target_unit->model;
+									if (weapon[i].data == -1 && pModel && pModel->nb_obj > 0)
+										weapon[i].data = sint16(Math::RandomTable() % pModel->nb_obj);
+									if (weapon[i].data >= 0)
+									{
+										target_unit->compute_model_coord();
+										if (target_unit->isAlive())
+										{
+											if (pModel && (int)target_unit->data.data.size() < weapon[i].data && pModel->mesh->random_pos(&(target_unit->data), weapon[i].data, &target_pos_on_unit))
+												target_pos_on_unit = target_unit->data.data[weapon[i].data].tpos;
+										}
+									}
+									else if (pModel)
+										target_pos_on_unit = pModel->center;
+								}
+								target_unit->unlock();
+							}
+
+							target += target_translation - data.data[start_piece].tpos;
+							if (target_unit != NULL)
+								target += target_pos_on_unit;
+
+							if (pType->aim_data[i].check) // Check angle limitations (not in OTA)
+							{
+								// Go back in model coordinates so we can compare to the weapon main direction
+								Vector3D dir = target * RotateXZY(-orientation.x * DEG2RAD, -orientation.z * DEG2RAD, -orientation.y * DEG2RAD);
+								// Check weapon
+								if (VAngle(dir, pType->aim_data[i].dir) > pType->aim_data[i].Maxangledif)
+								{
+									weapon[i].state = WEAPON_FLAG_IDLE;
+									weapon[i].data = -1;
+									break;
+								}
+							}
+
+							dist = target.length();
+							target = (1.0f / dist) * target;
+							const Vector3D I(0.0f, 0.0f, 1.0f),
+								J(1.0f, 0.0f, 0.0f),
+								IJ(0.0f, 1.0f, 0.0f);
+							Vector3D RT = target;
+							RT.y = 0.0f;
+							RT.normalize();
+							float angle = acosf(RT.z) * RAD2DEG;
+							if (RT.x < 0.0f)
+								angle = -angle;
+							angle -= orientation.y;
+							if (angle < -180.0f)
+								angle += 360.0f;
+							else if (angle > 180.0f)
+								angle -= 360.0f;
+
+							int aiming[] = {(int)(angle * DEG2TA), -4096};
+							if (pType->weapon[i]->ballistic) // Calculs de ballistique / ballistic calculations
+							{
+								Vector3D D = target_unit == NULL
+											 ? (target_weapon == NULL
+												? position + data.data[start_piece].tpos - weapon[i].target_pos
+												: (position + data.data[start_piece].tpos - target_weapon->Pos))
+											 : (position + data.data[start_piece].tpos - pos_of_target_unit - target_pos_on_unit);
+								D.y = 0.0f;
+								float v;
+								if (Math::AlmostZero(pType->weapon[i]->startvelocity))
+									v = pType->weapon[i]->weaponvelocity;
+								else
+									v = pType->weapon[i]->startvelocity;
+								if (target_unit == NULL)
+								{
+									if (target_weapon == NULL)
+										aiming[1] = (int)(ballistic_angle(v, the_map->ota_data.gravity, D.length(), (position + data.data[start_piece].tpos).y, weapon[i].target_pos.y) * DEG2TA);
+									else
+										aiming[1] = (int)(ballistic_angle(v, the_map->ota_data.gravity, D.length(), (position + data.data[start_piece].tpos).y, target_weapon->Pos.y) * DEG2TA);
+								}
+								else if (pModel)
+									aiming[1] = (int)(ballistic_angle(v, the_map->ota_data.gravity, D.length(),
+																	  (position + data.data[start_piece].tpos).y,
+																	  pos_of_target_unit.y + pModel->center.y * 0.5f)
+													  * DEG2TA);
+							}
+							else
+							{
+								angle = acosf(RT % target) * RAD2DEG;
+								if (target.y < 0.0f)
+									angle = -angle;
+								angle -= orientation.x;
+								if (angle > 180.0f)
+									angle -= 360.0f;
+								if (angle < -180.0f)
+									angle += 360.0f;
+								if (fabsf(angle) > 180.0f)
+								{
+									weapon[i].state = WEAPON_FLAG_IDLE;
+									weapon[i].data = -1;
+									break;
+								}
+								aiming[1] = (int)(angle * DEG2TA);
+							}
+							if (readyToFire)
+							{
+								if (pType->weapon[i]->lineofsight)
+								{
+									if (!target_unit)
+									{
+										if (target_weapon == NULL)
+											weapon[i].aim_dir = weapon[i].target_pos - (position + data.data[start_piece].tpos);
+										else
+											weapon[i].aim_dir = ((Weapon*)(weapon[i].target))->Pos - (position + data.data[start_piece].tpos);
+									}
+									else
+										weapon[i].aim_dir = ((Unit*)(weapon[i].target))->position + target_pos_on_unit - (position + data.data[start_piece].tpos);
+									weapon[i].aim_dir += target_translation;
+									weapon[i].aim_dir.normalize();
+								}
+								else
+									weapon[i].aim_dir = cosf((float)aiming[1] * TA2RAD) * (cosf((float)aiming[0] * TA2RAD + orientation.y * DEG2RAD) * I + sinf((float)aiming[0] * TA2RAD + orientation.y * DEG2RAD) * J) + sinf((float)aiming[1] * TA2RAD) * IJ;
+							}
+							else
+								launchScript(Aim_script, 2, aiming);
+						}
+						else
+						{
+							readyToFire = launchScript(Aim_script, 0, NULL) != 0;
+							if (!readyToFire)
+								readyToFire = script->getReturnValue(UnitScriptInterface::get_script_name(Aim_script));
+							if (pType->weapon[i]->lineofsight)
+							{
+								int start_piece = weapon[i].aim_piece;
+								if (weapon[i].aim_piece < 0)
+									weapon[i].aim_piece = start_piece = runScriptFunction(AimFrom_script);
+								if (start_piece < 0 || start_piece >= data.nb_piece)
+									start_piece = 0;
+								compute_model_coord();
+
+								if (!target_unit)
+								{
+									if (target_weapon == NULL)
+										weapon[i].aim_dir = weapon[i].target_pos - (position + data.data[start_piece].tpos);
+									else
+										weapon[i].aim_dir = ((Weapon*)(weapon[i].target))->Pos - (position + data.data[start_piece].tpos);
+								}
+								else
+								{
+									Vector3D target_pos_on_unit; // Read the target piece on the target unit so we better know where to aim
+									if (weapon[i].data == -1)
+										weapon[i].data = (sint16)target_unit->get_sweet_spot();
+									if (weapon[i].data >= 0)
+									{
+										if (target_unit->model && target_unit->model->mesh->random_pos(&(target_unit->data), weapon[i].data, &target_pos_on_unit))
+											target_pos_on_unit = target_unit->data.data[weapon[i].data].tpos;
+									}
+									else if (target_unit->model)
+										target_pos_on_unit = target_unit->model->center;
+									weapon[i].aim_dir = ((Unit*)(weapon[i].target))->position + target_pos_on_unit - (position + data.data[start_piece].tpos);
+								}
+								weapon[i].aim_dir += target_translation;
+								weapon[i].aim_dir.normalize();
+							}
+							weapon[i].data = -1;
+						}
+						if (readyToFire)
+						{
+							weapon[i].time = 0.0f;
+							weapon[i].state = WEAPON_FLAG_SHOOT; // (puis) on lui demande de tirer / tell it to fire
+							weapon[i].burst = 0;
+						}
+					}
+				}
+				else
+				{
+					launchScript(SCRIPT_TargetCleared);
+					weapon[i].state = WEAPON_FLAG_IDLE;
+					weapon[i].data = -1;
+				}
+				break;
+			case WEAPON_FLAG_SHOOT: // Tire sur une unité / fire!
+				if (weapon[i].target == NULL || ((weapon[i].state & WEAPON_FLAG_WEAPON) == WEAPON_FLAG_WEAPON && ((Weapon*)(weapon[i].target))->weapon_id != -1) || ((weapon[i].state & WEAPON_FLAG_WEAPON) != WEAPON_FLAG_WEAPON && ((Unit*)(weapon[i].target))->isAlive()))
+				{
+					if (weapon[i].burst > 0 && weapon[i].delay < pType->weapon[i]->burstrate)
+						break;
+					if ((players.metal[ownerId] < pType->weapon[i]->metalpershot || players.energy[ownerId] < pType->weapon[i]->energypershot) && !pType->weapon[i]->stockpile)
+					{
+						weapon[i].state = WEAPON_FLAG_AIM; // Pas assez d'énergie pour tirer / not enough energy to fire
+						weapon[i].data = -1;
+						script->setReturnValue(UnitScriptInterface::get_script_name(Aim_script), 0);
+						break;
+					}
+					if (pType->weapon[i]->stockpile && weapon[i].stock <= 0)
+					{
+						weapon[i].state = WEAPON_FLAG_AIM; // Plus rien pour tirer / nothing to fire
+						weapon[i].data = -1;
+						script->setReturnValue(UnitScriptInterface::get_script_name(Aim_script), 0);
+						break;
+					}
+					int start_piece = runScriptFunction(Query_script);
+					if (start_piece >= 0 && start_piece < data.nb_piece)
+					{
+						compute_model_coord();
+						if (!pType->weapon[i]->waterweapon && position.y + data.data[start_piece].tpos.y <= the_map->sealvl) // Can't shoot from water !!
+							break;
+						Vector3D Dir = data.data[start_piece].dir;
+						if (pType->weapon[i]->vlaunch)
+						{
+							Dir.x = 0.0f;
+							Dir.y = 1.0f;
+							Dir.z = 0.0f;
+						}
+						else if (!pType->weapon[i]->turret || Dir.isNull())
+							Dir = weapon[i].aim_dir;
+						if (i == 3)
+						{
+							LOG_DEBUG("firing from " << (position + data.data[start_piece].tpos).y << " (" << the_map->get_unit_h((position + data.data[start_piece].tpos).x, (position + data.data[start_piece].tpos).z) << ")");
+							LOG_DEBUG("from piece " << start_piece << " (" << Query_script << "," << Aim_script << "," << Fire_script << ")");
+						}
+
+						// SHOOT NOW !!
+						if (pType->weapon[i]->stockpile)
+							weapon[i].stock--;
+						else
+						{ // We use energy and metal only for weapons with no prebuilt ammo
+							players.c_metal[ownerId] -= (float)pType->weapon[i]->metalpershot;
+							players.c_energy[ownerId] -= (float)pType->weapon[i]->energypershot;
+						}
+						launchScript(Fire_script); // Run the fire animation script
+						if (!pType->weapon[i]->soundstart.empty())
+							sound_manager->playSound(pType->weapon[i]->soundstart, &position);
+
+						if (weapon[i].target == NULL)
+							shoot(-1, position + data.data[start_piece].tpos, Dir, i, weapon[i].target_pos);
+						else
+						{
+							if (weapon[i].state & WEAPON_FLAG_WEAPON)
+								shoot(((Weapon*)(weapon[i].target))->idx, position + data.data[start_piece].tpos, Dir, i, weapon[i].target_pos);
+							else
+								shoot(((Unit*)(weapon[i].target))->idx, position + data.data[start_piece].tpos, Dir, i, weapon[i].target_pos);
+						}
+						weapon[i].burst++;
+						if (weapon[i].burst >= pType->weapon[i]->burst)
+							weapon[i].burst = 0;
+						weapon[i].delay = 0.0f;
+						weapon[i].aim_piece = -1;
+					}
+					if (weapon[i].burst == 0 && pType->weapon[i]->commandfire && !pType->weapon[i]->dropped) // Shoot only once
+					{
+						weapon[i].state = WEAPON_FLAG_IDLE;
+						weapon[i].data = -1;
+						script->setReturnValue(UnitScriptInterface::get_script_name(Aim_script), 0);
+						if (!missionQueue.empty())
+							missionQueue->Flags() |= MISSION_FLAG_COMMAND_FIRED;
+						break;
+					}
+					if (weapon[i].target != NULL && (weapon[i].state & WEAPON_FLAG_WEAPON) != WEAPON_FLAG_WEAPON && ((Unit*)(weapon[i].target))->hp > 0) // La cible est-elle détruite ?? / is target destroyed ??
+					{
+						if (weapon[i].burst == 0)
+						{
+							weapon[i].state = WEAPON_FLAG_AIM;
+							weapon[i].data = -1;
+							weapon[i].time = 0.0f;
+							script->setReturnValue(UnitScriptInterface::get_script_name(Aim_script), 0);
+						}
+					}
+					else if (weapon[i].target != NULL || weapon[i].burst == 0)
+					{
+						launchScript(SCRIPT_TargetCleared);
+						weapon[i].state = WEAPON_FLAG_IDLE;
+						weapon[i].data = -1;
+						script->setReturnValue(UnitScriptInterface::get_script_name(Aim_script), 0);
+					}
+				}
+				else
+				{
+					launchScript(SCRIPT_TargetCleared);
+					weapon[i].state = WEAPON_FLAG_IDLE;
+					weapon[i].data = -1;
+				}
+				break;
+		}
 	}
 
 	bool Unit::hit(const Vector3D& P, const Vector3D& Dir, Vector3D* hit_vec, const float length)
