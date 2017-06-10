@@ -216,7 +216,7 @@ namespace TA3D
 			just_explode = false;
 		}
 
-		if (weapon_def->interceptor && ((Vector3D) (position - targetPosition)).lengthSquared() < 1024.0f)
+		if (weapon_def->interceptor && (position - targetPosition).lengthSquared() < 1024.0f)
 		{
 			hit = true;
 			hit_vec = position;
