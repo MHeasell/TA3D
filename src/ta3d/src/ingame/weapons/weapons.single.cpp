@@ -42,9 +42,7 @@ namespace TA3D
 		anim_sprite = 0;
 		weaponId = -1; // Non défini
 		position.reset();
-		;
 		velocity.reset();
-		;
 		targetPosition = position;
 		target = -1; // Pas de cible
 		stime = 0.0f;
