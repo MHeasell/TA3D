@@ -389,11 +389,6 @@ namespace TA3D
 	{
 		return TA3D::Vector3D(lhs) *= rhs;
 	}
-
-	inline float operator%(const TA3D::Vector3D& lhs, const TA3D::Vector3D& rhs)
-	{
-		return lhs.x * rhs.x + lhs.y * rhs.y + lhs.z * rhs.z;
-	}
 }
 
 //@}
@@ -404,7 +399,7 @@ namespace TA3D
 inline float VAngle(const TA3D::Vector3D& A, const TA3D::Vector3D& B)
 {
 	float a = sqrtf(A.lengthSquared() * B.lengthSquared());
-	a = (TA3D::Math::AlmostZero(a)) ? 0.0f : acosf((A % B) / a);
+	a = (TA3D::Math::AlmostZero(a)) ? 0.0f : acosf(A.dot(B) / a);
 	return isNaN(a) ? 0.0f : a;
 }
 

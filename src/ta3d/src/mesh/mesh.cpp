@@ -705,7 +705,7 @@ namespace TA3D
 						F_N = new Vector3D[nb_t_index / 3];
 					for (int i = 0; i < nb_t_index; i += 3)
 					{
-						if ((F_N[e++] % Dir) >= 0.0f)
+						if (F_N[e++].dot(Dir) >= 0.0f)
 							continue; // Use face normal
 						line_on[t_line[i]] = byte(((line_on[t_line[i]] ^ 1) & 1) | face_reverse[i]);
 						line_on[t_line[i + 1]] = byte(((line_on[t_line[i + 1]] ^ 1) & 1) | face_reverse[i + 1]);
@@ -807,14 +807,14 @@ namespace TA3D
 					const Vector3D AB = B - A;
 					const Vector3D AC = C - A;
 					const Vector3D N = AB * AC;
-					if (Math::AlmostZero(N % Dir))
+					if (Math::AlmostZero(N.dot(Dir)))
 						continue;
-					const float dist = -((Pos - A) % N) / (N % Dir);
+					const float dist = -((Pos - A).dot(N)) / N.dot(Dir);
 					if (dist < 0.0f)
 						continue;
 					const Vector3D P_p = Pos + dist * Dir;
 
-					if (is_hit && (MP - P_p) % Dir < 0.0f)
+					if (is_hit && (MP - P_p).dot(Dir) < 0.0f)
 						continue;
 
 					float a;
@@ -890,14 +890,14 @@ namespace TA3D
 						const Vector3D AB = B - A;
 						const Vector3D AC = C - A;
 						const Vector3D N = AB * AC;
-						if (Math::AlmostZero(N % Dir))
+						if (Math::AlmostZero(N.dot(Dir)))
 							continue;
-						const float dist = -((Pos - A) % N) / (N % Dir);
+						const float dist = -((Pos - A).dot(N)) / N.dot(Dir);
 						if (dist < 0.0f)
 							continue;
 						const Vector3D P_p = Pos + dist * Dir;
 
-						if (is_hit && (MP - P_p) % Dir < 0.0f)
+						if (is_hit && (MP - P_p).dot(Dir) < 0.0f)
 							continue;
 
 						float a, b, c; // Coefficients pour que P soit le barycentre de A,B,C
@@ -976,7 +976,7 @@ namespace TA3D
 				{
 					if (nhit >= -1 && is_hit)
 					{
-						if ((MP2 - MP) % Dir < 0.0f)
+						if ((MP2 - MP).dot(Dir) < 0.0f)
 						{
 							MP = MP2;
 							hit_idx = nhit;
@@ -1001,7 +1001,7 @@ namespace TA3D
 			else
 			{
 				if (nhit >= -1 && is_hit)
-					if ((MP2 - MP) % Dir < 0.0f)
+					if ((MP2 - MP).dot(Dir) < 0.0f)
 					{
 						MP = MP2;
 						hit_idx = nhit;
@@ -1078,7 +1078,7 @@ namespace TA3D
 						const Vector3D IP = Pos + ((min_x - Pos.x) / Dir.x) * Dir;
 						if (IP.y >= min_y && IP.y <= max_y && IP.z >= min_z && IP.z <= max_z)
 						{
-							if (!is_hit || (IP - MP) % Dir < 0.0f)
+							if (!is_hit || (IP - MP).dot(Dir) < 0.0f)
 								MP = IP;
 							is_hit = true;
 						}
@@ -1088,7 +1088,7 @@ namespace TA3D
 						const Vector3D IP = Pos + ((max_x - Pos.x) / Dir.x) * Dir;
 						if (IP.y >= min_y && IP.y <= max_y && IP.z >= min_z && IP.z <= max_z)
 						{
-							if (!is_hit || (IP - MP) % Dir < 0.0f)
+							if (!is_hit || (IP - MP).dot(Dir) < 0.0f)
 								MP = IP;
 							is_hit = true;
 						}
@@ -1098,7 +1098,7 @@ namespace TA3D
 						const Vector3D IP = Pos + ((min_y - Pos.y) / Dir.y) * Dir;
 						if (IP.x >= min_x && IP.x <= max_x && IP.z >= min_z && IP.z <= max_z)
 						{
-							if (!is_hit || (IP - MP) % Dir < 0.0f)
+							if (!is_hit || (IP - MP).dot(Dir) < 0.0f)
 								MP = IP;
 							is_hit = true;
 						}
@@ -1108,7 +1108,7 @@ namespace TA3D
 						const Vector3D IP = Pos + ((max_y - Pos.y) / Dir.y) * Dir;
 						if (IP.x >= min_x && IP.x <= max_x && IP.z >= min_z && IP.z <= max_z)
 						{
-							if (!is_hit || (IP - MP) % Dir < 0.0f)
+							if (!is_hit || (IP - MP).dot(Dir) < 0.0f)
 								MP = IP;
 							is_hit = true;
 						}
@@ -1118,7 +1118,7 @@ namespace TA3D
 						const Vector3D IP = Pos + ((min_z - Pos.z) / Dir.z) * Dir;
 						if (IP.y >= min_y && IP.y <= max_y && IP.x >= min_x && IP.x <= max_x)
 						{
-							if (!is_hit || (IP - MP) % Dir < 0.0f)
+							if (!is_hit || (IP - MP).dot(Dir) < 0.0f)
 								MP = IP;
 							is_hit = true;
 						}
@@ -1128,7 +1128,7 @@ namespace TA3D
 						const Vector3D IP = Pos + ((max_z - Pos.z) / Dir.z) * Dir;
 						if (IP.y >= min_y && IP.y <= max_y && IP.x >= min_x && IP.x <= max_x)
 						{
-							if (!is_hit || (IP - MP) % Dir < 0.0f)
+							if (!is_hit || (IP - MP).dot(Dir) < 0.0f)
 								MP = IP;
 							is_hit = true;
 						}
@@ -1141,7 +1141,7 @@ namespace TA3D
 				const bool nhit = child->hit_fast(Pos, Dir, data_s, &MP2);
 				if (nhit)
 				{
-					if (!is_hit || (MP2 - MP) % Dir < 0.0f)
+					if (!is_hit || (MP2 - MP).dot(Dir) < 0.0f)
 						MP = MP2;
 					is_hit = true;
 				}
@@ -1155,7 +1155,7 @@ namespace TA3D
 			const bool nhit = next->hit_fast(OPos, ODir, data_s, &MP2);
 			if (nhit)
 			{
-				if (!is_hit || (MP2 - MP) % ODir < 0.0f)
+				if (!is_hit || (MP2 - MP).dot(ODir) < 0.0f)
 					MP = MP2;
 				is_hit = true;
 			}

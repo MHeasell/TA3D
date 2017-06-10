@@ -1739,12 +1739,12 @@ namespace TA3D
 				I.z = -J.x;
 				I.x = J.z;
 				I.y = 0.0f;
-				velocity = (velocity % K) * K + (velocity % J) * J;
+				velocity = velocity.dot(K) * K + velocity.dot(J) * J;
 
 				Vector3D D(Target.z - position.z, 0.0f, position.x - Target.x);
 				D.normalize();
 				float speed = sqrtf(velocity.x * velocity.x + velocity.z * velocity.z);
-				const float vsin = fabsf(D % velocity);
+				const float vsin = fabsf(D.dot(velocity));
 				const float deltaX = 8.0f * vsin / (pType->TurnRate * DEG2RAD);
 				const float time_to_stop = speed / pType->BrakeRate;
 				const float min_dist = time_to_stop * (speed - pType->BrakeRate * 0.5f * time_to_stop);
@@ -1754,7 +1754,7 @@ namespace TA3D
 				{
 					velocity = velocity - pType->BrakeRate * dt * J;
 					// Don't go backward
-					if (J % velocity <= 0.0f)
+					if (J.dot(velocity) <= 0.0f)
 						velocity.reset();
 				}
 				else if (speed < pType->MaxVelocity)
@@ -2746,7 +2746,7 @@ namespace TA3D
 						I.z = -J.x;
 						I.x = J.z;
 						I.y = 0.0f;
-						velocity = (velocity % K) * K + (velocity % J) * J + units.exp_dt_4 * (velocity % I) * I;
+						velocity = velocity.dot(K) * K + velocity.dot(J) * J + units.exp_dt_4 * velocity.dot(I) * I;
 						const float speed = velocity.lengthSquared();
 						if (speed < pType->MaxVelocity * pType->MaxVelocity)
 							velocity = velocity + pType->Acceleration * dt * J;
@@ -2798,7 +2798,7 @@ namespace TA3D
 							J.z = sinf(orientation.y * DEG2RAD);
 							J.x = -cosf(orientation.y * DEG2RAD);
 							J.y = 0.0f;
-							J = (J % velocity) * J;
+							J = J.dot(velocity) * J;
 							velocity = (velocity - J) + units.exp_dt_4 * J;
 						}
 						const float speed = velocity.lengthSquared();
@@ -2840,7 +2840,7 @@ namespace TA3D
 						J.z = sinf(orientation.y * DEG2RAD);
 						J.x = -cosf(orientation.y * DEG2RAD);
 						J.y = 0.0f;
-						J = (J % velocity) * J;
+						J = J.dot(velocity) * J;
 						velocity = (velocity - J) + units.exp_dt_4 * J;
 
 						const float speed = velocity.lengthSquared();
@@ -3041,7 +3041,7 @@ namespace TA3D
 			virtual_G.y = -4.0f * units.g_dt;
 			float d = J.lengthSquared();
 			if (!Math::AlmostZero(d))
-				virtual_G = virtual_G + (((old_V - velocity) % J) / d) * J; // Add the opposite of the speed derivative projected on the side of the unit
+				virtual_G = virtual_G + ((old_V - velocity).dot(J) / d) * J; // Add the opposite of the speed derivative projected on the side of the unit
 
 			d = virtual_G.length();
 			if (!Math::AlmostZero(d))
@@ -3053,7 +3053,7 @@ namespace TA3D
 				if (virtual_G.z < 0.0f)
 					angle_1 = -angle_1;
 				virtual_G = virtual_G * RotateX(-angle_1 * DEG2RAD);
-				float angle_2 = acosf(virtual_G % K) * RAD2DEG;
+				float angle_2 = acosf(virtual_G.dot(K)) * RAD2DEG;
 				if (virtual_G.x > 0.0f)
 					angle_2 = -angle_2;
 
@@ -3318,7 +3318,7 @@ namespace TA3D
 
 						if (pType->attackrunlength > 0)
 						{
-							if (target % velocity < 0.0f)
+							if (target.dot(velocity) < 0.0f)
 							{
 								weapon[i].state = WEAPON_FLAG_IDLE;
 								weapon[i].data = -1;
@@ -3332,7 +3332,7 @@ namespace TA3D
 						{
 							if (pType->weapon[i]->waterweapon && position.y > the_map->sealvl)
 							{
-								if (target % velocity < 0.0f)
+								if (target.dot(velocity) < 0.0f)
 								{
 									weapon[i].state = WEAPON_FLAG_IDLE;
 									weapon[i].data = -1;
@@ -3460,7 +3460,7 @@ namespace TA3D
 							}
 							else
 							{
-								angle = acosf(RT % target) * RAD2DEG;
+								angle = acosf(RT.dot(target)) * RAD2DEG;
 								if (target.y < 0.0f)
 									angle = -angle;
 								angle -= orientation.x;
@@ -3675,7 +3675,7 @@ namespace TA3D
 				if (is_hit)
 				{
 					*hit_vec = ((*hit_vec) * RotateYZX(orientation.y * DEG2RAD, orientation.z * DEG2RAD, orientation.x * DEG2RAD)) * Scale(scale) + position;
-					*hit_vec = ((*hit_vec - P) % Dir) * Dir + P;
+					*hit_vec = (*hit_vec - P).dot(Dir) * Dir + P;
 				}
 
 				return is_hit;
@@ -3702,7 +3702,7 @@ namespace TA3D
 				if (is_hit)
 				{
 					*hit_vec = ((*hit_vec) * RotateYZX(orientation.y * DEG2RAD, orientation.z * DEG2RAD, orientation.x * DEG2RAD)) * Scale(scale) + position;
-					*hit_vec = ((*hit_vec - P) % Dir) * Dir + P;
+					*hit_vec = (*hit_vec - P).dot(Dir) * Dir + P;
 				}
 
 				return is_hit;
@@ -5172,7 +5172,7 @@ namespace TA3D
 				bool allowed_to_fire = true;
 				if (pType->attackrunlength > 0)
 				{
-					if (Dir % velocity < 0.0f)
+					if (Dir.dot(velocity) < 0.0f)
 						allowed_to_fire = false;
 					const float t = 2.0f / the_map->ota_data.gravity * fabsf(position.y - missionQueue->getTarget().getPos().y);
 					cur_mindist = (int)sqrtf(t * velocity.lengthSquared()) - ((pType->attackrunlength + 1) / 2);
@@ -5180,7 +5180,7 @@ namespace TA3D
 				}
 				else if (pType->weapon[i]->waterweapon && position.y > the_map->sealvl)
 				{
-					if (Dir % velocity < 0.0f)
+					if (Dir.dot(velocity) < 0.0f)
 						allowed_to_fire = false;
 					const float t = 2.0f / the_map->ota_data.gravity * fabsf(position.y - missionQueue->getTarget().getPos().y);
 					cur_maxdist = (int)sqrtf(t * velocity.lengthSquared()) + (pType->weapon[i]->range / 2);

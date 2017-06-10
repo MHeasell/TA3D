@@ -48,7 +48,7 @@ namespace TA3D
 			Vector3D Normal(-dx, 16.0f, -dz);
 			Normal.normalize();
 
-			float cross = Speed % Normal;
+			float cross = Speed.dot(Normal);
 			if (cross < 0.0f)
 				Speed -= (1.5f * cross) * Normal;
 		}

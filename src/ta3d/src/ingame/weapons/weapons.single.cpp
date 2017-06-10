@@ -156,7 +156,7 @@ namespace TA3D
 				}
 				else
 				{
-					if (speed > 0.5f * weapon_def->weaponvelocity && (V % Dir) < 0.0f) // Can slow down if needed
+					if (speed > 0.5f * weapon_def->weaponvelocity && V.dot(Dir) < 0.0f) // Can slow down if needed
 						A -= weapon_def->weaponacceleration * I;
 					else
 					{
@@ -207,7 +207,7 @@ namespace TA3D
 
 		bool hit = false;
 		if (!dying)
-			hit = ((hit_vec - Pos) % V) <= 0.0f && ((hit_vec - OPos) % V >= 0.0f);
+			hit = (hit_vec - Pos).dot(V) <= 0.0f && (hit_vec - OPos).dot(V) >= 0.0f;
 		bool u_hit = false;
 
 		if (just_explode)
@@ -249,14 +249,14 @@ namespace TA3D
 					u_hit = const_cast<Unit*>(it->first)->hit_fast(OPos, Dir, &t_vec, length);
 					if (u_hit)
 					{
-						if ((t_vec - Pos) % V <= 0.0f) // Touché
+						if ((t_vec - Pos).dot(V) <= 0.0f) // Touché
 						{
 							if (!hit)
 							{
 								hit_vec = t_vec;
 								hit_idx = t_idx;
 							}
-							else if ((hit_vec - t_vec) % Dir >= 0.0f)
+							else if ((hit_vec - t_vec).dot(Dir) >= 0.0f)
 							{
 								hit_vec = t_vec;
 								hit_idx = t_idx;

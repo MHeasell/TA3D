@@ -95,9 +95,9 @@ namespace TA3D
 			float mz = 0.0f, Mz = 0.0f;
 			for (unsigned int i = 0; i < frustum.size(); i++)
 			{
-				float X = frustum[i] % Side;
-				float Z = frustum[i] % Dir;
-				float Y = frustum[i] % Up;
+				float X = frustum[i].dot(Side);
+				float Z = frustum[i].dot(Dir);
+				float Y = frustum[i].dot(Up);
 				if (i == 0)
 				{
 					mx = Mx = X;
