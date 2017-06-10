@@ -431,7 +431,7 @@ namespace TA3D
 			explicit IntersectResult(const Vector3D& v): hit(true), v(v) {}
 		};
 
-		IntersectResult hit2(Vector3D Pos, Vector3D Dir, bool water = true, float length = 200000.0f, bool allow_out = false) const;
+		IntersectResult hit2(Vector3D Pos, Vector3D Dir, bool water = true) const;
 
 		IntersectResult findIntersectWithTerrain(const Ray3D& ray) const;
 

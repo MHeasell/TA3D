@@ -1234,7 +1234,7 @@ namespace TA3D
 		return result.hit ? IntersectResult(result.point) : IntersectResult();
 	}
 
-	MAP::IntersectResult MAP::hit2(Vector3D Pos, Vector3D Dir, bool water, float length, bool allow_out) const
+	MAP::IntersectResult MAP::hit2(Vector3D Pos, Vector3D Dir, bool water) const
 	{
 		Ray3D ray(Pos, Dir);
 		auto result = findIntersectWithTerrain(ray);
