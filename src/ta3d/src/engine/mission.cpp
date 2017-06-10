@@ -59,7 +59,7 @@ namespace TA3D
 			{
 				const Weapon* p = getWeapon();
 				if (p)
-					return p->Pos;
+					return p->position;
 			}
 			break;
 			case TargetNone:

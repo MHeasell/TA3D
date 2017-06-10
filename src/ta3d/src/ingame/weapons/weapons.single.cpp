@@ -42,11 +42,11 @@ namespace TA3D
 		shooter_idx = -1;
 		anim_sprite = 0;
 		weapon_id = -1; // Non défini
-		Pos.reset();
+		position.reset();
 		;
-		V.reset();
+		velocity.reset();
 		;
-		target_pos = Pos;
+		targetPosition = position;
 		target = -1; // Pas de cible
 		stime = 0.0f;
 		killtime = 0.0f;
@@ -65,7 +65,7 @@ namespace TA3D
 		if (bInit)
 		{
 			bInit = false;
-			start_pos = Pos;
+			startPosition = position;
 		}
 
 		const WeaponDef* const weapon_def = &(weapon_manager.weapon[weapon_id]);
@@ -85,12 +85,12 @@ namespace TA3D
 			}
 			if (weapon_def->vlaunch)
 			{
-				V.x = 0.0f;
-				V.z = 0.0f;
-				if (V.y < weapon_def->weaponvelocity)
+				velocity.x = 0.0f;
+				velocity.z = 0.0f;
+				if (velocity.y < weapon_def->weaponvelocity)
 					A.y = weapon_def->weaponacceleration;
 				else
-					V.y = weapon_def->weaponvelocity;
+					velocity.y = weapon_def->weaponvelocity;
 			}
 		}
 		if (!dying && weapon_def->selfprop && f_time <= 0.0f && ((weapon_def->twophase && phase == 2) || !weapon_def->twophase))
@@ -99,51 +99,51 @@ namespace TA3D
 		{
 			smoke_time = 0.0f;
 			if (visible)
-				particle_engine.make_smoke(Pos, 0, 1, 0.0f, -1.0f, -2.0f, 0.3f);
+				particle_engine.make_smoke(position, 0, 1, 0.0f, -1.0f, -2.0f, 0.3f);
 		}
 
 		Vector3D hit_vec;
-		const Vector3D OPos(Pos);
+		const Vector3D OPos(position);
 
-		const float h = the_map->get_unit_h(Pos.x, Pos.z);
+		const float h = the_map->get_unit_h(position.x, position.z);
 		if (dying)
 			killtime -= dt;
 		else
 		{
-			if ((!weapon_def->lineofsight && (weapon_def->ballistic || weapon_def->dropped)) || (weapon_def->waterweapon && Pos.y > the_map->sealvl)) // Arme soumise à la gravité
+			if ((!weapon_def->lineofsight && (weapon_def->ballistic || weapon_def->dropped)) || (weapon_def->waterweapon && position.y > the_map->sealvl)) // Arme soumise à la gravité
 				A.y -= the_map->ota_data.gravity;
 
-			if (weapon_def->guidance && ((weapon_def->twophase && phase == 2) || !weapon_def->twophase) && ((weapon_def->waterweapon && Pos.y < the_map->sealvl) || !weapon_def->waterweapon)) // Traque sa cible
+			if (weapon_def->guidance && ((weapon_def->twophase && phase == 2) || !weapon_def->twophase) && ((weapon_def->waterweapon && position.y < the_map->sealvl) || !weapon_def->waterweapon)) // Traque sa cible
 			{
-				float speed = V.length();
+				float speed = velocity.length();
 				if (weapon_def->tracks && target >= 0)
 				{
 					Vector3D target_V;
 					if (weapon_def->interceptor && (uint32)target <= weapons.nb_weapon && weapons.weapon[target].weapon_id != -1)
 					{
-						target_pos = weapons.weapon[target].Pos;
-						target_V = weapons.weapon[target].V;
+						targetPosition = weapons.weapon[target].position;
+						target_V = weapons.weapon[target].velocity;
 					}
 					else if (!weapon_def->interceptor && (uint32)target < units.max_unit && units.unit[target].isAlive()) // Met à jour les coordonnées de la cible
 					{
-						target_pos = units.unit[target].position;
+						targetPosition = units.unit[target].position;
 						target_V = units.unit[target].velocity;
 					}
 					else
 						target = -1;
-					const float speed = V.lengthSquared();
+					const float speed = velocity.lengthSquared();
 					const float target_speed = target_V.lengthSquared();
 					if (speed > 0.0f && target_speed > 0.0f) // Make it aim better
 					{
-						const float time_to_hit = (target_pos - Pos).lengthSquared() / speed;
-						target_pos = target_pos + sqrtf(time_to_hit / target_speed) * target_V;
+						const float time_to_hit = (targetPosition - position).lengthSquared() / speed;
+						targetPosition = targetPosition + sqrtf(time_to_hit / target_speed) * target_V;
 					}
 				}
-				if (target_pos.y < the_map->sealvl && !weapon_def->waterweapon)
-					target_pos.y = the_map->sealvl;
-				Vector3D Dir = target_pos - Pos;
+				if (targetPosition.y < the_map->sealvl && !weapon_def->waterweapon)
+					targetPosition.y = the_map->sealvl;
+				Vector3D Dir = targetPosition - position;
 				Dir.normalize();
-				Vector3D I(V), J, K; // Crée un trièdre
+				Vector3D I(velocity), J, K; // Crée un trièdre
 				I.normalize();
 				J = I * Dir;
 				K = J * I;
@@ -156,7 +156,7 @@ namespace TA3D
 				}
 				else
 				{
-					if (speed > 0.5f * weapon_def->weaponvelocity && V.dot(Dir) < 0.0f) // Can slow down if needed
+					if (speed > 0.5f * weapon_def->weaponvelocity && velocity.dot(Dir) < 0.0f) // Can slow down if needed
 						A -= weapon_def->weaponacceleration * I;
 					else
 					{
@@ -166,34 +166,34 @@ namespace TA3D
 				}
 
 				const float rotate = dt * float(weapon_def->turnrate) * TA2RAD;
-				V = speed * (cosf(rotate) * I + sinf(rotate) * K);
+				velocity = speed * (cosf(rotate) * I + sinf(rotate) * K);
 			}
-			V = V + dt * A;
-			Pos = Pos + dt * V;
+			velocity = velocity + dt * A;
+			position = position + dt * velocity;
 			stime += dt;
 		}
 
-		if (weapon_def->waterweapon && Pos.y <= the_map->sealvl && OPos.y > the_map->sealvl) // A weapon that gets into water slows down
-			V = 0.5f * V;
+		if (weapon_def->waterweapon && position.y <= the_map->sealvl && OPos.y > the_map->sealvl) // A weapon that gets into water slows down
+			velocity = 0.5f * velocity;
 
-		const float length = ((Vector3D) (OPos - Pos)).length();
+		const float length = ((Vector3D) (OPos - position)).length();
 		if (!dying)
 		{
-			if (weapon_def->waterweapon && Pos.y > the_map->sealvl && OPos.y <= the_map->sealvl) // An aquatic weapon does not come out of the water
+			if (weapon_def->waterweapon && position.y > the_map->sealvl && OPos.y <= the_map->sealvl) // An aquatic weapon does not come out of the water
 			{
-				Pos.y = the_map->sealvl;
-				V.y = 0.0f;
+				position.y = the_map->sealvl;
+				velocity.y = 0.0f;
 			}
 			else
 			{
-				hit_vec = the_map->hit(Pos, V, !weapon_def->waterweapon, length);
-				if (!weapon_def->waterweapon && Pos.y <= the_map->sealvl && h < the_map->sealvl)
+				hit_vec = the_map->hit(position, velocity, !weapon_def->waterweapon, length);
+				if (!weapon_def->waterweapon && position.y <= the_map->sealvl && h < the_map->sealvl)
 				{
-					hit_vec = the_map->hit(Pos, V, !weapon_def->waterweapon, length);
-					if (!Math::AlmostZero(V.y))
-						hit_vec = Pos - (the_map->sealvl - hit_vec.y) / V.y * V;
+					hit_vec = the_map->hit(position, velocity, !weapon_def->waterweapon, length);
+					if (!Math::AlmostZero(velocity.y))
+						hit_vec = position - (the_map->sealvl - hit_vec.y) / velocity.y * velocity;
 					else
-						hit_vec = Pos;
+						hit_vec = position;
 					hit_vec.y = the_map->sealvl;
 				}
 			}
@@ -201,26 +201,26 @@ namespace TA3D
 
 		if (!dying && weapon_def->cruise && ((weapon_def->twophase && phase == 2) || phase == 1))
 		{
-			if (((Vector3D) (target_pos - Pos)).length() > 2.0f * fabsf(Pos.y - h) && V.y < 0.0f)
-				V.y = 0.0f;
+			if (((Vector3D) (targetPosition - position)).length() > 2.0f * fabsf(position.y - h) && velocity.y < 0.0f)
+				velocity.y = 0.0f;
 		}
 
 		bool hit = false;
 		if (!dying)
-			hit = (hit_vec - Pos).dot(V) <= 0.0f && (hit_vec - OPos).dot(V) >= 0.0f;
+			hit = (hit_vec - position).dot(velocity) <= 0.0f && (hit_vec - OPos).dot(velocity) >= 0.0f;
 		bool u_hit = false;
 
 		if (just_explode)
 		{
-			hit_vec = Pos;
+			hit_vec = position;
 			hit = true;
 			just_explode = false;
 		}
 
-		if (weapon_def->interceptor && ((Vector3D) (Pos - target_pos)).lengthSquared() < 1024.0f)
+		if (weapon_def->interceptor && ((Vector3D) (position - targetPosition)).lengthSquared() < 1024.0f)
 		{
 			hit = true;
-			hit_vec = Pos;
+			hit_vec = position;
 			if (target >= 0 && (uint32)target <= weapons.nb_weapon && weapons.weapon[target].weapon_id != -1)
 			{
 				weapons.weapon[target].dying = true;
@@ -234,10 +234,10 @@ namespace TA3D
 			auto heightmapIndex = the_map->worldToHeightmapIndex(OPos);
 			const int py = heightmapIndex.y;
 			const int px = heightmapIndex.x;
-			Vector3D Dir(V);
+			Vector3D Dir(velocity);
 			Dir.normalize();
 			std::deque<BVH_UnitTKit::T> neighbors;
-			weapons.bvhUnits->boxCollisionQuery(neighbors, 0.5f * (Pos + OPos), (OPos - Pos).length());
+			weapons.bvhUnits->boxCollisionQuery(neighbors, 0.5f * (position + OPos), (OPos - position).length());
 			for (std::deque<BVH_UnitTKit::T>::const_iterator it = neighbors.begin(); it != neighbors.end(); ++it)
 			{
 				const int t_idx = it->first->idx;
@@ -249,7 +249,7 @@ namespace TA3D
 					u_hit = const_cast<Unit*>(it->first)->hit_fast(OPos, Dir, &t_vec, length);
 					if (u_hit)
 					{
-						if ((t_vec - Pos).dot(V) <= 0.0f) // Touché
+						if ((t_vec - position).dot(velocity) <= 0.0f) // Touché
 						{
 							if (!hit)
 							{
@@ -316,7 +316,7 @@ namespace TA3D
 							g_ta3d_network->sendDamageEvent(hit_idx, damage);
 					}
 
-					Vector3D D = V * RotateY(-pUnit->orientation.y * DEG2RAD);
+					Vector3D D = velocity * RotateY(-pUnit->orientation.y * DEG2RAD);
 					D.normalize();
 					int param[] = {(int)(10.0f * DEG2TA * D.z), (int)(10.0f * DEG2TA * D.x)};
 					pUnit->launchScript(SCRIPT_HitByWeapon, 2, param);
@@ -388,14 +388,14 @@ namespace TA3D
 			const int s = (weapon_def->areaofeffect + 31) >> 5;
 			const int d = (weapon_def->areaofeffect * weapon_def->areaofeffect + 15) >> 4;
 			std::deque<BVH_UnitTKit::T> neighbors;
-			weapons.bvhUnits->boxCollisionQuery(neighbors, Pos, std::sqrt(float(d)));
+			weapons.bvhUnits->boxCollisionQuery(neighbors, position, std::sqrt(float(d)));
 			for (std::deque<BVH_UnitTKit::T>::const_iterator it = neighbors.begin(); it != neighbors.end(); ++it)
 			{
 				Unit* const pUnit = const_cast<Unit*>(it->first);
 				if (pUnit->idx == shooter_idx)
 					continue;
 				pUnit->lock();
-				if (pUnit->isAlive() && pUnit->local && ((Vector3D) (pUnit->position - Pos)).lengthSquared() <= d)
+				if (pUnit->isAlive() && pUnit->local && ((Vector3D) (pUnit->position - position)).lengthSquared() <= d)
 				{
 					const bool ok = pUnit->hp > 0.0f;
 					damage = float(weapon_def->get_damage_for_unit(unit_manager.unit_type[pUnit->typeId]->Unitname));
@@ -425,7 +425,7 @@ namespace TA3D
 							g_ta3d_network->sendDamageEvent(pUnit->idx, cur_damage);
 					}
 
-					Vector3D D = (pUnit->position - Pos) * RotateY(-pUnit->orientation.y * DEG2RAD);
+					Vector3D D = (pUnit->position - position) * RotateY(-pUnit->orientation.y * DEG2RAD);
 					D.normalize();
 					int param[] = {(int)(10.0f * DEG2TA * D.z), (int)(10.0f * DEG2TA * D.x)};
 					pUnit->launchScript(SCRIPT_HitByWeapon, 2, param);
@@ -453,7 +453,7 @@ namespace TA3D
 					features.lock();
 					FeatureData* const pFeature = &(features.feature[-t_idx - 2]);
 					if (!weapon_def->unitsonly && pFeature->type >= 0 &&
-						((Vector3D) (pFeature->Pos - Pos)).lengthSquared() <= d)
+						((Vector3D) (pFeature->Pos - position)).lengthSquared() <= d)
 					{
 						Feature* feature = feature_manager.getFeaturePointer(pFeature->type);
 						// Start a fire ?
@@ -509,10 +509,10 @@ namespace TA3D
 
 		if (hit && visible && weapon_def->areaofeffect >= 256) // Effet de souffle / Shock wave
 		{
-			fx_manager.addFlash(Pos, float(weapon_def->areaofeffect) * 0.5f);
-			particle_engine.make_shockwave(Pos, 1, weapon_def->areaofeffect, float(weapon_def->areaofeffect) * 0.75f);
-			particle_engine.make_shockwave(Pos, 0, weapon_def->areaofeffect, float(weapon_def->areaofeffect) * 0.5f);
-			particle_engine.make_nuke(Pos, 1, weapon_def->areaofeffect >> 1, float(weapon_def->areaofeffect) * 0.25f);
+			fx_manager.addFlash(position, float(weapon_def->areaofeffect) * 0.5f);
+			particle_engine.make_shockwave(position, 1, weapon_def->areaofeffect, float(weapon_def->areaofeffect) * 0.75f);
+			particle_engine.make_shockwave(position, 0, weapon_def->areaofeffect, float(weapon_def->areaofeffect) * 0.5f);
+			particle_engine.make_nuke(position, 1, weapon_def->areaofeffect >> 1, float(weapon_def->areaofeffect) * 0.25f);
 		}
 
 		if (hit && weapon_def->interceptor)
@@ -536,62 +536,62 @@ namespace TA3D
 			units.unit[shooter_idx].unlock();
 		}
 
-		const float travelled = (Pos - start_pos).lengthSquared();
+		const float travelled = (position - startPosition).lengthSquared();
 		const bool rangeReached = travelled >= (float(weapon_def->range * weapon_def->range) * 0.25f);
 
 		if ((((stime > 0.5f * weapon_def->time_to_range || rangeReached) && (!weapon_def->noautorange || weapon_def->burnblow)) || hit) && !dying)
 		{
 			if (hit)
 			{
-				Pos = hit_vec;
+				position = hit_vec;
 			}
-			if (Math::AlmostEquals(Pos.y, the_map->sealvl))
+			if (Math::AlmostEquals(position.y, the_map->sealvl))
 			{
 				if (!weapon_def->soundwater.empty())
-					sound_manager->playSound(weapon_def->soundwater, &Pos);
+					sound_manager->playSound(weapon_def->soundwater, &position);
 			}
 			else
 			{
 				if (!weapon_def->soundhit.empty())
-					sound_manager->playSound(weapon_def->soundhit, &Pos);
+					sound_manager->playSound(weapon_def->soundhit, &position);
 			}
 
-			if (hit && !weapon_def->explosiongaf.empty() && !weapon_def->explosionart.empty() && !Math::AlmostEquals(Pos.y, the_map->sealvl))
+			if (hit && !weapon_def->explosiongaf.empty() && !weapon_def->explosionart.empty() && !Math::AlmostEquals(position.y, the_map->sealvl))
 			{
 				if (visible && weapon_def->areaofeffect < 256) // Nuclear type explosion don't draw sprites :)
-					fx_manager.add(weapon_def->explosiongaf, weapon_def->explosionart, Pos, 1.0f);
+					fx_manager.add(weapon_def->explosiongaf, weapon_def->explosionart, position, 1.0f);
 			}
-			else if (hit && Math::AlmostEquals(Pos.y, the_map->sealvl))
+			else if (hit && Math::AlmostEquals(position.y, the_map->sealvl))
 			{
-				auto tileIndex = the_map->worldToGraphicalTileIndex(Pos);
+				auto tileIndex = the_map->worldToGraphicalTileIndex(position);
 				const int px = tileIndex.x;
 				const int py = tileIndex.y;
-				Vector3D P = Pos;
+				Vector3D P = position;
 				P.y += 3.0f;
 				if (px >= 0 && px < the_map->widthInGraphicalTiles && py >= 0 && py < the_map->heightInGraphicalTiles)
 				{
 					if (the_map->bloc[the_map->bmap(px, py)].lava && !weapon_def->lavaexplosiongaf.empty() && !weapon_def->lavaexplosionart.empty())
 					{
 						if (visible)
-							fx_manager.add(weapon_def->lavaexplosiongaf, weapon_def->lavaexplosionart, Pos, 1.0f);
+							fx_manager.add(weapon_def->lavaexplosiongaf, weapon_def->lavaexplosionart, position, 1.0f);
 					}
 					else if (!the_map->bloc[the_map->bmap(px, py)].lava && !weapon_def->waterexplosiongaf.empty() && !weapon_def->waterexplosionart.empty())
 						if (visible)
-							fx_manager.add(weapon_def->waterexplosiongaf, weapon_def->waterexplosionart, Pos, 1.0f);
+							fx_manager.add(weapon_def->waterexplosiongaf, weapon_def->waterexplosionart, position, 1.0f);
 				}
 				else if (!weapon_def->explosiongaf.empty() && !weapon_def->explosionart.empty())
 					if (visible)
-						fx_manager.add(weapon_def->explosiongaf, weapon_def->explosionart, Pos, 1.0f);
+						fx_manager.add(weapon_def->explosiongaf, weapon_def->explosionart, position, 1.0f);
 			}
 			if (weapon_def->endsmoke)
 			{
 				if (visible)
-					particle_engine.make_smoke(Pos, 0, 1, 0.0f, -1.0f);
+					particle_engine.make_smoke(position, 0, 1, 0.0f, -1.0f);
 			}
 			if (weapon_def->noexplode && hit && !rangeReached) // Special flag used by dguns
 			{
 				dying = false;
-				Pos.y += fabsf(3.0f * dt * V.y);
+				position.y += fabsf(3.0f * dt * velocity.y);
 			}
 			else
 			{
@@ -606,7 +606,7 @@ namespace TA3D
 		}
 		else if (dying && killtime <= 0.0f)
 			weapon_id = -1;
-		else if (Pos.x < -the_map->halfWidthInWorldUnits || Pos.x > the_map->halfWidthInWorldUnits || Pos.z < -the_map->halfHeightInWorldUnits || Pos.z > the_map->halfHeightInWorldUnits) // We're out of the map
+		else if (position.x < -the_map->halfWidthInWorldUnits || position.x > the_map->halfWidthInWorldUnits || position.z < -the_map->halfHeightInWorldUnits || position.z > the_map->halfHeightInWorldUnits) // We're out of the map
 			weapon_id = -1;
 	}
 
@@ -617,7 +617,7 @@ namespace TA3D
 
 		visible = false;
 
-		auto tileIndex = the_map->worldToGraphicalTileIndex(Pos);
+		auto tileIndex = the_map->worldToGraphicalTileIndex(position);
 		const int px = tileIndex.x;
 		const int py = tileIndex.y;
 		if (px < 0 || py < 0 || px >= the_map->widthInGraphicalTiles || py >= the_map->heightInGraphicalTiles)
@@ -635,13 +635,13 @@ namespace TA3D
 		{
 			case RENDER_TYPE_LASER:			 // Draw the laser
 				{
-					Vector3D P(Pos);
+					Vector3D P(position);
 					float length = weapon_def->duration;
 					if (weapon_def->duration > stime)
 						length = stime;
 					if (dying && length > killtime)
 						length = killtime;
-					P = P - length * V;
+					P = P - length * velocity;
 					glDisable(GL_LIGHTING);
 					int color0 = weapon_def->color[0];
 					int color1 = weapon_def->color[1];
@@ -649,8 +649,8 @@ namespace TA3D
 					GLubyte r = (GLubyte)(coef * float(getr(color0)) + (1.0f - coef) * float(getr(color1)));
 					GLubyte g = (GLubyte)(coef * float(getg(color0)) + (1.0f - coef) * float(getg(color1)));
 					GLubyte b = (GLubyte)(coef * float(getb(color0)) + (1.0f - coef) * float(getb(color1)));
-					Vector3D D(Pos - Camera::inGame->position());
-					Vector3D Up(D * V);
+					Vector3D D(position - Camera::inGame->position());
+					Vector3D Up(D * velocity);
 					Up.normalize();
 					if (damage < 0.0f)
 						damage = float(weapon_def->damage);
@@ -664,17 +664,17 @@ namespace TA3D
 						glDisable(GL_TEXTURE_2D);
 						glBegin(GL_QUADS);
 						glColor4ub(r, g, b, 0);
-						glVertex3f(Pos.x + Up.x, Pos.y + Up.y, Pos.z + Up.z);
+						glVertex3f(position.x + Up.x, position.y + Up.y, position.z + Up.z);
 						glVertex3f(P.x + Up.x, P.y + Up.y, P.z + Up.z);
 						glColor4ub(r, g, b, 0xFF);
 						glVertex3f(P.x, P.y, P.z);
-						glVertex3f(Pos.x, Pos.y, Pos.z);
+						glVertex3f(position.x, position.y, position.z);
 
-						glVertex3f(Pos.x, Pos.y, Pos.z);
+						glVertex3f(position.x, position.y, position.z);
 						glVertex3f(P.x, P.y, P.z);
 						glColor4ub(r, g, b, 0);
 						glVertex3f(P.x - Up.x, P.y - Up.y, P.z - Up.z);
-						glVertex3f(Pos.x - Up.x, Pos.y - Up.y, Pos.z - Up.z);
+						glVertex3f(position.x - Up.x, position.y - Up.y, position.z - Up.z);
 						glEnd();
 					}
 					else
@@ -685,13 +685,13 @@ namespace TA3D
 						glColor4ub(r, g, b, a);
 						glBegin(GL_QUADS);
 						glTexCoord2f(0.0f, 0.0f);
-						glVertex3f(Pos.x + Up.x, Pos.y + Up.y, Pos.z + Up.z);
+						glVertex3f(position.x + Up.x, position.y + Up.y, position.z + Up.z);
 						glTexCoord2f(1.0f, 0.0f);
 						glVertex3f(P.x + Up.x, P.y + Up.y, P.z + Up.z);
 						glTexCoord2f(1.0f, 1.0f);
 						glVertex3f(P.x - Up.x, P.y - Up.y, P.z - Up.z);
 						glTexCoord2f(0.0f, 1.0f);
-						glVertex3f(Pos.x - Up.x, Pos.y - Up.y, Pos.z - Up.z);
+						glVertex3f(position.x - Up.x, position.y - Up.y, position.z - Up.z);
 						glEnd();
 
 						if (a != 0xFF)
@@ -702,13 +702,13 @@ namespace TA3D
 							glColor4ub(r, g, b, a);
 							glBegin(GL_QUADS);
 							glTexCoord2f(0.0f, 0.0f);
-							glVertex3f(Pos.x + Up.x, Pos.y + Up.y, Pos.z + Up.z);
+							glVertex3f(position.x + Up.x, position.y + Up.y, position.z + Up.z);
 							glTexCoord2f(1.0f, 0.0f);
 							glVertex3f(P.x + Up.x, P.y + Up.y, P.z + Up.z);
 							glTexCoord2f(1.0f, 1.0f);
 							glVertex3f(P.x - Up.x, P.y - Up.y, P.z - Up.z);
 							glTexCoord2f(0.0f, 1.0f);
-							glVertex3f(Pos.x - Up.x, Pos.y - Up.y, Pos.z - Up.z);
+							glVertex3f(position.x - Up.x, position.y - Up.y, position.z - Up.z);
 							glEnd();
 							glDepthFunc(GL_LESS);
 						}
@@ -720,11 +720,11 @@ namespace TA3D
 			case RENDER_TYPE_MISSILE: // Dessine le missile
 				if (weapon_def->model)
 				{
-					glTranslatef(Pos.x, Pos.y, Pos.z);
+					glTranslatef(position.x, position.y, position.z);
 
-					Vector3D I(0.0f, 0.0f, 1.0f), Dir(V);
+					Vector3D I(0.0f, 0.0f, 1.0f), Dir(velocity);
 					Dir.normalize();
-					Vector3D J(V * I);
+					Vector3D J(velocity * I);
 					J.normalize();
 					float theta = -acosf(Dir.z) * RAD2DEG;
 					glRotatef(theta, J.x, J.y, J.z);
@@ -747,10 +747,10 @@ namespace TA3D
 					glEnable(GL_TEXTURE_2D);
 					glBindTexture(GL_TEXTURE_2D, weapon_manager.cannonshell.glbmp[anim_sprite]);
 					Vector3D A, B, C, D;
-					A = Pos + ((-0.5f * float(weapon_manager.cannonshell.h[anim_sprite] - weapon_manager.cannonshell.ofs_y[anim_sprite])) * Camera::inGame->up() + (-0.5f * float(weapon_manager.cannonshell.w[anim_sprite] - weapon_manager.cannonshell.ofs_x[anim_sprite])) * Camera::inGame->side());
-					B = Pos + ((-0.5f * float(weapon_manager.cannonshell.h[anim_sprite] - weapon_manager.cannonshell.ofs_y[anim_sprite])) * Camera::inGame->up() + (0.5f * float(weapon_manager.cannonshell.w[anim_sprite] - weapon_manager.cannonshell.ofs_x[anim_sprite])) * Camera::inGame->side());
-					C = Pos + ((0.5f * float(weapon_manager.cannonshell.h[anim_sprite] - weapon_manager.cannonshell.ofs_y[anim_sprite])) * Camera::inGame->up() + (-0.5f * float(weapon_manager.cannonshell.w[anim_sprite] - weapon_manager.cannonshell.ofs_x[anim_sprite])) * Camera::inGame->side());
-					D = Pos + ((0.5f * float(weapon_manager.cannonshell.h[anim_sprite] - weapon_manager.cannonshell.ofs_y[anim_sprite])) * Camera::inGame->up() + (0.5f * float(weapon_manager.cannonshell.w[anim_sprite] - weapon_manager.cannonshell.ofs_x[anim_sprite])) * Camera::inGame->side());
+					A = position + ((-0.5f * float(weapon_manager.cannonshell.h[anim_sprite] - weapon_manager.cannonshell.ofs_y[anim_sprite])) * Camera::inGame->up() + (-0.5f * float(weapon_manager.cannonshell.w[anim_sprite] - weapon_manager.cannonshell.ofs_x[anim_sprite])) * Camera::inGame->side());
+					B = position + ((-0.5f * float(weapon_manager.cannonshell.h[anim_sprite] - weapon_manager.cannonshell.ofs_y[anim_sprite])) * Camera::inGame->up() + (0.5f * float(weapon_manager.cannonshell.w[anim_sprite] - weapon_manager.cannonshell.ofs_x[anim_sprite])) * Camera::inGame->side());
+					C = position + ((0.5f * float(weapon_manager.cannonshell.h[anim_sprite] - weapon_manager.cannonshell.ofs_y[anim_sprite])) * Camera::inGame->up() + (-0.5f * float(weapon_manager.cannonshell.w[anim_sprite] - weapon_manager.cannonshell.ofs_x[anim_sprite])) * Camera::inGame->side());
+					D = position + ((0.5f * float(weapon_manager.cannonshell.h[anim_sprite] - weapon_manager.cannonshell.ofs_y[anim_sprite])) * Camera::inGame->up() + (0.5f * float(weapon_manager.cannonshell.w[anim_sprite] - weapon_manager.cannonshell.ofs_x[anim_sprite])) * Camera::inGame->side());
 					glBegin(GL_QUADS);
 					glTexCoord2f(0.0f, 0.0f);
 					glVertex3f(A.x, A.y, A.z);
@@ -766,10 +766,10 @@ namespace TA3D
 				else
 				{
 					glBegin(GL_QUADS);
-					glVertex3f(Pos.x - 2.5f, Pos.y - 2.5f, Pos.z);
-					glVertex3f(Pos.x + 2.5f, Pos.y - 2.5f, Pos.z);
-					glVertex3f(Pos.x + 2.5f, Pos.y + 2.5f, Pos.z);
-					glVertex3f(Pos.x - 2.5f, Pos.y + 2.5f, Pos.z);
+					glVertex3f(position.x - 2.5f, position.y - 2.5f, position.z);
+					glVertex3f(position.x + 2.5f, position.y - 2.5f, position.z);
+					glVertex3f(position.x + 2.5f, position.y + 2.5f, position.z);
+					glVertex3f(position.x - 2.5f, position.y + 2.5f, position.z);
 					glEnd();
 				}
 				glEnable(GL_LIGHTING);
@@ -777,11 +777,11 @@ namespace TA3D
 			case RENDER_TYPE_BOMB:
 				if (weapon_def->model)
 				{
-					glTranslatef(Pos.x, Pos.y, Pos.z);
+					glTranslatef(position.x, position.y, position.z);
 
-					Vector3D I(0.0f, 0.0f, 1.0f), Dir(V);
+					Vector3D I(0.0f, 0.0f, 1.0f), Dir(velocity);
 					Dir.normalize();
-					Vector3D J(V * I);
+					Vector3D J(velocity * I);
 					J.normalize();
 					float theta = -acosf(Dir.z) * RAD2DEG;
 					glRotatef(theta, J.x, J.y, J.z);
@@ -795,13 +795,13 @@ namespace TA3D
 				break;
 			case RENDER_TYPE_LIGHTNING:
 			{
-				Vector3D P = Pos;
+				Vector3D P = position;
 				float length = weapon_def->duration;
 				if (weapon_def->duration > stime)
 					length = stime;
 				if (dying && length > killtime)
 					length = killtime;
-				P = P - length * V;
+				P = P - length * velocity;
 				glDisable(GL_LIGHTING);
 				glDisable(GL_TEXTURE_2D);
 				int color0 = weapon_def->color[0];
@@ -825,7 +825,7 @@ namespace TA3D
 						y = float(((sint32)(Math::RandomTable() % 2001)) - 1000) * 0.005f;
 						z = float(((sint32)(Math::RandomTable() % 2001)) - 1000) * 0.005f;
 					}
-					glVertex3f(Pos.x + (P.x - Pos.x) * float(i) / 9.0f + x, Pos.y + (P.y - Pos.y) * float(i) / 9.0f + y, Pos.z + (P.z - Pos.z) * float(i) / 9.0f + z);
+					glVertex3f(position.x + (P.x - position.x) * float(i) / 9.0f + x, position.y + (P.y - position.y) * float(i) / 9.0f + y, position.z + (P.z - position.z) * float(i) / 9.0f + z);
 				}
 				glEnd();
 			}
@@ -833,11 +833,11 @@ namespace TA3D
 			case RENDER_TYPE_DGUN: // Dessine le dgun
 				if (weapon_def->model)
 				{
-					glTranslatef(Pos.x, Pos.y, Pos.z);
+					glTranslatef(position.x, position.y, position.z);
 
-					Vector3D I(0.0f, 0.0f, 1.0f), Dir(V);
+					Vector3D I(0.0f, 0.0f, 1.0f), Dir(velocity);
 					Dir.normalize();
-					Vector3D J(V * I);
+					Vector3D J(velocity * I);
 					J.normalize();
 					glRotatef((float)(-acosf(Dir.z) * RAD2DEG), J.x, J.y, J.z);
 
@@ -853,7 +853,7 @@ namespace TA3D
 				glDisable(GL_TEXTURE_2D);
 				glBegin(GL_POINTS);
 				glColor3ub(0xBF, 0xBF, 0xBF);
-				glVertex3f(Pos.x, Pos.y, Pos.z);
+				glVertex3f(position.x, position.y, position.z);
 				glEnd();
 				break;
 			case RENDER_TYPE_PARTICLES: // Dessine des particules
@@ -864,9 +864,9 @@ namespace TA3D
 				for (int i = 0; i < 10; ++i)
 				{
 					glVertex3f(
-						Pos.x + float(Math::RandomTable() % 201) * 0.01f - 1.0f,
-						Pos.y + float(Math::RandomTable() % 201) * 0.01f - 1.0f,
-						Pos.z + float(Math::RandomTable() % 201) * 0.01f - 1.0f);
+						position.x + float(Math::RandomTable() % 201) * 0.01f - 1.0f,
+						position.y + float(Math::RandomTable() % 201) * 0.01f - 1.0f,
+						position.z + float(Math::RandomTable() % 201) * 0.01f - 1.0f);
 				}
 				glEnd();
 				break;

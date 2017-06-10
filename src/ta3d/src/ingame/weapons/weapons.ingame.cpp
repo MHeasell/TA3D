@@ -180,7 +180,7 @@ namespace TA3D
 
 		for (std::vector<uint32>::iterator e = idx_list.begin(); e != idx_list.end(); ++e)
 		{
-			if (!underwater ^ (weapon[*e].Pos.y < the_map->sealvl))
+			if (!underwater ^ (weapon[*e].position.y < the_map->sealvl))
 				weapon[*e].draw();
 		}
 
@@ -213,16 +213,16 @@ namespace TA3D
 				glEnable(GL_BLEND);
 				glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 				const int idx = weapon[i].owner;
-				GFX::PutTextureInsideRect(nuclogo.glbmp[idx], weapon[i].Pos.x * rw + 64.0f - float(nuclogo.ofs_x[idx]),
-					weapon[i].Pos.z* rh + 64.0f - float(nuclogo.ofs_y[idx]),
-					weapon[i].Pos.x* rw + 63.0f - float(nuclogo.ofs_x[idx] + nuclogo.w[idx]),
-					weapon[i].Pos.z* rh + 63.0f - float(nuclogo.ofs_y[idx] + nuclogo.h[idx]));
+				GFX::PutTextureInsideRect(nuclogo.glbmp[idx], weapon[i].position.x * rw + 64.0f - float(nuclogo.ofs_x[idx]),
+					weapon[i].position.z* rh + 64.0f - float(nuclogo.ofs_y[idx]),
+					weapon[i].position.x* rw + 63.0f - float(nuclogo.ofs_x[idx] + nuclogo.w[idx]),
+					weapon[i].position.z* rh + 63.0f - float(nuclogo.ofs_y[idx] + nuclogo.h[idx]));
 				glDisable(GL_BLEND);
 			}
 			else
 			{
-				points[n].x = weapon[i].Pos.x * rw + 64.0f;
-				points[n].y = weapon[i].Pos.z * rh + 64.0f;
+				points[n].x = weapon[i].position.x * rw + 64.0f;
+				points[n].y = weapon[i].position.z * rh + 64.0f;
 				++n;
 			}
 		}

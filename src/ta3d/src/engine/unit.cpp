@@ -1459,8 +1459,8 @@ namespace TA3D
 		pMutex.lock();
 		if (w_id >= 0)
 		{
-			weapons.weapon[w_id].Pos = position;
-			weapons.weapon[w_id].target_pos = position;
+			weapons.weapon[w_id].position = position;
+			weapons.weapon[w_id].targetPosition = position;
 			weapons.weapon[w_id].target = -1;
 			weapons.weapon[w_id].just_explode = true;
 		}
@@ -2996,8 +2996,8 @@ namespace TA3D
 						// Yes we don't defend against allies :D, can lead to funny situations :P
 						if (weapons.weapon[i].weapon_id != -1 && !(players.team[units.unit[weapons.weapon[i].shooter_idx].ownerId] & players.team[ownerId]) && weapon_manager.weapon[weapons.weapon[i].weapon_id].targetable)
 						{
-							if (((Vector3D) (weapons.weapon[i].target_pos - position)).lengthSquared() <= coverage &&
-								((Vector3D) (weapons.weapon[i].Pos - position)).lengthSquared() <= range)
+							if (((Vector3D) (weapons.weapon[i].targetPosition - position)).lengthSquared() <= coverage &&
+								((Vector3D) (weapons.weapon[i].position - position)).lengthSquared() <= range)
 							{
 								int idx = -1;
 								for (e = 0; e < mem_size; ++e)
@@ -3025,7 +3025,7 @@ namespace TA3D
 					lock();
 					if (enemy_idx >= 0) // If we found a target, then attack it, here  we use attack because we need the mission list to act properly
 						add_mission(MISSION_ATTACK | MISSION_FLAG_AUTO,
-							&(weapons.weapon[enemy_idx].Pos),
+							&(weapons.weapon[enemy_idx].position),
 							false, 0, &(weapons.weapon[enemy_idx]), 12); // 12 = 4 | 8, targets a weapon and automatic fire
 				}
 			}
@@ -3311,7 +3311,7 @@ namespace TA3D
 						Unit* const target_unit = (weapon[i].state & WEAPON_FLAG_WEAPON) == WEAPON_FLAG_WEAPON ? NULL : (Unit*)weapon[i].target;
 						const Weapon* const target_weapon = (weapon[i].state & WEAPON_FLAG_WEAPON) == WEAPON_FLAG_WEAPON ? (Weapon*)weapon[i].target : NULL;
 
-						Vector3D target = target_unit == NULL ? (target_weapon == NULL ? weapon[i].target_pos - position : target_weapon->Pos - position) : target_unit->position - position;
+						Vector3D target = target_unit == NULL ? (target_weapon == NULL ? weapon[i].target_pos - position : target_weapon->position - position) : target_unit->position - position;
 						float dist = target.lengthSquared();
 						int maxdist = 0;
 						int mindist = 0;
@@ -3437,7 +3437,7 @@ namespace TA3D
 								Vector3D D = target_unit == NULL
 											 ? (target_weapon == NULL
 												? position + data.data[start_piece].tpos - weapon[i].target_pos
-												: (position + data.data[start_piece].tpos - target_weapon->Pos))
+												: (position + data.data[start_piece].tpos - target_weapon->position))
 											 : (position + data.data[start_piece].tpos - pos_of_target_unit - target_pos_on_unit);
 								D.y = 0.0f;
 								float v;
@@ -3450,7 +3450,7 @@ namespace TA3D
 									if (target_weapon == NULL)
 										aiming[1] = (int)(ballistic_angle(v, the_map->ota_data.gravity, D.length(), (position + data.data[start_piece].tpos).y, weapon[i].target_pos.y) * DEG2TA);
 									else
-										aiming[1] = (int)(ballistic_angle(v, the_map->ota_data.gravity, D.length(), (position + data.data[start_piece].tpos).y, target_weapon->Pos.y) * DEG2TA);
+										aiming[1] = (int)(ballistic_angle(v, the_map->ota_data.gravity, D.length(), (position + data.data[start_piece].tpos).y, target_weapon->position.y) * DEG2TA);
 								}
 								else if (pModel)
 									aiming[1] = (int)(ballistic_angle(v, the_map->ota_data.gravity, D.length(),
@@ -3485,7 +3485,7 @@ namespace TA3D
 										if (target_weapon == NULL)
 											weapon[i].aim_dir = weapon[i].target_pos - (position + data.data[start_piece].tpos);
 										else
-											weapon[i].aim_dir = ((Weapon*)(weapon[i].target))->Pos - (position + data.data[start_piece].tpos);
+											weapon[i].aim_dir = ((Weapon*)(weapon[i].target))->position - (position + data.data[start_piece].tpos);
 									}
 									else
 										weapon[i].aim_dir = ((Unit*)(weapon[i].target))->position + target_pos_on_unit - (position + data.data[start_piece].tpos);
@@ -3517,7 +3517,7 @@ namespace TA3D
 									if (target_weapon == NULL)
 										weapon[i].aim_dir = weapon[i].target_pos - (position + data.data[start_piece].tpos);
 									else
-										weapon[i].aim_dir = ((Weapon*)(weapon[i].target))->Pos - (position + data.data[start_piece].tpos);
+										weapon[i].aim_dir = ((Weapon*)(weapon[i].target))->position - (position + data.data[start_piece].tpos);
 								}
 								else
 								{
@@ -4050,24 +4050,24 @@ namespace TA3D
 		}
 
 		weapons.weapon[w_idx].damage = (float)pW->damage;
-		weapons.weapon[w_idx].Pos = startpos;
+		weapons.weapon[w_idx].position = startpos;
 		weapons.weapon[w_idx].local = local;
 		if (Math::AlmostZero(pW->startvelocity) && !pW->selfprop)
-			weapons.weapon[w_idx].V = pW->weaponvelocity * Dir;
+			weapons.weapon[w_idx].velocity = pW->weaponvelocity * Dir;
 		else
-			weapons.weapon[w_idx].V = pW->startvelocity * Dir;
-		weapons.weapon[w_idx].V = weapons.weapon[w_idx].V + velocity;
+			weapons.weapon[w_idx].velocity = pW->startvelocity * Dir;
+		weapons.weapon[w_idx].velocity = weapons.weapon[w_idx].velocity + velocity;
 		weapons.weapon[w_idx].owner = (byte)owner;
 		weapons.weapon[w_idx].target = target;
 		if (target >= 0)
 		{
 			if (pW->interceptor)
-				weapons.weapon[w_idx].target_pos = weapons.weapon[target].Pos;
+				weapons.weapon[w_idx].targetPosition = weapons.weapon[target].position;
 			else
-				weapons.weapon[w_idx].target_pos = target_pos;
+				weapons.weapon[w_idx].targetPosition = target_pos;
 		}
 		else
-			weapons.weapon[w_idx].target_pos = target_pos;
+			weapons.weapon[w_idx].targetPosition = target_pos;
 
 		weapons.weapon[w_idx].stime = 0.0f;
 		weapons.weapon[w_idx].visible = visible; // Not critical so we don't duplicate this

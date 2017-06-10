@@ -51,13 +51,13 @@ namespace TA3D
 
 	public:
 		//! Position
-		Vector3D Pos;
+		Vector3D position;
 		//! Speed
-		Vector3D V;
+		Vector3D velocity;
 		//! Start position
-		Vector3D start_pos;
+		Vector3D startPosition;
 		//!
-		Vector3D target_pos; // Position ciblée
+		Vector3D targetPosition; // Position ciblée
 
 		//! Weapon unique id
 		int weapon_id;

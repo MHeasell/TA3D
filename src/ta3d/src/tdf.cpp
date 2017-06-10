@@ -870,7 +870,7 @@ namespace TA3D
 					if (w_idx >= 0)
 					{
 						weapons.weapon[w_idx].just_explode = true;
-						weapons.weapon[w_idx].Pos = feature[e].Pos;
+						weapons.weapon[w_idx].position = feature[e].Pos;
 						weapons.weapon[w_idx].owner = 0xFF;
 						weapons.weapon[w_idx].local = true;
 					}

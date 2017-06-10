@@ -537,17 +537,17 @@ namespace TA3D
 							weapons.weapon[w_idx].local = false;
 
 							weapons.weapon[w_idx].damage = (float)event_msg.opt4;
-							weapons.weapon[w_idx].Pos = startpos;
+							weapons.weapon[w_idx].position = startpos;
 							weapons.weapon[w_idx].local = false;
 							if (Math::AlmostZero(weapon_manager.weapon[w_type].startvelocity) && !weapon_manager.weapon[w_type].selfprop)
-								weapons.weapon[w_idx].V = weapon_manager.weapon[w_type].weaponvelocity * Dir;
+								weapons.weapon[w_idx].velocity = weapon_manager.weapon[w_type].weaponvelocity * Dir;
 							else
-								weapons.weapon[w_idx].V = weapon_manager.weapon[w_type].startvelocity * Dir;
+								weapons.weapon[w_idx].velocity = weapon_manager.weapon[w_type].startvelocity * Dir;
 							if (weapon_manager.weapon[w_type].dropped || !(weapon_manager.weapon[w_type].rendertype & RENDER_TYPE_LASER))
 							{
 								units.unit[event_msg.opt1].lock();
 								if (units.unit[event_msg.opt1].isAlive())
-									weapons.weapon[w_idx].V = weapons.weapon[w_idx].V + units.unit[event_msg.opt1].velocity;
+									weapons.weapon[w_idx].velocity = weapons.weapon[w_idx].velocity + units.unit[event_msg.opt1].velocity;
 								units.unit[event_msg.opt1].unlock();
 							}
 							weapons.weapon[w_idx].owner = (byte)player_id;
@@ -555,12 +555,12 @@ namespace TA3D
 							if (event_msg.opt2 < weapons.weapon.size())
 							{
 								if (weapon_manager.weapon[w_type].interceptor)
-									weapons.weapon[w_idx].target_pos = weapons.weapon[event_msg.opt2].Pos;
+									weapons.weapon[w_idx].targetPosition = weapons.weapon[event_msg.opt2].position;
 								else
-									weapons.weapon[w_idx].target_pos = target_pos;
+									weapons.weapon[w_idx].targetPosition = target_pos;
 							}
 							else
-								weapons.weapon[w_idx].target_pos = target_pos;
+								weapons.weapon[w_idx].targetPosition = target_pos;
 							weapons.weapon[w_idx].stime = 0.0f;
 							weapons.weapon[w_idx].visible = true;
 							if (event_msg.opt3 < units.current_tick)

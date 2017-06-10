@@ -218,11 +218,11 @@ namespace TA3D
 
 			writestring(file, weapon_manager.weapon[weapons.weapon[i].weapon_id].internal_name);
 
-			SAVE(weapons.weapon[i].Pos);
+			SAVE(weapons.weapon[i].position);
 			SAVE(weapons.weapon[i].bInit);
-			SAVE(weapons.weapon[i].start_pos);
-			SAVE(weapons.weapon[i].V);
-			SAVE(weapons.weapon[i].target_pos);
+			SAVE(weapons.weapon[i].startPosition);
+			SAVE(weapons.weapon[i].velocity);
+			SAVE(weapons.weapon[i].targetPosition);
 			SAVE(weapons.weapon[i].target);
 			SAVE(weapons.weapon[i].stime);
 			SAVE(weapons.weapon[i].killtime);
@@ -668,11 +668,11 @@ namespace TA3D
 				continue;
 			weapons.weapon[i].weapon_id = short(weapon_manager.get_weapon_index(readstring(file)));
 
-			LOAD(weapons.weapon[i].Pos);
+			LOAD(weapons.weapon[i].position);
 			LOAD(weapons.weapon[i].bInit);
-			LOAD(weapons.weapon[i].start_pos);
-			LOAD(weapons.weapon[i].V);
-			LOAD(weapons.weapon[i].target_pos);
+			LOAD(weapons.weapon[i].startPosition);
+			LOAD(weapons.weapon[i].velocity);
+			LOAD(weapons.weapon[i].targetPosition);
 			LOAD(weapons.weapon[i].target);
 			LOAD(weapons.weapon[i].stime);
 			LOAD(weapons.weapon[i].killtime);
