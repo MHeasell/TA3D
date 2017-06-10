@@ -60,7 +60,7 @@ namespace TA3D
 		Vector3D targetPosition; // Position ciblée
 
 		//! Weapon unique id
-		int weapon_id;
+		int weaponId;
 		//!
 		int target; // Unité ciblée (dans le tableau des unités)
 		//!

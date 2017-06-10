@@ -2979,7 +2979,7 @@ namespace TA3D
 					int e = 0;
 					for (int i = 0; i + e < mem_size; ++i)
 					{
-						if (memory[i + e] >= weapons.nb_weapon || weapons.weapon[memory[i + e]].weapon_id == -1)
+						if (memory[i + e] >= weapons.nb_weapon || weapons.weapon[memory[i + e]].weaponId == -1)
 						{
 							++e;
 							--i;
@@ -2994,7 +2994,7 @@ namespace TA3D
 					{
 						const uint32 i = *f;
 						// Yes we don't defend against allies :D, can lead to funny situations :P
-						if (weapons.weapon[i].weapon_id != -1 && !(players.team[units.unit[weapons.weapon[i].shooter_idx].ownerId] & players.team[ownerId]) && weapon_manager.weapon[weapons.weapon[i].weapon_id].targetable)
+						if (weapons.weapon[i].weaponId != -1 && !(players.team[units.unit[weapons.weapon[i].shooter_idx].ownerId] & players.team[ownerId]) && weapon_manager.weapon[weapons.weapon[i].weaponId].targetable)
 						{
 							if (((Vector3D) (weapons.weapon[i].targetPosition - position)).lengthSquared() <= coverage &&
 								((Vector3D) (weapons.weapon[i].position - position)).lengthSquared() <= range)
@@ -3288,7 +3288,7 @@ namespace TA3D
 					break;
 				}
 
-				if (weapon[i].target == NULL || ((weapon[i].state & WEAPON_FLAG_WEAPON) == WEAPON_FLAG_WEAPON && ((Weapon*)(weapon[i].target))->weapon_id != -1) || ((weapon[i].state & WEAPON_FLAG_WEAPON) != WEAPON_FLAG_WEAPON && ((Unit*)(weapon[i].target))->isAlive()))
+				if (weapon[i].target == NULL || ((weapon[i].state & WEAPON_FLAG_WEAPON) == WEAPON_FLAG_WEAPON && ((Weapon*)(weapon[i].target))->weaponId != -1) || ((weapon[i].state & WEAPON_FLAG_WEAPON) != WEAPON_FLAG_WEAPON && ((Unit*)(weapon[i].target))->isAlive()))
 				{
 					if ((weapon[i].state & WEAPON_FLAG_WEAPON) != WEAPON_FLAG_WEAPON && weapon[i].target != NULL && ((Unit*)(weapon[i].target))->cloaked && ((const Unit*)(weapon[i].target))->isNotOwnedBy(ownerId) && !((const Unit*)(weapon[i].target))->is_on_radar(toPlayerMask(ownerId)))
 					{
@@ -3554,7 +3554,7 @@ namespace TA3D
 				}
 				break;
 			case WEAPON_FLAG_SHOOT: // Tire sur une unité / fire!
-				if (weapon[i].target == NULL || ((weapon[i].state & WEAPON_FLAG_WEAPON) == WEAPON_FLAG_WEAPON && ((Weapon*)(weapon[i].target))->weapon_id != -1) || ((weapon[i].state & WEAPON_FLAG_WEAPON) != WEAPON_FLAG_WEAPON && ((Unit*)(weapon[i].target))->isAlive()))
+				if (weapon[i].target == NULL || ((weapon[i].state & WEAPON_FLAG_WEAPON) == WEAPON_FLAG_WEAPON && ((Weapon*)(weapon[i].target))->weaponId != -1) || ((weapon[i].state & WEAPON_FLAG_WEAPON) != WEAPON_FLAG_WEAPON && ((Unit*)(weapon[i].target))->isAlive()))
 				{
 					if (weapon[i].burst > 0 && weapon[i].delay < pType->weapon[i]->burstrate)
 						break;
@@ -5130,7 +5130,7 @@ namespace TA3D
 
 		Unit* target_unit = missionQueue->getUnit();
 		Weapon* target_weapon = missionQueue->getWeapon();
-		if ((target_unit != NULL && target_unit->isAlive()) || (target_weapon != NULL && target_weapon->weapon_id != -1) || missionQueue->getTarget().isStatic())
+		if ((target_unit != NULL && target_unit->isAlive()) || (target_weapon != NULL && target_weapon->weaponId != -1) || missionQueue->getTarget().isStatic())
 		{
 			if (target_unit) // Check if we can target the unit
 			{

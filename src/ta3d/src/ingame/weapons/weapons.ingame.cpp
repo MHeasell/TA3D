@@ -91,7 +91,7 @@ namespace TA3D
 			idx_list.push_back(i);
 			++nb_weapon;
 			weapon[i].init();
-			weapon[i].weapon_id = weapon_id;
+			weapon[i].weaponId = weapon_id;
 			weapon[i].shooter_idx = shooter;
 			weapon[i].idx = i;
 			weapon[i].f_time = weapon_manager.weapon[weapon_id].flighttime;
@@ -103,7 +103,7 @@ namespace TA3D
 		idx_list.push_back(index);
 		++nb_weapon;
 		weapon.back().init();
-		weapon.back().weapon_id = weapon_id;
+		weapon.back().weaponId = weapon_id;
 		weapon.back().shooter_idx = shooter;
 		weapon.back().idx = index;
 		weapon.back().f_time = weapon_manager.weapon[weapon_id].flighttime;
@@ -150,10 +150,10 @@ namespace TA3D
 				break;
 
 			const uint32 i = idx_list[e];
-			for (; weapon[i].ticks_to_compute > 0U && weapon[i].weapon_id >= 0; --weapon[i].ticks_to_compute)
+			for (; weapon[i].ticks_to_compute > 0U && weapon[i].weaponId >= 0; --weapon[i].ticks_to_compute)
 				weapon[i].move(dt);
 			weapon[i].move(dt);
-			if (weapon[i].weapon_id < 0) // Remove it from the "alive" list
+			if (weapon[i].weaponId < 0) // Remove it from the "alive" list
 			{
 				--nb_weapon;
 				free_idx.push_back(i);
@@ -207,7 +207,7 @@ namespace TA3D
 		for (std::vector<uint32>::iterator e = idx_list.begin(); e != idx_list.end(); ++e)
 		{
 			const uint32 i = *e;
-			if (weapon_manager.weapon[weapon[i].weapon_id].cruise || weapon_manager.weapon[weapon[i].weapon_id].interceptor)
+			if (weapon_manager.weapon[weapon[i].weaponId].cruise || weapon_manager.weapon[weapon[i].weaponId].interceptor)
 			{
 				glEnable(GL_TEXTURE_2D);
 				glEnable(GL_BLEND);

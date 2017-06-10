@@ -41,7 +41,7 @@ namespace TA3D
 		f_time = 0.0f;
 		shooter_idx = -1;
 		anim_sprite = 0;
-		weapon_id = -1; // Non défini
+		weaponId = -1; // Non défini
 		position.reset();
 		;
 		velocity.reset();
@@ -59,7 +59,7 @@ namespace TA3D
 
 	void Weapon::move(const float dt) // Anime les armes
 	{
-		if (weapon_id < 0)
+		if (weaponId < 0)
 			return;
 
 		if (bInit)
@@ -68,7 +68,7 @@ namespace TA3D
 			startPosition = position;
 		}
 
-		const WeaponDef* const weapon_def = &(weapon_manager.weapon[weapon_id]);
+		const WeaponDef* const weapon_def = &(weapon_manager.weapon[weaponId]);
 
 		smoke_time += dt;
 		f_time -= dt;
@@ -119,7 +119,7 @@ namespace TA3D
 				if (weapon_def->tracks && target >= 0)
 				{
 					Vector3D target_V;
-					if (weapon_def->interceptor && (uint32)target <= weapons.nb_weapon && weapons.weapon[target].weapon_id != -1)
+					if (weapon_def->interceptor && (uint32)target <= weapons.nb_weapon && weapons.weapon[target].weaponId != -1)
 					{
 						targetPosition = weapons.weapon[target].position;
 						target_V = weapons.weapon[target].velocity;
@@ -221,7 +221,7 @@ namespace TA3D
 		{
 			hit = true;
 			hit_vec = position;
-			if (target >= 0 && (uint32)target <= weapons.nb_weapon && weapons.weapon[target].weapon_id != -1)
+			if (target >= 0 && (uint32)target <= weapons.nb_weapon && weapons.weapon[target].weaponId != -1)
 			{
 				weapons.weapon[target].dying = true;
 				weapons.weapon[target].killtime = 0.0f;
@@ -601,18 +601,18 @@ namespace TA3D
 					killtime = weapon_def->duration;
 				}
 				else
-					weapon_id = -1;
+					weaponId = -1;
 			}
 		}
 		else if (dying && killtime <= 0.0f)
-			weapon_id = -1;
+			weaponId = -1;
 		else if (position.x < -the_map->halfWidthInWorldUnits || position.x > the_map->halfWidthInWorldUnits || position.z < -the_map->halfHeightInWorldUnits || position.z > the_map->halfHeightInWorldUnits) // We're out of the map
-			weapon_id = -1;
+			weaponId = -1;
 	}
 
 	void Weapon::draw() // Dessine les objets produits par les armes
 	{
-		if (weapon_id < 0)
+		if (weaponId < 0)
 			return;
 
 		visible = false;
@@ -628,7 +628,7 @@ namespace TA3D
 
 		glPushMatrix();
 
-		const WeaponDef* const weapon_def = &(weapon_manager.weapon[weapon_id]);
+		const WeaponDef* const weapon_def = &(weapon_manager.weapon[weaponId]);
 
 		visible = true;
 		switch (weapon_def->rendertype)

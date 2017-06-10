@@ -212,11 +212,11 @@ namespace TA3D
 			uint32 i = *e;
 			SAVE(i);
 
-			SAVE(weapons.weapon[i].weapon_id);
-			if (weapons.weapon[i].weapon_id == -1)
+			SAVE(weapons.weapon[i].weaponId);
+			if (weapons.weapon[i].weaponId == -1)
 				continue;
 
-			writestring(file, weapon_manager.weapon[weapons.weapon[i].weapon_id].internal_name);
+			writestring(file, weapon_manager.weapon[weapons.weapon[i].weaponId].internal_name);
 
 			SAVE(weapons.weapon[i].position);
 			SAVE(weapons.weapon[i].bInit);
@@ -655,7 +655,7 @@ namespace TA3D
 		weapons.weapon.resize(max_weapon);
 
 		for (uint32 e = 0; e < max_weapon; ++e)
-			weapons.weapon[e].weapon_id = -1;
+			weapons.weapon[e].weaponId = -1;
 
 		for (uint32 e = 0; e < index_list_size; ++e)
 		{
@@ -663,10 +663,10 @@ namespace TA3D
 			LOAD(i);
 			weapons.idx_list.push_back(i);
 
-			LOAD(weapons.weapon[i].weapon_id);
-			if (weapons.weapon[i].weapon_id == -1)
+			LOAD(weapons.weapon[i].weaponId);
+			if (weapons.weapon[i].weaponId == -1)
 				continue;
-			weapons.weapon[i].weapon_id = short(weapon_manager.get_weapon_index(readstring(file)));
+			weapons.weapon[i].weaponId = short(weapon_manager.get_weapon_index(readstring(file)));
 
 			LOAD(weapons.weapon[i].position);
 			LOAD(weapons.weapon[i].bInit);
@@ -689,7 +689,7 @@ namespace TA3D
 		}
 
 		for (uint32 e = 0; e < max_weapon; ++e)
-			if (weapons.weapon[e].weapon_id == -1)
+			if (weapons.weapon[e].weaponId == -1)
 				weapons.free_idx.push_back(e);
 
 		weapons.unlock();
