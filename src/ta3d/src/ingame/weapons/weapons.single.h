@@ -80,8 +80,6 @@ namespace TA3D
 		//!
 		float damage;
 		//!
-		uint32 last_timestamp;
-		//!
 		uint32 idx;
 		//!
 		uint32 ticks_to_compute; // How many ticks to compute in order to synchronize the weapon (multiplayer, 0 for local objects)
