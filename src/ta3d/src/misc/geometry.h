@@ -16,7 +16,7 @@ namespace TA3D
 		/** The direction the ray is travelling. */
 		Vector3D direction;
 
-		Ray3D(Vector3D position, Vector3D direction);
+		Ray3D(const Vector3D& position, const Vector3D& direction);
 
 		/** Returns the position along the ray at time t. */
 		Vector3D pointAt(const float t) const;
@@ -37,7 +37,7 @@ namespace TA3D
 		 * are in anticlockwise order when the normal
 		 * is pointing at the viewer.
 		 */
-		static Plane3D fromPoints(Vector3D a, Vector3D b, Vector3D c);
+		static Plane3D fromPoints(const Vector3D& a, const Vector3D& b, const Vector3D& c);
 
 		/** A point on the plane. */
 		Vector3D point;
@@ -45,7 +45,7 @@ namespace TA3D
 		/** The normal of the plane. */
 		Vector3D normal;
 
-		Plane3D(Vector3D point, Vector3D normal): point(point), normal(normal) {}
+		Plane3D(const Vector3D& point, const Vector3D& normal): point(point), normal(normal) {}
 
 		/**
 		 * Returns the distance along the ray

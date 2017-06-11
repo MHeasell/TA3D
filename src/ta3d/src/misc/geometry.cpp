@@ -3,7 +3,7 @@
 
 namespace TA3D
 {
-	Ray3D::Ray3D(Vector3D position, Vector3D direction) : origin(position), direction(direction) {}
+	Ray3D::Ray3D(const Vector3D& position, const Vector3D& direction) : origin(position), direction(direction) {}
 
 	Vector3D Ray3D::pointAt(const float t) const
 	{
@@ -15,7 +15,7 @@ namespace TA3D
 		return (a - origin).dot(direction) < (b - origin).dot(direction);
 	}
 
-	Plane3D Plane3D::fromPoints(Vector3D a, Vector3D b, Vector3D c)
+	Plane3D Plane3D::fromPoints(const Vector3D& a, const Vector3D& b, const Vector3D& c)
 	{
 		auto position = a;
 
