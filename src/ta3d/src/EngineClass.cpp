@@ -1234,7 +1234,7 @@ namespace TA3D
 		return result;
 	}
 
-	boost::optional<Vector3D> MAP::hit2(Vector3D Pos, Vector3D Dir, bool water) const
+	boost::optional<Vector3D> MAP::hit2(const Vector3D& Pos, const Vector3D& Dir, bool water) const
 	{
 		Ray3D ray(Pos, Dir);
 		auto result = findIntersectWithTerrain(ray);

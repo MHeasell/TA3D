@@ -425,7 +425,7 @@ namespace TA3D
 		//! Calculates the intersection of a ray with the map (the ray starts from the top of the map)
 		Vector3D hit(Vector3D Pos, Vector3D Dir, bool water = true, float length = 200000.0f, bool allow_out = false) const;
 
-		boost::optional<Vector3D> hit2(Vector3D Pos, Vector3D Dir, bool water = true) const;
+		boost::optional<Vector3D> hit2(const Vector3D& Pos, const Vector3D& Dir, bool water = true) const;
 
 		boost::optional<Vector3D> findIntersectWithTerrain(const Ray3D& ray) const;
 
