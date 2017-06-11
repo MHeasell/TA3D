@@ -99,7 +99,6 @@ namespace TA3D
 				particle_engine.make_smoke(position, 0, 1, 0.0f, -1.0f, -2.0f, 0.3f);
 		}
 
-		Vector3D hit_vec;
 		const Vector3D OPos(position);
 
 		const float h = the_map->get_unit_h(position.x, position.z);
@@ -172,6 +171,8 @@ namespace TA3D
 
 		if (weapon_def->waterweapon && position.y <= the_map->sealvl && OPos.y > the_map->sealvl) // A weapon that gets into water slows down
 			velocity = 0.5f * velocity;
+
+		Vector3D hit_vec;
 
 		const float length = (OPos - position).length();
 		if (!dying)
