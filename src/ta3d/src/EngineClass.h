@@ -427,6 +427,8 @@ namespace TA3D
 
 		boost::optional<Vector3D> hit2(const Vector3D& Pos, const Vector3D& Dir, bool water = true) const;
 
+		boost::optional<Vector3D> hitLine(const Vector3D& start, const Vector3D& end, bool water = true) const;
+
 		boost::optional<Vector3D> findIntersectWithTerrain(const Ray3D& ray) const;
 
 		boost::optional<Vector3D> findIntersectWithTerrainLine(const Vector3D& startPoint, const Vector3D& endPoint) const;

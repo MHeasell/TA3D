@@ -71,6 +71,8 @@ namespace TA3D
 		 */
 		float intersectOrInfinity(const Ray3D& ray) const;
 
+		boost::optional<Vector3D> intersectLine(const Vector3D& startPoint, const Vector3D& endPoint);
+
 		/**
 		 * Returns true if the given point is in front of the plane.
 		 * The point is in front of the plane if it is on the side of the plane

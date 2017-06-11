@@ -1234,6 +1234,20 @@ namespace TA3D
 		return result;
 	}
 
+	boost::optional<Vector3D> MAP::hitLine(const Vector3D& start, const Vector3D& end, bool water) const
+	{
+		auto result = findIntersectWithTerrainLine(start, end);
+
+		if (water)
+		{
+			Plane3D waterPlane(Vector3D(0.0f, sealvl, 0.0f), Vector3D(0.0f, 1.0f, 0.0f));
+			auto waterResult = waterPlane.intersectLine(start, end);
+			result = closestTo(start, result, waterResult);
+		}
+
+		return result;
+	}
+
 	boost::optional<Vector3D> MAP::hit2(const Vector3D& Pos, const Vector3D& Dir, bool water) const
 	{
 		Ray3D ray(Pos, Dir);

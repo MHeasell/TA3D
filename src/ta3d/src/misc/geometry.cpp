@@ -59,6 +59,18 @@ namespace TA3D
 			: -std::numeric_limits<float>::infinity();
 	}
 
+	boost::optional<Vector3D> Plane3D::intersectLine(const Vector3D& startPoint, const Vector3D& endPoint)
+	{
+		Ray3D ray(startPoint, endPoint - startPoint);
+		auto result = intersect(ray);
+		if (result && *result >= 0.0f && *result <= 1.0f)
+		{
+			return ray.pointAt(*result);
+		}
+
+		return boost::none;
+	}
+
 	BoundingBox3D::BoundingBox3D(const Vector3D& center, const Vector3D& extents) : center(center), extents(extents) {}
 
 	boost::optional<BoundingBox3D::RayIntersect> BoundingBox3D::intersect(const Ray3D& ray) const
