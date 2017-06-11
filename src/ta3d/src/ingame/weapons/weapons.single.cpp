@@ -187,7 +187,6 @@ namespace TA3D
 				hit_vec = the_map->hit(position, velocity, !weapon_def->waterweapon, length);
 				if (!weapon_def->waterweapon && position.y <= the_map->sealvl && h < the_map->sealvl)
 				{
-					hit_vec = the_map->hit(position, velocity, !weapon_def->waterweapon, length);
 					if (!Math::AlmostZero(velocity.y))
 						hit_vec = position - (the_map->sealvl - hit_vec.y) / velocity.y * velocity;
 					else
