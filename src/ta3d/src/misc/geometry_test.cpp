@@ -412,4 +412,59 @@ namespace TA3D
 			REQUIRE(p.normal.z == Approx(4.0f));
 		}
 	}
+
+	TEST_CASE("closestTo")
+	{
+		SECTION("returns a when b is not defined")
+		{
+			Vector3D origin(0.0f, 0.0f, 0.0f);
+			boost::optional<Vector3D> a = Vector3D(1.0f, 2.0f, 3.0f);
+			boost::optional<Vector3D> b;
+
+			auto result = closestTo(origin, a, b);
+			REQUIRE(result);
+			REQUIRE(result->x == 1.0f);
+			REQUIRE(result->y == 2.0f);
+			REQUIRE(result->z == 3.0f);
+		}
+
+		SECTION("returns b when a is not defined")
+		{
+			Vector3D origin(0.0f, 0.0f, 0.0f);
+			boost::optional<Vector3D> a;
+			boost::optional<Vector3D> b = Vector3D(2.0f, 3.0f, 4.0f);
+
+			auto result = closestTo(origin, a, b);
+			REQUIRE(result);
+			REQUIRE(result->x == 2.0f);
+			REQUIRE(result->y == 3.0f);
+			REQUIRE(result->z == 4.0f);
+		}
+
+		SECTION("when both are defined, returns the closer")
+		{
+			Vector3D origin(0.0f, 0.0f, 0.0f);
+			boost::optional<Vector3D> a = Vector3D(1.0f, 2.0f, 3.0f);
+			boost::optional<Vector3D> b = Vector3D(2.0f, 3.0f, 4.0f);
+
+			auto result = closestTo(origin, a, b);
+			REQUIRE(result);
+			REQUIRE(result->x == 1.0f);
+			REQUIRE(result->y == 2.0f);
+			REQUIRE(result->z == 3.0f);
+		}
+
+		SECTION("when both are defined, returns the closer (test 2)")
+		{
+			Vector3D origin(3.0f, 3.0f, 3.0f);
+			boost::optional<Vector3D> a = Vector3D(1.0f, 2.0f, 3.0f);
+			boost::optional<Vector3D> b = Vector3D(2.0f, 3.0f, 4.0f);
+
+			auto result = closestTo(origin, a, b);
+			REQUIRE(result);
+			REQUIRE(result->x == 2.0f);
+			REQUIRE(result->y == 3.0f);
+			REQUIRE(result->z == 4.0f);
+		}
+	}
 }
