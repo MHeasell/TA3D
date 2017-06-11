@@ -35,7 +35,7 @@ namespace TA3D
 		{
 			throw std::runtime_error("cursor position did not intersect the map");
 		}
-		return *intersect;
+		return intersect->point;
 	}
 
 	void Battle::showGameStatus()

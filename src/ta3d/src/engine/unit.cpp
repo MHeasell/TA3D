@@ -1361,7 +1361,7 @@ namespace TA3D
 				throw std::logic_error("top of shadow did not intersect with the map");
 			}
 
-			const Vector3D D = *intersectResult;
+			const Vector3D D = intersectResult->point;
 			shadow_scale_dir = (D - H).length();
 		}
 		model->draw_shadow(shadow_scale_dir * Dir * RotateXZY(-render.Angle.x * DEG2RAD, -render.Angle.z * DEG2RAD, -render.Angle.y * DEG2RAD), 0.0f, &render.Anim);

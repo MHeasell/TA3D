@@ -141,6 +141,14 @@ namespace TA3D
 	class MAP : public ObjectSync
 	{
 	public:
+		struct IntersectResult
+		{
+			enum class Type { Water, Land };
+			Type type;
+			Vector3D point;
+			IntersectResult(Type type, const Vector3D& point): type(type), point(point) {}
+		};
+
 		static const int GraphicalTileWidthInWorldUnits;
 		static const int GraphicalTileHeightInWorldUnits;
 		static const int HeightmapTileWidthInWorldUnits;
@@ -425,9 +433,9 @@ namespace TA3D
 		//! Calculates the intersection of a ray with the map (the ray starts from the top of the map)
 		Vector3D hit(Vector3D Pos, Vector3D Dir, bool water = true, float length = 200000.0f, bool allow_out = false) const;
 
-		boost::optional<Vector3D> hit2(const Vector3D& Pos, const Vector3D& Dir, bool water = true) const;
+		boost::optional<IntersectResult> hit2(const Vector3D& Pos, const Vector3D& Dir, bool water = true) const;
 
-		boost::optional<Vector3D> hitLine(const Vector3D& start, const Vector3D& end, bool water = true) const;
+		boost::optional<IntersectResult> hitLine(const Vector3D& start, const Vector3D& end, bool water = true) const;
 
 		boost::optional<Vector3D> findIntersectWithTerrain(const Ray3D& ray) const;
 

@@ -241,4 +241,9 @@ namespace TA3D
 
 		return b;
 	}
+
+	bool isCloserTo(const Vector3D& v, const Vector3D& a, const Vector3D& b)
+	{
+		return (a - v).lengthSquared() < (b - v).lengthSquared();
+	}
 }

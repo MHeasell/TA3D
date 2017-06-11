@@ -180,6 +180,12 @@ namespace TA3D
 		const Vector3D& v,
 		const boost::optional<Vector3D>& a,
 		const boost::optional<Vector3D>& b);
+
+	/**
+	 * Returns true if a is closer to v than b.
+	 * Otherwise, returns false.
+	 */
+	bool isCloserTo(const Vector3D& v, const Vector3D& a, const Vector3D& b);
 }
 
 #endif //__TA3D_GEOMETRY_H__

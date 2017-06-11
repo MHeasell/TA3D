@@ -1234,42 +1234,71 @@ namespace TA3D
 		return result;
 	}
 
-	boost::optional<Vector3D> MAP::hitLine(const Vector3D& start, const Vector3D& end, bool water) const
+	boost::optional<MAP::IntersectResult> MAP::hitLine(const Vector3D& start, const Vector3D& end, bool water) const
 	{
 		auto result = findIntersectWithTerrainLine(start, end);
+		boost::optional<Vector3D> waterResult;
 
 		if (water)
 		{
 			Plane3D waterPlane(Vector3D(0.0f, sealvl, 0.0f), Vector3D(0.0f, 1.0f, 0.0f));
-			auto waterResult = waterPlane.intersectLine(start, end);
-			result = closestTo(start, result, waterResult);
+			waterResult = waterPlane.intersectLine(start, end);
 		}
 
-		return result;
+		if (result)
+		{
+			if (!waterResult || isCloserTo(start, *result, *waterResult))
+			{
+				return IntersectResult(IntersectResult::Type::Land, *result);
+			}
+
+			return IntersectResult(IntersectResult::Type::Water, *waterResult);
+		}
+
+		if (waterResult)
+		{
+			return IntersectResult(IntersectResult::Type::Water, *waterResult);
+		}
+
+		return boost::none;
 	}
 
-	boost::optional<Vector3D> MAP::hit2(const Vector3D& Pos, const Vector3D& Dir, bool water) const
+	boost::optional<MAP::IntersectResult> MAP::hit2(const Vector3D& Pos, const Vector3D& Dir, bool water) const
 	{
 		Ray3D ray(Pos, Dir);
 		auto result = findIntersectWithTerrain(ray);
+		boost::optional<float> waterResult;
 
 		if (water)
 		{
 			Plane3D waterPlane(Vector3D(0.0f, sealvl, 0.0f), Vector3D(0.0f, 1.0f, 0.0f));
-			auto waterResult = waterPlane.intersect(ray);
-			if (waterResult)
-			{
-				auto waterPoint = ray.pointAt(*waterResult);
-
-				// accept whichever point is the least distance along the ray
-				if (!result || ray.isLessFar(waterPoint, *result))
-				{
-					result = waterPoint;
-				}
-			}
+			waterResult = waterPlane.intersect(ray);
 		}
 
-		return result;
+		if (result)
+		{
+			if (!waterResult)
+			{
+				return IntersectResult(IntersectResult::Type::Land, *result);
+			}
+
+			auto waterPoint = ray.pointAt(*waterResult);
+			if (ray.isLessFar(*result, waterPoint))
+			{
+				return IntersectResult(IntersectResult::Type::Land, *result);
+			}
+
+			return IntersectResult(IntersectResult::Type::Water, waterPoint);
+
+		}
+
+		if (waterResult)
+		{
+			auto waterPoint = ray.pointAt(*waterResult);
+			return IntersectResult(IntersectResult::Type::Water, waterPoint);
+		}
+
+		return boost::none;
 	}
 
 	Vector3D MAP::hit(Vector3D Pos, Vector3D Dir, bool water, float length, bool allow_out) const
