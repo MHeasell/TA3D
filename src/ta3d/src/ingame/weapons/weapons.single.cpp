@@ -173,7 +173,7 @@ namespace TA3D
 		if (weapon_def->waterweapon && position.y <= the_map->sealvl && OPos.y > the_map->sealvl) // A weapon that gets into water slows down
 			velocity = 0.5f * velocity;
 
-		const float length = ((Vector3D) (OPos - position)).length();
+		const float length = (OPos - position).length();
 		if (!dying)
 		{
 			if (weapon_def->waterweapon && position.y > the_map->sealvl && OPos.y <= the_map->sealvl) // An aquatic weapon does not come out of the water
@@ -198,7 +198,7 @@ namespace TA3D
 
 		if (!dying && weapon_def->cruise && ((weapon_def->twophase && phase == 2) || phase == 1))
 		{
-			if (((Vector3D) (targetPosition - position)).length() > 2.0f * fabsf(position.y - h) && velocity.y < 0.0f)
+			if ((targetPosition - position).length() > 2.0f * fabsf(position.y - h) && velocity.y < 0.0f)
 				velocity.y = 0.0f;
 		}
 
