@@ -27,16 +27,16 @@ namespace TA3D
 		return Plane3D(position, normal);
 	}
 
-	Plane3D::IntersectResult Plane3D::intersect(const Ray3D& ray) const
+	boost::optional<float> Plane3D::intersect(const Ray3D& ray) const
 	{
 		float a = (point - ray.origin).dot(normal);
 		float b = ray.direction.dot(normal);
 		if (b == 0.0f)
 		{
-			return IntersectResult();
+			return boost::none;
 		}
 
-		return IntersectResult(a / b);
+		return a / b;
 	}
 
 	bool Plane3D::isInFront(const Vector3D& p) const
@@ -47,9 +47,9 @@ namespace TA3D
 	float Plane3D::intersectOrInfinity(const Ray3D& ray) const
 	{
 		auto result = intersect(ray);
-		if (result.hit)
+		if (result)
 		{
-			return result.d;
+			return *result;
 		}
 
 		return isInFront(ray.origin)
@@ -57,7 +57,7 @@ namespace TA3D
 			: -std::numeric_limits<float>::infinity();
 	}
 
-	BoundingBox3D::IntersectResult BoundingBox3D::intersect(const Ray3D& ray) const
+	boost::optional<BoundingBox3D::RayIntersect> BoundingBox3D::intersect(const Ray3D& ray) const
 	{
 		Plane3D bottomPlane(center + Vector3D(0.0f, 0.0f, -extents.z), Vector3D(0.0f, 0.0f, -1.0f));
 		Plane3D topPlane(center + Vector3D(0.0f, 0.0f, extents.z), Vector3D(0.0f, 0.0f, -1.0f));
@@ -121,31 +121,31 @@ namespace TA3D
 
 		if (std::isfinite(enter) && std::isfinite(exit) && enter <= exit)
 		{
-			return IntersectResult(enter, exit);
+			return RayIntersect(enter, exit);
 		}
 
 		// return a miss
-		return IntersectResult();
+		return boost::none;
 	}
 
-	Triangle3D::IntersectResult Triangle3D::intersect(const Ray3D& ray) const
+	boost::optional<float> Triangle3D::intersect(const Ray3D& ray) const
 	{
 		auto intersect = toPlane().intersect(ray);
-		if (!intersect.hit)
+		if (!intersect)
 		{
-			return IntersectResult();
+			return boost::none;
 		}
 
-		Vector3D p = toBarycentric(ray.pointAt(intersect.d));
+		Vector3D p = toBarycentric(ray.pointAt(*intersect));
 		if (p.x < 0 || p.y < 0 || p.z < 0)
 		{
-			return IntersectResult();
+			return boost::none;
 		}
 
-		return IntersectResult(intersect.d);
+		return *intersect;
 	}
 
-	Triangle3D::LineIntersectResult Triangle3D::intersectLine(const Vector3D& p, const Vector3D& q) const
+	boost::optional<Vector3D> Triangle3D::intersectLine(const Vector3D& p, const Vector3D& q) const
 	{
 		auto pq = q - p;
 		auto pa = a - p;
@@ -156,13 +156,13 @@ namespace TA3D
 		float v = scalarTriple(pq, pa, pc);
 		if (!Math::sameSign(u, v))
 		{
-			return LineIntersectResult();
+			return boost::none;
 		}
 
 		float w = scalarTriple(pq, pb, pa);
 		if (!Math::sameSign(v, w))
 		{
-			return LineIntersectResult();
+			return boost::none;
 		}
 
 		float denominator = u + v + w;
@@ -170,7 +170,7 @@ namespace TA3D
 		v /= denominator;
 		w /= denominator;
 
-		return LineIntersectResult(toCartesian(Vector3D(u, v, w)));
+		return toCartesian(Vector3D(u, v, w));
 	}
 
 	Plane3D Triangle3D::toPlane() const
@@ -200,26 +200,26 @@ namespace TA3D
 		return (p.x * a) + (p.y * b) + (p.z * c);
 	}
 
-	const Triangle3D::LineIntersectResult& Triangle3D::LineIntersectResult::closestTo(
+	const boost::optional<Vector3D>& closestTo(
 		const Vector3D& v,
-	    const Triangle3D::LineIntersectResult& b)
+		const boost::optional<Vector3D>& a,
+		const boost::optional<Vector3D>& b)
 	{
-		if (!hit)
+		if (!a)
 		{
 			return b;
-		}
-		if (!b.hit)
-		{
-			return *this;
 		}
 
-		if ((point - v).lengthSquared() < (b.point - v).lengthSquared())
+		if (!b)
 		{
-			return *this;
+			return a;
 		}
-		else
+
+		if ((*a - v).lengthSquared() < (*b - v).lengthSquared())
 		{
-			return b;
+			return a;
 		}
+
+		return b;
 	}
 }

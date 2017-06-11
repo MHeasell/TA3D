@@ -1107,7 +1107,7 @@ namespace TA3D
 		return (view_map(x, z) & player_mask) != 0;
 	}
 
-	MAP::IntersectResult MAP::findIntersectWithTerrain(const Ray3D& ray) const
+	boost::optional<Vector3D> MAP::findIntersectWithTerrain(const Ray3D& ray) const
 	{
 		// * find the point where the ray enters the map bounding box
 
@@ -1116,18 +1116,18 @@ namespace TA3D
 			Vector3D(halfWidthInWorldUnits, 63.75f, halfHeightInWorldUnits));
 
 		auto intersect = mapBoundingBox.intersect(ray);
-		if (!intersect.hit)
+		if (!intersect)
 		{
-			return IntersectResult();
+			return boost::none;
 		}
 
-		auto startPoint = ray.pointAt(intersect.enter);
-		auto endPoint = ray.pointAt(intersect.exit);
+		auto startPoint = ray.pointAt(intersect->enter);
+		auto endPoint = ray.pointAt(intersect->exit);
 
 		return findIntersectWithTerrainLine(startPoint, endPoint);
 	}
 
-	MAP::IntersectResult MAP::findIntersectWithTerrainLine(const Vector3D& startPoint, const Vector3D& endPoint) const
+	boost::optional<Vector3D> MAP::findIntersectWithTerrainLine(const Vector3D& startPoint, const Vector3D& endPoint) const
 	{
 		auto startCell = worldToHeightmapIndex(startPoint);
 
@@ -1146,25 +1146,25 @@ namespace TA3D
 				&& startCell.y < heightInHeightmapTiles - 1)
 			{
 				auto cellIntersect = findIntersectWithHeightmapCell(startPoint, endPoint, startCell.x, startCell.y);
-				if (cellIntersect.hit)
+				if (cellIntersect)
 				{
-					return cellIntersect;
+					return *cellIntersect;
 				}
 			}
 
 			auto cellPos = heightmapIndexToWorld(startCell);
 
 			Plane3D xPlane(Vector3D(cellPos.x + xPlaneOffset, 0.0f, 0.0f), Vector3D(1.0f, 0.0f, 0.0f));
-			float xIntersect = xPlane.intersect(ray).orInfinity();
+			float xIntersect = xPlane.intersect(ray).get_value_or(std::numeric_limits<float>::infinity());
 
 			Plane3D zPlane(Vector3D(0.0f, 0.0f, cellPos.y + zPlaneOffset), Vector3D(0.0f, 0.0f, 1.0f));
-			float zIntersect = zPlane.intersect(ray).orInfinity();
+			float zIntersect = zPlane.intersect(ray).get_value_or(std::numeric_limits<float>::infinity());
 
 			if (xIntersect < zIntersect)
 			{
 				if (xIntersect > 1.0f)
 				{
-					return IntersectResult();
+					return boost::none;
 				}
 
 				startCell.x += xDirection;
@@ -1173,7 +1173,7 @@ namespace TA3D
 			{
 				if (zIntersect > 1.0f)
 				{
-					return IntersectResult();
+					return boost::none;
 				}
 
 				startCell.y += zDirection;
@@ -1181,7 +1181,7 @@ namespace TA3D
 		}
 	}
 
-	MAP::IntersectResult MAP::findIntersectWithHeightmapCell(const Vector3D& start, const Vector3D& end, int x, int y) const
+	boost::optional<Vector3D> MAP::findIntersectWithHeightmapCell(const Vector3D& start, const Vector3D& end, int x, int y) const
 	{
 		float topLeftHeight = h_map(x, y);
 		Vector2D xzPosTopLeft = heightmapIndexToWorldCorner(x, y);
@@ -1227,14 +1227,14 @@ namespace TA3D
 		}
 
 		auto result = left.intersectLine(start, end);
-		result = result.closestTo(start, bottom.intersectLine(start, end));
-		result = result.closestTo(start, right.intersectLine(start, end));
-		result = result.closestTo(start, top.intersectLine(start, end));
+		result = closestTo(start, result, bottom.intersectLine(start, end));
+		result = closestTo(start, result, right.intersectLine(start, end));
+		result = closestTo(start, result, top.intersectLine(start, end));
 
-		return result.hit ? IntersectResult(result.point) : IntersectResult();
+		return result;
 	}
 
-	MAP::IntersectResult MAP::hit2(Vector3D Pos, Vector3D Dir, bool water) const
+	boost::optional<Vector3D> MAP::hit2(Vector3D Pos, Vector3D Dir, bool water) const
 	{
 		Ray3D ray(Pos, Dir);
 		auto result = findIntersectWithTerrain(ray);
@@ -1243,14 +1243,14 @@ namespace TA3D
 		{
 			Plane3D waterPlane(Vector3D(0.0f, sealvl, 0.0f), Vector3D(0.0f, 1.0f, 0.0f));
 			auto waterResult = waterPlane.intersect(ray);
-			if (waterResult.hit)
+			if (waterResult)
 			{
-				auto waterPoint = ray.pointAt(waterResult.d);
+				auto waterPoint = ray.pointAt(*waterResult);
 
 				// accept whichever point is the least distance along the ray
-				if (!result.hit || ray.isLessFar(waterPoint, result.v))
+				if (!result || ray.isLessFar(waterPoint, *result))
 				{
-					result = IntersectResult(waterPoint);
+					result = waterPoint;
 				}
 			}
 		}

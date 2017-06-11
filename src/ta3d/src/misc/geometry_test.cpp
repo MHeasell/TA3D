@@ -34,8 +34,8 @@ namespace TA3D
 			Ray3D r(Vector3D(3.0f, 10.0f, 4.0f), Vector3D(0.0f, -2.0f, 0.0f));
 			Plane3D p(Vector3D(0.0f, 0.0f, 0.0f), Vector3D(0.0f, 1.0f, 0.0f));
 			auto intersect = p.intersect(r);
-			REQUIRE(intersect.hit);
-			REQUIRE(intersect.d == 5.0f);
+			REQUIRE(intersect);
+			REQUIRE(*intersect == 5.0f);
 		}
 
 		SECTION("Returns a miss when the ray is parallel in front of the plane")
@@ -43,7 +43,7 @@ namespace TA3D
 			Ray3D r(Vector3D(1.0f, 1.0f, 1.0f), Vector3D(1.0f, 0.0f, 0.0f));
 			Plane3D p(Vector3D(0.0f, 0.0f, 0.0f), Vector3D(0.0f, 1.0f, 0.0f));
 			auto intersect = p.intersect(r);
-			REQUIRE(!intersect.hit);
+			REQUIRE(!intersect);
 		}
 
 		SECTION("Returns a miss when the ray is parallel behind the plane")
@@ -51,7 +51,7 @@ namespace TA3D
 			Ray3D r(Vector3D(1.0f, -1.0f, 1.0f), Vector3D(1.0f, 0.0f, 0.0f));
 			Plane3D p(Vector3D(0.0f, 0.0f, 0.0f), Vector3D(0.0f, 1.0f, 0.0f));
 			auto intersect = p.intersect(r);
-			REQUIRE(!intersect.hit);
+			REQUIRE(!intersect);
 		}
 	}
 
@@ -124,9 +124,9 @@ namespace TA3D
 			BoundingBox3D box(Vector3D(0.0f, 0.0f, 0.0f), Vector3D(1.0f, 1.0f, 1.0f));
 			Ray3D ray(Vector3D(-5.0f, 0.0f, 0.0f), Vector3D(1.0f, 0.0f, 0.0f));
 			auto intersect = box.intersect(ray);
-			REQUIRE(intersect.hit);
-			REQUIRE(intersect.enter == Approx(4.0f));
-			REQUIRE(intersect.exit == Approx(6.0f));
+			REQUIRE(intersect);
+			REQUIRE(intersect->enter == Approx(4.0f));
+			REQUIRE(intersect->exit == Approx(6.0f));
 		}
 
 		SECTION("hits at the corner of the box")
@@ -134,9 +134,9 @@ namespace TA3D
 			BoundingBox3D box(Vector3D(0.0f, 0.0f, 0.0f), Vector3D(1.0f, 1.0f, 1.0f));
 			Ray3D ray(Vector3D(-2.0f, -2.0f, 0.0f), Vector3D(1.0f, 1.0f, 1.0f));
 			auto intersect = box.intersect(ray);
-			REQUIRE(intersect.hit);
-			REQUIRE(intersect.enter == Approx(1.0f));
-			REQUIRE(intersect.exit == Approx(1.0f));
+			REQUIRE(intersect);
+			REQUIRE(intersect->enter == Approx(1.0f));
+			REQUIRE(intersect->exit == Approx(1.0f));
 		}
 
 		SECTION("misses just above the corner of the box")
@@ -144,7 +144,7 @@ namespace TA3D
 			BoundingBox3D box(Vector3D(0.0f, 0.0f, 0.0f), Vector3D(1.0f, 1.0f, 1.0f));
 			Ray3D ray(Vector3D(-2.0f, -2.0f, 0.00001f), Vector3D(1.0f, 1.0f, 1.0f));
 			auto intersect = box.intersect(ray);
-			REQUIRE(!intersect.hit);
+			REQUIRE(!intersect);
 		}
 
 		SECTION("returns a miss when the ray misses")
@@ -152,7 +152,7 @@ namespace TA3D
 			BoundingBox3D box(Vector3D(0.0f, 0.0f, 0.0f), Vector3D(1.0f, 1.0f, 1.0f));
 			Ray3D ray(Vector3D(-5.0f, 0.0f, 0.0f), Vector3D(1.0f, 1.0f, 0.0f));
 			auto intersect = box.intersect(ray);
-			REQUIRE(!intersect.hit);
+			REQUIRE(!intersect);
 		}
 	}
 
@@ -258,8 +258,8 @@ namespace TA3D
 				Vector3D(0.0f, 0.0f, 10.0f),
 				Vector3D(0.0f, 0.0f, -1.0f));
 			auto intersect = tri.intersect(r);
-			REQUIRE(intersect.hit);
-			REQUIRE(intersect.d == Approx(10.0f));
+			REQUIRE(intersect);
+			REQUIRE(*intersect == Approx(10.0f));
 		}
 
 		SECTION("hits at the corner of the triangle")
@@ -272,8 +272,8 @@ namespace TA3D
 				Vector3D(-1.0f, -1.0f, 10.0f),
 				Vector3D(0.0f, 0.0f, -1.0f));
 			auto intersect = tri.intersect(r);
-			REQUIRE(intersect.hit);
-			REQUIRE(intersect.d == Approx(10.0f));
+			REQUIRE(intersect);
+			REQUIRE(*intersect == Approx(10.0f));
 		}
 
 		SECTION("misses just below the corner of the triangle")
@@ -286,7 +286,7 @@ namespace TA3D
 				Vector3D(-1.0f, -1.000001f, 10.0f),
 				Vector3D(0.0f, 0.0f, -1.0f));
 			auto intersect = tri.intersect(r);
-			REQUIRE(!intersect.hit);
+			REQUIRE(!intersect);
 		}
 
 		SECTION("returns a miss when the ray misses")
@@ -300,7 +300,7 @@ namespace TA3D
 				Ray3D r(
 					Vector3D(2.0f, 2.0f, 10.0f),
 					Vector3D(0.0f, 0.0f, -1.0f));
-				REQUIRE(!tri.intersect(r).hit);
+				REQUIRE(!tri.intersect(r));
 			}
 
 			SECTION("case 2")
@@ -312,7 +312,7 @@ namespace TA3D
 				Ray3D r(
 					Vector3D(0.0f, 0.0f, 10.0f),
 					Vector3D(0.0f, 0.0f, -1.0f));
-				REQUIRE(!tri.intersect(r).hit);
+				REQUIRE(!tri.intersect(r));
 			}
 
 			SECTION("when ray is parallel above the triangle")
@@ -324,7 +324,7 @@ namespace TA3D
 				Ray3D r(
 					Vector3D(0.0f, 0.0f, 10.0f),
 					Vector3D(0.0f, 1.0f, 0.0f));
-				REQUIRE(!tri.intersect(r).hit);
+				REQUIRE(!tri.intersect(r));
 			}
 
 			SECTION("when ray is parallel below the triangle")
@@ -336,7 +336,7 @@ namespace TA3D
 				Ray3D r(
 					Vector3D(0.0f, 0.0f, -10.0f),
 					Vector3D(0.0f, 1.0f, 0.0f));
-				REQUIRE(!tri.intersect(r).hit);
+				REQUIRE(!tri.intersect(r));
 			}
 		}
 	}
@@ -350,10 +350,10 @@ namespace TA3D
 				Vector3D(1.0f, -1.0f, 0.0f),
 				Vector3D(0.0f, 1.0f, 0.0f));
 			auto intersect = tri.intersectLine(Vector3D(0.0f, 0.0f, 10.0f), Vector3D(0.0f, 0.0f, -10.0f));
-			REQUIRE(intersect.hit);
-			REQUIRE(intersect.point.x == Approx(0.0f));
-			REQUIRE(intersect.point.y == Approx(0.0f));
-			REQUIRE(intersect.point.z == Approx(0.0f));
+			REQUIRE(intersect);
+			REQUIRE(intersect->x == Approx(0.0f));
+			REQUIRE(intersect->y == Approx(0.0f));
+			REQUIRE(intersect->z == Approx(0.0f));
 		}
 
 		SECTION("works for a line in the other direction")
@@ -363,10 +363,10 @@ namespace TA3D
 				Vector3D(1.0f, -1.0f, 0.0f),
 				Vector3D(0.0f, 1.0f, 0.0f));
 			auto intersect = tri.intersectLine(Vector3D(0.0f, 0.0f, -10.0f), Vector3D(0.0f, 0.0f, 10.0f));
-			REQUIRE(intersect.hit);
-			REQUIRE(intersect.point.x == Approx(0.0f));
-			REQUIRE(intersect.point.y == Approx(0.0f));
-			REQUIRE(intersect.point.z == Approx(0.0f));
+			REQUIRE(intersect);
+			REQUIRE(intersect->x == Approx(0.0f));
+			REQUIRE(intersect->y == Approx(0.0f));
+			REQUIRE(intersect->z == Approx(0.0f));
 		}
 
 		SECTION("hits at the corner of the triangle")
@@ -376,10 +376,10 @@ namespace TA3D
 				Vector3D(1.0f, -1.0f, 0.0f),
 				Vector3D(0.0f, 1.0f, 0.0f));
 			auto intersect = tri.intersectLine(Vector3D(-1.0f, -1.0f, 10.0f), Vector3D(-1.0f, -1.0f, -10.0f));
-			REQUIRE(intersect.hit);
-			REQUIRE(intersect.point.x == Approx(-1.0f));
-			REQUIRE(intersect.point.y == Approx(-1.0f));
-			REQUIRE(intersect.point.z == Approx(0.0f));
+			REQUIRE(intersect);
+			REQUIRE(intersect->x == Approx(-1.0f));
+			REQUIRE(intersect->y == Approx(-1.0f));
+			REQUIRE(intersect->z == Approx(0.0f));
 		}
 
 		SECTION("misses just below the corner of the triangle")
@@ -389,7 +389,7 @@ namespace TA3D
 				Vector3D(1.0f, -1.0f, 0.0f),
 				Vector3D(0.0f, 1.0f, 0.0f));
 			auto intersect = tri.intersectLine(Vector3D(-1.0f, -1.000001f, 10.0f), Vector3D(-1.0f, -1.000001f, -10.0f));
-			REQUIRE(!intersect.hit);
+			REQUIRE(!intersect);
 		}
 	}
 

@@ -52,12 +52,12 @@ namespace TA3D
 			// then this implies our camera is somehow parallel.
 			// Skipping the point probably isn't the correct behaviour here,
 			// but this shouldn't happen anyway since our camera angle is fixed.
-			if (!intersect.hit)
+			if (!intersect)
 			{
 				continue;
 			}
 
-			auto point = ray.pointAt(intersect.d);
+			auto point = ray.pointAt(*intersect);
 			out.push_back(point);
 		}
 

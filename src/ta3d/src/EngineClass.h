@@ -36,6 +36,8 @@
 #include "misc/string.h"
 #include "misc/grid.h"
 
+#include <boost/optional.hpp>
+
 #define H_DIV 0.5f
 
 namespace TA3D
@@ -423,21 +425,13 @@ namespace TA3D
 		//! Calculates the intersection of a ray with the map (the ray starts from the top of the map)
 		Vector3D hit(Vector3D Pos, Vector3D Dir, bool water = true, float length = 200000.0f, bool allow_out = false) const;
 
-		struct IntersectResult
-		{
-			bool hit;
-			Vector3D v;
-			IntersectResult(): hit(false) {}
-			explicit IntersectResult(const Vector3D& v): hit(true), v(v) {}
-		};
+		boost::optional<Vector3D> hit2(Vector3D Pos, Vector3D Dir, bool water = true) const;
 
-		IntersectResult hit2(Vector3D Pos, Vector3D Dir, bool water = true) const;
+		boost::optional<Vector3D> findIntersectWithTerrain(const Ray3D& ray) const;
 
-		IntersectResult findIntersectWithTerrain(const Ray3D& ray) const;
+		boost::optional<Vector3D> findIntersectWithTerrainLine(const Vector3D& startPoint, const Vector3D& endPoint) const;
 
-		IntersectResult findIntersectWithTerrainLine(const Vector3D& startPoint, const Vector3D& endPoint) const;
-
-		IntersectResult findIntersectWithHeightmapCell(const Vector3D& start, const Vector3D& end, int x, int y) const;
+		boost::optional<Vector3D> findIntersectWithHeightmapCell(const Vector3D& start, const Vector3D& end, int x, int y) const;
 
 		/**
 		 * Returns true if the graphical tile at the given index

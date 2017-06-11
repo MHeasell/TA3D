@@ -31,11 +31,11 @@ namespace TA3D
 		auto ray = cam.screenToWorldRay(clipCoords);
 
 		auto intersect = map.hit2(ray.origin, ray.direction, true);
-		if (!intersect.hit)
+		if (!intersect)
 		{
 			throw std::runtime_error("cursor position did not intersect the map");
 		}
-		return intersect.v;
+		return *intersect;
 	}
 
 	void Battle::showGameStatus()

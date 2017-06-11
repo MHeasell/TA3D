@@ -1356,12 +1356,12 @@ namespace TA3D
 			Vector3D H = render.Pos;
 			H.y += 2.0f * model->size2 + 1.0f;
 			auto intersectResult = the_map->hit2(H, Dir, true);
-			if (!intersectResult.hit)
+			if (!intersectResult)
 			{
 				throw std::logic_error("top of shadow did not intersect with the map");
 			}
 
-			const Vector3D D = intersectResult.v;
+			const Vector3D D = *intersectResult;
 			shadow_scale_dir = (D - H).length();
 		}
 		model->draw_shadow(shadow_scale_dir * Dir * RotateXZY(-render.Angle.x * DEG2RAD, -render.Angle.z * DEG2RAD, -render.Angle.y * DEG2RAD), 0.0f, &render.Anim);

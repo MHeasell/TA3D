@@ -1,6 +1,8 @@
 #ifndef __TA3D_GEOMETRY_H__
 #define __TA3D_GEOMETRY_H__
 
+#include <boost/optional.hpp>
+
 #include "vector.h"
 
 namespace TA3D
@@ -29,16 +31,6 @@ namespace TA3D
 	/** An infinite plane in 3D space. */
 	struct Plane3D
 	{
-		struct IntersectResult
-		{
-			bool hit;
-			float d;
-			IntersectResult(): hit(false) {}
-			explicit IntersectResult(float d): hit(true), d(d) {}
-			float orInfinity() { return hit ? d : std::numeric_limits<float>::infinity(); }
-			float orElse(float alternative) { return hit ? d : alternative; }
-		};
-
 		/**
 		 * Creates a plane from 3 points that lie on it.
 		 * The plane is constructed such that the points
@@ -65,7 +57,7 @@ namespace TA3D
 		 * i.e. they are parallel, this will return
 		 * a result indicating that they did not intersect.
 		 */
-		IntersectResult intersect(const Ray3D& ray) const;
+		boost::optional<float> intersect(const Ray3D& ray) const;
 
 		/**
 		 * Returns the distance along the ray
@@ -97,29 +89,11 @@ namespace TA3D
 	/** An axis-aligned bounding box in 3D space */
 	struct BoundingBox3D
 	{
-		struct IntersectResult
+		struct RayIntersect
 		{
-			/**
-			 * True if the result is a hit, otherwise false.
-			 * If this is false then enter and exit are not set.
-			 */
-			bool hit;
-
-			/**
-			 * The distance along the ray at which it entered the bounding box.
-			 */
 			float enter;
-
-			/**
-			 * The distance along the ray at which it exited the bounding box.
-			 */
 			float exit;
-
-			/** Constructs a result representing a miss. */
-			IntersectResult(): hit(false) {}
-
-			/** Constructs a result representing a hit with the given entry and exit distances */
-			IntersectResult(float enter, float exit): hit(true), enter(enter), exit(exit) {}
+			RayIntersect(float enter, float exit): enter(enter), exit(exit) {}
 		};
 
 		/** The position of the center of the box. */
@@ -136,29 +110,11 @@ namespace TA3D
 		 * at which the ray enters and exits the bounding box.
 		 * Otherwise, returns a result indicating that the ray missed.
 		 */
-		IntersectResult intersect(const Ray3D& ray) const;
+		boost::optional<RayIntersect> intersect(const Ray3D& ray) const;
 	};
 
 	struct Triangle3D
 	{
-		struct IntersectResult
-		{
-			bool hit;
-			float d;
-			IntersectResult(): hit(false) {}
-			explicit IntersectResult(float d): hit(true), d(d) {}
-			float orInfinity() { return hit ? d : std::numeric_limits<float>::infinity(); }
-		};
-
-		struct LineIntersectResult
-		{
-			bool hit;
-			Vector3D point;
-			LineIntersectResult(): hit(false) {}
-			explicit LineIntersectResult(const Vector3D& v): hit(true), point(v) {}
-			const LineIntersectResult& closestTo(const Vector3D& v, const LineIntersectResult& b);
-		};
-
 		Vector3D a;
 		Vector3D b;
 		Vector3D c;
@@ -175,7 +131,7 @@ namespace TA3D
 		 * If the ray and the triangle never intersect,
 		 * this will return a result indicating that they did not intersect.
 		 */
-		IntersectResult intersect(const Ray3D& ray) const;
+		boost::optional<float> intersect(const Ray3D& ray) const;
 
 		/**
 		 * Returns the point at which the given line intersects this triangle.
@@ -193,7 +149,7 @@ namespace TA3D
 		 * @param p The point at which the line starts
 		 * @param q The point at which the line ends
 		 */
-		LineIntersectResult intersectLine(const Vector3D& p, const Vector3D& q) const;
+		boost::optional<Vector3D> intersectLine(const Vector3D& p, const Vector3D& q) const;
 
 		/**
 		 * Converts the input world-space coordinates
@@ -212,6 +168,16 @@ namespace TA3D
 		 */
 		Plane3D toPlane() const;
 	};
+
+	/**
+	 * Returns the vector that is closest to v.
+	 * If either of the vectors a and b are none,
+	 * the other vector is returned.
+	 */
+	const boost::optional<Vector3D>& closestTo(
+		const Vector3D& v,
+		const boost::optional<Vector3D>& a,
+		const boost::optional<Vector3D>& b);
 }
 
 #endif //__TA3D_GEOMETRY_H__
