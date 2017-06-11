@@ -13,6 +13,7 @@ before_install:
   - export CC=gcc-6 CXX=g++-6
   - >
     sudo apt-get install -q -y \
+      libboost-dev \
       libsdl2-dev \
       libsdl2-image-dev \
       libsdl2-net-dev \

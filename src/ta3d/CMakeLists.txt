@@ -222,6 +222,13 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../libs/ftgl/include)
 set(LIBS "${LIBS} ${CMAKE_CURRENT_BINARY_DIR}/../libs/ftgl/src/libftgl.a")
 
 #
+# --- Boost ---
+#
+find_package(Boost 1.54.0 REQUIRED)
+include_directories(${Boost_INCLUDE_DIRS})
+link_directories(${Boost_LIBRARY_DIRS})
+
+#
 # --- CPack: Installation process ---
 #
 
