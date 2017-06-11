@@ -15,6 +15,8 @@ namespace TA3D
 		return (a - origin).dot(direction) < (b - origin).dot(direction);
 	}
 
+	Plane3D::Plane3D(const Vector3D& point, const Vector3D& normal) : point(point), normal(normal) {}
+
 	Plane3D Plane3D::fromPoints(const Vector3D& a, const Vector3D& b, const Vector3D& c)
 	{
 		auto position = a;
@@ -56,6 +58,8 @@ namespace TA3D
 			? std::numeric_limits<float>::infinity()
 			: -std::numeric_limits<float>::infinity();
 	}
+
+	BoundingBox3D::BoundingBox3D(const Vector3D& center, const Vector3D& extents) : center(center), extents(extents) {}
 
 	boost::optional<BoundingBox3D::RayIntersect> BoundingBox3D::intersect(const Ray3D& ray) const
 	{
@@ -128,6 +132,8 @@ namespace TA3D
 		return boost::none;
 	}
 
+	Triangle3D::Triangle3D(const Vector3D& a, const Vector3D& b, const Vector3D& c) : a(a), b(b), c(c) {}
+
 	boost::optional<float> Triangle3D::intersect(const Ray3D& ray) const
 	{
 		auto intersect = toPlane().intersect(ray);
@@ -199,6 +205,7 @@ namespace TA3D
 	{
 		return (p.x * a) + (p.y * b) + (p.z * c);
 	}
+
 
 	const boost::optional<Vector3D>& closestTo(
 		const Vector3D& v,

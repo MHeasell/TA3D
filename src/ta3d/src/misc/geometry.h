@@ -45,7 +45,7 @@ namespace TA3D
 		/** The normal of the plane. */
 		Vector3D normal;
 
-		Plane3D(const Vector3D& point, const Vector3D& normal): point(point), normal(normal) {}
+		Plane3D(const Vector3D& point, const Vector3D& normal);
 
 		/**
 		 * Returns the distance along the ray
@@ -102,7 +102,7 @@ namespace TA3D
 		/** The box's extents in all directions from the center. */
 		Vector3D extents;
 
-		BoundingBox3D(const Vector3D& center, const Vector3D& extents): center(center), extents(extents) {}
+		BoundingBox3D(const Vector3D& center, const Vector3D& extents);
 
 		/**
 		 * Computes the intersection between the given ray and the bounding box.
@@ -119,8 +119,8 @@ namespace TA3D
 		Vector3D b;
 		Vector3D c;
 
-		Triangle3D() {}
-		Triangle3D(const Vector3D& a, const Vector3D& b, const Vector3D& c): a(a), b(b), c(c) {}
+		Triangle3D() = default;
+		Triangle3D(const Vector3D& a, const Vector3D& b, const Vector3D& c);
 
 		/**
 		 * Returns the distance along the ray
